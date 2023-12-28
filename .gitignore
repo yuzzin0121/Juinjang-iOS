@@ -2,6 +2,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=swift,xcode,cocoapods
 
 .DS_Store
+Info.plist
 
 ### CocoaPods ###
 ## CocoaPods GitIgnore Template
@@ -109,3 +110,4 @@ iOSInjectionProject/
 **/xcshareddata/WorkspaceSettings.xcsettings
 
 # End of https://www.toptal.com/developers/gitignore/api/swift,xcode,cocoapods
+
