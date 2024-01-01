@@ -12,12 +12,13 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
+        self.navigationItem.title = "주인장"
         // Do any additional setup after loading the view.
         
         
         let button = UIButton(type: .system)
-        button.setTitle("Go to Detail", for: .normal)
-        button.addTarget(self, action: #selector(goToDetail), for: .touchUpInside)
+        button.setTitle("생성하기", for: .normal)
+        button.addTarget(self, action: #selector(goToCreation), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(button)
         
@@ -29,9 +30,9 @@ class MainViewController: UIViewController {
     }
             
     // 버튼 액션 메서드
-    @objc func goToDetail() {
-        let OpenNewPageViewController = OpenNewPageViewController()
-        navigationController?.pushViewController(OpenNewPageViewController, animated: true)
+    @objc func goToCreation() {
+        let newPageViewController = OpenNewPageViewController()
+        navigationController?.pushViewController(newPageViewController, animated: true)
     }
     
         

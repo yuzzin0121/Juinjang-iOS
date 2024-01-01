@@ -13,129 +13,163 @@ class OpenNewPageViewController: UINavigationController {
     
     var investmentButtons: [UIButton] = [] // "거래 목적"을 나타내는 선택지
     var propertyTypeButtons: [UIButton] = [] // "매물 유형"을 나타내는 선택지
+    var moveTypeButtons: [UIButton] = [] // "입주 유형"을 나타내는 선택지
+    
+    // 거래 목적 카테고리의 버튼
+    var selectedInvestmentButton: UIButton?
+
+    // 매물 유형 카테고리의 버튼
+    var selectedPropertyTypeButton: UIButton?
+    
+    var moveTypeStackView: UIStackView!
+    
+    // 입주 유형 카테고리의 버튼
+    var selectedMoveTypeButton: UIButton?
+    
+    var priceDetailLabel: UILabel?
+    
+    func makeImageView(_ imageView: UIImageView, imageName: String) {
+        imageView.image = UIImage(named: imageName)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFit
+    }
     
     lazy var backgroundImageView = UIImageView().then {
-        $0.image = UIImage(named: "creation-background")
-        $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.contentMode = .scaleAspectFit
+        makeImageView($0, imageName: "creation-background")
     }
     
+    lazy var investorImageView = UIImageView().then {
+        makeImageView($0, imageName: "investor")
+    }
+    
+    lazy var movingUserImageView = UIImageView().then {
+        makeImageView($0, imageName: "user-moving-in-directly")
+    }
+    
+    lazy var apartmentImageView = UIImageView().then {
+        makeImageView($0, imageName: "apartment-img")
+    }
+    
+    lazy var villaImageView = UIImageView().then {
+        makeImageView($0, imageName: "villa-img")
+    }
+    
+    lazy var houseImageView = UIImageView().then {
+        makeImageView($0, imageName: "house-img")
+    }
+    
+    func configureLabel(_ label: UILabel, text: String) {
+        label.text = text
+        label.frame = CGRect(x: 0, y: 0, width: 66, height: 24)
+        label.textColor = UIColor(red: 0.133, green: 0.133, blue: 0.133, alpha: 1)
+        label.font = UIFont(name: "Pretendard-SemiBold", size: 18)
+        label.translatesAutoresizingMaskIntoConstraints = false
+
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineHeightMultiple = 1.13
+
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.5
+    }
+
     lazy var purposeLabel = UILabel().then {
-        $0.text = "거래 목적"
-        $0.frame = CGRect(x: 0, y: 0, width: 66, height: 24)
-        $0.textColor = UIColor(red: 0.133, green: 0.133, blue: 0.133, alpha: 1)
-        $0.font = UIFont(name: "Pretendard-SemiBold", size: 18)
+        configureLabel($0, text: "거래 목적")
+    }
 
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineHeightMultiple = 1.13
-
-        $0.adjustsFontSizeToFitWidth = true
-        $0.minimumScaleFactor = 0.5
-    }
-    
-    lazy var realestateInvestmentButton = UIButton().then {
-        $0.frame = CGRect(x: 0, y: 0, width: 200, height: 50)
-        let image = UIImage(named: "realestate-investment-button")
-        $0.setBackgroundImage(image, for: .normal)
-        $0.layer.cornerRadius = 10
-        $0.layer.masksToBounds = true
-        $0.contentMode = .scaleAspectFit
-        $0.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
-        // 버튼이 선택되면 이미지가 변경됨
-        // 이벤트 처리: 선택된(selected) 상태에서 색상 변경 방지
-        $0.adjustsImageWhenHighlighted = false
-        let normalImage = UIImage(named: "realestate-investment-button")
-        $0.setBackgroundImage(normalImage, for: .normal)
-        let selectedImage = UIImage(named: "realstate-investment-selected-button")
-        $0.setBackgroundImage(selectedImage, for: .selected)
-    }
-    
-    lazy var moveInDirectlyButton = UIButton().then {
-        $0.frame = CGRect(x: 0, y: 0, width: 200, height: 50)
-        let image = UIImage(named: "move-in-directly-button")
-        $0.setBackgroundImage(image, for: .normal)
-        $0.layer.cornerRadius = 10
-        $0.layer.masksToBounds = true
-        $0.contentMode = .scaleAspectFit
-        $0.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
-        // 이벤트 처리: 선택된(selected) 상태에서 색상 변경 방지
-        $0.adjustsImageWhenHighlighted = false
-        // 버튼이 선택되면 이미지가 변경됨
-        let normalImage = UIImage(named: "move-in-directly-button")
-        $0.setBackgroundImage(normalImage, for: .normal)
-        let selectedImage = UIImage(named: "move-in-directly-selected-button")
-        $0.setBackgroundImage(selectedImage, for: .selected)
-    }
-    
     lazy var typeLabel = UILabel().then {
-        $0.text = "매물 유형"
-        $0.frame = CGRect(x: 0, y: 0, width: 66, height: 24)
-        $0.textColor = UIColor(red: 0.133, green: 0.133, blue: 0.133, alpha: 1)
-        $0.font = UIFont(name: "Pretendard-SemiBold", size: 18)
+        configureLabel($0, text: "매물 유형")
+    }
 
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineHeightMultiple = 1.13
-
-        $0.adjustsFontSizeToFitWidth = true
-        $0.minimumScaleFactor = 0.5
+    lazy var priceLabel = UILabel().then {
+        configureLabel($0, text: "가격")
     }
     
+    func configureButton(_ button: UIButton, normalImage: UIImage?, selectedImage: UIImage?, action: Selector) {
+        button.frame = CGRect(x: 0, y: 0, width: 200, height: 50)
+        button.setBackgroundImage(normalImage, for: .normal)
+        button.setBackgroundImage(selectedImage, for: .selected)
+        button.layer.cornerRadius = 10
+        button.layer.masksToBounds = true
+        button.contentMode = .scaleAspectFit
+        button.addTarget(self, action: action, for: .touchUpInside)
+        button.adjustsImageWhenHighlighted = false // 버튼이 눌릴 때 색상 변경 방지
+    }
+
+    lazy var realestateInvestmentButton = UIButton().then {
+        configureButton($0, normalImage: UIImage(named: "realestate-investment-button"), selectedImage: UIImage(named: "realstate-investment-selected-button"), action: #selector(buttonPressed))
+    }
+
+    lazy var moveInDirectlyButton = UIButton().then {
+        configureButton($0, normalImage: UIImage(named: "move-in-directly-button"), selectedImage: UIImage(named: "move-in-directly-selected-button"), action: #selector(buttonPressed))
+    }
+
     lazy var apartmentButton = UIButton().then {
-        $0.frame = CGRect(x: 0, y: 0, width: 200, height: 50)
-        let image = UIImage(named: "apartment-button")
-        $0.setBackgroundImage(image, for: .normal)
-        let selectedImage = UIImage(named: "apartment-selected-button")
-        $0.setBackgroundImage(selectedImage, for: .selected)
-        $0.layer.cornerRadius = 10
-        $0.layer.masksToBounds = true
-        $0.contentMode = .scaleAspectFit
-        $0.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
-        // 이벤트 처리: 선택된(selected) 상태에서 색상 변경 방지
-        $0.adjustsImageWhenHighlighted = false
+        configureButton($0, normalImage: UIImage(named: "apartment-button"), selectedImage: UIImage(named: "apartment-selected-button"), action: #selector(buttonPressed))
     }
     
     lazy var villaButton = UIButton().then {
-        // 기본 이미지
-        let image = UIImage(named: "villa-button")
-        $0.setBackgroundImage(image, for: .normal)
-        // 선택된 이미지
-        let selectedImage = UIImage(named: "villa-selected-button")
-        $0.setBackgroundImage(selectedImage, for: .selected)
-        $0.frame = CGRect(x: 0, y: 0, width: 200, height: 50)
-        $0.setBackgroundImage(image, for: .normal)
-        $0.layer.cornerRadius = 10
-        $0.layer.masksToBounds = true
-        $0.contentMode = .scaleAspectFit
-        $0.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
-        // 이벤트 처리: 선택된(selected) 상태에서 색상 변경 방지
-        $0.adjustsImageWhenHighlighted = false
+        configureButton($0, normalImage: UIImage(named: "villa-button"), selectedImage: UIImage(named: "villa-selected-button"), action: #selector(buttonPressed))
     }
     
     lazy var houseButton = UIButton().then {
-        $0.frame = CGRect(x: 0, y: 0, width: 200, height: 50)
-        let image = UIImage(named: "house-button")
-        $0.setBackgroundImage(image, for: .normal)
-        let selectedImage = UIImage(named: "house-selected-button")
-        $0.setBackgroundImage(selectedImage, for: .selected)
-        $0.layer.cornerRadius = 10
-        $0.layer.masksToBounds = true
-        $0.contentMode = .scaleAspectFit
-        $0.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
-        // 이벤트 처리: 선택된(selected) 상태에서 색상 변경 방지
-        $0.adjustsImageWhenHighlighted = false
+        configureButton($0, normalImage: UIImage(named: "house-button"), selectedImage: UIImage(named: "house-selected-button"), action: #selector(buttonPressed))
     }
     
-    lazy var priceLabel = UILabel().then {
-        $0.text = "가격"
-        $0.frame = CGRect(x: 0, y: 0, width: 66, height: 24)
-        $0.textColor = UIColor(red: 0.133, green: 0.133, blue: 0.133, alpha: 1)
-        $0.font = UIFont(name: "Pretendard-SemiBold", size: 18)
+    lazy var saleButton = UIButton().then {
+        configureButton($0, normalImage: UIImage(named: "sale-button"), selectedImage: UIImage(named: "sale-selected-button"), action: #selector(buttonPressed))
+    }
+    
+    lazy var jeonseButton = UIButton().then {
+        configureButton($0, normalImage: UIImage(named: "jeonse-button"), selectedImage: UIImage(named: "jeonse-selected-button"), action: #selector(buttonPressed))
+    }
+    
+    lazy var monthlyRentButton = UIButton().then {
+        configureButton($0, normalImage: UIImage(named: "monthlyrent-button"), selectedImage: UIImage(named: "monthlyrent-selected-button"), action: #selector(buttonPressed))
+    }
+
+    lazy var priceView = UIView().then {
+        $0.layer.backgroundColor = UIColor(red: 0.971, green: 0.971, blue: 0.971, alpha: 1).cgColor
+        $0.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    func configurePriceLabel(_ label: UILabel, text: String) {
+        label.text = text
+        label.frame = CGRect(x: 0, y: 0, width: 55, height: 22)
+        label.textColor = UIColor(red: 0.212, green: 0.212, blue: 0.212, alpha: 1)
+        label.font = UIFont(name: "Pretendard-SemiBold", size: 16)
+        label.translatesAutoresizingMaskIntoConstraints = false
 
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineHeightMultiple = 1.13
 
-        $0.adjustsFontSizeToFitWidth = true
-        $0.minimumScaleFactor = 0.5
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.5
+    }
+
+    lazy var priceDetailLabels: [UILabel] = {
+        let labelsTexts = ["실거래가", "매매가", "보증금", "월", "전세금", "억", "만원"]
+        return labelsTexts.map { text in
+            UILabel().then {
+                configurePriceLabel($0, text: text)
+                if text == "실거래가" {
+                    priceDetailLabel = $0
+                    priceView.addSubview($0)
+                }
+            }
+        }
+    }()
+//    priceDetailLabel = priceDetailLabels[0]
+    
+    lazy var threeDisitPriceField = UITextField().then {
+        let backgroundImage = UIImage(named: "3-disit-price")
+        $0.background = backgroundImage
+        $0.keyboardType = .numberPad // 숫자 패드 키보드로 설정, 숫자만 입력을 받도록 추후 설정
+    }
+    
+    lazy var fourDisitPriceField = UITextField().then {
+        let backgroundImage = UIImage(named: "4-disit-price")
+        $0.background = backgroundImage
+        $0.keyboardType = .numberPad
     }
     
     lazy var nextButton = UIButton().then {
@@ -167,39 +201,21 @@ class OpenNewPageViewController: UINavigationController {
         backBarButtonItem.tintColor = .black
         self.navigationItem.backBarButtonItem = backBarButtonItem
         
-        // 이미지 뷰의 가로 사이즈를 부모 뷰와 같도록 설정
-        //        imageView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
-        //        // 이미지 뷰의 세로 사이즈를 설정
-        //        imageView.heightAnchor.constraint(equalToConstant: 300).isActive = true
-        //
-        //        // 이미지 뷰의 위치를 네비게이션 바 바로 아래로 설정
-        //        imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        //        imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        
         setupWidgets()
     }
         
-
     func setupWidgets() {
         // 위젯들을 서브뷰로 추가
-        view.addSubview(purposeLabel)
-        view.addSubview(realestateInvestmentButton)
-        view.addSubview(moveInDirectlyButton)
-        view.addSubview(typeLabel)
-        view.addSubview(apartmentButton)
-        view.addSubview(villaButton)
-        view.addSubview(houseButton)
-        view.addSubview(priceLabel)
-        view.addSubview(backgroundImageView)
-        view.addSubview(nextButton)
+        let widgets: [UIView] = [purposeLabel, typeLabel, priceLabel, backgroundImageView, priceView, nextButton]
+        widgets.forEach { view.addSubview($0) }
         setupLayout()
         setButton()
     }
     
     func setupLayout() {
-        
         // 위젯에 관한 Auto Layout 설정
-        // 배경 이미지
+        
+        // 배경 ImageView
         NSLayoutConstraint.activate([
             backgroundImageView.widthAnchor.constraint(equalTo: view.widthAnchor),
             backgroundImageView.heightAnchor.constraint(equalToConstant: 300),
@@ -207,7 +223,6 @@ class OpenNewPageViewController: UINavigationController {
         ])
 
         // 거래 목적 Label
-        purposeLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             purposeLabel.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: 20),
 //            purposeLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 350)
@@ -232,7 +247,6 @@ class OpenNewPageViewController: UINavigationController {
         ])
         
         // 매물 유형 Label
-        typeLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             typeLabel.widthAnchor.constraint(equalToConstant: 66),
             typeLabel.heightAnchor.constraint(equalToConstant: 24),
@@ -256,12 +270,61 @@ class OpenNewPageViewController: UINavigationController {
         ])
 
         // 가격 Label
-        priceLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             priceLabel.widthAnchor.constraint(equalToConstant: 31),
             priceLabel.heightAnchor.constraint(equalToConstant: 24),
             priceLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -155.5),
-            priceLabel.topAnchor.constraint(equalTo: propertyTypeStackView.topAnchor, constant: 80) // 임의로 지정
+            priceLabel.topAnchor.constraint(equalTo: propertyTypeStackView.bottomAnchor, constant: 40)
+        ])
+        
+        // 가격 View
+        NSLayoutConstraint.activate([
+            priceView.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 12),
+            priceView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            priceView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            priceView.heightAnchor.constraint(equalToConstant: 40)
+        ])
+        
+        // 입주 유형 Stack View
+        moveTypeStackView = UIStackView(arrangedSubviews: [saleButton, jeonseButton, monthlyRentButton])
+
+        moveTypeStackView.translatesAutoresizingMaskIntoConstraints = false
+        moveTypeStackView.axis = .horizontal
+        moveTypeStackView.spacing = 8
+        
+        // 매매 버튼이 기본으로 선택되어 있음
+        saleButton.isSelected = true
+        
+        // "실거래"가 기본 Label
+        if let priceDetailLabel = priceDetailLabel {
+            NSLayoutConstraint.activate([
+                priceDetailLabel.centerYAnchor.constraint(equalTo: priceView.centerYAnchor),
+                priceDetailLabel.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8),
+                priceDetailLabel.leadingAnchor.constraint(equalTo: priceView.leadingAnchor, constant: 24)
+            ])
+        }
+        
+        // 가격 입력칸 Stack View
+        let inputPriceStackView = UIStackView(arrangedSubviews: [threeDisitPriceField, priceDetailLabels[5], fourDisitPriceField, priceDetailLabels[6]])
+                                                             
+        inputPriceStackView.translatesAutoresizingMaskIntoConstraints = false
+        inputPriceStackView.axis = .horizontal
+        inputPriceStackView.spacing = 8
+                                                             
+        priceView.addSubview(inputPriceStackView)
+        if let priceDetailLabel = priceDetailLabel {
+            NSLayoutConstraint.activate([
+                priceDetailLabel.centerYAnchor.constraint(equalTo: priceView.centerYAnchor),
+                priceDetailLabel.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8),
+                priceDetailLabel.leadingAnchor.constraint(equalTo: priceView.leadingAnchor, constant: 24)
+            ])
+        }
+        
+        NSLayoutConstraint.activate([
+            inputPriceStackView.leadingAnchor.constraint(equalTo: priceDetailLabels[0].leadingAnchor, constant: 100),
+            inputPriceStackView.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8),
+//            inputPriceStackView.heightAnchor.constraint(equalToConstant: 32),
+//            inputPriceStackView.widthAnchor.constraint(equalToConstant: 191)
         ])
         
         // 다음으로 버튼
@@ -272,27 +335,150 @@ class OpenNewPageViewController: UINavigationController {
             nextButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             nextButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 764)
         ])
+    }
     
+    func setPriceView() {
+        
     }
     
     // 각 카테고리에 따른 버튼을 나타내기 위한 처리
     func setButton() {
-        // 거래 목적 카테고리의 버튼
-        let realEstateButton1 = UIButton()
-        let realEstateButton2 = UIButton()
+        // 거래 목적 카테고리에 속한 버튼
         investmentButtons = [realestateInvestmentButton, moveInDirectlyButton]
-        
-        // 매물 유형 카테고리의 버튼
-        let propertyTypeButton1 = UIButton()
-        let propertyTypeButton2 = UIButton()
+        // 매물 유형 카테고리에 속한 버튼
         propertyTypeButtons = [apartmentButton, villaButton, houseButton]
+        // 입주 유형 카테고리에 속한 버튼
+        moveTypeButtons = [saleButton, jeonseButton, monthlyRentButton]
     }
-    
     
     // 버튼이 눌렸을 때 버튼의 색상 변경
     @objc func buttonPressed(_ sender: UIButton) {
-        // 해당 버튼의 선택 여부를 반전시킴
+        // 해당 버튼의 선택 여부를 반전
         sender.isSelected = !sender.isSelected
+        
+        if investmentButtons.contains(sender) {
+            // 거래 목적 카테고리의 버튼일 경우
+            if let selectedButton = selectedInvestmentButton, selectedButton != sender {
+                // 이전에 선택된 버튼이 있고 새로운 버튼과 다른 경우에는 이전 버튼의 선택을 해제
+                selectedButton.isSelected = false
+            }
+            selectedInvestmentButton = sender.isSelected ? sender : nil
+            
+            // 버튼에 따라 사용자 표시
+            if sender == realestateInvestmentButton {
+                backgroundImageView.addSubview(investorImageView)
+                NSLayoutConstraint.activate([
+                    investorImageView.bottomAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -15),
+                    investorImageView.trailingAnchor.constraint(equalTo: backgroundImageView.trailingAnchor, constant: -258.67),
+                    investorImageView.topAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: 105)
+                ])
+                movingUserImageView.removeFromSuperview()
+            } else if sender == moveInDirectlyButton {
+                backgroundImageView.addSubview(movingUserImageView)
+                NSLayoutConstraint.activate([
+                    movingUserImageView.bottomAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -14.84),
+                    movingUserImageView.trailingAnchor.constraint(equalTo: backgroundImageView.trailingAnchor, constant: -255.55),
+                    movingUserImageView.topAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: 110)
+                ])
+                investorImageView.removeFromSuperview()
+            }
+        } else if propertyTypeButtons.contains(sender) {
+            if let selectedButton = selectedPropertyTypeButton, selectedButton != sender {
+                selectedButton.isSelected = false
+            }
+            selectedPropertyTypeButton = sender.isSelected ? sender : nil
+            
+            // 버튼에 따라 집 표시
+            if sender == apartmentButton {
+                backgroundImageView.addSubview(apartmentImageView)
+                NSLayoutConstraint.activate([
+                    apartmentImageView.bottomAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -13),
+                    apartmentImageView.trailingAnchor.constraint(equalTo: backgroundImageView.trailingAnchor, constant: -95),
+                    apartmentImageView.topAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: 27)
+                ])
+                villaImageView.removeFromSuperview()
+                houseImageView.removeFromSuperview()
+            } else if sender == villaButton {
+                backgroundImageView.addSubview(villaImageView)
+                NSLayoutConstraint.activate([
+                    villaImageView.bottomAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -14.5),
+                    villaImageView.trailingAnchor.constraint(equalTo: backgroundImageView.trailingAnchor, constant: -95),
+                    villaImageView.topAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: 82)
+                ])
+                apartmentImageView.removeFromSuperview()
+                houseImageView.removeFromSuperview()
+            } else if sender == houseButton {
+                backgroundImageView.addSubview(houseImageView)
+                NSLayoutConstraint.activate([
+                    houseImageView.bottomAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -14.84),
+                    houseImageView.trailingAnchor.constraint(equalTo: backgroundImageView.trailingAnchor, constant: -91),
+                    houseImageView.topAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: 102)
+                ])
+                apartmentImageView.removeFromSuperview()
+                villaImageView.removeFromSuperview()
+            }
+        } else if moveTypeButtons.contains(sender) {
+            if sender != saleButton {
+                saleButton.isSelected = false
+            }
+            // 매물 유형 카테고리의 버튼일 경우
+            if let selectedButton = selectedMoveTypeButton, selectedButton != sender {
+                // 이전에 선택된 버튼이 있고 새로운 버튼과 다른 경우에는 이전 버튼의 선택을 해제
+                selectedButton.isSelected = false
+            }
+            
+            // 버튼에 따라 가격 View 표시
+            if sender == saleButton {
+                priceDetailLabel?.removeFromSuperview()
+                priceDetailLabel = priceDetailLabels[1]
+                priceView.addSubview(priceDetailLabel!)
+                
+            } else if sender == jeonseButton {
+                priceDetailLabel?.removeFromSuperview()
+                priceDetailLabel = priceDetailLabels[4]
+                priceView.addSubview(priceDetailLabel!)
+            } else if sender == monthlyRentButton {
+                priceDetailLabel?.removeFromSuperview()
+                priceDetailLabel = priceDetailLabels[2]
+                priceView.addSubview(priceDetailLabel!)
+            }
+            selectedMoveTypeButton = sender.isSelected ? sender : nil
+        }
+        
+        // moveInDirectlyButton을 눌렀을 때 매매, 전세, 월세 버튼을 포함한 moveTypeStackView가 나타남
+        if moveInDirectlyButton.isSelected {
+            priceView.removeFromSuperview()
+            // moveInDirectlyButton이 선택된 상태일 때
+            view.addSubview(moveTypeStackView) // moveTypeStackView을 표시
+            view.addSubview(priceView)
+            // moveTypeStackView 제약 조건
+            NSLayoutConstraint.activate([
+                moveTypeStackView.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 12),
+                moveTypeStackView.heightAnchor.constraint(equalToConstant: 38),
+                moveTypeStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
+            ])
+
+            // priceView 제약 조건
+            NSLayoutConstraint.activate([
+                priceView.topAnchor.constraint(equalTo: moveTypeStackView.bottomAnchor, constant: 12),
+                priceView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                priceView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                priceView.heightAnchor.constraint(equalToConstant: 40)
+            ])
+        } else {
+            // moveInDirectlyButton이 선택되지 않은 상태일 때
+            moveTypeStackView.removeFromSuperview() // moveTypeStackView을 숨김
+            saleButton.isSelected = true
+            jeonseButton.isSelected = false
+            monthlyRentButton.isSelected = false
+            view.addSubview(priceView)
+            NSLayoutConstraint.activate([
+                priceView.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 12),
+                priceView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+                priceView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+                priceView.heightAnchor.constraint(equalToConstant: 40)
+            ])
+        }
     }
 
     
