@@ -22,6 +22,7 @@ class OpenNewPageViewController: UINavigationController {
     var selectedPropertyTypeButton: UIButton?
     
     var moveTypeStackView: UIStackView!
+    var inputPriceStackView: UIStackView!
     
     // 입주 유형 카테고리의 버튼
     var selectedMoveTypeButton: UIButton?
@@ -294,38 +295,27 @@ class OpenNewPageViewController: UINavigationController {
         
         // 매매 버튼이 기본으로 선택되어 있음
         saleButton.isSelected = true
-        
-        // "실거래"가 기본 Label
-        if let priceDetailLabel = priceDetailLabel {
-            NSLayoutConstraint.activate([
-                priceDetailLabel.centerYAnchor.constraint(equalTo: priceView.centerYAnchor),
-                priceDetailLabel.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8),
-                priceDetailLabel.leadingAnchor.constraint(equalTo: priceView.leadingAnchor, constant: 24)
-            ])
-        }
-        
+
+
         // 가격 입력칸 Stack View
-        let inputPriceStackView = UIStackView(arrangedSubviews: [threeDisitPriceField, priceDetailLabels[5], fourDisitPriceField, priceDetailLabels[6]])
-                                                             
+        inputPriceStackView = UIStackView(arrangedSubviews: [threeDisitPriceField, priceDetailLabels[5], fourDisitPriceField, priceDetailLabels[6]])
+
         inputPriceStackView.translatesAutoresizingMaskIntoConstraints = false
         inputPriceStackView.axis = .horizontal
         inputPriceStackView.spacing = 8
-                                                             
+
         priceView.addSubview(inputPriceStackView)
+
         if let priceDetailLabel = priceDetailLabel {
             NSLayoutConstraint.activate([
                 priceDetailLabel.centerYAnchor.constraint(equalTo: priceView.centerYAnchor),
                 priceDetailLabel.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8),
-                priceDetailLabel.leadingAnchor.constraint(equalTo: priceView.leadingAnchor, constant: 24)
+                priceDetailLabel.leadingAnchor.constraint(equalTo: priceView.leadingAnchor, constant: 24),
+                inputPriceStackView.leadingAnchor.constraint(equalTo: priceDetailLabel.leadingAnchor, constant: 100),
+                inputPriceStackView.centerYAnchor.constraint(equalTo: priceView.centerYAnchor),
+                inputPriceStackView.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8),
             ])
         }
-        
-        NSLayoutConstraint.activate([
-            inputPriceStackView.leadingAnchor.constraint(equalTo: priceDetailLabels[0].leadingAnchor, constant: 100),
-            inputPriceStackView.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8),
-//            inputPriceStackView.heightAnchor.constraint(equalToConstant: 32),
-//            inputPriceStackView.widthAnchor.constraint(equalToConstant: 191)
-        ])
         
         // 다음으로 버튼
         nextButton.translatesAutoresizingMaskIntoConstraints = false
@@ -367,6 +357,19 @@ class OpenNewPageViewController: UINavigationController {
             // 버튼에 따라 사용자 표시
             if sender == realestateInvestmentButton {
                 backgroundImageView.addSubview(investorImageView)
+                priceDetailLabel?.removeFromSuperview()
+                priceDetailLabel = priceDetailLabels[0]
+                if let priceDetailLabel = priceDetailLabel {
+                    priceView.addSubview(priceDetailLabel)
+                    NSLayoutConstraint.activate([
+                        priceDetailLabel.centerYAnchor.constraint(equalTo: priceView.centerYAnchor),
+                        priceDetailLabel.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8),
+                        priceDetailLabel.leadingAnchor.constraint(equalTo: priceView.leadingAnchor, constant: 24),
+                        inputPriceStackView.leadingAnchor.constraint(equalTo: priceDetailLabel.leadingAnchor, constant: 100),
+                        inputPriceStackView.centerYAnchor.constraint(equalTo: priceView.centerYAnchor),
+                        inputPriceStackView.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8),
+                    ])
+                }
                 NSLayoutConstraint.activate([
                     investorImageView.bottomAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -15),
                     investorImageView.trailingAnchor.constraint(equalTo: backgroundImageView.trailingAnchor, constant: -258.67),
@@ -375,6 +378,19 @@ class OpenNewPageViewController: UINavigationController {
                 movingUserImageView.removeFromSuperview()
             } else if sender == moveInDirectlyButton {
                 backgroundImageView.addSubview(movingUserImageView)
+                priceDetailLabel?.removeFromSuperview()
+                priceDetailLabel = priceDetailLabels[1]
+                if let priceDetailLabel = priceDetailLabel {
+                    priceView.addSubview(priceDetailLabel)
+                    NSLayoutConstraint.activate([
+                        priceDetailLabel.centerYAnchor.constraint(equalTo: priceView.centerYAnchor),
+                        priceDetailLabel.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8),
+                        priceDetailLabel.leadingAnchor.constraint(equalTo: priceView.leadingAnchor, constant: 24),
+                        inputPriceStackView.leadingAnchor.constraint(equalTo: priceDetailLabel.leadingAnchor, constant: 100),
+                        inputPriceStackView.centerYAnchor.constraint(equalTo: priceView.centerYAnchor),
+                        inputPriceStackView.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8),
+                    ])
+                }
                 NSLayoutConstraint.activate([
                     movingUserImageView.bottomAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -14.84),
                     movingUserImageView.trailingAnchor.constraint(equalTo: backgroundImageView.trailingAnchor, constant: -255.55),
@@ -431,16 +447,46 @@ class OpenNewPageViewController: UINavigationController {
             if sender == saleButton {
                 priceDetailLabel?.removeFromSuperview()
                 priceDetailLabel = priceDetailLabels[1]
-                priceView.addSubview(priceDetailLabel!)
+                if let priceDetailLabel = priceDetailLabel {
+                    priceView.addSubview(priceDetailLabel)
+                    NSLayoutConstraint.activate([
+                        priceDetailLabel.centerYAnchor.constraint(equalTo: priceView.centerYAnchor),
+                        priceDetailLabel.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8),
+                        priceDetailLabel.leadingAnchor.constraint(equalTo: priceView.leadingAnchor, constant: 24),
+                        inputPriceStackView.leadingAnchor.constraint(equalTo: priceDetailLabel.leadingAnchor, constant: 100),
+                        inputPriceStackView.centerYAnchor.constraint(equalTo: priceView.centerYAnchor),
+                        inputPriceStackView.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8),
+                    ])
+                }
                 
             } else if sender == jeonseButton {
                 priceDetailLabel?.removeFromSuperview()
                 priceDetailLabel = priceDetailLabels[4]
-                priceView.addSubview(priceDetailLabel!)
+                if let priceDetailLabel = priceDetailLabel {
+                    priceView.addSubview(priceDetailLabel)
+                    NSLayoutConstraint.activate([
+                        priceDetailLabel.centerYAnchor.constraint(equalTo: priceView.centerYAnchor),
+                        priceDetailLabel.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8),
+                        priceDetailLabel.leadingAnchor.constraint(equalTo: priceView.leadingAnchor, constant: 24),
+                        inputPriceStackView.leadingAnchor.constraint(equalTo: priceDetailLabel.leadingAnchor, constant: 100),
+                        inputPriceStackView.centerYAnchor.constraint(equalTo: priceView.centerYAnchor),
+                        inputPriceStackView.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8),
+                    ])
+                }
             } else if sender == monthlyRentButton {
                 priceDetailLabel?.removeFromSuperview()
                 priceDetailLabel = priceDetailLabels[2]
-                priceView.addSubview(priceDetailLabel!)
+                if let priceDetailLabel = priceDetailLabel {
+                    priceView.addSubview(priceDetailLabel)
+                    NSLayoutConstraint.activate([
+                        priceDetailLabel.centerYAnchor.constraint(equalTo: priceView.centerYAnchor),
+                        priceDetailLabel.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8),
+                        priceDetailLabel.leadingAnchor.constraint(equalTo: priceView.leadingAnchor, constant: 24),
+                        inputPriceStackView.leadingAnchor.constraint(equalTo: priceDetailLabel.leadingAnchor, constant: 100),
+                        inputPriceStackView.centerYAnchor.constraint(equalTo: priceView.centerYAnchor),
+                        inputPriceStackView.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8),
+                    ])
+                }
             }
             selectedMoveTypeButton = sender.isSelected ? sender : nil
         }
