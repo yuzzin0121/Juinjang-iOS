@@ -19,5 +19,9 @@
 			</array>
 		</dict>
 	</dict>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Pretendard-SemiBold.otf</string>
+	</array>
 </dict>
 </plist>
