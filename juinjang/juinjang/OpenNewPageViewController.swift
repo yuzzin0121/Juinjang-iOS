@@ -9,7 +9,7 @@
 import UIKit
 import Then
 
-class OpenNewPageViewController: UINavigationController {
+class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
     
     var investmentButtons: [UIButton] = [] // "거래 목적"을 나타내는 선택지
     var propertyTypeButtons: [UIButton] = [] // "매물 유형"을 나타내는 선택지
@@ -23,11 +23,13 @@ class OpenNewPageViewController: UINavigationController {
     
     var moveTypeStackView: UIStackView!
     var inputPriceStackView: UIStackView!
+    var inputMonthlyRentStackView: UIStackView!
     
     // 입주 유형 카테고리의 버튼
     var selectedMoveTypeButton: UIButton?
     
     var priceDetailLabel: UILabel?
+    var priceDetailLabel2: UILabel?
     
     func makeImageView(_ imageView: UIImageView, imageName: String) {
         imageView.image = UIImage(named: imageName)
@@ -133,6 +135,11 @@ class OpenNewPageViewController: UINavigationController {
         $0.translatesAutoresizingMaskIntoConstraints = false
     }
     
+    lazy var priceView2 = UIView().then {
+        $0.layer.backgroundColor = UIColor(red: 0.971, green: 0.971, blue: 0.971, alpha: 1).cgColor
+        $0.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
     func configurePriceLabel(_ label: UILabel, text: String) {
         label.text = text
         label.frame = CGRect(x: 0, y: 0, width: 55, height: 22)
@@ -148,7 +155,7 @@ class OpenNewPageViewController: UINavigationController {
     }
 
     lazy var priceDetailLabels: [UILabel] = {
-        let labelsTexts = ["실거래가", "매매가", "보증금", "월", "전세금", "억", "만원"]
+        let labelsTexts = ["실거래가", "매매가", "보증금", "전세금", "억", "월", "만원", "만원"]
         return labelsTexts.map { text in
             UILabel().then {
                 configurePriceLabel($0, text: text)
@@ -159,18 +166,49 @@ class OpenNewPageViewController: UINavigationController {
             }
         }
     }()
-//    priceDetailLabel = priceDetailLabels[0]
     
-    lazy var threeDisitPriceField = UITextField().then {
+    lazy var threeDisitPriceField: UITextField = {
+        let textField = UITextField()
         let backgroundImage = UIImage(named: "3-disit-price")
-        $0.background = backgroundImage
-        $0.keyboardType = .numberPad // 숫자 패드 키보드로 설정, 숫자만 입력을 받도록 추후 설정
-    }
+        textField.background = backgroundImage
+        textField.textColor = UIColor(red: 1, green: 0.386, blue: 0.158, alpha: 1)
+        textField.keyboardType = .numberPad // 숫자 패드 키보드로 설정, 숫자만 입력을 받도록 추후 설정
+        if let customFont = UIFont(name: "Pretendard-SemiBold", size: 24) {
+            textField.font = customFont
+        }
+        // 오른쪽 여백을 추가하기 위한 뷰 설정
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 7, height: textField.frame.height))
+        textField.leftView = paddingView
+        textField.leftViewMode = .always
+        textField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        return textField
+    }()
+
     
     lazy var fourDisitPriceField = UITextField().then {
         let backgroundImage = UIImage(named: "4-disit-price")
         $0.background = backgroundImage
+        $0.textColor = UIColor(red: 1, green: 0.386, blue: 0.158, alpha: 1)
         $0.keyboardType = .numberPad
+        if let customFont = UIFont(name: "Pretendard-SemiBold", size: 24) {
+            $0.font = customFont
+        }
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 7, height: $0.frame.height))
+        $0.leftView = paddingView
+        $0.leftViewMode = .always
+    }
+    
+    lazy var fourDisitMonthlyRentField = UITextField().then {
+        let backgroundImage = UIImage(named: "4-disit-price")
+        $0.background = backgroundImage
+        $0.textColor = UIColor(red: 1, green: 0.386, blue: 0.158, alpha: 1)
+        $0.keyboardType = .numberPad
+        if let customFont = UIFont(name: "Pretendard-SemiBold", size: 24) {
+            $0.font = customFont
+        }
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 7, height: $0.frame.height))
+        $0.leftView = paddingView
+        $0.leftViewMode = .always
     }
     
     lazy var nextButton = UIButton().then {
@@ -201,8 +239,29 @@ class OpenNewPageViewController: UINavigationController {
         let backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil) // title 부분 수정
         backBarButtonItem.tintColor = .black
         self.navigationItem.backBarButtonItem = backBarButtonItem
-        
         setupWidgets()
+        threeDisitPriceField.delegate = self
+        fourDisitPriceField.delegate = self
+        fourDisitMonthlyRentField.delegate = self
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        // 백 스페이스 실행 가능하도록
+        if let char = string.cString(using: String.Encoding.utf8) {
+            let isBackSpace = strcmp(char, "\\b")
+            if (isBackSpace == -92) {
+                return true
+            }
+        }
+        // 숫자만 허용, textField에 따라 글자 수 제한
+        guard Int(string) != nil || string == "" else { return false }
+        if textField == threeDisitPriceField {
+            guard textField.text!.count < 3 else { return false }
+        } else {
+            guard textField.text!.count < 4 else { return false }
+        }
+            
+        return true
     }
         
     func setupWidgets() {
@@ -298,11 +357,11 @@ class OpenNewPageViewController: UINavigationController {
 
 
         // 가격 입력칸 Stack View
-        inputPriceStackView = UIStackView(arrangedSubviews: [threeDisitPriceField, priceDetailLabels[5], fourDisitPriceField, priceDetailLabels[6]])
+        inputPriceStackView = UIStackView(arrangedSubviews: [threeDisitPriceField, priceDetailLabels[4], fourDisitPriceField, priceDetailLabels[6]])
 
         inputPriceStackView.translatesAutoresizingMaskIntoConstraints = false
         inputPriceStackView.axis = .horizontal
-        inputPriceStackView.spacing = 8
+        inputPriceStackView.spacing = 5
 
         priceView.addSubview(inputPriceStackView)
 
@@ -311,11 +370,27 @@ class OpenNewPageViewController: UINavigationController {
                 priceDetailLabel.centerYAnchor.constraint(equalTo: priceView.centerYAnchor),
                 priceDetailLabel.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8),
                 priceDetailLabel.leadingAnchor.constraint(equalTo: priceView.leadingAnchor, constant: 24),
-                inputPriceStackView.leadingAnchor.constraint(equalTo: priceDetailLabel.leadingAnchor, constant: 100),
+                inputPriceStackView.leadingAnchor.constraint(equalTo: priceDetailLabel.trailingAnchor, constant: 16),
                 inputPriceStackView.centerYAnchor.constraint(equalTo: priceView.centerYAnchor),
-                inputPriceStackView.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8),
+                inputPriceStackView.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8)
             ])
         }
+        
+        // 월세 가격 입력칸 Stack View
+        inputMonthlyRentStackView = UIStackView()
+
+        inputMonthlyRentStackView.translatesAutoresizingMaskIntoConstraints = false
+        inputMonthlyRentStackView.axis = .horizontal
+        inputMonthlyRentStackView.spacing = 5
+        
+        NSLayoutConstraint.activate([
+            threeDisitPriceField.widthAnchor.constraint(equalToConstant: 60),
+            threeDisitPriceField.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 4),
+            threeDisitPriceField.centerYAnchor.constraint(equalTo: priceView.centerYAnchor),
+            fourDisitPriceField.widthAnchor.constraint(equalToConstant: 74),
+            fourDisitPriceField.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 4),
+            fourDisitPriceField.centerYAnchor.constraint(equalTo: priceView.centerYAnchor)
+        ])
         
         // 다음으로 버튼
         nextButton.translatesAutoresizingMaskIntoConstraints = false
@@ -325,10 +400,6 @@ class OpenNewPageViewController: UINavigationController {
             nextButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             nextButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 764)
         ])
-    }
-    
-    func setPriceView() {
-        
     }
     
     // 각 카테고리에 따른 버튼을 나타내기 위한 처리
@@ -341,8 +412,16 @@ class OpenNewPageViewController: UINavigationController {
         moveTypeButtons = [saleButton, jeonseButton, monthlyRentButton]
     }
     
+    @objc func textFieldDidChange(_ textField: UITextField) {
+        guard let text = textField.text else { return }
+        let width = text.size(withAttributes: [NSAttributedString.Key.font: textField.font ?? UIFont.systemFont(ofSize: 16)]).width
+        let newWidth = width + 20 // 원하는 너비 조정
+        textField.frame.size.width = newWidth
+    }
+    
     // 버튼이 눌렸을 때 버튼의 색상 변경
     @objc func buttonPressed(_ sender: UIButton) {
+        guard !sender.isSelected else { return } // 이미 선택된 버튼이면 아무 동작도 하지 않음
         // 해당 버튼의 선택 여부를 반전
         sender.isSelected = !sender.isSelected
         
@@ -358,16 +437,18 @@ class OpenNewPageViewController: UINavigationController {
             if sender == realestateInvestmentButton {
                 backgroundImageView.addSubview(investorImageView)
                 priceDetailLabel?.removeFromSuperview()
+                priceView2.removeFromSuperview()
                 priceDetailLabel = priceDetailLabels[0]
                 if let priceDetailLabel = priceDetailLabel {
                     priceView.addSubview(priceDetailLabel)
+                    priceView.addSubview(inputPriceStackView)
                     NSLayoutConstraint.activate([
                         priceDetailLabel.centerYAnchor.constraint(equalTo: priceView.centerYAnchor),
                         priceDetailLabel.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8),
                         priceDetailLabel.leadingAnchor.constraint(equalTo: priceView.leadingAnchor, constant: 24),
-                        inputPriceStackView.leadingAnchor.constraint(equalTo: priceDetailLabel.leadingAnchor, constant: 100),
+                        inputPriceStackView.leadingAnchor.constraint(equalTo: priceDetailLabel.trailingAnchor, constant: 16),
                         inputPriceStackView.centerYAnchor.constraint(equalTo: priceView.centerYAnchor),
-                        inputPriceStackView.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8),
+                        inputPriceStackView.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8)
                     ])
                 }
                 NSLayoutConstraint.activate([
@@ -386,9 +467,9 @@ class OpenNewPageViewController: UINavigationController {
                         priceDetailLabel.centerYAnchor.constraint(equalTo: priceView.centerYAnchor),
                         priceDetailLabel.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8),
                         priceDetailLabel.leadingAnchor.constraint(equalTo: priceView.leadingAnchor, constant: 24),
-                        inputPriceStackView.leadingAnchor.constraint(equalTo: priceDetailLabel.leadingAnchor, constant: 100),
+                        inputPriceStackView.leadingAnchor.constraint(equalTo: priceDetailLabel.trailingAnchor, constant: 16),
                         inputPriceStackView.centerYAnchor.constraint(equalTo: priceView.centerYAnchor),
-                        inputPriceStackView.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8),
+                        inputPriceStackView.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8)
                     ])
                 }
                 NSLayoutConstraint.activate([
@@ -442,49 +523,79 @@ class OpenNewPageViewController: UINavigationController {
                 // 이전에 선택된 버튼이 있고 새로운 버튼과 다른 경우에는 이전 버튼의 선택을 해제
                 selectedButton.isSelected = false
             }
-            
+
             // 버튼에 따라 가격 View 표시
             if sender == saleButton {
                 priceDetailLabel?.removeFromSuperview()
                 priceDetailLabel = priceDetailLabels[1]
                 if let priceDetailLabel = priceDetailLabel {
                     priceView.addSubview(priceDetailLabel)
+                    priceView.addSubview(inputPriceStackView)
                     NSLayoutConstraint.activate([
                         priceDetailLabel.centerYAnchor.constraint(equalTo: priceView.centerYAnchor),
                         priceDetailLabel.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8),
                         priceDetailLabel.leadingAnchor.constraint(equalTo: priceView.leadingAnchor, constant: 24),
-                        inputPriceStackView.leadingAnchor.constraint(equalTo: priceDetailLabel.leadingAnchor, constant: 100),
+                        inputPriceStackView.leadingAnchor.constraint(equalTo: priceDetailLabel.trailingAnchor, constant: 16),
                         inputPriceStackView.centerYAnchor.constraint(equalTo: priceView.centerYAnchor),
-                        inputPriceStackView.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8),
+                        inputPriceStackView.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8)
                     ])
                 }
                 
             } else if sender == jeonseButton {
                 priceDetailLabel?.removeFromSuperview()
-                priceDetailLabel = priceDetailLabels[4]
+                priceView2.removeFromSuperview()
+                priceDetailLabel = priceDetailLabels[3]
                 if let priceDetailLabel = priceDetailLabel {
                     priceView.addSubview(priceDetailLabel)
+                    priceView.addSubview(inputPriceStackView)
                     NSLayoutConstraint.activate([
                         priceDetailLabel.centerYAnchor.constraint(equalTo: priceView.centerYAnchor),
                         priceDetailLabel.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8),
                         priceDetailLabel.leadingAnchor.constraint(equalTo: priceView.leadingAnchor, constant: 24),
-                        inputPriceStackView.leadingAnchor.constraint(equalTo: priceDetailLabel.leadingAnchor, constant: 100),
+                        inputPriceStackView.leadingAnchor.constraint(equalTo: priceDetailLabel.trailingAnchor, constant: 16),
                         inputPriceStackView.centerYAnchor.constraint(equalTo: priceView.centerYAnchor),
-                        inputPriceStackView.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8),
+                        inputPriceStackView.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8)
                     ])
                 }
             } else if sender == monthlyRentButton {
                 priceDetailLabel?.removeFromSuperview()
+                priceView2.removeFromSuperview()
                 priceDetailLabel = priceDetailLabels[2]
                 if let priceDetailLabel = priceDetailLabel {
                     priceView.addSubview(priceDetailLabel)
+                    priceView.addSubview(inputPriceStackView)
                     NSLayoutConstraint.activate([
                         priceDetailLabel.centerYAnchor.constraint(equalTo: priceView.centerYAnchor),
                         priceDetailLabel.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8),
                         priceDetailLabel.leadingAnchor.constraint(equalTo: priceView.leadingAnchor, constant: 24),
-                        inputPriceStackView.leadingAnchor.constraint(equalTo: priceDetailLabel.leadingAnchor, constant: 100),
+                        inputPriceStackView.leadingAnchor.constraint(equalTo: priceDetailLabel.trailingAnchor, constant: 16),
                         inputPriceStackView.centerYAnchor.constraint(equalTo: priceView.centerYAnchor),
-                        inputPriceStackView.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8),
+                        inputPriceStackView.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8)
+                    ])
+                }
+                view.addSubview(priceView2) //////////// 여긱고쳐라!!!!!!!!!
+                NSLayoutConstraint.activate([
+                    priceView2.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 100), // 나중에 수정 필요, 임의로 설정
+                    priceView2.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+                    priceView2.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+                    priceView2.heightAnchor.constraint(equalToConstant: 40)
+                ])
+                priceView2.addSubview(inputMonthlyRentStackView)
+                priceDetailLabel2 = priceDetailLabels[5]
+                inputMonthlyRentStackView.addArrangedSubview(fourDisitMonthlyRentField)
+                inputMonthlyRentStackView.addArrangedSubview(priceDetailLabels[7])
+                if let priceDetailLabel2 = priceDetailLabel2 {
+                    priceView2.addSubview(priceDetailLabel2)
+                    NSLayoutConstraint.activate([
+                        priceDetailLabel2.centerYAnchor.constraint(equalTo: priceView2.centerYAnchor),
+                        priceDetailLabel2.topAnchor.constraint(equalTo: priceView2.topAnchor, constant: 8),
+                        priceDetailLabel2.leadingAnchor.constraint(equalTo: priceView2.leadingAnchor, constant: 24),
+                        inputMonthlyRentStackView.leadingAnchor.constraint(equalTo: priceDetailLabel2.trailingAnchor, constant: 16),
+                        inputMonthlyRentStackView.centerYAnchor.constraint(equalTo: priceView2.centerYAnchor),
+                        inputMonthlyRentStackView.topAnchor.constraint(equalTo: priceView2.topAnchor, constant: 8),
+                        fourDisitMonthlyRentField.widthAnchor.constraint(equalToConstant: 74),
+                        fourDisitMonthlyRentField.topAnchor.constraint(equalTo: priceView2.topAnchor, constant: 4),
+                        fourDisitMonthlyRentField.centerYAnchor.constraint(equalTo: priceView2.centerYAnchor)
                     ])
                 }
             }
