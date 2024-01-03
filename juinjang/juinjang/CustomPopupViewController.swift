@@ -12,14 +12,16 @@ class CustomPopupViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.black.withAlphaComponent(0.7) // 흐리게 만듦
-
-        let popupView = UIView() // 팝업창 뷰
-        popupView.backgroundColor = .white
-        popupView.layer.cornerRadius = 10
-        popupView.translatesAutoresizingMaskIntoConstraints = false
+        
+        lazy var popupView = UIView().then { // 팝업창 뷰
+            $0.backgroundColor = .white
+            $0.layer.cornerRadius = 10
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
+        
         view.addSubview(popupView)
 
-        // 팝업창을 중앙에 위치시킴
+        // 팝업창 위치 설정
         NSLayoutConstraint.activate([
             popupView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             popupView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -38,7 +40,6 @@ class CustomPopupViewController: UIViewController {
         
         popupView.addSubview(messageLabel)
         
-        // 메시지 레이블을 중앙에 위치시킴
         NSLayoutConstraint.activate([
             messageLabel.centerXAnchor.constraint(equalTo: popupView.centerXAnchor),
             messageLabel.topAnchor.constraint(equalTo: popupView.topAnchor, constant: 65)
