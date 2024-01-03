@@ -11,12 +11,12 @@ import Then
 
 class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
     
-    var investmentButtons: [UIButton] = [] // "거래 목적"을 나타내는 선택지
+    var purposeButtons: [UIButton] = [] // "거래 목적"을 나타내는 선택지
     var propertyTypeButtons: [UIButton] = [] // "매물 유형"을 나타내는 선택지
     var moveTypeButtons: [UIButton] = [] // "입주 유형"을 나타내는 선택지
     
     // 거래 목적 카테고리의 버튼
-    var selectedInvestmentButton: UIButton?
+    var selectedPurposeButton: UIButton?
 
     // 매물 유형 카테고리의 버튼
     var selectedPropertyTypeButton: UIButton?
@@ -30,6 +30,10 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
     
     var priceDetailLabel: UILabel?
     var priceDetailLabel2: UILabel?
+    
+    var isPurposeSelected: Bool = false
+    var isPropertyTypeSelected: Bool = false
+    var isMoveTypeSelected: Bool = false
     
     func makeImageView(_ imageView: UIImageView, imageName: String) {
         imageView.image = UIImage(named: imageName)
@@ -243,6 +247,7 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
         threeDisitPriceField.delegate = self
         fourDisitPriceField.delegate = self
         fourDisitMonthlyRentField.delegate = self
+        checkNextButtonActivation()
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -292,18 +297,18 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
         ])
         
         // 거래 목적 Stack View
-        let investmentButtonsStackView = UIStackView(arrangedSubviews: [realestateInvestmentButton, moveInDirectlyButton])
+        let purposeButtonsStackView = UIStackView(arrangedSubviews: [realestateInvestmentButton, moveInDirectlyButton])
         
-        investmentButtonsStackView.translatesAutoresizingMaskIntoConstraints = false
-        investmentButtonsStackView.axis = .horizontal
-        investmentButtonsStackView.spacing = 8
+        purposeButtonsStackView.translatesAutoresizingMaskIntoConstraints = false
+        purposeButtonsStackView.axis = .horizontal
+        purposeButtonsStackView.spacing = 8
 
-        view.addSubview(investmentButtonsStackView)
+        view.addSubview(purposeButtonsStackView)
 
         NSLayoutConstraint.activate([
-            investmentButtonsStackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
-            investmentButtonsStackView.topAnchor.constraint(equalTo: purposeLabel.bottomAnchor, constant: 12),
-            investmentButtonsStackView.heightAnchor.constraint(equalToConstant: 38),
+            purposeButtonsStackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
+            purposeButtonsStackView.topAnchor.constraint(equalTo: purposeLabel.bottomAnchor, constant: 12),
+            purposeButtonsStackView.heightAnchor.constraint(equalToConstant: 38),
         ])
         
         // 매물 유형 Label
@@ -405,7 +410,7 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
     // 각 카테고리에 따른 버튼을 나타내기 위한 처리
     func setButton() {
         // 거래 목적 카테고리에 속한 버튼
-        investmentButtons = [realestateInvestmentButton, moveInDirectlyButton]
+        purposeButtons = [realestateInvestmentButton, moveInDirectlyButton]
         // 매물 유형 카테고리에 속한 버튼
         propertyTypeButtons = [apartmentButton, villaButton, houseButton]
         // 입주 유형 카테고리에 속한 버튼
@@ -419,25 +424,32 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
         textField.frame.size.width = newWidth
     }
     
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        // 모든 조건을 검사하여 버튼 상태 변경
+        checkNextButtonActivation()
+    }
+    
     // 버튼이 눌렸을 때 버튼의 색상 변경
     @objc func buttonPressed(_ sender: UIButton) {
         guard !sender.isSelected else { return } // 이미 선택된 버튼이면 아무 동작도 하지 않음
         // 해당 버튼의 선택 여부를 반전
         sender.isSelected = !sender.isSelected
         
-        if investmentButtons.contains(sender) {
+        if purposeButtons.contains(sender) {
             // 거래 목적 카테고리의 버튼일 경우
-            if let selectedButton = selectedInvestmentButton, selectedButton != sender {
+            if let selectedButton = selectedPurposeButton, selectedButton != sender {
                 // 이전에 선택된 버튼이 있고 새로운 버튼과 다른 경우에는 이전 버튼의 선택을 해제
                 selectedButton.isSelected = false
             }
-            selectedInvestmentButton = sender.isSelected ? sender : nil
+            selectedPurposeButton = sender.isSelected ? sender : nil
             
             // 버튼에 따라 사용자 표시
             if sender == realestateInvestmentButton {
                 backgroundImageView.addSubview(investorImageView)
                 priceDetailLabel?.removeFromSuperview()
                 priceView2.removeFromSuperview()
+                threeDisitPriceField.text = ""
+                fourDisitPriceField.text = ""
                 priceDetailLabel = priceDetailLabels[0]
                 if let priceDetailLabel = priceDetailLabel {
                     priceView.addSubview(priceDetailLabel)
@@ -460,6 +472,8 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
             } else if sender == moveInDirectlyButton {
                 backgroundImageView.addSubview(movingUserImageView)
                 priceDetailLabel?.removeFromSuperview()
+                threeDisitPriceField.text = ""
+                fourDisitPriceField.text = ""
                 priceDetailLabel = priceDetailLabels[1]
                 if let priceDetailLabel = priceDetailLabel {
                     priceView.addSubview(priceDetailLabel)
@@ -527,6 +541,9 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
             // 버튼에 따라 가격 View 표시
             if sender == saleButton {
                 priceDetailLabel?.removeFromSuperview()
+                priceView2.removeFromSuperview()
+                threeDisitPriceField.text = ""
+                fourDisitPriceField.text = ""
                 priceDetailLabel = priceDetailLabels[1]
                 if let priceDetailLabel = priceDetailLabel {
                     priceView.addSubview(priceDetailLabel)
@@ -540,10 +557,11 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
                         inputPriceStackView.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8)
                     ])
                 }
-                
             } else if sender == jeonseButton {
                 priceDetailLabel?.removeFromSuperview()
                 priceView2.removeFromSuperview()
+                threeDisitPriceField.text = ""
+                fourDisitPriceField.text = ""
                 priceDetailLabel = priceDetailLabels[3]
                 if let priceDetailLabel = priceDetailLabel {
                     priceView.addSubview(priceDetailLabel)
@@ -560,6 +578,9 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
             } else if sender == monthlyRentButton {
                 priceDetailLabel?.removeFromSuperview()
                 priceView2.removeFromSuperview()
+                threeDisitPriceField.text = ""
+                fourDisitPriceField.text = ""
+                fourDisitMonthlyRentField.text = ""
                 priceDetailLabel = priceDetailLabels[2]
                 if let priceDetailLabel = priceDetailLabel {
                     priceView.addSubview(priceDetailLabel)
@@ -636,11 +657,96 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
                 priceView.heightAnchor.constraint(equalToConstant: 40)
             ])
         }
+        
+        // 각 카테고리에 대한 버튼 선택 여부
+        if sender == realestateInvestmentButton || sender == moveInDirectlyButton {
+            isPurposeSelected = sender.isSelected
+            checkNextButtonActivation()
+        } else if sender == apartmentButton || sender == villaButton || sender == houseButton {
+            isPropertyTypeSelected = sender.isSelected
+            checkNextButtonActivation()
+        } else if sender == saleButton || sender == jeonseButton || sender == monthlyRentButton {
+            isMoveTypeSelected = sender.isSelected
+            checkNextButtonActivation()
+        }
+    }
+    
+    func checkNextButtonActivation() {
+        // 각 카테고리별 버튼과 텍스트 필드가 모두 선택 및 입력되었는지 확인
+        let isPurposeButtonSelected = selectedPurposeButton != nil
+        
+        if isPurposeButtonSelected {
+            if realestateInvestmentButton.isSelected {
+                // 매물 유형 버튼이 선택되었는지 확인
+                let isPropertyTypeSelected = propertyTypeButtons.contains { $0.isSelected }
+                
+                // 필드의 상태를 확인
+                let threeDisitPriceFieldEmpty = threeDisitPriceField.text?.isEmpty ?? true
+                let fourDisitPriceFieldEmpty = fourDisitPriceField.text?.isEmpty ?? true
+                
+                // 각 버튼 선택 여부와 텍스트 필드 입력 여부에 따라 다음으로 버튼 활성화 여부 결정
+                let allCategoriesSelected = isPropertyTypeSelected
+                let allTextFieldsFilled = !threeDisitPriceFieldEmpty && !fourDisitPriceFieldEmpty
+                
+                // 모든 조건이 충족되었을 때 다음으로 버튼 활성화
+                if allCategoriesSelected && allTextFieldsFilled {
+                    nextButton.isEnabled = true
+                    nextButton.backgroundColor = UIColor(red: 0.212, green: 0.212, blue: 0.212, alpha: 1)
+                } else {
+                    nextButton.isEnabled = false
+                    nextButton.backgroundColor = UIColor(red: 0.82, green: 0.82, blue: 0.82, alpha: 1)
+                }
+            } else if moveInDirectlyButton.isSelected {
+                if saleButton.isSelected || jeonseButton.isSelected {
+                    // 매물 유형 버튼과 이사 유형 버튼이 선택되었는지 확인
+                    let isPropertyTypeSelected = propertyTypeButtons.contains { $0.isSelected }
+                    let isMoveTypeSelected = moveTypeButtons.contains { $0.isSelected }
+                    
+                    // 필드의 상태를 확인
+                    let threeDisitPriceFieldEmpty = threeDisitPriceField.text?.isEmpty ?? true
+                    let fourDisitPriceFieldEmpty = fourDisitPriceField.text?.isEmpty ?? true
+                    
+                    // 각 버튼 선택 여부와 텍스트 필드 입력 여부에 따라 다음으로 버튼 활성화 여부 결정
+                    let allCategoriesSelected = isPropertyTypeSelected && isMoveTypeSelected
+                    let allTextFieldsFilled = !threeDisitPriceFieldEmpty && !fourDisitPriceFieldEmpty
+                    
+                    // 모든 조건이 충족되었을 때 다음으로 버튼 활성화
+                    if allCategoriesSelected && allTextFieldsFilled {
+                        nextButton.isEnabled = true
+                        nextButton.backgroundColor = UIColor(red: 0.212, green: 0.212, blue: 0.212, alpha: 1)
+                    } else {
+                        nextButton.isEnabled = false
+                        nextButton.backgroundColor = UIColor(red: 0.82, green: 0.82, blue: 0.82, alpha: 1)
+                    }
+                } else if monthlyRentButton.isSelected {
+                    // 매물 유형 버튼과 이사 유형 버튼이 선택되었는지 확인
+                    let isPropertyTypeSelected = propertyTypeButtons.contains { $0.isSelected }
+                    let isMoveTypeSelected = moveTypeButtons.contains { $0.isSelected }
+                    
+                    // 필드의 상태를 확인
+                    let threeDisitPriceFieldEmpty = threeDisitPriceField.text?.isEmpty ?? true
+                    let fourDisitPriceFieldEmpty = fourDisitPriceField.text?.isEmpty ?? true
+                    let fourDisitMonthlyRentFieldEmpty = fourDisitMonthlyRentField.text?.isEmpty ?? true
+                    
+                    // 각 버튼 선택 여부와 텍스트 필드 입력 여부에 따라 다음으로 버튼 활성화 여부 결정
+                    let allCategoriesSelected = isPropertyTypeSelected && isMoveTypeSelected
+                    let allTextFieldsFilled = !threeDisitPriceFieldEmpty && !fourDisitPriceFieldEmpty && !fourDisitMonthlyRentFieldEmpty
+                    
+                    // 모든 조건이 충족되었을 때 다음으로 버튼 활성화
+                    if allCategoriesSelected && allTextFieldsFilled {
+                        nextButton.isEnabled = true
+                        nextButton.backgroundColor = UIColor(red: 0.212, green: 0.212, blue: 0.212, alpha: 1)
+                    } else {
+                        nextButton.isEnabled = false
+                        nextButton.backgroundColor = UIColor(red: 0.82, green: 0.82, blue: 0.82, alpha: 1)
+                    }
+                }
+            }
+        }
     }
 
     
     @objc func buttonTapped(_ sender: UIButton) {
-        // 모든 항목 입력 완료 시 다음으로 버튼 활성화
     }
     
     /*
