@@ -772,6 +772,8 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
 
     
     @objc func buttonTapped(_ sender: UIButton) {
+        let newPageViewController = OpenNewPage2ViewController()
+        navigationController?.pushViewController(newPageViewController, animated: true)
     }
     
     /*

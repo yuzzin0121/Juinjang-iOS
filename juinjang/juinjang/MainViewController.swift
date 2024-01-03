@@ -30,7 +30,7 @@ class MainViewController: UIViewController {
     }
             
     // 버튼 액션 메서드
-    @objc func goToCreation() {
+    @objc func goToCreation(_ sender: UIButton) {
         let newPageViewController = OpenNewPageViewController()
         navigationController?.pushViewController(newPageViewController, animated: true)
     }
