@@ -35,10 +35,12 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
     var isPropertyTypeSelected: Bool = false
     var isMoveTypeSelected: Bool = false
     
+    var backgroundImageViewWidthConstraint: NSLayoutConstraint? // 배경 이미지의 너비 제약조건
+    
     func makeImageView(_ imageView: UIImageView, imageName: String) {
         imageView.image = UIImage(named: imageName)
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
     }
     
     lazy var backgroundImageView = UIImageView().then {
@@ -171,27 +173,37 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
         }
     }()
     
-    lazy var threeDisitPriceField: UITextField = {
-        let textField = UITextField()
+    lazy var threeDisitPriceField = UITextField().then {
         let backgroundImage = UIImage(named: "3-disit-price")
-        textField.background = backgroundImage
-        textField.textColor = UIColor(red: 1, green: 0.386, blue: 0.158, alpha: 1)
-        textField.keyboardType = .numberPad // 숫자 패드 키보드로 설정, 숫자만 입력을 받도록 추후 설정
+        $0.background = backgroundImage
+        $0.attributedPlaceholder = NSAttributedString(
+            string: "000",
+            attributes: [
+                .foregroundColor: UIColor(red: 0.788, green: 0.788, blue: 0.788, alpha: 1),
+                .font: UIFont(name: "Pretendard-Medium", size: 24) ?? UIFont.systemFont(ofSize: 24)
+            ]
+        )
+        $0.textColor = UIColor(red: 1, green: 0.386, blue: 0.158, alpha: 1)
+        $0.keyboardType = .numberPad
         if let customFont = UIFont(name: "Pretendard-SemiBold", size: 24) {
-            textField.font = customFont
+            $0.font = customFont
         }
-        // 오른쪽 여백을 추가하기 위한 뷰 설정
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 7, height: textField.frame.height))
-        textField.leftView = paddingView
-        textField.leftViewMode = .always
-        textField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
-        return textField
-    }()
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 7, height: $0.frame.height))
+        $0.leftView = paddingView
+        $0.leftViewMode = .always
+    }
 
     
     lazy var fourDisitPriceField = UITextField().then {
         let backgroundImage = UIImage(named: "4-disit-price")
         $0.background = backgroundImage
+        $0.attributedPlaceholder = NSAttributedString(
+            string: "0000",
+            attributes: [
+                .foregroundColor: UIColor(red: 0.788, green: 0.788, blue: 0.788, alpha: 1),
+                .font: UIFont(name: "Pretendard-Medium", size: 24) ?? UIFont.systemFont(ofSize: 24)
+            ]
+        )
         $0.textColor = UIColor(red: 1, green: 0.386, blue: 0.158, alpha: 1)
         $0.keyboardType = .numberPad
         if let customFont = UIFont(name: "Pretendard-SemiBold", size: 24) {
@@ -205,6 +217,13 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
     lazy var fourDisitMonthlyRentField = UITextField().then {
         let backgroundImage = UIImage(named: "4-disit-price")
         $0.background = backgroundImage
+        $0.attributedPlaceholder = NSAttributedString(
+            string: "0000",
+            attributes: [
+                .foregroundColor: UIColor(red: 0.788, green: 0.788, blue: 0.788, alpha: 1),
+                .font: UIFont(name: "Pretendard-Medium", size: 24) ?? UIFont.systemFont(ofSize: 24)
+            ]
+        )
         $0.textColor = UIColor(red: 1, green: 0.386, blue: 0.158, alpha: 1)
         $0.keyboardType = .numberPad
         if let customFont = UIFont(name: "Pretendard-SemiBold", size: 24) {
@@ -283,17 +302,17 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
         // 배경 ImageView
         NSLayoutConstraint.activate([
             backgroundImageView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            backgroundImageView.heightAnchor.constraint(equalToConstant: 300),
-            backgroundImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+            backgroundImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.28),
+//            backgroundImageView.topAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: -13.5)
+            backgroundImageView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor)
         ])
 
         // 거래 목적 Label
         NSLayoutConstraint.activate([
-            purposeLabel.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: 20),
-//            purposeLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 350)
+            purposeLabel.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: 35),
             purposeLabel.widthAnchor.constraint(equalToConstant: 66),
             purposeLabel.heightAnchor.constraint(equalToConstant: 24),
-            purposeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -138),
+            purposeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: view.bounds.width * -0.35)
         ])
         
         // 거래 목적 Stack View
@@ -308,15 +327,15 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
         NSLayoutConstraint.activate([
             purposeButtonsStackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
             purposeButtonsStackView.topAnchor.constraint(equalTo: purposeLabel.bottomAnchor, constant: 12),
-            purposeButtonsStackView.heightAnchor.constraint(equalToConstant: 38),
+            purposeButtonsStackView.heightAnchor.constraint(lessThanOrEqualTo: view.heightAnchor, multiplier: 0.1)
         ])
         
         // 매물 유형 Label
         NSLayoutConstraint.activate([
             typeLabel.widthAnchor.constraint(equalToConstant: 66),
             typeLabel.heightAnchor.constraint(equalToConstant: 24),
-            typeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -138),
-            typeLabel.topAnchor.constraint(equalTo: realestateInvestmentButton.bottomAnchor, constant: 40),
+            typeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: view.bounds.width * -0.35),
+            typeLabel.topAnchor.constraint(equalTo: realestateInvestmentButton.bottomAnchor, constant: 35),
         ])
         
         // 매물 유형 Stack View
@@ -330,16 +349,16 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
 
         NSLayoutConstraint.activate([
             propertyTypeStackView.topAnchor.constraint(equalTo: typeLabel.bottomAnchor, constant: 12),
-            propertyTypeStackView.heightAnchor.constraint(equalToConstant: 38),
+            propertyTypeStackView.heightAnchor.constraint(lessThanOrEqualTo: view.heightAnchor, multiplier: 0.1),
             propertyTypeStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24)
         ])
 
         // 가격 Label
         NSLayoutConstraint.activate([
-            priceLabel.widthAnchor.constraint(equalToConstant: 31),
+            priceLabel.widthAnchor.constraint(equalToConstant: 66),
             priceLabel.heightAnchor.constraint(equalToConstant: 24),
-            priceLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -155.5),
-            priceLabel.topAnchor.constraint(equalTo: propertyTypeStackView.bottomAnchor, constant: 40)
+            priceLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: view.bounds.width * -0.35),
+            priceLabel.topAnchor.constraint(equalTo: propertyTypeStackView.bottomAnchor, constant: 35)
         ])
         
         // 가격 View
@@ -347,7 +366,7 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
             priceView.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 12),
             priceView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             priceView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            priceView.heightAnchor.constraint(equalToConstant: 40)
+            priceView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.05)
         ])
         
         // 입주 유형 Stack View
@@ -400,10 +419,10 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
         // 다음으로 버튼
         nextButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            nextButton.widthAnchor.constraint(equalToConstant: 342),
+            nextButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.87),
             nextButton.heightAnchor.constraint(equalToConstant: 52),
             nextButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            nextButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 764)
+            nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -5)
         ])
     }
     
@@ -417,14 +436,13 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
         moveTypeButtons = [saleButton, jeonseButton, monthlyRentButton]
     }
     
-    @objc func textFieldDidChange(_ textField: UITextField) {
-        guard let text = textField.text else { return }
-        let width = text.size(withAttributes: [NSAttributedString.Key.font: textField.font ?? UIFont.systemFont(ofSize: 16)]).width
-        let newWidth = width + 20 // 원하는 너비 조정
-        textField.frame.size.width = newWidth
-    }
-    
     func textFieldDidChangeSelection(_ textField: UITextField) {
+        guard let text = textField.text else { return }
+        
+        // 입력된 텍스트에 따라 너비 조절
+        let width = text.size(withAttributes: [NSAttributedString.Key.font: textField.font ?? UIFont.systemFont(ofSize: 17)]).width + 16 // 여분의 여백 추가
+        backgroundImageViewWidthConstraint?.constant = width
+        
         // 모든 조건을 검사하여 버튼 상태 변경
         checkNextButtonActivation()
     }
@@ -460,6 +478,7 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
                         priceDetailLabel.leadingAnchor.constraint(equalTo: priceView.leadingAnchor, constant: 24),
                         inputPriceStackView.leadingAnchor.constraint(equalTo: priceDetailLabel.trailingAnchor, constant: 16),
                         inputPriceStackView.centerYAnchor.constraint(equalTo: priceView.centerYAnchor),
+                        inputPriceStackView.heightAnchor.constraint(lessThanOrEqualTo: view.heightAnchor, multiplier: 0.5),
                         inputPriceStackView.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8)
                     ])
                 }
@@ -483,6 +502,7 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
                         priceDetailLabel.leadingAnchor.constraint(equalTo: priceView.leadingAnchor, constant: 24),
                         inputPriceStackView.leadingAnchor.constraint(equalTo: priceDetailLabel.trailingAnchor, constant: 16),
                         inputPriceStackView.centerYAnchor.constraint(equalTo: priceView.centerYAnchor),
+                        inputPriceStackView.heightAnchor.constraint(lessThanOrEqualTo: view.heightAnchor, multiplier: 0.5),
                         inputPriceStackView.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8)
                     ])
                 }
@@ -554,6 +574,7 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
                         priceDetailLabel.leadingAnchor.constraint(equalTo: priceView.leadingAnchor, constant: 24),
                         inputPriceStackView.leadingAnchor.constraint(equalTo: priceDetailLabel.trailingAnchor, constant: 16),
                         inputPriceStackView.centerYAnchor.constraint(equalTo: priceView.centerYAnchor),
+                        inputPriceStackView.heightAnchor.constraint(lessThanOrEqualTo: view.heightAnchor, multiplier: 0.1),
                         inputPriceStackView.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8)
                     ])
                 }
@@ -572,6 +593,7 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
                         priceDetailLabel.leadingAnchor.constraint(equalTo: priceView.leadingAnchor, constant: 24),
                         inputPriceStackView.leadingAnchor.constraint(equalTo: priceDetailLabel.trailingAnchor, constant: 16),
                         inputPriceStackView.centerYAnchor.constraint(equalTo: priceView.centerYAnchor),
+                        inputPriceStackView.heightAnchor.constraint(lessThanOrEqualTo: view.heightAnchor, multiplier: 0.1),
                         inputPriceStackView.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8)
                     ])
                 }
@@ -591,15 +613,16 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
                         priceDetailLabel.leadingAnchor.constraint(equalTo: priceView.leadingAnchor, constant: 24),
                         inputPriceStackView.leadingAnchor.constraint(equalTo: priceDetailLabel.trailingAnchor, constant: 16),
                         inputPriceStackView.centerYAnchor.constraint(equalTo: priceView.centerYAnchor),
+                        inputPriceStackView.heightAnchor.constraint(lessThanOrEqualTo: view.heightAnchor, multiplier: 0.1),
                         inputPriceStackView.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8)
                     ])
                 }
                 view.addSubview(priceView2) //////////// 여긱고쳐라!!!!!!!!!
                 NSLayoutConstraint.activate([
-                    priceView2.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 100), // 나중에 수정 필요, 임의로 설정
+                    priceView2.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 101), // 나중에 수정 필요, 임의로 설정
                     priceView2.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
                     priceView2.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-                    priceView2.heightAnchor.constraint(equalToConstant: 40)
+                    priceView2.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.05)
                 ])
                 priceView2.addSubview(inputMonthlyRentStackView)
                 priceDetailLabel2 = priceDetailLabels[5]
@@ -613,6 +636,7 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
                         priceDetailLabel2.leadingAnchor.constraint(equalTo: priceView2.leadingAnchor, constant: 24),
                         inputMonthlyRentStackView.leadingAnchor.constraint(equalTo: priceDetailLabel2.trailingAnchor, constant: 16),
                         inputMonthlyRentStackView.centerYAnchor.constraint(equalTo: priceView2.centerYAnchor),
+                        inputMonthlyRentStackView.heightAnchor.constraint(lessThanOrEqualTo: view.heightAnchor, multiplier: 0.1),
                         inputMonthlyRentStackView.topAnchor.constraint(equalTo: priceView2.topAnchor, constant: 8),
                         fourDisitMonthlyRentField.widthAnchor.constraint(equalToConstant: 74),
                         fourDisitMonthlyRentField.topAnchor.constraint(equalTo: priceView2.topAnchor, constant: 4),
@@ -633,6 +657,7 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
             NSLayoutConstraint.activate([
                 moveTypeStackView.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 12),
                 moveTypeStackView.heightAnchor.constraint(equalToConstant: 38),
+                moveTypeStackView.heightAnchor.constraint(lessThanOrEqualTo: view.heightAnchor, multiplier: 0.5),
                 moveTypeStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
             ])
 
@@ -641,7 +666,7 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
                 priceView.topAnchor.constraint(equalTo: moveTypeStackView.bottomAnchor, constant: 12),
                 priceView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
                 priceView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-                priceView.heightAnchor.constraint(equalToConstant: 40)
+                priceView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.05)
             ])
         } else {
             // moveInDirectlyButton이 선택되지 않은 상태일 때
@@ -654,7 +679,7 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
                 priceView.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 12),
                 priceView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
                 priceView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-                priceView.heightAnchor.constraint(equalToConstant: 40)
+                priceView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.05)
             ])
         }
         
