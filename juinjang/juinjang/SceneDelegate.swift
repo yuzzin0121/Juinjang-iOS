@@ -21,8 +21,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 //        let mainViewController = MainViewController()
 //        let navigationController = UINavigationController(rootViewController: mainViewController)
 
-//       window?.rootViewController = navigationController
-        window?.rootViewController = OpenNewPageViewController()
+//        window?.rootViewController = navigationController
+        window?.rootViewController = OpenNewPage2ViewController()
         window?.makeKeyAndVisible()
     }
 
