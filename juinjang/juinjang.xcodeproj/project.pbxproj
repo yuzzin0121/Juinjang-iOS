@@ -83,11 +83,11 @@
 				0A9E0A482B3DCAB90094595A /* SceneDelegate.swift */,
 				0A9E0A4A2B3DCAB90094595A /* MainViewController.swift */,
 				0A9DA8122B405C3E005C4B23 /* OpenNewPageViewController.swift */,
+				0AA6161F2B45683100F720B3 /* OpenNewPage2ViewController.swift */,
+				0AA616232B4579E300F720B3 /* CustomPopupViewController.swift */,
 				0A9E0A4F2B3DCAB90094595A /* Assets.xcassets */,
 				0A9E0A512B3DCAB90094595A /* LaunchScreen.storyboard */,
 				0A9E0A542B3DCAB90094595A /* Info.plist */,
-				0AA6161F2B45683100F720B3 /* OpenNewPage2ViewController.swift */,
-				0AA616232B4579E300F720B3 /* CustomPopupViewController.swift */,
 			);
 			path = juinjang;
 			sourceTree = "<group>";
