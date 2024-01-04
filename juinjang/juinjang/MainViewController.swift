@@ -32,9 +32,9 @@ class MainViewController: UIViewController {
     // 버튼 액션 메서드
     @objc func goToCreation(_ sender: UIButton) {
         let newPageViewController = OpenNewPageViewController()
-        navigationController?.pushViewController(newPageViewController, animated: true)
+        // 백 버튼 타이틀 숨기기
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        navigationController?.pushViewController(newPageViewController, animated: false)
     }
-    
-        
 }
 

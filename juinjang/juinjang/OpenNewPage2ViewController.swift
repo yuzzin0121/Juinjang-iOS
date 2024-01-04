@@ -7,7 +7,7 @@
 
 import UIKit
 
-class OpenNewPage2ViewController: UINavigationController, UITextFieldDelegate {
+class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
     
     var backgroundImageViewWidthConstraint: NSLayoutConstraint? // 배경 이미지의 너비 제약조건
     
@@ -82,8 +82,6 @@ class OpenNewPage2ViewController: UINavigationController, UITextFieldDelegate {
         
         $0.widthAnchor.constraint(equalToConstant: 250).isActive = true
     }
-
-
     
     lazy var addressTextField = UITextField().then {
         $0.layer.backgroundColor = UIColor(red: 0.971, green: 0.971, blue: 0.971, alpha: 1).cgColor
@@ -99,6 +97,7 @@ class OpenNewPage2ViewController: UINavigationController, UITextFieldDelegate {
         
         $0.backgroundColor = UIColor(red: 0.358, green: 0.363, blue: 0.371, alpha: 1)
         $0.layer.cornerRadius = 10
+        $0.addTarget(self, action: #selector(searchAddressButtonTapped(_:)), for: .touchUpInside)
         $0.translatesAutoresizingMaskIntoConstraints = false
         
         $0.titleLabel?.font = UIFont(name: "Pretendard-SemiBold", size: 14)
@@ -160,6 +159,7 @@ class OpenNewPage2ViewController: UINavigationController, UITextFieldDelegate {
         $0.titleLabel?.adjustsFontSizeToFitWidth = true
         $0.titleLabel?.minimumScaleFactor = 0.5
         $0.titleLabel?.lineBreakMode = .byTruncatingTail
+        $0.addTarget(self, action: #selector(backButtonTapped(_:)), for: .touchUpInside)
     }
     
     lazy var nextButton = UIButton().then {
@@ -178,12 +178,13 @@ class OpenNewPage2ViewController: UINavigationController, UITextFieldDelegate {
         $0.addTarget(self, action: #selector(nextButtonTapped(_:)), for: .touchUpInside)
     }
 
-
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        // Do any additional setup after loading the view.
+        self.navigationItem.title = "새 페이지 펼치기"
         addressTextField.delegate = self
+        addressTextField.isUserInteractionEnabled = false // 사용자 입력 방지
+        houseNicknameTextField.delegate = self
         setupWidgets()
     }
     
@@ -263,7 +264,7 @@ class OpenNewPage2ViewController: UINavigationController, UITextFieldDelegate {
         // 이전으로 버튼
         NSLayoutConstraint.activate([
             backButton.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -116.5),
-            backButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 764),
+            backButton.topAnchor.constraint(equalTo: houseNicknameTextField.bottomAnchor, constant: 182),
             backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
             backButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -5)
         ])
@@ -272,11 +273,34 @@ class OpenNewPage2ViewController: UINavigationController, UITextFieldDelegate {
         NSLayoutConstraint.activate([
             nextButton.heightAnchor.constraint(equalToConstant: 52),
             nextButton.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 58.5),
-            nextButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 764),
+            nextButton.topAnchor.constraint(equalTo: houseNicknameTextField.bottomAnchor, constant: 182),
             nextButton.leadingAnchor.constraint(equalTo: backButton.trailingAnchor, constant: 8),
+            nextButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
             nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -5)
         ])
 
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        // 백 스페이스 실행 가능하도록
+        if let char = string.cString(using: String.Encoding.utf8) {
+            let isBackSpace = strcmp(char, "\\b")
+            if (isBackSpace == -92) {
+                return true
+            }
+        }
+        // 글자 수 제한
+        guard textField.text!.count < 12 else { return false }
+        return true
+    }
+    
+    @objc func searchAddressButtonTapped(_ sender: UIButton) {
+        let alertController = UIAlertController(title: "", message: "주소를 검색해주세요.", preferredStyle: .alert)
+        
+        let okAction = UIAlertAction(title: "확인", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        
+        present(alertController, animated: true, completion: nil)
     }
     
     @objc func nextButtonTapped(_ sender: UIButton) {
@@ -285,14 +309,7 @@ class OpenNewPage2ViewController: UINavigationController, UITextFieldDelegate {
         present(customPopup, animated: false, completion: nil)
     }
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    @objc func backButtonTapped(_ sender: UIButton) {
+        navigationController?.popViewController(animated: true)
     }
-    */
-
 }

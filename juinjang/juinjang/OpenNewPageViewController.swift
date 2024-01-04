@@ -9,7 +9,7 @@
 import UIKit
 import Then
 
-class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
+class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
     
     var purposeButtons: [UIButton] = [] // "거래 목적"을 나타내는 선택지
     var propertyTypeButtons: [UIButton] = [] // "매물 유형"을 나타내는 선택지
@@ -212,6 +212,7 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 7, height: $0.frame.height))
         $0.leftView = paddingView
         $0.leftViewMode = .always
+        $0.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
     }
     
     lazy var fourDisitMonthlyRentField = UITextField().then {
@@ -240,6 +241,7 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
         
         $0.backgroundColor = UIColor(red: 0.82, green: 0.82, blue: 0.82, alpha: 1)
         $0.layer.cornerRadius = 8
+        $0.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
         $0.translatesAutoresizingMaskIntoConstraints = false
         
         $0.titleLabel?.font = UIFont(name: "Pretendard-SemiBold", size: 16)
@@ -254,14 +256,6 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
         self.view.backgroundColor = .white
         self.navigationItem.title = "새 페이지 펼치기"
         self.navigationController?.navigationBar.tintColor = .black
-        // 이미지 로드
-//        let backImage = UIImage(named: "arrow-left")
-//        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-        // Do any additional setup after loading the view.
-        
-        let backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil) // title 부분 수정
-        backBarButtonItem.tintColor = .black
-        self.navigationItem.backBarButtonItem = backBarButtonItem
         setupWidgets()
         threeDisitPriceField.delegate = self
         fourDisitPriceField.delegate = self
@@ -447,7 +441,15 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
         checkNextButtonActivation()
     }
     
-    // 버튼이 눌렸을 때 버튼의 색상 변경
+    @objc func textFieldDidChange(_ textField: UITextField) {
+        if let text = textField.text {
+            let size = (text as NSString).size(withAttributes: [
+                NSAttributedString.Key.font: textField.font ?? UIFont.systemFont(ofSize: 17)
+            ])
+            textField.frame.size.width = size.width + 20 // 적절한 여유 공간 추가
+        }
+    }
+    
     @objc func buttonPressed(_ sender: UIButton) {
         guard !sender.isSelected else { return } // 이미 선택된 버튼이면 아무 동작도 하지 않음
         // 해당 버튼의 선택 여부를 반전
@@ -485,7 +487,7 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
                 NSLayoutConstraint.activate([
                     investorImageView.bottomAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -15),
                     investorImageView.trailingAnchor.constraint(equalTo: backgroundImageView.trailingAnchor, constant: -258.67),
-                    investorImageView.topAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: 105)
+                    investorImageView.topAnchor.constraint(equalTo: backgroundImageView.topAnchor, constant: 105)
                 ])
                 movingUserImageView.removeFromSuperview()
             } else if sender == moveInDirectlyButton {
@@ -509,7 +511,7 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
                 NSLayoutConstraint.activate([
                     movingUserImageView.bottomAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -14.84),
                     movingUserImageView.trailingAnchor.constraint(equalTo: backgroundImageView.trailingAnchor, constant: -255.55),
-                    movingUserImageView.topAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: 110)
+                    movingUserImageView.topAnchor.constraint(equalTo: backgroundImageView.topAnchor, constant: 110)
                 ])
                 investorImageView.removeFromSuperview()
             }
@@ -525,7 +527,7 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
                 NSLayoutConstraint.activate([
                     apartmentImageView.bottomAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -13),
                     apartmentImageView.trailingAnchor.constraint(equalTo: backgroundImageView.trailingAnchor, constant: -95),
-                    apartmentImageView.topAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: 27)
+                    apartmentImageView.topAnchor.constraint(equalTo: backgroundImageView.topAnchor, constant: 27)
                 ])
                 villaImageView.removeFromSuperview()
                 houseImageView.removeFromSuperview()
@@ -534,7 +536,7 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
                 NSLayoutConstraint.activate([
                     villaImageView.bottomAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -14.5),
                     villaImageView.trailingAnchor.constraint(equalTo: backgroundImageView.trailingAnchor, constant: -95),
-                    villaImageView.topAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: 82)
+                    villaImageView.topAnchor.constraint(equalTo: backgroundImageView.topAnchor, constant: 82)
                 ])
                 apartmentImageView.removeFromSuperview()
                 houseImageView.removeFromSuperview()
@@ -543,7 +545,7 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
                 NSLayoutConstraint.activate([
                     houseImageView.bottomAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -14.84),
                     houseImageView.trailingAnchor.constraint(equalTo: backgroundImageView.trailingAnchor, constant: -91),
-                    houseImageView.topAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: 102)
+                    houseImageView.topAnchor.constraint(equalTo: backgroundImageView.topAnchor, constant: 102)
                 ])
                 apartmentImageView.removeFromSuperview()
                 villaImageView.removeFromSuperview()
@@ -773,6 +775,7 @@ class OpenNewPageViewController: UINavigationController, UITextFieldDelegate {
     
     @objc func buttonTapped(_ sender: UIButton) {
         let newPageViewController = OpenNewPage2ViewController()
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         navigationController?.pushViewController(newPageViewController, animated: true)
     }
     
