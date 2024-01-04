@@ -172,10 +172,14 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
             }
         }
     }()
+
     
     lazy var threeDisitPriceField = UITextField().then {
         let backgroundImage = UIImage(named: "3-disit-price")
         $0.background = backgroundImage
+//        $0.layer.backgroundColor = UIColor(red: 0.933, green: 0.933, blue: 0.933, alpha: 1).cgColor
+//        $0.layer.cornerRadius = 21
+
         $0.attributedPlaceholder = NSAttributedString(
             string: "000",
             attributes: [
@@ -191,7 +195,9 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 7, height: $0.frame.height))
         $0.leftView = paddingView
         $0.leftViewMode = .always
+        $0.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
     }
+    
 
     
     lazy var fourDisitPriceField = UITextField().then {
@@ -256,11 +262,16 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
         self.view.backgroundColor = .white
         self.navigationItem.title = "새 페이지 펼치기"
         self.navigationController?.navigationBar.tintColor = .black
+        self.navigationItem.hidesBackButton = true
+        let backButtonImage = UIImage(named: "arrow-left")
+        let backButton = UIBarButtonItem(image: backButtonImage, style: .plain,target: self, action: #selector(backButtonTapped))
+        navigationItem.leftBarButtonItem = backButton
         setupWidgets()
         threeDisitPriceField.delegate = self
         fourDisitPriceField.delegate = self
         fourDisitMonthlyRentField.delegate = self
         checkNextButtonActivation()
+        nextButton.isEnabled = false
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -779,6 +790,10 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
         navigationController?.pushViewController(newPageViewController, animated: true)
     }
     
+    @objc func backButtonTapped() {
+        navigationController?.popViewController(animated: true)
+    }
+
     /*
     // MARK: - Navigation
 

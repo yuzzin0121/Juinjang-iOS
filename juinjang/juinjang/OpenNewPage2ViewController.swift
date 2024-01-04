@@ -182,6 +182,10 @@ class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         view.backgroundColor = .white
         self.navigationItem.title = "새 페이지 펼치기"
+        self.navigationItem.hidesBackButton = true
+        let backButtonImage = UIImage(named: "arrow-left")
+        let backButton = UIBarButtonItem(image: backButtonImage, style: .plain,target: self, action: #selector(backButtonTapped))
+        navigationItem.leftBarButtonItem = backButton
         addressTextField.delegate = self
         addressTextField.isUserInteractionEnabled = false // 사용자 입력 방지
         houseNicknameTextField.delegate = self
