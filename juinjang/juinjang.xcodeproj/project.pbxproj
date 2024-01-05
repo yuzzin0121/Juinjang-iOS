@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A0EBB402B47CAE20098375B /* TransactionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0EBB3F2B47CAE20098375B /* TransactionModel.swift */; };
 		0A4253652B41C91F00A2B2A8 /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0A4253622B41B86F00A2B2A8 /* Pretendard-SemiBold.otf */; };
 		0A9DA8132B405C3E005C4B23 /* OpenNewPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9DA8122B405C3E005C4B23 /* OpenNewPageViewController.swift */; };
 		0A9DA8162B405E6C005C4B23 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 0A9DA8152B405E6C005C4B23 /* Then */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0A0EBB3F2B47CAE20098375B /* TransactionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionModel.swift; sourceTree = "<group>"; };
 		0A4253622B41B86F00A2B2A8 /* Pretendard-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-SemiBold.otf"; sourceTree = "<group>"; };
 		0A9DA8122B405C3E005C4B23 /* OpenNewPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenNewPageViewController.swift; sourceTree = "<group>"; };
 		0A9E0A432B3DCAB90094595A /* juinjang.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = juinjang.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -83,6 +85,7 @@
 				0A9E0A482B3DCAB90094595A /* SceneDelegate.swift */,
 				0A9E0A4A2B3DCAB90094595A /* MainViewController.swift */,
 				0A9DA8122B405C3E005C4B23 /* OpenNewPageViewController.swift */,
+				0A0EBB3F2B47CAE20098375B /* TransactionModel.swift */,
 				0AA6161F2B45683100F720B3 /* OpenNewPage2ViewController.swift */,
 				0AA616232B4579E300F720B3 /* CustomPopupViewController.swift */,
 				0A9E0A4F2B3DCAB90094595A /* Assets.xcassets */,
@@ -176,6 +179,7 @@
 				0A9E0A4B2B3DCAB90094595A /* MainViewController.swift in Sources */,
 				0AA616202B45683100F720B3 /* OpenNewPage2ViewController.swift in Sources */,
 				0A9E0A472B3DCAB90094595A /* AppDelegate.swift in Sources */,
+				0A0EBB402B47CAE20098375B /* TransactionModel.swift in Sources */,
 				0A9DA8132B405C3E005C4B23 /* OpenNewPageViewController.swift in Sources */,
 				0A9E0A492B3DCAB90094595A /* SceneDelegate.swift in Sources */,
 			);
