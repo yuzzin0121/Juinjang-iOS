@@ -61,15 +61,19 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
     }
     
     lazy var apartmentImageView = UIImageView().then {
-        makeImageView($0, imageName: "apartment-img")
+        makeImageView($0, imageName: "apartment")
     }
     
     lazy var villaImageView = UIImageView().then {
-        makeImageView($0, imageName: "villa-img")
+        makeImageView($0, imageName: "villa")
+    }
+    
+    lazy var officetelImageView = UIImageView().then {
+        makeImageView($0, imageName: "officetel")
     }
     
     lazy var houseImageView = UIImageView().then {
-        makeImageView($0, imageName: "house-img")
+        makeImageView($0, imageName: "house")
     }
     
     func configureLabel(_ label: UILabel, text: String) {
@@ -123,6 +127,10 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
     
     lazy var villaButton = UIButton().then {
         configureButton($0, normalImage: UIImage(named: "villa-button"), selectedImage: UIImage(named: "villa-selected-button"), action: #selector(buttonPressed))
+    }
+    
+    lazy var officetelButton = UIButton().then {
+        configureButton($0, normalImage: UIImage(named: "officetel-button"), selectedImage: UIImage(named: "officetel-selected-button"), action: #selector(buttonPressed))
     }
     
     lazy var houseButton = UIButton().then {
@@ -349,7 +357,7 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
         ])
         
         // 매물 유형 Stack View
-        let propertyTypeStackView = UIStackView(arrangedSubviews: [apartmentButton, villaButton, houseButton])
+        let propertyTypeStackView = UIStackView(arrangedSubviews: [apartmentButton, villaButton, officetelButton, houseButton])
 
         propertyTypeStackView.translatesAutoresizingMaskIntoConstraints = false
         propertyTypeStackView.axis = .horizontal
@@ -441,7 +449,7 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
         // 거래 목적 카테고리에 속한 버튼
         purposeButtons = [realestateInvestmentButton, moveInDirectlyButton]
         // 매물 유형 카테고리에 속한 버튼
-        propertyTypeButtons = [apartmentButton, villaButton, houseButton]
+        propertyTypeButtons = [apartmentButton, villaButton, officetelButton, houseButton]
         // 입주 유형 카테고리에 속한 버튼
         moveTypeButtons = [saleButton, jeonseButton, monthlyRentButton]
     }
@@ -550,6 +558,7 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
                     apartmentImageView.topAnchor.constraint(equalTo: backgroundImageView.topAnchor, constant: 27)
                 ])
                 villaImageView.removeFromSuperview()
+                officetelImageView.removeFromSuperview()
                 houseImageView.removeFromSuperview()
             } else if sender == villaButton {
                 transactionModel.selectedPropertyTypeButtonImage = villaImageView.image
@@ -560,6 +569,18 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
                     villaImageView.topAnchor.constraint(equalTo: backgroundImageView.topAnchor, constant: 82)
                 ])
                 apartmentImageView.removeFromSuperview()
+                officetelImageView.removeFromSuperview()
+                houseImageView.removeFromSuperview()
+            } else if sender == officetelButton {
+                transactionModel.selectedPropertyTypeButtonImage = officetelImageView.image
+                backgroundImageView.addSubview(officetelImageView)
+                NSLayoutConstraint.activate([
+                    officetelImageView.bottomAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -14.5),
+                    officetelImageView.trailingAnchor.constraint(equalTo: backgroundImageView.trailingAnchor, constant: -95),
+                    officetelImageView.topAnchor.constraint(equalTo: backgroundImageView.topAnchor, constant: 37)
+                ])
+                apartmentImageView.removeFromSuperview()
+                villaImageView.removeFromSuperview()
                 houseImageView.removeFromSuperview()
             } else if sender == houseButton {
                 transactionModel.selectedPropertyTypeButtonImage = houseImageView.image
@@ -571,6 +592,7 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
                 ])
                 apartmentImageView.removeFromSuperview()
                 villaImageView.removeFromSuperview()
+                officetelImageView.removeFromSuperview()
             }
         } else if moveTypeButtons.contains(sender) {
             if sender != saleButton {
@@ -711,7 +733,7 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
         if sender == realestateInvestmentButton || sender == moveInDirectlyButton {
             isPurposeSelected = sender.isSelected
             checkNextButtonActivation()
-        } else if sender == apartmentButton || sender == villaButton || sender == houseButton {
+        } else if sender == apartmentButton || sender == villaButton || sender == officetelButton || sender == houseButton {
             isPropertyTypeSelected = sender.isSelected
             checkNextButtonActivation()
         } else if sender == saleButton || sender == jeonseButton || sender == monthlyRentButton {
