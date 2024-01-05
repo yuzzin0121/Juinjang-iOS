@@ -6,19 +6,25 @@
 //
 
 import UIKit
+import Then
 
 class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
     
     var backgroundImageViewWidthConstraint: NSLayoutConstraint? // 배경 이미지의 너비 제약조건
     
+    var transactionModel = TransactionModel()
+    
     func makeImageView(_ imageView: UIImageView, imageName: String) {
         imageView.image = UIImage(named: imageName)
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .scaleAspectFit
     }
     
     lazy var backgroundImageView = UIImageView().then {
-        makeImageView($0, imageName: "creation-background")
+        let backgroundImage = UIImage(named: "creation-background")
+        $0.image = backgroundImage
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        $0.contentMode = .scaleAspectFill
     }
     
     lazy var investorImageView = UIImageView().then {
@@ -182,9 +188,14 @@ class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         view.backgroundColor = .white
         self.navigationItem.title = "새 페이지 펼치기"
+        self.navigationItem.hidesBackButton = true
+        let backButtonImage = UIImage(named: "arrow-left")
+        let backButton = UIBarButtonItem(image: backButtonImage, style: .plain,target: self, action: #selector(backToMainTapped))
+        navigationItem.leftBarButtonItem = backButton
         addressTextField.delegate = self
         addressTextField.isUserInteractionEnabled = false // 사용자 입력 방지
         houseNicknameTextField.delegate = self
+        updateImageViewsFromModel()
         setupWidgets()
     }
     
@@ -263,8 +274,9 @@ class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
         
         // 이전으로 버튼
         NSLayoutConstraint.activate([
+            backButton.heightAnchor.constraint(equalToConstant: 52),
             backButton.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -116.5),
-            backButton.topAnchor.constraint(equalTo: houseNicknameTextField.bottomAnchor, constant: 182),
+//            backButton.topAnchor.constraint(equalTo: houseNicknameTextField.bottomAnchor, constant: 182),
             backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
             backButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -5)
         ])
@@ -273,7 +285,7 @@ class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
         NSLayoutConstraint.activate([
             nextButton.heightAnchor.constraint(equalToConstant: 52),
             nextButton.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 58.5),
-            nextButton.topAnchor.constraint(equalTo: houseNicknameTextField.bottomAnchor, constant: 182),
+//            nextButton.topAnchor.constraint(equalTo: houseNicknameTextField.bottomAnchor, constant: 182),
             nextButton.leadingAnchor.constraint(equalTo: backButton.trailingAnchor, constant: 8),
             nextButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
             nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -5)
@@ -294,6 +306,65 @@ class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
         return true
     }
     
+    func updateImageViewsFromModel() {
+        print("Selected Purpose Button Image: \(transactionModel.selectedPurposeButtonImage)")
+        print("Selected Property Type Button Image: \(transactionModel.selectedPropertyTypeButtonImage)")
+        
+        hideAllImageViews()
+        
+        if transactionModel.selectedPurposeButtonImage == investorImageView.image {
+            investorImageView.isHidden = false
+            backgroundImageView.addSubview(investorImageView)
+            NSLayoutConstraint.activate([
+                investorImageView.bottomAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -15),
+                investorImageView.trailingAnchor.constraint(equalTo: backgroundImageView.trailingAnchor, constant: -258.67),
+                investorImageView.topAnchor.constraint(equalTo: backgroundImageView.topAnchor, constant: 105)
+            ])
+        } else {
+            movingUserImageView.isHidden = false
+            backgroundImageView.addSubview(movingUserImageView)
+            NSLayoutConstraint.activate([
+                movingUserImageView.bottomAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -14.84),
+                movingUserImageView.trailingAnchor.constraint(equalTo: backgroundImageView.trailingAnchor, constant: -255.55),
+                movingUserImageView.topAnchor.constraint(equalTo: backgroundImageView.topAnchor, constant: 110)
+            ])
+        }
+        
+        if transactionModel.selectedPropertyTypeButtonImage == apartmentImageView.image {
+            apartmentImageView.isHidden = false
+            backgroundImageView.addSubview(apartmentImageView)
+            NSLayoutConstraint.activate([
+                apartmentImageView.bottomAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -13),
+                apartmentImageView.trailingAnchor.constraint(equalTo: backgroundImageView.trailingAnchor, constant: -95),
+                apartmentImageView.topAnchor.constraint(equalTo: backgroundImageView.topAnchor, constant: 27)
+            ])
+        } else if transactionModel.selectedPropertyTypeButtonImage == villaImageView.image {
+            villaImageView.isHidden = false
+            backgroundImageView.addSubview(villaImageView)
+            NSLayoutConstraint.activate([
+                villaImageView.bottomAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -14.5),
+                villaImageView.trailingAnchor.constraint(equalTo: backgroundImageView.trailingAnchor, constant: -95),
+                villaImageView.topAnchor.constraint(equalTo: backgroundImageView.topAnchor, constant: 82)
+            ])
+        } else {
+            houseImageView.isHidden = false
+            backgroundImageView.addSubview(houseImageView)
+            NSLayoutConstraint.activate([
+                houseImageView.bottomAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -14.84),
+                houseImageView.trailingAnchor.constraint(equalTo: backgroundImageView.trailingAnchor, constant: -91),
+                houseImageView.topAnchor.constraint(equalTo: backgroundImageView.topAnchor, constant: 102)
+            ])
+        }
+    }
+    
+    func hideAllImageViews() {
+        investorImageView.isHidden = true
+        movingUserImageView.isHidden = true
+        apartmentImageView.isHidden = true
+        villaImageView.isHidden = true
+        houseImageView.isHidden = true
+    }
+    
     @objc func searchAddressButtonTapped(_ sender: UIButton) {
         let alertController = UIAlertController(title: "", message: "주소를 검색해주세요.", preferredStyle: .alert)
         
@@ -303,7 +374,7 @@ class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
         present(alertController, animated: true, completion: nil)
     }
     
-    @objc func nextButtonTapped(_ sender: UIButton) {
+    @objc func backToMainTapped(_ sender: UIButton) {
         let customPopup = CustomPopupViewController()
         customPopup.modalPresentationStyle = .overCurrentContext
         present(customPopup, animated: false, completion: nil)
@@ -311,5 +382,11 @@ class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
 
     @objc func backButtonTapped(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
+    }
+    
+    @objc func nextButtonTapped(_ sender: UIButton) {
+        let newPageViewController = OpenNewPage2ViewController() // 체크리스트 화면으로 나중에 변경
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        navigationController?.pushViewController(newPageViewController, animated: true)
     }
 }

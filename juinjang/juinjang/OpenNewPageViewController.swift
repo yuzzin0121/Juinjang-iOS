@@ -35,16 +35,21 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
     var isPropertyTypeSelected: Bool = false
     var isMoveTypeSelected: Bool = false
     
+    var transactionModel = TransactionModel()
+    
     var backgroundImageViewWidthConstraint: NSLayoutConstraint? // 배경 이미지의 너비 제약조건
     
     func makeImageView(_ imageView: UIImageView, imageName: String) {
         imageView.image = UIImage(named: imageName)
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .scaleAspectFit
     }
     
     lazy var backgroundImageView = UIImageView().then {
-        makeImageView($0, imageName: "creation-background")
+        let backgroundImage = UIImage(named: "creation-background")
+        $0.image = backgroundImage
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        $0.contentMode = .scaleAspectFill
     }
     
     lazy var investorImageView = UIImageView().then {
@@ -56,15 +61,19 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
     }
     
     lazy var apartmentImageView = UIImageView().then {
-        makeImageView($0, imageName: "apartment-img")
+        makeImageView($0, imageName: "apartment")
     }
     
     lazy var villaImageView = UIImageView().then {
-        makeImageView($0, imageName: "villa-img")
+        makeImageView($0, imageName: "villa")
+    }
+    
+    lazy var officetelImageView = UIImageView().then {
+        makeImageView($0, imageName: "officetel")
     }
     
     lazy var houseImageView = UIImageView().then {
-        makeImageView($0, imageName: "house-img")
+        makeImageView($0, imageName: "house")
     }
     
     func configureLabel(_ label: UILabel, text: String) {
@@ -120,6 +129,10 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
         configureButton($0, normalImage: UIImage(named: "villa-button"), selectedImage: UIImage(named: "villa-selected-button"), action: #selector(buttonPressed))
     }
     
+    lazy var officetelButton = UIButton().then {
+        configureButton($0, normalImage: UIImage(named: "officetel-button"), selectedImage: UIImage(named: "officetel-selected-button"), action: #selector(buttonPressed))
+    }
+    
     lazy var houseButton = UIButton().then {
         configureButton($0, normalImage: UIImage(named: "house-button"), selectedImage: UIImage(named: "house-selected-button"), action: #selector(buttonPressed))
     }
@@ -172,10 +185,14 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
             }
         }
     }()
+
     
     lazy var threeDisitPriceField = UITextField().then {
         let backgroundImage = UIImage(named: "3-disit-price")
         $0.background = backgroundImage
+//        $0.layer.backgroundColor = UIColor(red: 0.933, green: 0.933, blue: 0.933, alpha: 1).cgColor
+//        $0.layer.cornerRadius = 21
+
         $0.attributedPlaceholder = NSAttributedString(
             string: "000",
             attributes: [
@@ -191,7 +208,9 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 7, height: $0.frame.height))
         $0.leftView = paddingView
         $0.leftViewMode = .always
+        $0.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
     }
+    
 
     
     lazy var fourDisitPriceField = UITextField().then {
@@ -256,11 +275,16 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
         self.view.backgroundColor = .white
         self.navigationItem.title = "새 페이지 펼치기"
         self.navigationController?.navigationBar.tintColor = .black
+        self.navigationItem.hidesBackButton = true
+        let backButtonImage = UIImage(named: "arrow-left")
+        let backButton = UIBarButtonItem(image: backButtonImage, style: .plain,target: self, action: #selector(backButtonTapped))
+        navigationItem.leftBarButtonItem = backButton
         setupWidgets()
         threeDisitPriceField.delegate = self
         fourDisitPriceField.delegate = self
         fourDisitMonthlyRentField.delegate = self
         checkNextButtonActivation()
+        nextButton.isEnabled = false
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -333,7 +357,7 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
         ])
         
         // 매물 유형 Stack View
-        let propertyTypeStackView = UIStackView(arrangedSubviews: [apartmentButton, villaButton, houseButton])
+        let propertyTypeStackView = UIStackView(arrangedSubviews: [apartmentButton, villaButton, officetelButton, houseButton])
 
         propertyTypeStackView.translatesAutoresizingMaskIntoConstraints = false
         propertyTypeStackView.axis = .horizontal
@@ -425,7 +449,7 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
         // 거래 목적 카테고리에 속한 버튼
         purposeButtons = [realestateInvestmentButton, moveInDirectlyButton]
         // 매물 유형 카테고리에 속한 버튼
-        propertyTypeButtons = [apartmentButton, villaButton, houseButton]
+        propertyTypeButtons = [apartmentButton, villaButton, officetelButton, houseButton]
         // 입주 유형 카테고리에 속한 버튼
         moveTypeButtons = [saleButton, jeonseButton, monthlyRentButton]
     }
@@ -465,6 +489,8 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
             
             // 버튼에 따라 사용자 표시
             if sender == realestateInvestmentButton {
+                transactionModel.selectedPurposeButtonImage = investorImageView.image
+                print(transactionModel.selectedPurposeButtonImage)
                 backgroundImageView.addSubview(investorImageView)
                 priceDetailLabel?.removeFromSuperview()
                 priceView2.removeFromSuperview()
@@ -491,6 +517,7 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
                 ])
                 movingUserImageView.removeFromSuperview()
             } else if sender == moveInDirectlyButton {
+                transactionModel.selectedPurposeButtonImage = movingUserImageView.image
                 backgroundImageView.addSubview(movingUserImageView)
                 priceDetailLabel?.removeFromSuperview()
                 threeDisitPriceField.text = ""
@@ -523,6 +550,7 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
             
             // 버튼에 따라 집 표시
             if sender == apartmentButton {
+                transactionModel.selectedPropertyTypeButtonImage = apartmentImageView.image
                 backgroundImageView.addSubview(apartmentImageView)
                 NSLayoutConstraint.activate([
                     apartmentImageView.bottomAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -13),
@@ -530,8 +558,10 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
                     apartmentImageView.topAnchor.constraint(equalTo: backgroundImageView.topAnchor, constant: 27)
                 ])
                 villaImageView.removeFromSuperview()
+                officetelImageView.removeFromSuperview()
                 houseImageView.removeFromSuperview()
             } else if sender == villaButton {
+                transactionModel.selectedPropertyTypeButtonImage = villaImageView.image
                 backgroundImageView.addSubview(villaImageView)
                 NSLayoutConstraint.activate([
                     villaImageView.bottomAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -14.5),
@@ -539,8 +569,21 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
                     villaImageView.topAnchor.constraint(equalTo: backgroundImageView.topAnchor, constant: 82)
                 ])
                 apartmentImageView.removeFromSuperview()
+                officetelImageView.removeFromSuperview()
+                houseImageView.removeFromSuperview()
+            } else if sender == officetelButton {
+                transactionModel.selectedPropertyTypeButtonImage = officetelImageView.image
+                backgroundImageView.addSubview(officetelImageView)
+                NSLayoutConstraint.activate([
+                    officetelImageView.bottomAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -14.5),
+                    officetelImageView.trailingAnchor.constraint(equalTo: backgroundImageView.trailingAnchor, constant: -95),
+                    officetelImageView.topAnchor.constraint(equalTo: backgroundImageView.topAnchor, constant: 37)
+                ])
+                apartmentImageView.removeFromSuperview()
+                villaImageView.removeFromSuperview()
                 houseImageView.removeFromSuperview()
             } else if sender == houseButton {
+                transactionModel.selectedPropertyTypeButtonImage = houseImageView.image
                 backgroundImageView.addSubview(houseImageView)
                 NSLayoutConstraint.activate([
                     houseImageView.bottomAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -14.84),
@@ -549,6 +592,7 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
                 ])
                 apartmentImageView.removeFromSuperview()
                 villaImageView.removeFromSuperview()
+                officetelImageView.removeFromSuperview()
             }
         } else if moveTypeButtons.contains(sender) {
             if sender != saleButton {
@@ -689,7 +733,7 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
         if sender == realestateInvestmentButton || sender == moveInDirectlyButton {
             isPurposeSelected = sender.isSelected
             checkNextButtonActivation()
-        } else if sender == apartmentButton || sender == villaButton || sender == houseButton {
+        } else if sender == apartmentButton || sender == villaButton || sender == officetelButton || sender == houseButton {
             isPropertyTypeSelected = sender.isSelected
             checkNextButtonActivation()
         } else if sender == saleButton || sender == jeonseButton || sender == monthlyRentButton {
@@ -771,14 +815,20 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
             }
         }
     }
-
     
     @objc func buttonTapped(_ sender: UIButton) {
         let newPageViewController = OpenNewPage2ViewController()
+        newPageViewController.transactionModel = transactionModel // 데이터 전달
+        print("Selected Purpose Button Image: \(transactionModel.selectedPurposeButtonImage)")
+        print("Selected Property Type Button Image: \(transactionModel.selectedPropertyTypeButtonImage)")
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         navigationController?.pushViewController(newPageViewController, animated: true)
     }
     
+    @objc func backButtonTapped() {
+        navigationController?.popViewController(animated: true)
+    }
+
     /*
     // MARK: - Navigation
 
