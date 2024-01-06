@@ -36,11 +36,15 @@ class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
     }
     
     lazy var apartmentImageView = UIImageView().then {
-        makeImageView($0, imageName: "apartment-img")
+        makeImageView($0, imageName: "apartment")
     }
     
     lazy var villaImageView = UIImageView().then {
-        makeImageView($0, imageName: "villa-img")
+        makeImageView($0, imageName: "villa")
+    }
+    
+    lazy var officetelImageView = UIImageView().then {
+        makeImageView($0, imageName: "officetel")
     }
     
     lazy var officetelImageView = UIImageView().then {
@@ -48,7 +52,7 @@ class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
     }
     
     lazy var houseImageView = UIImageView().then {
-        makeImageView($0, imageName: "house-img")
+        makeImageView($0, imageName: "house")
     }
     
     func configureLabel(_ label: UILabel, text: String) {
@@ -311,9 +315,6 @@ class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
     }
     
     func updateImageViewsFromModel() {
-        print("Selected Purpose Button Image: \(transactionModel.selectedPurposeButtonImage)")
-        print("Selected Property Type Button Image: \(transactionModel.selectedPropertyTypeButtonImage)")
-        
         hideAllImageViews()
         
         if transactionModel.selectedPurposeButtonImage == investorImageView.image {
