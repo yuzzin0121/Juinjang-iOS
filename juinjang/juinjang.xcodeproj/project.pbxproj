@@ -7,9 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A0EBB402B47CAE20098375B /* TransactionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0EBB3F2B47CAE20098375B /* TransactionModel.swift */; };
+		0A4253652B41C91F00A2B2A8 /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0A4253622B41B86F00A2B2A8 /* Pretendard-SemiBold.otf */; };
+		0A9DA8132B405C3E005C4B23 /* OpenNewPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9DA8122B405C3E005C4B23 /* OpenNewPageViewController.swift */; };
+		0A9DA8162B405E6C005C4B23 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 0A9DA8152B405E6C005C4B23 /* Then */; };
 		0A9E0A472B3DCAB90094595A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9E0A462B3DCAB90094595A /* AppDelegate.swift */; };
 		0A9E0A492B3DCAB90094595A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9E0A482B3DCAB90094595A /* SceneDelegate.swift */; };
-		0A9E0A4B2B3DCAB90094595A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9E0A4A2B3DCAB90094595A /* ViewController.swift */; };
+		0A9E0A4B2B3DCAB90094595A /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9E0A4A2B3DCAB90094595A /* MainViewController.swift */; };
 		0A9E0A502B3DCAB90094595A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0A9E0A4F2B3DCAB90094595A /* Assets.xcassets */; };
 		0A9E0A532B3DCAB90094595A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0A9E0A512B3DCAB90094595A /* LaunchScreen.storyboard */; };
 		0A9E0AA92B3DD4D20094595A /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 0A9E0AA82B3DD4D20094595A /* .gitignore */; };
@@ -38,13 +42,20 @@
 		61D9250A2B49506D002A16B4 /* RecordingFilesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D925092B49506D002A16B4 /* RecordingFilesViewController.swift */; };
 		61D9250F2B4965D0002A16B4 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 61D9250E2B4965D0002A16B4 /* IQKeyboardManagerSwift */; };
 		61D925112B4983A1002A16B4 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D925102B4983A1002A16B4 /* UILabel+Extension.swift */; };
+		0AA616202B45683100F720B3 /* OpenNewPage2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA6161F2B45683100F720B3 /* OpenNewPage2ViewController.swift */; };
+		0AA616242B4579E300F720B3 /* CustomPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA616232B4579E300F720B3 /* CustomPopupViewController.swift */; };
+		0AA616262B45C37900F720B3 /* Pretendard-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0AA616252B45C37900F720B3 /* Pretendard-Medium.otf */; };
+		0ACEC0642B497DB200ED71D4 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0ACEC0632B497DB200ED71D4 /* SnapKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0A0EBB3F2B47CAE20098375B /* TransactionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionModel.swift; sourceTree = "<group>"; };
+		0A4253622B41B86F00A2B2A8 /* Pretendard-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-SemiBold.otf"; sourceTree = "<group>"; };
+		0A9DA8122B405C3E005C4B23 /* OpenNewPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenNewPageViewController.swift; sourceTree = "<group>"; };
 		0A9E0A432B3DCAB90094595A /* juinjang.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = juinjang.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A9E0A462B3DCAB90094595A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0A9E0A482B3DCAB90094595A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		0A9E0A4A2B3DCAB90094595A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		0A9E0A4A2B3DCAB90094595A /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		0A9E0A4F2B3DCAB90094595A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0A9E0A522B3DCAB90094595A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0A9E0A542B3DCAB90094595A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -69,6 +80,9 @@
 		61D925072B486706002A16B4 /* RecordingFileItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingFileItem.swift; sourceTree = "<group>"; };
 		61D925092B49506D002A16B4 /* RecordingFilesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingFilesViewController.swift; sourceTree = "<group>"; };
 		61D925102B4983A1002A16B4 /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
+		0AA6161F2B45683100F720B3 /* OpenNewPage2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenNewPage2ViewController.swift; sourceTree = "<group>"; };
+		0AA616232B4579E300F720B3 /* CustomPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPopupViewController.swift; sourceTree = "<group>"; };
+		0AA616252B45C37900F720B3 /* Pretendard-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Pretendard-Medium.otf"; path = "../../../../../../Downloads/Pretendard-1.3.9/public/static/Pretendard-Medium.otf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +101,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0A4253602B41B85300A2B2A8 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				0AA616252B45C37900F720B3 /* Pretendard-Medium.otf */,
+				0A4253622B41B86F00A2B2A8 /* Pretendard-SemiBold.otf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 		0A9E0A3A2B3DCAB90094595A = {
 			isa = PBXGroup;
 			children = (
@@ -108,11 +131,17 @@
 			isa = PBXGroup;
 			children = (
 				616408EA2B407A2100EC3B5E /* Extension */,
-				0A9E0A462B3DCAB90094595A /* AppDelegate.swift */,
-				0A9E0A482B3DCAB90094595A /* SceneDelegate.swift */,
 				0A9E0A4A2B3DCAB90094595A /* ViewController.swift */,
 				61D925062B4866D9002A16B4 /* Model */,
 				61D925032B4864E8002A16B4 /* Cell */,
+				0A4253602B41B85300A2B2A8 /* Fonts */,
+				0A9E0A462B3DCAB90094595A /* AppDelegate.swift */,
+				0A9E0A482B3DCAB90094595A /* SceneDelegate.swift */,
+				0A9E0A4A2B3DCAB90094595A /* MainViewController.swift */,
+				0A9DA8122B405C3E005C4B23 /* OpenNewPageViewController.swift */,
+				0A0EBB3F2B47CAE20098375B /* TransactionModel.swift */,
+				0AA6161F2B45683100F720B3 /* OpenNewPage2ViewController.swift */,
+				0AA616232B4579E300F720B3 /* CustomPopupViewController.swift */,
 				0A9E0A4F2B3DCAB90094595A /* Assets.xcassets */,
 				0A9E0A512B3DCAB90094595A /* LaunchScreen.storyboard */,
 				0A9E0A542B3DCAB90094595A /* Info.plist */,
@@ -251,15 +280,11 @@
 				616408FB2B407F6600EC3B5E /* Pretendard-Medium.otf in Resources */,
 				616408FE2B407F6600EC3B5E /* Pretendard-Bold.otf in Resources */,
 				0A9E0AA92B3DD4D20094595A /* .gitignore in Resources */,
-				616408F82B407F6600EC3B5E /* Pretendard-Regular.otf in Resources */,
-				616408FD2B407F6600EC3B5E /* Pretendard-Thin.otf in Resources */,
-				616408FF2B407F6600EC3B5E /* Pretendard-Light.otf in Resources */,
-				616409002B407F6600EC3B5E /* Pretendard-ExtraLight.otf in Resources */,
-				616408FA2B407F6600EC3B5E /* Pretendard-ExtraBold.otf in Resources */,
-				616408F92B407F6600EC3B5E /* Pretendard-SemiBold.otf in Resources */,
+				0AA616262B45C37900F720B3 /* Pretendard-Medium.otf in Resources */,
 				0A9E0A532B3DCAB90094595A /* LaunchScreen.storyboard in Resources */,
 				616408FC2B407F6600EC3B5E /* Pretendard-Black.otf in Resources */,
 				0A9E0A502B3DCAB90094595A /* Assets.xcassets in Resources */,
+				0A4253652B41C91F00A2B2A8 /* Pretendard-SemiBold.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,6 +307,12 @@
 				616409022B407FB300EC3B5E /* UIFont+Pretendard.swift in Sources */,
 				61D925112B4983A1002A16B4 /* UILabel+Extension.swift in Sources */,
 				616408EC2B407A2D00EC3B5E /* UIView+Extensions.swift in Sources */,
+				0AA616242B4579E300F720B3 /* CustomPopupViewController.swift in Sources */,
+				0A9E0A4B2B3DCAB90094595A /* MainViewController.swift in Sources */,
+				0AA616202B45683100F720B3 /* OpenNewPage2ViewController.swift in Sources */,
+				0A9E0A472B3DCAB90094595A /* AppDelegate.swift in Sources */,
+				0A0EBB402B47CAE20098375B /* TransactionModel.swift in Sources */,
+				0A9DA8132B405C3E005C4B23 /* OpenNewPageViewController.swift in Sources */,
 				0A9E0A492B3DCAB90094595A /* SceneDelegate.swift in Sources */,
 				611F145A2B4707CC00B983F1 /* RecordingRoomViewController.swift in Sources */,
 			);
