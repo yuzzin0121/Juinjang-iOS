@@ -715,7 +715,7 @@ class OpenNewPageViewController: UIViewController {
                 
                 // 각 버튼 선택 여부와 텍스트 필드 입력 여부에 따라 다음으로 버튼 활성화 여부 결정
                 let allCategoriesSelected = isPropertyTypeSelected
-                let allTextFieldsFilled = !threeDisitPriceFieldEmpty && !fourDisitPriceFieldEmpty
+                let allTextFieldsFilled = !threeDisitPriceFieldEmpty || !fourDisitPriceFieldEmpty
                 
                 // 모든 조건이 충족되었을 때 다음으로 버튼 활성화
                 if allCategoriesSelected && allTextFieldsFilled {
@@ -737,7 +737,7 @@ class OpenNewPageViewController: UIViewController {
                     
                     // 각 버튼 선택 여부와 텍스트 필드 입력 여부에 따라 다음으로 버튼 활성화 여부 결정
                     let allCategoriesSelected = isPropertyTypeSelected && isMoveTypeSelected
-                    let allTextFieldsFilled = !threeDisitPriceFieldEmpty && !fourDisitPriceFieldEmpty
+                    let allTextFieldsFilled = !threeDisitPriceFieldEmpty || !fourDisitPriceFieldEmpty
                     
                     // 모든 조건이 충족되었을 때 다음으로 버튼 활성화
                     if allCategoriesSelected && allTextFieldsFilled {
@@ -759,7 +759,7 @@ class OpenNewPageViewController: UIViewController {
                     
                     // 각 버튼 선택 여부와 텍스트 필드 입력 여부에 따라 다음으로 버튼 활성화 여부 결정
                     let allCategoriesSelected = isPropertyTypeSelected && isMoveTypeSelected
-                    let allTextFieldsFilled = !threeDisitPriceFieldEmpty && !fourDisitPriceFieldEmpty && !fourDisitMonthlyRentFieldEmpty
+                    let allTextFieldsFilled = !threeDisitPriceFieldEmpty || !fourDisitPriceFieldEmpty && !fourDisitMonthlyRentFieldEmpty
                     
                     // 모든 조건이 충족되었을 때 다음으로 버튼 활성화
                     if allCategoriesSelected && allTextFieldsFilled {
