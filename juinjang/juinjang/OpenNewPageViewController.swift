@@ -8,6 +8,7 @@
 
 import UIKit
 import Then
+import SnapKit
 
 class OpenNewPageViewController: UIViewController {
     
@@ -49,7 +50,7 @@ class OpenNewPageViewController: UIViewController {
         let backgroundImage = UIImage(named: "creation-background")
         $0.image = backgroundImage
         $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.contentMode = .scaleAspectFill
+        $0.contentMode = .scaleToFill
     }
     
     lazy var investorImageView = UIImageView().then {
@@ -302,12 +303,11 @@ class OpenNewPageViewController: UIViewController {
         // 위젯에 관한 Auto Layout 설정
         
         // 배경 ImageView
-        NSLayoutConstraint.activate([
-            backgroundImageView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            backgroundImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.28),
-//            backgroundImageView.topAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: -13.5)
-            backgroundImageView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor)
-        ])
+        backgroundImageView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top) // 네비게이션 바 바로 아래에 배치
+            make.leading.trailing.equalToSuperview().inset(0)
+            make.height.equalTo(view.snp.height).multipliedBy(0.28)
+        }
 
         // 거래 목적 Label
         NSLayoutConstraint.activate([
@@ -715,7 +715,7 @@ class OpenNewPageViewController: UIViewController {
                 
                 // 각 버튼 선택 여부와 텍스트 필드 입력 여부에 따라 다음으로 버튼 활성화 여부 결정
                 let allCategoriesSelected = isPropertyTypeSelected
-                let allTextFieldsFilled = !threeDisitPriceFieldEmpty && !fourDisitPriceFieldEmpty
+                let allTextFieldsFilled = !threeDisitPriceFieldEmpty || !fourDisitPriceFieldEmpty
                 
                 // 모든 조건이 충족되었을 때 다음으로 버튼 활성화
                 if allCategoriesSelected && allTextFieldsFilled {
@@ -737,7 +737,7 @@ class OpenNewPageViewController: UIViewController {
                     
                     // 각 버튼 선택 여부와 텍스트 필드 입력 여부에 따라 다음으로 버튼 활성화 여부 결정
                     let allCategoriesSelected = isPropertyTypeSelected && isMoveTypeSelected
-                    let allTextFieldsFilled = !threeDisitPriceFieldEmpty && !fourDisitPriceFieldEmpty
+                    let allTextFieldsFilled = !threeDisitPriceFieldEmpty || !fourDisitPriceFieldEmpty
                     
                     // 모든 조건이 충족되었을 때 다음으로 버튼 활성화
                     if allCategoriesSelected && allTextFieldsFilled {
@@ -759,7 +759,7 @@ class OpenNewPageViewController: UIViewController {
                     
                     // 각 버튼 선택 여부와 텍스트 필드 입력 여부에 따라 다음으로 버튼 활성화 여부 결정
                     let allCategoriesSelected = isPropertyTypeSelected && isMoveTypeSelected
-                    let allTextFieldsFilled = !threeDisitPriceFieldEmpty && !fourDisitPriceFieldEmpty && !fourDisitMonthlyRentFieldEmpty
+                    let allTextFieldsFilled = (!threeDisitPriceFieldEmpty || !fourDisitPriceFieldEmpty) && !fourDisitMonthlyRentFieldEmpty
                     
                     // 모든 조건이 충족되었을 때 다음으로 버튼 활성화
                     if allCategoriesSelected && allTextFieldsFilled {
