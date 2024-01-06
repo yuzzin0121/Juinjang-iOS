@@ -9,7 +9,7 @@
 import UIKit
 import Then
 
-class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
+class OpenNewPageViewController: UIViewController {
     
     var purposeButtons: [UIButton] = [] // "거래 목적"을 나타내는 선택지
     var propertyTypeButtons: [UIButton] = [] // "매물 유형"을 나타내는 선택지
@@ -188,10 +188,10 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
 
     
     lazy var threeDisitPriceField = UITextField().then {
-        let backgroundImage = UIImage(named: "3-disit-price")
-        $0.background = backgroundImage
-//        $0.layer.backgroundColor = UIColor(red: 0.933, green: 0.933, blue: 0.933, alpha: 1).cgColor
-//        $0.layer.cornerRadius = 21
+//        let backgroundImage = UIImage(named: "3-disit-price")
+//        $0.background = backgroundImage
+        $0.layer.backgroundColor = UIColor(red: 0.933, green: 0.933, blue: 0.933, alpha: 1).cgColor
+        $0.layer.cornerRadius = 15
 
         $0.attributedPlaceholder = NSAttributedString(
             string: "000",
@@ -205,17 +205,19 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
         if let customFont = UIFont(name: "Pretendard-SemiBold", size: 24) {
             $0.font = customFont
         }
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 7, height: $0.frame.height))
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 8, height: $0.frame.height))
         $0.leftView = paddingView
+        $0.rightView = paddingView
+        $0.rightViewMode = .always
         $0.leftViewMode = .always
-        $0.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        $0.translatesAutoresizingMaskIntoConstraints = false
     }
     
-
-    
     lazy var fourDisitPriceField = UITextField().then {
-        let backgroundImage = UIImage(named: "4-disit-price")
-        $0.background = backgroundImage
+//        let backgroundImage = UIImage(named: "4-disit-price")
+//        $0.background = backgroundImage
+        $0.layer.backgroundColor = UIColor(red: 0.933, green: 0.933, blue: 0.933, alpha: 1).cgColor
+        $0.layer.cornerRadius = 15
         $0.attributedPlaceholder = NSAttributedString(
             string: "0000",
             attributes: [
@@ -228,15 +230,19 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
         if let customFont = UIFont(name: "Pretendard-SemiBold", size: 24) {
             $0.font = customFont
         }
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 7, height: $0.frame.height))
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 8, height: $0.frame.height))
         $0.leftView = paddingView
+        $0.rightView = paddingView
+        $0.rightViewMode = .always
         $0.leftViewMode = .always
-        $0.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        $0.translatesAutoresizingMaskIntoConstraints = false
     }
     
     lazy var fourDisitMonthlyRentField = UITextField().then {
-        let backgroundImage = UIImage(named: "4-disit-price")
-        $0.background = backgroundImage
+//        let backgroundImage = UIImage(named: "4-disit-price")
+//        $0.background = backgroundImage
+        $0.layer.backgroundColor = UIColor(red: 0.933, green: 0.933, blue: 0.933, alpha: 1).cgColor
+        $0.layer.cornerRadius = 15
         $0.attributedPlaceholder = NSAttributedString(
             string: "0000",
             attributes: [
@@ -249,9 +255,12 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
         if let customFont = UIFont(name: "Pretendard-SemiBold", size: 24) {
             $0.font = customFont
         }
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 7, height: $0.frame.height))
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 8, height: $0.frame.height))
         $0.leftView = paddingView
+        $0.rightView = paddingView
+        $0.rightViewMode = .always
         $0.leftViewMode = .always
+        $0.translatesAutoresizingMaskIntoConstraints = false
     }
     
     lazy var nextButton = UIButton().then {
@@ -285,25 +294,6 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
         fourDisitMonthlyRentField.delegate = self
         checkNextButtonActivation()
         nextButton.isEnabled = false
-    }
-    
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        // 백 스페이스 실행 가능하도록
-        if let char = string.cString(using: String.Encoding.utf8) {
-            let isBackSpace = strcmp(char, "\\b")
-            if (isBackSpace == -92) {
-                return true
-            }
-        }
-        // 숫자만 허용, textField에 따라 글자 수 제한
-        guard Int(string) != nil || string == "" else { return false }
-        if textField == threeDisitPriceField {
-            guard textField.text!.count < 3 else { return false }
-        } else {
-            guard textField.text!.count < 4 else { return false }
-        }
-            
-        return true
     }
         
     func setupWidgets() {
@@ -397,7 +387,6 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
         // 매매 버튼이 기본으로 선택되어 있음
         saleButton.isSelected = true
 
-
         // 가격 입력칸 Stack View
         inputPriceStackView = UIStackView(arrangedSubviews: [threeDisitPriceField, priceDetailLabels[4], fourDisitPriceField, priceDetailLabels[6]])
 
@@ -426,10 +415,8 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
         inputMonthlyRentStackView.spacing = 5
         
         NSLayoutConstraint.activate([
-            threeDisitPriceField.widthAnchor.constraint(equalToConstant: 60),
             threeDisitPriceField.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 4),
             threeDisitPriceField.centerYAnchor.constraint(equalTo: priceView.centerYAnchor),
-            fourDisitPriceField.widthAnchor.constraint(equalToConstant: 74),
             fourDisitPriceField.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 4),
             fourDisitPriceField.centerYAnchor.constraint(equalTo: priceView.centerYAnchor)
         ])
@@ -454,30 +441,18 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
         moveTypeButtons = [saleButton, jeonseButton, monthlyRentButton]
     }
     
-    func textFieldDidChangeSelection(_ textField: UITextField) {
-        guard let text = textField.text else { return }
-        
-        // 입력된 텍스트에 따라 너비 조절
-        let width = text.size(withAttributes: [NSAttributedString.Key.font: textField.font ?? UIFont.systemFont(ofSize: 17)]).width + 16 // 여분의 여백 추가
-        backgroundImageViewWidthConstraint?.constant = width
-        
-        // 모든 조건을 검사하여 버튼 상태 변경
-        checkNextButtonActivation()
-    }
-    
-    @objc func textFieldDidChange(_ textField: UITextField) {
-        if let text = textField.text {
-            let size = (text as NSString).size(withAttributes: [
-                NSAttributedString.Key.font: textField.font ?? UIFont.systemFont(ofSize: 17)
-            ])
-            textField.frame.size.width = size.width + 20 // 적절한 여유 공간 추가
-        }
-    }
-    
     @objc func buttonPressed(_ sender: UIButton) {
         guard !sender.isSelected else { return } // 이미 선택된 버튼이면 아무 동작도 하지 않음
         // 해당 버튼의 선택 여부를 반전
         sender.isSelected = !sender.isSelected
+        
+        // 버튼을 누를 때마다 해당 텍스트 필드의 너비를 초기화
+        threeDisitPriceField.placeholder = "000"
+        fourDisitPriceField.placeholder = "0000"
+        fourDisitMonthlyRentField.placeholder = "0000"
+        updateTextFieldWidthConstraint(for: threeDisitPriceField, constant: 60)
+        updateTextFieldWidthConstraint(for: fourDisitPriceField, constant: 74)
+        updateTextFieldWidthConstraint(for: fourDisitMonthlyRentField, constant: 74)
         
         if purposeButtons.contains(sender) {
             // 거래 목적 카테고리의 버튼일 경우
@@ -490,7 +465,6 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
             // 버튼에 따라 사용자 표시
             if sender == realestateInvestmentButton {
                 transactionModel.selectedPurposeButtonImage = investorImageView.image
-                print(transactionModel.selectedPurposeButtonImage)
                 backgroundImageView.addSubview(investorImageView)
                 priceDetailLabel?.removeFromSuperview()
                 priceView2.removeFromSuperview()
@@ -548,6 +522,10 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
             }
             selectedPropertyTypeButton = sender.isSelected ? sender : nil
             
+            threeDisitPriceField.text = ""
+            fourDisitPriceField.text = ""
+            fourDisitMonthlyRentField.text = ""
+            
             // 버튼에 따라 집 표시
             if sender == apartmentButton {
                 transactionModel.selectedPropertyTypeButtonImage = apartmentImageView.image
@@ -603,13 +581,15 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
                 // 이전에 선택된 버튼이 있고 새로운 버튼과 다른 경우에는 이전 버튼의 선택을 해제
                 selectedButton.isSelected = false
             }
+            
+            threeDisitPriceField.text = ""
+            fourDisitPriceField.text = ""
+            fourDisitMonthlyRentField.text = ""
 
             // 버튼에 따라 가격 View 표시
             if sender == saleButton {
                 priceDetailLabel?.removeFromSuperview()
                 priceView2.removeFromSuperview()
-                threeDisitPriceField.text = ""
-                fourDisitPriceField.text = ""
                 priceDetailLabel = priceDetailLabels[1]
                 if let priceDetailLabel = priceDetailLabel {
                     priceView.addSubview(priceDetailLabel)
@@ -627,8 +607,6 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
             } else if sender == jeonseButton {
                 priceDetailLabel?.removeFromSuperview()
                 priceView2.removeFromSuperview()
-                threeDisitPriceField.text = ""
-                fourDisitPriceField.text = ""
                 priceDetailLabel = priceDetailLabels[3]
                 if let priceDetailLabel = priceDetailLabel {
                     priceView.addSubview(priceDetailLabel)
@@ -646,9 +624,6 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
             } else if sender == monthlyRentButton {
                 priceDetailLabel?.removeFromSuperview()
                 priceView2.removeFromSuperview()
-                threeDisitPriceField.text = ""
-                fourDisitPriceField.text = ""
-                fourDisitMonthlyRentField.text = ""
                 priceDetailLabel = priceDetailLabels[2]
                 if let priceDetailLabel = priceDetailLabel {
                     priceView.addSubview(priceDetailLabel)
@@ -663,7 +638,7 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
                         inputPriceStackView.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8)
                     ])
                 }
-                view.addSubview(priceView2) //////////// 여긱고쳐라!!!!!!!!!
+                view.addSubview(priceView2) // 나중에 수정
                 NSLayoutConstraint.activate([
                     priceView2.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 101), // 나중에 수정 필요, 임의로 설정
                     priceView2.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
@@ -684,7 +659,6 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
                         inputMonthlyRentStackView.centerYAnchor.constraint(equalTo: priceView2.centerYAnchor),
                         inputMonthlyRentStackView.heightAnchor.constraint(lessThanOrEqualTo: view.heightAnchor, multiplier: 0.1),
                         inputMonthlyRentStackView.topAnchor.constraint(equalTo: priceView2.topAnchor, constant: 8),
-                        fourDisitMonthlyRentField.widthAnchor.constraint(equalToConstant: 74),
                         fourDisitMonthlyRentField.topAnchor.constraint(equalTo: priceView2.topAnchor, constant: 4),
                         fourDisitMonthlyRentField.centerYAnchor.constraint(equalTo: priceView2.centerYAnchor)
                     ])
@@ -702,7 +676,6 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
             // moveTypeStackView 제약 조건
             NSLayoutConstraint.activate([
                 moveTypeStackView.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 12),
-                moveTypeStackView.heightAnchor.constraint(equalToConstant: 38),
                 moveTypeStackView.heightAnchor.constraint(lessThanOrEqualTo: view.heightAnchor, multiplier: 0.5),
                 moveTypeStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
             ])
@@ -838,5 +811,74 @@ class OpenNewPageViewController: UIViewController, UITextFieldDelegate {
         // Pass the selected object to the new view controller.
     }
     */
+}
 
+extension OpenNewPageViewController: UITextFieldDelegate {
+    
+    func updateTextFieldWidthConstraint(for textField: UITextField, constant: CGFloat) {
+        // 기존의 widthAnchor로 업데이트
+        for constraint in textField.constraints where constraint.firstAttribute == .width {
+            constraint.constant = constant
+        }
+    }
+    
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        guard let text = textField.text else { return }
+
+        // 각 텍스트 필드에 대한 최소, 최대 너비 설정
+        let minimumWidth: CGFloat = 30 // 최소 너비
+        var maximumWidth: CGFloat = 74 // 네 자릿수 텍스트 필드의 최대 너비
+
+        if textField == threeDisitPriceField {
+            maximumWidth = 60 // 세 자릿수 텍스트 필드의 최대 너비
+        }
+        
+        // 텍스트 길이에 따라 적절한 너비 계산
+        let size = text.size(withAttributes: [.font: textField.font ?? UIFont.systemFont(ofSize: 17)])
+        let calculatedWidth = max(size.width + 20, minimumWidth) // 텍스트 길이와 최소 너비 중 큰 값을 선택
+        let finalWidth = min(calculatedWidth, maximumWidth) // 최대 너비 제한
+
+        // 너비 제약 업데이트
+        updateTextFieldWidthConstraint(for: textField, constant: finalWidth)
+
+        // 레이아웃 업데이트
+        view.layoutIfNeeded()
+        
+        // 모든 조건을 검사하여 버튼 상태 변경
+        checkNextButtonActivation()
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        // 백 스페이스 실행 가능하도록
+        if let char = string.cString(using: String.Encoding.utf8) {
+            let isBackSpace = strcmp(char, "\\b")
+            if (isBackSpace == -92) {
+                return true
+            }
+        }
+        // 숫자만 허용, textField에 따라 글자 수 제한
+        guard Int(string) != nil || string == "" else { return false }
+        if textField == threeDisitPriceField {
+            guard textField.text!.count < 3 else { return false }
+        } else {
+            guard textField.text!.count < 4 else { return false }
+        }
+            
+        return true
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.placeholder = "" // 입력 시작 시 placeholder를 숨김
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        guard textField.text?.isEmpty ?? true else { return }
+        if textField == threeDisitPriceField {
+            textField.placeholder = "000"
+            updateTextFieldWidthConstraint(for: textField, constant: 60) // 기존 너비로 복원
+        } else {
+            textField.placeholder = "0000"
+            updateTextFieldWidthConstraint(for: textField, constant: 74)
+        }
+    }
 }
