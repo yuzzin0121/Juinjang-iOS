@@ -47,10 +47,6 @@ class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
         makeImageView($0, imageName: "officetel")
     }
     
-    lazy var officetelImageView = UIImageView().then {
-        makeImageView($0, imageName: "officetel")
-    }
-    
     lazy var houseImageView = UIImageView().then {
         makeImageView($0, imageName: "house")
     }
