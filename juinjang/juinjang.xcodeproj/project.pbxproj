@@ -13,6 +13,31 @@
 		0A9E0A502B3DCAB90094595A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0A9E0A4F2B3DCAB90094595A /* Assets.xcassets */; };
 		0A9E0A532B3DCAB90094595A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0A9E0A512B3DCAB90094595A /* LaunchScreen.storyboard */; };
 		0A9E0AA92B3DD4D20094595A /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 0A9E0AA82B3DD4D20094595A /* .gitignore */; };
+		611F14552B47070B00B983F1 /* RecordingSegmentedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F14542B47070B00B983F1 /* RecordingSegmentedViewController.swift */; };
+		611F14582B47074000B983F1 /* Tabman in Frameworks */ = {isa = PBXBuildFile; productRef = 611F14572B47074000B983F1 /* Tabman */; };
+		611F145A2B4707CC00B983F1 /* RecordingRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F14592B4707CC00B983F1 /* RecordingRoomViewController.swift */; };
+		611F145C2B4707DF00B983F1 /* CheckListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F145B2B4707DF00B983F1 /* CheckListViewController.swift */; };
+		611F145E2B471ECA00B983F1 /* CALayer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F145D2B471ECA00B983F1 /* CALayer+Extension.swift */; };
+		616408E12B405B7200EC3B5E /* ImjangNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616408E02B405B7200EC3B5E /* ImjangNoteViewController.swift */; };
+		616408E42B405D7D00EC3B5E /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 616408E32B405D7D00EC3B5E /* SnapKit */; };
+		616408E62B405D7D00EC3B5E /* SnapKit-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 616408E52B405D7D00EC3B5E /* SnapKit-Dynamic */; };
+		616408E92B405DA100EC3B5E /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 616408E82B405DA100EC3B5E /* Then */; };
+		616408EC2B407A2D00EC3B5E /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616408EB2B407A2D00EC3B5E /* UIView+Extensions.swift */; };
+		616408F82B407F6600EC3B5E /* Pretendard-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 616408EF2B407F6500EC3B5E /* Pretendard-Regular.otf */; };
+		616408F92B407F6600EC3B5E /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 616408F02B407F6600EC3B5E /* Pretendard-SemiBold.otf */; };
+		616408FA2B407F6600EC3B5E /* Pretendard-ExtraBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 616408F12B407F6600EC3B5E /* Pretendard-ExtraBold.otf */; };
+		616408FB2B407F6600EC3B5E /* Pretendard-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 616408F22B407F6600EC3B5E /* Pretendard-Medium.otf */; };
+		616408FC2B407F6600EC3B5E /* Pretendard-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = 616408F32B407F6600EC3B5E /* Pretendard-Black.otf */; };
+		616408FD2B407F6600EC3B5E /* Pretendard-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = 616408F42B407F6600EC3B5E /* Pretendard-Thin.otf */; };
+		616408FE2B407F6600EC3B5E /* Pretendard-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 616408F52B407F6600EC3B5E /* Pretendard-Bold.otf */; };
+		616408FF2B407F6600EC3B5E /* Pretendard-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 616408F62B407F6600EC3B5E /* Pretendard-Light.otf */; };
+		616409002B407F6600EC3B5E /* Pretendard-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = 616408F72B407F6600EC3B5E /* Pretendard-ExtraLight.otf */; };
+		616409022B407FB300EC3B5E /* UIFont+Pretendard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616409012B407FB300EC3B5E /* UIFont+Pretendard.swift */; };
+		61D925052B486508002A16B4 /* RecordingFileViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D925042B486508002A16B4 /* RecordingFileViewCell.swift */; };
+		61D925082B486706002A16B4 /* RecordingFileItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D925072B486706002A16B4 /* RecordingFileItem.swift */; };
+		61D9250A2B49506D002A16B4 /* RecordingFilesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D925092B49506D002A16B4 /* RecordingFilesViewController.swift */; };
+		61D9250F2B4965D0002A16B4 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 61D9250E2B4965D0002A16B4 /* IQKeyboardManagerSwift */; };
+		61D925112B4983A1002A16B4 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D925102B4983A1002A16B4 /* UILabel+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +49,26 @@
 		0A9E0A522B3DCAB90094595A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0A9E0A542B3DCAB90094595A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0A9E0AA82B3DD4D20094595A /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; name = .gitignore; path = ../.gitignore; sourceTree = "<group>"; };
+		611F14542B47070B00B983F1 /* RecordingSegmentedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingSegmentedViewController.swift; sourceTree = "<group>"; };
+		611F14592B4707CC00B983F1 /* RecordingRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingRoomViewController.swift; sourceTree = "<group>"; };
+		611F145B2B4707DF00B983F1 /* CheckListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckListViewController.swift; sourceTree = "<group>"; };
+		611F145D2B471ECA00B983F1 /* CALayer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+Extension.swift"; sourceTree = "<group>"; };
+		616408E02B405B7200EC3B5E /* ImjangNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImjangNoteViewController.swift; sourceTree = "<group>"; };
+		616408EB2B407A2D00EC3B5E /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
+		616408EF2B407F6500EC3B5E /* Pretendard-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.otf"; sourceTree = "<group>"; };
+		616408F02B407F6600EC3B5E /* Pretendard-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-SemiBold.otf"; sourceTree = "<group>"; };
+		616408F12B407F6600EC3B5E /* Pretendard-ExtraBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-ExtraBold.otf"; sourceTree = "<group>"; };
+		616408F22B407F6600EC3B5E /* Pretendard-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Medium.otf"; sourceTree = "<group>"; };
+		616408F32B407F6600EC3B5E /* Pretendard-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Black.otf"; sourceTree = "<group>"; };
+		616408F42B407F6600EC3B5E /* Pretendard-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Thin.otf"; sourceTree = "<group>"; };
+		616408F52B407F6600EC3B5E /* Pretendard-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.otf"; sourceTree = "<group>"; };
+		616408F62B407F6600EC3B5E /* Pretendard-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Light.otf"; sourceTree = "<group>"; };
+		616408F72B407F6600EC3B5E /* Pretendard-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-ExtraLight.otf"; sourceTree = "<group>"; };
+		616409012B407FB300EC3B5E /* UIFont+Pretendard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Pretendard.swift"; sourceTree = "<group>"; };
+		61D925042B486508002A16B4 /* RecordingFileViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingFileViewCell.swift; sourceTree = "<group>"; };
+		61D925072B486706002A16B4 /* RecordingFileItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingFileItem.swift; sourceTree = "<group>"; };
+		61D925092B49506D002A16B4 /* RecordingFilesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingFilesViewController.swift; sourceTree = "<group>"; };
+		61D925102B4983A1002A16B4 /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +76,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				61D9250F2B4965D0002A16B4 /* IQKeyboardManagerSwift in Frameworks */,
+				616408E42B405D7D00EC3B5E /* SnapKit in Frameworks */,
+				611F14582B47074000B983F1 /* Tabman in Frameworks */,
+				616408E92B405DA100EC3B5E /* Then in Frameworks */,
+				616408E62B405D7D00EC3B5E /* SnapKit-Dynamic in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -57,14 +107,74 @@
 		0A9E0A452B3DCAB90094595A /* juinjang */ = {
 			isa = PBXGroup;
 			children = (
+				616408EA2B407A2100EC3B5E /* Extension */,
 				0A9E0A462B3DCAB90094595A /* AppDelegate.swift */,
 				0A9E0A482B3DCAB90094595A /* SceneDelegate.swift */,
 				0A9E0A4A2B3DCAB90094595A /* ViewController.swift */,
+				61D925062B4866D9002A16B4 /* Model */,
+				61D925032B4864E8002A16B4 /* Cell */,
 				0A9E0A4F2B3DCAB90094595A /* Assets.xcassets */,
 				0A9E0A512B3DCAB90094595A /* LaunchScreen.storyboard */,
 				0A9E0A542B3DCAB90094595A /* Info.plist */,
+				616408E02B405B7200EC3B5E /* ImjangNoteViewController.swift */,
+				611F14542B47070B00B983F1 /* RecordingSegmentedViewController.swift */,
+				611F145B2B4707DF00B983F1 /* CheckListViewController.swift */,
+				611F14592B4707CC00B983F1 /* RecordingRoomViewController.swift */,
+				61D925092B49506D002A16B4 /* RecordingFilesViewController.swift */,
+				616408ED2B407E4400EC3B5E /* Resources */,
 			);
 			path = juinjang;
+			sourceTree = "<group>";
+		};
+		616408EA2B407A2100EC3B5E /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				616408EB2B407A2D00EC3B5E /* UIView+Extensions.swift */,
+				616409012B407FB300EC3B5E /* UIFont+Pretendard.swift */,
+				611F145D2B471ECA00B983F1 /* CALayer+Extension.swift */,
+				61D925102B4983A1002A16B4 /* UILabel+Extension.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		616408ED2B407E4400EC3B5E /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				616408EE2B407E6300EC3B5E /* Fonts */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		616408EE2B407E6300EC3B5E /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				616408F32B407F6600EC3B5E /* Pretendard-Black.otf */,
+				616408F52B407F6600EC3B5E /* Pretendard-Bold.otf */,
+				616408F12B407F6600EC3B5E /* Pretendard-ExtraBold.otf */,
+				616408F72B407F6600EC3B5E /* Pretendard-ExtraLight.otf */,
+				616408F62B407F6600EC3B5E /* Pretendard-Light.otf */,
+				616408F22B407F6600EC3B5E /* Pretendard-Medium.otf */,
+				616408EF2B407F6500EC3B5E /* Pretendard-Regular.otf */,
+				616408F02B407F6600EC3B5E /* Pretendard-SemiBold.otf */,
+				616408F42B407F6600EC3B5E /* Pretendard-Thin.otf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		61D925032B4864E8002A16B4 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				61D925042B486508002A16B4 /* RecordingFileViewCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		61D925062B4866D9002A16B4 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				61D925072B486706002A16B4 /* RecordingFileItem.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -83,6 +193,13 @@
 			dependencies = (
 			);
 			name = juinjang;
+			packageProductDependencies = (
+				616408E32B405D7D00EC3B5E /* SnapKit */,
+				616408E52B405D7D00EC3B5E /* SnapKit-Dynamic */,
+				616408E82B405DA100EC3B5E /* Then */,
+				611F14572B47074000B983F1 /* Tabman */,
+				61D9250E2B4965D0002A16B4 /* IQKeyboardManagerSwift */,
+			);
 			productName = juinjang;
 			productReference = 0A9E0A432B3DCAB90094595A /* juinjang.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +228,12 @@
 				Base,
 			);
 			mainGroup = 0A9E0A3A2B3DCAB90094595A;
+			packageReferences = (
+				616408E22B405D7D00EC3B5E /* XCRemoteSwiftPackageReference "SnapKit" */,
+				616408E72B405DA100EC3B5E /* XCRemoteSwiftPackageReference "Then" */,
+				611F14562B47074000B983F1 /* XCRemoteSwiftPackageReference "Tabman" */,
+				61D9250D2B4965D0002A16B4 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
+			);
 			productRefGroup = 0A9E0A442B3DCAB90094595A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -125,8 +248,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				616408FB2B407F6600EC3B5E /* Pretendard-Medium.otf in Resources */,
+				616408FE2B407F6600EC3B5E /* Pretendard-Bold.otf in Resources */,
 				0A9E0AA92B3DD4D20094595A /* .gitignore in Resources */,
+				616408F82B407F6600EC3B5E /* Pretendard-Regular.otf in Resources */,
+				616408FD2B407F6600EC3B5E /* Pretendard-Thin.otf in Resources */,
+				616408FF2B407F6600EC3B5E /* Pretendard-Light.otf in Resources */,
+				616409002B407F6600EC3B5E /* Pretendard-ExtraLight.otf in Resources */,
+				616408FA2B407F6600EC3B5E /* Pretendard-ExtraBold.otf in Resources */,
+				616408F92B407F6600EC3B5E /* Pretendard-SemiBold.otf in Resources */,
 				0A9E0A532B3DCAB90094595A /* LaunchScreen.storyboard in Resources */,
+				616408FC2B407F6600EC3B5E /* Pretendard-Black.otf in Resources */,
 				0A9E0A502B3DCAB90094595A /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -138,9 +270,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				616408E12B405B7200EC3B5E /* ImjangNoteViewController.swift in Sources */,
+				61D9250A2B49506D002A16B4 /* RecordingFilesViewController.swift in Sources */,
 				0A9E0A4B2B3DCAB90094595A /* ViewController.swift in Sources */,
+				61D925082B486706002A16B4 /* RecordingFileItem.swift in Sources */,
 				0A9E0A472B3DCAB90094595A /* AppDelegate.swift in Sources */,
+				611F145E2B471ECA00B983F1 /* CALayer+Extension.swift in Sources */,
+				61D925052B486508002A16B4 /* RecordingFileViewCell.swift in Sources */,
+				611F14552B47070B00B983F1 /* RecordingSegmentedViewController.swift in Sources */,
+				611F145C2B4707DF00B983F1 /* CheckListViewController.swift in Sources */,
+				616409022B407FB300EC3B5E /* UIFont+Pretendard.swift in Sources */,
+				61D925112B4983A1002A16B4 /* UILabel+Extension.swift in Sources */,
+				616408EC2B407A2D00EC3B5E /* UIView+Extensions.swift in Sources */,
 				0A9E0A492B3DCAB90094595A /* SceneDelegate.swift in Sources */,
+				611F145A2B4707CC00B983F1 /* RecordingRoomViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -279,7 +422,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7LVZCMHQG6;
+				DEVELOPMENT_TEAM = T2Q8P9627P;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = juinjang/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -287,6 +430,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -294,9 +438,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "juinjang-ios.juinjang";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -307,7 +454,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7LVZCMHQG6;
+				DEVELOPMENT_TEAM = T2Q8P9627P;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = juinjang/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -315,6 +462,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -322,9 +470,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "juinjang-ios.juinjang";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -350,6 +501,69 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		611F14562B47074000B983F1 /* XCRemoteSwiftPackageReference "Tabman" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/uias/Tabman.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.2;
+			};
+		};
+		616408E22B405D7D00EC3B5E /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.6.0;
+			};
+		};
+		616408E72B405DA100EC3B5E /* XCRemoteSwiftPackageReference "Then" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/devxoul/Then";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
+		61D9250D2B4965D0002A16B4 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.5.16;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		611F14572B47074000B983F1 /* Tabman */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 611F14562B47074000B983F1 /* XCRemoteSwiftPackageReference "Tabman" */;
+			productName = Tabman;
+		};
+		616408E32B405D7D00EC3B5E /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 616408E22B405D7D00EC3B5E /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		616408E52B405D7D00EC3B5E /* SnapKit-Dynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 616408E22B405D7D00EC3B5E /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = "SnapKit-Dynamic";
+		};
+		616408E82B405DA100EC3B5E /* Then */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 616408E72B405DA100EC3B5E /* XCRemoteSwiftPackageReference "Then" */;
+			productName = Then;
+		};
+		61D9250E2B4965D0002A16B4 /* IQKeyboardManagerSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 61D9250D2B4965D0002A16B4 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
+			productName = IQKeyboardManagerSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 0A9E0A3B2B3DCAB90094595A /* Project object */;
 }
