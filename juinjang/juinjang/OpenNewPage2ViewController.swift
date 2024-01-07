@@ -43,6 +43,10 @@ class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
         makeImageView($0, imageName: "villa")
     }
     
+    lazy var officetelImageView = UIImageView().then {
+        makeImageView($0, imageName: "officetel")
+    }
+    
     lazy var houseImageView = UIImageView().then {
         makeImageView($0, imageName: "house")
     }
@@ -307,9 +311,6 @@ class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
     }
     
     func updateImageViewsFromModel() {
-        print("Selected Purpose Button Image: \(transactionModel.selectedPurposeButtonImage)")
-        print("Selected Property Type Button Image: \(transactionModel.selectedPropertyTypeButtonImage)")
-        
         hideAllImageViews()
         
         if transactionModel.selectedPurposeButtonImage == investorImageView.image {
@@ -346,6 +347,14 @@ class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
                 villaImageView.trailingAnchor.constraint(equalTo: backgroundImageView.trailingAnchor, constant: -95),
                 villaImageView.topAnchor.constraint(equalTo: backgroundImageView.topAnchor, constant: 82)
             ])
+        } else if transactionModel.selectedPropertyTypeButtonImage == officetelImageView.image {
+            officetelImageView.isHidden = false
+            backgroundImageView.addSubview(officetelImageView)
+            NSLayoutConstraint.activate([
+                officetelImageView.bottomAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -14.5),
+                officetelImageView.trailingAnchor.constraint(equalTo: backgroundImageView.trailingAnchor, constant: -95),
+                officetelImageView.topAnchor.constraint(equalTo: backgroundImageView.topAnchor, constant: 37)
+            ])
         } else {
             houseImageView.isHidden = false
             backgroundImageView.addSubview(houseImageView)
@@ -362,6 +371,7 @@ class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
         movingUserImageView.isHidden = true
         apartmentImageView.isHidden = true
         villaImageView.isHidden = true
+        officetelImageView.isHidden = true
         houseImageView.isHidden = true
     }
     
