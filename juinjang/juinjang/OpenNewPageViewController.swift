@@ -37,7 +37,7 @@ class OpenNewPageViewController: UIViewController {
     var isMoveTypeSelected: Bool = false
     
     var transactionModel = TransactionModel()
-    
+
     var backgroundImageViewWidthConstraint: NSLayoutConstraint? // 배경 이미지의 너비 제약조건
     
     func makeImageView(_ imageView: UIImageView, imageName: String) {
@@ -293,7 +293,7 @@ class OpenNewPageViewController: UIViewController {
         
     func setupWidgets() {
         // 위젯들을 서브뷰로 추가
-        let widgets: [UIView] = [purposeLabel, typeLabel, priceLabel, backgroundImageView, priceView, nextButton]
+        let widgets: [UIView] = [purposeLabel, typeLabel, priceLabel, backgroundImageView, priceView, priceView2, nextButton]
         widgets.forEach { view.addSubview($0) }
         setupLayout()
         setButton()
@@ -308,14 +308,14 @@ class OpenNewPageViewController: UIViewController {
             make.leading.trailing.equalToSuperview().inset(0)
             make.height.equalTo(view.snp.height).multipliedBy(0.28)
         }
-
+        
         // 거래 목적 Label
-        NSLayoutConstraint.activate([
-            purposeLabel.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: 35),
-            purposeLabel.widthAnchor.constraint(equalToConstant: 66),
-            purposeLabel.heightAnchor.constraint(equalToConstant: 24),
-            purposeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: view.bounds.width * -0.35)
-        ])
+        purposeLabel.snp.makeConstraints { make in
+            make.top.equalTo(backgroundImageView.snp.bottom).offset(21)
+            make.width.equalToSuperview().multipliedBy(0.18)
+            make.height.equalToSuperview().multipliedBy(0.03)
+            make.centerX.equalTo(view.snp.centerX).offset(view.bounds.width * -0.35)
+        }
         
         // 거래 목적 Stack View
         let purposeButtonsStackView = UIStackView(arrangedSubviews: [realestateInvestmentButton, moveInDirectlyButton])
@@ -323,45 +323,45 @@ class OpenNewPageViewController: UIViewController {
         purposeButtonsStackView.translatesAutoresizingMaskIntoConstraints = false
         purposeButtonsStackView.axis = .horizontal
         purposeButtonsStackView.spacing = 8
-
+        
         view.addSubview(purposeButtonsStackView)
-
-        NSLayoutConstraint.activate([
-            purposeButtonsStackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
-            purposeButtonsStackView.topAnchor.constraint(equalTo: purposeLabel.bottomAnchor, constant: 12),
-            purposeButtonsStackView.heightAnchor.constraint(lessThanOrEqualTo: view.heightAnchor, multiplier: 0.1)
-        ])
+        
+        purposeButtonsStackView.snp.makeConstraints { make in
+            make.top.equalTo(purposeLabel.snp.bottom).offset(12)
+            make.height.lessThanOrEqualTo(view.snp.height).multipliedBy(0.08)
+            make.leading.equalTo(view).offset(24)
+        }
         
         // 매물 유형 Label
-        NSLayoutConstraint.activate([
-            typeLabel.widthAnchor.constraint(equalToConstant: 66),
-            typeLabel.heightAnchor.constraint(equalToConstant: 24),
-            typeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: view.bounds.width * -0.35),
-            typeLabel.topAnchor.constraint(equalTo: realestateInvestmentButton.bottomAnchor, constant: 35),
-        ])
+        typeLabel.snp.makeConstraints { make in
+            make.top.equalTo(realestateInvestmentButton.snp.bottom).offset(27)
+            make.width.equalToSuperview().multipliedBy(0.18)
+            make.height.equalToSuperview().multipliedBy(0.03)
+            make.centerX.equalTo(view.snp.centerX).offset(view.bounds.width * -0.35)
+        }
         
         // 매물 유형 Stack View
         let propertyTypeStackView = UIStackView(arrangedSubviews: [apartmentButton, villaButton, officetelButton, houseButton])
-
+        
         propertyTypeStackView.translatesAutoresizingMaskIntoConstraints = false
         propertyTypeStackView.axis = .horizontal
         propertyTypeStackView.spacing = 8
-
+        
         view.addSubview(propertyTypeStackView)
-
-        NSLayoutConstraint.activate([
-            propertyTypeStackView.topAnchor.constraint(equalTo: typeLabel.bottomAnchor, constant: 12),
-            propertyTypeStackView.heightAnchor.constraint(lessThanOrEqualTo: view.heightAnchor, multiplier: 0.1),
-            propertyTypeStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24)
-        ])
-
+        
+        propertyTypeStackView.snp.makeConstraints { make in
+            make.top.equalTo(typeLabel.snp.bottom).offset(12)
+            make.height.lessThanOrEqualTo(view.snp.height).multipliedBy(0.08)
+            make.leading.equalTo(view).offset(24)
+        }
+        
         // 가격 Label
-        NSLayoutConstraint.activate([
-            priceLabel.widthAnchor.constraint(equalToConstant: 66),
-            priceLabel.heightAnchor.constraint(equalToConstant: 24),
-            priceLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: view.bounds.width * -0.35),
-            priceLabel.topAnchor.constraint(equalTo: propertyTypeStackView.bottomAnchor, constant: 35)
-        ])
+        priceLabel.snp.makeConstraints { make in
+            make.top.equalTo(propertyTypeStackView.snp.bottom).offset(27)
+            make.width.equalToSuperview().multipliedBy(0.18)
+            make.height.equalToSuperview().multipliedBy(0.03)
+            make.centerX.equalTo(view.snp.centerX).offset(view.bounds.width * -0.35)
+        }
         
         // 가격 View
         NSLayoutConstraint.activate([
@@ -370,6 +370,15 @@ class OpenNewPageViewController: UIViewController {
             priceView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
             priceView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.05)
         ])
+        
+        NSLayoutConstraint.activate([
+            priceView2.topAnchor.constraint(equalTo: priceView.bottomAnchor),
+            priceView2.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            priceView2.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            priceView2.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.05)
+        ])
+        
+        priceView2.isHidden = true
         
         // 입주 유형 Stack View
         moveTypeStackView = UIStackView(arrangedSubviews: [saleButton, jeonseButton, monthlyRentButton])
@@ -401,9 +410,14 @@ class OpenNewPageViewController: UIViewController {
             ])
         }
         
+        propertyTypeStackView.snp.makeConstraints { make in
+            make.top.equalTo(typeLabel.snp.bottom).offset(12)
+            make.height.lessThanOrEqualTo(view.snp.height).multipliedBy(0.07)
+            make.leading.equalTo(view).offset(24)
+        }
+        
         // 월세 가격 입력칸 Stack View
         inputMonthlyRentStackView = UIStackView()
-
         inputMonthlyRentStackView.translatesAutoresizingMaskIntoConstraints = false
         inputMonthlyRentStackView.axis = .horizontal
         inputMonthlyRentStackView.spacing = 5
@@ -453,7 +467,7 @@ class OpenNewPageViewController: UIViewController {
                 transactionModel.selectedPurposeButtonImage = investorImageView.image
                 backgroundImageView.addSubview(investorImageView)
                 priceDetailLabel?.removeFromSuperview()
-                priceView2.removeFromSuperview()
+                priceView2.isHidden = true
                 priceDetailLabel = priceDetailLabels[0]
                 if let priceDetailLabel = priceDetailLabel {
                     priceView.addSubview(priceDetailLabel)
@@ -511,7 +525,7 @@ class OpenNewPageViewController: UIViewController {
                 NSLayoutConstraint.activate([
                     apartmentImageView.bottomAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -13),
                     apartmentImageView.trailingAnchor.constraint(equalTo: backgroundImageView.trailingAnchor, constant: -95),
-                    apartmentImageView.topAnchor.constraint(equalTo: backgroundImageView.topAnchor, constant: 27)
+                    apartmentImageView.topAnchor.constraint(equalTo: backgroundImageView.topAnchor, constant: 30)
                 ])
                 villaImageView.removeFromSuperview()
                 officetelImageView.removeFromSuperview()
@@ -568,8 +582,8 @@ class OpenNewPageViewController: UIViewController {
             if sender == saleButton {
                 threeDisitPriceField.text = ""
                 fourDisitPriceField.text = ""
+                priceView2.isHidden = true
                 priceDetailLabel?.removeFromSuperview()
-                priceView2.removeFromSuperview()
                 priceDetailLabel = priceDetailLabels[1]
                 if let priceDetailLabel = priceDetailLabel {
                     priceView.addSubview(priceDetailLabel)
@@ -587,8 +601,8 @@ class OpenNewPageViewController: UIViewController {
             } else if sender == jeonseButton {
                 threeDisitPriceField.text = ""
                 fourDisitPriceField.text = ""
+                priceView2.isHidden = true
                 priceDetailLabel?.removeFromSuperview()
-                priceView2.removeFromSuperview()
                 priceDetailLabel = priceDetailLabels[3]
                 if let priceDetailLabel = priceDetailLabel {
                     priceView.addSubview(priceDetailLabel)
@@ -608,7 +622,7 @@ class OpenNewPageViewController: UIViewController {
                 fourDisitPriceField.text = ""
                 fourDisitMonthlyRentField.text = ""
                 priceDetailLabel?.removeFromSuperview()
-                priceView2.removeFromSuperview()
+                priceView2.isHidden = false
                 priceDetailLabel = priceDetailLabels[2]
                 if let priceDetailLabel = priceDetailLabel {
                     priceView.addSubview(priceDetailLabel)
@@ -623,13 +637,6 @@ class OpenNewPageViewController: UIViewController {
                         inputPriceStackView.topAnchor.constraint(equalTo: priceView.topAnchor, constant: 8)
                     ])
                 }
-                view.addSubview(priceView2) // 나중에 수정
-                NSLayoutConstraint.activate([
-                    priceView2.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 101), // 나중에 수정 필요, 임의로 설정
-                    priceView2.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-                    priceView2.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-                    priceView2.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.05)
-                ])
                 priceView2.addSubview(inputMonthlyRentStackView)
                 priceDetailLabel2 = priceDetailLabels[5]
                 inputMonthlyRentStackView.addArrangedSubview(fourDisitMonthlyRentField)
@@ -658,6 +665,7 @@ class OpenNewPageViewController: UIViewController {
             // moveInDirectlyButton이 선택된 상태일 때
             view.addSubview(moveTypeStackView) // moveTypeStackView을 표시
             view.addSubview(priceView)
+            view.addSubview(priceView2)
             // moveTypeStackView 제약 조건
             NSLayoutConstraint.activate([
                 moveTypeStackView.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 12),
@@ -671,6 +679,14 @@ class OpenNewPageViewController: UIViewController {
                 priceView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
                 priceView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
                 priceView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.05)
+            ])
+            
+            // priceVeiw 제약 조건
+            NSLayoutConstraint.activate([
+                priceView2.topAnchor.constraint(equalTo: priceView.bottomAnchor),
+                priceView2.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                priceView2.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                priceView2.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.05)
             ])
         } else {
             // moveInDirectlyButton이 선택되지 않은 상태일 때

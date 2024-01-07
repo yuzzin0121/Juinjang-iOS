@@ -24,7 +24,7 @@ class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
         let backgroundImage = UIImage(named: "creation-background")
         $0.image = backgroundImage
         $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.contentMode = .scaleAspectFill
+        $0.contentMode = .scaleToFill
     }
     
     lazy var investorImageView = UIImageView().then {
