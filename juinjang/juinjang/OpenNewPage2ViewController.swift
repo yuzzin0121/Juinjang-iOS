@@ -24,7 +24,7 @@ class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
         let backgroundImage = UIImage(named: "creation-background")
         $0.image = backgroundImage
         $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.contentMode = .scaleAspectFill
+        $0.contentMode = .scaleToFill
     }
     
     lazy var investorImageView = UIImageView().then {
@@ -36,15 +36,15 @@ class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
     }
     
     lazy var apartmentImageView = UIImageView().then {
-        makeImageView($0, imageName: "apartment-img")
+        makeImageView($0, imageName: "apartment")
     }
     
     lazy var villaImageView = UIImageView().then {
-        makeImageView($0, imageName: "villa-img")
+        makeImageView($0, imageName: "villa")
     }
     
     lazy var houseImageView = UIImageView().then {
-        makeImageView($0, imageName: "house-img")
+        makeImageView($0, imageName: "house")
     }
     
     func configureLabel(_ label: UILabel, text: String) {
