@@ -7,6 +7,7 @@
 
 import UIKit
 import Then
+import SnapKit
 
 class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
     
@@ -205,19 +206,72 @@ class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
     
     func setupWidgets() {
         // 위젯들을 서브뷰로 추가
-        let widgets: [UIView] = [addressLabel, houseNicknameLabel, backgroundImageView, addressTextField, searchAddressButton, addressDetailTextField, explanationLabel, houseNicknameTextField, backButton, nextButton]
+        let widgets: [UIView] = [
+            addressLabel,
+            houseNicknameLabel,
+            backgroundImageView,
+            investorImageView,
+            movingUserImageView,
+            apartmentImageView,
+            villaImageView,
+            officetelImageView,
+            houseImageView,
+            addressTextField,
+            searchAddressButton,
+            addressDetailTextField,
+            explanationLabel,
+            houseNicknameTextField,
+            backButton,
+            nextButton]
         widgets.forEach { view.addSubview($0) }
         setupLayout()
     }
     
     func setupLayout() {
         // 배경 ImageView
-        NSLayoutConstraint.activate([
-            backgroundImageView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            backgroundImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.28),
-            //            backgroundImageView.topAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: -13.5)
-            backgroundImageView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor)
-        ])
+        backgroundImageView.snp.makeConstraints {
+            $0.width.equalTo(view.snp.width)
+            $0.height.equalTo(view.snp.height).multipliedBy(0.28)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+        }
+        
+        // 사람 ImageView
+        investorImageView.snp.makeConstraints {
+            $0.bottom.equalTo(backgroundImageView.snp.bottom).offset(-15)
+            $0.trailing.equalTo(backgroundImageView.snp.trailing).offset(-258.67)
+            $0.top.equalTo(backgroundImageView.snp.top).offset(105)
+        }
+        
+        movingUserImageView.snp.makeConstraints {
+            $0.bottom.equalTo(backgroundImageView.snp.bottom).offset(-14.84)
+            $0.trailing.equalTo(backgroundImageView.snp.trailing).offset(-255.55)
+            $0.top.equalTo(backgroundImageView.snp.top).offset(110)
+        }
+        
+        // 건물 ImageView
+        apartmentImageView.snp.makeConstraints {
+            $0.bottom.equalTo(backgroundImageView.snp.bottom).offset(-13)
+            $0.trailing.equalTo(backgroundImageView.snp.trailing).offset(-95)
+            $0.top.equalTo(backgroundImageView.snp.top).offset(30)
+        }
+        
+        villaImageView.snp.makeConstraints {
+            $0.bottom.equalTo(backgroundImageView.snp.bottom).offset(-14.5)
+            $0.trailing.equalTo(backgroundImageView.snp.trailing).offset(-95)
+            $0.top.equalTo(backgroundImageView.snp.top).offset(82)
+        }
+        
+        officetelImageView.snp.makeConstraints {
+            $0.bottom.equalTo(backgroundImageView.snp.bottom).offset(-14.5)
+            $0.trailing.equalTo(backgroundImageView.snp.trailing).offset(-95)
+            $0.top.equalTo(backgroundImageView.snp.top).offset(37)
+        }
+        
+        houseImageView.snp.makeConstraints {
+            $0.bottom.equalTo(backgroundImageView.snp.bottom).offset(-14.84)
+            $0.trailing.equalTo(backgroundImageView.snp.trailing).offset(-91)
+            $0.top.equalTo(backgroundImageView.snp.top).offset(102)
+        }
         
         // 주소 Label
         addressLabel.snp.makeConstraints {
@@ -228,72 +282,68 @@ class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
         }
         
         // 주소 TextField
-        NSLayoutConstraint.activate([
-            addressTextField.widthAnchor.constraint(equalToConstant: 225),
-            addressTextField.heightAnchor.constraint(equalToConstant: 36),
-            addressTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
-            addressTextField.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 12)
-        ])
+        addressTextField.snp.makeConstraints {
+            $0.width.equalTo(225)
+            $0.height.equalTo(36)
+            $0.leading.equalTo(view.snp.leading).offset(24)
+            $0.top.equalTo(addressLabel.snp.bottom).offset(12)
+        }
         
         // 주소 검색하기 Button
-        NSLayoutConstraint.activate([
-            searchAddressButton.widthAnchor.constraint(equalToConstant: 109),
-            searchAddressButton.heightAnchor.constraint(equalToConstant: 36),
-            searchAddressButton.leadingAnchor.constraint(equalTo: addressTextField.trailingAnchor, constant: 8),
-            searchAddressButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
-            searchAddressButton.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 12)
-        ])
+        searchAddressButton.snp.makeConstraints {
+            $0.width.equalTo(109)
+            $0.height.equalTo(36)
+            $0.leading.equalTo(addressTextField.snp.trailing).offset(8)
+            $0.trailing.equalTo(view.snp.trailing).offset(-24)
+            $0.top.equalTo(addressLabel.snp.bottom).offset(12)
+        }
         
         // 상세주소 TextField
-        NSLayoutConstraint.activate([
-//            addressDetailTextField.widthAnchor.constraint(equalToConstant: 109),
-            addressDetailTextField.heightAnchor.constraint(equalToConstant: 36),
-            addressDetailTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
-            addressDetailTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
-            addressDetailTextField.topAnchor.constraint(equalTo: searchAddressButton.bottomAnchor, constant: 8)
-        ])
+        addressDetailTextField.snp.makeConstraints {
+            $0.height.equalTo(36)
+            $0.leading.equalTo(view.snp.leading).offset(24)
+            $0.trailing.equalTo(view.snp.trailing).offset(-24)
+            $0.top.equalTo(searchAddressButton.snp.bottom).offset(8)
+        }
 
         // 집 별명 Label
-        NSLayoutConstraint.activate([
-            houseNicknameLabel.widthAnchor.constraint(equalToConstant: 66),
-            houseNicknameLabel.heightAnchor.constraint(equalToConstant: 24),
-            houseNicknameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: view.bounds.width * -0.35),
-            houseNicknameLabel.topAnchor.constraint(equalTo: addressDetailTextField.bottomAnchor, constant: 40)
-        ])
+        houseNicknameLabel.snp.makeConstraints {
+            $0.top.equalTo(addressDetailTextField.snp.bottom).offset(40)
+            $0.width.equalToSuperview().multipliedBy(0.18)
+            $0.height.equalToSuperview().multipliedBy(0.03)
+            $0.leading.equalTo(view.snp.leading).offset(24)
+        }
         
         // 별명 설명 Label
-        NSLayoutConstraint.activate([
-            explanationLabel.leadingAnchor.constraint(equalTo: houseNicknameLabel.trailingAnchor, constant: 1),
-//            explanationLabel.topAnchor.constraint(equalTo: addressDetailTextField.bottomAnchor, constant: 43),
-            explanationLabel.bottomAnchor.constraint(equalTo: houseNicknameTextField.topAnchor, constant: -14)
-        ])
+        explanationLabel.snp.makeConstraints {
+            $0.leading.equalTo(houseNicknameLabel.snp.trailing).offset(1)
+            $0.bottom.equalTo(houseNicknameTextField.snp.top).offset(-14)
+        }
         
         // 집 별명 TextField
-        NSLayoutConstraint.activate([
-            houseNicknameTextField.heightAnchor.constraint(equalToConstant: 36),
-            houseNicknameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
-            houseNicknameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
-            houseNicknameTextField.topAnchor.constraint(equalTo: houseNicknameLabel.bottomAnchor, constant: 12)
-        ])
+        houseNicknameTextField.snp.makeConstraints {
+            $0.height.equalTo(36)
+            $0.leading.equalTo(view.snp.leading).offset(24)
+            $0.trailing.equalTo(view.snp.trailing).offset(-24)
+            $0.top.equalTo(houseNicknameLabel.snp.bottom).offset(12)
+        }
         
         // 이전으로 버튼
-        NSLayoutConstraint.activate([
-            backButton.heightAnchor.constraint(equalToConstant: 52),
-            backButton.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -116.5),
-//            backButton.topAnchor.constraint(equalTo: houseNicknameTextField.bottomAnchor, constant: 182),
-            backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
-            backButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -5)
-        ])
+        backButton.snp.makeConstraints {
+            $0.height.equalTo(52)
+            $0.centerX.equalTo(view.snp.centerX).offset(-116.5)
+            $0.leading.equalTo(view.snp.leading).offset(24)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-5)
+        }
 
         // 다음으로 버튼
-        NSLayoutConstraint.activate([
-            nextButton.heightAnchor.constraint(equalToConstant: 52),
-            nextButton.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 58.5),
-//            nextButton.topAnchor.constraint(equalTo: houseNicknameTextField.bottomAnchor, constant: 182),
-            nextButton.leadingAnchor.constraint(equalTo: backButton.trailingAnchor, constant: 8),
-            nextButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
-            nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -5)
-        ])
+        nextButton.snp.makeConstraints {
+            $0.height.equalTo(52)
+            $0.centerX.equalTo(view.snp.centerX).offset(58.5)
+            $0.leading.equalTo(backButton.snp.trailing).offset(8)
+            $0.trailing.equalTo(view.snp.trailing).offset(-24)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-5)
+        }
 
     }
     
@@ -313,56 +363,21 @@ class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
     func updateImageViewsFromModel() {
         hideAllImageViews()
         
+        // 사람
         if transactionModel.selectedPurposeButtonImage == investorImageView.image {
             investorImageView.isHidden = false
-            backgroundImageView.addSubview(investorImageView)
-            NSLayoutConstraint.activate([
-                investorImageView.bottomAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -15),
-                investorImageView.trailingAnchor.constraint(equalTo: backgroundImageView.trailingAnchor, constant: -258.67),
-                investorImageView.topAnchor.constraint(equalTo: backgroundImageView.topAnchor, constant: 105)
-            ])
         } else {
             movingUserImageView.isHidden = false
-            backgroundImageView.addSubview(movingUserImageView)
-            NSLayoutConstraint.activate([
-                movingUserImageView.bottomAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -14.84),
-                movingUserImageView.trailingAnchor.constraint(equalTo: backgroundImageView.trailingAnchor, constant: -255.55),
-                movingUserImageView.topAnchor.constraint(equalTo: backgroundImageView.topAnchor, constant: 110)
-            ])
         }
-        
+        // 건물
         if transactionModel.selectedPropertyTypeButtonImage == apartmentImageView.image {
             apartmentImageView.isHidden = false
-            backgroundImageView.addSubview(apartmentImageView)
-            NSLayoutConstraint.activate([
-                apartmentImageView.bottomAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -13),
-                apartmentImageView.trailingAnchor.constraint(equalTo: backgroundImageView.trailingAnchor, constant: -95),
-                apartmentImageView.topAnchor.constraint(equalTo: backgroundImageView.topAnchor, constant: 27)
-            ])
         } else if transactionModel.selectedPropertyTypeButtonImage == villaImageView.image {
             villaImageView.isHidden = false
-            backgroundImageView.addSubview(villaImageView)
-            NSLayoutConstraint.activate([
-                villaImageView.bottomAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -14.5),
-                villaImageView.trailingAnchor.constraint(equalTo: backgroundImageView.trailingAnchor, constant: -95),
-                villaImageView.topAnchor.constraint(equalTo: backgroundImageView.topAnchor, constant: 82)
-            ])
         } else if transactionModel.selectedPropertyTypeButtonImage == officetelImageView.image {
             officetelImageView.isHidden = false
-            backgroundImageView.addSubview(officetelImageView)
-            NSLayoutConstraint.activate([
-                officetelImageView.bottomAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -14.5),
-                officetelImageView.trailingAnchor.constraint(equalTo: backgroundImageView.trailingAnchor, constant: -95),
-                officetelImageView.topAnchor.constraint(equalTo: backgroundImageView.topAnchor, constant: 37)
-            ])
         } else {
             houseImageView.isHidden = false
-            backgroundImageView.addSubview(houseImageView)
-            NSLayoutConstraint.activate([
-                houseImageView.bottomAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -14.84),
-                houseImageView.trailingAnchor.constraint(equalTo: backgroundImageView.trailingAnchor, constant: -91),
-                houseImageView.topAnchor.constraint(equalTo: backgroundImageView.topAnchor, constant: 102)
-            ])
         }
     }
     
@@ -395,7 +410,7 @@ class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
     }
     
     @objc func nextButtonTapped(_ sender: UIButton) {
-        let newPageViewController = OpenNewPage2ViewController() // 체크리스트 화면으로 나중에 변경
+        let newPageViewController = CheckListViewController()
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         navigationController?.pushViewController(newPageViewController, animated: true)
     }
