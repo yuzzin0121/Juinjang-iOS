@@ -432,8 +432,11 @@ extension ImjangNoteViewController: UIScrollViewDelegate {
         
         let containerY = containerView.frame.origin.y
         
-        if scrollView.contentOffset.y > 0 && scrollView.contentOffset.y == containerY {
+        if (scrollView.contentOffset.y > 0) && (scrollView.contentOffset.y > containerY - 20 && scrollView.contentOffset.y <= containerY){
             DispatchQueue.main.async {
+                UIView.animate(withDuration: 0.2) {
+                    scrollView.contentOffset.y = containerY
+                }
                 scrollView.isScrollEnabled = false
             }
             NotificationCenter.default.post(name: NSNotification.Name("didStoppedParentScroll"), object: nil)

@@ -8,15 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		0A0EBB402B47CAE20098375B /* TransactionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0EBB3F2B47CAE20098375B /* TransactionModel.swift */; };
-		0A4253652B41C91F00A2B2A8 /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0A4253622B41B86F00A2B2A8 /* Pretendard-SemiBold.otf */; };
 		0A9DA8132B405C3E005C4B23 /* OpenNewPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9DA8122B405C3E005C4B23 /* OpenNewPageViewController.swift */; };
-		0A9DA8162B405E6C005C4B23 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 0A9DA8152B405E6C005C4B23 /* Then */; };
 		0A9E0A472B3DCAB90094595A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9E0A462B3DCAB90094595A /* AppDelegate.swift */; };
 		0A9E0A492B3DCAB90094595A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9E0A482B3DCAB90094595A /* SceneDelegate.swift */; };
 		0A9E0A4B2B3DCAB90094595A /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9E0A4A2B3DCAB90094595A /* MainViewController.swift */; };
 		0A9E0A502B3DCAB90094595A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0A9E0A4F2B3DCAB90094595A /* Assets.xcassets */; };
 		0A9E0A532B3DCAB90094595A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0A9E0A512B3DCAB90094595A /* LaunchScreen.storyboard */; };
 		0A9E0AA92B3DD4D20094595A /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 0A9E0AA82B3DD4D20094595A /* .gitignore */; };
+		0AA616202B45683100F720B3 /* OpenNewPage2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA6161F2B45683100F720B3 /* OpenNewPage2ViewController.swift */; };
+		0AA616242B4579E300F720B3 /* CustomPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA616232B4579E300F720B3 /* CustomPopupViewController.swift */; };
 		611F14552B47070B00B983F1 /* RecordingSegmentedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F14542B47070B00B983F1 /* RecordingSegmentedViewController.swift */; };
 		611F14582B47074000B983F1 /* Tabman in Frameworks */ = {isa = PBXBuildFile; productRef = 611F14572B47074000B983F1 /* Tabman */; };
 		611F145A2B4707CC00B983F1 /* RecordingRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F14592B4707CC00B983F1 /* RecordingRoomViewController.swift */; };
@@ -27,30 +27,25 @@
 		616408E62B405D7D00EC3B5E /* SnapKit-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 616408E52B405D7D00EC3B5E /* SnapKit-Dynamic */; };
 		616408E92B405DA100EC3B5E /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 616408E82B405DA100EC3B5E /* Then */; };
 		616408EC2B407A2D00EC3B5E /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616408EB2B407A2D00EC3B5E /* UIView+Extensions.swift */; };
-		616408F82B407F6600EC3B5E /* Pretendard-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 616408EF2B407F6500EC3B5E /* Pretendard-Regular.otf */; };
-		616408F92B407F6600EC3B5E /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 616408F02B407F6600EC3B5E /* Pretendard-SemiBold.otf */; };
-		616408FA2B407F6600EC3B5E /* Pretendard-ExtraBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 616408F12B407F6600EC3B5E /* Pretendard-ExtraBold.otf */; };
-		616408FB2B407F6600EC3B5E /* Pretendard-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 616408F22B407F6600EC3B5E /* Pretendard-Medium.otf */; };
-		616408FC2B407F6600EC3B5E /* Pretendard-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = 616408F32B407F6600EC3B5E /* Pretendard-Black.otf */; };
-		616408FD2B407F6600EC3B5E /* Pretendard-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = 616408F42B407F6600EC3B5E /* Pretendard-Thin.otf */; };
-		616408FE2B407F6600EC3B5E /* Pretendard-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 616408F52B407F6600EC3B5E /* Pretendard-Bold.otf */; };
-		616408FF2B407F6600EC3B5E /* Pretendard-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 616408F62B407F6600EC3B5E /* Pretendard-Light.otf */; };
-		616409002B407F6600EC3B5E /* Pretendard-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = 616408F72B407F6600EC3B5E /* Pretendard-ExtraLight.otf */; };
 		616409022B407FB300EC3B5E /* UIFont+Pretendard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616409012B407FB300EC3B5E /* UIFont+Pretendard.swift */; };
+		61A7B9262B4C4EC300795B49 /* Pretendard-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 61A7B91D2B4C4EC200795B49 /* Pretendard-Regular.otf */; };
+		61A7B9272B4C4EC300795B49 /* Pretendard-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = 61A7B91E2B4C4EC200795B49 /* Pretendard-ExtraLight.otf */; };
+		61A7B9282B4C4EC300795B49 /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 61A7B91F2B4C4EC200795B49 /* Pretendard-SemiBold.otf */; };
+		61A7B9292B4C4EC300795B49 /* Pretendard-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = 61A7B9202B4C4EC200795B49 /* Pretendard-Thin.otf */; };
+		61A7B92A2B4C4EC300795B49 /* Pretendard-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 61A7B9212B4C4EC300795B49 /* Pretendard-Medium.otf */; };
+		61A7B92B2B4C4EC300795B49 /* Pretendard-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 61A7B9222B4C4EC300795B49 /* Pretendard-Light.otf */; };
+		61A7B92C2B4C4EC300795B49 /* Pretendard-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = 61A7B9232B4C4EC300795B49 /* Pretendard-Black.otf */; };
+		61A7B92D2B4C4EC300795B49 /* Pretendard-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 61A7B9242B4C4EC300795B49 /* Pretendard-Bold.otf */; };
+		61A7B92E2B4C4EC300795B49 /* Pretendard-ExtraBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 61A7B9252B4C4EC300795B49 /* Pretendard-ExtraBold.otf */; };
 		61D925052B486508002A16B4 /* RecordingFileViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D925042B486508002A16B4 /* RecordingFileViewCell.swift */; };
 		61D925082B486706002A16B4 /* RecordingFileItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D925072B486706002A16B4 /* RecordingFileItem.swift */; };
 		61D9250A2B49506D002A16B4 /* RecordingFilesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D925092B49506D002A16B4 /* RecordingFilesViewController.swift */; };
 		61D9250F2B4965D0002A16B4 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 61D9250E2B4965D0002A16B4 /* IQKeyboardManagerSwift */; };
 		61D925112B4983A1002A16B4 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D925102B4983A1002A16B4 /* UILabel+Extension.swift */; };
-		0AA616202B45683100F720B3 /* OpenNewPage2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA6161F2B45683100F720B3 /* OpenNewPage2ViewController.swift */; };
-		0AA616242B4579E300F720B3 /* CustomPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA616232B4579E300F720B3 /* CustomPopupViewController.swift */; };
-		0AA616262B45C37900F720B3 /* Pretendard-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0AA616252B45C37900F720B3 /* Pretendard-Medium.otf */; };
-		0ACEC0642B497DB200ED71D4 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0ACEC0632B497DB200ED71D4 /* SnapKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0A0EBB3F2B47CAE20098375B /* TransactionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionModel.swift; sourceTree = "<group>"; };
-		0A4253622B41B86F00A2B2A8 /* Pretendard-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-SemiBold.otf"; sourceTree = "<group>"; };
 		0A9DA8122B405C3E005C4B23 /* OpenNewPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenNewPageViewController.swift; sourceTree = "<group>"; };
 		0A9E0A432B3DCAB90094595A /* juinjang.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = juinjang.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A9E0A462B3DCAB90094595A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -60,29 +55,28 @@
 		0A9E0A522B3DCAB90094595A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0A9E0A542B3DCAB90094595A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0A9E0AA82B3DD4D20094595A /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; name = .gitignore; path = ../.gitignore; sourceTree = "<group>"; };
+		0AA6161F2B45683100F720B3 /* OpenNewPage2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenNewPage2ViewController.swift; sourceTree = "<group>"; };
+		0AA616232B4579E300F720B3 /* CustomPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPopupViewController.swift; sourceTree = "<group>"; };
 		611F14542B47070B00B983F1 /* RecordingSegmentedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingSegmentedViewController.swift; sourceTree = "<group>"; };
 		611F14592B4707CC00B983F1 /* RecordingRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingRoomViewController.swift; sourceTree = "<group>"; };
 		611F145B2B4707DF00B983F1 /* CheckListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckListViewController.swift; sourceTree = "<group>"; };
 		611F145D2B471ECA00B983F1 /* CALayer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+Extension.swift"; sourceTree = "<group>"; };
 		616408E02B405B7200EC3B5E /* ImjangNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImjangNoteViewController.swift; sourceTree = "<group>"; };
 		616408EB2B407A2D00EC3B5E /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
-		616408EF2B407F6500EC3B5E /* Pretendard-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.otf"; sourceTree = "<group>"; };
-		616408F02B407F6600EC3B5E /* Pretendard-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-SemiBold.otf"; sourceTree = "<group>"; };
-		616408F12B407F6600EC3B5E /* Pretendard-ExtraBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-ExtraBold.otf"; sourceTree = "<group>"; };
-		616408F22B407F6600EC3B5E /* Pretendard-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Medium.otf"; sourceTree = "<group>"; };
-		616408F32B407F6600EC3B5E /* Pretendard-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Black.otf"; sourceTree = "<group>"; };
-		616408F42B407F6600EC3B5E /* Pretendard-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Thin.otf"; sourceTree = "<group>"; };
-		616408F52B407F6600EC3B5E /* Pretendard-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.otf"; sourceTree = "<group>"; };
-		616408F62B407F6600EC3B5E /* Pretendard-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Light.otf"; sourceTree = "<group>"; };
-		616408F72B407F6600EC3B5E /* Pretendard-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-ExtraLight.otf"; sourceTree = "<group>"; };
 		616409012B407FB300EC3B5E /* UIFont+Pretendard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Pretendard.swift"; sourceTree = "<group>"; };
+		61A7B91D2B4C4EC200795B49 /* Pretendard-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.otf"; sourceTree = "<group>"; };
+		61A7B91E2B4C4EC200795B49 /* Pretendard-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-ExtraLight.otf"; sourceTree = "<group>"; };
+		61A7B91F2B4C4EC200795B49 /* Pretendard-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-SemiBold.otf"; sourceTree = "<group>"; };
+		61A7B9202B4C4EC200795B49 /* Pretendard-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Thin.otf"; sourceTree = "<group>"; };
+		61A7B9212B4C4EC300795B49 /* Pretendard-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Medium.otf"; sourceTree = "<group>"; };
+		61A7B9222B4C4EC300795B49 /* Pretendard-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Light.otf"; sourceTree = "<group>"; };
+		61A7B9232B4C4EC300795B49 /* Pretendard-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Black.otf"; sourceTree = "<group>"; };
+		61A7B9242B4C4EC300795B49 /* Pretendard-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.otf"; sourceTree = "<group>"; };
+		61A7B9252B4C4EC300795B49 /* Pretendard-ExtraBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-ExtraBold.otf"; sourceTree = "<group>"; };
 		61D925042B486508002A16B4 /* RecordingFileViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingFileViewCell.swift; sourceTree = "<group>"; };
 		61D925072B486706002A16B4 /* RecordingFileItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingFileItem.swift; sourceTree = "<group>"; };
 		61D925092B49506D002A16B4 /* RecordingFilesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingFilesViewController.swift; sourceTree = "<group>"; };
 		61D925102B4983A1002A16B4 /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
-		0AA6161F2B45683100F720B3 /* OpenNewPage2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenNewPage2ViewController.swift; sourceTree = "<group>"; };
-		0AA616232B4579E300F720B3 /* CustomPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPopupViewController.swift; sourceTree = "<group>"; };
-		0AA616252B45C37900F720B3 /* Pretendard-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Pretendard-Medium.otf"; path = "../../../../../../Downloads/Pretendard-1.3.9/public/static/Pretendard-Medium.otf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,15 +95,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0A4253602B41B85300A2B2A8 /* Fonts */ = {
-			isa = PBXGroup;
-			children = (
-				0AA616252B45C37900F720B3 /* Pretendard-Medium.otf */,
-				0A4253622B41B86F00A2B2A8 /* Pretendard-SemiBold.otf */,
-			);
-			path = Fonts;
-			sourceTree = "<group>";
-		};
 		0A9E0A3A2B3DCAB90094595A = {
 			isa = PBXGroup;
 			children = (
@@ -131,10 +116,8 @@
 			isa = PBXGroup;
 			children = (
 				616408EA2B407A2100EC3B5E /* Extension */,
-				0A9E0A4A2B3DCAB90094595A /* ViewController.swift */,
 				61D925062B4866D9002A16B4 /* Model */,
 				61D925032B4864E8002A16B4 /* Cell */,
-				0A4253602B41B85300A2B2A8 /* Fonts */,
 				0A9E0A462B3DCAB90094595A /* AppDelegate.swift */,
 				0A9E0A482B3DCAB90094595A /* SceneDelegate.swift */,
 				0A9E0A4A2B3DCAB90094595A /* MainViewController.swift */,
@@ -177,15 +160,15 @@
 		616408EE2B407E6300EC3B5E /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
-				616408F32B407F6600EC3B5E /* Pretendard-Black.otf */,
-				616408F52B407F6600EC3B5E /* Pretendard-Bold.otf */,
-				616408F12B407F6600EC3B5E /* Pretendard-ExtraBold.otf */,
-				616408F72B407F6600EC3B5E /* Pretendard-ExtraLight.otf */,
-				616408F62B407F6600EC3B5E /* Pretendard-Light.otf */,
-				616408F22B407F6600EC3B5E /* Pretendard-Medium.otf */,
-				616408EF2B407F6500EC3B5E /* Pretendard-Regular.otf */,
-				616408F02B407F6600EC3B5E /* Pretendard-SemiBold.otf */,
-				616408F42B407F6600EC3B5E /* Pretendard-Thin.otf */,
+				61A7B9232B4C4EC300795B49 /* Pretendard-Black.otf */,
+				61A7B9242B4C4EC300795B49 /* Pretendard-Bold.otf */,
+				61A7B9252B4C4EC300795B49 /* Pretendard-ExtraBold.otf */,
+				61A7B91E2B4C4EC200795B49 /* Pretendard-ExtraLight.otf */,
+				61A7B9222B4C4EC300795B49 /* Pretendard-Light.otf */,
+				61A7B9212B4C4EC300795B49 /* Pretendard-Medium.otf */,
+				61A7B91D2B4C4EC200795B49 /* Pretendard-Regular.otf */,
+				61A7B91F2B4C4EC200795B49 /* Pretendard-SemiBold.otf */,
+				61A7B9202B4C4EC200795B49 /* Pretendard-Thin.otf */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
@@ -277,14 +260,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				616408FB2B407F6600EC3B5E /* Pretendard-Medium.otf in Resources */,
-				616408FE2B407F6600EC3B5E /* Pretendard-Bold.otf in Resources */,
+				61A7B92D2B4C4EC300795B49 /* Pretendard-Bold.otf in Resources */,
 				0A9E0AA92B3DD4D20094595A /* .gitignore in Resources */,
-				0AA616262B45C37900F720B3 /* Pretendard-Medium.otf in Resources */,
+				61A7B92E2B4C4EC300795B49 /* Pretendard-ExtraBold.otf in Resources */,
+				61A7B9262B4C4EC300795B49 /* Pretendard-Regular.otf in Resources */,
+				61A7B9292B4C4EC300795B49 /* Pretendard-Thin.otf in Resources */,
+				61A7B92A2B4C4EC300795B49 /* Pretendard-Medium.otf in Resources */,
+				61A7B92C2B4C4EC300795B49 /* Pretendard-Black.otf in Resources */,
+				61A7B9272B4C4EC300795B49 /* Pretendard-ExtraLight.otf in Resources */,
+				61A7B9282B4C4EC300795B49 /* Pretendard-SemiBold.otf in Resources */,
 				0A9E0A532B3DCAB90094595A /* LaunchScreen.storyboard in Resources */,
-				616408FC2B407F6600EC3B5E /* Pretendard-Black.otf in Resources */,
 				0A9E0A502B3DCAB90094595A /* Assets.xcassets in Resources */,
-				0A4253652B41C91F00A2B2A8 /* Pretendard-SemiBold.otf in Resources */,
+				61A7B92B2B4C4EC300795B49 /* Pretendard-Light.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -297,7 +284,7 @@
 			files = (
 				616408E12B405B7200EC3B5E /* ImjangNoteViewController.swift in Sources */,
 				61D9250A2B49506D002A16B4 /* RecordingFilesViewController.swift in Sources */,
-				0A9E0A4B2B3DCAB90094595A /* ViewController.swift in Sources */,
+				0A9E0A4B2B3DCAB90094595A /* MainViewController.swift in Sources */,
 				61D925082B486706002A16B4 /* RecordingFileItem.swift in Sources */,
 				0A9E0A472B3DCAB90094595A /* AppDelegate.swift in Sources */,
 				611F145E2B471ECA00B983F1 /* CALayer+Extension.swift in Sources */,
