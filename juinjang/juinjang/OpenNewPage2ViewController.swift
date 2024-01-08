@@ -220,12 +220,12 @@ class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
         ])
         
         // 주소 Label
-        NSLayoutConstraint.activate([
-            addressLabel.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: 35),
-            addressLabel.widthAnchor.constraint(equalToConstant: 66),
-            addressLabel.heightAnchor.constraint(equalToConstant: 24),
-            addressLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: view.bounds.width * -0.35)
-        ])
+        addressLabel.snp.makeConstraints {
+            $0.top.equalTo(backgroundImageView.snp.bottom).offset(21)
+            $0.width.equalToSuperview().multipliedBy(0.18)
+            $0.height.equalToSuperview().multipliedBy(0.03)
+            $0.leading.equalTo(view.snp.leading).offset(24)
+        }
         
         // 주소 TextField
         NSLayoutConstraint.activate([
