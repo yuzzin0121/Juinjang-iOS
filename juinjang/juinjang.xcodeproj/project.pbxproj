@@ -17,14 +17,13 @@
 		0A9E0AA92B3DD4D20094595A /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 0A9E0AA82B3DD4D20094595A /* .gitignore */; };
 		0AA616202B45683100F720B3 /* OpenNewPage2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA6161F2B45683100F720B3 /* OpenNewPage2ViewController.swift */; };
 		0AA616242B4579E300F720B3 /* CustomPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA616232B4579E300F720B3 /* CustomPopupViewController.swift */; };
+		0AAA737B2B4C55640076065B /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0AAA737A2B4C55640076065B /* SnapKit */; };
 		611F14552B47070B00B983F1 /* RecordingSegmentedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F14542B47070B00B983F1 /* RecordingSegmentedViewController.swift */; };
 		611F14582B47074000B983F1 /* Tabman in Frameworks */ = {isa = PBXBuildFile; productRef = 611F14572B47074000B983F1 /* Tabman */; };
 		611F145A2B4707CC00B983F1 /* RecordingRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F14592B4707CC00B983F1 /* RecordingRoomViewController.swift */; };
 		611F145C2B4707DF00B983F1 /* CheckListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F145B2B4707DF00B983F1 /* CheckListViewController.swift */; };
 		611F145E2B471ECA00B983F1 /* CALayer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F145D2B471ECA00B983F1 /* CALayer+Extension.swift */; };
 		616408E12B405B7200EC3B5E /* ImjangNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616408E02B405B7200EC3B5E /* ImjangNoteViewController.swift */; };
-		616408E42B405D7D00EC3B5E /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 616408E32B405D7D00EC3B5E /* SnapKit */; };
-		616408E62B405D7D00EC3B5E /* SnapKit-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 616408E52B405D7D00EC3B5E /* SnapKit-Dynamic */; };
 		616408E92B405DA100EC3B5E /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 616408E82B405DA100EC3B5E /* Then */; };
 		616408EC2B407A2D00EC3B5E /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616408EB2B407A2D00EC3B5E /* UIView+Extensions.swift */; };
 		616409022B407FB300EC3B5E /* UIFont+Pretendard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616409012B407FB300EC3B5E /* UIFont+Pretendard.swift */; };
@@ -85,10 +84,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				61D9250F2B4965D0002A16B4 /* IQKeyboardManagerSwift in Frameworks */,
-				616408E42B405D7D00EC3B5E /* SnapKit in Frameworks */,
+				0AAA737B2B4C55640076065B /* SnapKit in Frameworks */,
 				611F14582B47074000B983F1 /* Tabman in Frameworks */,
 				616408E92B405DA100EC3B5E /* Then in Frameworks */,
-				616408E62B405D7D00EC3B5E /* SnapKit-Dynamic in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -206,11 +204,10 @@
 			);
 			name = juinjang;
 			packageProductDependencies = (
-				616408E32B405D7D00EC3B5E /* SnapKit */,
-				616408E52B405D7D00EC3B5E /* SnapKit-Dynamic */,
 				616408E82B405DA100EC3B5E /* Then */,
 				611F14572B47074000B983F1 /* Tabman */,
 				61D9250E2B4965D0002A16B4 /* IQKeyboardManagerSwift */,
+				0AAA737A2B4C55640076065B /* SnapKit */,
 			);
 			productName = juinjang;
 			productReference = 0A9E0A432B3DCAB90094595A /* juinjang.app */;
@@ -241,10 +238,10 @@
 			);
 			mainGroup = 0A9E0A3A2B3DCAB90094595A;
 			packageReferences = (
-				616408E22B405D7D00EC3B5E /* XCRemoteSwiftPackageReference "SnapKit" */,
 				616408E72B405DA100EC3B5E /* XCRemoteSwiftPackageReference "Then" */,
 				611F14562B47074000B983F1 /* XCRemoteSwiftPackageReference "Tabman" */,
 				61D9250D2B4965D0002A16B4 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
+				0AAA73792B4C55640076065B /* XCRemoteSwiftPackageReference "SnapKit" */,
 			);
 			productRefGroup = 0A9E0A442B3DCAB90094595A /* Products */;
 			projectDirPath = "";
@@ -521,20 +518,20 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		0AAA73792B4C55640076065B /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 		611F14562B47074000B983F1 /* XCRemoteSwiftPackageReference "Tabman" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/uias/Tabman.git";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 3.0.2;
-			};
-		};
-		616408E22B405D7D00EC3B5E /* XCRemoteSwiftPackageReference "SnapKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SnapKit/SnapKit";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.6.0;
 			};
 		};
 		616408E72B405DA100EC3B5E /* XCRemoteSwiftPackageReference "Then" */ = {
@@ -556,20 +553,15 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		0AAA737A2B4C55640076065B /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0AAA73792B4C55640076065B /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
 		611F14572B47074000B983F1 /* Tabman */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 611F14562B47074000B983F1 /* XCRemoteSwiftPackageReference "Tabman" */;
 			productName = Tabman;
-		};
-		616408E32B405D7D00EC3B5E /* SnapKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 616408E22B405D7D00EC3B5E /* XCRemoteSwiftPackageReference "SnapKit" */;
-			productName = SnapKit;
-		};
-		616408E52B405D7D00EC3B5E /* SnapKit-Dynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 616408E22B405D7D00EC3B5E /* XCRemoteSwiftPackageReference "SnapKit" */;
-			productName = "SnapKit-Dynamic";
 		};
 		616408E82B405DA100EC3B5E /* Then */ = {
 			isa = XCSwiftPackageProductDependency;

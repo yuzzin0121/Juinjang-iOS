@@ -62,19 +62,19 @@ class OpenNewPageViewController: UIViewController {
     }
     
     lazy var apartmentImageView = UIImageView().then {
-        makeImageView($0, imageName: "apartment")
+        makeImageView($0, imageName: "apartment-image")
     }
     
     lazy var villaImageView = UIImageView().then {
-        makeImageView($0, imageName: "villa")
+        makeImageView($0, imageName: "villa-image")
     }
     
     lazy var officetelImageView = UIImageView().then {
-        makeImageView($0, imageName: "officetel")
+        makeImageView($0, imageName: "officetel-image")
     }
     
     lazy var houseImageView = UIImageView().then {
-        makeImageView($0, imageName: "house")
+        makeImageView($0, imageName: "house-image")
     }
     
     func configureLabel(_ label: UILabel, text: String) {
