@@ -93,6 +93,54 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0A3D5D5C2B4D370A00574686 /* OpenNewpage */ = {
+			isa = PBXGroup;
+			children = (
+				0A9DA8122B405C3E005C4B23 /* OpenNewPageViewController.swift */,
+				0AA6161F2B45683100F720B3 /* OpenNewPage2ViewController.swift */,
+				0AA616232B4579E300F720B3 /* CustomPopupViewController.swift */,
+			);
+			path = OpenNewpage;
+			sourceTree = "<group>";
+		};
+		0A3D5D5D2B4D376C00574686 /* UserInterface */ = {
+			isa = PBXGroup;
+			children = (
+				0A3D5D602B4D37BD00574686 /* Main */,
+				0A3D5D5F2B4D37B000574686 /* CheckList */,
+				0A3D5D5E2B4D379300574686 /* RecordingRoom */,
+				0A3D5D5C2B4D370A00574686 /* OpenNewpage */,
+			);
+			path = UserInterface;
+			sourceTree = "<group>";
+		};
+		0A3D5D5E2B4D379300574686 /* RecordingRoom */ = {
+			isa = PBXGroup;
+			children = (
+				616408E02B405B7200EC3B5E /* ImjangNoteViewController.swift */,
+				611F14542B47070B00B983F1 /* RecordingSegmentedViewController.swift */,
+				611F14592B4707CC00B983F1 /* RecordingRoomViewController.swift */,
+				61D925092B49506D002A16B4 /* RecordingFilesViewController.swift */,
+			);
+			path = RecordingRoom;
+			sourceTree = "<group>";
+		};
+		0A3D5D5F2B4D37B000574686 /* CheckList */ = {
+			isa = PBXGroup;
+			children = (
+				611F145B2B4707DF00B983F1 /* CheckListViewController.swift */,
+			);
+			path = CheckList;
+			sourceTree = "<group>";
+		};
+		0A3D5D602B4D37BD00574686 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				0A9E0A4A2B3DCAB90094595A /* MainViewController.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
 		0A9E0A3A2B3DCAB90094595A = {
 			isa = PBXGroup;
 			children = (
@@ -113,24 +161,15 @@
 		0A9E0A452B3DCAB90094595A /* juinjang */ = {
 			isa = PBXGroup;
 			children = (
+				0A3D5D5D2B4D376C00574686 /* UserInterface */,
 				616408EA2B407A2100EC3B5E /* Extension */,
 				61D925062B4866D9002A16B4 /* Model */,
 				61D925032B4864E8002A16B4 /* Cell */,
 				0A9E0A462B3DCAB90094595A /* AppDelegate.swift */,
 				0A9E0A482B3DCAB90094595A /* SceneDelegate.swift */,
-				0A9E0A4A2B3DCAB90094595A /* MainViewController.swift */,
-				0A9DA8122B405C3E005C4B23 /* OpenNewPageViewController.swift */,
-				0A0EBB3F2B47CAE20098375B /* TransactionModel.swift */,
-				0AA6161F2B45683100F720B3 /* OpenNewPage2ViewController.swift */,
-				0AA616232B4579E300F720B3 /* CustomPopupViewController.swift */,
 				0A9E0A4F2B3DCAB90094595A /* Assets.xcassets */,
 				0A9E0A512B3DCAB90094595A /* LaunchScreen.storyboard */,
 				0A9E0A542B3DCAB90094595A /* Info.plist */,
-				616408E02B405B7200EC3B5E /* ImjangNoteViewController.swift */,
-				611F14542B47070B00B983F1 /* RecordingSegmentedViewController.swift */,
-				611F145B2B4707DF00B983F1 /* CheckListViewController.swift */,
-				611F14592B4707CC00B983F1 /* RecordingRoomViewController.swift */,
-				61D925092B49506D002A16B4 /* RecordingFilesViewController.swift */,
 				616408ED2B407E4400EC3B5E /* Resources */,
 			);
 			path = juinjang;
@@ -182,6 +221,7 @@
 		61D925062B4866D9002A16B4 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				0A0EBB3F2B47CAE20098375B /* TransactionModel.swift */,
 				61D925072B486706002A16B4 /* RecordingFileItem.swift */,
 			);
 			path = Model;
