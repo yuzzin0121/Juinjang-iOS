@@ -17,7 +17,7 @@ class OpenNewPageViewController: UIViewController {
     
     // 거래 목적 카테고리의 버튼
     var selectedPurposeButton: UIButton?
-
+    
     // 매물 유형 카테고리의 버튼
     var selectedPropertyTypeButton: UIButton?
     
@@ -36,8 +36,17 @@ class OpenNewPageViewController: UIViewController {
     var isMoveTypeSelected: Bool = false
     
     var transactionModel = TransactionModel()
-
+    
     var backgroundImageViewWidthConstraint: NSLayoutConstraint? // 배경 이미지의 너비 제약조건
+    
+    let scrollView = UIScrollView().then {
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        $0.backgroundColor = .white
+    }
+    
+    let contentView = UIView().then {
+        $0.translatesAutoresizingMaskIntoConstraints = false
+    }
     
     func makeImageView(_ imageView: UIImageView, imageName: String) {
         imageView.image = UIImage(named: imageName)
@@ -82,22 +91,22 @@ class OpenNewPageViewController: UIViewController {
         label.textColor = UIColor(red: 0.133, green: 0.133, blue: 0.133, alpha: 1)
         label.font = UIFont(name: "Pretendard-SemiBold", size: 18)
         label.translatesAutoresizingMaskIntoConstraints = false
-
+        
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineHeightMultiple = 1.13
-
+        
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
     }
-
+    
     lazy var purposeLabel = UILabel().then {
         configureLabel($0, text: "거래 목적")
     }
-
+    
     lazy var typeLabel = UILabel().then {
         configureLabel($0, text: "매물 유형")
     }
-
+    
     lazy var priceLabel = UILabel().then {
         configureLabel($0, text: "가격")
     }
@@ -112,15 +121,15 @@ class OpenNewPageViewController: UIViewController {
         button.addTarget(self, action: action, for: .touchUpInside)
         button.adjustsImageWhenHighlighted = false // 버튼이 눌릴 때 색상 변경 방지
     }
-
+    
     lazy var realestateInvestmentButton = UIButton().then {
         configureButton($0, normalImage: UIImage(named: "realestate-investment-button"), selectedImage: UIImage(named: "realstate-investment-selected-button"), action: #selector(buttonPressed))
     }
-
+    
     lazy var moveInDirectlyButton = UIButton().then {
         configureButton($0, normalImage: UIImage(named: "move-in-directly-button"), selectedImage: UIImage(named: "move-in-directly-selected-button"), action: #selector(buttonPressed))
     }
-
+    
     lazy var apartmentButton = UIButton().then {
         configureButton($0, normalImage: UIImage(named: "apartment-button"), selectedImage: UIImage(named: "apartment-selected-button"), action: #selector(buttonPressed))
     }
@@ -148,7 +157,7 @@ class OpenNewPageViewController: UIViewController {
     lazy var monthlyRentButton = UIButton().then {
         configureButton($0, normalImage: UIImage(named: "monthlyrent-button"), selectedImage: UIImage(named: "monthlyrent-selected-button"), action: #selector(buttonPressed))
     }
-
+    
     lazy var priceView = UIView().then {
         $0.layer.backgroundColor = UIColor(red: 0.971, green: 0.971, blue: 0.971, alpha: 1).cgColor
         $0.translatesAutoresizingMaskIntoConstraints = false
@@ -165,14 +174,14 @@ class OpenNewPageViewController: UIViewController {
         label.textColor = UIColor(red: 0.212, green: 0.212, blue: 0.212, alpha: 1)
         label.font = UIFont(name: "Pretendard-SemiBold", size: 16)
         label.translatesAutoresizingMaskIntoConstraints = false
-
+        
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineHeightMultiple = 1.13
-
+        
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
     }
-
+    
     lazy var priceDetailLabels: [UILabel] = {
         let labelsTexts = [
             "실거래가",
@@ -194,12 +203,12 @@ class OpenNewPageViewController: UIViewController {
             }
         }
     }()
-
+    
     
     lazy var threeDisitPriceField = UITextField().then {
         $0.layer.backgroundColor = UIColor(red: 0.933, green: 0.933, blue: 0.933, alpha: 1).cgColor
         $0.layer.cornerRadius = 15
-
+        
         $0.attributedPlaceholder = NSAttributedString(
             string: "000",
             attributes: [
@@ -281,7 +290,7 @@ class OpenNewPageViewController: UIViewController {
         $0.titleLabel?.minimumScaleFactor = 0.5
         $0.titleLabel?.lineBreakMode = .byTruncatingTail
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
@@ -291,14 +300,41 @@ class OpenNewPageViewController: UIViewController {
         let backButtonImage = UIImage(named: "arrow-left")
         let backButton = UIBarButtonItem(image: backButtonImage, style: .plain,target: self, action: #selector(backButtonTapped))
         navigationItem.leftBarButtonItem = backButton
-        setupWidgets()
+        if UIScreen.main.bounds.height <= 667 { // 아이폰 SE(3rd generation) 기준으로 스크린이 작으면
+            // 스크롤뷰 사용
+            setupScrollView()
+        } else {
+            // 다른 디바이스에서는 스크롤뷰 미사용
+            setupWidgets()
+        }
         threeDisitPriceField.delegate = self
         fourDisitPriceField.delegate = self
         fourDisitMonthlyRentField.delegate = self
         checkNextButtonActivation()
         nextButton.isEnabled = false
     }
-        
+    
+    func setupScrollView() {
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        // 위젯들을 서브뷰로 추가
+        let widgets: [UIView] = [
+            purposeLabel,
+            typeLabel,
+            priceLabel,
+            backgroundImageView,
+            apartmentImageView,
+            villaImageView,
+            officetelImageView,
+            houseImageView,
+            priceView,
+            priceView2]
+        widgets.forEach { contentView.addSubview($0) }
+        view.addSubview(nextButton)
+        setupScrollLayout()
+        setButton()
+    }
+    
     func setupWidgets() {
         // 위젯들을 서브뷰로 추가
         let widgets: [UIView] = [
@@ -317,6 +353,40 @@ class OpenNewPageViewController: UIViewController {
         setupLayout()
         setButton()
     }
+    
+    func setupScrollLayout() {
+        // 위젯에 관한 Auto Layout 설정
+        scrollView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.leading.trailing.equalToSuperview()
+            $0.width.equalTo(view.snp.width)
+            $0.bottom.equalTo(nextButton.snp.top).offset(10)
+        }
+        
+        contentView.snp.makeConstraints {
+            $0.top.equalTo(scrollView.snp.top)
+            $0.leading.trailing.equalToSuperview()
+            $0.width.equalTo(view.snp.width)
+            $0.bottom.equalTo(nextButton.snp.top).offset(10)
+        }
+        
+        setupLayout()
+        
+        // 배경 ImageView
+        backgroundImageView.snp.makeConstraints {
+            $0.top.equalTo(contentView.safeAreaLayoutGuide.snp.top)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(view.snp.height).multipliedBy(0.28)
+        }
+        
+        // 배경 ImageView
+        backgroundImageView.snp.makeConstraints {
+            $0.top.equalTo(contentView.safeAreaLayoutGuide.snp.top)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(view.snp.height).multipliedBy(0.28)
+        }
+    }
+    
     
     func setupLayout() {
         // 위젯에 관한 Auto Layout 설정
