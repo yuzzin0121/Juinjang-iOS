@@ -17,7 +17,7 @@ class BottomCollectionViewCell: UICollectionViewCell {
         $0.layer.cornerRadius = 10
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.layer.borderWidth = 1.5
-        $0.layer.borderColor = UIColor.bordercolor.cgColor
+        $0.layer.borderColor = UIColor(named: "bordercolor")?.cgColor
         $0.backgroundColor = .white
     }
     

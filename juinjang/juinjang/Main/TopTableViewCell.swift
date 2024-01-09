@@ -80,7 +80,7 @@ class TopTableViewCell: UITableViewCell {
     //MARK: - 함수 구현
     private func addContentView() {
         contentView.addSubview(greetLabel)
-        greetLabel.asColor(targetString: "땡땡", color: UIColor.juinjang)
+        greetLabel.asColor(targetString: "땡땡", color: UIColor(named: "mainOrange"))
         
         contentView.addSubview(myNoteButton)
         myNoteButton.addSubview(myNoteLabel)
@@ -89,7 +89,7 @@ class TopTableViewCell: UITableViewCell {
         contentView.addSubview(newImjangButton)
         newImjangButton.addSubview(newPageImageView)
         newImjangButton.addSubview(newPageLabel)
-        newPageLabel.asColor(targetString: "새 페이지", color: UIColor.juinjang)
+        newPageLabel.asColor(targetString: "새 페이지", color: UIColor(named: "mainOrange"))
     }
         
     private func autoLayout() {
