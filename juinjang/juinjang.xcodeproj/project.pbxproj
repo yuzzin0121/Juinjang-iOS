@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0A0EBB402B47CAE20098375B /* TransactionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0EBB3F2B47CAE20098375B /* TransactionModel.swift */; };
+		0A3D5D632B4D707300574686 /* RecordBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3D5D622B4D707300574686 /* RecordBottomSheetViewController.swift */; };
 		0A9DA8132B405C3E005C4B23 /* OpenNewPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9DA8122B405C3E005C4B23 /* OpenNewPageViewController.swift */; };
 		0A9E0A472B3DCAB90094595A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9E0A462B3DCAB90094595A /* AppDelegate.swift */; };
 		0A9E0A492B3DCAB90094595A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9E0A482B3DCAB90094595A /* SceneDelegate.swift */; };
@@ -45,6 +46,7 @@
 
 /* Begin PBXFileReference section */
 		0A0EBB3F2B47CAE20098375B /* TransactionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionModel.swift; sourceTree = "<group>"; };
+		0A3D5D622B4D707300574686 /* RecordBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordBottomSheetViewController.swift; sourceTree = "<group>"; };
 		0A9DA8122B405C3E005C4B23 /* OpenNewPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenNewPageViewController.swift; sourceTree = "<group>"; };
 		0A9E0A432B3DCAB90094595A /* juinjang.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = juinjang.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A9E0A462B3DCAB90094595A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 		0A3D5D5E2B4D379300574686 /* RecordingRoom */ = {
 			isa = PBXGroup;
 			children = (
+				0A3D5D612B4D703700574686 /* RecordBottomSheet */,
 				616408E02B405B7200EC3B5E /* ImjangNoteViewController.swift */,
 				611F14542B47070B00B983F1 /* RecordingSegmentedViewController.swift */,
 				611F14592B4707CC00B983F1 /* RecordingRoomViewController.swift */,
@@ -139,6 +142,14 @@
 				0A9E0A4A2B3DCAB90094595A /* MainViewController.swift */,
 			);
 			path = Main;
+			sourceTree = "<group>";
+		};
+		0A3D5D612B4D703700574686 /* RecordBottomSheet */ = {
+			isa = PBXGroup;
+			children = (
+				0A3D5D622B4D707300574686 /* RecordBottomSheetViewController.swift */,
+			);
+			path = RecordBottomSheet;
 			sourceTree = "<group>";
 		};
 		0A9E0A3A2B3DCAB90094595A = {
@@ -332,6 +343,7 @@
 				61D925112B4983A1002A16B4 /* UILabel+Extension.swift in Sources */,
 				616408EC2B407A2D00EC3B5E /* UIView+Extensions.swift in Sources */,
 				0AA616242B4579E300F720B3 /* CustomPopupViewController.swift in Sources */,
+				0A3D5D632B4D707300574686 /* RecordBottomSheetViewController.swift in Sources */,
 				0A9E0A4B2B3DCAB90094595A /* MainViewController.swift in Sources */,
 				0AA616202B45683100F720B3 /* OpenNewPage2ViewController.swift in Sources */,
 				0A9E0A472B3DCAB90094595A /* AppDelegate.swift in Sources */,

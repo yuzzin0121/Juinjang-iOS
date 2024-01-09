@@ -58,7 +58,7 @@ class RecordingFilesViewController: UIViewController {
         let addButtonItem = UIBarButtonItem(image: UIImage(named: "+"),
                                             style: .plain,
                                             target: self,
-                                            action: nil)
+                                            action: #selector(startRecording))
 
         // 네비게이션 아이템에 백 버튼 아이템 설정
         self.navigationItem.leftBarButtonItem = backButtonItem
@@ -67,6 +67,13 @@ class RecordingFilesViewController: UIViewController {
     
     @objc func back(_ sender: Any) {
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    @objc func startRecording(_ sender: Any) {
+        let bottomSheetViewController = RecordBottomSheetViewController()
+        bottomSheetViewController.modalPresentationStyle = .custom
+//        bottomSheetViewController.transitioningDelegate = self
+        self.present(bottomSheetViewController, animated: false, completion: nil)
     }
     
     func setItemData() {
