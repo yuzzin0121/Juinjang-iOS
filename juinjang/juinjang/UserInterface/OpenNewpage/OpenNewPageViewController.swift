@@ -566,7 +566,7 @@ class OpenNewPageViewController: UIViewController {
             $0.width.equalTo(view.snp.width).multipliedBy(0.87)
             $0.height.equalTo(52)
             $0.centerX.equalTo(view.snp.centerX)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-5)
+            $0.bottom.equalTo(view.snp.bottom).offset(-28)
         }
     }
     

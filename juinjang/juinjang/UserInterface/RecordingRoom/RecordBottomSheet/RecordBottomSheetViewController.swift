@@ -13,7 +13,7 @@ class RecordBottomSheetViewController: UIViewController {
         $0.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
     }
     
-    let bottomSheetView = UIView().then {
+    lazy var bottomSheetView = UIView().then {
         $0.backgroundColor = .white
         $0.layer.cornerRadius = 30
         $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
@@ -27,11 +27,11 @@ class RecordBottomSheetViewController: UIViewController {
         return (ratio / totalHeight) * UIScreen.main.bounds.height // 디바이스가 달라져도 비율만큼 차지
     }
     
-    let cancelButton = UIButton().then {
-        $0.setBackgroundImage(UIImage(named: "cancel"), for: .normal)
+    lazy var cancelButton = UIButton().then {
+        $0.setBackgroundImage(UIImage(named: "cancel-black"), for: .normal)
         $0.layer.masksToBounds = true
         $0.contentMode = .scaleAspectFit
-        $0.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
+        $0.addTarget(self, action: #selector(cancelButtonTapped(_:)), for: .touchUpInside)
     }
     
     let warningMessageLabel = UILabel().then {
@@ -53,7 +53,7 @@ class RecordBottomSheetViewController: UIViewController {
         $0.setTitle("오늘 하루 보지 않기", for: .normal)
         $0.setTitleColor(UIColor(named: "normalText"), for: .normal)
         $0.titleLabel?.font = UIFont(name: "Pretendard-Medium", size: 14)
-        $0.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
+        $0.addTarget(self, action: #selector(checkButtonPressed(_:)), for: .touchUpInside)
         $0.adjustsImageWhenHighlighted = false // 버튼이 눌릴 때 색상 변경 방지
 
         $0.setImage(UIImage(named: "record-check-off"), for: .normal)
@@ -71,7 +71,7 @@ class RecordBottomSheetViewController: UIViewController {
         
         $0.backgroundColor = UIColor(named: "textBlack")
         $0.layer.cornerRadius = 8
-//        $0.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
+        $0.addTarget(self, action: #selector(confirmButtonPressed(_:)), for: .touchUpInside)
         $0.translatesAutoresizingMaskIntoConstraints = false
         
         $0.titleLabel?.font = UIFont(name: "Pretendard-SemiBold", size: 16)
@@ -79,6 +79,13 @@ class RecordBottomSheetViewController: UIViewController {
         $0.titleLabel?.adjustsFontSizeToFitWidth = true
         $0.titleLabel?.minimumScaleFactor = 0.5
         $0.titleLabel?.lineBreakMode = .byTruncatingTail
+    }
+    
+    let recordLabel = UILabel().then {
+        $0.text = "녹음하기"
+        $0.textAlignment = .center
+        $0.textColor = UIColor(named: "textWhite")
+        $0.font = UIFont(name: "Pretendard-SemiBold", size: 18)
     }
     
     // MARK: Life Cycle
@@ -149,12 +156,28 @@ class RecordBottomSheetViewController: UIViewController {
             $0.leading.trailing.equalToSuperview().inset(24)
             $0.centerX.equalToSuperview()
             $0.top.equalTo(warningMessageImage.snp.bottom).offset(74.51)
-            $0.bottom.equalTo(bottomSheetView.snp.bottom).offset(-28)
+            $0.bottom.equalTo(bottomSheetView.snp.bottom).offset(-33)
+        }
+    }
+    
+    func addRecordSubViews() {
+        let widgets: [UIView] = [
+            recordLabel,]
+        widgets.forEach { bottomSheetView.addSubview($0) }
+    }
+    
+    func setRecordLayout() {
+        cancelButton.setImage(UIImage(named: "cancel-white"), for: .normal)
+        
+        recordLabel.snp.makeConstraints {
+            $0.centerX.equalTo(bottomSheetView.snp.centerX)
+            $0.top.equalTo(bottomSheetView.snp.bottom).offset(24)
+//            $0.leading.equalTo(bottomSheetView.snp.leading).offset(164)
         }
     }
     
     @objc
-    func buttonPressed(_ sender: UIButton) {
+    func checkButtonPressed(_ sender: UIButton) {
         if checkButton.isSelected {
             checkButton.setImage(UIImage(named: "record-check-off"), for: .normal)
             recordStartButton.setTitle("녹음 시작!", for: .normal)
@@ -163,6 +186,19 @@ class RecordBottomSheetViewController: UIViewController {
             recordStartButton.setTitle("확인했어요", for: .normal)
         }
         checkButton.isSelected.toggle()
+    }
+    
+    @objc
+    func confirmButtonPressed(_ sender: UIButton) {
+        bottomSheetView.backgroundColor = UIColor(named: "textBlack")
+        let removeWidgets: [UIView] = [
+            warningMessageLabel,
+            warningMessageImage,
+            checkButton,
+            recordStartButton]
+        removeWidgets.forEach { $0.removeFromSuperview() }
+        addRecordSubViews()
+        setRecordLayout()
     }
     
     func showBottomSheet() {
