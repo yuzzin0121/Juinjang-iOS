@@ -7,25 +7,25 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0A3D5D632B4D707300574686 /* RecordBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3D5D622B4D707300574686 /* RecordBottomSheetViewController.swift */; };
 		0A3D5D4B2B4D333900574686 /* SideBarComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3D5D492B4D333900574686 /* SideBarComponents.swift */; };
 		0A3D5D4C2B4D333900574686 /* TransactionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3D5D4A2B4D333900574686 /* TransactionModel.swift */; };
-		0A3D5D552B4D337100574686 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3D5D4E2B4D337100574686 /* ViewController.swift */; };
+		0A3D5D552B4D337100574686 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3D5D4E2B4D337100574686 /* MainViewController.swift */; };
 		0A3D5D562B4D337100574686 /* SideBarLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3D5D4F2B4D337100574686 /* SideBarLauncher.swift */; };
 		0A3D5D572B4D337100574686 /* BottomCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3D5D502B4D337100574686 /* BottomCollectionViewCell.swift */; };
 		0A3D5D582B4D337100574686 /* BottomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3D5D512B4D337100574686 /* BottomTableViewCell.swift */; };
 		0A3D5D592B4D337100574686 /* FirstTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3D5D522B4D337100574686 /* FirstTableViewCell.swift */; };
 		0A3D5D5A2B4D337100574686 /* TopTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3D5D532B4D337100574686 /* TopTableViewCell.swift */; };
 		0A3D5D5B2B4D337100574686 /* FirstTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A3D5D542B4D337100574686 /* FirstTableViewCell.xib */; };
-		0A9DA8132B405C3E005C4B23 /* OpenNewPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9DA8122B405C3E005C4B23 /* OpenNewPageViewController.swift */; };
+		0A3D5D632B4D707300574686 /* RecordBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3D5D622B4D707300574686 /* RecordBottomSheetViewController.swift */; };
 		0A9E0A472B3DCAB90094595A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9E0A462B3DCAB90094595A /* AppDelegate.swift */; };
 		0A9E0A492B3DCAB90094595A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9E0A482B3DCAB90094595A /* SceneDelegate.swift */; };
 		0A9E0A502B3DCAB90094595A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0A9E0A4F2B3DCAB90094595A /* Assets.xcassets */; };
 		0A9E0A532B3DCAB90094595A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0A9E0A512B3DCAB90094595A /* LaunchScreen.storyboard */; };
 		0A9E0AA92B3DD4D20094595A /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 0A9E0AA82B3DD4D20094595A /* .gitignore */; };
-		0AA616202B45683100F720B3 /* OpenNewPage2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA6161F2B45683100F720B3 /* OpenNewPage2ViewController.swift */; };
-		0AA616242B4579E300F720B3 /* CustomPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA616232B4579E300F720B3 /* CustomPopupViewController.swift */; };
 		0AAA737B2B4C55640076065B /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0AAA737A2B4C55640076065B /* SnapKit */; };
+		0AB34CC12B4F11B000150A15 /* OpenNewPage2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB34CBE2B4F11B000150A15 /* OpenNewPage2ViewController.swift */; };
+		0AB34CC22B4F11B000150A15 /* CustomPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB34CBF2B4F11B000150A15 /* CustomPopupViewController.swift */; };
+		0AB34CC32B4F11B000150A15 /* OpenNewPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB34CC02B4F11B000150A15 /* OpenNewPageViewController.swift */; };
 		611F14552B47070B00B983F1 /* RecordingSegmentedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F14542B47070B00B983F1 /* RecordingSegmentedViewController.swift */; };
 		611F14582B47074000B983F1 /* Tabman in Frameworks */ = {isa = PBXBuildFile; productRef = 611F14572B47074000B983F1 /* Tabman */; };
 		611F145A2B4707CC00B983F1 /* RecordingRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F14592B4707CC00B983F1 /* RecordingRoomViewController.swift */; };
@@ -52,17 +52,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0A3D5D622B4D707300574686 /* RecordBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordBottomSheetViewController.swift; sourceTree = "<group>"; };
 		0A3D5D492B4D333900574686 /* SideBarComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideBarComponents.swift; sourceTree = "<group>"; };
 		0A3D5D4A2B4D333900574686 /* TransactionModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionModel.swift; sourceTree = "<group>"; };
-		0A3D5D4E2B4D337100574686 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		0A3D5D4E2B4D337100574686 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		0A3D5D4F2B4D337100574686 /* SideBarLauncher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideBarLauncher.swift; sourceTree = "<group>"; };
 		0A3D5D502B4D337100574686 /* BottomCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BottomCollectionViewCell.swift; sourceTree = "<group>"; };
 		0A3D5D512B4D337100574686 /* BottomTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BottomTableViewCell.swift; sourceTree = "<group>"; };
 		0A3D5D522B4D337100574686 /* FirstTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirstTableViewCell.swift; sourceTree = "<group>"; };
 		0A3D5D532B4D337100574686 /* TopTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopTableViewCell.swift; sourceTree = "<group>"; };
 		0A3D5D542B4D337100574686 /* FirstTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FirstTableViewCell.xib; sourceTree = "<group>"; };
-		0A9DA8122B405C3E005C4B23 /* OpenNewPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenNewPageViewController.swift; sourceTree = "<group>"; };
+		0A3D5D622B4D707300574686 /* RecordBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordBottomSheetViewController.swift; sourceTree = "<group>"; };
 		0A9E0A432B3DCAB90094595A /* juinjang.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = juinjang.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A9E0A462B3DCAB90094595A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0A9E0A482B3DCAB90094595A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -70,8 +69,9 @@
 		0A9E0A522B3DCAB90094595A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0A9E0A542B3DCAB90094595A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0A9E0AA82B3DD4D20094595A /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; name = .gitignore; path = ../.gitignore; sourceTree = "<group>"; };
-		0AA6161F2B45683100F720B3 /* OpenNewPage2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenNewPage2ViewController.swift; sourceTree = "<group>"; };
-		0AA616232B4579E300F720B3 /* CustomPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPopupViewController.swift; sourceTree = "<group>"; };
+		0AB34CBE2B4F11B000150A15 /* OpenNewPage2ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenNewPage2ViewController.swift; sourceTree = "<group>"; };
+		0AB34CBF2B4F11B000150A15 /* CustomPopupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomPopupViewController.swift; sourceTree = "<group>"; };
+		0AB34CC02B4F11B000150A15 /* OpenNewPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenNewPageViewController.swift; sourceTree = "<group>"; };
 		611F14542B47070B00B983F1 /* RecordingSegmentedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingSegmentedViewController.swift; sourceTree = "<group>"; };
 		611F14592B4707CC00B983F1 /* RecordingRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingRoomViewController.swift; sourceTree = "<group>"; };
 		611F145B2B4707DF00B983F1 /* CheckListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckListViewController.swift; sourceTree = "<group>"; };
@@ -109,12 +109,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0A3D5D4D2B4D337100574686 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				0A3D5D4E2B4D337100574686 /* MainViewController.swift */,
+				0A3D5D4F2B4D337100574686 /* SideBarLauncher.swift */,
+				0A3D5D502B4D337100574686 /* BottomCollectionViewCell.swift */,
+				0A3D5D512B4D337100574686 /* BottomTableViewCell.swift */,
+				0A3D5D522B4D337100574686 /* FirstTableViewCell.swift */,
+				0A3D5D532B4D337100574686 /* TopTableViewCell.swift */,
+				0A3D5D542B4D337100574686 /* FirstTableViewCell.xib */,
+			);
+			name = Main;
+			path = ../Main;
+			sourceTree = "<group>";
+		};
 		0A3D5D5C2B4D370A00574686 /* OpenNewpage */ = {
 			isa = PBXGroup;
 			children = (
-				0A9DA8122B405C3E005C4B23 /* OpenNewPageViewController.swift */,
-				0AA6161F2B45683100F720B3 /* OpenNewPage2ViewController.swift */,
-				0AA616232B4579E300F720B3 /* CustomPopupViewController.swift */,
+				0AB34CBF2B4F11B000150A15 /* CustomPopupViewController.swift */,
+				0AB34CBE2B4F11B000150A15 /* OpenNewPage2ViewController.swift */,
+				0AB34CC02B4F11B000150A15 /* OpenNewPageViewController.swift */,
 			);
 			path = OpenNewpage;
 			sourceTree = "<group>";
@@ -122,7 +137,7 @@
 		0A3D5D5D2B4D376C00574686 /* UserInterface */ = {
 			isa = PBXGroup;
 			children = (
-				0A3D5D602B4D37BD00574686 /* Main */,
+				0A3D5D4D2B4D337100574686 /* Main */,
 				0A3D5D5F2B4D37B000574686 /* CheckList */,
 				0A3D5D5E2B4D379300574686 /* RecordingRoom */,
 				0A3D5D5C2B4D370A00574686 /* OpenNewpage */,
@@ -148,21 +163,6 @@
 				611F145B2B4707DF00B983F1 /* CheckListViewController.swift */,
 			);
 			path = CheckList;
-			sourceTree = "<group>";
-		};
-		0A3D5D4D2B4D337100574686 /* Main */ = {
-			isa = PBXGroup;
-			children = (
-        0A9E0A4A2B3DCAB90094595A /* MainViewController.swift */,
-				0A3D5D4E2B4D337100574686 /* ViewController.swift */,
-				0A3D5D4F2B4D337100574686 /* SideBarLauncher.swift */,
-				0A3D5D502B4D337100574686 /* BottomCollectionViewCell.swift */,
-				0A3D5D512B4D337100574686 /* BottomTableViewCell.swift */,
-				0A3D5D522B4D337100574686 /* FirstTableViewCell.swift */,
-				0A3D5D532B4D337100574686 /* TopTableViewCell.swift */,
-				0A3D5D542B4D337100574686 /* FirstTableViewCell.xib */,
-			);
-			path = Main;
 			sourceTree = "<group>";
 		};
 		0A3D5D612B4D703700574686 /* RecordBottomSheet */ = {
@@ -195,14 +195,10 @@
 			children = (
 				0A3D5D5D2B4D376C00574686 /* UserInterface */,
 				616408EA2B407A2100EC3B5E /* Extension */,
-				0A3D5D4D2B4D337100574686 /* Main */,
 				61D925062B4866D9002A16B4 /* Model */,
 				61D925032B4864E8002A16B4 /* Cell */,
 				0A9E0A462B3DCAB90094595A /* AppDelegate.swift */,
 				0A9E0A482B3DCAB90094595A /* SceneDelegate.swift */,
-				0A9DA8122B405C3E005C4B23 /* OpenNewPageViewController.swift */,
-				0AA6161F2B45683100F720B3 /* OpenNewPage2ViewController.swift */,
-				0AA616232B4579E300F720B3 /* CustomPopupViewController.swift */,
 				0A9E0A4F2B3DCAB90094595A /* Assets.xcassets */,
 				0A9E0A512B3DCAB90094595A /* LaunchScreen.storyboard */,
 				0A9E0A542B3DCAB90094595A /* Info.plist */,
@@ -360,27 +356,26 @@
 				616408E12B405B7200EC3B5E /* ImjangNoteViewController.swift in Sources */,
 				61D9250A2B49506D002A16B4 /* RecordingFilesViewController.swift in Sources */,
 				0A3D5D4B2B4D333900574686 /* SideBarComponents.swift in Sources */,
-				0A3D5D552B4D337100574686 /* ViewController.swift in Sources */,
+				0A3D5D552B4D337100574686 /* MainViewController.swift in Sources */,
 				61D925082B486706002A16B4 /* RecordingFileItem.swift in Sources */,
 				0A9E0A472B3DCAB90094595A /* AppDelegate.swift in Sources */,
+				0AB34CC32B4F11B000150A15 /* OpenNewPageViewController.swift in Sources */,
 				611F145E2B471ECA00B983F1 /* CALayer+Extension.swift in Sources */,
 				0A3D5D582B4D337100574686 /* BottomTableViewCell.swift in Sources */,
 				0A3D5D562B4D337100574686 /* SideBarLauncher.swift in Sources */,
 				61D925052B486508002A16B4 /* RecordingFileViewCell.swift in Sources */,
 				611F14552B47070B00B983F1 /* RecordingSegmentedViewController.swift in Sources */,
 				611F145C2B4707DF00B983F1 /* CheckListViewController.swift in Sources */,
+				0AB34CC22B4F11B000150A15 /* CustomPopupViewController.swift in Sources */,
+				0AB34CC12B4F11B000150A15 /* OpenNewPage2ViewController.swift in Sources */,
 				616409022B407FB300EC3B5E /* UIFont+Pretendard.swift in Sources */,
 				61D925112B4983A1002A16B4 /* UILabel+Extension.swift in Sources */,
 				0A3D5D4C2B4D333900574686 /* TransactionModel.swift in Sources */,
 				616408EC2B407A2D00EC3B5E /* UIView+Extensions.swift in Sources */,
 				0A3D5D5A2B4D337100574686 /* TopTableViewCell.swift in Sources */,
-				0AA616242B4579E300F720B3 /* CustomPopupViewController.swift in Sources */,
 				0A3D5D632B4D707300574686 /* RecordBottomSheetViewController.swift in Sources */,
-				0A9E0A4B2B3DCAB90094595A /* MainViewController.swift in Sources */,
 				0A3D5D592B4D337100574686 /* FirstTableViewCell.swift in Sources */,
-				0AA616202B45683100F720B3 /* OpenNewPage2ViewController.swift in Sources */,
 				0A9E0A472B3DCAB90094595A /* AppDelegate.swift in Sources */,
-				0A9DA8132B405C3E005C4B23 /* OpenNewPageViewController.swift in Sources */,
 				0A3D5D572B4D337100574686 /* BottomCollectionViewCell.swift in Sources */,
 				0A9E0A492B3DCAB90094595A /* SceneDelegate.swift in Sources */,
 				611F145A2B4707CC00B983F1 /* RecordingRoomViewController.swift in Sources */,

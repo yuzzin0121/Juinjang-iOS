@@ -10,7 +10,7 @@ import SnapKit
 import Then
 
 
-class ViewController: UIViewController {
+class MainViewController: UIViewController {
     
     let tableView = UITableView().then {
         $0.translatesAutoresizingMaskIntoConstraints = false
@@ -126,7 +126,7 @@ extension UIView {
     }
 }
 
-extension ViewController : UITableViewDelegate, UITableViewDataSource{
+extension MainViewController : UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 2
     }
@@ -168,7 +168,7 @@ extension ViewController : UITableViewDelegate, UITableViewDataSource{
 }
      
      
-extension ViewController : UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
+extension MainViewController : UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
      return 5
      }
