@@ -22,7 +22,7 @@ class RecordBottomSheetViewController: UIViewController {
     
     let totalHeight: CGFloat = 844 // 전체 높이
     let ratio: CGFloat = 392 // Bottom Sheet가 차지하는 높이
-    
+
     var bottomSheetHeight: CGFloat {
         return (ratio / totalHeight) * UIScreen.main.bounds.height // 디바이스가 달라져도 비율만큼 차지
     }
@@ -34,7 +34,7 @@ class RecordBottomSheetViewController: UIViewController {
         $0.addTarget(self, action: #selector(cancelButtonTapped(_:)), for: .touchUpInside)
     }
     
-    let warningMessageLabel = UILabel().then {
+    lazy var warningMessageLabel = UILabel().then {
         $0.text = "녹음 파일을 법적인 상황에서 활용하려면\n반드시 녹음한 사람의 목소리가 함께 들어가야 해요."
         $0.numberOfLines = 2
         $0.textAlignment = .center
@@ -43,13 +43,13 @@ class RecordBottomSheetViewController: UIViewController {
         $0.asColor(targetString: "녹음한 사람의 목소리가 함께", color: UIColor(named: "mainOrange"))
     }
     
-    let warningMessageImage = UIImageView().then {
+    lazy var warningMessageImage = UIImageView().then {
         $0.image = UIImage(named: "record-check-image")
         $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.contentMode = .scaleAspectFit
+        $0.contentMode = .scaleAspectFill
     }
     
-    let checkButton = UIButton().then {
+    lazy var checkButton = UIButton().then {
         $0.setTitle("오늘 하루 보지 않기", for: .normal)
         $0.setTitleColor(UIColor(named: "normalText"), for: .normal)
         $0.titleLabel?.font = UIFont(name: "Pretendard-Medium", size: 14)
@@ -65,7 +65,7 @@ class RecordBottomSheetViewController: UIViewController {
         $0.imageEdgeInsets = UIEdgeInsets(top: 0, left: -4, bottom: 0, right: 4)
     }
 
-    let recordStartButton = UIButton().then {
+    lazy var recordStartButton = UIButton().then {
         $0.setTitle("녹음 시작!", for: .normal)
         $0.setTitleColor(UIColor(red: 1, green: 1, blue: 1, alpha: 1), for: .normal)
         
@@ -81,12 +81,55 @@ class RecordBottomSheetViewController: UIViewController {
         $0.titleLabel?.lineBreakMode = .byTruncatingTail
     }
     
-    let recordLabel = UILabel().then {
+    lazy var recordLabel = UILabel().then {
         $0.text = "녹음하기"
         $0.textAlignment = .center
         $0.textColor = UIColor(named: "textWhite")
         $0.font = UIFont(name: "Pretendard-SemiBold", size: 18)
     }
+    
+    lazy var timeLabel = UILabel().then {
+        $0.text = "00:18.79"
+        $0.textAlignment = .center
+        $0.textColor = UIColor(named: "lightGray")
+        $0.font = UIFont(name: "Pretendard-Bold", size: 24)
+    }
+    
+    lazy var recordsttLabel = UILabel().then {
+        $0.text = "speech to text 적용 중"
+        $0.textAlignment = .center
+        $0.textColor = UIColor(red: 0.38, green: 0.38, blue: 0.38, alpha: 1)
+        $0.font = UIFont(name: "Pretendard-Medium", size: 16)
+    }
+    
+    lazy var trashButton = UIButton().then {
+        $0.setImage(UIImage(named: "record-trash"), for: .normal)
+        $0.imageView?.contentMode = .scaleAspectFit
+    }
+    
+    lazy var recordButton = UIButton().then {
+        $0.setImage(UIImage(named: "being-recorded-button"), for: .normal)
+        $0.imageView?.contentMode = .scaleAspectFit
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        $0.addTarget(self, action: #selector(startRecordPressed(_:)), for: .touchUpInside)
+    }
+    
+    lazy var completedButton = UIButton().then {
+        $0.setTitle("완료", for: .normal)
+        $0.setTitleColor(UIColor(named: "textWhite"), for: .normal)
+        $0.titleLabel?.font = UIFont(name: "Pretendard-Bold", size: 18)
+        $0.addTarget(self, action: #selector(completedButtonPressed(_:)), for: .touchUpInside)
+    }
+    
+    lazy var sttConversionLabel = UILabel().then {
+        $0.text = "speech to text 변환 중..."
+        $0.textAlignment = .center
+        $0.textColor = UIColor(named: "textWhite")
+        $0.font = UIFont(name: "Pretendard-Medium", size: 16)
+    }
+    
+//    lazy var topViewController = TopViewController()
+//    lazy var bottomViewController = BottomViewController()
     
     // MARK: Life Cycle
     override func viewDidLoad() {
@@ -141,14 +184,19 @@ class RecordBottomSheetViewController: UIViewController {
             $0.top.equalTo(cancelButton.snp.bottom).offset(4)
         }
         
+        let ratio: CGFloat = 294.07 / 114.61
+        
         warningMessageImage.snp.makeConstraints {
             $0.centerX.equalTo(bottomSheetView.snp.centerX)
             $0.top.equalTo(warningMessageLabel.snp.bottom).offset(28.88)
+            $0.leading.equalTo(bottomSheetView.snp.leading).offset(55)
+            $0.trailing.equalTo(bottomSheetView.snp.trailing).offset(-55)
+            $0.height.equalTo(warningMessageImage.snp.width).dividedBy(ratio)
         }
         
         checkButton.snp.makeConstraints {
             $0.centerX.equalTo(bottomSheetView.snp.centerX)
-            $0.top.equalTo(warningMessageImage.snp.bottom).offset(42.51)
+            $0.top.equalTo(warningMessageImage.snp.bottom).offset(38.51)
         }
         
         recordStartButton.snp.makeConstraints {
@@ -157,12 +205,19 @@ class RecordBottomSheetViewController: UIViewController {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(warningMessageImage.snp.bottom).offset(74.51)
             $0.bottom.equalTo(bottomSheetView.snp.bottom).offset(-33)
+//            $0.bottom.equalTo(bottomSheetView.snp.bottom).multipliedBy(0.9)
         }
     }
     
     func addRecordSubViews() {
         let widgets: [UIView] = [
-            recordLabel,]
+            recordLabel,
+            timeLabel,
+            recordsttLabel,
+            trashButton,
+            recordButton,
+            completedButton
+        ]
         widgets.forEach { bottomSheetView.addSubview($0) }
     }
     
@@ -171,10 +226,101 @@ class RecordBottomSheetViewController: UIViewController {
         
         recordLabel.snp.makeConstraints {
             $0.centerX.equalTo(bottomSheetView.snp.centerX)
-            $0.top.equalTo(bottomSheetView.snp.bottom).offset(24)
+            $0.top.equalTo(bottomSheetView.snp.top).offset(24)
 //            $0.leading.equalTo(bottomSheetView.snp.leading).offset(164)
         }
+        
+        timeLabel.snp.makeConstraints {
+            $0.centerX.equalTo(bottomSheetView.snp.centerX)
+            $0.top.equalTo(recordLabel.snp.bottom).offset(34)
+        }
+        
+        recordsttLabel.snp.makeConstraints {
+            $0.centerX.equalTo(bottomSheetView.snp.centerX)
+            $0.top.equalTo(recordLabel.snp.bottom).offset(117)
+        }
+        
+        trashButton.snp.makeConstraints {
+            $0.top.equalTo(recordsttLabel.snp.bottom).offset(52)
+            $0.leading.equalTo(bottomSheetView.snp.leading).offset(39)
+        }
+        
+        recordButton.snp.makeConstraints {
+            $0.leading.equalTo(trashButton.snp.trailing).offset(90)
+            $0.top.equalTo(recordsttLabel.snp.bottom).offset(39)
+        }
+        
+        completedButton.snp.makeConstraints {
+            $0.leading.equalTo(recordButton.snp.trailing).offset(90)
+            $0.top.equalTo(recordsttLabel.snp.bottom).offset(58)
+            $0.height.equalTo(24)
+        }
     }
+    
+    func addConversionSubViews() {
+        let widgets: [UIView] = [
+            sttConversionLabel,
+        ]
+        widgets.forEach { bottomSheetView.addSubview($0) }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            self.sttConversionLabel.removeFromSuperview()
+//            self.bottomSheetView.addSubview(self.topViewController.view)
+//            self.bottomSheetView.addSubview(self.bottomViewController.view)
+//            self.configureBottomSheetViewController()
+        }
+    }
+
+    
+    func setConversionLayout() {
+        sttConversionLabel.snp.makeConstraints {
+            $0.centerX.equalTo(bottomSheetView.snp.centerX)
+            $0.top.equalTo(bottomSheetView.snp.top).offset(87)
+        }
+    }
+    
+//    func configureBottomSheetViewController() {
+//        let topViewControllerHeight: CGFloat = topViewController.relativeHeight * totalHeight
+//        let bottomViewControllerHeight: CGFloat = bottomViewController.relativeHeight * totalHeight
+//        let totalBottomSheetHeight: CGFloat = topViewControllerHeight + bottomViewControllerHeight
+
+        // 현재 뷰 컨트롤러인 RecordBottomSheetViewController를 사용
+//        let bottomSheetViewController = self
+
+        // Top ViewController 설정
+//        addChild(topViewController)
+//        bottomSheetView.addSubview(topViewController.view)
+//        topViewController.didMove(toParent: self)
+
+        // Bottom ViewController 설정
+//        addChild(bottomViewController)
+//        bottomSheetView.addSubview(bottomViewController.view)
+//        bottomViewController.didMove(toParent: self)
+
+        // 제약 조건 설정
+//        topViewController.view.snp.makeConstraints {
+//            $0.leading.trailing.equalTo(bottomSheetView)
+//            $0.top.equalTo(bottomSheetView)
+//            $0.height.equalTo(topViewControllerHeight)  // 상단 높이 조절
+//        }
+
+//        bottomViewController.view.snp.makeConstraints {
+//            $0.leading.trailing.equalTo(bottomSheetView)
+//            $0.top.equalTo(topViewController.view.snp.bottom)
+//            $0.bottom.equalTo(bottomSheetView)
+//        }
+
+        // Bottom Sheet의 높이 제약 조건 설정
+//        bottomSheetViewController.bottomSheetView.snp.makeConstraints {
+//            $0.height.equalTo(topViewControllerHeight + bottomViewControllerHeight)
+//        }
+
+        // Bottom Sheet ViewController를 화면에 표시
+        // 애니메이션 추가
+//        UIView.animate(withDuration: 0.25) {
+//            self.view.layoutIfNeeded()
+//        }
+//    }
     
     @objc
     func checkButtonPressed(_ sender: UIButton) {
@@ -201,6 +347,30 @@ class RecordBottomSheetViewController: UIViewController {
         setRecordLayout()
     }
     
+    @objc
+    func startRecordPressed(_ sender: UIButton) {
+        if recordButton.isSelected {
+            recordButton.setImage(UIImage(named: "being-recorded-button"), for: .normal)
+        } else {
+            recordButton.setImage(UIImage(named: "record-button"), for: .normal)
+        }
+        recordButton.isSelected.toggle()
+    }
+    
+    @objc
+    func completedButtonPressed(_ sender: UIButton) {
+        let removeWidgets: [UIView] = [
+            recordLabel,
+            timeLabel,
+            recordsttLabel,
+            trashButton,
+            recordButton,
+            completedButton]
+        removeWidgets.forEach { $0.removeFromSuperview() }
+        addConversionSubViews()
+        setConversionLayout()
+    }
+    
     func showBottomSheet() {
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseIn, animations: {
             self.dimmedView.alpha = 0.7
@@ -219,7 +389,6 @@ class RecordBottomSheetViewController: UIViewController {
         }
     }
 
-    // 3
     @objc
     func cancelButtonTapped(_ sender: UIButton) {
         hideBottomSheetAndGoBack()
