@@ -27,9 +27,6 @@ class BottomSheetViewController: UIViewController {
         let warningMessageVC = WarningMessageViewController()
         warningMessageVC.bottomSheetViewController = self
         addContentViewController(warningMessageVC)
-//        let warningMessageVC = RecordViewController()
-//        warningMessageVC.bottomSheetViewController = self
-//        addContentViewController(warningMessageVC)
     }
     
     private func addContentViewController(_ viewController: UIViewController) {

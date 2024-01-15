@@ -136,17 +136,18 @@ class RecordViewController: UIViewController {
         // 제한 문구 Label
         limitLabel.snp.makeConstraints {
             $0.centerX.equalTo(bottomSheetView.snp.centerX)
-            $0.top.equalTo(recordLabel.snp.bottom).offset(117)        }
+            $0.top.equalTo(recordLabel.snp.bottom).offset(117)
+        }
         
         // 휴지통 Button
         trashButton.snp.makeConstraints {
             $0.top.equalTo(limitLabel.snp.bottom).offset(48)
-            $0.leading.equalTo(bottomSheetView.snp.leading).offset(39)
+            $0.trailing.equalTo(recordButton.snp.leading).offset(-90)
         }
         
         // 녹음 Button
         recordButton.snp.makeConstraints {
-            $0.leading.equalTo(trashButton.snp.trailing).offset(90)
+            $0.centerX.equalTo(bottomSheetView.snp.centerX)
             $0.top.equalTo(limitLabel.snp.bottom).offset(35)
         }
         
@@ -177,6 +178,7 @@ class RecordViewController: UIViewController {
         
         bottomSheetViewController?.transitionToViewController(loadingVC)
         
+        // 임의로 2초 후 recordPlaybackVC로 이동
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [self] in
             let recordPlaybackVC = RecordPlaybackViewController()
             recordPlaybackVC.bottomSheetViewController = bottomSheetViewController

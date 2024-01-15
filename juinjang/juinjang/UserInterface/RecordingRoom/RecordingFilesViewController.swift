@@ -74,6 +74,7 @@ class RecordingFilesViewController: UIViewController {
         bottomSheetViewController.modalPresentationStyle = .custom
 //        bottomSheetViewController.transitioningDelegate = self
         self.present(bottomSheetViewController, animated: false, completion: nil)
+        // TODO: - 녹음 파일 추가
     }
     
     func setItemData() {
