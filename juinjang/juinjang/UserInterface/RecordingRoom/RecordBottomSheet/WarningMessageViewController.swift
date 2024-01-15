@@ -46,7 +46,6 @@ class WarningMessageViewController: UIViewController {
     
     lazy var warningMessageImage = UIImageView().then {
         $0.image = UIImage(named: "record-check-image")
-        $0.translatesAutoresizingMaskIntoConstraints = false
         $0.contentMode = .scaleAspectFill
     }
     
@@ -104,42 +103,46 @@ class WarningMessageViewController: UIViewController {
             $0.height.equalTo(bottomSheetHeight)
         }
         
-         cancelButton.snp.makeConstraints {
-             $0.height.equalTo(12)
-             $0.width.equalTo(12)
- //            $0.leading.equalTo(bottomSheetView.snp.leading).offset(354)
-             $0.trailing.equalTo(bottomSheetView.snp.trailing).offset(-24)
-             $0.top.equalTo(bottomSheetView.snp.top).offset(29)
-         }
-         
-         warningMessageLabel.snp.makeConstraints {
-             $0.centerX.equalTo(bottomSheetView.snp.centerX)
-             $0.top.equalTo(cancelButton.snp.bottom).offset(4)
-             $0.trailing.leading.equalToSuperview().inset(16)
-         }
-         
-         let ratio: CGFloat = 294.07 / 114.61
-         
-         warningMessageImage.snp.makeConstraints {
-             $0.centerX.equalTo(bottomSheetView.snp.centerX)
-             $0.width.equalTo(bottomSheetView.snp.width).multipliedBy(0.75)
-             $0.height.equalTo(warningMessageImage.snp.width).multipliedBy(0.75/ratio)
-             $0.top.equalTo(warningMessageLabel.snp.bottom).offset(24.88)
-         }
-         
-         checkButton.snp.makeConstraints {
-             $0.centerX.equalTo(bottomSheetView.snp.centerX)
-             $0.top.equalTo(warningMessageImage.snp.bottom).offset(38.51)
-         }
-         
-         recordStartButton.snp.makeConstraints {
-             $0.height.equalTo(52)
-             $0.leading.trailing.equalToSuperview().inset(24)
-             $0.centerX.equalToSuperview()
-             $0.top.equalTo(checkButton.snp.bottom).offset(16)
-             $0.bottom.equalTo(bottomSheetView.safeAreaLayoutGuide.snp.bottom).offset(-16)
-         }
-     }
+        // 취소 Button
+        cancelButton.snp.makeConstraints {
+            $0.height.equalTo(12)
+            $0.width.equalTo(12)
+            //            $0.leading.equalTo(bottomSheetView.snp.leading).offset(354)
+            $0.trailing.equalTo(bottomSheetView.snp.trailing).offset(-24)
+            $0.top.equalTo(bottomSheetView.snp.top).offset(29)
+        }
+        
+        // 경고 메시지 문구 Label
+        warningMessageLabel.snp.makeConstraints {
+            $0.centerX.equalTo(bottomSheetView.snp.centerX)
+            $0.top.equalTo(cancelButton.snp.bottom).offset(4)
+            $0.trailing.leading.equalToSuperview().inset(16)
+        }
+        
+        let ratio: CGFloat = 294.07 / 114.61
+        // 경고 메시지 ImageView
+        warningMessageImage.snp.makeConstraints {
+            $0.centerX.equalTo(bottomSheetView.snp.centerX)
+            $0.width.equalTo(bottomSheetView.snp.width).multipliedBy(0.75)
+            $0.height.equalTo(warningMessageImage.snp.width).multipliedBy(0.75/ratio)
+            $0.top.equalTo(warningMessageLabel.snp.bottom).offset(24.88)
+        }
+        
+        // 문구 확인 Button
+        checkButton.snp.makeConstraints {
+            $0.centerX.equalTo(bottomSheetView.snp.centerX)
+            $0.top.equalTo(warningMessageImage.snp.bottom).offset(38.51)
+        }
+        
+        // 녹음 시작 Button
+        recordStartButton.snp.makeConstraints {
+            $0.height.equalTo(52)
+            $0.leading.trailing.equalToSuperview().inset(24)
+            $0.centerX.equalToSuperview()
+            $0.top.equalTo(checkButton.snp.bottom).offset(16)
+            $0.bottom.equalTo(bottomSheetView.safeAreaLayoutGuide.snp.bottom).offset(-16)
+        }
+    }
 
     
     @objc func checkButtonPressed(_ sender: UIButton) {
@@ -157,40 +160,14 @@ class WarningMessageViewController: UIViewController {
     }
     
     @objc func confirmButtonPressed(_ sender: UIButton) {
-        let recordBottomSheet = RecordViewController()
-        recordBottomSheet.bottomSheetViewController = bottomSheetViewController
+        let recordVC = RecordViewController()
+        recordVC.bottomSheetViewController = bottomSheetViewController
         
-        // 기존 뷰 컨트롤러가 있으면 제거
-        if let currentChildViewController = currentChildViewController {
-            removeContentViewController(currentChildViewController)
-        }
-        
-        // 새로운 뷰 컨트롤러 추가
-        addContentViewController(recordBottomSheet)
-
-        // 현재 자식 뷰 컨트롤러 업데이트
-        currentChildViewController = recordBottomSheet
+        bottomSheetViewController?.transitionToViewController(recordVC)
     }
     
     @objc func cancelButtonTapped(_ sender: UIButton) {
         print("닫기")
         bottomSheetViewController?.hideBottomSheetAndGoBack()
-    }
-    
-    private func addContentViewController(_ viewController: UIViewController) {
-        bottomSheetView.addSubview(viewController.view)
-        addChild(viewController)
-        viewController.didMove(toParent: self)
-
-        // Content View Controller의 레이아웃 설정
-        viewController.view.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-        }
-    }
-    
-    private func removeContentViewController(_ viewController: UIViewController) {
-        viewController.willMove(toParent: nil)
-        viewController.view.removeFromSuperview()
-        viewController.removeFromParent()
     }
 }

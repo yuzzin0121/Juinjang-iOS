@@ -10,6 +10,8 @@ import SnapKit
 
 class BottomSheetViewController: UIViewController {
     
+    var currentViewController: UIViewController?
+    
     let dimmedView = UIView().then {
         $0.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
     }
@@ -73,5 +75,19 @@ class BottomSheetViewController: UIViewController {
                 self.dismiss(animated: false, completion: nil)
             }
         }
+    }
+    
+    func transitionToViewController(_ viewController: UIViewController) {
+        // 이전 뷰 컨트롤러를 제거
+        currentViewController?.removeFromParent()
+        currentViewController?.view.removeFromSuperview()
+
+        // 새로운 뷰 컨트롤러를 추가
+        addChild(viewController)
+        view.addSubview(viewController.view)
+        viewController.didMove(toParent: self)
+
+        // 현재 뷰 컨트롤러 갱신
+        currentViewController = viewController
     }
 }
