@@ -19,8 +19,8 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate {
         $0.font = UIFont(name: "Pretendard-Bold", size: 24)
     }
     
-    lazy var currentTimeLabel = UILabel().then {
-        $0.text = "오후 4:00"
+    lazy var recordStartTimeLabel = UILabel().then {
+        $0.text = "오후 4:00" // - TODO: 녹음 파일 추가할 때의 시간 반영
         $0.textColor = UIColor(red: 0.79, green: 0.79, blue: 0.79, alpha: 1)
         $0.font = UIFont(name: "Pretendard-Regular", size: 16)
     }
@@ -54,7 +54,7 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate {
     
     func addSubViews() {
         [titleTextField,
-         currentTimeLabel,
+         recordStartTimeLabel,
          rewindButton,
          recordButton,
          fastForwardButton].forEach { view.addSubview($0) }
@@ -66,7 +66,7 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate {
             $0.top.equalTo(view.snp.top).offset(24)
         }
         
-        currentTimeLabel.snp.makeConstraints {
+        recordStartTimeLabel.snp.makeConstraints {
             $0.centerX.equalTo(view.snp.centerX)
             $0.top.equalTo(titleTextField.snp.bottom).offset(20)
         }

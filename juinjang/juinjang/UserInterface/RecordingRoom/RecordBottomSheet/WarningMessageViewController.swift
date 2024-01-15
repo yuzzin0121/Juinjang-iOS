@@ -72,7 +72,6 @@ class WarningMessageViewController: UIViewController {
         $0.backgroundColor = UIColor(named: "textBlack")
         $0.layer.cornerRadius = 8
         $0.addTarget(self, action: #selector(confirmButtonPressed(_:)), for: .touchUpInside)
-        $0.translatesAutoresizingMaskIntoConstraints = false
         
         $0.titleLabel?.font = UIFont(name: "Pretendard-SemiBold", size: 16)
         $0.titleLabel?.numberOfLines = 1
@@ -107,7 +106,7 @@ class WarningMessageViewController: UIViewController {
         cancelButton.snp.makeConstraints {
             $0.height.equalTo(12)
             $0.width.equalTo(12)
-            //            $0.leading.equalTo(bottomSheetView.snp.leading).offset(354)
+//            $0.leading.equalTo(bottomSheetView.snp.leading).offset(354)
             $0.trailing.equalTo(bottomSheetView.snp.trailing).offset(-24)
             $0.top.equalTo(bottomSheetView.snp.top).offset(29)
         }
@@ -116,22 +115,22 @@ class WarningMessageViewController: UIViewController {
         warningMessageLabel.snp.makeConstraints {
             $0.centerX.equalTo(bottomSheetView.snp.centerX)
             $0.top.equalTo(cancelButton.snp.bottom).offset(4)
-            $0.trailing.leading.equalToSuperview().inset(16)
         }
         
-        let ratio: CGFloat = 294.07 / 114.61
+//        let ratio: CGFloat = 294.07 / 114.61
         // 경고 메시지 ImageView
         warningMessageImage.snp.makeConstraints {
             $0.centerX.equalTo(bottomSheetView.snp.centerX)
-            $0.width.equalTo(bottomSheetView.snp.width).multipliedBy(0.75)
-            $0.height.equalTo(warningMessageImage.snp.width).multipliedBy(0.75/ratio)
+//            $0.width.equalTo(bottomSheetView.snp.width).multipliedBy(0.75)
+//            $0.height.equalTo(warningMessageImage.snp.width).multipliedBy(0.75/ratio)
             $0.top.equalTo(warningMessageLabel.snp.bottom).offset(24.88)
         }
         
         // 문구 확인 Button
         checkButton.snp.makeConstraints {
+            $0.height.equalTo(20)
             $0.centerX.equalTo(bottomSheetView.snp.centerX)
-            $0.top.equalTo(warningMessageImage.snp.bottom).offset(38.51)
+            $0.top.equalTo(warningMessageImage.snp.bottom).offset(30)//38.51
         }
         
         // 녹음 시작 Button

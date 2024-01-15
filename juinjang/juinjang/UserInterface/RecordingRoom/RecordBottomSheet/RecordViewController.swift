@@ -142,12 +142,12 @@ class RecordViewController: UIViewController {
         // 휴지통 Button
         trashButton.snp.makeConstraints {
             $0.top.equalTo(limitLabel.snp.bottom).offset(48)
-            $0.leading.equalTo(bottomSheetView.snp.leading).offset(39)
+            $0.trailing.equalTo(recordButton.snp.leading).offset(-90)
         }
         
         // 녹음 Button
         recordButton.snp.makeConstraints {
-            $0.leading.equalTo(trashButton.snp.trailing).offset(90)
+            $0.centerX.equalTo(bottomSheetView.snp.centerX)
             $0.top.equalTo(limitLabel.snp.bottom).offset(35)
         }
         
