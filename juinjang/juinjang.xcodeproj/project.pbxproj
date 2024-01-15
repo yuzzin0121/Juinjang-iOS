@@ -16,7 +16,9 @@
 		0A3D5D592B4D337100574686 /* FirstTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3D5D522B4D337100574686 /* FirstTableViewCell.swift */; };
 		0A3D5D5A2B4D337100574686 /* TopTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3D5D532B4D337100574686 /* TopTableViewCell.swift */; };
 		0A3D5D5B2B4D337100574686 /* FirstTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A3D5D542B4D337100574686 /* FirstTableViewCell.xib */; };
-		0A3D5D632B4D707300574686 /* RecordBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3D5D622B4D707300574686 /* RecordBottomSheetViewController.swift */; };
+		0A3D5D632B4D707300574686 /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3D5D622B4D707300574686 /* BottomSheetViewController.swift */; };
+		0A554CE02B52DB100023BB49 /* RecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A554CDF2B52DB100023BB49 /* RecordViewController.swift */; };
+		0A554CE42B5420F20023BB49 /* WarningMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A554CE32B5420F20023BB49 /* WarningMessageViewController.swift */; };
 		0A9E0A472B3DCAB90094595A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9E0A462B3DCAB90094595A /* AppDelegate.swift */; };
 		0A9E0A492B3DCAB90094595A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9E0A482B3DCAB90094595A /* SceneDelegate.swift */; };
 		0A9E0A502B3DCAB90094595A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0A9E0A4F2B3DCAB90094595A /* Assets.xcassets */; };
@@ -61,7 +63,9 @@
 		0A3D5D522B4D337100574686 /* FirstTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirstTableViewCell.swift; sourceTree = "<group>"; };
 		0A3D5D532B4D337100574686 /* TopTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopTableViewCell.swift; sourceTree = "<group>"; };
 		0A3D5D542B4D337100574686 /* FirstTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FirstTableViewCell.xib; sourceTree = "<group>"; };
-		0A3D5D622B4D707300574686 /* RecordBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordBottomSheetViewController.swift; sourceTree = "<group>"; };
+		0A3D5D622B4D707300574686 /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
+		0A554CDF2B52DB100023BB49 /* RecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordViewController.swift; sourceTree = "<group>"; };
+		0A554CE32B5420F20023BB49 /* WarningMessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarningMessageViewController.swift; sourceTree = "<group>"; };
 		0A9E0A432B3DCAB90094595A /* juinjang.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = juinjang.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A9E0A462B3DCAB90094595A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0A9E0A482B3DCAB90094595A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -168,7 +172,9 @@
 		0A3D5D612B4D703700574686 /* RecordBottomSheet */ = {
 			isa = PBXGroup;
 			children = (
-				0A3D5D622B4D707300574686 /* RecordBottomSheetViewController.swift */,
+				0A3D5D622B4D707300574686 /* BottomSheetViewController.swift */,
+				0A554CE32B5420F20023BB49 /* WarningMessageViewController.swift */,
+				0A554CDF2B52DB100023BB49 /* RecordViewController.swift */,
 			);
 			path = RecordBottomSheet;
 			sourceTree = "<group>";
@@ -356,6 +362,8 @@
 				616408E12B405B7200EC3B5E /* ImjangNoteViewController.swift in Sources */,
 				61D9250A2B49506D002A16B4 /* RecordingFilesViewController.swift in Sources */,
 				0A3D5D4B2B4D333900574686 /* SideBarComponents.swift in Sources */,
+				0A554CE42B5420F20023BB49 /* WarningMessageViewController.swift in Sources */,
+				0A554CE02B52DB100023BB49 /* RecordViewController.swift in Sources */,
 				0A3D5D552B4D337100574686 /* MainViewController.swift in Sources */,
 				61D925082B486706002A16B4 /* RecordingFileItem.swift in Sources */,
 				0A9E0A472B3DCAB90094595A /* AppDelegate.swift in Sources */,
@@ -373,7 +381,7 @@
 				0A3D5D4C2B4D333900574686 /* TransactionModel.swift in Sources */,
 				616408EC2B407A2D00EC3B5E /* UIView+Extensions.swift in Sources */,
 				0A3D5D5A2B4D337100574686 /* TopTableViewCell.swift in Sources */,
-				0A3D5D632B4D707300574686 /* RecordBottomSheetViewController.swift in Sources */,
+				0A3D5D632B4D707300574686 /* BottomSheetViewController.swift in Sources */,
 				0A3D5D592B4D337100574686 /* FirstTableViewCell.swift in Sources */,
 				0A9E0A472B3DCAB90094595A /* AppDelegate.swift in Sources */,
 				0A3D5D572B4D337100574686 /* BottomCollectionViewCell.swift in Sources */,
