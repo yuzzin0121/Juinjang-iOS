@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A2DED1A2B55198D00A96BAA /* STTLoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2DED192B55198D00A96BAA /* STTLoadingViewController.swift */; };
+		0A2DED1C2B551CB100A96BAA /* RecordPlaybackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2DED1B2B551CB100A96BAA /* RecordPlaybackViewController.swift */; };
+		0A2DED1E2B551CEE00A96BAA /* RecordTopViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2DED1D2B551CEE00A96BAA /* RecordTopViewController.swift */; };
+		0A2DED202B551CF900A96BAA /* RecordBottomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2DED1F2B551CF900A96BAA /* RecordBottomViewController.swift */; };
 		0A3D5D4B2B4D333900574686 /* SideBarComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3D5D492B4D333900574686 /* SideBarComponents.swift */; };
 		0A3D5D4C2B4D333900574686 /* TransactionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3D5D4A2B4D333900574686 /* TransactionModel.swift */; };
 		0A3D5D552B4D337100574686 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3D5D4E2B4D337100574686 /* MainViewController.swift */; };
@@ -54,6 +58,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0A2DED192B55198D00A96BAA /* STTLoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STTLoadingViewController.swift; sourceTree = "<group>"; };
+		0A2DED1B2B551CB100A96BAA /* RecordPlaybackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordPlaybackViewController.swift; sourceTree = "<group>"; };
+		0A2DED1D2B551CEE00A96BAA /* RecordTopViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordTopViewController.swift; sourceTree = "<group>"; };
+		0A2DED1F2B551CF900A96BAA /* RecordBottomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordBottomViewController.swift; sourceTree = "<group>"; };
 		0A3D5D492B4D333900574686 /* SideBarComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideBarComponents.swift; sourceTree = "<group>"; };
 		0A3D5D4A2B4D333900574686 /* TransactionModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionModel.swift; sourceTree = "<group>"; };
 		0A3D5D4E2B4D337100574686 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -113,6 +121,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0A2DED212B55433900A96BAA /* RecordPlayback */ = {
+			isa = PBXGroup;
+			children = (
+				0A2DED1D2B551CEE00A96BAA /* RecordTopViewController.swift */,
+				0A2DED1F2B551CF900A96BAA /* RecordBottomViewController.swift */,
+			);
+			path = RecordPlayback;
+			sourceTree = "<group>";
+		};
 		0A3D5D4D2B4D337100574686 /* Main */ = {
 			isa = PBXGroup;
 			children = (
@@ -132,8 +149,8 @@
 			isa = PBXGroup;
 			children = (
 				0AB34CBF2B4F11B000150A15 /* CustomPopupViewController.swift */,
-				0AB34CBE2B4F11B000150A15 /* OpenNewPage2ViewController.swift */,
 				0AB34CC02B4F11B000150A15 /* OpenNewPageViewController.swift */,
+				0AB34CBE2B4F11B000150A15 /* OpenNewPage2ViewController.swift */,
 			);
 			path = OpenNewpage;
 			sourceTree = "<group>";
@@ -175,6 +192,9 @@
 				0A3D5D622B4D707300574686 /* BottomSheetViewController.swift */,
 				0A554CE32B5420F20023BB49 /* WarningMessageViewController.swift */,
 				0A554CDF2B52DB100023BB49 /* RecordViewController.swift */,
+				0A2DED192B55198D00A96BAA /* STTLoadingViewController.swift */,
+				0A2DED1B2B551CB100A96BAA /* RecordPlaybackViewController.swift */,
+				0A2DED212B55433900A96BAA /* RecordPlayback */,
 			);
 			path = RecordBottomSheet;
 			sourceTree = "<group>";
@@ -363,10 +383,13 @@
 				61D9250A2B49506D002A16B4 /* RecordingFilesViewController.swift in Sources */,
 				0A3D5D4B2B4D333900574686 /* SideBarComponents.swift in Sources */,
 				0A554CE42B5420F20023BB49 /* WarningMessageViewController.swift in Sources */,
+				0A2DED1A2B55198D00A96BAA /* STTLoadingViewController.swift in Sources */,
 				0A554CE02B52DB100023BB49 /* RecordViewController.swift in Sources */,
 				0A3D5D552B4D337100574686 /* MainViewController.swift in Sources */,
 				61D925082B486706002A16B4 /* RecordingFileItem.swift in Sources */,
+				0A2DED1C2B551CB100A96BAA /* RecordPlaybackViewController.swift in Sources */,
 				0A9E0A472B3DCAB90094595A /* AppDelegate.swift in Sources */,
+				0A2DED1E2B551CEE00A96BAA /* RecordTopViewController.swift in Sources */,
 				0AB34CC32B4F11B000150A15 /* OpenNewPageViewController.swift in Sources */,
 				611F145E2B471ECA00B983F1 /* CALayer+Extension.swift in Sources */,
 				0A3D5D582B4D337100574686 /* BottomTableViewCell.swift in Sources */,
@@ -384,6 +407,7 @@
 				0A3D5D632B4D707300574686 /* BottomSheetViewController.swift in Sources */,
 				0A3D5D592B4D337100574686 /* FirstTableViewCell.swift in Sources */,
 				0A9E0A472B3DCAB90094595A /* AppDelegate.swift in Sources */,
+				0A2DED202B551CF900A96BAA /* RecordBottomViewController.swift in Sources */,
 				0A3D5D572B4D337100574686 /* BottomCollectionViewCell.swift in Sources */,
 				0A9E0A492B3DCAB90094595A /* SceneDelegate.swift in Sources */,
 				611F145A2B4707CC00B983F1 /* RecordingRoomViewController.swift in Sources */,

@@ -105,6 +105,7 @@ class RecordViewController: UIViewController {
             $0.height.equalTo(bottomSheetHeight)
         }
         
+        // 취소 Button
         cancelButton.snp.makeConstraints {
             $0.height.equalTo(12)
             $0.width.equalTo(12)
@@ -113,36 +114,43 @@ class RecordViewController: UIViewController {
             $0.top.equalTo(bottomSheetView.snp.top).offset(29)
         }
         
+        // 녹음 Label
         recordLabel.snp.makeConstraints {
             $0.centerX.equalTo(bottomSheetView.snp.centerX)
             $0.top.equalTo(bottomSheetView.snp.top).offset(24)
 //            $0.leading.equalTo(bottomSheetView.snp.leading).offset(164)
         }
         
+        // 시간 Label
         timeLabel.snp.makeConstraints {
             $0.centerX.equalTo(bottomSheetView.snp.centerX)
             $0.top.equalTo(recordLabel.snp.bottom).offset(34)
         }
         
+        // 남은 시간 Label
         remainTimeLabel.snp.makeConstraints {
             $0.centerX.equalTo(bottomSheetView.snp.centerX)
             $0.top.equalTo(timeLabel.snp.bottom).offset(1)
         }
         
+        // 제한 문구 Label
         limitLabel.snp.makeConstraints {
             $0.centerX.equalTo(bottomSheetView.snp.centerX)
             $0.top.equalTo(recordLabel.snp.bottom).offset(117)        }
         
+        // 휴지통 Button
         trashButton.snp.makeConstraints {
             $0.top.equalTo(limitLabel.snp.bottom).offset(48)
             $0.leading.equalTo(bottomSheetView.snp.leading).offset(39)
         }
         
+        // 녹음 Button
         recordButton.snp.makeConstraints {
             $0.leading.equalTo(trashButton.snp.trailing).offset(90)
             $0.top.equalTo(limitLabel.snp.bottom).offset(35)
         }
         
+        // 완료 Button
         completedButton.snp.makeConstraints {
             $0.leading.equalTo(recordButton.snp.trailing).offset(90)
             $0.top.equalTo(limitLabel.snp.bottom).offset(54)
@@ -164,5 +172,16 @@ class RecordViewController: UIViewController {
     }
     
     @objc func completedButtonPressed(_ sender: UIButton) {
+        let loadingVC = STTLoadingViewController()
+        loadingVC.bottomSheetViewController = bottomSheetViewController
+        
+        bottomSheetViewController?.transitionToViewController(loadingVC)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [self] in
+            let recordPlaybackVC = RecordPlaybackViewController()
+            recordPlaybackVC.bottomSheetViewController = bottomSheetViewController
+
+            bottomSheetViewController?.transitionToViewController(recordPlaybackVC)
+        }
     }
 }
