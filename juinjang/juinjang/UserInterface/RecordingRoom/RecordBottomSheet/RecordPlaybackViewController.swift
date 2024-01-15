@@ -49,6 +49,9 @@ class RecordPlaybackViewController: UIViewController {
         bottomSheetView.addSubview(topViewController.view)
         bottomSheetView.addSubview(bottomViewController.view)
         
+        topViewController.bottomSheetViewController = bottomSheetViewController
+        bottomViewController.topViewController = topViewController
+        
         addChild(topViewController)
         addChild(bottomViewController)
         
@@ -76,12 +79,5 @@ class RecordPlaybackViewController: UIViewController {
             $0.bottom.leading.trailing.equalToSuperview()
             $0.height.equalTo(bottomHeight)
         }
-    }
-
-    func switchToAnotherRecordPlaybackViewController() {
-        let anotherViewController = RecordPlaybackViewController()
-        // 필요한 경우 다른 설정 수행
-
-        bottomSheetViewController?.transitionToViewController(anotherViewController)
     }
 }

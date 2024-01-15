@@ -9,6 +9,8 @@ import UIKit
 import SnapKit
 
 class RecordBottomViewController: UIViewController, UITextFieldDelegate {
+    
+    weak var topViewController: RecordTopViewController?
 
     lazy var titleTextField = UITextField().then {
         $0.text = "녹음_001"
@@ -92,18 +94,16 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    // titleTextField의 Delegate 메소드: 텍스트 필드의 편집이 끝날 때 호출되는 메소드
     func textFieldDidEndEditing(_ textField: UITextField) {
-        // 텍스트 필드의 편집이 끝날 때 호출되는 메소드
+        // 텍스트 필드가 수정되면 title을 수정
         updateTitle(textField.text)
+        topViewController?.updateTitle(textField.text)
     }
 
-    // title을 업데이트하는 메소드
     func updateTitle(_ newTitle: String?) {
         if let title = newTitle {
-            print("제목 업데이트: \(title)")
+            print("녹음 파일 제목: \(title)")
             titleTextField.text = title
-            // 여기에서 필요한 작업을 수행하세요 (예: 화면에 제목 표시 등)
         }
     }
     

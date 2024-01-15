@@ -110,7 +110,7 @@ class RecordTopViewController: UIViewController {
     }
     
     @objc func copyButtonTapped(_ sender: UIButton) {
-        // recordTextView에 있는 문자열 복사하기
+        // recordTextView에 있는 문자열 복사
         UIPasteboard.general.string = recordTextView.text
         
         let alertController = UIAlertController(title: "", message: "복사되었습니다", preferredStyle: .alert)
@@ -123,5 +123,12 @@ class RecordTopViewController: UIViewController {
     
     @objc func editButtonTapped(_ sender: UIButton) {
         recordTextView.isEditable = true
+    }
+    
+    func updateTitle(_ newTitle: String?) {
+        if let title = newTitle {
+            print("녹음 파일 제목: \(title)")
+            titleLabel.text = title
+        }
     }
 }
