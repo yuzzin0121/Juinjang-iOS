@@ -109,7 +109,6 @@ class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
         $0.backgroundColor = UIColor(red: 0.358, green: 0.363, blue: 0.371, alpha: 1)
         $0.layer.cornerRadius = 10
         $0.addTarget(self, action: #selector(searchAddressButtonTapped(_:)), for: .touchUpInside)
-        $0.translatesAutoresizingMaskIntoConstraints = false
         
         $0.titleLabel?.font = UIFont(name: "Pretendard-SemiBold", size: 14)
         $0.titleLabel?.numberOfLines = 1
@@ -135,7 +134,6 @@ class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
             let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: $0.frame.height))
             $0.leftView = paddingView
             $0.leftViewMode = .always
-            $0.translatesAutoresizingMaskIntoConstraints = false
     }
     
     lazy var houseNicknameTextField = UITextField().then {
