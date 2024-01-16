@@ -155,6 +155,7 @@ class SetNickNameViewController: UIViewController {
     
     @objc func buttonTapped(_ sender: UIButton) {
         let welcomeViewController = WelcomeViewController()
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         navigationController?.pushViewController(welcomeViewController, animated: true)
     }
     
