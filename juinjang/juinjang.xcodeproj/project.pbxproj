@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		0A14E36F2B569A840008FD28 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A14E36E2B569A840008FD28 /* SignUpViewController.swift */; };
+		0A14E3712B56B31A0008FD28 /* SetNickNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A14E3702B56B31A0008FD28 /* SetNickNameViewController.swift */; };
+		0A14E3732B56B6F70008FD28 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A14E3722B56B6F70008FD28 /* WelcomeViewController.swift */; };
+		0A14E3772B56C43A0008FD28 /* omyu pretty.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0A14E3762B56C43A0008FD28 /* omyu pretty.ttf */; };
 		0A2DED1A2B55198D00A96BAA /* STTLoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2DED192B55198D00A96BAA /* STTLoadingViewController.swift */; };
 		0A2DED1C2B551CB100A96BAA /* RecordPlaybackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2DED1B2B551CB100A96BAA /* RecordPlaybackViewController.swift */; };
 		0A2DED1E2B551CEE00A96BAA /* RecordTopViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2DED1D2B551CEE00A96BAA /* RecordTopViewController.swift */; };
@@ -60,6 +63,9 @@
 
 /* Begin PBXFileReference section */
 		0A14E36E2B569A840008FD28 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		0A14E3702B56B31A0008FD28 /* SetNickNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetNickNameViewController.swift; sourceTree = "<group>"; };
+		0A14E3722B56B6F70008FD28 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
+		0A14E3762B56C43A0008FD28 /* omyu pretty.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "omyu pretty.ttf"; path = "../../../../../../../Downloads/omyu pretty.ttf"; sourceTree = "<group>"; };
 		0A2DED192B55198D00A96BAA /* STTLoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STTLoadingViewController.swift; sourceTree = "<group>"; };
 		0A2DED1B2B551CB100A96BAA /* RecordPlaybackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordPlaybackViewController.swift; sourceTree = "<group>"; };
 		0A2DED1D2B551CEE00A96BAA /* RecordTopViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordTopViewController.swift; sourceTree = "<group>"; };
@@ -127,6 +133,8 @@
 			isa = PBXGroup;
 			children = (
 				0A14E36E2B569A840008FD28 /* SignUpViewController.swift */,
+				0A14E3702B56B31A0008FD28 /* SetNickNameViewController.swift */,
+				0A14E3722B56B6F70008FD28 /* WelcomeViewController.swift */,
 			);
 			path = SignUp;
 			sourceTree = "<group>";
@@ -275,6 +283,7 @@
 				61A7B91D2B4C4EC200795B49 /* Pretendard-Regular.otf */,
 				61A7B91F2B4C4EC200795B49 /* Pretendard-SemiBold.otf */,
 				61A7B9202B4C4EC200795B49 /* Pretendard-Thin.otf */,
+				0A14E3762B56C43A0008FD28 /* omyu pretty.ttf */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
@@ -370,6 +379,7 @@
 				61A7B92D2B4C4EC300795B49 /* Pretendard-Bold.otf in Resources */,
 				0A9E0AA92B3DD4D20094595A /* .gitignore in Resources */,
 				61A7B92E2B4C4EC300795B49 /* Pretendard-ExtraBold.otf in Resources */,
+				0A14E3772B56C43A0008FD28 /* omyu pretty.ttf in Resources */,
 				61A7B9262B4C4EC300795B49 /* Pretendard-Regular.otf in Resources */,
 				0A3D5D5B2B4D337100574686 /* FirstTableViewCell.xib in Resources */,
 				61A7B9292B4C4EC300795B49 /* Pretendard-Thin.otf in Resources */,
@@ -395,6 +405,8 @@
 				61D9250A2B49506D002A16B4 /* RecordingFilesViewController.swift in Sources */,
 				0A3D5D4B2B4D333900574686 /* SideBarComponents.swift in Sources */,
 				0A554CE42B5420F20023BB49 /* WarningMessageViewController.swift in Sources */,
+				0A14E3712B56B31A0008FD28 /* SetNickNameViewController.swift in Sources */,
+				0A14E3732B56B6F70008FD28 /* WelcomeViewController.swift in Sources */,
 				0A2DED1A2B55198D00A96BAA /* STTLoadingViewController.swift in Sources */,
 				0A554CE02B52DB100023BB49 /* RecordViewController.swift in Sources */,
 				0A3D5D552B4D337100574686 /* MainViewController.swift in Sources */,

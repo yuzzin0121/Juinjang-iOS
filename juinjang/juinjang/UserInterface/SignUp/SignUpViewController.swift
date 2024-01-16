@@ -95,11 +95,11 @@ class SignUpViewController: UIViewController {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(loginStackView.snp.bottom).offset(view.frame.height * 0.06)
         }
-
     }
     
     @objc func backButtonTapped() {
         navigationController?.popViewController(animated: true)
+        // -TODO: 온보딩 3번째 페이지로
     }
     
     @objc func loginButtonTapped(_ sender: UIButton) {

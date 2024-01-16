@@ -282,9 +282,9 @@ class OpenNewPageViewController: UIViewController {
     
     lazy var nextButton = UIButton().then {
         $0.setTitle("다음으로", for: .normal)
-        $0.setTitleColor(UIColor(red: 1, green: 1, blue: 1, alpha: 1), for: .normal)
+        $0.setTitleColor(UIColor(named: "textWhite"), for: .normal)
         
-        $0.backgroundColor = UIColor(red: 0.82, green: 0.82, blue: 0.82, alpha: 1)
+        $0.backgroundColor = UIColor(named: "lightGray")
         $0.layer.cornerRadius = 8
         $0.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
         $0.translatesAutoresizingMaskIntoConstraints = false
