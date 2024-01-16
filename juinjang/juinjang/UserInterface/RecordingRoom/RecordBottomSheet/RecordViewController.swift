@@ -52,6 +52,12 @@ class RecordViewController: UIViewController {
         $0.font = UIFont(name: "Pretendard-Medium", size: 16)
     }
     
+    // -TODO: 음성과 직접 연결 필요
+    lazy var recordWaveForm = UIImageView().then {
+        $0.image = UIImage(named: "record-bar")
+        $0.contentMode = .scaleAspectFill
+    }
+    
     lazy var limitLabel = UILabel().then {
         $0.text = "녹음은 5분까지만 가능해요"
         $0.textAlignment = .center
@@ -92,6 +98,7 @@ class RecordViewController: UIViewController {
          recordLabel,
          timeLabel,
          remainTimeLabel,
+         recordWaveForm,
          limitLabel,
          trashButton,
          recordButton,
@@ -133,10 +140,16 @@ class RecordViewController: UIViewController {
             $0.top.equalTo(timeLabel.snp.bottom).offset(1)
         }
         
+        // 파형 ImageView
+        recordWaveForm.snp.makeConstraints {
+            $0.centerX.equalTo(bottomSheetView.snp.centerX)
+            $0.top.equalTo(remainTimeLabel.snp.bottom).offset(20)
+        }
+        
         // 제한 문구 Label
         limitLabel.snp.makeConstraints {
             $0.centerX.equalTo(bottomSheetView.snp.centerX)
-            $0.top.equalTo(recordLabel.snp.bottom).offset(117)
+            $0.top.equalTo(recordWaveForm.snp.bottom).offset(28)
         }
         
         // 휴지통 Button
