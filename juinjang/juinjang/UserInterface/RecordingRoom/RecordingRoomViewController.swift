@@ -41,6 +41,8 @@ class RecordingRoomViewController: UIViewController {
         $0.isScrollEnabled = false
         $0.separatorStyle = .none
         $0.register(RecordingFileViewCell.self, forCellReuseIdentifier: RecordingFileViewCell.identifier)
+        $0.estimatedRowHeight = 56
+        $0.separatorInset = .init(top: 0, left: 0, bottom: 12, right: 0)
     }
     
     let notePadLabel = UILabel()
@@ -102,8 +104,8 @@ class RecordingRoomViewController: UIViewController {
     
     func setItemData() {
         fileItems.append(contentsOf: [
-            .init(name: "보일러 관련", recordedDate: Date(), recordedTime: "1:30")
-//            .init(name: "녹음_002", recordedDate: Date(), recordedTime: "2:12"),
+            .init(name: "보일러 관련", recordedDate: Date(), recordedTime: "1:30"),
+            .init(name: "녹음_002", recordedDate: Date(), recordedTime: "2:12"),
 //            .init(name: "녹음_001", recordedDate: Date(), recordedTime: "1:57"),
 //            .init(name: "으아앙", recordedDate: Date(), recordedTime: "3:10")
         ])

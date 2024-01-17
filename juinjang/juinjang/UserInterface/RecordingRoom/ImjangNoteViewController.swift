@@ -114,8 +114,6 @@ class ImjangNoteViewController: UIViewController {
         upButton.addTarget(self, action: #selector(upToTop), for: .touchUpInside)
         
         NotificationCenter.default.addObserver(self, selector: #selector(didStoppedChildScroll), name: NSNotification.Name("didStoppedChildScroll"), object: nil)
-        
-
     }
     
     @objc func didStoppedChildScroll() {
