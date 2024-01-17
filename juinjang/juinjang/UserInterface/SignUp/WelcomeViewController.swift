@@ -11,6 +11,8 @@ import SnapKit
 
 class WelcomeViewController: UIViewController {
     
+    var userInfo: UserInfo?
+    
     lazy var backgroundImage = UIImageView().then {
         $0.image = UIImage(named: "welcome-background")
         $0.contentMode = .scaleAspectFill
@@ -74,6 +76,7 @@ class WelcomeViewController: UIViewController {
         fadeIn()
         addSubViews()
         setupLayout()
+        setNickname()
     }
     
     func fadeIn() {
@@ -144,15 +147,15 @@ class WelcomeViewController: UIViewController {
 
         // 임장 노트 ImageView
         imjangNoteImage.snp.makeConstraints {
-            $0.top.equalTo(guideLabel3.snp.bottom).offset(0.04 * view.bounds.height)
+            $0.top.equalTo(guideLabel3.snp.bottom).offset(0.07 * view.bounds.height)
             $0.centerX.equalToSuperview()
         }
 
         // 닉네임 Label
         nickNameLabel.snp.makeConstraints {
-            $0.top.equalTo(imjangNoteImage.snp.top).offset(0.05 * view.bounds.height)
-            $0.leading.equalTo(imjangNoteImage.snp.leading).offset(0.22 * view.bounds.width)
-            $0.width.equalTo(23)
+            $0.top.equalTo(imjangNoteImage.snp.top).offset(43.19)
+            $0.centerX.equalToSuperview().offset(-8)
+//            $0.width.equalTo(23)
             $0.height.equalTo(19)
         }
 
@@ -162,6 +165,14 @@ class WelcomeViewController: UIViewController {
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-0.03 * view.bounds.height)
             $0.width.equalTo(202)
             $0.height.equalTo(52)
+        }
+    }
+    
+    func setNickname() {
+        if let nickname = userInfo?.nickname {
+            greetingLabel.text = "반가워요, \(nickname)님"
+            nickNameLabel.text = nickname
+            print("사용자가 설정한 닉네임: \(nickname)")
         }
     }
     

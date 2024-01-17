@@ -47,9 +47,6 @@ class SignUpViewController: UIViewController {
         self.view.backgroundColor = .white
         self.navigationController?.navigationBar.tintColor = .black
         self.navigationItem.hidesBackButton = true
-        let backButtonImage = UIImage(named: "arrow-left")
-        let backButton = UIBarButtonItem(image: backButtonImage, style: .plain,target: self, action: #selector(backButtonTapped))
-        navigationItem.leftBarButtonItem = backButton
         super.viewDidLoad()
         addSubViews()
         setupLayout()
@@ -95,11 +92,6 @@ class SignUpViewController: UIViewController {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(loginStackView.snp.bottom).offset(view.frame.height * 0.06)
         }
-    }
-    
-    @objc func backButtonTapped() {
-        navigationController?.popViewController(animated: true)
-        // -TODO: 온보딩 3번째 페이지로
     }
     
     @objc func loginButtonTapped(_ sender: UIButton) {
