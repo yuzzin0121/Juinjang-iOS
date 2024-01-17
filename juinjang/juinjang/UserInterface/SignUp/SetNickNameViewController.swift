@@ -70,7 +70,7 @@ class SetNickNameViewController: UIViewController {
         self.navigationItem.title = "닉네임 정하기"
         super.viewDidLoad()
         nickNameTextField.delegate = self
-        fadeIn()
+//        fadeIn()
         addSubViews()
         setupLayout()
     }
@@ -154,9 +154,13 @@ class SetNickNameViewController: UIViewController {
     }
     
     @objc func buttonTapped(_ sender: UIButton) {
-        let welcomeViewController = WelcomeViewController()
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        navigationController?.pushViewController(welcomeViewController, animated: true)
+        
+        if let nickname = nickNameTextField.text, !nickname.isEmpty {
+            let welcomeViewController = WelcomeViewController()
+            welcomeViewController.userInfo = UserInfo(nickname: nickname)
+            navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+            navigationController?.pushViewController(welcomeViewController, animated: true)
+        }
     }
     
     func checkNextButtonActivation() {

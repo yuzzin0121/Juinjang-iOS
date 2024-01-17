@@ -45,13 +45,13 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate {
     }
     
     // 임의로 넣어둠 -TODO: 음성 녹음 파일 연결 필요
-    var player: AVPlayer = {
-        guard let url = URL(string: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3") else { fatalError() }
-        let player = AVPlayer()
-        let playerItem = AVPlayerItem(url: url)
-        player.replaceCurrentItem(with: playerItem) // AVPlayer는 한번에 하나씩만 다룰 수 있음
-        return player
-    }()
+//    var player: AVPlayer = {
+//        guard let url = URL(string: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3") else { fatalError() }
+//        let player = AVPlayer()
+//        let playerItem = AVPlayerItem(url: url)
+//        player.replaceCurrentItem(with: playerItem) // AVPlayer는 한번에 하나씩만 다룰 수 있음
+//        return player
+//    }()
     
     lazy var rewindButton = UIButton().then {
         $0.setImage(UIImage(named: "rewind"), for: .normal)
@@ -154,11 +154,11 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate {
     }
     
     @objc func startRecordPressed(_ sender: UIButton) {
-        if player.timeControlStatus == .playing {
-            player.pause()
+        if recordButton.isSelected {
+//            player.pause()
             recordButton.setImage(UIImage(named: "record-button"), for: .normal)
-        } else if player.timeControlStatus == .paused {
-            player.play()
+        } else {
+//            player.play()
             recordButton.setImage(UIImage(named: "being-recorded-button"), for: .normal)
         }
         recordButton.isSelected.toggle()
