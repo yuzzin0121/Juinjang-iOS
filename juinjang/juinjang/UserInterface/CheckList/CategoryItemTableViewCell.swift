@@ -11,6 +11,8 @@ class CategoryItemTableViewCell: UITableViewCell {
     
     static let identifier = "CategoryItemTableViewCell"
     
+    var itemCategory: [Category] = []
+    
     let categoryImage = UIImageView().then {
         $0.contentMode = .scaleAspectFit
         $0.image = UIImage(named: "deadline-item")
@@ -19,15 +21,20 @@ class CategoryItemTableViewCell: UITableViewCell {
     let categoryLabel = UILabel().then {
         $0.font = .pretendard(size: 18, weight: .bold)
         $0.textColor = UIColor(named: "mainOrange")
-        $0.text = "기한"
     }
     
     let expandButton = UIButton().then {
         $0.setImage(UIImage(named: "expand-items"), for: .normal)
     }
     
+    let expandedItemLabel = UILabel().then {
+        $0.font = .pretendard(size: 16, weight: .regular)
+        $0.textColor = UIColor(named: "textBlack")
+    }
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        print("CategoryItemTableViewCell initialized")
         
         [categoryImage,
          categoryLabel,
@@ -70,5 +77,4 @@ class CategoryItemTableViewCell: UITableViewCell {
             $0.width.equalTo(22)
         }
     }
-
 }
