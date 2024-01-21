@@ -229,6 +229,9 @@ class ImjangNoteViewController: UIViewController {
                      distribution: .fill,
                      spacing: 12,
                      isImageRight: false)
+//                    textColor: UIColor(named:"textGray")!)
+        
+
         
         // 리포트 보기 레이블
         designLabel(showReportLabel, text: "리포트 보기",
