@@ -70,30 +70,8 @@ class SetNickNameViewController: UIViewController {
         self.navigationItem.title = "닉네임 정하기"
         super.viewDidLoad()
         nickNameTextField.delegate = self
-//        fadeIn()
         addSubViews()
         setupLayout()
-    }
-    
-    func fadeIn() {
-        introLabel.alpha = 0
-        guideLabel.alpha = 0
-        textFieldContainerView.alpha = 0
-        imjangNoteImage.alpha = 0
-
-        // 페이드 인 애니메이션을 순차적으로 실행
-        UIView.animate(withDuration: 1.0, delay: 0.0, options: [], animations: {
-            self.introLabel.alpha = 1
-        }, completion: { _ in
-            UIView.animate(withDuration: 1.0, delay: 0.0, options: [], animations: {
-                self.guideLabel.alpha = 1
-            }, completion: { _ in
-                UIView.animate(withDuration: 1.0, delay: 0.0, options: [], animations: {
-                    self.textFieldContainerView.alpha = 1
-                    self.imjangNoteImage.alpha = 1
-                }, completion: nil)
-            })
-        })
     }
 
     
@@ -103,7 +81,6 @@ class SetNickNameViewController: UIViewController {
          imjangNoteImage,
          textFieldContainerView,
          nextButton].forEach { view.addSubview($0) }
-//        imjangNoteImage.addSubview(textFieldContainerView)
         textFieldContainerView.addSubview(nickNameTextField)
     }
     
