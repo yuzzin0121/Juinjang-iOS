@@ -11,49 +11,58 @@ class ExpandedTableViewCell: UITableViewCell {
 
     static let identifier = "ExpandedTableViewCell"
     
-    let questionImage = UIImageView().then {
+    var selectedAnswer: Int? // 선택된 버튼의 값을 저장할 변수
+    
+    lazy var questionImage = UIImageView().then {
         $0.contentMode = .scaleAspectFit
         $0.image = UIImage(named: "question-image")
     }
     
-    let contentLabel = UILabel().then {
+    lazy var contentLabel = UILabel().then {
         $0.font = .pretendard(size: 16, weight: .regular)
         $0.textColor = UIColor(named: "textBlack")
     }
     
-    let answerButton1 = UIButton().then {
+    lazy var answerButton1 = UIButton().then {
         $0.setImage(UIImage(named: "answer1"), for: .normal)
+        $0.contentMode = .scaleAspectFit
+        $0.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
+        $0.tag = 1
     }
     
-    let answerButton2 = UIButton().then {
+    lazy var answerButton2 = UIButton().then {
         $0.setImage(UIImage(named: "answer2"), for: .normal)
+        $0.contentMode = .scaleAspectFit
+        $0.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
+        $0.tag = 2
     }
     
-    let answerButton3 = UIButton().then {
+    lazy var answerButton3 = UIButton().then {
         $0.setImage(UIImage(named: "answer3"), for: .normal)
+        $0.contentMode = .scaleAspectFit
+        $0.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
+        $0.tag = 3
     }
     
-    let answerButton4 = UIButton().then {
+    lazy var answerButton4 = UIButton().then {
         $0.setImage(UIImage(named: "answer4"), for: .normal)
+        $0.contentMode = .scaleAspectFit
+        $0.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
+        $0.tag = 4
     }
     
-    let answerButton5 = UIButton().then {
+    lazy var answerButton5 = UIButton().then {
         $0.setImage(UIImage(named: "answer5"), for: .normal)
+        $0.contentMode = .scaleAspectFit
+        $0.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
+        $0.tag = 5
     }
-    
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        print("CategoryItemTableViewCell initialized")
+        self.selectionStyle = .none
         
-        [
-            questionImage,
-            contentLabel,
-//         answerButton1,
-//         answerButton2,
-//         answerButton3,
-//         answerButton4,
-//         answerButton5
-        ].forEach { addSubview($0) }
+        [questionImage, contentLabel].forEach { contentView.addSubview($0) }
         setupLayout()
     }
     
@@ -101,40 +110,38 @@ class ExpandedTableViewCell: UITableViewCell {
 //            $0.height.lessThanOrEqualTo(view.snp.height).multipliedBy(0.08)
             $0.trailing.equalToSuperview().offset(-24)
         }
+    }
+    
+    @objc func buttonPressed(_ sender: UIButton) {
+        // 각 버튼에 대한 기본 이미지
+        let initialImages: [Int: UIImage] = [
+            1: UIImage(named: "answer1")!,
+            2: UIImage(named: "answer2")!,
+            3: UIImage(named: "answer3")!,
+            4: UIImage(named: "answer4")!,
+            5: UIImage(named: "answer5")!
+        ]
         
-//        answerButton1.snp.makeConstraints {
-//            $0.trailing.equalToSuperview().offset(-24)
-//            $0.centerY.equalToSuperview()
-//            $0.height.equalTo(31)
-//            $0.width.equalTo(31)
-//        }
-//
-//        answerButton2.snp.makeConstraints {
-//            $0.trailing.equalToSuperview().offset(-24)
-//            $0.centerY.equalToSuperview()
-//            $0.height.equalTo(31)
-//            $0.width.equalTo(31)
-//        }
-//
-//        answerButton3.snp.makeConstraints {
-//            $0.trailing.equalToSuperview().offset(-24)
-//            $0.centerY.equalToSuperview()
-//            $0.height.equalTo(31)
-//            $0.width.equalTo(31)
-//        }
-//
-//        answerButton4.snp.makeConstraints {
-//            $0.trailing.equalToSuperview().offset(-24)
-//            $0.centerY.equalToSuperview()
-//            $0.height.equalTo(31)
-//            $0.width.equalTo(31)
-//        }
-//
-//        answerButton5.snp.makeConstraints {
-//            $0.trailing.equalToSuperview().offset(-24)
-//            $0.centerY.equalToSuperview()
-//            $0.height.equalTo(31)
-//            $0.width.equalTo(31)
-//        }
+        // 모든 버튼을 초기화 상태로 설정
+        for button in [answerButton1, answerButton2, answerButton3, answerButton4, answerButton5] {
+            if let initialImage = initialImages[button.tag] {
+                button.setImage(initialImage, for: .normal)
+            }
+        }
+        
+        // 현재 눌린 버튼을 선택된 상태로 변경
+        sender.setImage(UIImage(named: "checked-button"), for: .normal)
+        
+        // 선택된 버튼의 정보를 저장
+        selectedAnswer = sender.tag
+        
+        if let answer = selectedAnswer {
+            print("Button Pressed: \(answer)")
+        } else {
+            print("Button Pressed: No answer")
+        }
+        
+        // 셀의 배경색을 변경
+        backgroundColor = UIColor(named: "lightOrange")
     }
 }

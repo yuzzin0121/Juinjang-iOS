@@ -80,6 +80,10 @@ class ImjangNoteViewController: UIViewController {
         $0.setImage(UIImage(named: "floating"), for: .normal)
     }
     
+    let editButton = UIButton().then {
+        $0.setImage(UIImage(named: "edit-button"), for: .normal)
+    }
+    
     let recordingSegmentedVC = RecordingSegmentedViewController()
     
     var roomName: String = "판교푸르지오월드마크"
@@ -97,8 +101,7 @@ class ImjangNoteViewController: UIViewController {
         setUpUI()
         setConstraints()
         upButton.addTarget(self, action: #selector(upToTop), for: .touchUpInside)
-        
-    
+        recordingSegmentedVC.imjangNoteViewController = self
     }
     
     @objc
@@ -132,9 +135,10 @@ class ImjangNoteViewController: UIViewController {
     
     // MARK: - addSubView()
     func addSubView() {
-        [scrollView, upButton].forEach {
+        [scrollView, upButton, editButton].forEach {
             view.addSubview($0)
         }
+
         scrollView.addSubview(contentView)
         
         [roomStackView, roomPriceLabel, roomAddressLabel, addPhoneStackView, infoStackView, containerView].forEach {
@@ -275,6 +279,13 @@ class ImjangNoteViewController: UIViewController {
         }
         
         view.bringSubviewToFront(upButton)
+        
+        editButton.snp.makeConstraints {
+            $0.bottom.equalTo(view.snp.bottom).offset(-28)
+            $0.trailing.equalTo(view.snp.trailing).offset(-24)
+        }
+        
+        view.bringSubviewToFront(editButton)
         
         // 스크롤뷰
         scrollView.snp.makeConstraints {
@@ -427,29 +438,29 @@ class ImjangNoteViewController: UIViewController {
 
 extension ImjangNoteViewController: UIScrollViewDelegate {
 
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        print("스크롤 좌표 - \(scrollView.contentOffset.y), containerView 좌표 - \(containerView.frame.origin.y)")
-        
-        let containerY = containerView.frame.origin.y
-        
-        if (scrollView.contentOffset.y > 0) && (scrollView.contentOffset.y > containerY - 20 && scrollView.contentOffset.y <= containerY){
-            DispatchQueue.main.async {
-                UIView.animate(withDuration: 0.2) {
-                    scrollView.contentOffset.y = containerY
-                }
-                scrollView.isScrollEnabled = false
-            }
-            NotificationCenter.default.post(name: NSNotification.Name("didStoppedParentScroll"), object: nil)
-        }
-        
-        if scrollView.contentOffset.y > 20 {
-            UIView.animate(withDuration: 0.5, delay:0) {
-                self.upButton.alpha = 1
-            }
-        } else {
-            UIView.animate(withDuration: 0.5, delay:0) {
-                self.upButton.alpha = 0
-            }
-        }
-    }
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        print("스크롤 좌표 - \(scrollView.contentOffset.y), containerView 좌표 - \(containerView.frame.origin.y)")
+//        
+//        let containerY = containerView.frame.origin.y
+//        
+//        if (scrollView.contentOffset.y > 0) && (scrollView.contentOffset.y > containerY - 20 && scrollView.contentOffset.y <= containerY){
+//            DispatchQueue.main.async {
+//                UIView.animate(withDuration: 0.2) {
+//                    scrollView.contentOffset.y = containerY
+//                }
+//                scrollView.isScrollEnabled = false
+//            }
+//            NotificationCenter.default.post(name: NSNotification.Name("didStoppedParentScroll"), object: nil)
+//        }
+//        
+//        if scrollView.contentOffset.y > 20 {
+//            UIView.animate(withDuration: 0.5, delay:0) {
+//                self.upButton.alpha = 1
+//            }
+//        } else {
+//            UIView.animate(withDuration: 0.5, delay:0) {
+//                self.upButton.alpha = 0
+//            }
+//        }
+//    }
 }

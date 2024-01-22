@@ -77,18 +77,18 @@ class CheckListViewController: UIViewController {
             $0.bottom.equalTo(tableView.snp.bottom)
         }
         
-        completedButton.snp.makeConstraints {
+        // 체크리스트 선택 완료 시 버튼 로직 처리
+//        completedButton.snp.makeConstraints {
 //            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-26)
-            $0.bottom.equalTo(view.snp.bottom).offset(-26)
-            $0.trailing.equalTo(view.snp.trailing).offset(-24)
-        }
-        
-        view.bringSubviewToFront(completedButton)
+//            $0.bottom.equalTo(view.snp.bottom).offset(-26)
+//            $0.trailing.equalTo(view.snp.trailing).offset(-24)
+//        }
+//        
+//        view.bringSubviewToFront(completedButton)
         
         tableView.snp.makeConstraints {
             $0.top.equalTo(contentView)
             $0.leading.trailing.equalTo(contentView)
-            $0.height.equalTo(63*4)
         }
     }
     
@@ -170,61 +170,65 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if categories[section].isExpanded {
-            return 1 + categories[section].items.count // 확장된 경우, 카테고리 셀과 확장된 항목들
+            return 1 + categories[section].items.count // 셀이 확장된 경우, 카테고리 셀과 확장된 항목들이 나타남
         } else {
-            return 1 // 비확장된 경우, 카테고리 셀만
+            return 1 // 셀이 확장되지 않은 경우, 카테고리 셀만 나타남
         }
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
             let cell: CategoryItemTableViewCell = tableView.dequeueReusableCell(withIdentifier: CategoryItemTableViewCell.identifier, for: indexPath) as! CategoryItemTableViewCell
-                
-                cell.categoryLabel.text = categories[indexPath.section].name
-                
-                return cell
-            }else {
-                //클릭시 펼쳐질 셀
-                let cell: ExpandedTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedTableViewCell.identifier, for: indexPath) as! ExpandedTableViewCell
-                
-                let scoreItem = categories[indexPath.section].items[indexPath.row - 1] as? ScoreItem
-                cell.contentLabel.text = scoreItem?.content
-
-                return cell
-            }
-    }
-
-
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let cell = tableView.cellForRow(at: indexPath) as? CategoryItemTableViewCell else {return}
-        guard let index = tableView.indexPath(for: cell) else { return }
-
-        if index.row == indexPath.row {
-           if index.row == 0 {
-               if categories[indexPath.section].isExpanded == true {
-                   categories[indexPath.section].isExpanded = false
-                   cell.expandButton.setImage(UIImage(named: "contraction-items"), for: .normal)
-                   let section = IndexSet.init(integer: indexPath.section)
-                   tableView.reloadSections(section, with: .fade)
-                   
-               } else {
-                   categories[indexPath.section].isExpanded = true
-                   cell.expandButton.setImage(UIImage(named: "expand-items"), for: .normal)
-                   let section = IndexSet.init(integer: indexPath.section)
-                   tableView.reloadSections(section, with: .fade)
-               }
-           }
+            
+            cell.categoryImage.image = categories[indexPath.section].image
+            cell.categoryLabel.text = categories[indexPath.section].name
+            
+            return cell
+            
+        } else {
+            // 카테고리 셀 클릭 시 펼쳐질 셀
+            let cell: ExpandedTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedTableViewCell.identifier, for: indexPath) as! ExpandedTableViewCell
+            
+            let scoreItem = categories[indexPath.section].items[indexPath.row - 1] as? ScoreItem
+            cell.contentLabel.text = scoreItem?.content
+        
+            return cell
         }
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let cell = tableView.cellForRow(at: indexPath) as? CategoryItemTableViewCell {
+            // 카테고리 셀을 눌렀을 때
+            if indexPath.row == 0 {
+                if categories[indexPath.section].isExpanded == true {
+                    categories[indexPath.section].isExpanded = false
+                    cell.expandButton.setImage(UIImage(named: "contraction-items"), for: .normal)
+                } else {
+                    categories[indexPath.section].isExpanded = true
+                    cell.expandButton.setImage(UIImage(named: "expand-items"), for: .normal)
+                }
+                let section = IndexSet.init(integer: indexPath.section)
+                tableView.reloadSections(section, with: .fade)
+            }
+        } else if let cell = tableView.cellForRow(at: indexPath) as? ExpandedTableViewCell {
+            // 확장 셀을 눌렀을 때
+            if let selectedAnswer = cell.selectedAnswer {
+                // 버튼의 값을 출력
+                print("Selected Answer: \(selectedAnswer)")
+            } else {
+                // 버튼의 값이 없는 경우
+                print("No answer selected")
+            }
+        }
+    }
+
 
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row == 0 {
             return 63
         } else {
-            return 100
+            return 98
         }
     }
 }
