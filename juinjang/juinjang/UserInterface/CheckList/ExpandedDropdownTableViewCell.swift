@@ -1,20 +1,19 @@
 //
-//  ExpandedTextFieldTableViewCell.swift
+//  ExpandedDropdownTableViewCell.swift
 //  juinjang
 //
 //  Created by 임수진 on 1/23/24.
 //
 
 import UIKit
-
-import UIKit
 import SnapKit
+import iOSDropDown
 
-class ExpandedTextFieldTableViewCell: UITableViewCell {
+class ExpandedDropdownTableViewCell: UITableViewCell {
     
-    static let identifier = "ExpandedTextFieldTableViewCell"
+    static let identifier = "ExpandedDropdownTableViewCell"
     
-    var inputAnswer: String?
+    var selectedOption: String?
     
     lazy var questionImage = UIImageView().then {
         $0.contentMode = .scaleAspectFit
@@ -26,24 +25,15 @@ class ExpandedTextFieldTableViewCell: UITableViewCell {
         $0.textColor = UIColor(named: "textBlack")
     }
     
-    lazy var answerTextField = UITextField().then {
-        $0.layer.cornerRadius = 15
-        $0.layer.backgroundColor = UIColor(named: "lightBackgroundOrange")?.cgColor
-        $0.font = .pretendard(size: 16, weight: .regular)
-        $0.textColor = UIColor(named: "darkGray")
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: $0.frame.height))
-        $0.leftView = paddingView
-        $0.rightView = paddingView
-        $0.rightViewMode = .always
-        $0.leftViewMode = .always
+    lazy var dropDown = DropDown().then {
+        $0.optionArray = ["Option 1", "Option 2", "Option 3"]
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.selectionStyle = .none
-        answerTextField.delegate = self
         
-        [questionImage, contentLabel, answerTextField].forEach { contentView.addSubview($0) }
+        [questionImage, contentLabel, dropDown].forEach { contentView.addSubview($0) }
         setupLayout()
     }
     
@@ -77,31 +67,12 @@ class ExpandedTextFieldTableViewCell: UITableViewCell {
             $0.height.equalTo(23)
         }
         
-        // 답변 TextField
-        answerTextField.snp.makeConstraints {
-            $0.top.equalTo(contentLabel.snp.bottom).offset(12)
-            $0.leading.equalToSuperview().offset(24)
+        // 답변 Dropdown
+        dropDown.snp.makeConstraints {
             $0.trailing.equalToSuperview().offset(-24)
+            $0.top.equalTo(contentLabel.snp.bottom).offset(20)
             $0.height.equalTo(31)
+            $0.width.equalTo(116)
         }
-    }
-}
-
-extension ExpandedTextFieldTableViewCell: UITextFieldDelegate {
-
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
-        // 백 스페이스 실행 가능하도록
-        if let char = string.cString(using: String.Encoding.utf8) {
-            let isBackSpace = strcmp(char, "\\b")
-            if (isBackSpace == -92) {
-                return true
-            }
-        }
-        
-        // 글자 수 20글자 제한
-        guard textField.text!.count < 20 else { return false }
-    
-        return true
     }
 }

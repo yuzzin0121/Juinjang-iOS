@@ -33,6 +33,8 @@
 		0A4EBE342B5EA25300909B7A /* ExpandedCalendarTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4EBE332B5EA25300909B7A /* ExpandedCalendarTableViewCell.swift */; };
 		0A4EBE362B5EA27B00909B7A /* ExpandedScoreTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4EBE352B5EA27B00909B7A /* ExpandedScoreTableViewCell.swift */; };
 		0A4EBE382B5EDD6F00909B7A /* ExpandedTextFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4EBE372B5EDD6F00909B7A /* ExpandedTextFieldTableViewCell.swift */; };
+		0A4EBE3B2B5EF2BC00909B7A /* ExpandedDropdownTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4EBE3A2B5EF2BC00909B7A /* ExpandedDropdownTableViewCell.swift */; };
+		0A4EBE3E2B5EF36200909B7A /* iOSDropDown in Frameworks */ = {isa = PBXBuildFile; productRef = 0A4EBE3D2B5EF36200909B7A /* iOSDropDown */; };
 		0A554CE02B52DB100023BB49 /* RecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A554CDF2B52DB100023BB49 /* RecordViewController.swift */; };
 		0A554CE42B5420F20023BB49 /* WarningMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A554CE32B5420F20023BB49 /* WarningMessageViewController.swift */; };
 		0A73E60D2B5855CD00EF1C89 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A73E60C2B5855CD00EF1C89 /* UserInfo.swift */; };
@@ -91,6 +93,7 @@
 		0A4EBE332B5EA25300909B7A /* ExpandedCalendarTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedCalendarTableViewCell.swift; sourceTree = "<group>"; };
 		0A4EBE352B5EA27B00909B7A /* ExpandedScoreTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedScoreTableViewCell.swift; sourceTree = "<group>"; };
 		0A4EBE372B5EDD6F00909B7A /* ExpandedTextFieldTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedTextFieldTableViewCell.swift; sourceTree = "<group>"; };
+		0A4EBE3A2B5EF2BC00909B7A /* ExpandedDropdownTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedDropdownTableViewCell.swift; sourceTree = "<group>"; };
 		0A554CDF2B52DB100023BB49 /* RecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordViewController.swift; sourceTree = "<group>"; };
 		0A554CE32B5420F20023BB49 /* WarningMessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarningMessageViewController.swift; sourceTree = "<group>"; };
 		0A73E60C2B5855CD00EF1C89 /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
@@ -138,6 +141,7 @@
 				61D9250F2B4965D0002A16B4 /* IQKeyboardManagerSwift in Frameworks */,
 				0A4EBE2D2B5E9E8B00909B7A /* SnapKit in Frameworks */,
 				0A4EBE2A2B5E9E6A00909B7A /* Tabman in Frameworks */,
+				0A4EBE3E2B5EF36200909B7A /* iOSDropDown in Frameworks */,
 				0A4EBE272B5E9E5F00909B7A /* Then in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -221,6 +225,7 @@
 				0A4EBE332B5EA25300909B7A /* ExpandedCalendarTableViewCell.swift */,
 				0A4EBE352B5EA27B00909B7A /* ExpandedScoreTableViewCell.swift */,
 				0A4EBE372B5EDD6F00909B7A /* ExpandedTextFieldTableViewCell.swift */,
+				0A4EBE3A2B5EF2BC00909B7A /* ExpandedDropdownTableViewCell.swift */,
 			);
 			path = CheckList;
 			sourceTree = "<group>";
@@ -351,6 +356,7 @@
 				0A4EBE2C2B5E9E8B00909B7A /* SnapKit */,
 				0A4EBE2E2B5E9E8B00909B7A /* SnapKit-Dynamic */,
 				0A4EBE312B5EA21100909B7A /* FSCalendar */,
+				0A4EBE3D2B5EF36200909B7A /* iOSDropDown */,
 			);
 			productName = juinjang;
 			productReference = 0A9E0A432B3DCAB90094595A /* juinjang.app */;
@@ -386,6 +392,7 @@
 				0A4EBE282B5E9E6A00909B7A /* XCRemoteSwiftPackageReference "Tabman" */,
 				0A4EBE2B2B5E9E8B00909B7A /* XCRemoteSwiftPackageReference "SnapKit" */,
 				0A4EBE302B5EA21100909B7A /* XCRemoteSwiftPackageReference "FSCalendar" */,
+				0A4EBE3C2B5EF36200909B7A /* XCRemoteSwiftPackageReference "iOSDropDown" */,
 			);
 			productRefGroup = 0A9E0A442B3DCAB90094595A /* Products */;
 			projectDirPath = "";
@@ -450,6 +457,7 @@
 				611F14552B47070B00B983F1 /* RecordingSegmentedViewController.swift in Sources */,
 				0AB34CC22B4F11B000150A15 /* CustomPopupViewController.swift in Sources */,
 				0AB34CC12B4F11B000150A15 /* OpenNewPage2ViewController.swift in Sources */,
+				0A4EBE3B2B5EF2BC00909B7A /* ExpandedDropdownTableViewCell.swift in Sources */,
 				616409022B407FB300EC3B5E /* UIFont+Pretendard.swift in Sources */,
 				61D925112B4983A1002A16B4 /* UILabel+Extension.swift in Sources */,
 				0AE3888B2B5992870041A979 /* CheckListItem.swift in Sources */,
@@ -717,6 +725,14 @@
 				minimumVersion = 2.8.4;
 			};
 		};
+		0A4EBE3C2B5EF36200909B7A /* XCRemoteSwiftPackageReference "iOSDropDown" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jriosdev/iOSDropDown";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.4.0;
+			};
+		};
 		61D9250D2B4965D0002A16B4 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager";
@@ -752,6 +768,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0A4EBE302B5EA21100909B7A /* XCRemoteSwiftPackageReference "FSCalendar" */;
 			productName = FSCalendar;
+		};
+		0A4EBE3D2B5EF36200909B7A /* iOSDropDown */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0A4EBE3C2B5EF36200909B7A /* XCRemoteSwiftPackageReference "iOSDropDown" */;
+			productName = iOSDropDown;
 		};
 		61D9250E2B4965D0002A16B4 /* IQKeyboardManagerSwift */ = {
 			isa = XCSwiftPackageProductDependency;
