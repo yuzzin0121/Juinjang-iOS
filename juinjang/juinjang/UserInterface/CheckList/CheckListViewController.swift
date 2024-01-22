@@ -223,8 +223,17 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource {
                 let section = IndexSet.init(integer: indexPath.section)
                 tableView.reloadSections(section, with: .fade)
             }
+        } else if let cell = tableView.cellForRow(at: indexPath) as? ExpandedCalendarTableViewCell {
+            // 확장된 캘린더 셀을 눌렀을 때
+            if let selectedDate = cell.selectedDate {
+                // 선택된 날짜를 출력
+                print("Selected Date: \(selectedDate)")
+            } else {
+                // 선택한 날짜가 없는 경우
+                print("No answer selected")
+            }
         } else if let cell = tableView.cellForRow(at: indexPath) as? ExpandedScoreTableViewCell {
-            // 확장 셀을 눌렀을 때
+            // 확장 점수 셀을 눌렀을 때
             if let selectedAnswer = cell.selectedAnswer {
                 // 버튼의 값을 출력
                 print("Selected Answer: \(selectedAnswer)")
@@ -238,20 +247,20 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource {
 
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-            if indexPath.row == 0 {
-                return 63
-            } else {
-                let category = categories[indexPath.section]
-                
-                if let _ = category.items[indexPath.row - 1] as? CalendarItem {
-                    // CalendarItem인 경우의 높이 설정
-                    return 443
-                } else if let _ = category.items[indexPath.row - 1] as? ScoreItem {
-                    // ScoreItem인 경우의 높이 설정
-                    return 98
-                }
-                
-                return UITableView.automaticDimension
+        if indexPath.row == 0 {
+            return 63
+        } else {
+            let category = categories[indexPath.section]
+            
+            if let _ = category.items[indexPath.row - 1] as? CalendarItem {
+                // CalendarItem인 경우의 높이 설정
+                return 443
+            } else if let _ = category.items[indexPath.row - 1] as? ScoreItem {
+                // ScoreItem인 경우의 높이 설정
+                return 98
             }
+            
+            return UITableView.automaticDimension
         }
+    }
 }
