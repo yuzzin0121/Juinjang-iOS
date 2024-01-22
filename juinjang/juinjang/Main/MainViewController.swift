@@ -11,87 +11,72 @@ import Then
 
 
 class MainViewController: UIViewController {
+// MARK: - 변수, 상수 설정
+    //설정 버튼, 메인 로고, 스피커 버튼
+    var settingButton = UIButton().then {
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        $0.setImage(UIImage(named:"setting"), for: .normal)
+        $0.addTarget(self, action: #selector(setBtnTap), for: .touchUpInside)
+    }
+    @objc
+    func setBtnTap() {
+        let vc = SettingViewController()
+        self.navigationController?.pushViewController(vc, animated: false)
+    }
+    var mainLogoImageView = UIImageView().then {
+        $0.image = UIImage(named:"mainLogo")
+    }
+    var speakerButton = UIButton().then {
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        $0.setImage(UIImage(named:"speaker"), for: .normal)
+    }
     
+    //배경
+    var backgroundImageView = UIImageView().then {
+        $0.image = UIImage(named:"backgroundshape")
+        $0.alpha = 0.0
+    }
+    
+    //테이블 뷰
     let tableView = UITableView().then {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.register(TopTableViewCell.self, forCellReuseIdentifier: TopTableViewCell.identifier)
         $0.register(BottomTableViewCell.self, forCellReuseIdentifier: BottomTableViewCell.identifier)
     }
     
-    // MARK: - 상단바
-    var isSlideInMenuPresented = false
-    lazy var slideInMenuPadding: CGFloat = self.view.frame.width * 0.30
-    var hambergerButton = UIButton().then {
-        $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.setImage(UIImage(named:"hamberger"), for: .normal)
-        $0.addTarget(self, action: #selector(hambergerButtonTapped), for: .touchUpInside)
-    }
-    
-    @objc
-    func hambergerButtonTapped(){
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1.0, initialSpringVelocity: 0, options: .curveEaseInOut) {
-            self.menuView.frame.origin.x = self.isSlideInMenuPresented ? -300 : 0
-        } completion: { (finished) in
-            print("Animation finished: \(finished)")
-            self.isSlideInMenuPresented.toggle()
-        }
-    }
-    
-    var menuView = UIView().then {
-        $0.backgroundColor = .white
-    }
-    
-    var speakerButton = UIButton().then {
-        $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.setImage(UIImage(named:"speaker"), for: .normal)
-    }
-    
-    var mainLogoImageView = UIImageView().then {
-        $0.image = UIImage(named:"mainLogo")
-    }
-
-    // MARK: - 배경
-    var backgroundImageView = UIImageView().then {
-        $0.image = UIImage(named:"backgroundshape")
-        $0.alpha = 0.0
-    }
-    
+//MARK: - 함수 선언
     func setConstraint() {
-        
-        tableView.snp.makeConstraints {
-            $0.top.equalTo(hambergerButton.snp.bottom)
-            $0.left.right.bottom.equalToSuperview()
-        }
-        //MARK: - 상단바
-        hambergerButton.snp.makeConstraints{
+        //설정 버튼, 메인 로고, 스피커 버튼
+        settingButton.snp.makeConstraints{
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(10.16)
             $0.height.equalTo(24)
             $0.left.equalToSuperview().offset(26.73)
         }
-        
         mainLogoImageView.snp.makeConstraints{
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(12.16)
             $0.height.equalTo(21)
             $0.centerX.equalToSuperview()
         }
-        
         speakerButton.snp.makeConstraints{
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(10.16)
-            $0.height.equalTo(24)
+            $0.height.width.equalTo(24)
             $0.right.equalToSuperview().inset(26.55)
         }
         
-        //MARK: - 배경
+        //배경
         backgroundImageView.snp.makeConstraints{
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(21.82)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(37.82)
             $0.left.right.equalToSuperview()
         }
-        
-        UIView.animate(withDuration: 1.5, delay: 0.0, options: .curveEaseIn, animations: {
+        UIView.animate(withDuration: 1.0, delay: 0.0, options: .curveEaseIn, animations: {
             self.backgroundImageView.alpha = 1.0
         }, completion: nil)
         
-    
+        //테이블 뷰
+        tableView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(46.16)
+            $0.left.right.bottom.equalToSuperview()
+        }
     }
     
     override func viewDidLoad() {
@@ -102,30 +87,19 @@ class MainViewController: UIViewController {
         tableView.rowHeight = 710
         tableView.backgroundColor = .clear
         
-        view.backgroundColor = .white
+        self.navigationController?.navigationBar.isHidden = true
         
+        view.backgroundColor = .white
         view.addSubview(backgroundImageView)
-        view.addSubview(hambergerButton)
+        view.addSubview(settingButton)
         view.addSubview(speakerButton)
         view.addSubview(mainLogoImageView)
         view.addSubview(tableView)
-        menuView.pinMenuTo(view, with: slideInMenuPadding)
         setConstraint()
     }
-
 }
 
-extension UIView {
-    func pinMenuTo(_ view: UIView, with constant: CGFloat) {
-        view.addSubview(self)
-        translatesAutoresizingMaskIntoConstraints = false
-        topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 34.16).isActive = true
-        leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: -constant*3).isActive = true
-        trailingAnchor.constraint(equalTo: view.leadingAnchor, constant: -constant).isActive = true
-        bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-    }
-}
-
+//MARK: - extension
 extension MainViewController : UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 2
@@ -145,7 +119,7 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource{
             else{
                 return UITableViewCell()
             }
-            //cell.selectionStyle = .none
+            cell.selectionStyle = .none
             return cell
         }
     }
@@ -167,7 +141,6 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource{
     }
 }
      
-     
 extension MainViewController : UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
      return 5
@@ -185,4 +158,3 @@ extension MainViewController : UICollectionViewDelegate, UICollectionViewDataSou
          return CGSize(width: 143 , height: 204)
      }
 }
-
