@@ -29,6 +29,7 @@ class CheckListViewController: UIViewController {
         $0.register(CategoryItemTableViewCell.self, forCellReuseIdentifier: CategoryItemTableViewCell.identifier)
         $0.register(ExpandedScoreTableViewCell.self, forCellReuseIdentifier: ExpandedScoreTableViewCell.identifier)
         $0.register(ExpandedCalendarTableViewCell.self, forCellReuseIdentifier: ExpandedCalendarTableViewCell.identifier)
+        $0.register(ExpandedTextFieldTableViewCell.self, forCellReuseIdentifier: ExpandedTextFieldTableViewCell.identifier)
     }
     
     var CategoryItems: [Category] = []
@@ -116,10 +117,10 @@ class CheckListViewController: UIViewController {
             ScoreItem(content: "주변에 변전소, 고압선, 레미콘 공장등이 가까운가요?"),
             ScoreItem(content: "단지 내 위험을 대비한 안전장치가 구비되어 있나요?"),
             ScoreItem(content: "찾고 계신 매물의 노후 정도가 괜찮은 편인가요?"),
-            //ScoreItem(content: "건축년도를 입력해 주세요.")
+            InputItem(content: "건축년도를 입력해 주세요.")
         ]),
         Category(image: UIImage(named: "public-space-item")!, name: "공용공간", items: [
-            //ScoreItem(content: "주차공간이 세대 당 몇 대인가요?"),
+            InputItem(content: "주차공간이 세대 당 몇 대인가요?"),
             ScoreItem(content: "단지 내 놀이터가 잘 갖춰져 있나요?"),
             ScoreItem(content: "단지 내 cctv가 설치된 놀이터가 있나요?"),
             ScoreItem(content: "단지 내 헬스장이 있나요?"),
@@ -147,7 +148,7 @@ class CheckListViewController: UIViewController {
             ScoreItem(content: "주방 옆 펜트리가 있나요?"),
             ScoreItem(content: "주방 싱크대 수압은 괜찮은 편인가요?"),
             ScoreItem(content: "방의 크기는 적당한가요?"),
-            //ScoreItem(content: "방의 갯수는 몇 개인가요?"),
+            InputItem(content: "방의 갯수는 몇 개인가요?"),
             ScoreItem(content: "방의 바닥 마감 상태가 양호한가요?"),
             ScoreItem(content: "방의 벽면 마감 상태가 양호한가요?"),
             ScoreItem(content: "방 안에 붙방이장이 설치되어 있나요?"),
@@ -193,18 +194,21 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource {
                 // CalendarItem인 경우
                 let cell: ExpandedCalendarTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedCalendarTableViewCell.identifier, for: indexPath) as! ExpandedCalendarTableViewCell
                 cell.contentLabel.text = calendarItem.content
-                // ExpandedCalendarTableViewCell에 필요한 설정
                 
                 return cell
             } else if let scoreItem = category.items[indexPath.row - 1] as? ScoreItem {
                 // ScoreItem인 경우
                 let cell: ExpandedScoreTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedScoreTableViewCell.identifier, for: indexPath) as! ExpandedScoreTableViewCell
                 cell.contentLabel.text = scoreItem.content
-                // ExpandedScoreTableViewCell에 필요한 설정
+                
+                return cell
+            } else if let inputItem = category.items[indexPath.row - 1] as? InputItem {
+                // InputItem인 경우
+                let cell: ExpandedTextFieldTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedTextFieldTableViewCell.identifier, for: indexPath) as! ExpandedTextFieldTableViewCell
+                cell.contentLabel.text = inputItem.content
                 
                 return cell
             }
-            
             return UITableViewCell()
         }
     }
@@ -257,6 +261,10 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource {
                 return 443
             } else if let _ = category.items[indexPath.row - 1] as? ScoreItem {
                 // ScoreItem인 경우의 높이 설정
+                return 98
+            }
+            else if let _ = category.items[indexPath.row - 1] as? InputItem {
+                // InputItem인 경우의 높이 설정
                 return 98
             }
             

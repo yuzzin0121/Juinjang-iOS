@@ -82,18 +82,18 @@ class ExpandedScoreTableViewCell: UITableViewCell {
     }
     
     func setupLayout() {
+        // 질문 구분 imageView
         questionImage.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(24)
             $0.top.equalToSuperview().offset(25)
-//            $0.centerY.equalToSuperview()
             $0.height.equalTo(6)
             $0.width.equalTo(6)
         }
         
+        // 질문 Label
         contentLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(38)
             $0.top.equalToSuperview().offset(16)
-//            $0.centerY.equalToSuperview()
             $0.height.equalTo(23)
         }
         
