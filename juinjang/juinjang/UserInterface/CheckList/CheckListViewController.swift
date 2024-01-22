@@ -27,8 +27,8 @@ class CheckListViewController: UIViewController {
         $0.separatorStyle = .none
         $0.isScrollEnabled = false
         $0.register(CategoryItemTableViewCell.self, forCellReuseIdentifier: CategoryItemTableViewCell.identifier)
-        $0.register(ExpandedTableViewCell.self, forCellReuseIdentifier: ExpandedTableViewCell.identifier)
-
+        $0.register(ExpandedScoreTableViewCell.self, forCellReuseIdentifier: ExpandedScoreTableViewCell.identifier)
+        $0.register(ExpandedCalendarTableViewCell.self, forCellReuseIdentifier: ExpandedCalendarTableViewCell.identifier)
     }
     
     var CategoryItems: [Category] = []
@@ -94,8 +94,8 @@ class CheckListViewController: UIViewController {
     
     var categories: [Category] = [
         Category(image: UIImage(named: "deadline-item")!, name: "기한", items: [
-            //CalendarItem(content: "입주 가능 날짜는 어떻게 되나요?"),
-            //CalendarItem(content: "잔금은 언제까지 치뤄야 하나요?")
+            CalendarItem(content: "입주 가능 날짜는 어떻게 되나요?"),
+            CalendarItem(content: "잔금은 언제까지 치뤄야 하나요?")
         ]),
         Category(image: UIImage(named: "location-conditions-item")!, name: "입지여건", items: [
             ScoreItem(content: "역세권인가요?"),
@@ -187,12 +187,25 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource {
             
         } else {
             // 카테고리 셀 클릭 시 펼쳐질 셀
-            let cell: ExpandedTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedTableViewCell.identifier, for: indexPath) as! ExpandedTableViewCell
+            let category = categories[indexPath.section]
             
-            let scoreItem = categories[indexPath.section].items[indexPath.row - 1] as? ScoreItem
-            cell.contentLabel.text = scoreItem?.content
-        
-            return cell
+            if let calendarItem = category.items[indexPath.row - 1] as? CalendarItem {
+                // CalendarItem인 경우
+                let cell: ExpandedCalendarTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedCalendarTableViewCell.identifier, for: indexPath) as! ExpandedCalendarTableViewCell
+                cell.contentLabel.text = calendarItem.content
+                // ExpandedCalendarTableViewCell에 필요한 설정
+                
+                return cell
+            } else if let scoreItem = category.items[indexPath.row - 1] as? ScoreItem {
+                // ScoreItem인 경우
+                let cell: ExpandedScoreTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedScoreTableViewCell.identifier, for: indexPath) as! ExpandedScoreTableViewCell
+                cell.contentLabel.text = scoreItem.content
+                // ExpandedScoreTableViewCell에 필요한 설정
+                
+                return cell
+            }
+            
+            return UITableViewCell()
         }
     }
     
@@ -210,7 +223,7 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource {
                 let section = IndexSet.init(integer: indexPath.section)
                 tableView.reloadSections(section, with: .fade)
             }
-        } else if let cell = tableView.cellForRow(at: indexPath) as? ExpandedTableViewCell {
+        } else if let cell = tableView.cellForRow(at: indexPath) as? ExpandedScoreTableViewCell {
             // 확장 셀을 눌렀을 때
             if let selectedAnswer = cell.selectedAnswer {
                 // 버튼의 값을 출력
@@ -225,10 +238,20 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource {
 
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.row == 0 {
-            return 63
-        } else {
-            return 98
+            if indexPath.row == 0 {
+                return 63
+            } else {
+                let category = categories[indexPath.section]
+                
+                if let _ = category.items[indexPath.row - 1] as? CalendarItem {
+                    // CalendarItem인 경우의 높이 설정
+                    return 443
+                } else if let _ = category.items[indexPath.row - 1] as? ScoreItem {
+                    // ScoreItem인 경우의 높이 설정
+                    return 98
+                }
+                
+                return UITableView.automaticDimension
+            }
         }
-    }
 }

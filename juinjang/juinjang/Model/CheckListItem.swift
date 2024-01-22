@@ -25,9 +25,21 @@ protocol Item {
 }
 
 struct CalendarItem: Item {
-    var title: String
+    var content: String
+    var inputDate: Date?
 }
 
 struct ScoreItem: Item {
     var content: String
+    var score: Int?
+}
+
+struct InputItem: Item {
+    var content: String
+    var inputAnswer: String?
+}
+
+struct SelectionItem: Item {
+    var content: String
+    var inputAnswer: String?
 }

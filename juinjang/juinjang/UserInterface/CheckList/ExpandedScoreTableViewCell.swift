@@ -1,15 +1,15 @@
 //
-//  ExpandedTableViewCell.swift
+//  ExpandedScoreTableViewCell.swift
 //  juinjang
 //
-//  Created by 임수진 on 1/21/24.
+//  Created by 임수진 on 1/22/24.
 //
 
 import UIKit
 
-class ExpandedTableViewCell: UITableViewCell {
+class ExpandedScoreTableViewCell: UITableViewCell {
 
-    static let identifier = "ExpandedTableViewCell"
+    static let identifier = "ExpandedScoreTableViewCell"
     
     var selectedAnswer: Int? // 선택된 버튼의 값을 저장할 변수
     

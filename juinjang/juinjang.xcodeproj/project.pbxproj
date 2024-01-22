@@ -25,16 +25,21 @@
 		0A3D5D5A2B4D337100574686 /* TopTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3D5D532B4D337100574686 /* TopTableViewCell.swift */; };
 		0A3D5D5B2B4D337100574686 /* FirstTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A3D5D542B4D337100574686 /* FirstTableViewCell.xib */; };
 		0A3D5D632B4D707300574686 /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3D5D622B4D707300574686 /* BottomSheetViewController.swift */; };
+		0A4EBE272B5E9E5F00909B7A /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 0A4EBE262B5E9E5F00909B7A /* Then */; };
+		0A4EBE2A2B5E9E6A00909B7A /* Tabman in Frameworks */ = {isa = PBXBuildFile; productRef = 0A4EBE292B5E9E6A00909B7A /* Tabman */; };
+		0A4EBE2D2B5E9E8B00909B7A /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0A4EBE2C2B5E9E8B00909B7A /* SnapKit */; };
+		0A4EBE2F2B5E9E8B00909B7A /* SnapKit-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 0A4EBE2E2B5E9E8B00909B7A /* SnapKit-Dynamic */; };
+		0A4EBE322B5EA21100909B7A /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 0A4EBE312B5EA21100909B7A /* FSCalendar */; };
+		0A4EBE342B5EA25300909B7A /* ExpandedCalendarTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4EBE332B5EA25300909B7A /* ExpandedCalendarTableViewCell.swift */; };
+		0A4EBE362B5EA27B00909B7A /* ExpandedScoreTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4EBE352B5EA27B00909B7A /* ExpandedScoreTableViewCell.swift */; };
 		0A554CE02B52DB100023BB49 /* RecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A554CDF2B52DB100023BB49 /* RecordViewController.swift */; };
 		0A554CE42B5420F20023BB49 /* WarningMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A554CE32B5420F20023BB49 /* WarningMessageViewController.swift */; };
 		0A73E60D2B5855CD00EF1C89 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A73E60C2B5855CD00EF1C89 /* UserInfo.swift */; };
-		0A9776CD2B5D149800CDF955 /* ExpandedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9776CC2B5D149800CDF955 /* ExpandedTableViewCell.swift */; };
 		0A9E0A472B3DCAB90094595A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9E0A462B3DCAB90094595A /* AppDelegate.swift */; };
 		0A9E0A492B3DCAB90094595A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9E0A482B3DCAB90094595A /* SceneDelegate.swift */; };
 		0A9E0A502B3DCAB90094595A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0A9E0A4F2B3DCAB90094595A /* Assets.xcassets */; };
 		0A9E0A532B3DCAB90094595A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0A9E0A512B3DCAB90094595A /* LaunchScreen.storyboard */; };
 		0A9E0AA92B3DD4D20094595A /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 0A9E0AA82B3DD4D20094595A /* .gitignore */; };
-		0AAA737B2B4C55640076065B /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0AAA737A2B4C55640076065B /* SnapKit */; };
 		0AB34CC12B4F11B000150A15 /* OpenNewPage2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB34CBE2B4F11B000150A15 /* OpenNewPage2ViewController.swift */; };
 		0AB34CC22B4F11B000150A15 /* CustomPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB34CBF2B4F11B000150A15 /* CustomPopupViewController.swift */; };
 		0AB34CC32B4F11B000150A15 /* OpenNewPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB34CC02B4F11B000150A15 /* OpenNewPageViewController.swift */; };
@@ -42,11 +47,9 @@
 		0AE3888B2B5992870041A979 /* CheckListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE3888A2B5992870041A979 /* CheckListItem.swift */; };
 		0AF968242B5BDF3300A3CBBB /* CheckListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF968232B5BDF3300A3CBBB /* CheckListViewController.swift */; };
 		611F14552B47070B00B983F1 /* RecordingSegmentedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F14542B47070B00B983F1 /* RecordingSegmentedViewController.swift */; };
-		611F14582B47074000B983F1 /* Tabman in Frameworks */ = {isa = PBXBuildFile; productRef = 611F14572B47074000B983F1 /* Tabman */; };
 		611F145A2B4707CC00B983F1 /* RecordingRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F14592B4707CC00B983F1 /* RecordingRoomViewController.swift */; };
 		611F145E2B471ECA00B983F1 /* CALayer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F145D2B471ECA00B983F1 /* CALayer+Extension.swift */; };
 		616408E12B405B7200EC3B5E /* ImjangNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616408E02B405B7200EC3B5E /* ImjangNoteViewController.swift */; };
-		616408E92B405DA100EC3B5E /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 616408E82B405DA100EC3B5E /* Then */; };
 		616408EC2B407A2D00EC3B5E /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616408EB2B407A2D00EC3B5E /* UIView+Extensions.swift */; };
 		616409022B407FB300EC3B5E /* UIFont+Pretendard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616409012B407FB300EC3B5E /* UIFont+Pretendard.swift */; };
 		61A7B9262B4C4EC300795B49 /* Pretendard-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 61A7B91D2B4C4EC200795B49 /* Pretendard-Regular.otf */; };
@@ -84,10 +87,11 @@
 		0A3D5D532B4D337100574686 /* TopTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopTableViewCell.swift; sourceTree = "<group>"; };
 		0A3D5D542B4D337100574686 /* FirstTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FirstTableViewCell.xib; sourceTree = "<group>"; };
 		0A3D5D622B4D707300574686 /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
+		0A4EBE332B5EA25300909B7A /* ExpandedCalendarTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedCalendarTableViewCell.swift; sourceTree = "<group>"; };
+		0A4EBE352B5EA27B00909B7A /* ExpandedScoreTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedScoreTableViewCell.swift; sourceTree = "<group>"; };
 		0A554CDF2B52DB100023BB49 /* RecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordViewController.swift; sourceTree = "<group>"; };
 		0A554CE32B5420F20023BB49 /* WarningMessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarningMessageViewController.swift; sourceTree = "<group>"; };
 		0A73E60C2B5855CD00EF1C89 /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
-		0A9776CC2B5D149800CDF955 /* ExpandedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedTableViewCell.swift; sourceTree = "<group>"; };
 		0A9E0A432B3DCAB90094595A /* juinjang.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = juinjang.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A9E0A462B3DCAB90094595A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0A9E0A482B3DCAB90094595A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -127,10 +131,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A4EBE2F2B5E9E8B00909B7A /* SnapKit-Dynamic in Frameworks */,
+				0A4EBE322B5EA21100909B7A /* FSCalendar in Frameworks */,
 				61D9250F2B4965D0002A16B4 /* IQKeyboardManagerSwift in Frameworks */,
-				0AAA737B2B4C55640076065B /* SnapKit in Frameworks */,
-				611F14582B47074000B983F1 /* Tabman in Frameworks */,
-				616408E92B405DA100EC3B5E /* Then in Frameworks */,
+				0A4EBE2D2B5E9E8B00909B7A /* SnapKit in Frameworks */,
+				0A4EBE2A2B5E9E6A00909B7A /* Tabman in Frameworks */,
+				0A4EBE272B5E9E5F00909B7A /* Then in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -210,7 +216,8 @@
 			children = (
 				0AE388882B5986BC0041A979 /* CategoryItemTableViewCell.swift */,
 				0AF968232B5BDF3300A3CBBB /* CheckListViewController.swift */,
-				0A9776CC2B5D149800CDF955 /* ExpandedTableViewCell.swift */,
+				0A4EBE332B5EA25300909B7A /* ExpandedCalendarTableViewCell.swift */,
+				0A4EBE352B5EA27B00909B7A /* ExpandedScoreTableViewCell.swift */,
 			);
 			path = CheckList;
 			sourceTree = "<group>";
@@ -335,10 +342,12 @@
 			);
 			name = juinjang;
 			packageProductDependencies = (
-				616408E82B405DA100EC3B5E /* Then */,
-				611F14572B47074000B983F1 /* Tabman */,
 				61D9250E2B4965D0002A16B4 /* IQKeyboardManagerSwift */,
-				0AAA737A2B4C55640076065B /* SnapKit */,
+				0A4EBE262B5E9E5F00909B7A /* Then */,
+				0A4EBE292B5E9E6A00909B7A /* Tabman */,
+				0A4EBE2C2B5E9E8B00909B7A /* SnapKit */,
+				0A4EBE2E2B5E9E8B00909B7A /* SnapKit-Dynamic */,
+				0A4EBE312B5EA21100909B7A /* FSCalendar */,
 			);
 			productName = juinjang;
 			productReference = 0A9E0A432B3DCAB90094595A /* juinjang.app */;
@@ -369,10 +378,11 @@
 			);
 			mainGroup = 0A9E0A3A2B3DCAB90094595A;
 			packageReferences = (
-				616408E72B405DA100EC3B5E /* XCRemoteSwiftPackageReference "Then" */,
-				611F14562B47074000B983F1 /* XCRemoteSwiftPackageReference "Tabman" */,
 				61D9250D2B4965D0002A16B4 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
-				0AAA73792B4C55640076065B /* XCRemoteSwiftPackageReference "SnapKit" */,
+				0A4EBE252B5E9E5F00909B7A /* XCRemoteSwiftPackageReference "Then" */,
+				0A4EBE282B5E9E6A00909B7A /* XCRemoteSwiftPackageReference "Tabman" */,
+				0A4EBE2B2B5E9E8B00909B7A /* XCRemoteSwiftPackageReference "SnapKit" */,
+				0A4EBE302B5EA21100909B7A /* XCRemoteSwiftPackageReference "FSCalendar" */,
 			);
 			productRefGroup = 0A9E0A442B3DCAB90094595A /* Products */;
 			projectDirPath = "";
@@ -440,12 +450,13 @@
 				61D925112B4983A1002A16B4 /* UILabel+Extension.swift in Sources */,
 				0AE3888B2B5992870041A979 /* CheckListItem.swift in Sources */,
 				0A3D5D4C2B4D333900574686 /* TransactionModel.swift in Sources */,
+				0A4EBE342B5EA25300909B7A /* ExpandedCalendarTableViewCell.swift in Sources */,
 				616408EC2B407A2D00EC3B5E /* UIView+Extensions.swift in Sources */,
+				0A4EBE362B5EA27B00909B7A /* ExpandedScoreTableViewCell.swift in Sources */,
 				0A3D5D5A2B4D337100574686 /* TopTableViewCell.swift in Sources */,
 				0AF968242B5BDF3300A3CBBB /* CheckListViewController.swift in Sources */,
 				0A3D5D632B4D707300574686 /* BottomSheetViewController.swift in Sources */,
 				0A3D5D592B4D337100574686 /* FirstTableViewCell.swift in Sources */,
-				0A9776CD2B5D149800CDF955 /* ExpandedTableViewCell.swift in Sources */,
 				0A9E0A472B3DCAB90094595A /* AppDelegate.swift in Sources */,
 				0A2DED202B551CF900A96BAA /* RecordBottomViewController.swift in Sources */,
 				0A3D5D572B4D337100574686 /* BottomCollectionViewCell.swift in Sources */,
@@ -670,28 +681,36 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		0AAA73792B4C55640076065B /* XCRemoteSwiftPackageReference "SnapKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SnapKit/SnapKit";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.0.0;
-			};
-		};
-		611F14562B47074000B983F1 /* XCRemoteSwiftPackageReference "Tabman" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/uias/Tabman.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.0.2;
-			};
-		};
-		616408E72B405DA100EC3B5E /* XCRemoteSwiftPackageReference "Then" */ = {
+		0A4EBE252B5E9E5F00909B7A /* XCRemoteSwiftPackageReference "Then" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/devxoul/Then";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 3.0.0;
+			};
+		};
+		0A4EBE282B5E9E6A00909B7A /* XCRemoteSwiftPackageReference "Tabman" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/uias/Tabman";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.2;
+			};
+		};
+		0A4EBE2B2B5E9E8B00909B7A /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.0;
+			};
+		};
+		0A4EBE302B5EA21100909B7A /* XCRemoteSwiftPackageReference "FSCalendar" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/WenchaoD/FSCalendar";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.8.4;
 			};
 		};
 		61D9250D2B4965D0002A16B4 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
@@ -705,20 +724,30 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		0AAA737A2B4C55640076065B /* SnapKit */ = {
+		0A4EBE262B5E9E5F00909B7A /* Then */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 0AAA73792B4C55640076065B /* XCRemoteSwiftPackageReference "SnapKit" */;
-			productName = SnapKit;
+			package = 0A4EBE252B5E9E5F00909B7A /* XCRemoteSwiftPackageReference "Then" */;
+			productName = Then;
 		};
-		611F14572B47074000B983F1 /* Tabman */ = {
+		0A4EBE292B5E9E6A00909B7A /* Tabman */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 611F14562B47074000B983F1 /* XCRemoteSwiftPackageReference "Tabman" */;
+			package = 0A4EBE282B5E9E6A00909B7A /* XCRemoteSwiftPackageReference "Tabman" */;
 			productName = Tabman;
 		};
-		616408E82B405DA100EC3B5E /* Then */ = {
+		0A4EBE2C2B5E9E8B00909B7A /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 616408E72B405DA100EC3B5E /* XCRemoteSwiftPackageReference "Then" */;
-			productName = Then;
+			package = 0A4EBE2B2B5E9E8B00909B7A /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		0A4EBE2E2B5E9E8B00909B7A /* SnapKit-Dynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0A4EBE2B2B5E9E8B00909B7A /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = "SnapKit-Dynamic";
+		};
+		0A4EBE312B5EA21100909B7A /* FSCalendar */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0A4EBE302B5EA21100909B7A /* XCRemoteSwiftPackageReference "FSCalendar" */;
+			productName = FSCalendar;
 		};
 		61D9250E2B4965D0002A16B4 /* IQKeyboardManagerSwift */ = {
 			isa = XCSwiftPackageProductDependency;
