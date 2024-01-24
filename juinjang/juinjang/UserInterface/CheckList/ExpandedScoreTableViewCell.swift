@@ -12,7 +12,9 @@ class ExpandedScoreTableViewCell: UITableViewCell {
 
     static let identifier = "ExpandedScoreTableViewCell"
     
-    var selectedAnswer: Int? // 선택된 버튼의 값을 저장할 변수
+    var score: Int? // 선택된 버튼의 값을 저장할 변수
+    var indexPath: IndexPath?
+    var item: Item?
     
     lazy var questionImage = UIImageView().then {
         $0.contentMode = .scaleAspectFit
@@ -114,35 +116,35 @@ class ExpandedScoreTableViewCell: UITableViewCell {
     }
     
     @objc func buttonPressed(_ sender: UIButton) {
-        // 각 버튼에 대한 기본 이미지
-        let initialImages: [Int: UIImage] = [
-            1: UIImage(named: "answer1")!,
-            2: UIImage(named: "answer2")!,
-            3: UIImage(named: "answer3")!,
-            4: UIImage(named: "answer4")!,
-            5: UIImage(named: "answer5")!
-        ]
+        sender.isSelected.toggle()
         
-        // 모든 버튼을 초기화 상태로 설정
+        // 선택한 버튼이 아닌 경우 선택 해제
         for button in [answerButton1, answerButton2, answerButton3, answerButton4, answerButton5] {
-            if let initialImage = initialImages[button.tag] {
-                button.setImage(initialImage, for: .normal)
+            if button != sender {
+                button.isSelected = false
+                button.setImage(UIImage(named: "answer\(button.tag)"), for: .normal)
             }
         }
-        
-        // 현재 눌린 버튼을 선택된 상태로 변경
-        sender.setImage(UIImage(named: "checked-button"), for: .normal)
+
+        if sender.isSelected {
+            // 현재 눌린 버튼을 선택된 상태로 변경
+            sender.setImage(UIImage(named: "checked-button"), for: .normal)
+            // 셀의 배경색을 변경
+            backgroundColor = UIColor(named: "lightOrange")
+            questionImage.image = UIImage(named: "question-selected-image")
+        } else {
+            sender.setImage(UIImage(named: "answer\(sender.tag)"), for: .normal)
+            backgroundColor = .white
+            questionImage.image = UIImage(named: "question-image")
+        }
         
         // 선택된 버튼의 정보를 저장
-        selectedAnswer = sender.tag
+        score = sender.tag
         
-        if let answer = selectedAnswer {
-            print("Button Pressed: \(answer)")
+        if let score = score {
+            print("Button Pressed: \(score)")
         } else {
             print("Button Pressed: No answer")
         }
-        
-        // 셀의 배경색을 변경
-        backgroundColor = UIColor(named: "lightOrange")
     }
 }

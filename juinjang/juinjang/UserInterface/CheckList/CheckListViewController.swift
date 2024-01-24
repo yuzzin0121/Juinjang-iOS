@@ -101,7 +101,7 @@ class CheckListViewController: UIViewController {
         ]),
         Category(image: UIImage(named: "location-conditions-item")!, name: "입지여건", items: [
             ScoreItem(content: "역세권인가요?"),
-            SelectionItem(content: "지하철 노선도를 선택해 주세요."),
+            SelectionItem(content: "지하철 노선도를 선택해 주세요.", options: ["선택안함", "1호선", "2호선", "3호선", "4호선", "5호선", "6호선", "7호선", "8호선", "9호선", "수인분당", "경의중앙", "신분당", "공항철도", "경춘선"]),
             ScoreItem(content: "버스 주요노선이 지역중심부에 접근이 용이한가요?"),
             ScoreItem(content: "공립 어린이집 혹은 유치원이 충분히 가까운가요?"),
             ScoreItem(content: "초등학교가 반경 5분~10분 이내에 있나요?"),
@@ -110,8 +110,8 @@ class CheckListViewController: UIViewController {
             ScoreItem(content: "대형마트, 시장이 도보로 이용 가능한가요?"),
             ScoreItem(content: "여러 브랜드의 편의점이 근거리에 분포해있나요?"),
             ScoreItem(content: "입주자가 사용하는 은행이 근거리에 분포해있나요?"),
-            SelectionItem(content: "건물뷰를 골라주세요."),
-            SelectionItem(content: "동향/서향/남향/북향"),
+            SelectionItem(content: "건물뷰를 골라주세요.", options: ["선택안함", "강", "공원", "아파트 단지"]),
+            SelectionItem(content: "동향/서향/남향/북향", options: ["선택안함", "동향", "서향", "남향", "북향"]),
             ScoreItem(content: "창문이 적절한 위치와 적절한 갯수를 갖추고 있나요?"),
             ScoreItem(content: "빛이 잘 들어오나요?"),
             ScoreItem(content: "근처에 술집, 노래방 등의 유흥시설이 가까운가요?"),
@@ -125,13 +125,13 @@ class CheckListViewController: UIViewController {
             ScoreItem(content: "단지 내 놀이터가 잘 갖춰져 있나요?"),
             ScoreItem(content: "단지 내 cctv가 설치된 놀이터가 있나요?"),
             ScoreItem(content: "단지 내 헬스장이 있나요?"),
-            SelectionItem(content: "단지 내 노인정이 있나요?"),
+            ScoreItem(content: "단지 내 노인정이 있나요?"),
             ScoreItem(content: "출퇴근 시 엘리베이터 사용이 여유롭나요?"),
             ScoreItem(content: "단지 내 택배를 안전하게 받을 수 있는 공간이 있나요?"),
             ScoreItem(content: "단지 내 유모차 이동이 자유롭나요?")
         ]),
         Category(image: UIImage(named: "indoor-item")!, name: "실내", items: [
-            SelectionItem(content: "시스템 에어컨 / 설치형에어컨 / 기타"),
+            SelectionItem(content: "시스템 에어컨 / 설치형에어컨 / 기타", options: ["선택안함", "시스템 에어컨", "설치형에어컨", "기타"]),
             ScoreItem(content: "냉난방 시스템이 장 작동하나요?"),
             ScoreItem(content: "창문은 이중창인가요?"),
             ScoreItem(content: "복도형 구조 / 거실중앙형 구조 / 기타"),
@@ -195,27 +195,32 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource {
                 // CalendarItem인 경우
                 let cell: ExpandedCalendarTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedCalendarTableViewCell.identifier, for: indexPath) as! ExpandedCalendarTableViewCell
                 cell.contentLabel.text = calendarItem.content
+                cell.selectedDate = calendarItem.inputDate
                 
                 return cell
             } else if let scoreItem = category.items[indexPath.row - 1] as? ScoreItem {
                 // ScoreItem인 경우
                 let cell: ExpandedScoreTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedScoreTableViewCell.identifier, for: indexPath) as! ExpandedScoreTableViewCell
                 cell.contentLabel.text = scoreItem.content
+                cell.score = scoreItem.score
                 
                 return cell
             } else if let inputItem = category.items[indexPath.row - 1] as? InputItem {
                 // InputItem인 경우
                 let cell: ExpandedTextFieldTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedTextFieldTableViewCell.identifier, for: indexPath) as! ExpandedTextFieldTableViewCell
                 cell.contentLabel.text = inputItem.content
+                cell.inputAnswer = inputItem.inputAnswer
                 
                 return cell
-            } else if let inputItem = category.items[indexPath.row - 1] as? SelectionItem {
+            } else if let selectionItem = category.items[indexPath.row - 1] as? SelectionItem {
                 // SelectionItem인 경우
                 let cell: ExpandedDropdownTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedDropdownTableViewCell.identifier, for: indexPath) as! ExpandedDropdownTableViewCell
-                cell.contentLabel.text = inputItem.content
+                cell.contentLabel.text = selectionItem.content
+                cell.options = selectionItem.options
+                cell.selectedOption = selectionItem.selectAnswer
                 
                 return cell
-            }
+            } 
             return UITableViewCell()
         }
     }
@@ -239,18 +244,40 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource {
             if let selectedDate = cell.selectedDate {
                 // 선택된 날짜를 출력
                 print("Selected Date: \(selectedDate)")
+                cell.backgroundColor = UIColor(named: "lightOrange")
             } else {
                 // 선택한 날짜가 없는 경우
                 print("No answer selected")
             }
         } else if let cell = tableView.cellForRow(at: indexPath) as? ExpandedScoreTableViewCell {
             // 확장 점수 셀을 눌렀을 때
-            if let selectedAnswer = cell.selectedAnswer {
+            if let selectedAnswer = cell.score {
                 // 버튼의 값을 출력
                 print("Selected Answer: \(selectedAnswer)")
+                cell.backgroundColor = UIColor(named: "lightOrange")
             } else {
                 // 버튼의 값이 없는 경우
                 print("No answer selected")
+            }
+        } else if let cell = tableView.cellForRow(at: indexPath) as? ExpandedTextFieldTableViewCell {
+            // 확장 입력 셀을 눌렀을 때
+            if let inputAnswer = cell.inputAnswer {
+                // 입력한 답변을 출력
+                print("Input Answer: \(inputAnswer)")
+                cell.backgroundColor = UIColor(named: "lightOrange")
+            } else {
+                // 입력한 답변이 없는 경우
+                print("No input answered")
+            }
+        } else if let cell = tableView.cellForRow(at: indexPath) as? ExpandedDropdownTableViewCell {
+            // 확장 드롭다운 셀을 눌렀을 때
+            if let selectedOption = cell.selectedOption {
+                // 선택한 옵션을 출력
+                print("Selected Option: \(selectedOption)")
+                cell.backgroundColor = UIColor(named: "lightOrange")
+            } else {
+                // 선택한 옵션이 없는 경우
+                print("No option selected")
             }
         }
     }

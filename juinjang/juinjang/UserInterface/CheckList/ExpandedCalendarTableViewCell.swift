@@ -186,6 +186,26 @@ extension ExpandedCalendarTableViewCell: FSCalendarDelegate, FSCalendarDataSourc
     // 날짜를 선택했을 때
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         backgroundColor = UIColor(named: "lightOrange")
+        questionImage.image = UIImage(named: "question-selected-image")
+        
+        // 이미 선택된 날짜를 클릭하면 선택을 해제
+        if let currentSelectedDate = selectedDate, currentSelectedDate == date {
+            calendar.deselect(date)
+            selectedDate = nil
+            
+            // 선택 해제할 경우 테두리 제거
+            if let selectedCell = calendar.cell(for: date, at: monthPosition) as? FSCalendarCell {
+                selectedCell.layer.borderWidth = 0.0
+                backgroundColor = .white
+                questionImage.image = UIImage(named: "question-image")
+            }
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy년 MM월 dd일"
+            print("Date deselected: \(dateFormatter.string(from: date))")
+            
+            return
+        }
         
         // 현재 선택된 날짜의 테두리를 초기화
         if let currentSelectedDate = selectedDate, let currentSelectedCell = calendar.cell(for: currentSelectedDate, at: monthPosition) {
