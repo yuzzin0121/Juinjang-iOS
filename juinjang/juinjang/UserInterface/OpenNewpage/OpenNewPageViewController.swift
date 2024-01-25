@@ -46,6 +46,7 @@ class OpenNewPageViewController: UIViewController {
     
     let contentView = UIView().then {
         $0.translatesAutoresizingMaskIntoConstraints = false
+//        $0.backgroundColor = .blue
     }
     
     func makeImageView(_ imageView: UIImageView, imageName: String) {
@@ -275,11 +276,15 @@ class OpenNewPageViewController: UIViewController {
         $0.translatesAutoresizingMaskIntoConstraints = false
     }
     
+    lazy var nextButtonContainerView = UIView().then {
+        $0.backgroundColor = .white
+    }
+    
     lazy var nextButton = UIButton().then {
         $0.setTitle("다음으로", for: .normal)
-        $0.setTitleColor(UIColor(red: 1, green: 1, blue: 1, alpha: 1), for: .normal)
+        $0.setTitleColor(UIColor(named: "textWhite"), for: .normal)
         
-        $0.backgroundColor = UIColor(red: 0.82, green: 0.82, blue: 0.82, alpha: 1)
+        $0.backgroundColor = UIColor(named: "lightGray")
         $0.layer.cornerRadius = 8
         $0.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
         $0.translatesAutoresizingMaskIntoConstraints = false
@@ -303,9 +308,12 @@ class OpenNewPageViewController: UIViewController {
         if UIScreen.main.bounds.height <= 667 { // 아이폰 SE(3rd generation) 기준으로 스크린이 작으면
             // 스크롤뷰 사용
             setupScrollView()
+            scrollView.isScrollEnabled = true
         } else {
             // 다른 디바이스에서는 스크롤뷰 미사용
-            setupWidgets()
+//            setupWidgets()
+            setupScrollView()
+            scrollView.isScrollEnabled = false
         }
         threeDisitPriceField.delegate = self
         fourDisitPriceField.delegate = self
@@ -318,38 +326,36 @@ class OpenNewPageViewController: UIViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         // 위젯들을 서브뷰로 추가
-        let widgets: [UIView] = [
-            purposeLabel,
-            typeLabel,
-            priceLabel,
-            backgroundImageView,
-            apartmentImageView,
-            villaImageView,
-            officetelImageView,
-            houseImageView,
-            priceView,
-            priceView2]
-        widgets.forEach { contentView.addSubview($0) }
-        view.addSubview(nextButton)
+        [purposeLabel,
+        typeLabel,
+        priceLabel,
+        backgroundImageView,
+        apartmentImageView,
+        villaImageView,
+        officetelImageView,
+        houseImageView,
+        priceView,
+        priceView2].forEach { contentView.addSubview($0) }
+        view.addSubview(nextButtonContainerView)
+        nextButtonContainerView.addSubview(nextButton)
         setupScrollLayout()
         setButton()
     }
     
     func setupWidgets() {
         // 위젯들을 서브뷰로 추가
-        let widgets: [UIView] = [
-            purposeLabel,
-            typeLabel,
-            priceLabel,
-            backgroundImageView,
-            apartmentImageView,
-            villaImageView,
-            officetelImageView,
-            houseImageView,
-            priceView,
-            priceView2,
-            nextButton]
-        widgets.forEach { view.addSubview($0) }
+        [purposeLabel,
+        typeLabel,
+        priceLabel,
+        backgroundImageView,
+        apartmentImageView,
+        villaImageView,
+        officetelImageView,
+        houseImageView,
+        priceView,
+        priceView2,
+        nextButtonContainerView,
+        nextButton].forEach { view.addSubview($0) }
         setupLayout()
         setButton()
     }
@@ -360,17 +366,20 @@ class OpenNewPageViewController: UIViewController {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.leading.trailing.equalToSuperview()
             $0.width.equalTo(view.snp.width)
-            $0.bottom.equalTo(nextButton.snp.top).offset(10)
+//            $0.height.equalTo(view.snp.height).multipliedBy(0.75)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
         
         contentView.snp.makeConstraints {
-            $0.top.equalTo(scrollView.snp.top)
-            $0.leading.trailing.equalToSuperview()
-            $0.width.equalTo(view.snp.width)
-            $0.bottom.equalTo(nextButton.snp.top).offset(10)
+//            $0.top.equalTo(scrollView.snp.top)
+//            $0.leading.trailing.equalToSuperview()
+            $0.width.equalTo(scrollView.frameLayoutGuide)
+//            $0.height.equalTo(view.snp.height).multipliedBy(1.1)
+//            $0.bottom.equalTo(nextButton.snp.top).offset(10)
+            $0.edges.equalTo(scrollView.contentLayoutGuide)
         }
         
-        setupLayout()
+//        setupLayout()
         
         // 배경 ImageView
         backgroundImageView.snp.makeConstraints {
@@ -384,6 +393,188 @@ class OpenNewPageViewController: UIViewController {
             $0.top.equalTo(contentView.safeAreaLayoutGuide.snp.top)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(view.snp.height).multipliedBy(0.28)
+        }
+        
+        // 건물 ImageView
+        apartmentImageView.snp.makeConstraints {
+            $0.bottom.equalTo(backgroundImageView.snp.bottom).offset(-13)
+            $0.trailing.equalTo(backgroundImageView.snp.trailing).offset(-95)
+            $0.top.equalTo(backgroundImageView.snp.top).offset(30)
+        }
+        
+        villaImageView.snp.makeConstraints {
+            $0.bottom.equalTo(backgroundImageView.snp.bottom).offset(-14.5)
+            $0.trailing.equalTo(backgroundImageView.snp.trailing).offset(-95)
+            $0.top.equalTo(backgroundImageView.snp.top).offset(82)
+        }
+        
+        officetelImageView.snp.makeConstraints {
+            $0.bottom.equalTo(backgroundImageView.snp.bottom).offset(-14.5)
+            $0.trailing.equalTo(backgroundImageView.snp.trailing).offset(-95)
+            $0.top.equalTo(backgroundImageView.snp.top).offset(37)
+        }
+        
+        houseImageView.snp.makeConstraints {
+            $0.bottom.equalTo(backgroundImageView.snp.bottom).offset(-14.84)
+            $0.trailing.equalTo(backgroundImageView.snp.trailing).offset(-91)
+            $0.top.equalTo(backgroundImageView.snp.top).offset(102)
+        }
+        
+        apartmentImageView.isHidden = true
+        villaImageView.isHidden = true
+        officetelImageView.isHidden = true
+        houseImageView.isHidden = true
+        
+        // 거래 목적 Label
+        purposeLabel.snp.makeConstraints {
+            $0.top.equalTo(backgroundImageView.snp.bottom).offset(21)
+            $0.width.equalToSuperview().multipliedBy(0.18)
+            $0.height.equalToSuperview().multipliedBy(0.03)
+            $0.leading.equalTo(contentView.snp.leading).offset(24)
+        }
+        
+        // 거래 목적 Stack View
+        let purposeButtonsStackView = UIStackView(arrangedSubviews: [realestateInvestmentButton, moveInDirectlyButton])
+        
+        purposeButtonsStackView.translatesAutoresizingMaskIntoConstraints = false
+        purposeButtonsStackView.axis = .horizontal
+        purposeButtonsStackView.spacing = 8
+        
+        contentView.addSubview(purposeButtonsStackView)
+        
+        purposeButtonsStackView.snp.makeConstraints {
+            $0.top.equalTo(purposeLabel.snp.bottom).offset(12)
+            $0.height.lessThanOrEqualTo(view.snp.height).multipliedBy(0.08)
+            $0.leading.equalTo(view).offset(24)
+        }
+        
+        // 매물 유형 Label
+        typeLabel.snp.makeConstraints {
+            $0.top.equalTo(realestateInvestmentButton.snp.bottom).offset(27)
+            $0.width.equalToSuperview().multipliedBy(0.18)
+            $0.height.equalToSuperview().multipliedBy(0.03)
+            $0.leading.equalTo(contentView.snp.leading).offset(24)
+        }
+        
+        // 매물 유형 Stack View
+        let propertyTypeStackView = UIStackView(arrangedSubviews: [apartmentButton, villaButton, officetelButton, houseButton])
+        
+        propertyTypeStackView.translatesAutoresizingMaskIntoConstraints = false
+        propertyTypeStackView.axis = .horizontal
+        propertyTypeStackView.spacing = 8
+        
+        contentView.addSubview(propertyTypeStackView)
+        
+        propertyTypeStackView.snp.makeConstraints {
+            $0.top.equalTo(typeLabel.snp.bottom).offset(12)
+            $0.height.lessThanOrEqualTo(view.snp.height).multipliedBy(0.08)
+            $0.leading.equalTo(contentView).offset(24)
+        }
+        
+        // 가격 Label
+        priceLabel.snp.makeConstraints {
+            $0.top.equalTo(propertyTypeStackView.snp.bottom).offset(27)
+            $0.width.equalToSuperview().multipliedBy(0.18)
+            $0.height.equalToSuperview().multipliedBy(0.03)
+            $0.leading.equalTo(contentView.snp.leading).offset(24)
+        }
+        
+        // 가격 View
+        priceView.snp.makeConstraints {
+            $0.top.equalTo(priceLabel.snp.bottom).offset(12)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(view.snp.height).multipliedBy(0.05)
+        }
+        
+        priceView2.snp.makeConstraints {
+            $0.top.equalTo(priceView.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(view.snp.height).multipliedBy(0.05)
+        }
+        
+        priceView2.isHidden = true
+        
+        // 입주 유형 Stack View
+        moveTypeStackView = UIStackView(
+            arrangedSubviews:
+                [saleButton,
+                 jeonseButton,
+                 monthlyRentButton])
+        
+        moveTypeStackView.translatesAutoresizingMaskIntoConstraints = false
+        moveTypeStackView.axis = .horizontal
+        moveTypeStackView.spacing = 8
+        
+        // 매매 버튼이 기본으로 선택되어 있음
+        saleButton.isSelected = true
+
+        // 가격 입력칸 Stack View
+        inputPriceStackView = UIStackView(
+            arrangedSubviews:
+                [threeDisitPriceField,
+                 priceDetailLabels[4],
+                 fourDisitPriceField,
+                 priceDetailLabels[6]])
+
+        inputPriceStackView.translatesAutoresizingMaskIntoConstraints = false
+        inputPriceStackView.axis = .horizontal
+        inputPriceStackView.spacing = 5
+
+        priceView.addSubview(inputPriceStackView)
+
+        if let priceDetailLabel = priceDetailLabel {
+            priceDetailLabel.snp.makeConstraints {
+                $0.centerY.equalTo(priceView.snp.centerY)
+                $0.top.equalTo(priceView.snp.top).offset(8)
+                $0.leading.equalTo(priceView.snp.leading).offset(24)
+            }
+            inputPriceStackView.snp.makeConstraints {
+                $0.leading.equalTo(priceDetailLabel.snp.trailing).offset(16)
+                $0.centerY.equalTo(priceView.snp.centerY)
+                $0.top.equalTo(priceView.snp.top).offset(8)
+            }
+        }
+        
+        propertyTypeStackView.snp.makeConstraints {
+            $0.top.equalTo(typeLabel.snp.bottom).offset(12)
+            $0.height.lessThanOrEqualTo(view.snp.height).multipliedBy(0.07)
+            $0.leading.equalTo(contentView).offset(24)
+        }
+        
+        // 월세 가격 입력칸 Stack View
+        inputMonthlyRentStackView = UIStackView()
+        inputMonthlyRentStackView.translatesAutoresizingMaskIntoConstraints = false
+        inputMonthlyRentStackView.axis = .horizontal
+        inputMonthlyRentStackView.spacing = 5
+    
+        // 가격 입력 받는 TextField
+        threeDisitPriceField.snp.makeConstraints {
+            $0.top.equalTo(priceView.snp.top).offset(4)
+            $0.centerY.equalTo(priceView.snp.centerY)
+        }
+
+        fourDisitPriceField.snp.makeConstraints {
+            $0.top.equalTo(priceView.snp.top).offset(4)
+            $0.centerY.equalTo(priceView.snp.centerY)
+        }
+        
+        nextButtonContainerView.snp.makeConstraints {
+//            $0.top.equalTo(scrollView.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(view.snp.bottom)
+            $0.height.equalTo(97)
+        }
+        scrollView.bringSubviewToFront(nextButtonContainerView)
+        
+        // 다음으로 버튼
+        nextButton.snp.makeConstraints {
+//            $0.width.equalTo(view.snp.width).multipliedBy(0.87)
+//            $0.height.equalTo(52)
+            $0.top.equalTo(nextButtonContainerView.snp.top).offset(12)
+            $0.leading.equalTo(nextButtonContainerView.snp.leading).offset(24)
+            $0.trailing.equalTo(nextButtonContainerView.snp.trailing).offset(-24)
+//            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-33)
+            $0.bottom.equalTo(nextButtonContainerView.snp.bottom).offset(-33)
         }
     }
     
@@ -566,7 +757,8 @@ class OpenNewPageViewController: UIViewController {
             $0.width.equalTo(view.snp.width).multipliedBy(0.87)
             $0.height.equalTo(52)
             $0.centerX.equalTo(view.snp.centerX)
-            $0.bottom.equalTo(view.snp.bottom).offset(-28)
+//            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-33)
+            $0.bottom.equalTo(view.snp.bottom).offset(-33)
         }
     }
     
@@ -716,9 +908,9 @@ class OpenNewPageViewController: UIViewController {
         if moveInDirectlyButton.isSelected {
             priceView.removeFromSuperview()
             // moveInDirectlyButton이 선택된 상태일 때
-            view.addSubview(moveTypeStackView) // moveTypeStackView을 표시
-            view.addSubview(priceView)
-            view.addSubview(priceView2)
+            contentView.addSubview(moveTypeStackView) // moveTypeStackView을 표시
+            contentView.addSubview(priceView)
+            contentView.addSubview(priceView2)
             // moveTypeStackView 제약 조건
             moveTypeStackView.snp.makeConstraints {
                 $0.top.equalTo(priceLabel.snp.bottom).offset(12)
@@ -744,7 +936,7 @@ class OpenNewPageViewController: UIViewController {
             saleButton.isSelected = true
             jeonseButton.isSelected = false
             monthlyRentButton.isSelected = false
-            view.addSubview(priceView)
+            contentView.addSubview(priceView)
             priceView.snp.makeConstraints {
                 $0.top.equalTo(priceLabel.snp.bottom).offset(12)
                 $0.leading.trailing.equalToSuperview()

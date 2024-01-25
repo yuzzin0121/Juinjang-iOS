@@ -104,12 +104,11 @@ class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
     
     lazy var searchAddressButton = UIButton().then {
         $0.setTitle("주소 검색하기", for: .normal)
-        $0.setTitleColor(UIColor(red: 1, green: 1, blue: 1, alpha: 1), for: .normal)
+        $0.setTitleColor(UIColor(named: "textWhite"), for: .normal)
         
         $0.backgroundColor = UIColor(red: 0.358, green: 0.363, blue: 0.371, alpha: 1)
         $0.layer.cornerRadius = 10
         $0.addTarget(self, action: #selector(searchAddressButtonTapped(_:)), for: .touchUpInside)
-        $0.translatesAutoresizingMaskIntoConstraints = false
         
         $0.titleLabel?.font = UIFont(name: "Pretendard-SemiBold", size: 14)
         $0.titleLabel?.numberOfLines = 1
@@ -135,7 +134,6 @@ class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
             let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: $0.frame.height))
             $0.leftView = paddingView
             $0.leftViewMode = .always
-            $0.translatesAutoresizingMaskIntoConstraints = false
     }
     
     lazy var houseNicknameTextField = UITextField().then {
@@ -334,7 +332,8 @@ class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
             $0.height.equalTo(52)
             $0.centerX.equalTo(view.snp.centerX).offset(-116.5)
             $0.leading.equalTo(view.snp.leading).offset(24)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-5)
+//            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-5)
+            $0.bottom.equalTo(view.snp.bottom).offset(-33)
         }
 
         // 다음으로 버튼
@@ -343,7 +342,8 @@ class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
             $0.centerX.equalTo(view.snp.centerX).offset(58.5)
             $0.leading.equalTo(backButton.snp.trailing).offset(8)
             $0.trailing.equalTo(view.snp.trailing).offset(-24)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-5)
+//            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-33)
+            $0.bottom.equalTo(view.snp.bottom).offset(-33)
         }
 
     }
