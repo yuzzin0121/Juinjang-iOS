@@ -128,16 +128,16 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
         calendar.appearance.headerMinimumDissolvedAlpha = 0.0 // 헤더 좌, 우측 흐릿한 글씨 삭제
         calendar.appearance.headerDateFormat = "YYYY.MM" // 헤더 표시 형식
         calendar.appearance.headerTitleColor = .black // 헤더 색
+        calendar.calendarWeekdayView.weekdayLabels.first?.textColor = UIColor(named: "mainOrange")
+
         
         // 날짜 부분
         calendar.backgroundColor = .white // 배경색
-        calendar.calendarWeekdayView.weekdayLabels[0].text = "악"
-        calendar.calendarWeekdayView.weekdayLabels[0].textColor = UIColor(named: "mainOrange")
         calendar.appearance.weekdayTextColor = .black // 요일 글씨 색
         calendar.appearance.selectionColor = .clear // 선택되었을 때 배경색
-        calendar.appearance.titleSelectionColor = .black // 선택되었을 때 텍스트 색
-        calendar.appearance.titleWeekendColor = .black //주말 날짜 색
-        calendar.appearance.titleDefaultColor = .black //기본 날짜 색
+        calendar.appearance.titleSelectionColor = UIColor(named: "mainOrange") // 선택되었을 때 텍스트 색
+        calendar.appearance.titleWeekendColor = .black // 주말 날짜 색
+        calendar.appearance.titleDefaultColor = .black // 기본 날짜 색
             
         // 오늘 날짜
         calendar.appearance.titleTodayColor = .black // Today에 표시되는 특정 글자색
@@ -196,7 +196,7 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
 }
 
 
-extension ExpandedCalendarTableViewCell: FSCalendarDelegate, FSCalendarDataSource {
+extension ExpandedCalendarTableViewCell: FSCalendarDelegate, FSCalendarDataSource, FSCalendarDelegateAppearance {
     // 날짜를 선택했을 때
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         backgroundColor = UIColor(named: "lightOrange")
@@ -256,5 +256,16 @@ extension ExpandedCalendarTableViewCell: FSCalendarDelegate, FSCalendarDataSourc
         print("Selected Date: \(dateFormatter.string(from: date))")
         // 현재 선택된 날짜 업데이트
         selectedDate = date
+    }
+    
+    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
+        let calendar = Calendar.current
+        let dayOfWeek = calendar.component(.weekday, from: date)
+        
+        if dayOfWeek == 1 { // 일요일
+            return .red
+        } else {
+            return nil // 다른 날짜의 경우 기본값으로 설정
+        }
     }
 }

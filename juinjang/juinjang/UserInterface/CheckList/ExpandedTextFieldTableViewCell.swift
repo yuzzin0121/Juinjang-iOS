@@ -111,6 +111,8 @@ extension ExpandedTextFieldTableViewCell: UITextFieldDelegate {
         if let text = textField.text, !text.isEmpty {
             // 텍스트 필드가 비어 있지 않은 경우
             backgroundColor = UIColor(named: "lightOrange")
+            questionImage.image = UIImage(named: "question-selected-image")
+            textField.backgroundColor = .white
             // 입력된 텍스트에 따라 동적으로 너비 조절
             let calculatedWidth = calculateTextFieldWidth(for: text, maxCharacterCount: 20)
             let leftPadding = (342 - calculatedWidth) / 2
@@ -121,11 +123,17 @@ extension ExpandedTextFieldTableViewCell: UITextFieldDelegate {
             textField.contentHorizontalAlignment = .left
         } else {
             // 비어있는 경우 기존 너비로
+            backgroundColor = .white
+            questionImage.image = UIImage(named: "question-image")
+            textField.backgroundColor = UIColor(named: "lightBackgroundOrange")
             updateTextFieldWidthConstraint(for: textField, constant: 342, shouldRemoveLeadingConstraint: false)
         }
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.becomeFirstResponder()
+        backgroundColor = UIColor(named: "lightOrange")
+        textField.backgroundColor = UIColor(named: "lightBackgroundOrange")
         updateTextFieldWidthConstraint(for: textField, constant: 342, shouldRemoveLeadingConstraint: false)
     }
 
