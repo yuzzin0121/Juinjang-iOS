@@ -174,8 +174,9 @@ class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
     lazy var nextButton = UIButton().then {
         $0.setTitle("다음으로", for: .normal)
         $0.setTitleColor(UIColor(red: 1, green: 1, blue: 1, alpha: 1), for: .normal)
+        $0.isEnabled = false
         
-        $0.backgroundColor = UIColor(red: 0.212, green: 0.212, blue: 0.212, alpha: 1)
+        $0.backgroundColor = UIColor(red: 0.79, green: 0.79, blue: 0.79, alpha: 1)
         $0.layer.cornerRadius = 8
         $0.translatesAutoresizingMaskIntoConstraints = false
         
@@ -388,6 +389,25 @@ class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
         villaImageView.isHidden = true
         officetelImageView.isHidden = true
         houseImageView.isHidden = true
+    }
+    
+    func checkNextButtonActivation() {
+        // 필드가 비어있는지 확인
+        let addressTextFieldEmpty = addressTextField.text?.isEmpty ?? true
+        let addressDetailTextFieldFieldEmpty = addressDetailTextField.text?.isEmpty ?? true
+        let houseNicknameTextFieldEmpty = houseNicknameTextField.text?.isEmpty ?? true
+        
+        // 텍스트 필드 입력 여부에 따라 다음으로 버튼 활성화 여부 결정
+        let allTextFieldsFilled = (!addressTextFieldEmpty || !addressDetailTextFieldFieldEmpty) && !houseNicknameTextFieldEmpty
+        
+        // 모든 조건이 충족되었을 때 다음으로 버튼 활성화
+        if allTextFieldsFilled {
+            nextButton.isEnabled = true
+            nextButton.backgroundColor = UIColor(red: 0.212, green: 0.212, blue: 0.212, alpha: 1)
+        } else {
+            nextButton.isEnabled = false
+            nextButton.backgroundColor = UIColor(red: 0.79, green: 0.79, blue: 0.79, alpha: 1)
+        }
     }
     
     @objc func searchAddressButtonTapped(_ sender: UIButton) {
