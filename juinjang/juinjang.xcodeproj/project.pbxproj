@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A129BE92B6251E10022819B /* ChecklistManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A129BE82B6251E10022819B /* ChecklistManager.swift */; };
 		0A14E36F2B569A840008FD28 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A14E36E2B569A840008FD28 /* SignUpViewController.swift */; };
 		0A14E3712B56B31A0008FD28 /* SetNickNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A14E3702B56B31A0008FD28 /* SetNickNameViewController.swift */; };
 		0A14E3732B56B6F70008FD28 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A14E3722B56B6F70008FD28 /* WelcomeViewController.swift */; };
@@ -72,6 +73,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0A129BE82B6251E10022819B /* ChecklistManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistManager.swift; sourceTree = "<group>"; };
 		0A14E36E2B569A840008FD28 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		0A14E3702B56B31A0008FD28 /* SetNickNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetNickNameViewController.swift; sourceTree = "<group>"; };
 		0A14E3722B56B6F70008FD28 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
@@ -149,6 +151,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0A129BE72B6251CF0022819B /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				0A129BE82B6251E10022819B /* ChecklistManager.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		0A14E36D2B569A2E0008FD28 /* SignUp */ = {
 			isa = PBXGroup;
 			children = (
@@ -220,6 +230,7 @@
 		0A3D5D5F2B4D37B000574686 /* CheckList */ = {
 			isa = PBXGroup;
 			children = (
+				0A129BE72B6251CF0022819B /* Model */,
 				0AE388882B5986BC0041A979 /* CategoryItemTableViewCell.swift */,
 				0AF968232B5BDF3300A3CBBB /* CheckListViewController.swift */,
 				0A4EBE332B5EA25300909B7A /* ExpandedCalendarTableViewCell.swift */,
@@ -443,6 +454,7 @@
 				0A14E3732B56B6F70008FD28 /* WelcomeViewController.swift in Sources */,
 				0A2DED1A2B55198D00A96BAA /* STTLoadingViewController.swift in Sources */,
 				0A554CE02B52DB100023BB49 /* RecordViewController.swift in Sources */,
+				0A129BE92B6251E10022819B /* ChecklistManager.swift in Sources */,
 				0A3D5D552B4D337100574686 /* MainViewController.swift in Sources */,
 				61D925082B486706002A16B4 /* RecordingFileItem.swift in Sources */,
 				0A2DED1C2B551CB100A96BAA /* RecordPlaybackViewController.swift in Sources */,

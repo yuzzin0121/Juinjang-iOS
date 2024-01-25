@@ -13,7 +13,14 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
 
     static let identifier = "ExpandedCalendarTableViewCell"
     
-    var selectedDate: Date?
+    var calendarItem: CalendarItem?
+    
+    var selectedDate: Date? {
+        didSet {
+            // 선택된 날짜가 변경될 때마다 호출되는 메서드
+            saveSelectedDate()
+        }
+    }
     
     lazy var questionImage = UIImageView().then {
         $0.contentMode = .scaleAspectFit
@@ -27,6 +34,8 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
     
     // 달력
     lazy var calendar = FSCalendar()
+    
+    var calendarItems: [Item] = []  // 이 부분을 추가
     
     let today = Date()
     private var calendarCurrent: Calendar = Calendar.current
@@ -145,6 +154,7 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
         calendar.layer.cornerRadius = 9.97
     }
     
+
     // 달력 페이지 이동
     @objc func moveToNext(_ sender: UIButton) {
         self.moveCurrentPage(moveUp: true)
@@ -178,6 +188,10 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
         dateComponents.month = moveUp ? 1 : -1
         currentPage = calendarCurrent.date(byAdding: dateComponents, to: currentPage ?? today)
         calendar.setCurrentPage(currentPage!, animated: true)
+    }
+    
+    private func saveSelectedDate() {
+        // 선택된 날짜를 입력값으로 추가
     }
 }
 
@@ -233,10 +247,14 @@ extension ExpandedCalendarTableViewCell: FSCalendarDelegate, FSCalendarDataSourc
             selectedCell.layer.borderColor = UIColor(named: "mainOrange")?.cgColor
         }
         
-        // 현재 선택된 날짜 업데이트
-        selectedDate = date
+        
+        // 선택된 날짜를 해당 CalendarItem에 저장
+        calendarItem?.inputDate = date
+        
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy년 MM월 dd일"
         print("Selected Date: \(dateFormatter.string(from: date))")
+        // 현재 선택된 날짜 업데이트
+        selectedDate = date
     }
 }

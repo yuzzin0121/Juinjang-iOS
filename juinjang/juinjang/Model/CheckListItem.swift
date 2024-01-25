@@ -24,31 +24,53 @@ struct Category {
 
 protocol Item {
     var content: String { get }
+    var isSelected: Bool { get set }
 }
 
 struct CalendarItem: Item {
     var content: String
     var inputDate: Date?
+    var isSelected: Bool
+    
+    init(content: String) {
+        self.content = content
+        self.isSelected = false
+    }
 }
 
 struct ScoreItem: Item {
     var content: String
-    var score: Int?
+    var score: String?
+    var isSelected: Bool
     
     init(content: String) {
         self.content = content
+        self.isSelected = false
     }
 }
 
 struct InputItem: Item {
     var content: String
     var inputAnswer: String?
+    var isSelected: Bool
+    
+    init(content: String) {
+        self.content = content
+        self.isSelected = false
+    }
 }
 
 struct SelectionItem: Item {
     var content: String
     var options: [String]
     var selectAnswer: String?
+    var isSelected: Bool
+    
+    init(content: String, options: [String]) {
+        self.content = content
+        self.options = options
+        self.isSelected = false
+    }
 }
 
 protocol DataUpdateDelegate: AnyObject {

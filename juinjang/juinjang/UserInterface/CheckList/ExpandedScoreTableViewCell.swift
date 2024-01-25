@@ -12,7 +12,7 @@ class ExpandedScoreTableViewCell: UITableViewCell {
 
     static let identifier = "ExpandedScoreTableViewCell"
     
-    var score: Int? // 선택된 버튼의 값을 저장할 변수
+    var score: String? // 선택된 버튼의 값을 저장할 변수
     var indexPath: IndexPath?
     var item: Item?
     
@@ -132,6 +132,12 @@ class ExpandedScoreTableViewCell: UITableViewCell {
             // 셀의 배경색을 변경
             backgroundColor = UIColor(named: "lightOrange")
             questionImage.image = UIImage(named: "question-selected-image")
+            for button in [answerButton1, answerButton2, answerButton3, answerButton4, answerButton5] {
+                if button != sender {
+                    button.isSelected = false
+                    button.setImage(UIImage(named: "checklist-completed-button"), for: .normal)
+                }
+            }
         } else {
             sender.setImage(UIImage(named: "answer\(sender.tag)"), for: .normal)
             backgroundColor = .white
@@ -139,7 +145,7 @@ class ExpandedScoreTableViewCell: UITableViewCell {
         }
         
         // 선택된 버튼의 정보를 저장
-        score = sender.tag
+        score = String(sender.tag)
         
         if let score = score {
             print("Button Pressed: \(score)")

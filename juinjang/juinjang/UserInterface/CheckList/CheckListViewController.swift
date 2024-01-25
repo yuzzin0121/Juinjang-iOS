@@ -34,6 +34,8 @@ class CheckListViewController: UIViewController {
     }
     
     var CategoryItems: [Category] = []
+    
+    var checklistManager: ChecklistManager!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,6 +45,10 @@ class CheckListViewController: UIViewController {
         tableView.dataSource = self
         addSubViews()
         setupLayout()
+        // ChecklistManager 초기화
+        checklistManager = ChecklistManager(categories: categories)
+        // 셀이 처음 로드될 때 UserDefaults에서 저장된 값 불러오기
+        loadSelectedValues()
     }
     
     // 키보드 내리기
@@ -93,6 +99,39 @@ class CheckListViewController: UIViewController {
             $0.leading.trailing.equalTo(contentView)
         }
     }
+    
+    // 사용자가 선택한 날짜를 UserDefaults에 저장하는 함수
+    func saveSelectedDate(categoryIndex: Int, itemIndex: Int, selectedDate: Date?) {
+        let key = "SelectedDate_\(categoryIndex)_\(itemIndex)"
+        UserDefaults.standard.set(selectedDate, forKey: key)
+    }
+
+
+    // UserDefaults에서 저장된 사용자 선택 날짜를 불러오는 함수
+    func loadSelectedDate(categoryIndex: Int, itemIndex: Int) -> Date? {
+        let key = "SelectedDate_\(categoryIndex)_\(itemIndex)"
+        return UserDefaults.standard.object(forKey: key) as? Date
+    }
+
+    
+    func loadSelectedValues() {
+        for section in 0..<categories.count {
+            for row in 1..<categories[section].items.count + 1 {
+                if let storedDate = loadSelectedDate(categoryIndex: section, itemIndex: row - 1) {
+                    // 저장된 값이 있다면 해당 값을 설정
+                    if var originalItem = categories[section].items[row - 1] as? CalendarItem {
+                        var updatedItem = originalItem
+                        updatedItem.inputDate = storedDate
+                        categories[section].items[row - 1] = updatedItem
+                    }
+                }
+
+            }
+        }
+        // tableView 갱신
+        tableView.reloadData()
+    }
+
     
     var categories: [Category] = [
         Category(image: UIImage(named: "deadline-item")!, name: "기한", items: [
@@ -162,10 +201,12 @@ class CheckListViewController: UIViewController {
             ScoreItem(content: "소방대피시설이 잘 갖춰져 있나요?")
         ]),
     ]
+    
+    var selectedDates: [Date?] = Array(repeating: nil, count: 2)
 }
 
-
-extension CheckListViewController : UITableViewDelegate, UITableViewDataSource {
+extension CheckListViewController : UITableViewDelegate, UITableViewDataSource  {
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return categories.count
     }
@@ -196,6 +237,9 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource {
                 let cell: ExpandedCalendarTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedCalendarTableViewCell.identifier, for: indexPath) as! ExpandedCalendarTableViewCell
                 cell.contentLabel.text = calendarItem.content
                 cell.selectedDate = calendarItem.inputDate
+                // 선택 상태에 따라 배경색 설정
+                cell.backgroundColor = calendarItem.isSelected ? UIColor(named: "lightOrange") : UIColor.white
+                cell.selectedDate = selectedDates[indexPath.section]
                 
                 return cell
             } else if let scoreItem = category.items[indexPath.row - 1] as? ScoreItem {
@@ -203,13 +247,17 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource {
                 let cell: ExpandedScoreTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedScoreTableViewCell.identifier, for: indexPath) as! ExpandedScoreTableViewCell
                 cell.contentLabel.text = scoreItem.content
                 cell.score = scoreItem.score
-                
+                // 선택 상태에 따라 배경색 설정
+                cell.backgroundColor = scoreItem.isSelected ? UIColor(named: "lightOrange") : UIColor.clear
+                            
                 return cell
             } else if let inputItem = category.items[indexPath.row - 1] as? InputItem {
                 // InputItem인 경우
                 let cell: ExpandedTextFieldTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedTextFieldTableViewCell.identifier, for: indexPath) as! ExpandedTextFieldTableViewCell
                 cell.contentLabel.text = inputItem.content
                 cell.inputAnswer = inputItem.inputAnswer
+                // 선택 상태에 따라 배경색 설정
+                cell.backgroundColor = inputItem.isSelected ? UIColor(named: "lightOrange") : UIColor.clear
                 
                 return cell
             } else if let selectionItem = category.items[indexPath.row - 1] as? SelectionItem {
@@ -218,6 +266,8 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource {
                 cell.contentLabel.text = selectionItem.content
                 cell.options = selectionItem.options
                 cell.selectedOption = selectionItem.selectAnswer
+                // 선택 상태에 따라 배경색 설정
+                cell.backgroundColor = selectionItem.isSelected ? UIColor(named: "lightOrange") : UIColor.clear
                 
                 return cell
             } 
@@ -226,6 +276,7 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
         if let cell = tableView.cellForRow(at: indexPath) as? CategoryItemTableViewCell {
             // 카테고리 셀을 눌렀을 때
             if indexPath.row == 0 {
@@ -242,44 +293,32 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource {
         } else if let cell = tableView.cellForRow(at: indexPath) as? ExpandedCalendarTableViewCell {
             // 확장된 캘린더 셀을 눌렀을 때
             if let selectedDate = cell.selectedDate {
-                // 선택된 날짜를 출력
-                print("Selected Date: \(selectedDate)")
                 cell.backgroundColor = UIColor(named: "lightOrange")
             } else {
-                // 선택한 날짜가 없는 경우
-                print("No answer selected")
             }
         } else if let cell = tableView.cellForRow(at: indexPath) as? ExpandedScoreTableViewCell {
             // 확장 점수 셀을 눌렀을 때
             if let selectedAnswer = cell.score {
-                // 버튼의 값을 출력
-                print("Selected Answer: \(selectedAnswer)")
                 cell.backgroundColor = UIColor(named: "lightOrange")
             } else {
                 // 버튼의 값이 없는 경우
-                print("No answer selected")
             }
         } else if let cell = tableView.cellForRow(at: indexPath) as? ExpandedTextFieldTableViewCell {
             // 확장 입력 셀을 눌렀을 때
             if let inputAnswer = cell.inputAnswer {
-                // 입력한 답변을 출력
-                print("Input Answer: \(inputAnswer)")
                 cell.backgroundColor = UIColor(named: "lightOrange")
             } else {
                 // 입력한 답변이 없는 경우
-                print("No input answered")
             }
         } else if let cell = tableView.cellForRow(at: indexPath) as? ExpandedDropdownTableViewCell {
             // 확장 드롭다운 셀을 눌렀을 때
             if let selectedOption = cell.selectedOption {
-                // 선택한 옵션을 출력
-                print("Selected Option: \(selectedOption)")
                 cell.backgroundColor = UIColor(named: "lightOrange")
             } else {
                 // 선택한 옵션이 없는 경우
-                print("No option selected")
             }
         }
+
     }
 
 
