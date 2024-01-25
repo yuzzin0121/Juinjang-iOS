@@ -49,7 +49,25 @@ class ImjangListViewController: UIViewController {
     lazy var filterArray = Filter.allCases
     var isEmpty = false
     
-    let imjangTableView = UITableView()
+    let imjangTableView: UITableView = {
+        let tableView = UITableView()
+        tableView.estimatedRowHeight = UITableView.automaticDimension
+        tableView.separatorStyle = .none
+        
+        tableView.backgroundColor = ColorStyle.textWhite
+//        tableView.contentInset = .init(top: <#T##CGFloat#>, left: <#T##CGFloat#>, bottom: <#T##CGFloat#>, right: <#T##CGFloat#>)
+        tableView.separatorInset = .init(top: 0, left: 0, bottom: 12, right: 0)
+        tableView.register(ScrapCollectionTableViewCell.self, forCellReuseIdentifier: ScrapCollectionTableViewCell.identifier)
+        tableView.register(ImjangNoteTableViewCell.self, forCellReuseIdentifier: ImjangNoteTableViewCell.identifier)
+        return tableView
+    }()
+    
+    let tableHeaderView = UIView().then {
+        $0.backgroundColor = .white
+    }
+    
+    var scrapImjangList: [ImjangNote] = ImjangList.list
+    let imjangList: [ImjangNote] = ImjangList.list
     
     // MARK: - viewDidLoad()
     override func viewDidLoad() {
@@ -58,12 +76,14 @@ class ImjangListViewController: UIViewController {
         designNavigationBar()
         addSubviews()
         designView()
+        configureTableView()
         setEmptyConstraints()
         setConstraints()
     }
     
     func configureTableView() {
-        
+        imjangTableView.delegate = self
+        imjangTableView.dataSource = self
     }
     
     // 네비게이션 바 디자인
@@ -93,8 +113,7 @@ class ImjangListViewController: UIViewController {
     }
     
     func addSubviews() {
-        view.addSubview(scrollView)
-        scrollView.addSubview(contentView)
+        view.addSubview(imjangTableView)
         view.addSubview(emptyBackgroundView)
         [emptyLogoImageView, emptyMessageLabel, newPageButton].forEach {
             emptyBackgroundView.addSubview($0)
@@ -143,17 +162,7 @@ class ImjangListViewController: UIViewController {
     }
     
     func setConstraints() {
-        scrollView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.leading.trailing.bottom.equalToSuperview()
-        }
-        
-        contentView.snp.makeConstraints {
-            $0.verticalEdges.equalToSuperview()
-            $0.horizontalEdges.equalToSuperview()
-            $0.width.equalToSuperview()
-        }
-        
+ 
         clippingBackgroundView.snp.makeConstraints {
             $0.horizontalEdges.equalToSuperview()
             $0.top.equalTo(contentView)
@@ -162,6 +171,11 @@ class ImjangListViewController: UIViewController {
     }
     
     func setEmptyConstraints() {
+        imjangTableView.snp.makeConstraints {
+            $0.verticalEdges.equalTo(view.safeAreaLayoutGuide)
+            $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
+        }
+        
         emptyBackgroundView.snp.makeConstraints {
             $0.verticalEdges.equalToSuperview()
             $0.horizontalEdges.equalToSuperview()
@@ -223,4 +237,50 @@ class ImjangListViewController: UIViewController {
         
     }
     
+}
+
+extension ImjangListViewController: UITableViewDelegate, UITableViewDataSource {
+//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        <#code#>
+//    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if section == 0 {
+            return 1
+        } else {
+            return imjangList.count
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        switch indexPath.section {
+        case 0:
+            let cell = tableView.dequeueReusableCell(withIdentifier: ScrapCollectionTableViewCell.identifier, for: indexPath) as! ScrapCollectionTableViewCell
+            return cell
+        case 1:
+            let cell = tableView.dequeueReusableCell(withIdentifier: ImjangNoteTableViewCell.identifier, for: indexPath) as! ImjangNoteTableViewCell
+            cell.selectionStyle = .none
+            cell.configureCell(imjangNote: imjangList[indexPath.row])
+            
+            return cell
+        default:
+            print("오류")
+        }
+        return UITableViewCell()
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section == 0 {
+            return 252
+        } else {
+            return 116
+        }
+    }
+}
+
+#Preview {
+    ImjangListViewController()
 }

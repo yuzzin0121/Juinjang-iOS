@@ -11,6 +11,9 @@ extension UIImageView {
     func design(image: UIImage?=nil, contentMode: UIView.ContentMode = .scaleAspectFill, cornerRadius: CGFloat?=nil) {
         self.image = image
         self.contentMode = contentMode
-        
+        if let cornerRadius {
+            self.clipsToBounds = true
+            self.layer.cornerRadius = cornerRadius
+        }
     }
 }

@@ -18,6 +18,8 @@ enum ImageStyle {
     static let on = UIImage(named: "on")!
     static let search = UIImage(named: "search")!
     static let star = UIImage(named: "star")!
+    static let starEmpty = UIImage(named: "starEmpty")!
+    static let emptyImage = UIImage(named: "emptyImage")!
     
     static let addOrange = UIImage(named: "addOrange")!
     static let arrowLeft = UIImage(named: "arrow-left")!

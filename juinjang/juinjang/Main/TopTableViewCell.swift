@@ -14,7 +14,6 @@ public protocol TypographyExtensions: UILabel {
 
 class TopTableViewCell: UITableViewCell {
     
-    static let identifier = "TopTableViewCell"
     //MARK: - 변수 설정
     //환영멘트
     var greetLabel = UILabel().then {

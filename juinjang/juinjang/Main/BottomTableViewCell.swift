@@ -10,7 +10,6 @@ import SnapKit
 import Then
 
 class BottomTableViewCell: UITableViewCell{
-    static let identifier = "BottomTableViewCell"
     static let cellHeight = 250.0
     
     let collectionView: UICollectionView = {

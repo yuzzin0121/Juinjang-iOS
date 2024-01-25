@@ -10,8 +10,6 @@ import SnapKit
 import Then
 
 class BottomCollectionViewCell: UICollectionViewCell {
-
-    static let identifier = "BottomCollectionViewCell"
     
     var recentImjangButton = UIButton().then {
         $0.layer.cornerRadius = 10

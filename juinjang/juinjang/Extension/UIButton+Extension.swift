@@ -15,6 +15,7 @@ extension UIButton {
         if let font {
             self.titleLabel?.font = font
         }
+        self.contentMode = .scaleAspectFit
         self.setImage(image, for: .normal)
         self.setTitleColor(titleColor, for: .normal)
         self.backgroundColor = backgroundColor

@@ -53,6 +53,10 @@
 		61864BED2B600DEC0073C175 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61864BEC2B600DEC0073C175 /* Filter.swift */; };
 		61864BEF2B600E920073C175 /* ImjangNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61864BEE2B600E920073C175 /* ImjangNote.swift */; };
 		61864BF12B6026C60073C175 /* ImjangSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61864BF02B6026C60073C175 /* ImjangSearchViewController.swift */; };
+		61864BFD2B6211390073C175 /* ScrapCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61864BFC2B6211390073C175 /* ScrapCollectionViewCell.swift */; };
+		61864BFF2B6211560073C175 /* ImjangNoteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61864BFE2B6211560073C175 /* ImjangNoteTableViewCell.swift */; };
+		61864C012B6214350073C175 /* ScrapCollectionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61864C002B6214350073C175 /* ScrapCollectionTableViewCell.swift */; };
+		61864C042B6215620073C175 /* ReuseableProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61864C032B6215620073C175 /* ReuseableProtocol.swift */; };
 		61A7B9262B4C4EC300795B49 /* Pretendard-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 61A7B91D2B4C4EC200795B49 /* Pretendard-Regular.otf */; };
 		61A7B9272B4C4EC300795B49 /* Pretendard-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = 61A7B91E2B4C4EC200795B49 /* Pretendard-ExtraLight.otf */; };
 		61A7B9282B4C4EC300795B49 /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 61A7B91F2B4C4EC200795B49 /* Pretendard-SemiBold.otf */; };
@@ -115,6 +119,10 @@
 		61864BEC2B600DEC0073C175 /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
 		61864BEE2B600E920073C175 /* ImjangNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImjangNote.swift; sourceTree = "<group>"; };
 		61864BF02B6026C60073C175 /* ImjangSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImjangSearchViewController.swift; sourceTree = "<group>"; };
+		61864BFC2B6211390073C175 /* ScrapCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrapCollectionViewCell.swift; sourceTree = "<group>"; };
+		61864BFE2B6211560073C175 /* ImjangNoteTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImjangNoteTableViewCell.swift; sourceTree = "<group>"; };
+		61864C002B6214350073C175 /* ScrapCollectionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrapCollectionTableViewCell.swift; sourceTree = "<group>"; };
+		61864C032B6215620073C175 /* ReuseableProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReuseableProtocol.swift; sourceTree = "<group>"; };
 		61A7B91D2B4C4EC200795B49 /* Pretendard-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.otf"; sourceTree = "<group>"; };
 		61A7B91E2B4C4EC200795B49 /* Pretendard-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-ExtraLight.otf"; sourceTree = "<group>"; };
 		61A7B91F2B4C4EC200795B49 /* Pretendard-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-SemiBold.otf"; sourceTree = "<group>"; };
@@ -255,6 +263,7 @@
 		0A9E0A452B3DCAB90094595A /* juinjang */ = {
 			isa = PBXGroup;
 			children = (
+				61864C022B6215450073C175 /* Protocol */,
 				0A3D5D5D2B4D376C00574686 /* UserInterface */,
 				616408EA2B407A2100EC3B5E /* Extension */,
 				61864BE32B5FFB4B0073C175 /* Constants */,
@@ -325,9 +334,28 @@
 			path = Constants;
 			sourceTree = "<group>";
 		};
+		61864BFB2B6211070073C175 /* ImjangList */ = {
+			isa = PBXGroup;
+			children = (
+				61864BFC2B6211390073C175 /* ScrapCollectionViewCell.swift */,
+				61864BFE2B6211560073C175 /* ImjangNoteTableViewCell.swift */,
+				61864C002B6214350073C175 /* ScrapCollectionTableViewCell.swift */,
+			);
+			path = ImjangList;
+			sourceTree = "<group>";
+		};
+		61864C022B6215450073C175 /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				61864C032B6215620073C175 /* ReuseableProtocol.swift */,
+			);
+			path = Protocol;
+			sourceTree = "<group>";
+		};
 		61D925032B4864E8002A16B4 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
+				61864BFB2B6211070073C175 /* ImjangList */,
 				61D925042B486508002A16B4 /* RecordingFileViewCell.swift */,
 			);
 			path = Cell;
@@ -456,15 +484,19 @@
 				0A554CE02B52DB100023BB49 /* RecordViewController.swift in Sources */,
 				0A3D5D552B4D337100574686 /* MainViewController.swift in Sources */,
 				61D925082B486706002A16B4 /* RecordingFileItem.swift in Sources */,
+				61864BFF2B6211560073C175 /* ImjangNoteTableViewCell.swift in Sources */,
 				0A2DED1C2B551CB100A96BAA /* RecordPlaybackViewController.swift in Sources */,
 				0A9E0A472B3DCAB90094595A /* AppDelegate.swift in Sources */,
 				0A2DED1E2B551CEE00A96BAA /* RecordTopViewController.swift in Sources */,
+				61864C012B6214350073C175 /* ScrapCollectionTableViewCell.swift in Sources */,
 				0AB34CC32B4F11B000150A15 /* OpenNewPageViewController.swift in Sources */,
 				61864BE22B5FFA890073C175 /* UIImageView+Extension.swift in Sources */,
 				611F145E2B471ECA00B983F1 /* CALayer+Extension.swift in Sources */,
 				61864BEF2B600E920073C175 /* ImjangNote.swift in Sources */,
 				0A73E60D2B5855CD00EF1C89 /* UserInfo.swift in Sources */,
 				0A3D5D582B4D337100574686 /* BottomTableViewCell.swift in Sources */,
+				61864C042B6215620073C175 /* ReuseableProtocol.swift in Sources */,
+				61864BFD2B6211390073C175 /* ScrapCollectionViewCell.swift in Sources */,
 				0A3D5D562B4D337100574686 /* SideBarLauncher.swift in Sources */,
 				61D925052B486508002A16B4 /* RecordingFileViewCell.swift in Sources */,
 				611F14552B47070B00B983F1 /* RecordingSegmentedViewController.swift in Sources */,
@@ -629,7 +661,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -661,7 +693,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
