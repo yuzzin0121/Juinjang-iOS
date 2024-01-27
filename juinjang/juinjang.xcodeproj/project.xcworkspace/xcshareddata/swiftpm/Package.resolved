@@ -7,6 +7,9 @@
       "state" : {
         "revision" : "3dc6a42c7727c49bf26508e29b0a0b35f9c7e1ad",
         "version" : "5.8.1"
+      }
+    },
+    {
       "identity" : "fscalendar",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/WenchaoD/FSCalendar",
@@ -54,7 +57,7 @@
     {
       "identity" : "tabman",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/uias/Tabman.git",
+      "location" : "https://github.com/uias/Tabman",
       "state" : {
         "revision" : "e32c0d821b03566ed966753f941113883f268da0",
         "version" : "3.0.2"
