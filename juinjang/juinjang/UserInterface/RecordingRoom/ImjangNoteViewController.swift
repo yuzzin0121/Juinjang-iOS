@@ -93,6 +93,13 @@ class ImjangNoteViewController: UIViewController {
         $0.setImage(UIImage(named: "floating"), for: .normal)
     }
     
+    let editButton = UIButton().then {
+        $0.setImage(UIImage(named: "edit-button"), for: .normal)
+        $0.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.13).cgColor
+        $0.layer.shadowOffset = CGSize(width: 0, height: 4)
+        $0.layer.shadowOpacity = 1
+    }
+    
     let recordingSegmentedVC = RecordingSegmentedViewController()
     
     var roomName: String = "판교푸르지오월드마크"
@@ -114,6 +121,7 @@ class ImjangNoteViewController: UIViewController {
         upButton.addTarget(self, action: #selector(upToTop), for: .touchUpInside)
         
         NotificationCenter.default.addObserver(self, selector: #selector(didStoppedChildScroll), name: NSNotification.Name("didStoppedChildScroll"), object: nil)
+        recordingSegmentedVC.imjangNoteViewController = self
     }
     
     @objc func didStoppedChildScroll() {
@@ -154,9 +162,10 @@ class ImjangNoteViewController: UIViewController {
     
     // MARK: - addSubView()
     func addSubView() {
-        [scrollView, upButton].forEach {
+        [scrollView, upButton, editButton].forEach {
             view.addSubview($0)
         }
+
         scrollView.addSubview(contentView)
         
         [roomStackView, roomPriceLabel, infoStackView, addressBackgroundView, containerView, noImageBackgroundView, stackView].forEach {
@@ -397,6 +406,13 @@ class ImjangNoteViewController: UIViewController {
         }
         
         view.bringSubviewToFront(upButton)
+        
+        editButton.snp.makeConstraints {
+            $0.bottom.equalTo(view.snp.bottom).offset(-28)
+            $0.trailing.equalTo(view.snp.trailing).offset(-24)
+        }
+        
+        view.bringSubviewToFront(editButton)
         
         // 스크롤뷰
         scrollView.snp.makeConstraints {

@@ -19,6 +19,8 @@ class RecordingSegmentedViewController: TabmanViewController {
     
     private var viewControllers: Array<UIViewController> = []
     let tabTitles = ["체크리스트", "기록룸"]
+    
+    var imjangNoteViewController: ImjangNoteViewController?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +31,6 @@ class RecordingSegmentedViewController: TabmanViewController {
         addViewControllers()
         setDelegate()
         createBar()
-        
     }
     
     func addBottomBorder(with color: UIColor?, andWidth borderWidth: CGFloat) {
