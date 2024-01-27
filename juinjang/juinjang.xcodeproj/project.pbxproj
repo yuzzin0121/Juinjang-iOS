@@ -18,6 +18,7 @@
 		0A2DED202B551CF900A96BAA /* RecordBottomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2DED1F2B551CF900A96BAA /* RecordBottomViewController.swift */; };
 		0A3D5D4C2B4D333900574686 /* TransactionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3D5D4A2B4D333900574686 /* TransactionModel.swift */; };
 		0A3D5D632B4D707300574686 /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3D5D622B4D707300574686 /* BottomSheetViewController.swift */; };
+		0A3EBEBE2B654E71004D8DCE /* OpenNewPagePopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3EBEBD2B654E71004D8DCE /* OpenNewPagePopupViewController.swift */; };
 		0A4EBE272B5E9E5F00909B7A /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 0A4EBE262B5E9E5F00909B7A /* Then */; };
 		0A4EBE2A2B5E9E6A00909B7A /* Tabman in Frameworks */ = {isa = PBXBuildFile; productRef = 0A4EBE292B5E9E6A00909B7A /* Tabman */; };
 		0A4EBE2D2B5E9E8B00909B7A /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0A4EBE2C2B5E9E8B00909B7A /* SnapKit */; };
@@ -30,6 +31,8 @@
 		0A554CE02B52DB100023BB49 /* RecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A554CDF2B52DB100023BB49 /* RecordViewController.swift */; };
 		0A554CE42B5420F20023BB49 /* WarningMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A554CE32B5420F20023BB49 /* WarningMessageViewController.swift */; };
 		0A73E60D2B5855CD00EF1C89 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A73E60C2B5855CD00EF1C89 /* UserInfo.swift */; };
+		0A7AC0EF2B640CA80032C9DF /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 0A7AC0EE2B640CA80032C9DF /* Alamofire */; };
+		0A7AC0F12B6412760032C9DF /* KakaoZipCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7AC0F02B6412760032C9DF /* KakaoZipCodeViewController.swift */; };
 		0A7FB9112B5F023B0060EBC8 /* QnAModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7FB9102B5F023B0060EBC8 /* QnAModel.swift */; };
 		0A7FB91F2B5F025C0060EBC8 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7FB9142B5F025C0060EBC8 /* SettingViewController.swift */; };
 		0A7FB9202B5F025C0060EBC8 /* UseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7FB9152B5F025C0060EBC8 /* UseViewController.swift */; };
@@ -50,7 +53,6 @@
 		0A9E0A532B3DCAB90094595A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0A9E0A512B3DCAB90094595A /* LaunchScreen.storyboard */; };
 		0A9E0AA92B3DD4D20094595A /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 0A9E0AA82B3DD4D20094595A /* .gitignore */; };
 		0AB34CC12B4F11B000150A15 /* OpenNewPage2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB34CBE2B4F11B000150A15 /* OpenNewPage2ViewController.swift */; };
-		0AB34CC22B4F11B000150A15 /* CustomPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB34CBF2B4F11B000150A15 /* CustomPopupViewController.swift */; };
 		0AB34CC32B4F11B000150A15 /* OpenNewPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB34CC02B4F11B000150A15 /* OpenNewPageViewController.swift */; };
 		0AE388892B5986BC0041A979 /* CategoryItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE388882B5986BC0041A979 /* CategoryItemTableViewCell.swift */; };
 		0AE3888B2B5992870041A979 /* CheckListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE3888A2B5992870041A979 /* CheckListItem.swift */; };
@@ -91,6 +93,7 @@
 		0A2DED1F2B551CF900A96BAA /* RecordBottomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordBottomViewController.swift; sourceTree = "<group>"; };
 		0A3D5D4A2B4D333900574686 /* TransactionModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionModel.swift; sourceTree = "<group>"; };
 		0A3D5D622B4D707300574686 /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
+		0A3EBEBD2B654E71004D8DCE /* OpenNewPagePopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenNewPagePopupViewController.swift; sourceTree = "<group>"; };
 		0A4EBE332B5EA25300909B7A /* ExpandedCalendarTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedCalendarTableViewCell.swift; sourceTree = "<group>"; };
 		0A4EBE352B5EA27B00909B7A /* ExpandedScoreTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedScoreTableViewCell.swift; sourceTree = "<group>"; };
 		0A4EBE372B5EDD6F00909B7A /* ExpandedTextFieldTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedTextFieldTableViewCell.swift; sourceTree = "<group>"; };
@@ -98,6 +101,7 @@
 		0A554CDF2B52DB100023BB49 /* RecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordViewController.swift; sourceTree = "<group>"; };
 		0A554CE32B5420F20023BB49 /* WarningMessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarningMessageViewController.swift; sourceTree = "<group>"; };
 		0A73E60C2B5855CD00EF1C89 /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
+		0A7AC0F02B6412760032C9DF /* KakaoZipCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoZipCodeViewController.swift; sourceTree = "<group>"; };
 		0A7FB9102B5F023B0060EBC8 /* QnAModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = QnAModel.swift; path = "../../../../../../Downloads/iOS-feature-settings/juinjang/juinjang/Model/QnAModel.swift"; sourceTree = "<group>"; };
 		0A7FB9142B5F025C0060EBC8 /* SettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		0A7FB9152B5F025C0060EBC8 /* UseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UseViewController.swift; sourceTree = "<group>"; };
@@ -120,7 +124,6 @@
 		0A9E0A542B3DCAB90094595A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0A9E0AA82B3DD4D20094595A /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; name = .gitignore; path = ../.gitignore; sourceTree = "<group>"; };
 		0AB34CBE2B4F11B000150A15 /* OpenNewPage2ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenNewPage2ViewController.swift; sourceTree = "<group>"; };
-		0AB34CBF2B4F11B000150A15 /* CustomPopupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomPopupViewController.swift; sourceTree = "<group>"; };
 		0AB34CC02B4F11B000150A15 /* OpenNewPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenNewPageViewController.swift; sourceTree = "<group>"; };
 		0AE388882B5986BC0041A979 /* CategoryItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryItemTableViewCell.swift; sourceTree = "<group>"; };
 		0AE3888A2B5992870041A979 /* CheckListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckListItem.swift; sourceTree = "<group>"; };
@@ -152,6 +155,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A7AC0EF2B640CA80032C9DF /* Alamofire in Frameworks */,
 				0A4EBE2F2B5E9E8B00909B7A /* SnapKit-Dynamic in Frameworks */,
 				0A4EBE322B5EA21100909B7A /* FSCalendar in Frameworks */,
 				61D9250F2B4965D0002A16B4 /* IQKeyboardManagerSwift in Frameworks */,
@@ -195,9 +199,10 @@
 		0A3D5D5C2B4D370A00574686 /* OpenNewpage */ = {
 			isa = PBXGroup;
 			children = (
-				0AB34CBF2B4F11B000150A15 /* CustomPopupViewController.swift */,
 				0AB34CC02B4F11B000150A15 /* OpenNewPageViewController.swift */,
 				0AB34CBE2B4F11B000150A15 /* OpenNewPage2ViewController.swift */,
+				0A7AC0F02B6412760032C9DF /* KakaoZipCodeViewController.swift */,
+				0A3EBEBD2B654E71004D8DCE /* OpenNewPagePopupViewController.swift */,
 			);
 			path = OpenNewpage;
 			sourceTree = "<group>";
@@ -408,6 +413,7 @@
 			name = juinjang;
 			packageProductDependencies = (
 				61D9250E2B4965D0002A16B4 /* IQKeyboardManagerSwift */,
+				0A7AC0EE2B640CA80032C9DF /* Alamofire */,
 				0A4EBE262B5E9E5F00909B7A /* Then */,
 				0A4EBE292B5E9E6A00909B7A /* Tabman */,
 				0A4EBE2C2B5E9E8B00909B7A /* SnapKit */,
@@ -445,6 +451,7 @@
 			mainGroup = 0A9E0A3A2B3DCAB90094595A;
 			packageReferences = (
 				61D9250D2B4965D0002A16B4 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
+				0A7AC0ED2B640CA80032C9DF /* XCRemoteSwiftPackageReference "Alamofire" */,
 				0A4EBE252B5E9E5F00909B7A /* XCRemoteSwiftPackageReference "Then" */,
 				0A4EBE282B5E9E6A00909B7A /* XCRemoteSwiftPackageReference "Tabman" */,
 				0A4EBE2B2B5E9E8B00909B7A /* XCRemoteSwiftPackageReference "SnapKit" */,
@@ -491,6 +498,7 @@
 				0A14E36F2B569A840008FD28 /* SignUpViewController.swift in Sources */,
 				0A7FB9212B5F025C0060EBC8 /* AccountDeleteViewController.swift in Sources */,
 				616408E12B405B7200EC3B5E /* ImjangNoteViewController.swift in Sources */,
+				0A7AC0F12B6412760032C9DF /* KakaoZipCodeViewController.swift in Sources */,
 				0A4EBE382B5EDD6F00909B7A /* ExpandedTextFieldTableViewCell.swift in Sources */,
 				61D9250A2B49506D002A16B4 /* RecordingFilesViewController.swift in Sources */,
 				0A554CE42B5420F20023BB49 /* WarningMessageViewController.swift in Sources */,
@@ -517,9 +525,9 @@
 				611F14552B47070B00B983F1 /* RecordingSegmentedViewController.swift in Sources */,
 				0A4EBE3B2B5EF2BC00909B7A /* ExpandedDropdownTableViewCell.swift in Sources */,
 				0A7FB9392B5F08340060EBC8 /* MainViewController.swift in Sources */,
+				0A3EBEBE2B654E71004D8DCE /* OpenNewPagePopupViewController.swift in Sources */,
 				0A7FB9372B5F02E00060EBC8 /* TopTableViewCell.swift in Sources */,
 				0A7FB9112B5F023B0060EBC8 /* QnAModel.swift in Sources */,
-				0AB34CC22B4F11B000150A15 /* CustomPopupViewController.swift in Sources */,
 				0AB34CC12B4F11B000150A15 /* OpenNewPage2ViewController.swift in Sources */,
 				0A7FB9232B5F025C0060EBC8 /* QnAViewController.swift in Sources */,
 				616409022B407FB300EC3B5E /* UIFont+Pretendard.swift in Sources */,
@@ -759,6 +767,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		0A7AC0ED2B640CA80032C9DF /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.8.1;
+			};
+		};
+		611F14562B47074000B983F1 /* XCRemoteSwiftPackageReference "Tabman" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/uias/Tabman.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.2;
+			};
+		};
 		0A4EBE252B5E9E5F00909B7A /* XCRemoteSwiftPackageReference "Then" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/devxoul/Then";
@@ -810,6 +834,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		0A7AC0EE2B640CA80032C9DF /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0A7AC0ED2B640CA80032C9DF /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
 		0A4EBE262B5E9E5F00909B7A /* Then */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 0A4EBE252B5E9E5F00909B7A /* XCRemoteSwiftPackageReference "Then" */;

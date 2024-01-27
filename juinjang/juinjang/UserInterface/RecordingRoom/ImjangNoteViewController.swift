@@ -129,11 +129,17 @@ class ImjangNoteViewController: UIViewController {
         let backButtonItem = UIBarButtonItem(image: backImage, style: .plain, target: self, action: nil)
         
         let editImage = UIImage(named: "edit")
-        let editButtonItem = UIBarButtonItem(image: editImage, style: .plain, target: self, action: nil)
+        let editButtonItem = UIBarButtonItem(image: editImage, style: .plain, target: self, action: #selector(nextButtonTapped(_:)))
 
         // 네비게이션 아이템에 백 버튼 아이템 설정
         self.navigationItem.leftBarButtonItem = backButtonItem
         self.navigationItem.rightBarButtonItem = editButtonItem
+    }
+    
+    @objc func nextButtonTapped(_ sender: UIButton) {
+        let newPageViewController = OpenNewPageViewController()
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        navigationController?.pushViewController(newPageViewController, animated: true)
     }
     
     // MARK: - addSubView()
