@@ -46,12 +46,6 @@ class RecordViewController: UIViewController {
         $0.font = UIFont(name: "Pretendard-Bold", size: 24)
     }
     
-    lazy var remainTimeLabel = UILabel().then {
-        $0.text = "-00:03.21"
-        $0.textColor = UIColor(red: 1, green: 0.66, blue: 0.47, alpha: 1)
-        $0.font = UIFont(name: "Pretendard-Medium", size: 16)
-    }
-    
     // -TODO: 음성과 직접 연결 필요
     lazy var recordWaveForm = UIImageView().then {
         $0.image = UIImage(named: "record-bar")
@@ -97,7 +91,6 @@ class RecordViewController: UIViewController {
         [cancelButton,
          recordLabel,
          timeLabel,
-         remainTimeLabel,
          recordWaveForm,
          limitLabel,
          trashButton,
@@ -134,16 +127,10 @@ class RecordViewController: UIViewController {
             $0.top.equalTo(recordLabel.snp.bottom).offset(34)
         }
         
-        // 남은 시간 Label
-        remainTimeLabel.snp.makeConstraints {
-            $0.centerX.equalTo(bottomSheetView.snp.centerX)
-            $0.top.equalTo(timeLabel.snp.bottom).offset(1)
-        }
-        
         // 파형 ImageView
         recordWaveForm.snp.makeConstraints {
             $0.centerX.equalTo(bottomSheetView.snp.centerX)
-            $0.top.equalTo(remainTimeLabel.snp.bottom).offset(20)
+            $0.top.equalTo(timeLabel.snp.bottom).offset(25)
         }
         
         // 제한 문구 Label

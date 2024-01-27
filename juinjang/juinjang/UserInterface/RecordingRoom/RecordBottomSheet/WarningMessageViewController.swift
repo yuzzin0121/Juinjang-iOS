@@ -49,6 +49,7 @@ class WarningMessageViewController: UIViewController {
         $0.contentMode = .scaleAspectFill
     }
     
+    // -TODO: Session 처리 필요
     lazy var checkButton = UIButton().then {
         $0.setTitle("오늘 하루 보지 않기", for: .normal)
         $0.setTitleColor(UIColor(named: "normalText"), for: .normal)
