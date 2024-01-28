@@ -10,14 +10,6 @@ import SnapKit
 import Then
 
 class ImjangListViewController: UIViewController {
-    // 스크롤뷰
-    let scrollView = UIScrollView().then {
-        $0.backgroundColor = .white
-        $0.showsVerticalScrollIndicator = false
-    }
-    
-    // 스크롤할 컨텐트뷰
-    let contentView = UIView()
     
     // 임장 노트가 존재하지 않을 때의 뷰
     let emptyBackgroundView = UIView()
@@ -25,49 +17,47 @@ class ImjangListViewController: UIViewController {
     let emptyMessageLabel = UILabel()
     let newPageButton = UIButton()
     
-    let clippingBackgroundView = UIView() 
-    lazy var messageStackView = UIStackView()
-    lazy var clipImageView = UIImageView()
-    lazy var clipEmptyMessageLabel = UILabel()
-    
-    lazy var tableTopView = UIView()
-    lazy var selectBtn: UIButton = {
+    lazy var filterselectBtn: UIButton = {
         var configuration = UIButton.Configuration.filled()
         
         var container = AttributeContainer()
         container.font = .pretendard(size: 14, weight: .semiBold)
-        configuration.attributedTitle = AttributedString(filterArray[0].title, attributes: container)
-        configuration.background.cornerRadius = 10
-        configuration.baseBackgroundColor = ColorStyle.textWhite
+        configuration.attributedTitle = AttributedString(filterList[0].title, attributes: container)
+        configuration.imagePadding = 2
         let button = UIButton(configuration: configuration, primaryAction: nil)
         button.setTitleColor(ColorStyle.darkGray, for: .normal)
+        button.setImage(ImageStyle.arrowDown, for: .normal)
+        button.semanticContentAttribute = .forceRightToLeft
         button.contentHorizontalAlignment = .leading
-        button.tintColor = ColorStyle.darkGray
+        button.tintColor = .white
         return button
     }()
     
-    lazy var filterArray = Filter.allCases
+    let deleteButton = UIButton()
+    
     var isEmpty = false
     
     let imjangTableView: UITableView = {
-        let tableView = UITableView()
+        let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.estimatedRowHeight = UITableView.automaticDimension
         tableView.separatorStyle = .none
-        
+        tableView.showsVerticalScrollIndicator = false
         tableView.backgroundColor = ColorStyle.textWhite
-//        tableView.contentInset = .init(top: <#T##CGFloat#>, left: <#T##CGFloat#>, bottom: <#T##CGFloat#>, right: <#T##CGFloat#>)
-        tableView.separatorInset = .init(top: 0, left: 0, bottom: 12, right: 0)
-        tableView.register(ScrapCollectionTableViewCell.self, forCellReuseIdentifier: ScrapCollectionTableViewCell.identifier)
+        tableView.register(ImjangListHeaderView.self, forHeaderFooterViewReuseIdentifier: ImjangListHeaderView.identifier)
         tableView.register(ImjangNoteTableViewCell.self, forCellReuseIdentifier: ImjangNoteTableViewCell.identifier)
         return tableView
     }()
     
-    let tableHeaderView = UIView().then {
+    
+    let stickyfilterBackgroundView = UIView().then {
         $0.backgroundColor = .white
     }
     
-    var scrapImjangList: [ImjangNote] = ImjangList.list
-    let imjangList: [ImjangNote] = ImjangList.list
+    var scrapImjangList: [ImjangNote] = []
+    var imjangList: [ImjangNote] = ImjangList.list
+    
+    var menuChildren: [UIMenuElement] = []
+    lazy var filterList = Filter.allCases
     
     // MARK: - viewDidLoad()
     override func viewDidLoad() {
@@ -75,41 +65,149 @@ class ImjangListViewController: UIViewController {
         
         designNavigationBar()
         addSubviews()
+        setData()
         designView()
         configureTableView()
         setEmptyConstraints()
-        setConstraints()
+        setupConstraints()
+        setFilterData()
+    }
+    
+    func setData() {
+        for item in imjangList {
+            if item.isBookmarked && scrapImjangList.count < 10 {
+                scrapImjangList.append(item)
+            }
+        }
     }
     
     func configureTableView() {
         imjangTableView.delegate = self
         imjangTableView.dataSource = self
     }
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
     
+    // 검색 화면으로 이동
+    @objc func showSearchVC() {
+        let searchVC = ImjangSearchViewController()
+        navigationController?.pushViewController(searchVC, animated: true)
+    }
+    
+    // MARK: - Set Data
+    func setFilterData() {
+        for filter in filterList {
+            menuChildren.append(UIAction(title: filter.title, state: .off,handler: {  (action: UIAction) in
+                self.changefilterTitle(filter.title)
+                self.callRequestFiltered(sort: filter.title)
+            }))
+        }
+        filterselectBtn.menu = UIMenu(options: .displayAsPalette, children: menuChildren)
+        
+        filterselectBtn.showsMenuAsPrimaryAction = true
+    }
+    
+    func changefilterTitle(_ title: String) {
+        filterselectBtn.setTitle(title, for: .normal)
+    }
+    
+    func callRequestFiltered(sort: String) {
+        
+    }
+    
+    @objc func deleteButtonClicked() {
+        
+    }
+    
+    @objc func showDeleteImjangVC() {
+        let DeleteImjangVC = DeleteImjangViewController()
+        
+        self.navigationController?.pushViewController(DeleteImjangVC, animated: true)
+    }
+    
+    @objc func bookMarkButtonClicked(sender: UIButton) {
+        var imjangNote = imjangList[sender.tag]
+        imjangNote.isBookmarked.toggle()
+        if scrapImjangList.count < 10 {
+            scrapImjangList.append(imjangNote)
+        }
+        
+        imjangList[sender.tag] = imjangNote
+        imjangTableView.reloadData()
+    }
+}
+
+extension ImjangListViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        print(scrollView.contentOffset.y, CGFloat(imjangTableView.tableHeaderView?.frame.minY ?? 181) - 54)
+        
+        let filterY = scrapImjangList.isEmpty ? 132.0 : 278.0
+        // 필터뷰의 시작 Y를 통해 sticky 타이밍을 계산
+        let shouldShowSticky = scrollView.contentOffset.y >= filterY
+        
+        stickyfilterBackgroundView.isHidden = !shouldShowSticky
+    }
+    
+    // 헤더의 높이 설정
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if scrapImjangList.isEmpty {
+            return 186
+        } else {
+            return 354
+        }
+        
+    }
+    // headerView 정의 (콜렉션뷰, 필터뷰)
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let imjangListHeaderView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ImjangListHeaderView.identifier) as? ImjangListHeaderView else {
+            return UIView()
+        }
+        imjangListHeaderView.scrapedList = scrapImjangList
+        imjangListHeaderView.deleteButton.addTarget(self, action: #selector(showDeleteImjangVC), for: .touchUpInside)
+        if scrapImjangList.isEmpty {
+            imjangListHeaderView.setFilterView(isEmpty: true)
+        }
+        else {
+            imjangListHeaderView.setFilterView(isEmpty: false)
+        }
+        return imjangListHeaderView
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return imjangList.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: ImjangNoteTableViewCell.identifier, for: indexPath) as! ImjangNoteTableViewCell
+        cell.selectionStyle = .none
+        cell.configureCell(imjangNote: imjangList[indexPath.row])
+        cell.bookMarkButton.tag = indexPath.row
+        cell.bookMarkButton.addTarget(self, action: #selector(bookMarkButtonClicked), for: .touchUpInside)
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 116
+    }
+}
+extension ImjangListViewController {
     // 네비게이션 바 디자인
     func designNavigationBar() {
         self.navigationItem.title = "님의 임장노트"     // TODO: - 나중에 nickname 으로 연결
         self.navigationController?.navigationBar.tintColor = .black
-        // 이미지 로드
-        let backImage = UIImage(named: "arrow-left")
 
         // UIBarButtonItem 생성 및 이미지 설정
-        let backButtonItem = UIBarButtonItem(image: backImage, style: .plain, target: self, action: nil)
+        let backButtonItem = UIBarButtonItem(image: ImageStyle.arrowLeft, style: .plain, target: self, action: nil)
         
-        let addImage = ImageStyle.add
-        let addButtonItem = UIBarButtonItem(image: addImage, style: .plain, target: self, action: nil)
+        let addButtonItem = UIBarButtonItem(image: ImageStyle.add, style: .plain, target: self, action: nil)
         
-        let searchImage = ImageStyle.search
-        let searchButtonItem = UIBarButtonItem(image: searchImage, style: .plain, target: self, action: #selector(showSearchVC))
+        let searchButtonItem = UIBarButtonItem(image: ImageStyle.search, style: .plain, target: self, action: #selector(showSearchVC))
 
         // 네비게이션 아이템에 백 버튼 아이템 설정
         self.navigationItem.leftBarButtonItem = backButtonItem
         self.navigationItem.rightBarButtonItems = [addButtonItem, searchButtonItem]
-    }
-    
-    @objc func showSearchVC() {
-        let searchVC = ImjangSearchViewController()
-        navigationController?.pushViewController(searchVC, animated: true)
     }
     
     func addSubviews() {
@@ -119,12 +217,16 @@ class ImjangListViewController: UIViewController {
             emptyBackgroundView.addSubview($0)
         }
         
-        contentView.addSubview(clippingBackgroundView)
-        clippingBackgroundView.addSubview(messageStackView)
-        
-        if isEmpty == false {
+        if imjangList.isEmpty {
+            emptyBackgroundView.isHidden = false
+            imjangTableView.isHidden = true
+        } else {
             emptyBackgroundView.isHidden = true
+            imjangTableView.isHidden = false
         }
+        view.addSubview(stickyfilterBackgroundView)
+        stickyfilterBackgroundView.addSubview(filterselectBtn)
+        stickyfilterBackgroundView.addSubview(deleteButton)
     }
     
     func designView() {
@@ -134,7 +236,7 @@ class ImjangListViewController: UIViewController {
         emptyLogoImageView.design(image: ImageStyle.logo,
                          contentMode: .scaleAspectFit)
         // 비었을 때 추가 권유 메시지 레이블
-        emptyMessageLabel.design(text: "아직 등록된 집이 없어요\n지금 바로 부동산을 추가해 볼까요?", 
+        emptyMessageLabel.design(text: "아직 등록된 집이 없어요\n지금 바로 부동산을 추가해 볼까요?",
                                  textColor: ColorStyle.textGray,
                                  font: .pretendard(size: 16, weight: .semiBold),
                                  textAlignment: .center,
@@ -148,48 +250,48 @@ class ImjangListViewController: UIViewController {
                              font: .pretendard(size: 16, weight: .semiBold),
                              cornerRadius: 10)
         
-        clipImageView.design(image: ImageStyle.bookmark, contentMode: .scaleAspectFit)
-        clipEmptyMessageLabel.design(text: "버튼을 누르면 상단에 고정할 수 있어요",
-                                     textColor: ColorStyle.null,
-                                     font: .pretendard(size: 16, weight: .medium))
+        deleteButton.design(image: ImageStyle.trash, backgroundColor: .clear)
         
-        setStackView(messageStackView, label: clipEmptyMessageLabel,
-                     image: clipImageView, axis: .horizontal, spacing: 9, imageRight: false)
-        
-        DispatchQueue.main.async {
-            self.clippingBackgroundView.applyGradientBackground()    // 스크랩 배경에 Gradient 추가
-        }
+        imjangTableView.backgroundColor = .white
     }
     
-    func setConstraints() {
- 
-        clippingBackgroundView.snp.makeConstraints {
+    func setupConstraints() {
+        imjangTableView.snp.makeConstraints {
+            $0.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        stickyfilterBackgroundView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.horizontalEdges.equalToSuperview()
-            $0.top.equalTo(contentView)
-            $0.height.equalTo(UIScreen.main.bounds.height * 0.15)
+            $0.height.equalTo(49)
+        }
+        
+        filterselectBtn.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.leading.equalToSuperview().offset(16)
+        }
+        
+        deleteButton.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalToSuperview().inset(24)
+            $0.size.equalTo(22)
         }
     }
     
     func setEmptyConstraints() {
-        imjangTableView.snp.makeConstraints {
-            $0.verticalEdges.equalTo(view.safeAreaLayoutGuide)
-            $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
-        }
-        
+    
         emptyBackgroundView.snp.makeConstraints {
-            $0.verticalEdges.equalToSuperview()
-            $0.horizontalEdges.equalToSuperview()
+            $0.edges.equalToSuperview()
         }
         
         emptyLogoImageView.snp.makeConstraints {
             $0.centerX.equalTo(emptyBackgroundView)
-            $0.width.height.equalTo(UIScreen.main.bounds.width * 0.4)
+            $0.size.equalTo(UIScreen.main.bounds.width * 0.4)
             $0.top.equalTo(emptyBackgroundView).offset(UIScreen.main.bounds.height * 0.25)
         }
         
         emptyMessageLabel.snp.makeConstraints {
-            $0.leading.equalTo(emptyBackgroundView.snp.leading).offset(36)
-            $0.trailing.equalTo(emptyBackgroundView.snp.trailing).offset(-36)
+            $0.horizontalEdges.equalTo(emptyBackgroundView).inset(36)
             $0.top.equalTo(emptyLogoImageView.snp.bottom).offset(36)
             $0.centerX.equalTo(emptyBackgroundView)
             $0.height.equalTo(46)
@@ -200,19 +302,6 @@ class ImjangListViewController: UIViewController {
             $0.height.equalTo(52)
             $0.centerX.equalTo(emptyBackgroundView)
             $0.top.equalTo(emptyMessageLabel.snp.bottom).offset(118)
-        }
-        
-        messageStackView.snp.makeConstraints {
-            $0.centerY.equalTo(clippingBackgroundView)
-            $0.centerX.equalTo(clippingBackgroundView)
-        }
-        
-        clipImageView.snp.makeConstraints {
-            $0.width.height.equalTo(18)
-        }
-        
-        clipEmptyMessageLabel.snp.makeConstraints {
-            $0.height.equalTo(24)
         }
     }
 
@@ -236,50 +325,8 @@ class ImjangListViewController: UIViewController {
         }
         
     }
-    
 }
 
-extension ImjangListViewController: UITableViewDelegate, UITableViewDataSource {
-//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        <#code#>
-//    }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
-    }
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            return 1
-        } else {
-            return imjangList.count
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch indexPath.section {
-        case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier: ScrapCollectionTableViewCell.identifier, for: indexPath) as! ScrapCollectionTableViewCell
-            return cell
-        case 1:
-            let cell = tableView.dequeueReusableCell(withIdentifier: ImjangNoteTableViewCell.identifier, for: indexPath) as! ImjangNoteTableViewCell
-            cell.selectionStyle = .none
-            cell.configureCell(imjangNote: imjangList[indexPath.row])
-            
-            return cell
-        default:
-            print("오류")
-        }
-        return UITableViewCell()
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 0 {
-            return 252
-        } else {
-            return 116
-        }
-    }
-}
 
 #Preview {
     ImjangListViewController()

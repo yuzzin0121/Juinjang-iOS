@@ -50,13 +50,20 @@
 		61864BE52B5FFB5B0073C175 /* ImageStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61864BE42B5FFB5B0073C175 /* ImageStyle.swift */; };
 		61864BE82B6001160073C175 /* ColorStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61864BE72B6001160073C175 /* ColorStyle.swift */; };
 		61864BEA2B6003520073C175 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61864BE92B6003520073C175 /* UIButton+Extension.swift */; };
-		61864BED2B600DEC0073C175 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61864BEC2B600DEC0073C175 /* Filter.swift */; };
 		61864BEF2B600E920073C175 /* ImjangNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61864BEE2B600E920073C175 /* ImjangNote.swift */; };
 		61864BF12B6026C60073C175 /* ImjangSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61864BF02B6026C60073C175 /* ImjangSearchViewController.swift */; };
-		61864BFD2B6211390073C175 /* ScrapCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61864BFC2B6211390073C175 /* ScrapCollectionViewCell.swift */; };
 		61864BFF2B6211560073C175 /* ImjangNoteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61864BFE2B6211560073C175 /* ImjangNoteTableViewCell.swift */; };
-		61864C012B6214350073C175 /* ScrapCollectionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61864C002B6214350073C175 /* ScrapCollectionTableViewCell.swift */; };
 		61864C042B6215620073C175 /* ReuseableProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61864C032B6215620073C175 /* ReuseableProtocol.swift */; };
+		61864C3E2B63EA8F0073C175 /* ImjangListHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61864C3D2B63EA8F0073C175 /* ImjangListHeaderView.swift */; };
+		61864C402B63FB0C0073C175 /* ScrapCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61864C3F2B63FB0C0073C175 /* ScrapCollectionViewCell.swift */; };
+		61864C432B63FC1F0073C175 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61864C422B63FC1F0073C175 /* Filter.swift */; };
+		61864C452B652AA10073C175 /* RecentSearchKeywordTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61864C442B652AA10073C175 /* RecentSearchKeywordTableViewCell.swift */; };
+		61864C472B652E4E0073C175 /* UserDefaultManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61864C462B652E4E0073C175 /* UserDefaultManager.swift */; };
+		61864C492B652F0A0073C175 /* ImjangSearchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61864C482B652F0A0073C175 /* ImjangSearchResultViewController.swift */; };
+		61864C4B2B6531C50073C175 /* SearchKeywordHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61864C4A2B6531C50073C175 /* SearchKeywordHeaderView.swift */; };
+		61864C4D2B653E140073C175 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61864C4C2B653E140073C175 /* UIViewController+Extension.swift */; };
+		61864C4F2B654B5D0073C175 /* DeleteImjangViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61864C4E2B654B5D0073C175 /* DeleteImjangViewController.swift */; };
+		61864C512B654DE10073C175 /* DeleteImjangNoteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61864C502B654DE10073C175 /* DeleteImjangNoteTableViewCell.swift */; };
 		61A7B9262B4C4EC300795B49 /* Pretendard-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 61A7B91D2B4C4EC200795B49 /* Pretendard-Regular.otf */; };
 		61A7B9272B4C4EC300795B49 /* Pretendard-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = 61A7B91E2B4C4EC200795B49 /* Pretendard-ExtraLight.otf */; };
 		61A7B9282B4C4EC300795B49 /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 61A7B91F2B4C4EC200795B49 /* Pretendard-SemiBold.otf */; };
@@ -116,13 +123,20 @@
 		61864BE42B5FFB5B0073C175 /* ImageStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStyle.swift; sourceTree = "<group>"; };
 		61864BE72B6001160073C175 /* ColorStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorStyle.swift; sourceTree = "<group>"; };
 		61864BE92B6003520073C175 /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
-		61864BEC2B600DEC0073C175 /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
 		61864BEE2B600E920073C175 /* ImjangNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImjangNote.swift; sourceTree = "<group>"; };
 		61864BF02B6026C60073C175 /* ImjangSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImjangSearchViewController.swift; sourceTree = "<group>"; };
-		61864BFC2B6211390073C175 /* ScrapCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrapCollectionViewCell.swift; sourceTree = "<group>"; };
 		61864BFE2B6211560073C175 /* ImjangNoteTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImjangNoteTableViewCell.swift; sourceTree = "<group>"; };
-		61864C002B6214350073C175 /* ScrapCollectionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrapCollectionTableViewCell.swift; sourceTree = "<group>"; };
 		61864C032B6215620073C175 /* ReuseableProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReuseableProtocol.swift; sourceTree = "<group>"; };
+		61864C3D2B63EA8F0073C175 /* ImjangListHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImjangListHeaderView.swift; sourceTree = "<group>"; };
+		61864C3F2B63FB0C0073C175 /* ScrapCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrapCollectionViewCell.swift; sourceTree = "<group>"; };
+		61864C422B63FC1F0073C175 /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
+		61864C442B652AA10073C175 /* RecentSearchKeywordTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentSearchKeywordTableViewCell.swift; sourceTree = "<group>"; };
+		61864C462B652E4E0073C175 /* UserDefaultManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultManager.swift; sourceTree = "<group>"; };
+		61864C482B652F0A0073C175 /* ImjangSearchResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImjangSearchResultViewController.swift; sourceTree = "<group>"; };
+		61864C4A2B6531C50073C175 /* SearchKeywordHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchKeywordHeaderView.swift; sourceTree = "<group>"; };
+		61864C4C2B653E140073C175 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
+		61864C4E2B654B5D0073C175 /* DeleteImjangViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteImjangViewController.swift; sourceTree = "<group>"; };
+		61864C502B654DE10073C175 /* DeleteImjangNoteTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteImjangNoteTableViewCell.swift; sourceTree = "<group>"; };
 		61A7B91D2B4C4EC200795B49 /* Pretendard-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.otf"; sourceTree = "<group>"; };
 		61A7B91E2B4C4EC200795B49 /* Pretendard-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-ExtraLight.otf"; sourceTree = "<group>"; };
 		61A7B91F2B4C4EC200795B49 /* Pretendard-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-SemiBold.otf"; sourceTree = "<group>"; };
@@ -263,6 +277,7 @@
 		0A9E0A452B3DCAB90094595A /* juinjang */ = {
 			isa = PBXGroup;
 			children = (
+				61864C412B63FC110073C175 /* Enum */,
 				61864C022B6215450073C175 /* Protocol */,
 				0A3D5D5D2B4D376C00574686 /* UserInterface */,
 				616408EA2B407A2100EC3B5E /* Extension */,
@@ -284,6 +299,8 @@
 			children = (
 				6150F4F92B5D5A080035F522 /* ImjangListViewController.swift */,
 				61864BF02B6026C60073C175 /* ImjangSearchViewController.swift */,
+				61864C482B652F0A0073C175 /* ImjangSearchResultViewController.swift */,
+				61864C4E2B654B5D0073C175 /* DeleteImjangViewController.swift */,
 			);
 			path = ImjangList;
 			sourceTree = "<group>";
@@ -297,6 +314,7 @@
 				61D925102B4983A1002A16B4 /* UILabel+Extension.swift */,
 				61864BE12B5FFA890073C175 /* UIImageView+Extension.swift */,
 				61864BE92B6003520073C175 /* UIButton+Extension.swift */,
+				61864C4C2B653E140073C175 /* UIViewController+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -330,6 +348,7 @@
 			children = (
 				61864BE42B5FFB5B0073C175 /* ImageStyle.swift */,
 				61864BE72B6001160073C175 /* ColorStyle.swift */,
+				61864C462B652E4E0073C175 /* UserDefaultManager.swift */,
 			);
 			path = Constants;
 			sourceTree = "<group>";
@@ -337,9 +356,12 @@
 		61864BFB2B6211070073C175 /* ImjangList */ = {
 			isa = PBXGroup;
 			children = (
-				61864BFC2B6211390073C175 /* ScrapCollectionViewCell.swift */,
 				61864BFE2B6211560073C175 /* ImjangNoteTableViewCell.swift */,
-				61864C002B6214350073C175 /* ScrapCollectionTableViewCell.swift */,
+				61864C3D2B63EA8F0073C175 /* ImjangListHeaderView.swift */,
+				61864C3F2B63FB0C0073C175 /* ScrapCollectionViewCell.swift */,
+				61864C442B652AA10073C175 /* RecentSearchKeywordTableViewCell.swift */,
+				61864C4A2B6531C50073C175 /* SearchKeywordHeaderView.swift */,
+				61864C502B654DE10073C175 /* DeleteImjangNoteTableViewCell.swift */,
 			);
 			path = ImjangList;
 			sourceTree = "<group>";
@@ -350,6 +372,14 @@
 				61864C032B6215620073C175 /* ReuseableProtocol.swift */,
 			);
 			path = Protocol;
+			sourceTree = "<group>";
+		};
+		61864C412B63FC110073C175 /* Enum */ = {
+			isa = PBXGroup;
+			children = (
+				61864C422B63FC1F0073C175 /* Filter.swift */,
+			);
+			path = Enum;
 			sourceTree = "<group>";
 		};
 		61D925032B4864E8002A16B4 /* Cell */ = {
@@ -368,7 +398,6 @@
 				0A3D5D4A2B4D333900574686 /* TransactionModel.swift */,
 				61D925072B486706002A16B4 /* RecordingFileItem.swift */,
 				0A73E60C2B5855CD00EF1C89 /* UserInfo.swift */,
-				61864BEC2B600DEC0073C175 /* Filter.swift */,
 				61864BEE2B600E920073C175 /* ImjangNote.swift */,
 			);
 			path = Model;
@@ -469,26 +498,30 @@
 			files = (
 				0A14E36F2B569A840008FD28 /* SignUpViewController.swift in Sources */,
 				616408E12B405B7200EC3B5E /* ImjangNoteViewController.swift in Sources */,
+				61864C4F2B654B5D0073C175 /* DeleteImjangViewController.swift in Sources */,
 				61D9250A2B49506D002A16B4 /* RecordingFilesViewController.swift in Sources */,
 				61864BE82B6001160073C175 /* ColorStyle.swift in Sources */,
+				61864C472B652E4E0073C175 /* UserDefaultManager.swift in Sources */,
 				6150F4FA2B5D5A080035F522 /* ImjangListViewController.swift in Sources */,
 				0A3D5D4B2B4D333900574686 /* SideBarComponents.swift in Sources */,
 				0A554CE42B5420F20023BB49 /* WarningMessageViewController.swift in Sources */,
-				61864BED2B600DEC0073C175 /* Filter.swift in Sources */,
+				61864C402B63FB0C0073C175 /* ScrapCollectionViewCell.swift in Sources */,
 				0A14E3712B56B31A0008FD28 /* SetNickNameViewController.swift in Sources */,
 				0A14E3732B56B6F70008FD28 /* WelcomeViewController.swift in Sources */,
+				61864C4B2B6531C50073C175 /* SearchKeywordHeaderView.swift in Sources */,
 				61864BEA2B6003520073C175 /* UIButton+Extension.swift in Sources */,
 				0A2DED1A2B55198D00A96BAA /* STTLoadingViewController.swift in Sources */,
 				61864BF12B6026C60073C175 /* ImjangSearchViewController.swift in Sources */,
+				61864C452B652AA10073C175 /* RecentSearchKeywordTableViewCell.swift in Sources */,
 				61864BE52B5FFB5B0073C175 /* ImageStyle.swift in Sources */,
 				0A554CE02B52DB100023BB49 /* RecordViewController.swift in Sources */,
 				0A3D5D552B4D337100574686 /* MainViewController.swift in Sources */,
 				61D925082B486706002A16B4 /* RecordingFileItem.swift in Sources */,
 				61864BFF2B6211560073C175 /* ImjangNoteTableViewCell.swift in Sources */,
 				0A2DED1C2B551CB100A96BAA /* RecordPlaybackViewController.swift in Sources */,
+				61864C3E2B63EA8F0073C175 /* ImjangListHeaderView.swift in Sources */,
 				0A9E0A472B3DCAB90094595A /* AppDelegate.swift in Sources */,
 				0A2DED1E2B551CEE00A96BAA /* RecordTopViewController.swift in Sources */,
-				61864C012B6214350073C175 /* ScrapCollectionTableViewCell.swift in Sources */,
 				0AB34CC32B4F11B000150A15 /* OpenNewPageViewController.swift in Sources */,
 				61864BE22B5FFA890073C175 /* UIImageView+Extension.swift in Sources */,
 				611F145E2B471ECA00B983F1 /* CALayer+Extension.swift in Sources */,
@@ -496,7 +529,6 @@
 				0A73E60D2B5855CD00EF1C89 /* UserInfo.swift in Sources */,
 				0A3D5D582B4D337100574686 /* BottomTableViewCell.swift in Sources */,
 				61864C042B6215620073C175 /* ReuseableProtocol.swift in Sources */,
-				61864BFD2B6211390073C175 /* ScrapCollectionViewCell.swift in Sources */,
 				0A3D5D562B4D337100574686 /* SideBarLauncher.swift in Sources */,
 				61D925052B486508002A16B4 /* RecordingFileViewCell.swift in Sources */,
 				611F14552B47070B00B983F1 /* RecordingSegmentedViewController.swift in Sources */,
@@ -509,11 +541,15 @@
 				616408EC2B407A2D00EC3B5E /* UIView+Extensions.swift in Sources */,
 				0A3D5D5A2B4D337100574686 /* TopTableViewCell.swift in Sources */,
 				0A3D5D632B4D707300574686 /* BottomSheetViewController.swift in Sources */,
+				61864C432B63FC1F0073C175 /* Filter.swift in Sources */,
 				0A3D5D592B4D337100574686 /* FirstTableViewCell.swift in Sources */,
 				0A9E0A472B3DCAB90094595A /* AppDelegate.swift in Sources */,
 				0A2DED202B551CF900A96BAA /* RecordBottomViewController.swift in Sources */,
 				0A3D5D572B4D337100574686 /* BottomCollectionViewCell.swift in Sources */,
+				61864C512B654DE10073C175 /* DeleteImjangNoteTableViewCell.swift in Sources */,
+				61864C4D2B653E140073C175 /* UIViewController+Extension.swift in Sources */,
 				0A9E0A492B3DCAB90094595A /* SceneDelegate.swift in Sources */,
+				61864C492B652F0A0073C175 /* ImjangSearchResultViewController.swift in Sources */,
 				611F145A2B4707CC00B983F1 /* RecordingRoomViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

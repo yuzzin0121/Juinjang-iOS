@@ -1,14 +1,13 @@
 //
-//  ImjangNoteTableViewCell.swift
+//  DeleteImjangNoteTableViewCell.swift
 //  juinjang
 //
-//  Created by 조유진 on 1/25/24.
+//  Created by 조유진 on 1/27/24.
 //
 
 import UIKit
-import SnapKit
 
-class ImjangNoteTableViewCell: UITableViewCell {
+class DeleteImjangNoteTableViewCell: UITableViewCell {
     let roomThumbnailImageView = UIImageView()
     let roomNameLabel = UILabel()
     let roomIcon = UIImageView()
@@ -18,12 +17,12 @@ class ImjangNoteTableViewCell: UITableViewCell {
     let scoreLabel = UILabel()
     let starStackView = UIStackView()
     let addressLabel = UILabel()
-    let bookMarkButton = UIButton()
+    let checkButton = UIButton()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        [roomThumbnailImageView, roomNameStackView, priceLabel, starStackView, addressLabel, bookMarkButton].forEach {
+        [roomThumbnailImageView, roomNameStackView, priceLabel, starStackView, addressLabel, checkButton].forEach {
             contentView.addSubview($0)
         }
         [roomNameLabel, roomIcon].forEach {
@@ -74,10 +73,17 @@ class ImjangNoteTableViewCell: UITableViewCell {
         addressLabel.text = imjangNote.location
         
         let image = imjangNote.isBookmarked ? ImageStyle.bookmarkSelected : ImageStyle.bookmark
-        bookMarkButton.setImage(image, for: .normal)
+        checkButton.setImage(image, for: .normal)
     }
     
     func setConstraints() {
+        
+        checkButton.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalTo(contentView).inset(16)
+            $0.size.equalTo(20)
+        }
+        
         roomThumbnailImageView.snp.makeConstraints {        // 방 썸네일 사진
             $0.leading.equalTo(contentView.snp.leading).offset(12)
             $0.centerY.equalTo(contentView)
@@ -87,7 +93,7 @@ class ImjangNoteTableViewCell: UITableViewCell {
         roomNameStackView.snp.makeConstraints {
             $0.top.equalTo(contentView).offset(12)
             $0.leading.equalTo(roomThumbnailImageView.snp.trailing).offset(8)
-            $0.trailing.lessThanOrEqualTo(contentView.snp.trailing).inset(12)
+            $0.trailing.greaterThanOrEqualTo(checkButton.snp.leading).inset(12)
             $0.height.equalTo(24)
         }
         
@@ -98,7 +104,7 @@ class ImjangNoteTableViewCell: UITableViewCell {
         priceLabel.snp.makeConstraints {
             $0.top.equalTo(roomNameStackView.snp.bottom)
             $0.leading.equalTo(roomNameLabel.snp.leading)
-            $0.trailing.equalTo(contentView.snp.trailing).inset(12)
+            $0.trailing.greaterThanOrEqualTo(checkButton.snp.leading).inset(12)
         }
         
         starStackView.snp.makeConstraints {
@@ -114,12 +120,9 @@ class ImjangNoteTableViewCell: UITableViewCell {
         addressLabel.snp.makeConstraints {
             $0.leading.equalTo(roomNameLabel.snp.leading)
             $0.top.equalTo(starStackView.snp.bottom)
-            $0.trailing.greaterThanOrEqualTo(bookMarkButton.snp.leading).inset(8)
+            $0.trailing.greaterThanOrEqualTo(checkButton.snp.leading).inset(12)
         }
-        bookMarkButton.snp.makeConstraints {
-            $0.bottom.trailing.equalTo(contentView).inset(12)
-            $0.size.equalTo(18)
-        }
+        
     }
     
     override func prepareForReuse() {

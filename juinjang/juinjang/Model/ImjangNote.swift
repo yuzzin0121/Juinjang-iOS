@@ -13,7 +13,7 @@ struct ImjangNote {
     let price: String
     let score: Double?
     let location: String
-    let isBookmarked: Bool
+    var isBookmarked: Bool
 //    let Date: String
 }
 

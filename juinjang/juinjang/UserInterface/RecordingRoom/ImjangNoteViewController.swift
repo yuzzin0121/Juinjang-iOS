@@ -97,9 +97,8 @@ class ImjangNoteViewController: UIViewController {
         setUpUI()
         setConstraints()
         upButton.addTarget(self, action: #selector(upToTop), for: .touchUpInside)
-        
-    
     }
+    
     
     @objc
     func upToTop() {

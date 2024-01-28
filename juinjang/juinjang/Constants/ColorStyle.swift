@@ -9,6 +9,7 @@ import UIKit
 
 enum ColorStyle {
     static let darkGray = UIColor(named: "darkGray")!       // #4A4A4A
+    static let emptyGray = UIColor(named: "emptyGray")!     // #F3F3F3
     static let gray0 = UIColor(named: "gray0")!             // #F8F8F8
     static let gray1 = UIColor(named: "gray1")!             // #C9C9C9
     static let lightGray = UIColor(named: "lightGray")!     // #D0D0D0
