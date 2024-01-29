@@ -24,6 +24,7 @@ class RecordingFilesViewController: UIViewController {
     let recordingFileTableView = UITableView().then {
         $0.isScrollEnabled = false
         $0.separatorStyle = .none
+        $0.separatorInset = .init(top: 0, left: 0, bottom: 12, right: 0)
         $0.register(RecordingFileViewCell.self, forCellReuseIdentifier: RecordingFileViewCell.identifier)
     }
     
@@ -125,6 +126,17 @@ class RecordingFilesViewController: UIViewController {
             $0.leading.trailing.top.bottom.equalTo(contentView)
         }
     }
+    
+    func showDeletePopup(indexPath: IndexPath) {
+        let deletePopupVC = DeletePopupViewController()
+        deletePopupVC.fileIndexPath = indexPath
+        deletePopupVC.completionHandler = { [weak self] indexPath in
+            self?.fileItems.remove(at: indexPath.row)
+            self?.recordingFileTableView.deleteRows(at: [indexPath], with: .fade)
+        }
+        deletePopupVC.modalPresentationStyle = .overCurrentContext
+        present(deletePopupVC, animated: true)
+    }
 }
 
 extension RecordingFilesViewController: UITableViewDelegate, UITableViewDataSource {
@@ -145,19 +157,11 @@ extension RecordingFilesViewController: UITableViewDelegate, UITableViewDataSour
         return 56
     }
     
-    // editing style에 대한 종류를 설정
-//    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-//        if editingStyle == .delete {
-//            fileItems.remove(at: indexPath.row)
-////            tableView.reloadData()
-//            tableView.deleteRows(at: [indexPath], with: .fade)
-//        }
-//    }
-    
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive, title: "삭제하기") {
             (_,_, completionHandler) in
-            
+            self.showDeletePopup(indexPath: indexPath)
+            completionHandler(true)
         }
         
         deleteAction.backgroundColor = UIColor(named: "mainOrange")
