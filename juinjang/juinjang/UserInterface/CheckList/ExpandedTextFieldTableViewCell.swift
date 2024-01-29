@@ -103,6 +103,12 @@ extension ExpandedTextFieldTableViewCell: UITextFieldDelegate {
         
         // 글자 수 20글자 제한
         guard textField.text!.count < 20 else { return false }
+        
+        textField.becomeFirstResponder()
+        backgroundColor = UIColor(named: "lightOrange")
+        questionImage.image = UIImage(named: "question-selected-image")
+        textField.backgroundColor = UIColor(named: "lightBackgroundOrange")
+        updateTextFieldWidthConstraint(for: textField, constant: 342, shouldRemoveLeadingConstraint: false)
     
         return true
     }
@@ -128,13 +134,6 @@ extension ExpandedTextFieldTableViewCell: UITextFieldDelegate {
             textField.backgroundColor = UIColor(named: "lightBackgroundOrange")
             updateTextFieldWidthConstraint(for: textField, constant: 342, shouldRemoveLeadingConstraint: false)
         }
-    }
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        textField.becomeFirstResponder()
-        backgroundColor = UIColor(named: "lightOrange")
-        textField.backgroundColor = UIColor(named: "lightBackgroundOrange")
-        updateTextFieldWidthConstraint(for: textField, constant: 342, shouldRemoveLeadingConstraint: false)
     }
 
     func calculateTextFieldWidth(for text: String, maxCharacterCount: Int) -> CGFloat {
