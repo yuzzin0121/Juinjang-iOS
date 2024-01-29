@@ -91,15 +91,9 @@ class WelcomeViewController: UIViewController {
         }, completion: { _ in
             UIView.animate(withDuration: 1.0, delay: 0.0, options: [], animations: {
                 self.guideLabel1.alpha = 1
-            }, completion: { _ in
-                UIView.animate(withDuration: 1.0, delay: 0.0, options: [], animations: {
-                    self.guideLabel2.alpha = 1
-                }, completion: { _ in
-                    UIView.animate(withDuration: 1.0, delay: 0.0, options: [], animations: {
-                        self.guideLabel3.alpha = 1
-                    }, completion: nil)
-                })
-            })
+                self.guideLabel2.alpha = 1
+                self.guideLabel3.alpha = 1
+            }, completion: nil)
         })
     }
 

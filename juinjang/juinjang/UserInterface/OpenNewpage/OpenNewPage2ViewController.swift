@@ -9,7 +9,7 @@ import UIKit
 import Then
 import SnapKit
 
-class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
+class OpenNewPage2ViewController: UIViewController, WarningMessageDelegate {
     
     var backgroundImageViewWidthConstraint: NSLayoutConstraint? // 배경 이미지의 너비 제약조건
     
@@ -99,7 +99,9 @@ class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
         $0.layer.cornerRadius = 10
         $0.layer.borderWidth = 1.5
         $0.layer.borderColor = UIColor(red: 0.933, green: 0.933, blue: 0.933, alpha: 1).cgColor
-        $0.translatesAutoresizingMaskIntoConstraints = false
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: $0.frame.height))
+        $0.leftView = paddingView
+        $0.leftViewMode = .always
     }
     
     lazy var searchAddressButton = UIButton().then {
@@ -174,8 +176,9 @@ class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
     lazy var nextButton = UIButton().then {
         $0.setTitle("다음으로", for: .normal)
         $0.setTitleColor(UIColor(red: 1, green: 1, blue: 1, alpha: 1), for: .normal)
+        $0.isEnabled = false
         
-        $0.backgroundColor = UIColor(red: 0.212, green: 0.212, blue: 0.212, alpha: 1)
+        $0.backgroundColor = UIColor(red: 0.79, green: 0.79, blue: 0.79, alpha: 1)
         $0.layer.cornerRadius = 8
         $0.translatesAutoresizingMaskIntoConstraints = false
         
@@ -193,7 +196,7 @@ class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
         self.navigationItem.title = "새 페이지 펼치기"
         self.navigationItem.hidesBackButton = true
         let backButtonImage = UIImage(named: "arrow-left")
-        let backButton = UIBarButtonItem(image: backButtonImage, style: .plain,target: self, action: #selector(backToMainTapped))
+        let backButton = UIBarButtonItem(image: backButtonImage, style: .plain,target: self, action: #selector(backToPageTapped))
         navigationItem.leftBarButtonItem = backButton
         addressTextField.delegate = self
         addressTextField.isUserInteractionEnabled = false // 사용자 입력 방지
@@ -347,19 +350,6 @@ class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
 
     }
     
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        // 백 스페이스 실행 가능하도록
-        if let char = string.cString(using: String.Encoding.utf8) {
-            let isBackSpace = strcmp(char, "\\b")
-            if (isBackSpace == -92) {
-                return true
-            }
-        }
-        // 글자 수 제한
-        guard textField.text!.count < 12 else { return false }
-        return true
-    }
-    
     func updateImageViewsFromModel() {
         hideAllImageViews()
         
@@ -390,19 +380,48 @@ class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
         houseImageView.isHidden = true
     }
     
-    @objc func searchAddressButtonTapped(_ sender: UIButton) {
-        let alertController = UIAlertController(title: "", message: "주소를 검색해주세요.", preferredStyle: .alert)
+    func checkNextButtonActivation() {
+        // 필드가 비어있는지 확인
+        let addressTextFieldEmpty = addressTextField.text?.isEmpty ?? true
+        let addressDetailTextFieldFieldEmpty = addressDetailTextField.text?.isEmpty ?? true
+        let houseNicknameTextFieldEmpty = houseNicknameTextField.text?.isEmpty ?? true
         
-        let okAction = UIAlertAction(title: "확인", style: .default, handler: nil)
-        alertController.addAction(okAction)
+        // 텍스트 필드 입력 여부에 따라 다음으로 버튼 활성화 여부 결정
+        let allTextFieldsFilled = (!addressTextFieldEmpty || !addressDetailTextFieldFieldEmpty) && !houseNicknameTextFieldEmpty
         
-        present(alertController, animated: true, completion: nil)
+        // 모든 조건이 충족되었을 때 다음으로 버튼 활성화
+        if allTextFieldsFilled {
+            nextButton.isEnabled = true
+            nextButton.backgroundColor = UIColor(red: 0.212, green: 0.212, blue: 0.212, alpha: 1)
+        } else {
+            nextButton.isEnabled = false
+            nextButton.backgroundColor = UIColor(red: 0.79, green: 0.79, blue: 0.79, alpha: 1)
+        }
     }
     
-    @objc func backToMainTapped(_ sender: UIButton) {
-        let customPopup = CustomPopupViewController()
-        customPopup.modalPresentationStyle = .overCurrentContext
-        present(customPopup, animated: false, completion: nil)
+    @objc func searchAddressButtonTapped(_ sender: UIButton) {
+        let KakaoZipCodeVC = KakaoZipCodeViewController()
+        present(KakaoZipCodeVC, animated: true)
+    }
+    
+    @objc func backToPageTapped(_ sender: UIButton) {
+        let warningPopup = OpenNewPagePopupViewController()
+        warningPopup.warningDelegate = self
+        warningPopup.modalPresentationStyle = .overCurrentContext
+        present(warningPopup, animated: false, completion: nil)
+    }
+    
+    func getWarningMessage() -> String {
+        if let imjangNoteVC = navigationController?.viewControllers.first(where: { $0 is ImjangNoteViewController }) {
+            // MainViewController -> ImjangNoteViewController -> OpenNewPageViewController -> OpenNewPage2ViewController: 임장노트에서 생성한 경우
+            return "임장노트로 돌아갈까요?\n입력한 정보는 저장되지 않습니다."
+        } else if let openNewPageVC = navigationController?.viewControllers.first(where: { $0 is OpenNewPageViewController }) {
+            // MainViewController -> OpenNewPageViewController -> OpenNewPage2ViewController: 메인에서 생성한 경우
+            return "메인화면으로 돌아갈까요?\n입력한 정보는 저장되지 않습니다."
+        } else {
+            // 기본은 메인으로 향하는 걸로 설정
+            return "메인화면으로 돌아갈까요?\n입력한 정보는 저장되지 않습니다."
+        }
     }
 
     @objc func backButtonTapped(_ sender: UIButton) {
@@ -413,5 +432,26 @@ class OpenNewPage2ViewController: UIViewController, UITextFieldDelegate {
         let newPageViewController = CheckListViewController()
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         navigationController?.pushViewController(newPageViewController, animated: true)
+    }
+}
+
+
+extension OpenNewPage2ViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        // 백 스페이스 실행 가능하도록
+        if let char = string.cString(using: String.Encoding.utf8) {
+            let isBackSpace = strcmp(char, "\\b")
+            if (isBackSpace == -92) {
+                return true
+            }
+        }
+        // 글자 수 제한
+        guard textField.text!.count < 12 else { return false }
+        return true
+    }
+    
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        // 모든 조건을 검사하여 버튼 상태 변경
+        checkNextButtonActivation()
     }
 }

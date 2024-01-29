@@ -20,9 +20,18 @@ class ImjangNoteViewController: UIViewController {
     let contentView = UIView()
     
     // 하우스 이미지뷰
-    let firstImage = UIImageView()
-    let secondImage = UIImageView()
-    let thirdImage = UIImageView()
+    let noImageBackgroundView = UIView().then {
+        $0.backgroundColor = UIColor(named: "backgroundGray")
+        $0.layer.cornerRadius = 5
+    }
+    let noImageIcon = UIImageView().then {
+        $0.image = UIImage(named: "gallery-add")
+        $0.contentMode = .scaleAspectFit
+    }
+    
+    lazy var firstImage = UIImageView()
+    lazy var secondImage = UIImageView()
+    lazy var thirdImage = UIImageView()
     
     // 이미지 개수 레이블
     var maximizeImageView = UIImageView()
@@ -46,11 +55,14 @@ class ImjangNoteViewController: UIViewController {
     let houseImageView = UIImageView()
     let roomStackView = UIStackView()
     let roomPriceLabel = UILabel()
-    let roomAddressLabel = UILabel()
     
-    let phoneImageView = UIImageView()
-    let addPhoneNumberLabel = UILabel()
-    let addPhoneStackView = UIStackView()
+    let roomLocationIcon = UIImageView()
+    let roomAddressLabel = UILabel()
+    let addressStackView = UIStackView()
+    let addressBackgroundView = UIView().then {
+        $0.backgroundColor = UIColor(named: "gray0")
+        $0.layer.cornerRadius = 10
+    }
     
     let showReportLabel = UILabel()
     let reportImageView = UIImageView()
@@ -74,10 +86,18 @@ class ImjangNoteViewController: UIViewController {
     
     let containerView = UIView().then {
         $0.backgroundColor = .white
+        $0.layer.cornerRadius = 5
     }
     
     let upButton = UIButton().then {
         $0.setImage(UIImage(named: "floating"), for: .normal)
+    }
+    
+    let editButton = UIButton().then {
+        $0.setImage(UIImage(named: "edit-button"), for: .normal)
+        $0.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.13).cgColor
+        $0.layer.shadowOffset = CGSize(width: 0, height: 4)
+        $0.layer.shadowOpacity = 1
     }
     
     let recordingSegmentedVC = RecordingSegmentedViewController()
@@ -86,6 +106,8 @@ class ImjangNoteViewController: UIViewController {
     var roomPriceString: String = "30억 1천만원"
     var roomAddress: String = "경기도 성남시 분당구 삼평동 741"
     var mDateString: String = "23.12.01"
+    
+    lazy var images: [UIImage?] = [UIImage(named: "1"), UIImage(named: "2"), UIImage(named: "3")]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -97,11 +119,20 @@ class ImjangNoteViewController: UIViewController {
         setUpUI()
         setConstraints()
         upButton.addTarget(self, action: #selector(upToTop), for: .touchUpInside)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(didStoppedChildScroll), name: NSNotification.Name("didStoppedChildScroll"), object: nil)
+        recordingSegmentedVC.imjangNoteViewController = self
     }
     
+    @objc func didStoppedChildScroll() {
+        scrollView.isScrollEnabled = true
+        let containerY = containerView.frame.origin.y
+        UIView.animate(withDuration: 0.2) {
+            self.scrollView.contentOffset.y = containerY - 21
+        }
+    }
     
-    @objc
-    func upToTop() {
+    @objc func upToTop() {
         UIView.animate(withDuration: 0.5) {
             self.scrollView.contentOffset.y = 0
         }
@@ -121,8 +152,8 @@ class ImjangNoteViewController: UIViewController {
         // UIBarButtonItem 생성 및 이미지 설정
         let backButtonItem = UIBarButtonItem(image: backImage, style: .plain, target: self, action: nil)
         
-        let editImage = UIImage(named: "edit")
-        let editButtonItem = UIBarButtonItem(image: editImage, style: .plain, target: self, action: nil)
+        let editButtonItem = UIBarButtonItem(title: "편집", style: .plain, target: self, action: nil)
+        editButtonItem.tintColor = UIColor(named: "textGray")
 
         // 네비게이션 아이템에 백 버튼 아이템 설정
         self.navigationItem.leftBarButtonItem = backButtonItem
@@ -131,14 +162,18 @@ class ImjangNoteViewController: UIViewController {
     
     // MARK: - addSubView()
     func addSubView() {
-        [scrollView, upButton].forEach {
+        [scrollView, upButton, editButton].forEach {
             view.addSubview($0)
         }
+
         scrollView.addSubview(contentView)
         
-        [roomStackView, roomPriceLabel, roomAddressLabel, addPhoneStackView, infoStackView, containerView].forEach {
+        [roomStackView, roomPriceLabel, infoStackView, addressBackgroundView, containerView, noImageBackgroundView, stackView].forEach {
             contentView.addSubview($0)
         }
+        
+        noImageBackgroundView.addSubview(noImageIcon)
+        addressBackgroundView.addSubview(addressStackView)
         
         [showReportLabel, reportImageView].forEach {
             reportStackView.addArrangedSubview($0)
@@ -162,24 +197,24 @@ class ImjangNoteViewController: UIViewController {
         setRoomImages()
         
         // 집 아이콘 이미지뷰
-        designImageView(houseImageView, 
+        designImageView(houseImageView,
                         image: UIImage(named: "house"),
                         contentMode: .scaleAspectFit)
         
         // 방 이름 레이블
-        designLabel(roomNameLabel, 
+        designLabel(roomNameLabel,
                     text: roomName,
                     alignment: .left,
                     font: UIFont.pretendard(size: 20, weight: .extraBold),
                     textColor: UIColor(named: "mainOrange")!)
         
         // 방 이름 스택뷰
-        setStackView(roomStackView, 
+        setStackView(roomStackView,
                      label: roomNameLabel,
                      image: houseImageView,
                      axis: .horizontal,
                      spacing: 6,
-                     imageRight: true)
+                     isImageRight: true)
         
         // 방 가격 레이블
         designLabel(roomPriceLabel,
@@ -188,29 +223,24 @@ class ImjangNoteViewController: UIViewController {
                     textColor: UIColor(named: "textBlack")!)
         
         // 방 주소 레이블
-        designLabel(roomAddressLabel, 
+        designLabel(roomAddressLabel,
                     text: roomAddress,
                     font: UIFont.pretendard(size: 16, weight: .medium),
-                    textColor: UIColor(named:"textGray")!)
-        
-        // 전화 아이콘 이미지뷰
-        designImageView(phoneImageView, 
-                        image: UIImage(named: "call"),
+                    textColor: UIColor(named:"textGray")!, numberOfLines: 2)
+        designImageView(roomLocationIcon,
+                        image: UIImage(named: "location"),
                         contentMode: .scaleAspectFit)
         
-        // 전화번호 추가 레이블
-        designLabel(addPhoneNumberLabel, 
-                    text: "전화번호 추가",
-                    font: UIFont.pretendard(size: 16, weight: .medium),
-                    textColor: UIColor(named: "textBlack")!)
+        setStackView(addressStackView, 
+                     label: roomAddressLabel,
+                     image: roomLocationIcon,
+                     axis: .horizontal,
+                     distribution: .fill,
+                     spacing: 12,
+                     isImageRight: false)
+//                    textColor: UIColor(named:"textGray")!)
         
-        // 전화번호 추가 스택뷰
-        setStackView(addPhoneStackView, 
-                     label: addPhoneNumberLabel,
-                     image: phoneImageView,
-                     axis: .horizontal, 
-                     spacing: 4,
-                     imageRight: false)
+
         
         // 리포트 보기 레이블
         designLabel(showReportLabel, text: "리포트 보기",
@@ -219,7 +249,7 @@ class ImjangNoteViewController: UIViewController {
                     textColor: UIColor(named: "textBlack")!)
         
         // 리포트 이미지뷰
-        designImageView(reportImageView, 
+        designImageView(reportImageView,
                         image: UIImage(named: "report"),
                         contentMode: .scaleAspectFit)
         
@@ -227,9 +257,9 @@ class ImjangNoteViewController: UIViewController {
         setStackView(reportStackView,
                      label: showReportLabel,
                      image: reportImageView,
-                     axis: .horizontal, 
+                     axis: .horizontal,
                      spacing: 4,
-                     imageRight: true)
+                     isImageRight: true)
         
         // 최근 수정날짜 레이블
         designLabel(modifiedDateString,
@@ -250,30 +280,139 @@ class ImjangNoteViewController: UIViewController {
     
     // 이미지 개수에 따라 stackView 설정
     func setUpUI() {
-        let images = [firstImage, secondImage, thirdImage]
-        
-        if images.count >= 3 {
-            contentView.addSubview(stackView)
-            [images[0],vStackView].forEach {
-                stackView.addArrangedSubview($0)
-            }
-            
-            [images[1], images[2]].forEach {
-                vStackView.addArrangedSubview($0)
-            }
-            
-            images[2].addSubview(maximizeImageView)
+        noImageBackgroundView.isHidden = true
+        let imageCount = images.count
+        print("이미지 개수\(imageCount)")
+        switch imageCount {
+        case 0:
+            noImageBackgroundView.isHidden = false
+        case 1:
+            setImage1()
+        case 2:
+            setImage2()
+        case 3...:
+            setImage3()
+        default:
+            print("오류")
         }
+
+    }
+    
+    func setImage1() {
+        [firstImage].forEach { stackView.addArrangedSubview($0)}
+        firstImage.addSubview(maximizeImageView)
+        let imageWidth = view.frame.width - (24*2)
+        
+        firstImage.snp.makeConstraints {
+            $0.width.equalTo(imageWidth)
+            $0.height.equalTo(firstImage.snp.width).multipliedBy(171.0 / 342.0)
+        }
+        
+        maximizeImageView.snp.makeConstraints {
+            $0.bottom.equalTo(firstImage.snp.bottom).offset(-12)
+            $0.trailing.equalTo(firstImage.snp.trailing).offset(-12)
+            $0.width.height.equalTo(24)
+        }
+    }
+    
+    func setImage2() {
+        let imagesWidth = view.frame.width - (24*2) - 8
+        [firstImage, secondImage].forEach { stackView.addArrangedSubview($0)}
+        secondImage.addSubview(maximizeImageView)
+        
+        firstImage.snp.makeConstraints {
+            $0.height.equalTo(firstImage.snp.width).multipliedBy(171.0 / 225.0)
+        }
+        
+        secondImage.snp.makeConstraints {
+            $0.height.equalTo(secondImage.snp.width).multipliedBy(171.0 / 109.0)
+        }
+        
+        maximizeImageView.snp.makeConstraints {
+            $0.bottom.equalTo(secondImage.snp.bottom).offset(-12)
+            $0.trailing.equalTo(secondImage.snp.trailing).offset(-12)
+            $0.width.height.equalTo(24)
+        }
+
+    }
+    
+    func setImage3() {
+        let images = [firstImage, secondImage, thirdImage]
+        let imagesWidth = view.frame.width - (24 * 2)
+        
+        [images[0],vStackView].forEach {
+            stackView.addArrangedSubview($0)
+        }
+        
+        [images[1], images[2]].forEach {
+            vStackView.addArrangedSubview($0)
+        }
+        
+        images[2].addSubview(maximizeImageView)
+        
+        images[0].snp.makeConstraints {
+            $0.height.equalTo(images[0].snp.width).multipliedBy(171.0 / 225.0)
+        }
+        let vstackHeight = images[0].frame.height - 8
+        
+        images[1].snp.makeConstraints {
+            $0.height.equalTo(images[1].snp.width).multipliedBy(89.0 / 109.0)
+        }
+        
+        images[2].snp.makeConstraints {
+            $0.height.equalTo(images[2].snp.width).multipliedBy(74.0 / 109.0)
+        }
+        
+        maximizeImageView.snp.makeConstraints {
+            $0.bottom.equalTo(images[2].snp.bottom).offset(-12)
+            $0.trailing.equalTo(images[2].snp.trailing).offset(-12)
+            $0.width.height.equalTo(24)
+        }
+    }
+    
+    // 이미지 없을 때 배경
+    func setImageViewConstraints() {
+        let imagesWidth = view.frame.width - (24*2)
+        noImageBackgroundView.snp.makeConstraints {
+            $0.top.equalTo(contentView).offset(8)
+            $0.leading.equalTo(contentView).offset(24)
+            $0.trailing.equalTo(contentView).offset(-24)
+            $0.width.equalTo(imagesWidth)
+            $0.height.equalTo(noImageBackgroundView.snp.width).multipliedBy(171.0 / 342.0)
+        }
+        
+        noImageIcon.snp.makeConstraints {
+            $0.centerX.equalTo(noImageBackgroundView)
+            $0.centerY.equalTo(noImageBackgroundView)
+            $0.height.equalTo(71)
+            $0.width.equalTo(71)
+        }
+        
     }
     
     // constraints 설정
     func setConstraints() {
+        
+        var topView: UIView? = nil
+        if images.isEmpty {
+            topView = noImageBackgroundView
+        } else {
+            topView = stackView
+        }
+        
         upButton.snp.makeConstraints {
             $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-28)
             $0.trailing.equalTo(view.snp.trailing).offset(-24)
         }
         
         view.bringSubviewToFront(upButton)
+        
+        editButton.snp.makeConstraints {
+            $0.bottom.equalTo(view.snp.bottom).offset(-28)
+            $0.trailing.equalTo(view.snp.trailing).offset(-24)
+        }
+        
+        view.bringSubviewToFront(editButton)
         
         // 스크롤뷰
         scrollView.snp.makeConstraints {
@@ -289,6 +428,9 @@ class ImjangNoteViewController: UIViewController {
             $0.height.equalTo(view).multipliedBy(1.6)
         }
         
+        setImageViewConstraints()
+        
+        contentView.bringSubviewToFront(stackView)
         // 방 이미지 스택뷰
         stackView.snp.makeConstraints {
             $0.top.equalTo(contentView).offset(8)
@@ -304,33 +446,40 @@ class ImjangNoteViewController: UIViewController {
         
         // 방 이름 스택뷰
         roomStackView.snp.makeConstraints {
-            $0.leading.equalTo(stackView.snp.leading)
-            $0.top.equalTo(stackView.snp.bottom).offset(12)
+            $0.leading.equalTo(topView!.snp.leading)
+            $0.top.equalTo(topView!.snp.bottom).offset(12)
         }
         
         // 방 가격 레이블
         roomPriceLabel.snp.makeConstraints {
-            $0.leading.equalTo(stackView.snp.leading)
+            $0.leading.equalTo(topView!.snp.leading)
             $0.top.equalTo(roomStackView.snp.bottom).offset(6)
         }
         
-        // 방 주소 레이블
-        roomAddressLabel.snp.makeConstraints {
-            $0.leading.equalTo(stackView.snp.leading)
+        addressBackgroundView.snp.makeConstraints {
+            $0.leading.equalTo(topView!.snp.leading)
+            $0.trailing.equalTo(topView!.snp.trailing)
             $0.top.equalTo(roomPriceLabel.snp.bottom).offset(6)
+//            $0.height.equalTo(37)
         }
         
-        // 전화번호 추가 스택뷰
-        addPhoneStackView.snp.makeConstraints {
-            $0.leading.equalTo(stackView.snp.leading)
-            $0.top.equalTo(roomAddressLabel.snp.bottom).offset(6)
+        addressStackView.snp.makeConstraints {
+            $0.leading.equalTo(addressBackgroundView.snp.leading).offset(12)
+            $0.trailing.equalTo(addressBackgroundView.snp.trailing).offset(-12)
+            $0.top.equalTo(addressBackgroundView.snp.top).offset(8)
+            $0.bottom.equalTo(addressBackgroundView.snp.bottom).offset(-8)
+        }
+        
+        // 위치 아이콘
+        roomLocationIcon.snp.makeConstraints {
+            $0.width.height.equalTo(18)
         }
         
         // info 스택뷰
         infoStackView.snp.makeConstraints {
-            $0.leading.equalTo(stackView.snp.leading)
-            $0.trailing.equalTo(stackView.snp.trailing)
-            $0.top.equalTo(addPhoneStackView.snp.bottom).offset(24)
+            $0.leading.equalTo(noImageBackgroundView.snp.leading)
+            $0.trailing.equalTo(noImageBackgroundView.snp.trailing)
+            $0.top.equalTo(addressBackgroundView.snp.bottom).offset(24)
         }
         
         // containerView
@@ -350,38 +499,17 @@ class ImjangNoteViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        let images = [firstImage, secondImage, thirdImage]
-        let imagesWidth = view.frame.width - (24 * 2) - 8
-        
-        images[0].snp.makeConstraints {
-            $0.width.equalTo(imagesWidth * 0.7)
-            $0.height.equalTo(images[0].snp.width).multipliedBy(57.0 / 85.0)
-        }
-        
-        images[1].snp.makeConstraints {
-            $0.height.equalTo(images[1].snp.width).multipliedBy(89.0 / 109.0)
-        }
-        
-        images[2].snp.makeConstraints {
-            $0.height.equalTo(images[2].snp.width).multipliedBy(74.0 / 109.0)
-        }
-        
-        maximizeImageView.snp.makeConstraints {
-            $0.bottom.equalTo(images[2].snp.bottom).offset(-12)
-            $0.trailing.equalTo(images[2].snp.trailing).offset(-12)
-            $0.width.height.equalTo(24)
-        }
     }
     
     // 스택뷰 설정
-    func setStackView(_ stackView: UIStackView, label: UILabel, image: UIImageView, axis: NSLayoutConstraint.Axis, spacing: CGFloat, imageRight: Bool){
+    func setStackView(_ stackView: UIStackView, label: UILabel, image: UIImageView, axis: NSLayoutConstraint.Axis, distribution: UIStackView.Distribution = .equalSpacing,spacing: CGFloat, isImageRight: Bool){
         
         stackView.axis = axis
         stackView.alignment = .center
-        stackView.distribution = .equalSpacing
+        stackView.distribution = distribution
         stackView.spacing = spacing
         
-        if imageRight {
+        if isImageRight {
             [label, image].forEach {
                 stackView.addArrangedSubview($0)
             }
@@ -431,12 +559,13 @@ extension ImjangNoteViewController: UIScrollViewDelegate {
         
         let containerY = containerView.frame.origin.y
         
+        // 0이상,
         if (scrollView.contentOffset.y > 0) && (scrollView.contentOffset.y > containerY - 20 && scrollView.contentOffset.y <= containerY){
             DispatchQueue.main.async {
-                UIView.animate(withDuration: 0.2) {
+                scrollView.isScrollEnabled = false
+                UIView.animate(withDuration: 0.1) {
                     scrollView.contentOffset.y = containerY
                 }
-                scrollView.isScrollEnabled = false
             }
             NotificationCenter.default.post(name: NSNotification.Name("didStoppedParentScroll"), object: nil)
         }
@@ -452,3 +581,4 @@ extension ImjangNoteViewController: UIScrollViewDelegate {
         }
     }
 }
+
