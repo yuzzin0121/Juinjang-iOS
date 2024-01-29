@@ -158,6 +158,6 @@ class DeleteImjangNoteTableViewCell: UITableViewCell {
         scoreLabel.design(text:"", textColor: ColorStyle.mainOrange, font: .pretendard(size: 14, weight: .semiBold))
         addressLabel.design(text: "", textColor: ColorStyle.textGray, font: .pretendard(size: 14, weight: .medium))
         
-        bookMarkButton.design(image: ImageStyle.bookmark, backgroundColor: .clear)
+        
     }
 }
