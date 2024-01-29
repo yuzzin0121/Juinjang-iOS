@@ -5,9 +5,15 @@
         "color-space" : "srgb",
         "components" : {
           "alpha" : "1.000",
+<<<<<<< HEAD:juinjang/juinjang/Assets.xcassets/Colors/gray0.colorset/Contents.json
+          "blue" : "0xF8",
+          "green" : "0xF8",
+          "red" : "0xF8"
+=======
           "blue" : "0xE3",
           "green" : "0xE3",
           "red" : "0xE3"
+>>>>>>> main:juinjang/juinjang/Assets.xcassets/Colors/gray2.colorset/Contents.json
         }
       },
       "idiom" : "universal"

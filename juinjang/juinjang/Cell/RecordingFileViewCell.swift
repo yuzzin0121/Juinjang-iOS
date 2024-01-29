@@ -10,7 +10,6 @@ import SnapKit
 import Then
 
 class RecordingFileViewCell: UITableViewCell {
-    static let identifier = "RecordingFileViewCell"
     
     let recordingFileNameLabel = UILabel().then {
         $0.font = .pretendard(size: 18, weight: .semiBold)
