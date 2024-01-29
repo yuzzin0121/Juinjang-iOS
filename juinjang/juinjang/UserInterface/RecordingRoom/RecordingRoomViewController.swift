@@ -41,6 +41,8 @@ class RecordingRoomViewController: UIViewController {
         $0.isScrollEnabled = false
         $0.separatorStyle = .none
         $0.register(RecordingFileViewCell.self, forCellReuseIdentifier: RecordingFileViewCell.identifier)
+        $0.estimatedRowHeight = 56
+        $0.separatorInset = .init(top: 0, left: 0, bottom: 12, right: 0)
     }
     
     let notePadLabel = UILabel()
@@ -64,9 +66,9 @@ class RecordingRoomViewController: UIViewController {
         print(Date())
         setDelegate()
         addSubView()
+        setItemData()
         designViews()
         setConstraints()
-        setItemData()
         hideKeyboardWhenTappedArround()
         showTotalRecordingButton.addTarget(self, action: #selector(showRecordingFilesVC), for: .touchUpInside)
         
@@ -104,8 +106,8 @@ class RecordingRoomViewController: UIViewController {
         fileItems.append(contentsOf: [
             .init(name: "보일러 관련", recordedDate: Date(), recordedTime: "1:30"),
             .init(name: "녹음_002", recordedDate: Date(), recordedTime: "2:12"),
-            .init(name: "녹음_001", recordedDate: Date(), recordedTime: "1:57"),
-            .init(name: "으아앙", recordedDate: Date(), recordedTime: "3:10")
+//            .init(name: "녹음_001", recordedDate: Date(), recordedTime: "1:57"),
+//            .init(name: "으아앙", recordedDate: Date(), recordedTime: "3:10")
         ])
         
         if fileItems.isEmpty {
@@ -198,6 +200,13 @@ class RecordingRoomViewController: UIViewController {
             $0.top.equalTo(contentView).offset(24)
         }
         
+        var topView: UIView? = nil
+        if fileItems.isEmpty {
+            topView = tableBackgroundView
+        } else {
+            topView = recordingFileTableView
+        }
+        
         tableBackgroundView.snp.makeConstraints {
             $0.top.equalTo(recordingHeaderStackView.snp.bottom).offset(12)
             $0.leading.trailing.equalTo(contentView)
@@ -211,14 +220,25 @@ class RecordingRoomViewController: UIViewController {
             $0.height.equalTo(22)
         }
         
+        var rowHeight = 0.13
+        print("file \(fileItems.count)개")
+        switch fileItems.count {
+        case 0: rowHeight = 0
+            tableBackgroundView.isHidden = false
+        case 1: rowHeight = 1
+        case 2: rowHeight = 2
+        case 3...: rowHeight = 3
+        default:
+            print("오류")
+        }
         recordingFileTableView.snp.makeConstraints {
             $0.top.equalTo(recordingHeaderStackView.snp.bottom).offset(12)
             $0.leading.trailing.equalTo(contentView)
-            $0.height.equalTo(56*3)
+            $0.height.equalTo(56*rowHeight)
         }
         
         notePadLabel.snp.makeConstraints {
-            $0.top.equalTo(tableBackgroundView.snp.bottom).offset(36)
+            $0.top.equalTo(topView!.snp.bottom).offset(36)
             $0.leading.equalTo(contentView).offset(24)
         }
         
@@ -329,8 +349,11 @@ extension RecordingRoomViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         print("Child 스크롤 좌표 - \(scrollView.contentOffset.y)")
         
-        if scrollView.contentOffset.y < 0 {
-            
+        // Child 스크롤 0 이하일 때
+        if scrollView.contentOffset.y < -50 {
+            scrollView.contentOffset.y = 0
+            scrollView.isScrollEnabled = false
+            NotificationCenter.default.post(name: NSNotification.Name("didStoppedChildScroll"), object: nil)
         }
     }
 }
@@ -352,3 +375,4 @@ extension RecordingRoomViewController: UITextViewDelegate {
         }
     }
 }
+

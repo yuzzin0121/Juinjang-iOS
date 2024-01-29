@@ -74,6 +74,7 @@
 		61A7B92C2B4C4EC300795B49 /* Pretendard-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = 61A7B9232B4C4EC300795B49 /* Pretendard-Black.otf */; };
 		61A7B92D2B4C4EC300795B49 /* Pretendard-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 61A7B9242B4C4EC300795B49 /* Pretendard-Bold.otf */; };
 		61A7B92E2B4C4EC300795B49 /* Pretendard-ExtraBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 61A7B9252B4C4EC300795B49 /* Pretendard-ExtraBold.otf */; };
+		61AD50A92B58039B00314673 /* DeletePopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AD50A82B58039B00314673 /* DeletePopupViewController.swift */; };
 		61D925052B486508002A16B4 /* RecordingFileViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D925042B486508002A16B4 /* RecordingFileViewCell.swift */; };
 		61D925082B486706002A16B4 /* RecordingFileItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D925072B486706002A16B4 /* RecordingFileItem.swift */; };
 		61D9250A2B49506D002A16B4 /* RecordingFilesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D925092B49506D002A16B4 /* RecordingFilesViewController.swift */; };
@@ -144,6 +145,7 @@
 		61A7B9232B4C4EC300795B49 /* Pretendard-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Black.otf"; sourceTree = "<group>"; };
 		61A7B9242B4C4EC300795B49 /* Pretendard-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.otf"; sourceTree = "<group>"; };
 		61A7B9252B4C4EC300795B49 /* Pretendard-ExtraBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-ExtraBold.otf"; sourceTree = "<group>"; };
+		61AD50A82B58039B00314673 /* DeletePopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletePopupViewController.swift; sourceTree = "<group>"; };
 		61D925042B486508002A16B4 /* RecordingFileViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingFileViewCell.swift; sourceTree = "<group>"; };
 		61D925072B486706002A16B4 /* RecordingFileItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingFileItem.swift; sourceTree = "<group>"; };
 		61D925092B49506D002A16B4 /* RecordingFilesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingFilesViewController.swift; sourceTree = "<group>"; };
@@ -228,6 +230,7 @@
 				611F14542B47070B00B983F1 /* RecordingSegmentedViewController.swift */,
 				611F14592B4707CC00B983F1 /* RecordingRoomViewController.swift */,
 				61D925092B49506D002A16B4 /* RecordingFilesViewController.swift */,
+				61AD50A82B58039B00314673 /* DeletePopupViewController.swift */,
 			);
 			path = RecordingRoom;
 			sourceTree = "<group>";
@@ -537,6 +540,9 @@
 				0A3D5D4C2B4D333900574686 /* TransactionModel.swift in Sources */,
 				0A4EBE342B5EA25300909B7A /* ExpandedCalendarTableViewCell.swift in Sources */,
 				616408EC2B407A2D00EC3B5E /* UIView+Extensions.swift in Sources */,
+				61AD50A92B58039B00314673 /* DeletePopupViewController.swift in Sources */,
+				0A3D5D632B4D707300574686 /* RecordBottomSheetViewController.swift in Sources */,
+				0A3D5D592B4D337100574686 /* FirstTableViewCell.swift in Sources */,
 				0A4EBE362B5EA27B00909B7A /* ExpandedScoreTableViewCell.swift in Sources */,
 				0AF968242B5BDF3300A3CBBB /* CheckListViewController.swift in Sources */,
 				0A7FB9222B5F025C0060EBC8 /* DimmedViewController.swift in Sources */,
