@@ -120,16 +120,13 @@ class RecordingRightsViewController: UIViewController {
     }
     
     @objc func backButtonTapped() {
-        let SignupPopupVC = SignupPopupViewController()
-        SignupPopupVC.modalPresentationStyle = .overCurrentContext
-        present(SignupPopupVC, animated: false, completion: nil)
+        navigationController?.popViewController(animated: true)
     }
     
     @objc func buttonTapped(_ sender: UIButton) {
         // -TODO: 녹음 권한 팝업창 띄우기
         let mainVC = MainViewController()
         mainVC.modalPresentationStyle = .fullScreen
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        self.navigationController?.pushViewController(mainVC, animated: true)
+        present(mainVC, animated: false, completion: nil)
     }
 }

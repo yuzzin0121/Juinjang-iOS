@@ -185,8 +185,9 @@ class WelcomeViewController: UIViewController {
     }
     
     @objc func buttonTapped(_ sender: UIButton) {
-        let mainViewController = MainViewController()
-        mainViewController.modalPresentationStyle = .fullScreen
-        present(mainViewController, animated: false, completion: nil)
+        let RecordingRightsVC = RecordingRightsViewController()
+        RecordingRightsVC.modalPresentationStyle = .fullScreen
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        self.navigationController?.pushViewController(RecordingRightsVC, animated: true)
     }
 }
