@@ -464,9 +464,9 @@ class EditBasicInfoDetailViewController: UIViewController {
         inputPriceStackView = UIStackView(
             arrangedSubviews:
                 [threeDisitPriceField,
-                 priceDetailLabels[4],
+                 priceDetailLabels[3],
                  fourDisitPriceField,
-                 priceDetailLabels[6]])
+                 priceDetailLabels[5]])
 
         inputPriceStackView.translatesAutoresizingMaskIntoConstraints = false
         inputPriceStackView.axis = .horizontal
