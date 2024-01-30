@@ -47,8 +47,6 @@ class CheckListViewController: UIViewController {
         setupLayout()
         // ChecklistManager 초기화
         checklistManager = ChecklistManager(categories: categories)
-        // 셀이 처음 로드될 때 UserDefaults에서 저장된 값 불러오기
-        loadSelectedValues()
     }
     
     // 키보드 내리기
@@ -99,40 +97,7 @@ class CheckListViewController: UIViewController {
             $0.leading.trailing.equalTo(contentView)
         }
     }
-    
-    // 사용자가 선택한 날짜를 UserDefaults에 저장하는 함수
-    func saveSelectedDate(categoryIndex: Int, itemIndex: Int, selectedDate: Date?) {
-        let key = "SelectedDate_\(categoryIndex)_\(itemIndex)"
-        UserDefaults.standard.set(selectedDate, forKey: key)
-    }
 
-
-    // UserDefaults에서 저장된 사용자 선택 날짜를 불러오는 함수
-    func loadSelectedDate(categoryIndex: Int, itemIndex: Int) -> Date? {
-        let key = "SelectedDate_\(categoryIndex)_\(itemIndex)"
-        return UserDefaults.standard.object(forKey: key) as? Date
-    }
-
-    
-    func loadSelectedValues() {
-        for section in 0..<categories.count {
-            for row in 1..<categories[section].items.count + 1 {
-                if let storedDate = loadSelectedDate(categoryIndex: section, itemIndex: row - 1) {
-                    // 저장된 값이 있다면 해당 값을 설정
-                    if var originalItem = categories[section].items[row - 1] as? CalendarItem {
-                        var updatedItem = originalItem
-                        updatedItem.inputDate = storedDate
-                        categories[section].items[row - 1] = updatedItem
-                    }
-                }
-
-            }
-        }
-        // tableView 갱신
-        tableView.reloadData()
-    }
-
-    
     var categories: [Category] = [
         Category(image: UIImage(named: "deadline-item")!, name: "기한", items: [
             CalendarItem(content: "입주 가능 날짜는 어떻게 되나요?"),
