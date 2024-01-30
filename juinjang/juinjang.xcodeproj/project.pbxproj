@@ -48,6 +48,8 @@
 		0A7FB9352B5F02E00060EBC8 /* BottomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7FB9312B5F02E00060EBC8 /* BottomTableViewCell.swift */; };
 		0A7FB9372B5F02E00060EBC8 /* TopTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7FB9332B5F02E00060EBC8 /* TopTableViewCell.swift */; };
 		0A7FB9392B5F08340060EBC8 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7FB9382B5F08340060EBC8 /* MainViewController.swift */; };
+		0A95D72F2B682013000A9C06 /* ToSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A95D72E2B682013000A9C06 /* ToSViewController.swift */; };
+		0A95D7312B682FB4000A9C06 /* ToSItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A95D7302B682FB4000A9C06 /* ToSItemTableViewCell.swift */; };
 		0A9E0A472B3DCAB90094595A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9E0A462B3DCAB90094595A /* AppDelegate.swift */; };
 		0A9E0A492B3DCAB90094595A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9E0A482B3DCAB90094595A /* SceneDelegate.swift */; };
 		0A9E0A532B3DCAB90094595A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0A9E0A512B3DCAB90094595A /* LaunchScreen.storyboard */; };
@@ -117,6 +119,8 @@
 		0A7FB9312B5F02E00060EBC8 /* BottomTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BottomTableViewCell.swift; sourceTree = "<group>"; };
 		0A7FB9332B5F02E00060EBC8 /* TopTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopTableViewCell.swift; sourceTree = "<group>"; };
 		0A7FB9382B5F08340060EBC8 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		0A95D72E2B682013000A9C06 /* ToSViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToSViewController.swift; sourceTree = "<group>"; };
+		0A95D7302B682FB4000A9C06 /* ToSItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToSItemTableViewCell.swift; sourceTree = "<group>"; };
 		0A9E0A432B3DCAB90094595A /* juinjang.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = juinjang.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A9E0A462B3DCAB90094595A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0A9E0A482B3DCAB90094595A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -183,6 +187,8 @@
 				0A14E36E2B569A840008FD28 /* SignUpViewController.swift */,
 				0A14E3702B56B31A0008FD28 /* SetNickNameViewController.swift */,
 				0A14E3722B56B6F70008FD28 /* WelcomeViewController.swift */,
+				0A95D72E2B682013000A9C06 /* ToSViewController.swift */,
+				0A95D7302B682FB4000A9C06 /* ToSItemTableViewCell.swift */,
 			);
 			path = SignUp;
 			sourceTree = "<group>";
@@ -512,7 +518,6 @@
 				0A2DED1A2B55198D00A96BAA /* STTLoadingViewController.swift in Sources */,
 				0A554CE02B52DB100023BB49 /* RecordViewController.swift in Sources */,
 				0A129BE92B6251E10022819B /* ChecklistManager.swift in Sources */,
-				0A3D5D552B4D337100574686 /* MainViewController.swift in Sources */,
 				61D925082B486706002A16B4 /* RecordingFileItem.swift in Sources */,
 				0A2DED1C2B551CB100A96BAA /* RecordPlaybackViewController.swift in Sources */,
 				0A7FB9342B5F02E00060EBC8 /* BottomCollectionViewCell.swift in Sources */,
@@ -525,6 +530,7 @@
 				611F14552B47070B00B983F1 /* RecordingSegmentedViewController.swift in Sources */,
 				0A4EBE3B2B5EF2BC00909B7A /* ExpandedDropdownTableViewCell.swift in Sources */,
 				0A7FB9392B5F08340060EBC8 /* MainViewController.swift in Sources */,
+				0A95D7312B682FB4000A9C06 /* ToSItemTableViewCell.swift in Sources */,
 				0A3EBEBE2B654E71004D8DCE /* OpenNewPagePopupViewController.swift in Sources */,
 				0A7FB9372B5F02E00060EBC8 /* TopTableViewCell.swift in Sources */,
 				0A7FB9112B5F023B0060EBC8 /* QnAModel.swift in Sources */,
@@ -538,6 +544,7 @@
 				0A4EBE342B5EA25300909B7A /* ExpandedCalendarTableViewCell.swift in Sources */,
 				616408EC2B407A2D00EC3B5E /* UIView+Extensions.swift in Sources */,
 				0A4EBE362B5EA27B00909B7A /* ExpandedScoreTableViewCell.swift in Sources */,
+				0A95D72F2B682013000A9C06 /* ToSViewController.swift in Sources */,
 				0AF968242B5BDF3300A3CBBB /* CheckListViewController.swift in Sources */,
 				0A7FB9222B5F025C0060EBC8 /* DimmedViewController.swift in Sources */,
 				0A3D5D632B4D707300574686 /* BottomSheetViewController.swift in Sources */,
@@ -767,22 +774,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		0A7AC0ED2B640CA80032C9DF /* XCRemoteSwiftPackageReference "Alamofire" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Alamofire/Alamofire";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.8.1;
-			};
-		};
-		611F14562B47074000B983F1 /* XCRemoteSwiftPackageReference "Tabman" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/uias/Tabman.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.0.2;
-			};
-		};
 		0A4EBE252B5E9E5F00909B7A /* XCRemoteSwiftPackageReference "Then" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/devxoul/Then";
@@ -815,6 +806,14 @@
 				minimumVersion = 2.8.4;
 			};
 		};
+		0A7AC0ED2B640CA80032C9DF /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.8.1;
+			};
+		};
 		0AEB63BE2B616DF200427EA7 /* XCRemoteSwiftPackageReference "SwiftyMenu" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/KarimEbrahemAbdelaziz/SwiftyMenu";
@@ -834,11 +833,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		0A7AC0EE2B640CA80032C9DF /* Alamofire */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 0A7AC0ED2B640CA80032C9DF /* XCRemoteSwiftPackageReference "Alamofire" */;
-			productName = Alamofire;
-		};
 		0A4EBE262B5E9E5F00909B7A /* Then */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 0A4EBE252B5E9E5F00909B7A /* XCRemoteSwiftPackageReference "Then" */;
@@ -863,6 +857,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0A4EBE302B5EA21100909B7A /* XCRemoteSwiftPackageReference "FSCalendar" */;
 			productName = FSCalendar;
+		};
+		0A7AC0EE2B640CA80032C9DF /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0A7AC0ED2B640CA80032C9DF /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
 		};
 		0AEB63BF2B616DF200427EA7 /* SwiftyMenu */ = {
 			isa = XCSwiftPackageProductDependency;
