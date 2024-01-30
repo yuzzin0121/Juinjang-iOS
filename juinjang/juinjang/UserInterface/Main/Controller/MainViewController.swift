@@ -71,7 +71,8 @@ class MainViewController: UIViewController {
         //배경
         backgroundImageView.snp.makeConstraints{
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(37.82)
-            $0.left.right.equalToSuperview()
+            $0.height.equalTo(483.27)
+            $0.left.equalToSuperview().offset(-201.08)
         }
         UIView.animate(withDuration: 0.8, delay: 0.0, options: .curveEaseIn, animations: {
             self.backgroundImageView.alpha = 1.0
