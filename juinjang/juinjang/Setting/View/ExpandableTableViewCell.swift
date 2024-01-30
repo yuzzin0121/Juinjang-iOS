@@ -96,10 +96,10 @@ class ExpandableTableViewCell: UITableViewCell {
             answerLabel.trailingAnchor.constraint(equalTo: expandableView.trailingAnchor, constant: -23)
         ])
     }
-    func set(_ model: Section) {
+    func set(_ model: Sections) {
             iconImageView.image = UIImage(named: "question")
             questionLabel.text = model.question
-            questionLabel.asColor(targetString: model.highlight, color: UIColor.juinjang)
+            questionLabel.asColor(targetString: model.highlight, color: UIColor(named: "juinjang"))
             answerLabel.text = model.answer
             let attrString = NSMutableAttributedString(string: answerLabel.text!)
             let paragraphStyle = NSMutableParagraphStyle()

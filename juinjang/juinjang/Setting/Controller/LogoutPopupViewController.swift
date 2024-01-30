@@ -27,3 +27,4 @@ class LogoutPopupViewController: UIViewController {
     }
     required init?(coder: NSCoder) { fatalError() }
 }
+

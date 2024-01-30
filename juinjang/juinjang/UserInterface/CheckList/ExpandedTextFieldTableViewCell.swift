@@ -12,7 +12,7 @@ import SnapKit
 
 class ExpandedTextFieldTableViewCell: UITableViewCell {
     
-    static let identifier = "ExpandedTextFieldTableViewCell"
+    static let id = "ExpandedTextFieldTableViewCell"
     
     var inputAnswer: String?
     

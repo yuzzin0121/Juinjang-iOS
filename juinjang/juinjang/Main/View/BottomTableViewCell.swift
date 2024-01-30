@@ -10,15 +10,17 @@ import SnapKit
 import Then
 
 class BottomTableViewCell: UITableViewCell{
+    
+    static let id = "BottomTableViewCell"
     static let cellHeight = 250.0
     
+//MARK: - 변수 설정
+    //컬렉션 뷰
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        //layout.minimumLineSpacing = 8
         layout.sectionInset = UIEdgeInsets(top: 0, left: 18, bottom: 0, right: 0)
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        //cv.alpha = 0.0
         cv.backgroundColor = .clear
         return cv
     }()
@@ -27,42 +29,46 @@ class BottomTableViewCell: UITableViewCell{
         collectionView.delegate = dataSourceDelegate
         collectionView.dataSource = dataSourceDelegate
         collectionView.tag = row
+        collectionView.showsHorizontalScrollIndicator = false
         collectionView.register(BottomCollectionViewCell.self, forCellWithReuseIdentifier: BottomCollectionViewCell.identifier)
-        //collectionView.reloadData()  //재부팅
     }
-    
-    /*let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
-        layout.minimumLineSpacing = 12
-        $0.collectionViewLayout = layout
-        $0.backgroundColor = .red
-    }*/
-    
-    //MARK: - 최근 본 임장
+    //최근 본 임장
     var recentImjangLabel = UILabel().then {
         $0.text = "최근 본 임장"
         $0.textColor = .black
         $0.font = UIFont(name: "Pretendard-Bold", size: 20)
         $0.translatesAutoresizingMaskIntoConstraints = false
-        ///$0.alpha = 0.0
+    }
+    
+    //최근 본 임장이 없을 때
+    var noImjangImageView = UIImageView().then {
+        $0.image = UIImage(named: "투명로고")
+        $0.contentMode = .scaleAspectFill
+        $0.alpha = 0.0
+    }
+    var noImjaneLabel = UILabel().then {
+        $0.text = "아직 등록된 집이 없어요"
+        $0.textColor = UIColor(named: "450")
+        $0.font = UIFont(name: "Pretendard-SemiBold", size: 16)
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        $0.alpha = 0.0
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         addContentView()
         autoLayout()
-        
-        }
+    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-        }
+    }
         
     private func addContentView() {
-        self.contentView.addSubview(self.recentImjangLabel)
-        self.contentView.addSubview(collectionView)
+        contentView.addSubview(recentImjangLabel)
+        //contentView.addSubview(noImjangImageView)
+        //contentView.addSubview(noImjaneLabel)
+        contentView.addSubview(collectionView)
     }
         
     private func autoLayout() {
@@ -71,29 +77,23 @@ class BottomTableViewCell: UITableViewCell{
             $0.left.equalToSuperview().inset(24)
         }
         
-        UIView.animate(withDuration: 1.5, delay: 1.2, options: .curveEaseIn, animations: {
-            self.recentImjangLabel.alpha = 1.0
-        }, completion: nil)
+        /*noImjangImageView.snp.makeConstraints{
+            $0.top.equalTo(recentImjangLabel.snp.bottom).offset(49)
+            $0.left.right.equalToSuperview().inset(149)
+            $0.height.equalTo(108.83)
+        }
+        
+        noImjaneLabel.snp.makeConstraints{
+            $0.top.equalTo(noImjangImageView.snp.bottom).offset(33.17)
+            $0.left.equalToSuperview().offset(122)
+        }*/
         
         collectionView.snp.makeConstraints{
             $0.top.equalTo(recentImjangLabel.snp.bottom).offset(15)
             $0.left.right.equalToSuperview()
             $0.height.equalTo(204)
         }
-        
-        UIView.animate(withDuration: 1.5, delay: 1.4, options: .curveEaseIn, animations: {
-            self.collectionView.alpha = 1.0
-        }, completion: nil)
-        
-    }
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        // Configure the view for the selected state
     }
 }
+
 

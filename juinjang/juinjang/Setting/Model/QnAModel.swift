@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Section {
+struct Sections {
     let question: String
     var answer: String
     let highlight: String
@@ -23,3 +23,4 @@ struct Section {
         Section(question: "사용성 피드백은 어디로 하면 되나요?", answer: "사용성 평가는 앱스토어 혹은 juinjang1227@gmail.com으로 주시면 대단히 감사하겠습니다.", highlight: "사용성 피드백"),
     ]
 }
+

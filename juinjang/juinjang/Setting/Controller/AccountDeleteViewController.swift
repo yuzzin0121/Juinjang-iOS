@@ -25,6 +25,12 @@ class AccountDeleteViewController : DimmedViewController {
         $0.font = UIFont(name: "Pretendard-Bold", size: 20)
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.textColor = UIColor(named: "600")
+        
+        let attrString = NSMutableAttributedString(string: $0.text!)
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 3.0
+        attrString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attrString.length))
+        $0.attributedText = attrString
     }
     var label0 = UILabel().then {
         $0.text = "계정을 없애면 임장노트의 내용은 복구할 수 없게 돼요. \n지금 취소하면 아래의 혜택을 계속 누릴 수 있어요."
@@ -32,12 +38,12 @@ class AccountDeleteViewController : DimmedViewController {
         $0.font = UIFont(name: "Pretendard-Medium", size: 16)
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.textColor = UIColor(named: "500")
-    }
-    var label1 = UILabel().then {
-        $0.text = "입력한 정보를 기반으로 계산된 점수 확인하기"
-        $0.font = UIFont(name: "Pretendard=SemiBold", size: 16)
-        $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.textColor = UIColor(named: "500")
+        
+        let attrString = NSMutableAttributedString(string: $0.text!)
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 5.0
+        attrString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attrString.length))
+        $0.attributedText = attrString
     }
     
     let list1 = ["입력한 정보를 기반으로 계산된 점수 확인하기","내 매물 정보 리포트로 한눈에 보기", "리포트 비교하고 공유하기"]
@@ -63,6 +69,7 @@ class AccountDeleteViewController : DimmedViewController {
     @objc
     func no(_ sender: Any) {
         dismiss(animated: true, completion: nil)
+        
     }
     
     var yesButton = UIButton().then {
@@ -76,13 +83,13 @@ class AccountDeleteViewController : DimmedViewController {
     }
     @objc
     func tapYesButton(_ sender: Any) {
+        
         switch yesButton.titleLabel?.text {
         case "네,계정을 삭제할게요":
             yesButton.setTitle("계정 삭제하기", for: .normal)
             yesButton.backgroundColor = UIColor(named: "juinjang")
             let vc = AccountDeleteFinalViewController()
-            vc.modalPresentationStyle = .overFullScreen
-            self.present(vc, animated: true)
+            view.insertSubview(vc.view, at: 1)
         default:
             return
         }
@@ -167,8 +174,9 @@ class AccountDeleteViewController : DimmedViewController {
         accountDeleteView.addSubview(dotLine2)
         list(listName: list3, num: 1, from: dotLine2, offset: 16)
         accountDeleteView.addSubview(noButton)
+        view.insertSubview(noButton, at: 2)
         accountDeleteView.addSubview(yesButton)
-    
+        view.insertSubview(yesButton, at: 2)
         setConstraint()
     }
 }
