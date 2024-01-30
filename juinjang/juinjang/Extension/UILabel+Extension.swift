@@ -36,5 +36,4 @@ extension UILabel {
         attributedString.addAttribute(.foregroundColor, value: color as Any, range: range)
         attributedText = attributedString
     }
-
 }

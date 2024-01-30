@@ -74,6 +74,7 @@ class WelcomeViewController: UIViewController {
         self.navigationItem.hidesBackButton = true
         super.viewDidLoad()
         fadeIn()
+        setNavigationBar()
         addSubViews()
         setupLayout()
         setNickname()
@@ -95,6 +96,14 @@ class WelcomeViewController: UIViewController {
                 self.guideLabel3.alpha = 1
             }, completion: nil)
         })
+    }
+    
+    func setNavigationBar() {
+        self.navigationController?.navigationBar.tintColor = .black
+        self.navigationItem.hidesBackButton = true
+        let backButtonImage = UIImage(named: "arrow-left")
+        let backButton = UIBarButtonItem(image: backButtonImage, style: .plain,target: self, action: #selector(backButtonTapped))
+        navigationItem.leftBarButtonItem = backButton
     }
 
     func addSubViews() {
@@ -166,13 +175,19 @@ class WelcomeViewController: UIViewController {
         if let nickname = userInfo?.nickname {
             greetingLabel.text = "반가워요, \(nickname)님"
             nickNameLabel.text = nickname
+            greetingLabel.asColor(targetString: nickname, color: UIColor(named: "mainOrange"))
             print("사용자가 설정한 닉네임: \(nickname)")
         }
     }
     
+    @objc func backButtonTapped() {
+        navigationController?.popViewController(animated: true)
+    }
+    
     @objc func buttonTapped(_ sender: UIButton) {
-        let mainViewController = MainViewController()
-        mainViewController.modalPresentationStyle = .fullScreen
-        present(mainViewController, animated: false, completion: nil)
+        let RecordingRightsVC = RecordingRightsViewController()
+        RecordingRightsVC.modalPresentationStyle = .fullScreen
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        self.navigationController?.pushViewController(RecordingRightsVC, animated: true)
     }
 }

@@ -11,6 +11,11 @@
 		0A14E36F2B569A840008FD28 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A14E36E2B569A840008FD28 /* SignUpViewController.swift */; };
 		0A14E3712B56B31A0008FD28 /* SetNickNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A14E3702B56B31A0008FD28 /* SetNickNameViewController.swift */; };
 		0A14E3732B56B6F70008FD28 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A14E3722B56B6F70008FD28 /* WelcomeViewController.swift */; };
+		0A14E3772B56C43A0008FD28 /* omyu pretty.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0A14E3762B56C43A0008FD28 /* omyu pretty.ttf */; };
+		0A2471192B68CAAF00A7382B /* ToSItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2471182B68CAAF00A7382B /* ToSItem.swift */; };
+		0A24711B2B68FCF700A7382B /* SignupPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A24711A2B68FCF700A7382B /* SignupPopupViewController.swift */; };
+		0A24711D2B69147200A7382B /* ToSDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A24711C2B69147200A7382B /* ToSDetailViewController.swift */; };
+		0A24711F2B6924BA00A7382B /* RecordingRightsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A24711E2B6924BA00A7382B /* RecordingRightsViewController.swift */; };
 		0A2DED1A2B55198D00A96BAA /* STTLoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2DED192B55198D00A96BAA /* STTLoadingViewController.swift */; };
 		0A2DED1C2B551CB100A96BAA /* RecordPlaybackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2DED1B2B551CB100A96BAA /* RecordPlaybackViewController.swift */; };
 		0A2DED1E2B551CEE00A96BAA /* RecordTopViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2DED1D2B551CEE00A96BAA /* RecordTopViewController.swift */; };
@@ -32,6 +37,8 @@
 		0A73E60D2B5855CD00EF1C89 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A73E60C2B5855CD00EF1C89 /* UserInfo.swift */; };
 		0A7AC0EF2B640CA80032C9DF /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 0A7AC0EE2B640CA80032C9DF /* Alamofire */; };
 		0A7AC0F12B6412760032C9DF /* KakaoZipCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7AC0F02B6412760032C9DF /* KakaoZipCodeViewController.swift */; };
+		0A95D72F2B682013000A9C06 /* ToSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A95D72E2B682013000A9C06 /* ToSViewController.swift */; };
+		0A95D7312B682FB4000A9C06 /* ToSItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A95D7302B682FB4000A9C06 /* ToSItemTableViewCell.swift */; };
 		0A9E0A472B3DCAB90094595A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9E0A462B3DCAB90094595A /* AppDelegate.swift */; };
 		0A9E0A492B3DCAB90094595A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9E0A482B3DCAB90094595A /* SceneDelegate.swift */; };
 		0A9E0A532B3DCAB90094595A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0A9E0A512B3DCAB90094595A /* LaunchScreen.storyboard */; };
@@ -111,6 +118,11 @@
 		0A14E36E2B569A840008FD28 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		0A14E3702B56B31A0008FD28 /* SetNickNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetNickNameViewController.swift; sourceTree = "<group>"; };
 		0A14E3722B56B6F70008FD28 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
+		0A14E3762B56C43A0008FD28 /* omyu pretty.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "omyu pretty.ttf"; path = "../../../../../../../Downloads/omyu pretty.ttf"; sourceTree = "<group>"; };
+		0A2471182B68CAAF00A7382B /* ToSItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToSItem.swift; sourceTree = "<group>"; };
+		0A24711A2B68FCF700A7382B /* SignupPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupPopupViewController.swift; sourceTree = "<group>"; };
+		0A24711C2B69147200A7382B /* ToSDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToSDetailViewController.swift; sourceTree = "<group>"; };
+		0A24711E2B6924BA00A7382B /* RecordingRightsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingRightsViewController.swift; sourceTree = "<group>"; };
 		0A2DED192B55198D00A96BAA /* STTLoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STTLoadingViewController.swift; sourceTree = "<group>"; };
 		0A2DED1B2B551CB100A96BAA /* RecordPlaybackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordPlaybackViewController.swift; sourceTree = "<group>"; };
 		0A2DED1D2B551CEE00A96BAA /* RecordTopViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordTopViewController.swift; sourceTree = "<group>"; };
@@ -126,6 +138,8 @@
 		0A554CE32B5420F20023BB49 /* WarningMessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarningMessageViewController.swift; sourceTree = "<group>"; };
 		0A73E60C2B5855CD00EF1C89 /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
 		0A7AC0F02B6412760032C9DF /* KakaoZipCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoZipCodeViewController.swift; sourceTree = "<group>"; };
+		0A95D72E2B682013000A9C06 /* ToSViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToSViewController.swift; sourceTree = "<group>"; };
+		0A95D7302B682FB4000A9C06 /* ToSItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToSItemTableViewCell.swift; sourceTree = "<group>"; };
 		0A9E0A432B3DCAB90094595A /* juinjang.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = juinjang.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A9E0A462B3DCAB90094595A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0A9E0A482B3DCAB90094595A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -233,6 +247,12 @@
 				0A14E36E2B569A840008FD28 /* SignUpViewController.swift */,
 				0A14E3702B56B31A0008FD28 /* SetNickNameViewController.swift */,
 				0A14E3722B56B6F70008FD28 /* WelcomeViewController.swift */,
+				0A95D72E2B682013000A9C06 /* ToSViewController.swift */,
+				0A95D7302B682FB4000A9C06 /* ToSItemTableViewCell.swift */,
+				0A2471182B68CAAF00A7382B /* ToSItem.swift */,
+				0A24711A2B68FCF700A7382B /* SignupPopupViewController.swift */,
+				0A24711C2B69147200A7382B /* ToSDetailViewController.swift */,
+				0A24711E2B6924BA00A7382B /* RecordingRightsViewController.swift */,
 			);
 			path = SignUp;
 			sourceTree = "<group>";
@@ -657,6 +677,7 @@
 				619269F52B67747F00D4DD3E /* ScrapCollectionViewCell.swift in Sources */,
 				3458557E2B689D2A00432C06 /* ExpandableTableViewCell.swift in Sources */,
 				616408E12B405B7200EC3B5E /* ImjangNoteViewController.swift in Sources */,
+				0A24711D2B69147200A7382B /* ToSDetailViewController.swift in Sources */,
 				0A7AC0F12B6412760032C9DF /* KakaoZipCodeViewController.swift in Sources */,
 				0A4EBE382B5EDD6F00909B7A /* ExpandedTextFieldTableViewCell.swift in Sources */,
 				0A554CE42B5420F20023BB49 /* WarningMessageViewController.swift in Sources */,
@@ -687,8 +708,12 @@
 				61D925052B486508002A16B4 /* RecordingFileViewCell.swift in Sources */,
 				611F14552B47070B00B983F1 /* RecordingSegmentedViewController.swift in Sources */,
 				0A4EBE3B2B5EF2BC00909B7A /* ExpandedDropdownTableViewCell.swift in Sources */,
+				0A95D7312B682FB4000A9C06 /* ToSItemTableViewCell.swift in Sources */,
 				0A3EBEBE2B654E71004D8DCE /* OpenNewPagePopupViewController.swift in Sources */,
+				0A2471192B68CAAF00A7382B /* ToSItem.swift in Sources */,
+				0A24711F2B6924BA00A7382B /* RecordingRightsViewController.swift in Sources */,
 				0AB34CC12B4F11B000150A15 /* OpenNewPage2ViewController.swift in Sources */,
+				0A24711B2B68FCF700A7382B /* SignupPopupViewController.swift in Sources */,
 				619269F62B67747F00D4DD3E /* SearchKeywordHeaderView.swift in Sources */,
 				616409022B407FB300EC3B5E /* UIFont+Pretendard.swift in Sources */,
 				345855972B692DFB00432C06 /* GraphViewController.swift in Sources */,
@@ -712,6 +737,7 @@
 				345855902B689E3B00432C06 /* DimmedViewController.swift in Sources */,
 				0A3D5D632B4D707300574686 /* BottomSheetViewController.swift in Sources */,
 				0A4EBE362B5EA27B00909B7A /* ExpandedScoreTableViewCell.swift in Sources */,
+				0A95D72F2B682013000A9C06 /* ToSViewController.swift in Sources */,
 				0AF968242B5BDF3300A3CBBB /* CheckListViewController.swift in Sources */,
 				0A3D5D632B4D707300574686 /* BottomSheetViewController.swift in Sources */,
 				0A9E0A472B3DCAB90094595A /* AppDelegate.swift in Sources */,

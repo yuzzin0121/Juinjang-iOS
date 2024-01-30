@@ -67,14 +67,22 @@ class SetNickNameViewController: UIViewController {
     
     override func viewDidLoad() {
         self.view.backgroundColor = .white
-        self.navigationItem.title = "닉네임 정하기"
         super.viewDidLoad()
         nickNameTextField.delegate = self
+        setNavigationBar()
         addSubViews()
         setupLayout()
     }
-
     
+    func setNavigationBar() {
+        self.navigationItem.title = "닉네임 정하기"
+        self.navigationController?.navigationBar.tintColor = .black
+        self.navigationItem.hidesBackButton = true
+        let backButtonImage = UIImage(named: "arrow-left")
+        let backButton = UIBarButtonItem(image: backButtonImage, style: .plain,target: self, action: #selector(backButtonTapped))
+        navigationItem.leftBarButtonItem = backButton
+    }
+
     func addSubViews() {
         [introLabel,
          guideLabel,
@@ -128,6 +136,10 @@ class SetNickNameViewController: UIViewController {
             $0.width.equalTo(202)
             $0.height.equalTo(52)
         }
+    }
+    
+    @objc func backButtonTapped() {
+        navigationController?.popViewController(animated: true)
     }
     
     @objc func buttonTapped(_ sender: UIButton) {
