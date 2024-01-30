@@ -9,8 +9,6 @@ import UIKit
 
 class ToSItemTableViewCell: UITableViewCell {
     
-    static let identifier = "ToSItemTableViewCell"
-    
     var toSItem: ToSItem?
     
     lazy var checkButton = UIButton().then {
