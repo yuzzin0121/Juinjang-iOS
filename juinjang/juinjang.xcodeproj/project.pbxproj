@@ -11,11 +11,11 @@
 		0A14E36F2B569A840008FD28 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A14E36E2B569A840008FD28 /* SignUpViewController.swift */; };
 		0A14E3712B56B31A0008FD28 /* SetNickNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A14E3702B56B31A0008FD28 /* SetNickNameViewController.swift */; };
 		0A14E3732B56B6F70008FD28 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A14E3722B56B6F70008FD28 /* WelcomeViewController.swift */; };
-		0A14E3772B56C43A0008FD28 /* omyu pretty.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0A14E3762B56C43A0008FD28 /* omyu pretty.ttf */; };
 		0A2471192B68CAAF00A7382B /* ToSItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2471182B68CAAF00A7382B /* ToSItem.swift */; };
 		0A24711B2B68FCF700A7382B /* SignupPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A24711A2B68FCF700A7382B /* SignupPopupViewController.swift */; };
 		0A24711D2B69147200A7382B /* ToSDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A24711C2B69147200A7382B /* ToSDetailViewController.swift */; };
 		0A24711F2B6924BA00A7382B /* RecordingRightsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A24711E2B6924BA00A7382B /* RecordingRightsViewController.swift */; };
+		0A2471212B69693400A7382B /* ToSDetailItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2471202B69693400A7382B /* ToSDetailItem.swift */; };
 		0A2DED1A2B55198D00A96BAA /* STTLoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2DED192B55198D00A96BAA /* STTLoadingViewController.swift */; };
 		0A2DED1C2B551CB100A96BAA /* RecordPlaybackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2DED1B2B551CB100A96BAA /* RecordPlaybackViewController.swift */; };
 		0A2DED1E2B551CEE00A96BAA /* RecordTopViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2DED1D2B551CEE00A96BAA /* RecordTopViewController.swift */; };
@@ -118,11 +118,11 @@
 		0A14E36E2B569A840008FD28 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		0A14E3702B56B31A0008FD28 /* SetNickNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetNickNameViewController.swift; sourceTree = "<group>"; };
 		0A14E3722B56B6F70008FD28 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
-		0A14E3762B56C43A0008FD28 /* omyu pretty.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "omyu pretty.ttf"; path = "../../../../../../../Downloads/omyu pretty.ttf"; sourceTree = "<group>"; };
 		0A2471182B68CAAF00A7382B /* ToSItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToSItem.swift; sourceTree = "<group>"; };
 		0A24711A2B68FCF700A7382B /* SignupPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupPopupViewController.swift; sourceTree = "<group>"; };
 		0A24711C2B69147200A7382B /* ToSDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToSDetailViewController.swift; sourceTree = "<group>"; };
 		0A24711E2B6924BA00A7382B /* RecordingRightsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingRightsViewController.swift; sourceTree = "<group>"; };
+		0A2471202B69693400A7382B /* ToSDetailItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToSDetailItem.swift; sourceTree = "<group>"; };
 		0A2DED192B55198D00A96BAA /* STTLoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STTLoadingViewController.swift; sourceTree = "<group>"; };
 		0A2DED1B2B551CB100A96BAA /* RecordPlaybackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordPlaybackViewController.swift; sourceTree = "<group>"; };
 		0A2DED1D2B551CEE00A96BAA /* RecordTopViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordTopViewController.swift; sourceTree = "<group>"; };
@@ -245,13 +245,14 @@
 			isa = PBXGroup;
 			children = (
 				0A14E36E2B569A840008FD28 /* SignUpViewController.swift */,
-				0A14E3702B56B31A0008FD28 /* SetNickNameViewController.swift */,
-				0A14E3722B56B6F70008FD28 /* WelcomeViewController.swift */,
 				0A95D72E2B682013000A9C06 /* ToSViewController.swift */,
 				0A95D7302B682FB4000A9C06 /* ToSItemTableViewCell.swift */,
-				0A2471182B68CAAF00A7382B /* ToSItem.swift */,
-				0A24711A2B68FCF700A7382B /* SignupPopupViewController.swift */,
 				0A24711C2B69147200A7382B /* ToSDetailViewController.swift */,
+				0A2471182B68CAAF00A7382B /* ToSItem.swift */,
+				0A2471202B69693400A7382B /* ToSDetailItem.swift */,
+				0A24711A2B68FCF700A7382B /* SignupPopupViewController.swift */,
+				0A14E3702B56B31A0008FD28 /* SetNickNameViewController.swift */,
+				0A14E3722B56B6F70008FD28 /* WelcomeViewController.swift */,
 				0A24711E2B6924BA00A7382B /* RecordingRightsViewController.swift */,
 			);
 			path = SignUp;
@@ -698,6 +699,7 @@
 				61D925082B486706002A16B4 /* RecordingFileItem.swift in Sources */,
 				0A2DED1C2B551CB100A96BAA /* RecordPlaybackViewController.swift in Sources */,
 				0A2DED1E2B551CEE00A96BAA /* RecordTopViewController.swift in Sources */,
+				0A2471212B69693400A7382B /* ToSDetailItem.swift in Sources */,
 				0AB34CC32B4F11B000150A15 /* OpenNewPageViewController.swift in Sources */,
 				61864BE22B5FFA890073C175 /* UIImageView+Extension.swift in Sources */,
 				611F145E2B471ECA00B983F1 /* CALayer+Extension.swift in Sources */,

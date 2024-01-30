@@ -11,6 +11,7 @@ import Then
 
 struct ToSItem {
     var content: String
+    var tag: Int
     
     func isRequired() -> Bool {
         let regex = try! NSRegularExpression(pattern: "(\\필수\\)", options: [])
@@ -19,7 +20,7 @@ struct ToSItem {
 }
 
 var termsOfService: [ToSItem] = [
-    ToSItem(content: "(필수) 주인장 이용약관"),
-    ToSItem(content: "(필수) 개인정보 수집 및 이용 동의"),
-    ToSItem(content: "(선택) 마케팅 활용 동의")
+    ToSItem(content: "(필수) 주인장 이용약관", tag: 0),
+    ToSItem(content: "(필수) 개인정보 수집 및 이용 동의", tag: 1),
+    ToSItem(content: "(선택) 마케팅 활용 동의", tag: 2)
 ]

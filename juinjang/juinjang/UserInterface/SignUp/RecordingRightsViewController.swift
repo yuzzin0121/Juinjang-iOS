@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 class RecordingRightsViewController: UIViewController {
     
@@ -124,9 +125,20 @@ class RecordingRightsViewController: UIViewController {
     }
     
     @objc func buttonTapped(_ sender: UIButton) {
-        // -TODO: 녹음 권한 팝업창 띄우기
-        let mainVC = MainViewController()
-        mainVC.modalPresentationStyle = .fullScreen
-        present(mainVC, animated: false, completion: nil)
+        // 녹음 권한 팝업창 띄우기
+        requestMicrophonePermission()
+    }
+    
+    func requestMicrophonePermission(){
+        AVAudioSession.sharedInstance().requestRecordPermission({(granted: Bool)-> Void in
+            if granted {
+                print("Mic: 권한 허용")
+            } else {
+                print("Mic: 권한 거부")
+            }
+            let mainVC = MainViewController()
+            mainVC.modalPresentationStyle = .fullScreen
+            self.present(mainVC, animated: false, completion: nil)
+        })
     }
 }

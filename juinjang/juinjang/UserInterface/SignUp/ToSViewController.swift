@@ -9,6 +9,8 @@ import UIKit
 
 class ToSViewController: UIViewController {
     
+    var selectedIndexPath: IndexPath?
+    
     lazy var guideLabel = UILabel().then {
         $0.text = "주인장 서비스의\n이용 약관에 동의해 주세요"
         $0.textAlignment = .left
@@ -62,8 +64,9 @@ class ToSViewController: UIViewController {
     lazy var nextButton = UIButton().then {
         $0.setTitle("다음으로", for: .normal)
         $0.setTitleColor(UIColor(named: "textWhite"), for: .normal)
-        $0.backgroundColor = UIColor(named: "lightGray") // textBlack
+        $0.backgroundColor = UIColor(named: "lightGray")
         $0.layer.cornerRadius = 8
+        $0.isEnabled = false
         $0.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
         
         $0.titleLabel?.font = .pretendard(size: 16, weight: .semiBold)
@@ -150,9 +153,13 @@ class ToSViewController: UIViewController {
         if isChecked {
             print("선택")
             checkButton.setImage(UIImage(named: "record-check-on"), for: .normal)
+            nextButton.backgroundColor = UIColor(named: "textBlack")
+            nextButton.isEnabled = true
         } else {
             print("선택 해제")
             checkButton.setImage(UIImage(named: "record-check-off"), for: .normal)
+            nextButton.backgroundColor = UIColor(named: "lightGray")
+            nextButton.isEnabled = false
         }
     }
     
@@ -188,8 +195,12 @@ extension ToSViewController: UITableViewDelegate, UITableViewDataSource {
         // cleanedContent에 "(필수)"가 포함되어 있는지 확인
         if let range = cleanedContent.range(of: "(필수)") {
             attributedString.addAttribute(.foregroundColor, value: UIColor(named: "mainOrange")!, range: NSRange(range, in: cleanedContent))
+        // "(선택)"이 포함되어 있는지 확인
+        } else if let range = cleanedContent.range(of: "(선택)") {
+            attributedString.addAttribute(.foregroundColor, value: UIColor(named: "textGray")!, range: NSRange(range, in: cleanedContent))
         }
         
+        cell.checkButton.tag = indexPath.row
         cell.checkButton.setAttributedTitle(attributedString, for: .normal)
         cell.configure(with: toSItem, isChecked: isChecked)
 

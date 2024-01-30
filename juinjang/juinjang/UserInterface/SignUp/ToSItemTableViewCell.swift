@@ -11,6 +11,8 @@ class ToSItemTableViewCell: UITableViewCell {
     
     var toSItem: ToSItem?
     
+    var indexPath: IndexPath?
+    
     lazy var checkButton = UIButton().then {
         $0.setTitleColor(UIColor(named: "textBlack"), for: .normal)
         $0.titleLabel?.font = .pretendard(size: 16, weight: .medium)
@@ -82,9 +84,14 @@ class ToSItemTableViewCell: UITableViewCell {
     }
     
     @objc func openContentButtonPressed(_ sender: UIButton) {
+        let tag = sender.tag
+        let selectedDetail = termsOfServiceDetail[tag]
+        
         let tosDetailVC = ToSDetailViewController()
         if let parentVC = parentViewController {
             parentVC.navigationController?.pushViewController(tosDetailVC, animated: true)
+            tosDetailVC.contentLabel.text = selectedDetail.contentLabel
+            tosDetailVC.contentDetailLabel.text = selectedDetail.contentDetailLabel
         }
     }
 
@@ -103,5 +110,6 @@ class ToSItemTableViewCell: UITableViewCell {
         checkButton.isSelected = isChecked
         let imageName = isChecked ? "record-check-on" : "record-check-off"
         checkButton.setImage(UIImage(named: imageName), for: .normal)
+        openContentButton.tag = item.tag
     }
 }
