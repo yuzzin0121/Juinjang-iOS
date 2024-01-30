@@ -9,8 +9,6 @@ import UIKit
 
 class CategoryItemTableViewCell: UITableViewCell {
     
-    static let identifier = "CategoryItemTableViewCell"
-    
     var itemCategory: [Category] = []
     
     let categoryImage = UIImageView().then {

@@ -11,8 +11,6 @@ import SwiftyMenu
 
 class ExpandedDropdownTableViewCell: UITableViewCell {
     
-    static let identifier = "ExpandedDropdownTableViewCell"
-    
     var selectedOption: String?
     
     lazy var questionImage = UIImageView().then {
