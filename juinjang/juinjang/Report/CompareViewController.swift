@@ -31,6 +31,10 @@ class CompareViewController : UIViewController {
         $0.translatesAutoresizingMaskIntoConstraints = false
     }
     
+    var compareView1 = UIView().then {
+        $0.backgroundColor = .clear
+    }
+    
     var radarChartView = RadarChartView().then {
         $0.webLineWidth = 1.5
         $0.innerWebLineWidth = 1.5
