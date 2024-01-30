@@ -31,7 +31,7 @@ class SignupPopupViewController: UIViewController {
         $0.textColor = UIColor(named: "normalText")
         $0.font = UIFont(name: "Pretendard-Medium", size: 16)
         $0.numberOfLines = 3
-        $0.setLineSpacing(lineSpacing: 3)
+        $0.setLineSpacing(spacing: 3)
         $0.textAlignment = .center
     }
     
