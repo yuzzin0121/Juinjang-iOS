@@ -16,6 +16,8 @@
 		0A24711D2B69147200A7382B /* ToSDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A24711C2B69147200A7382B /* ToSDetailViewController.swift */; };
 		0A24711F2B6924BA00A7382B /* RecordingRightsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A24711E2B6924BA00A7382B /* RecordingRightsViewController.swift */; };
 		0A2471212B69693400A7382B /* ToSDetailItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2471202B69693400A7382B /* ToSDetailItem.swift */; };
+		0A2471252B697E3D00A7382B /* EditBasicInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2471242B697E3D00A7382B /* EditBasicInfoViewController.swift */; };
+		0A2471272B69803000A7382B /* EditBasicInfoDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2471262B69803000A7382B /* EditBasicInfoDetailViewController.swift */; };
 		0A2DED1A2B55198D00A96BAA /* STTLoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2DED192B55198D00A96BAA /* STTLoadingViewController.swift */; };
 		0A2DED1C2B551CB100A96BAA /* RecordPlaybackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2DED1B2B551CB100A96BAA /* RecordPlaybackViewController.swift */; };
 		0A2DED1E2B551CEE00A96BAA /* RecordTopViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2DED1D2B551CEE00A96BAA /* RecordTopViewController.swift */; };
@@ -123,6 +125,8 @@
 		0A24711C2B69147200A7382B /* ToSDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToSDetailViewController.swift; sourceTree = "<group>"; };
 		0A24711E2B6924BA00A7382B /* RecordingRightsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingRightsViewController.swift; sourceTree = "<group>"; };
 		0A2471202B69693400A7382B /* ToSDetailItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToSDetailItem.swift; sourceTree = "<group>"; };
+		0A2471242B697E3D00A7382B /* EditBasicInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBasicInfoViewController.swift; sourceTree = "<group>"; };
+		0A2471262B69803000A7382B /* EditBasicInfoDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBasicInfoDetailViewController.swift; sourceTree = "<group>"; };
 		0A2DED192B55198D00A96BAA /* STTLoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STTLoadingViewController.swift; sourceTree = "<group>"; };
 		0A2DED1B2B551CB100A96BAA /* RecordPlaybackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordPlaybackViewController.swift; sourceTree = "<group>"; };
 		0A2DED1D2B551CEE00A96BAA /* RecordTopViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordTopViewController.swift; sourceTree = "<group>"; };
@@ -314,6 +318,8 @@
 				0A4EBE352B5EA27B00909B7A /* ExpandedScoreTableViewCell.swift */,
 				0A4EBE372B5EDD6F00909B7A /* ExpandedTextFieldTableViewCell.swift */,
 				0A4EBE3A2B5EF2BC00909B7A /* ExpandedDropdownTableViewCell.swift */,
+				0A2471242B697E3D00A7382B /* EditBasicInfoViewController.swift */,
+				0A2471262B69803000A7382B /* EditBasicInfoDetailViewController.swift */,
 			);
 			path = CheckList;
 			sourceTree = "<group>";
@@ -725,10 +731,12 @@
 				345855922B689E5200432C06 /* AccountDeleteFinalViewController.swift in Sources */,
 				345855992B692E0400432C06 /* TabViewController.swift in Sources */,
 				0A3D5D4C2B4D333900574686 /* TransactionModel.swift in Sources */,
+				0A2471272B69803000A7382B /* EditBasicInfoDetailViewController.swift in Sources */,
 				345855952B692DF100432C06 /* ReportViewController.swift in Sources */,
 				0A4EBE342B5EA25300909B7A /* ExpandedCalendarTableViewCell.swift in Sources */,
 				616408EC2B407A2D00EC3B5E /* UIView+Extensions.swift in Sources */,
 				619269F72B67747F00D4DD3E /* ImjangListHeaderView.swift in Sources */,
+				0A2471252B697E3D00A7382B /* EditBasicInfoViewController.swift in Sources */,
 				61864C4D2B653E140073C175 /* UIViewController+Extension.swift in Sources */,
 				345855862B689DEC00432C06 /* SettingViewController.swift in Sources */,
 				0A9E0A492B3DCAB90094595A /* SceneDelegate.swift in Sources */,
