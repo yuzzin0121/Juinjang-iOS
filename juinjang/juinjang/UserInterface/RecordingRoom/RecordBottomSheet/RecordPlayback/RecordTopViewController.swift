@@ -122,7 +122,15 @@ class RecordTopViewController: UIViewController {
     }
     
     @objc func editButtonTapped(_ sender: UIButton) {
-        recordTextView.isEditable = true
+        sender.isSelected.toggle()
+        
+        if sender.isSelected {
+            editButton.setImage(UIImage(named: "record-edit-activate"), for: .normal)
+            recordTextView.isEditable = true
+        } else {
+            editButton.setImage(UIImage(named: "record-edit"), for: .normal)
+            recordTextView.isEditable = false
+        }
     }
     
     func updateTitle(_ newTitle: String?) {

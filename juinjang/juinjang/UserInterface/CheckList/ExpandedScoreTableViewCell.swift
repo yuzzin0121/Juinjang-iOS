@@ -9,8 +9,6 @@ import UIKit
 import SnapKit
 
 class ExpandedScoreTableViewCell: UITableViewCell {
-
-    static let identifier = "ExpandedScoreTableViewCell"
     
     var score: String? // 선택된 버튼의 값을 저장할 변수
     var indexPath: IndexPath?

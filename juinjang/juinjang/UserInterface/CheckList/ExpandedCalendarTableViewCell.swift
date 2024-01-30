@@ -10,8 +10,6 @@ import SnapKit
 import FSCalendar
 
 class ExpandedCalendarTableViewCell: UITableViewCell {
-
-    static let identifier = "ExpandedCalendarTableViewCell"
     
     var calendarItem: CalendarItem?
     

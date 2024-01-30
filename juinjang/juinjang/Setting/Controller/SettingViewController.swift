@@ -58,7 +58,23 @@ class SettingViewController : UIViewController{
         $0.placeholder = "8자 이내"
         $0.text = "땡땡"
         $0.font = UIFont(name: "Pretendard-Medium", size: 16)
+        $0.addTarget(self, action: #selector(SettingViewController.textFieldDidChange(_:)), for: .editingChanged)
     }
+    @objc func textFieldDidChange(_ sender: Any?) {
+        if nicknameTextField.text!.count < 8 {
+            nicknameWarnLabel.removeFromSuperview()
+            nicknameWarnImageView.removeFromSuperview()
+            if nicknameTextField.text?.count == 0 {
+                saveButton.setTitle("취소", for: .normal)
+                saveButton.backgroundColor = UIColor(named: "300")
+            }
+            else {
+                saveButton.setTitle("저장", for: .normal)
+                saveButton.backgroundColor = UIColor(named: "juinjang")
+            }
+        }
+    }
+    
     var nicknameWarnImageView = UIImageView().then {
         $0.image = UIImage(named:"warn")
     }
@@ -81,6 +97,7 @@ class SettingViewController : UIViewController{
     func tapChangeButton(_ sender: Any) {
         switch saveButton.titleLabel?.text {
         case "변경":
+            nicknameTextField.text = nickname.text
             saveButton.setTitle("저장", for: .normal)
             saveButton.backgroundColor = UIColor(named: "juinjang")
             view.addSubview(nicknameTextField)
@@ -98,6 +115,10 @@ class SettingViewController : UIViewController{
                 $0.width.equalTo(264)
                 $0.height.equalTo(1)
             }
+        case "취소":
+            saveButton.setTitle("변경", for: .normal)
+            nicknameTextField.removeFromSuperview()
+            line1.removeFromSuperview()
         default:
             saveButton.setTitle("변경", for: .normal)
             saveButton.backgroundColor = UIColor(named: "300")

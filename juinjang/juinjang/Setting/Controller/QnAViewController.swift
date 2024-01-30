@@ -77,7 +77,7 @@ class QnAViewController : UIViewController {
        // $0.register(<#T##nib: UINib?##UINib?#>, forCellReuseIdentifier: <#T##String#>)
     }
     
-    var dataSource = Section.sections
+    var dataSource = Sections.sections
     
     func setConstraint() {
         closeButton.snp.makeConstraints{
