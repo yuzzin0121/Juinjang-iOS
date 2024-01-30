@@ -40,14 +40,10 @@ class OpenNewPageViewController: UIViewController {
     var backgroundImageViewWidthConstraint: NSLayoutConstraint? // 배경 이미지의 너비 제약조건
     
     let scrollView = UIScrollView().then {
-        $0.translatesAutoresizingMaskIntoConstraints = false
         $0.backgroundColor = .white
     }
     
-    let contentView = UIView().then {
-        $0.translatesAutoresizingMaskIntoConstraints = false
-//        $0.backgroundColor = .blue
-    }
+    let contentView = UIView()
     
     func makeImageView(_ imageView: UIImageView, imageName: String) {
         imageView.image = UIImage(named: imageName)

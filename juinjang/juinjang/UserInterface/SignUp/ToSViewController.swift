@@ -46,10 +46,16 @@ class ToSViewController: UIViewController {
         $0.imageEdgeInsets = UIEdgeInsets(top: 0, left: -12, bottom: 0, right: 4)
     }
     
+    var isChecked = false {
+        didSet {
+            // 체크 버튼이 눌릴 때마다 리로드
+            itemtableView.reloadData()
+        }
+    }
+    
     lazy var itemtableView = UITableView().then {
         $0.separatorStyle = .none
         $0.isScrollEnabled = false
-        $0.backgroundColor = .blue
         $0.register(ToSItemTableViewCell.self, forCellReuseIdentifier: ToSItemTableViewCell.identifier)
     }
     
@@ -66,6 +72,8 @@ class ToSViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
+        itemtableView.delegate = self
+        itemtableView.dataSource = self
         setNavigationBar()
         addSubViews()
         setupLayout()
@@ -125,7 +133,6 @@ class ToSViewController: UIViewController {
             $0.top.equalTo(agreeToAllTermsView.snp.bottom).offset(24)
             $0.leading.equalToSuperview().offset(24)
             $0.trailing.equalToSuperview().offset(-24)
-            $0.bottom.equalTo(nextButton.snp.top).offset(-20)
         }
 
         // 다음으로 Button
@@ -139,9 +146,8 @@ class ToSViewController: UIViewController {
     }
     
     @objc func checkButtonPressed(_ sender: UIButton) {
-        checkButton.isSelected = !checkButton.isSelected
-        
-        if checkButton.isSelected {
+        isChecked = !isChecked
+        if isChecked {
             print("선택")
             checkButton.setImage(UIImage(named: "record-check-on"), for: .normal)
         } else {
@@ -151,24 +157,42 @@ class ToSViewController: UIViewController {
     }
     
     @objc func backButtonTapped() {
-        navigationController?.popViewController(animated: true)
+        let SignupPopupVC = SignupPopupViewController()
+        SignupPopupVC.modalPresentationStyle = .overCurrentContext
+        present(SignupPopupVC, animated: false, completion: nil)
     }
     
     @objc func buttonTapped(_ sender: UIButton) {
         let setNickNameVC = SetNickNameViewController()
         setNickNameVC.modalPresentationStyle = .fullScreen
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        present(setNickNameVC, animated: false, completion: nil)
+        self.navigationController?.pushViewController(setNickNameVC, animated: true)
     }
 }
 
 extension ToSViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 6
+        return termsOfService.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: ToSItemTableViewCell = tableView.dequeueReusableCell(withIdentifier: ToSItemTableViewCell.identifier, for: indexPath) as! ToSItemTableViewCell
+        guard let cell: ToSItemTableViewCell = tableView.dequeueReusableCell(withIdentifier: ToSItemTableViewCell.identifier, for: indexPath) as? ToSItemTableViewCell else {
+            return UITableViewCell()
+        }
+        
+        let toSItem = termsOfService[indexPath.row]
+        
+        let cleanedContent = toSItem.content.replacingOccurrences(of: "\\", with: "") // 백 슬래쉬 제거
+        let attributedString = NSMutableAttributedString(string: cleanedContent)
+        
+        // cleanedContent에 "(필수)"가 포함되어 있는지 확인
+        if let range = cleanedContent.range(of: "(필수)") {
+            attributedString.addAttribute(.foregroundColor, value: UIColor(named: "mainOrange")!, range: NSRange(range, in: cleanedContent))
+        }
+        
+        cell.checkButton.setAttributedTitle(attributedString, for: .normal)
+        cell.configure(with: toSItem, isChecked: isChecked)
+
         return cell
     }
     

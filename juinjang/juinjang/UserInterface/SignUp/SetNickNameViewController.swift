@@ -76,11 +76,11 @@ class SetNickNameViewController: UIViewController {
     
     func setNavigationBar() {
         self.navigationItem.title = "닉네임 정하기"
-//        self.navigationController?.navigationBar.tintColor = .black
-//        self.navigationItem.hidesBackButton = true
-//        let backButtonImage = UIImage(named: "arrow-left")
-//        let backButton = UIBarButtonItem(image: backButtonImage, style: .plain,target: self, action: #selector(backButtonTapped))
-//        navigationItem.leftBarButtonItem = backButton
+        self.navigationController?.navigationBar.tintColor = .black
+        self.navigationItem.hidesBackButton = true
+        let backButtonImage = UIImage(named: "arrow-left")
+        let backButton = UIBarButtonItem(image: backButtonImage, style: .plain,target: self, action: #selector(backButtonTapped))
+        navigationItem.leftBarButtonItem = backButton
     }
 
     func addSubViews() {
