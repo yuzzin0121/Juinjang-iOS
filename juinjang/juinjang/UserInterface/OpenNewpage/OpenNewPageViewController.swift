@@ -46,7 +46,6 @@ class OpenNewPageViewController: UIViewController {
     
     let contentView = UIView().then {
         $0.translatesAutoresizingMaskIntoConstraints = false
-//        $0.backgroundColor = .blue
     }
     
     func makeImageView(_ imageView: UIImageView, imageName: String) {
@@ -287,10 +286,8 @@ class OpenNewPageViewController: UIViewController {
         $0.backgroundColor = UIColor(named: "lightGray")
         $0.layer.cornerRadius = 8
         $0.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
-        $0.translatesAutoresizingMaskIntoConstraints = false
         
         $0.titleLabel?.font = UIFont(name: "Pretendard-SemiBold", size: 16)
-        $0.titleLabel?.numberOfLines = 1
         $0.titleLabel?.adjustsFontSizeToFitWidth = true
         $0.titleLabel?.minimumScaleFactor = 0.5
         $0.titleLabel?.lineBreakMode = .byTruncatingTail

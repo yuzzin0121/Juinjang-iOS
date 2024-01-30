@@ -23,4 +23,5 @@ enum ColorStyle {
     static let placeholderOrange = UIColor(named: "placeholderOrange")! // #FFD2B9
     static let mainOrange = UIColor(named: "mainOrange")!   // #FF6228
     static let textWhite = UIColor(named: "textWhite")!     // #FFFFFF
+    static let lightOrange = UIColor(named: "lightOrange")! // #FFDECC
 }
