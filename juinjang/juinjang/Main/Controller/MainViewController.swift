@@ -39,12 +39,12 @@ class MainViewController: UIViewController {
     
     @objc
     func newImjangBtnTap() {
-        let vc = SettingViewController()
+        let vc = OpenNewPageViewController()
         self.navigationController?.pushViewController(vc, animated: false)
     }
     @objc
     func myImjangBtnTap() {
-        let vc = OpenNewPageViewController()
+        let vc = ReportViewController()
         self.navigationController?.pushViewController(vc, animated: false)
     }
     
