@@ -56,7 +56,7 @@ class RecordingFilesViewController: UIViewController {
                                              target: self,
                                              action: #selector(back))
         
-        let addButtonItem = UIBarButtonItem(image: UIImage(named: "+"),
+        let addButtonItem = UIBarButtonItem(image: UIImage(named: "addOrange"),
                                             style: .plain,
                                             target: self,
                                             action: #selector(startRecording))
