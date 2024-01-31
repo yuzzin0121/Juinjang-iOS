@@ -15,6 +15,7 @@ enum ColorStyle {
     static let gray2 = UIColor(named: "gray2")!             // #EDEDED
     static let gray3 = UIColor(named: "gray3")!             // #ECECEC
     static let gray4 = UIColor(named: "gray4")!             // #E3E3E3
+    static let gray5 = UIColor(named: "gray5")!             // #767676
     static let lightGray = UIColor(named: "lightGray")!     // #D0D0D0
     static let shadowGray = UIColor(named: "shadowGray")!   // #EEEEEE
     static let strokeGray = UIColor(named: "strokeGray")!   // #E3E3E3
