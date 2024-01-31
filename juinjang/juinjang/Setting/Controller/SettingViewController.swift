@@ -12,8 +12,18 @@ import SnapKit
 class SettingViewController : UIViewController{
     static let id = "SettingViewController"
     
+    func designNavigationBar() {
+        self.navigationController?.navigationBar.tintColor = .black
+        navigationItem.title = "설정"
+        
+        let backButtonItem = UIBarButtonItem(image: UIImage(named:"Vector"), style: .plain, target: self, action: #selector(backBtnTap))
+
+        // 네비게이션 아이템에 백 버튼 아이템 설정
+        self.navigationItem.hidesBackButton = true
+        self.navigationItem.rightBarButtonItem = backButtonItem
+    }
     //MARK: - 상단
-    var settingLabel = UILabel().then {
+    /*var settingLabel = UILabel().then {
         $0.text = "설정"
         $0.font = UIFont(name: "Pretendard-SemiBold", size: 16)
         $0.translatesAutoresizingMaskIntoConstraints = false
@@ -22,7 +32,7 @@ class SettingViewController : UIViewController{
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.setImage(UIImage(named:"Vector"), for: .normal)
         $0.addTarget(self, action: #selector(backBtnTap), for: .touchUpInside)
-    }
+    }*/
     @objc
     func backBtnTap() {
         let vc = MainViewController()
@@ -245,7 +255,7 @@ class SettingViewController : UIViewController{
     
     //MARK: - 함수
     func setConstraint() {
-        settingLabel.snp.makeConstraints{
+        /*settingLabel.snp.makeConstraints{
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(12.16)
             $0.centerX.equalToSuperview()
         }
@@ -254,10 +264,10 @@ class SettingViewController : UIViewController{
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(11.16)
             $0.right.equalToSuperview().inset(23.5)
             $0.width.height.equalTo(22)
-        }
+        }*/
         
         profileImageView.snp.makeConstraints{
-            $0.top.equalTo(settingLabel.snp.bottom).offset(40)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(28)
             $0.centerX.equalToSuperview()
             $0.width.height.equalTo(66)
         }
@@ -372,8 +382,9 @@ class SettingViewController : UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(settingLabel)
-        view.addSubview(backButton)
+        designNavigationBar()
+        //view.addSubview(settingLabel)
+        //view.addSubview(backButton)
         view.addSubview(profileImageView)
         view.addSubview(editButton)
         view.addSubview(nicknameLabel)

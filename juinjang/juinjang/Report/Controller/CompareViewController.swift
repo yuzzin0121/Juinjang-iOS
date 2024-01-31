@@ -119,9 +119,12 @@ class CompareViewController : UIViewController {
         $0.addTarget(self, action: #selector(compareButtonTap), for: .touchUpInside)
     }
     @objc private func compareButtonTap() {
-        let popupViewController = NoMaemullPopupViewController(ment: "비교할 매물이 아직 없어요.\n다른 매물이 생기면 다시 와주세요!")
+        /*let popupViewController = NoMaemullPopupViewController(ment: "비교할 매물이 아직 없어요.\n다른 매물이 생기면 다시 와주세요!")
         popupViewController.modalPresentationStyle = .overFullScreen
-        self.present(popupViewController, animated: false)
+        self.present(popupViewController, animated: false)*/
+        let vc = SelectMaemullViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
+    
     }
     
     var radarChartView = RadarChartView().then {

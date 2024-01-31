@@ -15,17 +15,30 @@ import Tabman
 import Pageboy
 
 class ReportViewController : UIViewController {
+    func designNavigationBar() {
+        self.navigationController?.navigationBar.tintColor = .black
+        navigationItem.title = "주인장 리포트"
+        
+        let shareButtonItem = UIBarButtonItem(image: UIImage(named: "share"), style: .plain, target: self, action: nil)
+        let backButtonItem = UIBarButtonItem(image: UIImage(named:"leftArrow"), style: .plain, target: self, action: #selector(backBtnTap))
+
+        // 네비게이션 아이템에 백 버튼 아이템 설정
+        //self.navigationItem.hidesBackButton = true
+        self.navigationItem.leftBarButtonItem = backButtonItem
+        self.navigationItem.rightBarButtonItem = shareButtonItem
+    }
+    @objc
+    func backBtnTap() {
+        let vc = ImjangNoteViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
     //MARK: - 상단
-    var backButton = UIButton().then {
+    /*var backButton = UIButton().then {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.setImage(UIImage(named:"leftArrow"), for: .normal)
         $0.addTarget(self, action: #selector(backBtnTap), for: .touchUpInside)
     }
-    @objc
-    func backBtnTap() {
-        let vc = MainViewController()
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
+    
     var reportLabel = UILabel().then {
         $0.text = "주인장 리포트"
         $0.font = UIFont(name: "Pretendard-SemiBold", size: 16)
@@ -34,7 +47,7 @@ class ReportViewController : UIViewController {
     var shareButton = UIButton().then {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.setImage(UIImage(named:"share"), for: .normal)
-    }
+    }*/
     
     //MARK: - 총 평점 멘트, 가격, 주소
     var totalGradeLabel = UILabel().then {
@@ -75,7 +88,7 @@ class ReportViewController : UIViewController {
     let tabViewController = TabViewController()
     
     func setConstraint() {
-        backButton.snp.makeConstraints{
+        /*backButton.snp.makeConstraints{
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(13.16)
             $0.left.equalToSuperview().inset(24)
             $0.width.height.equalTo(22)
@@ -88,10 +101,10 @@ class ReportViewController : UIViewController {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(13.16)
             $0.right.equalToSuperview().inset(24)
             $0.width.height.equalTo(22)
-        }
+        }*/
         
         totalGradeLabel.snp.makeConstraints{
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(74.16)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(28)
             $0.left.equalToSuperview().offset(24)
         }
         priceLabel.snp.makeConstraints{
@@ -111,10 +124,12 @@ class ReportViewController : UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        designNavigationBar()
+        
         view.backgroundColor = .white
-        view.addSubview(backButton)
-        view.addSubview(reportLabel)
-        view.addSubview(shareButton)
+        //view.addSubview(backButton)
+        //view.addSubview(reportLabel)
+        //view.addSubview(shareButton)
         
         view.addSubview(totalGradeLabel)
         view.addSubview(priceLabel)

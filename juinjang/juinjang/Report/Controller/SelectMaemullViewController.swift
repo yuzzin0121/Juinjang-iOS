@@ -10,15 +10,30 @@ import SnapKit
 
 class SelectMaemullViewController : UIViewController {
     
-    var backButton = UIButton().then {
+    func designNavigationBar() {
+        self.navigationController?.navigationBar.tintColor = .black
+        navigationItem.title = "비교할 매물 고르기"
+
+        // UIBarButtonItem 생성 및 이미지 설정
+        let backButtonItem = UIBarButtonItem(image: UIImage(named: "leftArrow"), style: .plain, target: self, action: #selector(backBtnTap))
+        
+        let searchButtonItem = UIBarButtonItem(image: UIImage(named:"search"), style: .plain, target: self, action: nil)
+
+        // 네비게이션 아이템에 백 버튼 아이템 설정
+        self.navigationItem.leftBarButtonItem = backButtonItem
+        self.navigationItem.rightBarButtonItem = searchButtonItem
+    }
+    @objc
+    func backBtnTap() {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    /*var backButton = UIButton().then {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.setImage(UIImage(named:"leftArrow"), for: .normal)
         $0.addTarget(self, action: #selector(backBtnTap), for: .touchUpInside)
     }
-    @objc
-    func backBtnTap() {
-        self.dismiss(animated: false, completion: nil)
-    }
+    
     var compareLabel = UILabel().then {
         $0.text = "비교할 매물 고르기"
         $0.font = UIFont(name: "Pretendard-SemiBold", size: 16)
@@ -27,7 +42,7 @@ class SelectMaemullViewController : UIViewController {
     var searchButton = UIButton().then {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.setImage(UIImage(named:"search"), for: .normal)
-    }
+    }*/
     
     var contentView = UIView().then {
         $0.backgroundColor = .white
@@ -103,7 +118,7 @@ class SelectMaemullViewController : UIViewController {
     }
     
     func setConstraint() {
-        backButton.snp.makeConstraints{
+        /*backButton.snp.makeConstraints{
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(13.16)
             $0.left.equalToSuperview().inset(24)
             $0.width.height.equalTo(22)
@@ -116,7 +131,7 @@ class SelectMaemullViewController : UIViewController {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(13.16)
             $0.right.equalToSuperview().inset(24)
             $0.width.height.equalTo(22)
-        }
+        }*/
         btnBackGroundView.snp.makeConstraints{
             $0.bottom.equalToSuperview()
             $0.left.right.equalToSuperview()
@@ -128,7 +143,7 @@ class SelectMaemullViewController : UIViewController {
             $0.height.equalTo(52)
         }
         contentView.snp.makeConstraints{
-            $0.top.equalTo(compareLabel.snp.bottom).offset(12)
+            $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.left.right.equalToSuperview()
             $0.height.equalTo(63)
         }
@@ -148,13 +163,14 @@ class SelectMaemullViewController : UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        designNavigationBar()
         tableView.delegate = self
         tableView.dataSource = self
         view.backgroundColor = .white
         
-        view.addSubview(backButton)
-        view.addSubview(compareLabel)
-        view.addSubview(searchButton)
+        //view.addSubview(backButton)
+        //view.addSubview(compareLabel)
+        //view.addSubview(searchButton)
         view.addSubview(contentView)
         contentView.addSubview(filterselectBtn)
         view.addSubview(tableView)
@@ -194,8 +210,4 @@ extension SelectMaemullViewController: UITableViewDelegate, UITableViewDataSourc
 
 }
 
-
-#Preview {
-    SelectMaemullViewController()
-}
 
