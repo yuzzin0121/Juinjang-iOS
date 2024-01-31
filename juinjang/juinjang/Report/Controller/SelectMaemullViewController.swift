@@ -34,7 +34,7 @@ class SelectMaemullViewController : UIViewController {
     }
     
     var tableView = UITableView().then {
-        $0.backgroundColor = .black
+        $0.backgroundColor = .purple
     }
     
     var btnBackGroundView = UIView().then{

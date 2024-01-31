@@ -73,8 +73,8 @@
 		345855992B692E0400432C06 /* TabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345855982B692E0400432C06 /* TabViewController.swift */; };
 		3458559B2B692E0C00432C06 /* CompareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3458559A2B692E0C00432C06 /* CompareViewController.swift */; };
 		3458559D2B69479D00432C06 /* NoMaemullPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3458559C2B69479D00432C06 /* NoMaemullPopupViewController.swift */; };
-		345855A12B69487500432C06 /* NoMaemullPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345855A02B69487500432C06 /* NoMaemullPopupView.swift */; };
 		345855A32B69504500432C06 /* SelectMaemullViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345855A22B69504500432C06 /* SelectMaemullViewController.swift */; };
+		345855A42B69E44D00432C06 /* NoMaemullPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345855A02B69487500432C06 /* NoMaemullPopupView.swift */; };
 		611757382B67D5E60043E958 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 611757372B67D5E60043E958 /* Assets.xcassets */; };
 		611F14552B47070B00B983F1 /* RecordingSegmentedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F14542B47070B00B983F1 /* RecordingSegmentedViewController.swift */; };
 		611F145A2B4707CC00B983F1 /* RecordingRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F14592B4707CC00B983F1 /* RecordingRoomViewController.swift */; };
@@ -708,13 +708,11 @@
 				619269E92B67745900D4DD3E /* UserDefaultManager.swift in Sources */,
 				619269F52B67747F00D4DD3E /* ScrapCollectionViewCell.swift in Sources */,
 				3458557E2B689D2A00432C06 /* ExpandableTableViewCell.swift in Sources */,
-<<<<<<< HEAD
 				616408E12B405B7200EC3B5E /* ImjangNoteViewController.swift in Sources */,
 				0A24711D2B69147200A7382B /* ToSDetailViewController.swift in Sources */,
-=======
->>>>>>> 5e2aa9c ([Feat]리포트 비교할 매물 추가)
 				0A7AC0F12B6412760032C9DF /* KakaoZipCodeViewController.swift in Sources */,
 				0A4EBE382B5EDD6F00909B7A /* ExpandedTextFieldTableViewCell.swift in Sources */,
+				345855A42B69E44D00432C06 /* NoMaemullPopupView.swift in Sources */,
 				0A554CE42B5420F20023BB49 /* WarningMessageViewController.swift in Sources */,
 				0A14E3712B56B31A0008FD28 /* SetNickNameViewController.swift in Sources */,
 				0AE388892B5986BC0041A979 /* CategoryItemTableViewCell.swift in Sources */,
@@ -766,11 +764,7 @@
 				0A4EBE342B5EA25300909B7A /* ExpandedCalendarTableViewCell.swift in Sources */,
 				616408EC2B407A2D00EC3B5E /* UIView+Extensions.swift in Sources */,
 				619269F72B67747F00D4DD3E /* ImjangListHeaderView.swift in Sources */,
-<<<<<<< HEAD
 				0A2471252B697E3D00A7382B /* EditBasicInfoViewController.swift in Sources */,
-=======
-				345855A12B69487500432C06 /* NoMaemullPopupView.swift in Sources */,
->>>>>>> 5e2aa9c ([Feat]리포트 비교할 매물 추가)
 				61864C4D2B653E140073C175 /* UIViewController+Extension.swift in Sources */,
 				345855862B689DEC00432C06 /* SettingViewController.swift in Sources */,
 				0A9E0A492B3DCAB90094595A /* SceneDelegate.swift in Sources */,
