@@ -149,7 +149,7 @@ class RecordingRoomViewController: UIViewController {
                     textColor: UIColor(named: "textBlack")!)
         
         designButton(addRecordingButton,
-                     image: UIImage(named: "+"))
+                     image: UIImage(named: "addOrange"))
         
         setStackView(recordingFileStackView,
                      label: recordingFileLabel,

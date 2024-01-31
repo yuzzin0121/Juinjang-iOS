@@ -429,9 +429,9 @@ class OpenNewPage2ViewController: UIViewController, WarningMessageDelegate {
     }
     
     @objc func nextButtonTapped(_ sender: UIButton) {
-        let newPageViewController = CheckListViewController()
+        let ImjangNoteVC = ImjangNoteViewController()
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        navigationController?.pushViewController(newPageViewController, animated: true)
+        navigationController?.pushViewController(ImjangNoteVC, animated: true)
     }
 }
 
