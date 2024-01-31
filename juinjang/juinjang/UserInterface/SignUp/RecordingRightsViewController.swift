@@ -52,7 +52,7 @@ class RecordingRightsViewController: UIViewController {
         
         $0.titleLabel?.font = .pretendard(size: 16, weight: .semiBold)
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
@@ -84,7 +84,7 @@ class RecordingRightsViewController: UIViewController {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(0.04 * view.bounds.height)
             $0.leading.equalTo(24)
         }
-
+        
         // 안내 상세 Label
         guideDetailLabel.snp.makeConstraints {
             $0.top.equalTo(guideLabel.snp.bottom).offset(0.06 * view.bounds.height)
@@ -109,12 +109,12 @@ class RecordingRightsViewController: UIViewController {
             $0.top.equalTo(recordingLabel.snp.bottom).offset(8)
             $0.leading.equalTo(69)
         }
-
+        
         // 확인 Button
         confirmButton.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.bottom.equalToSuperview().offset(-33)
-//            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-33)
+            //            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-33)
             $0.leading.equalToSuperview().offset(24)
             $0.trailing.equalToSuperview().offset(-24)
             $0.height.equalTo(52)
@@ -127,19 +127,22 @@ class RecordingRightsViewController: UIViewController {
     
     @objc func buttonTapped(_ sender: UIButton) {
         // 녹음 권한 팝업창 띄우기
-        requestMicrophonePermission()
-        let mainVC = MainViewController()
-        mainVC.modalPresentationStyle = .fullScreen
-        self.present(mainVC, animated: false, completion: nil)
+        requestMicrophonePermission { granted in
+            DispatchQueue.main.async {
+                let mainVC = MainViewController()
+                self.navigationController?.pushViewController(mainVC, animated: true)
+            }
+        }
     }
     
-    func requestMicrophonePermission(){
-        AVAudioSession.sharedInstance().requestRecordPermission({(granted: Bool)-> Void in
+    func requestMicrophonePermission(completion: @escaping (Bool) -> Void) {
+        AVAudioSession.sharedInstance().requestRecordPermission { granted in
             if granted {
-                print("Mic: 권한 허용")
+                print("Mic: 권한이 허용되었습니다.")
             } else {
-                print("Mic: 권한 거부")
+                print("Mic: 권한이 거부되었습니다.")
             }
-        })
+            completion(granted)
+        }
     }
 }
