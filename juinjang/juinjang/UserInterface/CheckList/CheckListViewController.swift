@@ -10,22 +10,10 @@ import SnapKit
 
 class CheckListViewController: UIViewController {
     
-    lazy var scrollView = UIScrollView().then {
-        $0.backgroundColor = .white
-        $0.showsVerticalScrollIndicator = false
-        $0.isScrollEnabled = false
-        $0.bounces = true
-    }
-    
-    lazy var contentView = UIView()
-    
-    lazy var completedButton = UIButton().then {
-        $0.setImage(UIImage(named: "completed-button"), for: .normal)
-    }
-    
     lazy var tableView = UITableView().then {
         $0.separatorStyle = .none
-        $0.isScrollEnabled = false
+        $0.showsVerticalScrollIndicator = false
+        $0.isScrollEnabled = true
         $0.register(CategoryItemTableViewCell.self, forCellReuseIdentifier: CategoryItemTableViewCell.identifier)
         $0.register(ExpandedScoreTableViewCell.self, forCellReuseIdentifier: ExpandedScoreTableViewCell.identifier)
         $0.register(ExpandedCalendarTableViewCell.self, forCellReuseIdentifier: ExpandedCalendarTableViewCell.identifier)
@@ -40,7 +28,6 @@ class CheckListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        scrollView.delegate = self
         tableView.delegate = self
         tableView.dataSource = self
         addSubViews()
@@ -61,40 +48,16 @@ class CheckListViewController: UIViewController {
     }
     
     func addSubViews() {
-        [scrollView,
-         completedButton].forEach { view.addSubview($0) }
-        scrollView.addSubview(contentView)
-        [tableView].forEach { contentView.addSubview($0) }
+        view.addSubview(tableView)
     }
     
     func setupLayout() {
-        // 스크롤 뷰
-        scrollView.snp.makeConstraints {
+        // 테이블 뷰
+        tableView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(48)
             $0.leading.trailing.equalToSuperview()
+            // bottom 어떻게 주어야 할까?
             $0.bottom.equalToSuperview()
-        }
-        
-        // 컨텐트 뷰
-        contentView.snp.makeConstraints {
-            $0.edges.equalTo(scrollView.contentLayoutGuide)
-            $0.width.equalTo(scrollView.frameLayoutGuide)
-            $0.height.equalTo(scrollView)
-            $0.bottom.equalTo(tableView.snp.bottom)
-        }
-        
-        // 체크리스트 선택 완료 시 버튼 로직 처리
-        completedButton.snp.makeConstraints {
-            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-26)
-            $0.bottom.equalTo(view.snp.bottom).offset(-26)
-            $0.trailing.equalTo(view.snp.trailing).offset(-24)
-        }
-        
-        view.bringSubviewToFront(completedButton)
-        
-        tableView.snp.makeConstraints {
-            $0.top.equalTo(contentView)
-            $0.leading.trailing.equalTo(contentView)
         }
     }
 
@@ -286,31 +249,25 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource  
 
     }
 
-
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.row == 0 {
+        guard indexPath.row != 0 else {
+            // 카테고리 셀의 높이
             return 63
-        } else {
-            let category = categories[indexPath.section]
-            
-            if let _ = category.items[indexPath.row - 1] as? CalendarItem {
-                // CalendarItem인 경우의 높이 설정
-                return 443
-            } else if let _ = category.items[indexPath.row - 1] as? ScoreItem {
-                // ScoreItem인 경우의 높이 설정
-                return 98
-            }
-            else if let _ = category.items[indexPath.row - 1] as? InputItem {
-                // InputItem인 경우의 높이 설정
-                return 98
-            }
-            else if let _ = category.items[indexPath.row - 1] as? SelectionItem {
-                // SelectionItem인 경우의 높이 설정
-                return 114
-            }
-            
+        }
+
+        let category = categories[indexPath.section]
+        let selectedItem = category.items[indexPath.row - 1]
+
+        switch selectedItem {
+        case is CalendarItem:
+            return 443
+        case is ScoreItem, is InputItem:
+            return 98
+        case is SelectionItem:
+            return 114
+        default:
             return UITableView.automaticDimension
         }
     }
+
 }

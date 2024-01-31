@@ -12,6 +12,7 @@
 		0A14E3712B56B31A0008FD28 /* SetNickNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A14E3702B56B31A0008FD28 /* SetNickNameViewController.swift */; };
 		0A14E3732B56B6F70008FD28 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A14E3722B56B6F70008FD28 /* WelcomeViewController.swift */; };
 		0A1EC4862B6A17FD009248E4 /* NotEnteredCheckListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1EC4852B6A17FD009248E4 /* NotEnteredCheckListViewController.swift */; };
+		0A1EC48E2B6AE1FF009248E4 /* NotEnteredCalendarTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1EC48D2B6AE1FF009248E4 /* NotEnteredCalendarTableViewCell.swift */; };
 		0A2471192B68CAAF00A7382B /* ToSItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2471182B68CAAF00A7382B /* ToSItem.swift */; };
 		0A24711B2B68FCF700A7382B /* SignupPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A24711A2B68FCF700A7382B /* SignupPopupViewController.swift */; };
 		0A24711D2B69147200A7382B /* ToSDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A24711C2B69147200A7382B /* ToSDetailViewController.swift */; };
@@ -128,6 +129,7 @@
 		0A14E3702B56B31A0008FD28 /* SetNickNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetNickNameViewController.swift; sourceTree = "<group>"; };
 		0A14E3722B56B6F70008FD28 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		0A1EC4852B6A17FD009248E4 /* NotEnteredCheckListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotEnteredCheckListViewController.swift; sourceTree = "<group>"; };
+		0A1EC48D2B6AE1FF009248E4 /* NotEnteredCalendarTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotEnteredCalendarTableViewCell.swift; sourceTree = "<group>"; };
 		0A2471182B68CAAF00A7382B /* ToSItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToSItem.swift; sourceTree = "<group>"; };
 		0A24711A2B68FCF700A7382B /* SignupPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupPopupViewController.swift; sourceTree = "<group>"; };
 		0A24711C2B69147200A7382B /* ToSDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToSDetailViewController.swift; sourceTree = "<group>"; };
@@ -328,13 +330,14 @@
 				0A129BE72B6251CF0022819B /* Model */,
 				0AE388882B5986BC0041A979 /* CategoryItemTableViewCell.swift */,
 				0AF968232B5BDF3300A3CBBB /* CheckListViewController.swift */,
+				0A1EC4852B6A17FD009248E4 /* NotEnteredCheckListViewController.swift */,
+				0A1EC48D2B6AE1FF009248E4 /* NotEnteredCalendarTableViewCell.swift */,
 				0A4EBE332B5EA25300909B7A /* ExpandedCalendarTableViewCell.swift */,
 				0A4EBE352B5EA27B00909B7A /* ExpandedScoreTableViewCell.swift */,
 				0A4EBE372B5EDD6F00909B7A /* ExpandedTextFieldTableViewCell.swift */,
 				0A4EBE3A2B5EF2BC00909B7A /* ExpandedDropdownTableViewCell.swift */,
 				0A2471242B697E3D00A7382B /* EditBasicInfoViewController.swift */,
 				0A2471262B69803000A7382B /* EditBasicInfoDetailViewController.swift */,
-				0A1EC4852B6A17FD009248E4 /* NotEnteredCheckListViewController.swift */,
 			);
 			path = CheckList;
 			sourceTree = "<group>";
@@ -771,6 +774,7 @@
 				61B0C99B2B697B2F00BE86D2 /* DeleteImjangTableHeaderView.swift in Sources */,
 				0A24711F2B6924BA00A7382B /* RecordingRightsViewController.swift in Sources */,
 				0AB34CC12B4F11B000150A15 /* OpenNewPage2ViewController.swift in Sources */,
+				0A1EC48E2B6AE1FF009248E4 /* NotEnteredCalendarTableViewCell.swift in Sources */,
 				0A24711B2B68FCF700A7382B /* SignupPopupViewController.swift in Sources */,
 				619269F62B67747F00D4DD3E /* SearchKeywordHeaderView.swift in Sources */,
 				616409022B407FB300EC3B5E /* UIFont+Pretendard.swift in Sources */,

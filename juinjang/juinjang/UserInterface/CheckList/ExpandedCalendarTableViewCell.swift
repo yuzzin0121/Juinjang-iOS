@@ -33,7 +33,7 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
     // 달력
     lazy var calendar = FSCalendar()
     
-    var calendarItems: [Item] = []  // 이 부분을 추가
+    var calendarItems: [Item] = []
     
     let today = Date()
     private var calendarCurrent: Calendar = Calendar.current
@@ -74,7 +74,6 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        self.backgroundColor = .white
         // Configure the view for the selected state
     }
     

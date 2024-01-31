@@ -10,22 +10,11 @@ import SnapKit
 
 class NotEnteredCheckListViewController: UIViewController {
     
-    lazy var scrollView = UIScrollView().then {
-        $0.backgroundColor = .white
-        $0.showsVerticalScrollIndicator = false
-        $0.isScrollEnabled = false
-        $0.bounces = true
-    }
-    
-    lazy var contentView = UIView()
-    
-    lazy var completedButton = UIButton().then {
-        $0.setImage(UIImage(named: "completed-button"), for: .normal)
-    }
-    
     lazy var tableView = UITableView().then {
         $0.separatorStyle = .none
-        $0.isScrollEnabled = false
+        $0.showsVerticalScrollIndicator = false
+        $0.isScrollEnabled = true
+        $0.register(NotEnteredCalendarTableViewCell.self, forCellReuseIdentifier: NotEnteredCalendarTableViewCell.identifier)
         $0.register(CategoryItemTableViewCell.self, forCellReuseIdentifier: CategoryItemTableViewCell.identifier)
         $0.register(ExpandedScoreTableViewCell.self, forCellReuseIdentifier: ExpandedScoreTableViewCell.identifier)
         $0.register(ExpandedCalendarTableViewCell.self, forCellReuseIdentifier: ExpandedCalendarTableViewCell.identifier)
@@ -40,7 +29,6 @@ class NotEnteredCheckListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        scrollView.delegate = self
         tableView.delegate = self
         tableView.dataSource = self
         addSubViews()
@@ -61,48 +49,20 @@ class NotEnteredCheckListViewController: UIViewController {
     }
     
     func addSubViews() {
-        [scrollView,
-         completedButton].forEach { view.addSubview($0) }
-        scrollView.addSubview(contentView)
-        [tableView].forEach { contentView.addSubview($0) }
+        view.addSubview(tableView)
     }
     
     func setupLayout() {
-        // 스크롤 뷰
-        scrollView.snp.makeConstraints {
+        // 테이블 뷰
+        tableView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(48)
             $0.leading.trailing.equalToSuperview()
+            // 어떻게 주어야 할까?
             $0.bottom.equalToSuperview()
-        }
-        
-        // 컨텐트 뷰
-        contentView.snp.makeConstraints {
-            $0.edges.equalTo(scrollView.contentLayoutGuide)
-            $0.width.equalTo(scrollView.frameLayoutGuide)
-            $0.height.equalTo(scrollView)
-            $0.bottom.equalTo(tableView.snp.bottom)
-        }
-        
-        // 체크리스트 선택 완료 시 버튼 로직 처리
-        completedButton.snp.makeConstraints {
-            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-26)
-            $0.bottom.equalTo(view.snp.bottom).offset(-26)
-            $0.trailing.equalTo(view.snp.trailing).offset(-24)
-        }
-        
-        view.bringSubviewToFront(completedButton)
-        
-        tableView.snp.makeConstraints {
-            $0.top.equalTo(contentView)
-            $0.leading.trailing.equalTo(contentView)
         }
     }
 
     var categories: [Category] = [
-        Category(image: UIImage(named: "deadline-item")!, name: "기한", items: [
-            CalendarItem(content: "입주 가능 날짜는 어떻게 되나요?"),
-            CalendarItem(content: "잔금은 언제까지 치뤄야 하나요?")
-        ]),
         Category(image: UIImage(named: "location-conditions-item")!, name: "입지여건", items: [
             ScoreItem(content: "역세권인가요?"),
             SelectionItem(content: "지하철 노선도를 선택해 주세요.", options: ["선택안함", "1호선", "2호선", "3호선", "4호선", "5호선", "6호선", "7호선", "8호선", "9호선", "수인분당", "경의중앙", "신분당", "공항철도", "경춘선"]),
@@ -173,68 +133,76 @@ class NotEnteredCheckListViewController: UIViewController {
 extension NotEnteredCheckListViewController : UITableViewDelegate, UITableViewDataSource  {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return categories.count
+        return 1 + categories.count
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if categories[section].isExpanded {
-            return 1 + categories[section].items.count // 셀이 확장된 경우, 카테고리 셀과 확장된 항목들이 나타남
+        if section == 0 {
+            return 1 // 첫 번째 섹션은 항상 1을 반환
         } else {
-            return 1 // 셀이 확장되지 않은 경우, 카테고리 셀만 나타남
+            if categories[section - 1].isExpanded {
+                return 1 + categories[section - 1].items.count
+            } else {
+                return 1
+            }
         }
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.row == 0 {
-            let cell: CategoryItemTableViewCell = tableView.dequeueReusableCell(withIdentifier: CategoryItemTableViewCell.identifier, for: indexPath) as! CategoryItemTableViewCell
-            
-            cell.categoryImage.image = categories[indexPath.section].image
-            cell.categoryLabel.text = categories[indexPath.section].name
-            
+        if indexPath.section == 0 {
+            // 첫 번째 섹션의 셀 처리 (여기서는 항상 NotEnteredCalendarTableViewCell)
+            let cell: NotEnteredCalendarTableViewCell = tableView.dequeueReusableCell(withIdentifier: NotEnteredCalendarTableViewCell.identifier, for: indexPath) as! NotEnteredCalendarTableViewCell
             return cell
-            
         } else {
-            // 카테고리 셀 클릭 시 펼쳐질 셀
-            let category = categories[indexPath.section]
+            // 나머지 섹션의 셀 처리
+            if indexPath.row == 0 {
+                let cell: CategoryItemTableViewCell = tableView.dequeueReusableCell(withIdentifier: CategoryItemTableViewCell.identifier, for: indexPath) as! CategoryItemTableViewCell
+                cell.categoryImage.image = categories[indexPath.section - 1].image
+                cell.categoryLabel.text = categories[indexPath.section - 1].name
+                return cell
+            } else {
+                let category = categories[indexPath.section - 1]
+                let selectedItem = category.items[indexPath.row - 1]
             
-            if let calendarItem = category.items[indexPath.row - 1] as? CalendarItem {
-                // CalendarItem인 경우
-                let cell: ExpandedCalendarTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedCalendarTableViewCell.identifier, for: indexPath) as! ExpandedCalendarTableViewCell
-                cell.contentLabel.text = calendarItem.content
-                cell.selectedDate = calendarItem.inputDate
-                // 선택 상태에 따라 배경색 설정
-                cell.backgroundColor = calendarItem.isSelected ? UIColor(named: "lightOrange") : UIColor.white
-                cell.selectedDate = selectedDates[indexPath.section]
-                
-                return cell
-            } else if let scoreItem = category.items[indexPath.row - 1] as? ScoreItem {
-                // ScoreItem인 경우
-                let cell: ExpandedScoreTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedScoreTableViewCell.identifier, for: indexPath) as! ExpandedScoreTableViewCell
-                cell.contentLabel.text = scoreItem.content
-                cell.score = scoreItem.score
-                // 선택 상태에 따라 배경색 설정
-                cell.backgroundColor = scoreItem.isSelected ? UIColor(named: "lightOrange") : UIColor.clear
-                            
-                return cell
-            } else if let inputItem = category.items[indexPath.row - 1] as? InputItem {
-                // InputItem인 경우
-                let cell: ExpandedTextFieldTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedTextFieldTableViewCell.identifier, for: indexPath) as! ExpandedTextFieldTableViewCell
-                cell.contentLabel.text = inputItem.content
-                cell.inputAnswer = inputItem.inputAnswer
-                // 선택 상태에 따라 배경색 설정
-                cell.backgroundColor = inputItem.isSelected ? UIColor(named: "lightOrange") : UIColor.clear
-                
-                return cell
-            } else if let selectionItem = category.items[indexPath.row - 1] as? SelectionItem {
-                // SelectionItem인 경우
-                let cell: ExpandedDropdownTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedDropdownTableViewCell.identifier, for: indexPath) as! ExpandedDropdownTableViewCell
-                cell.contentLabel.text = selectionItem.content
-                cell.options = selectionItem.options
-                cell.selectedOption = selectionItem.selectAnswer
-                // 선택 상태에 따라 배경색 설정
-                cell.backgroundColor = selectionItem.isSelected ? UIColor(named: "lightOrange") : UIColor.clear
-                
-                return cell
+                if let calendarItem = category.items[indexPath.row - 1] as? CalendarItem {
+                    // CalendarItem인 경우
+                    let cell: ExpandedCalendarTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedCalendarTableViewCell.identifier, for: indexPath) as! ExpandedCalendarTableViewCell
+                    cell.contentLabel.text = calendarItem.content
+                    cell.selectedDate = calendarItem.inputDate
+                    // 선택 상태에 따라 배경색 설정
+                    cell.backgroundColor = calendarItem.isSelected ? UIColor(named: "lightOrange") : UIColor.white
+                    cell.selectedDate = selectedDates[indexPath.section]
+                    
+                    return cell
+                } else if let scoreItem = category.items[indexPath.row - 1] as? ScoreItem {
+                    // ScoreItem인 경우
+                    let cell: ExpandedScoreTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedScoreTableViewCell.identifier, for: indexPath) as! ExpandedScoreTableViewCell
+                    cell.contentLabel.text = scoreItem.content
+                    cell.score = scoreItem.score
+                    // 선택 상태에 따라 배경색 설정
+                    cell.backgroundColor = scoreItem.isSelected ? UIColor(named: "lightOrange") : UIColor.clear
+                                
+                    return cell
+                } else if let inputItem = category.items[indexPath.row - 1] as? InputItem {
+                    // InputItem인 경우
+                    let cell: ExpandedTextFieldTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedTextFieldTableViewCell.identifier, for: indexPath) as! ExpandedTextFieldTableViewCell
+                    cell.contentLabel.text = inputItem.content
+                    cell.inputAnswer = inputItem.inputAnswer
+                    // 선택 상태에 따라 배경색 설정
+                    cell.backgroundColor = inputItem.isSelected ? UIColor(named: "lightOrange") : UIColor.clear
+                    
+                    return cell
+                } else if let selectionItem = category.items[indexPath.row - 1] as? SelectionItem {
+                    // SelectionItem인 경우
+                    let cell: ExpandedDropdownTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedDropdownTableViewCell.identifier, for: indexPath) as! ExpandedDropdownTableViewCell
+                    cell.contentLabel.text = selectionItem.content
+                    cell.options = selectionItem.options
+                    cell.selectedOption = selectionItem.selectAnswer
+                    // 선택 상태에 따라 배경색 설정
+                    cell.backgroundColor = selectionItem.isSelected ? UIColor(named: "lightOrange") : UIColor.clear
+                    
+                    return cell
+                }
             }
             return UITableViewCell()
         }
@@ -245,11 +213,11 @@ extension NotEnteredCheckListViewController : UITableViewDelegate, UITableViewDa
         if let cell = tableView.cellForRow(at: indexPath) as? CategoryItemTableViewCell {
             // 카테고리 셀을 눌렀을 때
             if indexPath.row == 0 {
-                if categories[indexPath.section].isExpanded == true {
-                    categories[indexPath.section].isExpanded = false
+                if categories[indexPath.section - 1].isExpanded == true {
+                    categories[indexPath.section - 1].isExpanded = false
                     cell.expandButton.setImage(UIImage(named: "contraction-items"), for: .normal)
                 } else {
-                    categories[indexPath.section].isExpanded = true
+                    categories[indexPath.section - 1].isExpanded = true
                     cell.expandButton.setImage(UIImage(named: "expand-items"), for: .normal)
                 }
                 let section = IndexSet.init(integer: indexPath.section)
@@ -286,31 +254,25 @@ extension NotEnteredCheckListViewController : UITableViewDelegate, UITableViewDa
 
     }
 
-
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.row == 0 {
+        guard indexPath.row != 0 else {
+            // 카테고리 셀의 높이
             return 63
-        } else {
-            let category = categories[indexPath.section]
-            
-            if let _ = category.items[indexPath.row - 1] as? CalendarItem {
-                // CalendarItem인 경우의 높이 설정
-                return 443
-            } else if let _ = category.items[indexPath.row - 1] as? ScoreItem {
-                // ScoreItem인 경우의 높이 설정
-                return 98
-            }
-            else if let _ = category.items[indexPath.row - 1] as? InputItem {
-                // InputItem인 경우의 높이 설정
-                return 98
-            }
-            else if let _ = category.items[indexPath.row - 1] as? SelectionItem {
-                // SelectionItem인 경우의 높이 설정
-                return 114
-            }
-            
+        }
+
+        let category = categories[indexPath.section - 1]
+        let selectedItem = category.items[indexPath.row - 1]
+
+        switch selectedItem {
+        case is CalendarItem:
+            return 443
+        case is ScoreItem, is InputItem:
+            return 98
+        case is SelectionItem:
+            return 114
+        default:
             return UITableView.automaticDimension
         }
     }
+
 }
