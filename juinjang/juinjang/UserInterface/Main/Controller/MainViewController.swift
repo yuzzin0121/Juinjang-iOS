@@ -9,13 +9,8 @@ class MainViewController: UIViewController {
     var settingButton = UIButton().then {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.setImage(UIImage(named:"setting"), for: .normal)
-        $0.addTarget(self, action: #selector(setBtnTap), for: .touchUpInside)
     }
-    @objc
-    func setBtnTap() {
-        let vc = SettingViewController()
-        self.navigationController?.pushViewController(vc, animated: false)
-    }
+    
     var mainLogoImageView = UIImageView().then {
         $0.image = UIImage(named:"mainLogo")
     }
@@ -40,33 +35,38 @@ class MainViewController: UIViewController {
     @objc
     func newImjangBtnTap() {
         let vc = OpenNewPageViewController()
-        self.navigationController?.pushViewController(vc, animated: false)
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     @objc
     func myImjangBtnTap() {
-        let vc = ReportViewController()
-        self.navigationController?.pushViewController(vc, animated: false)
+        let vc = ImjangNoteViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
+    @objc
+    func setttingBtnTap() {
+        let vc = SettingViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
     
 //MARK: - 함수 선언
     func setConstraint() {
         //설정 버튼, 메인 로고, 스피커 버튼
-        settingButton.snp.makeConstraints{
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(10.16)
-            $0.height.equalTo(24)
-            $0.left.equalToSuperview().offset(26.73)
-        }
-        mainLogoImageView.snp.makeConstraints{
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(12.16)
-            $0.height.equalTo(21)
-            $0.centerX.equalToSuperview()
-        }
-        speakerButton.snp.makeConstraints{
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(10.16)
-            $0.height.width.equalTo(24)
-            $0.right.equalToSuperview().inset(26.55)
-        }
+//        settingButton.snp.makeConstraints{
+//            $0.top.equalTo(view.safeAreaLayoutGuide).offset(10.16)
+//            $0.height.equalTo(24)
+//            $0.left.equalToSuperview().offset(26.73)
+//        }
+//        mainLogoImageView.snp.makeConstraints{
+//            $0.top.equalTo(view.safeAreaLayoutGuide).offset(12.16)
+//            $0.height.equalTo(21)
+//            $0.centerX.equalToSuperview()
+//        }
+//        speakerButton.snp.makeConstraints{
+//            $0.top.equalTo(view.safeAreaLayoutGuide).offset(10.16)
+//            $0.height.width.equalTo(24)
+//            $0.right.equalToSuperview().inset(26.55)
+//        }
         
         //배경
         backgroundImageView.snp.makeConstraints{
@@ -80,29 +80,48 @@ class MainViewController: UIViewController {
     
         //테이블 뷰
         tableView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(46.16)
+            $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.left.right.bottom.equalToSuperview()
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        designNavigationBar()
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
         tableView.rowHeight = 710
         tableView.backgroundColor = .clear
         
-        self.navigationController?.navigationBar.isHidden = true
+//        self.navigationController?.navigationBar.isHidden = true
         
         view.backgroundColor = .white
         view.addSubview(backgroundImageView)
-        view.addSubview(settingButton)
-        view.addSubview(speakerButton)
-        view.addSubview(mainLogoImageView)
+//        view.addSubview(settingButton)
+//        view.addSubview(speakerButton)
+//        view.addSubview(mainLogoImageView)
         view.addSubview(tableView)
         setConstraint()
+    }
+    
+    // 네비게이션 바 디자인
+    func designNavigationBar() {
+        self.navigationController?.navigationBar.tintColor = .black
+        navigationItem.titleView = mainLogoImageView
+        
+        // 이미지 로드
+        let speaker = UIImage(named:"speaker")
+
+        // UIBarButtonItem 생성 및 이미지 설정
+        let speakerButtonItem = UIBarButtonItem(image: speaker, style: .plain, target: self, action: nil)
+        
+        let settingButtonItem = UIBarButtonItem(image: UIImage(named:"setting"), style: .plain, target: self, action: #selector(setttingBtnTap))
+        settingButtonItem.tintColor = UIColor(named: "textGray")
+
+        // 네비게이션 아이템에 백 버튼 아이템 설정
+        self.navigationItem.leftBarButtonItem = settingButtonItem
+        self.navigationItem.rightBarButtonItem = speakerButtonItem
     }
 }
 

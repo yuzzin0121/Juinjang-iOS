@@ -18,9 +18,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
 
-        let mainViewController = ImjangNoteViewController()
+        let mainViewController = MainViewController()
         let navigationController = UINavigationController(rootViewController: mainViewController)
-        navigationController.navigationBar.scrollEdgeAppearance?.backgroundColor = .white
+//        navigationController.navigationBar.scrollEdgeAppearance?.backgroundColor = .white
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
     }
