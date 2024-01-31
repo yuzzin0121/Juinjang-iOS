@@ -39,7 +39,7 @@ class MainViewController: UIViewController {
     }
     @objc
     func myImjangBtnTap() {
-        let vc = ImjangNoteViewController()
+        let vc = ImjangListViewController()
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
