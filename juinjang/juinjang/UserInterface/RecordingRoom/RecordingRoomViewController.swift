@@ -10,6 +10,7 @@ import SnapKit
 import Then
 
 class RecordingRoomViewController: UIViewController {
+    
     // 스크롤뷰
     let scrollView = UIScrollView().then {
         $0.backgroundColor = .white
@@ -149,7 +150,7 @@ class RecordingRoomViewController: UIViewController {
                     textColor: UIColor(named: "textBlack")!)
         
         designButton(addRecordingButton,
-                     image: UIImage(named: "+"))
+                     image: UIImage(named: "addOrange"))
         
         setStackView(recordingFileStackView,
                      label: recordingFileLabel,

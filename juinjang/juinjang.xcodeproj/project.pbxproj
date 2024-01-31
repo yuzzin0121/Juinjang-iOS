@@ -15,6 +15,9 @@
 		0A24711B2B68FCF700A7382B /* SignupPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A24711A2B68FCF700A7382B /* SignupPopupViewController.swift */; };
 		0A24711D2B69147200A7382B /* ToSDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A24711C2B69147200A7382B /* ToSDetailViewController.swift */; };
 		0A24711F2B6924BA00A7382B /* RecordingRightsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A24711E2B6924BA00A7382B /* RecordingRightsViewController.swift */; };
+		0A2471212B69693400A7382B /* ToSDetailItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2471202B69693400A7382B /* ToSDetailItem.swift */; };
+		0A2471252B697E3D00A7382B /* EditBasicInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2471242B697E3D00A7382B /* EditBasicInfoViewController.swift */; };
+		0A2471272B69803000A7382B /* EditBasicInfoDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2471262B69803000A7382B /* EditBasicInfoDetailViewController.swift */; };
 		0A2DED1A2B55198D00A96BAA /* STTLoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2DED192B55198D00A96BAA /* STTLoadingViewController.swift */; };
 		0A2DED1C2B551CB100A96BAA /* RecordPlaybackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2DED1B2B551CB100A96BAA /* RecordPlaybackViewController.swift */; };
 		0A2DED1E2B551CEE00A96BAA /* RecordTopViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2DED1D2B551CEE00A96BAA /* RecordTopViewController.swift */; };
@@ -69,6 +72,9 @@
 		345855972B692DFB00432C06 /* GraphViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345855962B692DFB00432C06 /* GraphViewController.swift */; };
 		345855992B692E0400432C06 /* TabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345855982B692E0400432C06 /* TabViewController.swift */; };
 		3458559B2B692E0C00432C06 /* CompareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3458559A2B692E0C00432C06 /* CompareViewController.swift */; };
+		3458559D2B69479D00432C06 /* NoMaemullPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3458559C2B69479D00432C06 /* NoMaemullPopupViewController.swift */; };
+		345855A32B69504500432C06 /* SelectMaemullViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345855A22B69504500432C06 /* SelectMaemullViewController.swift */; };
+		345855A42B69E44D00432C06 /* NoMaemullPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345855A02B69487500432C06 /* NoMaemullPopupView.swift */; };
 		611757382B67D5E60043E958 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 611757372B67D5E60043E958 /* Assets.xcassets */; };
 		611F14552B47070B00B983F1 /* RecordingSegmentedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F14542B47070B00B983F1 /* RecordingSegmentedViewController.swift */; };
 		611F145A2B4707CC00B983F1 /* RecordingRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F14592B4707CC00B983F1 /* RecordingRoomViewController.swift */; };
@@ -123,6 +129,9 @@
 		0A24711A2B68FCF700A7382B /* SignupPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupPopupViewController.swift; sourceTree = "<group>"; };
 		0A24711C2B69147200A7382B /* ToSDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToSDetailViewController.swift; sourceTree = "<group>"; };
 		0A24711E2B6924BA00A7382B /* RecordingRightsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingRightsViewController.swift; sourceTree = "<group>"; };
+		0A2471202B69693400A7382B /* ToSDetailItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToSDetailItem.swift; sourceTree = "<group>"; };
+		0A2471242B697E3D00A7382B /* EditBasicInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBasicInfoViewController.swift; sourceTree = "<group>"; };
+		0A2471262B69803000A7382B /* EditBasicInfoDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBasicInfoDetailViewController.swift; sourceTree = "<group>"; };
 		0A2DED192B55198D00A96BAA /* STTLoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STTLoadingViewController.swift; sourceTree = "<group>"; };
 		0A2DED1B2B551CB100A96BAA /* RecordPlaybackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordPlaybackViewController.swift; sourceTree = "<group>"; };
 		0A2DED1D2B551CEE00A96BAA /* RecordTopViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordTopViewController.swift; sourceTree = "<group>"; };
@@ -170,6 +179,9 @@
 		345855962B692DFB00432C06 /* GraphViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphViewController.swift; sourceTree = "<group>"; };
 		345855982B692E0400432C06 /* TabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabViewController.swift; sourceTree = "<group>"; };
 		3458559A2B692E0C00432C06 /* CompareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompareViewController.swift; sourceTree = "<group>"; };
+		3458559C2B69479D00432C06 /* NoMaemullPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoMaemullPopupViewController.swift; sourceTree = "<group>"; };
+		345855A02B69487500432C06 /* NoMaemullPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoMaemullPopupView.swift; sourceTree = "<group>"; };
+		345855A22B69504500432C06 /* SelectMaemullViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectMaemullViewController.swift; sourceTree = "<group>"; };
 		611757372B67D5E60043E958 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		611F14542B47070B00B983F1 /* RecordingSegmentedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingSegmentedViewController.swift; sourceTree = "<group>"; };
 		611F14592B4707CC00B983F1 /* RecordingRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingRoomViewController.swift; sourceTree = "<group>"; };
@@ -247,13 +259,14 @@
 			isa = PBXGroup;
 			children = (
 				0A14E36E2B569A840008FD28 /* SignUpViewController.swift */,
-				0A14E3702B56B31A0008FD28 /* SetNickNameViewController.swift */,
-				0A14E3722B56B6F70008FD28 /* WelcomeViewController.swift */,
 				0A95D72E2B682013000A9C06 /* ToSViewController.swift */,
 				0A95D7302B682FB4000A9C06 /* ToSItemTableViewCell.swift */,
-				0A2471182B68CAAF00A7382B /* ToSItem.swift */,
-				0A24711A2B68FCF700A7382B /* SignupPopupViewController.swift */,
 				0A24711C2B69147200A7382B /* ToSDetailViewController.swift */,
+				0A2471182B68CAAF00A7382B /* ToSItem.swift */,
+				0A2471202B69693400A7382B /* ToSDetailItem.swift */,
+				0A24711A2B68FCF700A7382B /* SignupPopupViewController.swift */,
+				0A14E3702B56B31A0008FD28 /* SetNickNameViewController.swift */,
+				0A14E3722B56B6F70008FD28 /* WelcomeViewController.swift */,
 				0A24711E2B6924BA00A7382B /* RecordingRightsViewController.swift */,
 			);
 			path = SignUp;
@@ -315,6 +328,8 @@
 				0A4EBE352B5EA27B00909B7A /* ExpandedScoreTableViewCell.swift */,
 				0A4EBE372B5EDD6F00909B7A /* ExpandedTextFieldTableViewCell.swift */,
 				0A4EBE3A2B5EF2BC00909B7A /* ExpandedDropdownTableViewCell.swift */,
+				0A2471242B697E3D00A7382B /* EditBasicInfoViewController.swift */,
+				0A2471262B69803000A7382B /* EditBasicInfoDetailViewController.swift */,
 			);
 			path = CheckList;
 			sourceTree = "<group>";
@@ -443,12 +458,31 @@
 		345855932B692DE300432C06 /* Report */ = {
 			isa = PBXGroup;
 			children = (
-				345855942B692DF100432C06 /* ReportViewController.swift */,
+				3458559F2B69486700432C06 /* View */,
+				3458559E2B69485800432C06 /* Controller */,
+			);
+			path = Report;
+			sourceTree = "<group>";
+		};
+		3458559E2B69485800432C06 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
 				345855962B692DFB00432C06 /* GraphViewController.swift */,
 				345855982B692E0400432C06 /* TabViewController.swift */,
 				3458559A2B692E0C00432C06 /* CompareViewController.swift */,
+				3458559C2B69479D00432C06 /* NoMaemullPopupViewController.swift */,
+				345855942B692DF100432C06 /* ReportViewController.swift */,
+				345855A22B69504500432C06 /* SelectMaemullViewController.swift */,
 			);
-			path = Report;
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		3458559F2B69486700432C06 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				345855A02B69487500432C06 /* NoMaemullPopupView.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		616408EA2B407A2100EC3B5E /* Extension */ = {
@@ -602,7 +636,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1430;
-				LastUpgradeCheck = 1430;
+				LastUpgradeCheck = 1520;
 				TargetAttributes = {
 					0A9E0A422B3DCAB90094595A = {
 						CreatedOnToolsVersion = 14.3.1;
@@ -684,11 +718,13 @@
 				0A24711D2B69147200A7382B /* ToSDetailViewController.swift in Sources */,
 				0A7AC0F12B6412760032C9DF /* KakaoZipCodeViewController.swift in Sources */,
 				0A4EBE382B5EDD6F00909B7A /* ExpandedTextFieldTableViewCell.swift in Sources */,
+				345855A42B69E44D00432C06 /* NoMaemullPopupView.swift in Sources */,
 				0A554CE42B5420F20023BB49 /* WarningMessageViewController.swift in Sources */,
 				0A14E3712B56B31A0008FD28 /* SetNickNameViewController.swift in Sources */,
 				0AE388892B5986BC0041A979 /* CategoryItemTableViewCell.swift in Sources */,
 				0A14E3732B56B6F70008FD28 /* WelcomeViewController.swift in Sources */,
 				345855822B689D7200432C06 /* QnATableViewCell.swift in Sources */,
+				345855A32B69504500432C06 /* SelectMaemullViewController.swift in Sources */,
 				3458558E2B689E2D00432C06 /* AccountDeleteViewController.swift in Sources */,
 				61864BEA2B6003520073C175 /* UIButton+Extension.swift in Sources */,
 				0A2DED1A2B55198D00A96BAA /* STTLoadingViewController.swift in Sources */,
@@ -703,9 +739,11 @@
 				61D925082B486706002A16B4 /* RecordingFileItem.swift in Sources */,
 				0A2DED1C2B551CB100A96BAA /* RecordPlaybackViewController.swift in Sources */,
 				0A2DED1E2B551CEE00A96BAA /* RecordTopViewController.swift in Sources */,
+				0A2471212B69693400A7382B /* ToSDetailItem.swift in Sources */,
 				0AB34CC32B4F11B000150A15 /* OpenNewPageViewController.swift in Sources */,
 				61864BE22B5FFA890073C175 /* UIImageView+Extension.swift in Sources */,
 				611F145E2B471ECA00B983F1 /* CALayer+Extension.swift in Sources */,
+				3458559D2B69479D00432C06 /* NoMaemullPopupViewController.swift in Sources */,
 				61864BEF2B600E920073C175 /* ImjangNote.swift in Sources */,
 				0A73E60D2B5855CD00EF1C89 /* UserInfo.swift in Sources */,
 				345855802B689D4C00432C06 /* LogoutPopupView.swift in Sources */,
@@ -729,10 +767,12 @@
 				345855922B689E5200432C06 /* AccountDeleteFinalViewController.swift in Sources */,
 				345855992B692E0400432C06 /* TabViewController.swift in Sources */,
 				0A3D5D4C2B4D333900574686 /* TransactionModel.swift in Sources */,
+				0A2471272B69803000A7382B /* EditBasicInfoDetailViewController.swift in Sources */,
 				345855952B692DF100432C06 /* ReportViewController.swift in Sources */,
 				0A4EBE342B5EA25300909B7A /* ExpandedCalendarTableViewCell.swift in Sources */,
 				616408EC2B407A2D00EC3B5E /* UIView+Extensions.swift in Sources */,
 				619269F72B67747F00D4DD3E /* ImjangListHeaderView.swift in Sources */,
+				0A2471252B697E3D00A7382B /* EditBasicInfoViewController.swift in Sources */,
 				61864C4D2B653E140073C175 /* UIViewController+Extension.swift in Sources */,
 				345855862B689DEC00432C06 /* SettingViewController.swift in Sources */,
 				0A9E0A492B3DCAB90094595A /* SceneDelegate.swift in Sources */,
@@ -745,7 +785,6 @@
 				0A4EBE362B5EA27B00909B7A /* ExpandedScoreTableViewCell.swift in Sources */,
 				0A95D72F2B682013000A9C06 /* ToSViewController.swift in Sources */,
 				0AF968242B5BDF3300A3CBBB /* CheckListViewController.swift in Sources */,
-				0A3D5D632B4D707300574686 /* BottomSheetViewController.swift in Sources */,
 				0A9E0A472B3DCAB90094595A /* AppDelegate.swift in Sources */,
 				0A2DED202B551CF900A96BAA /* RecordBottomViewController.swift in Sources */,
 				611F145A2B4707CC00B983F1 /* RecordingRoomViewController.swift in Sources */,
@@ -802,6 +841,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -862,6 +902,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;

@@ -92,10 +92,6 @@ class GraphViewController : UIViewController {
         $0.translatesAutoresizingMaskIntoConstraints = false
     }
     
-    var graphImageView = UIImageView().then {
-        $0.image = UIImage(named: "삼각그래프")
-    }
-    
     var graphContainerView = UIView().then{
         $0.backgroundColor = .white
     }
@@ -326,6 +322,7 @@ class DataSetValueFormatter: ValueFormatter {
 class XAxisFormatter: AxisValueFormatter {
     
     let titles = [" \n실내","입지\n여건","공용\n공간"]
+    
     
     func stringForValue(_ value: Double, axis: AxisBase?) -> String {
         let index = Int(value) % titles.count

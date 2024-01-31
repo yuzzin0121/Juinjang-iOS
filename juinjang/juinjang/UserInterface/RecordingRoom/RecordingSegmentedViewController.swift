@@ -11,6 +11,7 @@ import Tabman
 import Pageboy
 
 class RecordingSegmentedViewController: TabmanViewController {
+    
     let tabView = UIView().then {
         $0.backgroundColor = .white
         $0.layer.addBorder([.top, .bottom], color: UIColor(named: "gray0")!, width: 1.0)
@@ -68,7 +69,6 @@ class RecordingSegmentedViewController: TabmanViewController {
         
         // Add to View
         self.addBar(bar, dataSource: self, at: .custom(view: tabView, layout: nil))
-        
     }
     
     func addSubView() {
@@ -105,6 +105,19 @@ extension RecordingSegmentedViewController: PageboyViewControllerDataSource, TMB
     }
     
     func viewController(for pageboyViewController: Pageboy.PageboyViewController, at index: Pageboy.PageboyViewController.PageIndex) -> UIViewController? {
+        
+        let currentViewController = self.viewControllers[index]
+        print("Current View Controller: \(currentViewController)")
+        
+        if currentViewController == self.viewControllers[0] {
+            print("현재 ViewController", currentViewController)
+            imjangNoteViewController?.editButton.isHidden = false
+            imjangNoteViewController?.upButton.isHidden = true
+        } else {
+            print("현재 ViewController", currentViewController)
+            imjangNoteViewController?.editButton.isHidden = true
+            imjangNoteViewController?.upButton.isHidden = false
+        }
         return viewControllers[index]
     }
     

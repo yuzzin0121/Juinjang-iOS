@@ -64,6 +64,7 @@ class RecordingFilesViewController: UIViewController {
         // 네비게이션 아이템에 백 버튼 아이템 설정
         self.navigationItem.leftBarButtonItem = backButtonItem
         self.navigationItem.rightBarButtonItem = addButtonItem
+        self.navigationItem.rightBarButtonItem?.tintColor = UIColor(named: "mainOrange")
     }
     
     @objc func back(_ sender: Any) {
