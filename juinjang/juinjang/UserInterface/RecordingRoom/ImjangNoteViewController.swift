@@ -164,7 +164,7 @@ class ImjangNoteViewController: UIViewController {
         // UIBarButtonItem 생성 및 이미지 설정
         let backButtonItem = UIBarButtonItem(image: backImage, style: .plain, target: self, action: #selector(popView))
         
-        let editButtonItem = UIBarButtonItem(title: "편집", style: .plain, target: self, action: nil)
+        let editButtonItem = UIBarButtonItem(title: "편집", style: .plain, target: self, action: #selector(editView))
         editButtonItem.tintColor = UIColor(named: "textGray")
 
         // 네비게이션 아이템에 백 버튼 아이템 설정
@@ -174,6 +174,13 @@ class ImjangNoteViewController: UIViewController {
     
     @objc func popView() {
         navigationController?.popViewController(animated: true)
+    }
+    
+    @objc func editView() {
+        // TODO: 실거래가 / 매매-전세-월세 구분 필요
+        let editVC = EditBasicInfoViewController()
+        self.navigationController?.pushViewController(editVC, animated: true)
+        
     }
     
     // MARK: - addSubView()

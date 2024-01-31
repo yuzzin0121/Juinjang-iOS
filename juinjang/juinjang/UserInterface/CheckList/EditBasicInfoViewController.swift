@@ -280,21 +280,6 @@ class EditBasicInfoViewController: UIViewController {
         $0.translatesAutoresizingMaskIntoConstraints = false
     }
     
-    lazy var cancelButton = UIButton().then {
-        $0.setTitle("취소하기", for: .normal)
-        $0.setTitleColor(UIColor(red: 0.212, green: 0.212, blue: 0.212, alpha: 1), for: .normal)
-        
-        $0.backgroundColor = UIColor(red: 0.925, green: 0.925, blue: 0.925, alpha: 1)
-        $0.layer.cornerRadius = 8
-        
-        $0.titleLabel?.font = UIFont(name: "Pretendard-SemiBold", size: 16)
-        $0.titleLabel?.numberOfLines = 1
-        $0.titleLabel?.adjustsFontSizeToFitWidth = true
-        $0.titleLabel?.minimumScaleFactor = 0.5
-        $0.titleLabel?.lineBreakMode = .byTruncatingTail
-        $0.addTarget(self, action: #selector(backButtonTapped(_:)), for: .touchUpInside)
-    }
-    
     lazy var saveButton = UIButton().then {
         $0.setTitle("저장하기", for: .normal)
         $0.setTitleColor(UIColor(red: 1, green: 1, blue: 1, alpha: 1), for: .normal)
@@ -346,7 +331,6 @@ class EditBasicInfoViewController: UIViewController {
          priceLabel,
          priceView,
          priceView2,
-         cancelButton,
          saveButton].forEach { view.addSubview($0) }
         setupLayout()
     }
@@ -487,23 +471,13 @@ class EditBasicInfoViewController: UIViewController {
             $0.top.equalTo(priceView.snp.top).offset(4)
             $0.centerY.equalTo(priceView.snp.centerY)
         }
-        
-        // 취소 버튼
-        cancelButton.snp.makeConstraints {
-            $0.height.equalTo(52)
-            $0.centerX.equalTo(view.snp.centerX).offset(-116.5)
-            $0.leading.equalTo(view.snp.leading).offset(24)
-//            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-5)
-            $0.bottom.equalTo(view.snp.bottom).offset(-33)
-        }
 
         // 저장 버튼
         saveButton.snp.makeConstraints {
             $0.height.equalTo(52)
             $0.centerX.equalTo(view.snp.centerX).offset(58.5)
-            $0.leading.equalTo(cancelButton.snp.trailing).offset(8)
+            $0.leading.equalTo(view.snp.leading).offset(24)
             $0.trailing.equalTo(view.snp.trailing).offset(-24)
-//            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-33)
             $0.bottom.equalTo(view.snp.bottom).offset(-33)
         }
 
@@ -556,13 +530,6 @@ class EditBasicInfoViewController: UIViewController {
     }
     
     @objc func backToPageTapped(_ sender: UIButton) {
-        let warningPopup = OpenNewPagePopupViewController()
-//        warningPopup.warningDelegate = self
-        warningPopup.modalPresentationStyle = .overCurrentContext
-        present(warningPopup, animated: false, completion: nil)
-    }
-
-    @objc func backButtonTapped(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
     }
     
