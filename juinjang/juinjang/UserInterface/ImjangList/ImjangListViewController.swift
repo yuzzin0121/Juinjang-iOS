@@ -123,7 +123,6 @@ class ImjangListViewController: UIViewController {
     
     @objc func showDeleteImjangVC() {
         let DeleteImjangVC = DeleteImjangViewController()
-        
         self.navigationController?.pushViewController(DeleteImjangVC, animated: true)
     }
     
@@ -136,6 +135,11 @@ class ImjangListViewController: UIViewController {
         
         imjangList[sender.tag] = imjangNote
         imjangTableView.reloadData()
+    }
+    
+    @objc func openNewPageVC() {
+        let openNewPageVC = OpenNewPageViewController()
+        self.navigationController?.pushViewController(openNewPageVC, animated: true)
     }
 }
 
@@ -202,7 +206,7 @@ extension ImjangListViewController {
         // UIBarButtonItem 생성 및 이미지 설정
         let backButtonItem = UIBarButtonItem(image: ImageStyle.arrowLeft, style: .plain, target: self, action: nil)
         
-        let addButtonItem = UIBarButtonItem(image: ImageStyle.add, style: .plain, target: self, action: nil)
+        let addButtonItem = UIBarButtonItem(image: ImageStyle.add, style: .plain, target: self, action: #selector(openNewPageVC))
         
         let searchButtonItem = UIBarButtonItem(image: ImageStyle.search, style: .plain, target: self, action: #selector(showSearchVC))
 

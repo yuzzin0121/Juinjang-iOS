@@ -412,8 +412,8 @@ class OpenNewPage2ViewController: UIViewController, WarningMessageDelegate {
     }
     
     func getWarningMessage() -> String {
-        if let imjangNoteVC = navigationController?.viewControllers.first(where: { $0 is ImjangNoteViewController }) {
-            // MainViewController -> ImjangNoteViewController -> OpenNewPageViewController -> OpenNewPage2ViewController: 임장노트에서 생성한 경우
+        if let imjangNoteVC = navigationController?.viewControllers.first(where: { $0 is ImjangListViewController }) {
+            // MainViewController -> ImjangListViewController -> OpenNewPageViewController -> OpenNewPage2ViewController: 임장노트에서 생성한 경우
             return "임장노트로 돌아갈까요?\n입력한 정보는 저장되지 않습니다."
         } else if let openNewPageVC = navigationController?.viewControllers.first(where: { $0 is OpenNewPageViewController }) {
             // MainViewController -> OpenNewPageViewController -> OpenNewPage2ViewController: 메인에서 생성한 경우
