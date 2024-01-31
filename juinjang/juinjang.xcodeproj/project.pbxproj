@@ -76,6 +76,7 @@
 		3458559D2B69479D00432C06 /* NoMaemullPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3458559C2B69479D00432C06 /* NoMaemullPopupViewController.swift */; };
 		345855A32B69504500432C06 /* SelectMaemullViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345855A22B69504500432C06 /* SelectMaemullViewController.swift */; };
 		345855A42B69E44D00432C06 /* NoMaemullPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345855A02B69487500432C06 /* NoMaemullPopupView.swift */; };
+		345855A72B6A039600432C06 /* ReportImjangListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345855A62B6A039600432C06 /* ReportImjangListTableViewCell.swift */; };
 		611757382B67D5E60043E958 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 611757372B67D5E60043E958 /* Assets.xcassets */; };
 		611F14552B47070B00B983F1 /* RecordingSegmentedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F14542B47070B00B983F1 /* RecordingSegmentedViewController.swift */; };
 		611F145A2B4707CC00B983F1 /* RecordingRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F14592B4707CC00B983F1 /* RecordingRoomViewController.swift */; };
@@ -184,6 +185,7 @@
 		3458559C2B69479D00432C06 /* NoMaemullPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoMaemullPopupViewController.swift; sourceTree = "<group>"; };
 		345855A02B69487500432C06 /* NoMaemullPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoMaemullPopupView.swift; sourceTree = "<group>"; };
 		345855A22B69504500432C06 /* SelectMaemullViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectMaemullViewController.swift; sourceTree = "<group>"; };
+		345855A62B6A039600432C06 /* ReportImjangListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportImjangListTableViewCell.swift; sourceTree = "<group>"; };
 		611757372B67D5E60043E958 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		611F14542B47070B00B983F1 /* RecordingSegmentedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingSegmentedViewController.swift; sourceTree = "<group>"; };
 		611F14592B4707CC00B983F1 /* RecordingRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingRoomViewController.swift; sourceTree = "<group>"; };
@@ -461,6 +463,7 @@
 		345855932B692DE300432C06 /* Report */ = {
 			isa = PBXGroup;
 			children = (
+				345855A52B6A037600432C06 /* Cell */,
 				3458559F2B69486700432C06 /* View */,
 				3458559E2B69485800432C06 /* Controller */,
 			);
@@ -486,6 +489,14 @@
 				345855A02B69487500432C06 /* NoMaemullPopupView.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		345855A52B6A037600432C06 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				345855A62B6A039600432C06 /* ReportImjangListTableViewCell.swift */,
+			);
+			path = Cell;
 			sourceTree = "<group>";
 		};
 		616408EA2B407A2100EC3B5E /* Extension */ = {
@@ -763,6 +774,7 @@
 				0A24711B2B68FCF700A7382B /* SignupPopupViewController.swift in Sources */,
 				619269F62B67747F00D4DD3E /* SearchKeywordHeaderView.swift in Sources */,
 				616409022B407FB300EC3B5E /* UIFont+Pretendard.swift in Sources */,
+				345855A72B6A039600432C06 /* ReportImjangListTableViewCell.swift in Sources */,
 				345855972B692DFB00432C06 /* GraphViewController.swift in Sources */,
 				61D925112B4983A1002A16B4 /* UILabel+Extension.swift in Sources */,
 				619269F32B67747F00D4DD3E /* RecentSearchKeywordTableViewCell.swift in Sources */,
