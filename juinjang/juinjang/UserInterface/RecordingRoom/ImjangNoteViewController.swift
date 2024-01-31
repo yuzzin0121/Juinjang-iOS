@@ -98,6 +98,7 @@ class ImjangNoteViewController: UIViewController {
         $0.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.13).cgColor
         $0.layer.shadowOffset = CGSize(width: 0, height: 4)
         $0.layer.shadowOpacity = 1
+        $0.addTarget(self, action: #selector(editButtonTapped(_:)), for: .touchUpInside)
     }
     
     let recordingSegmentedVC = RecordingSegmentedViewController()
@@ -550,6 +551,18 @@ class ImjangNoteViewController: UIViewController {
         label.font = font
         label.textColor = textColor
         label.numberOfLines = numberOfLines
+    }
+    
+    // 수정 버튼 클릭
+    @objc func editButtonTapped(_ sender: UIButton) {
+        sender.isSelected.toggle()
+        if sender.isSelected {
+            editButton.setImage(UIImage(named: "completed-button"), for: .normal)
+        } else {
+            editButton.setImage(UIImage(named: "edit-button"), for: .normal)
+        }
+        // -TODO: 체크리스트 수정 상태 진입
+        
     }
 }
 
