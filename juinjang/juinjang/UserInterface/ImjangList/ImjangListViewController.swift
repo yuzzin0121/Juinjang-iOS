@@ -204,7 +204,7 @@ extension ImjangListViewController {
         self.navigationController?.navigationBar.tintColor = .black
 
         // UIBarButtonItem 생성 및 이미지 설정
-        let backButtonItem = UIBarButtonItem(image: ImageStyle.arrowLeft, style: .plain, target: self, action: nil)
+        let backButtonItem = UIBarButtonItem(image: ImageStyle.arrowLeft, style: .plain, target: self, action: #selector(popView))
         
         let addButtonItem = UIBarButtonItem(image: ImageStyle.add, style: .plain, target: self, action: #selector(openNewPageVC))
         
@@ -213,6 +213,10 @@ extension ImjangListViewController {
         // 네비게이션 아이템에 백 버튼 아이템 설정
         self.navigationItem.leftBarButtonItem = backButtonItem
         self.navigationItem.rightBarButtonItems = [addButtonItem, searchButtonItem]
+    }
+    
+    @objc func popView() {
+        navigationController?.popViewController(animated: true)
     }
     
     func addSubviews() {
