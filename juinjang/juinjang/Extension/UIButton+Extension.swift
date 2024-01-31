@@ -8,7 +8,20 @@
 import UIKit
 
 extension UIButton {
-    func design(title: String="", font: UIFont?=nil, image: UIImage?=nil, tintColor: UIColor = ColorStyle.darkGray, titleColor: UIColor = ColorStyle.textWhite, backgroundColor: UIColor = ColorStyle.mainOrange, cornerRadius: CGFloat = 0, borderColor: CGColor?=nil) {
+    
+    var isClicked: Bool {
+        get { return self.isClicked }
+        set { self.isClicked = newValue }
+    }
+  
+    func design(title: String="",
+                font: UIFont?=nil,
+                image: UIImage?=nil,
+                tintColor: UIColor = ColorStyle.darkGray,
+                titleColor: UIColor = ColorStyle.textWhite,
+                backgroundColor: UIColor = ColorStyle.mainOrange,
+                cornerRadius: CGFloat = 0, borderColor: CGColor?=nil
+    ) {
         self.tintColor = tintColor
         self.backgroundColor = .systemGray5
         self.setTitle(title, for: .normal)

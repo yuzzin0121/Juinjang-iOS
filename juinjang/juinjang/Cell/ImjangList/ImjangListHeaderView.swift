@@ -35,6 +35,8 @@ class ImjangListHeaderView: UITableViewHeaderFooterView {
     lazy var clipImageView = UIImageView()
     lazy var clipEmptyMessageLabel = UILabel()
     
+    var list: [ImjangNote] = [] 
+    
     // collectionView
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -79,7 +81,8 @@ class ImjangListHeaderView: UITableViewHeaderFooterView {
     var menuChildren: [UIMenuElement] = []
     let filterList = Filter.allCases
     lazy var scrapedList: [ImjangNote] = ImjangList.list
-
+    weak var delegate: ButtonTappedDelegate?    // 북마크 버튼 클릭했을 때
+    
     // MARK: - init
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
@@ -189,7 +192,7 @@ class ImjangListHeaderView: UITableViewHeaderFooterView {
         // empty면 collectionView 숨기고, top 기준 변경
         if isEmpty {
             print("collectionView 숨기기")
-            clipEmptyMessageLabel.isHidden = false
+            messageStackView.isHidden = false
             collectionView.isHidden = true
             clippingEmptyBackgroundView.snp.updateConstraints {
                 $0.height.equalTo(114)
@@ -205,7 +208,7 @@ class ImjangListHeaderView: UITableViewHeaderFooterView {
             }
         } else {
             print("filterBackground 숨기기")
-            clipEmptyMessageLabel.isHidden = true
+            messageStackView.isHidden = true
             collectionView.isHidden = false
             clippingEmptyBackgroundView.snp.updateConstraints {
                 $0.height.equalTo(252)
@@ -242,6 +245,7 @@ extension ImjangListHeaderView: UICollectionViewDelegate, UICollectionViewDataSo
         
         return cell
     }
+    
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard let layout = self.collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }

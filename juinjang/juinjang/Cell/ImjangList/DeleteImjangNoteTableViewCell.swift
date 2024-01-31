@@ -18,7 +18,7 @@ class DeleteImjangNoteTableViewCell: UITableViewCell {
     let starStackView = UIStackView()
     let addressLabel = UILabel()
     let checkButton = UIButton()
-
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -35,15 +35,13 @@ class DeleteImjangNoteTableViewCell: UITableViewCell {
         setConstraints()
         
     }
+    
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 0, left: 24, bottom: 8, right: 24))
     }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
+
     func configureCell(imjangNote: ImjangNote?) {
         guard let imjangNote else { return }
         if let images = imjangNote.images {
@@ -53,7 +51,6 @@ class DeleteImjangNoteTableViewCell: UITableViewCell {
                 roomThumbnailImageView.image = UIImage(named: "1")  // 임시
             }
         }
-        
         
         roomNameLabel.text = imjangNote.roomName
         priceLabel.text = imjangNote.price
@@ -72,8 +69,7 @@ class DeleteImjangNoteTableViewCell: UITableViewCell {
         
         addressLabel.text = imjangNote.location
         
-        let image = imjangNote.isBookmarked ? ImageStyle.bookmarkSelected : ImageStyle.bookmark
-        checkButton.setImage(image, for: .normal)
+        checkButton.setImage(ImageStyle.off, for: .normal)
     }
     
     func setConstraints() {
@@ -93,7 +89,7 @@ class DeleteImjangNoteTableViewCell: UITableViewCell {
         roomNameStackView.snp.makeConstraints {
             $0.top.equalTo(contentView).offset(12)
             $0.leading.equalTo(roomThumbnailImageView.snp.trailing).offset(8)
-            $0.trailing.greaterThanOrEqualTo(checkButton.snp.leading).inset(12)
+            $0.trailing.lessThanOrEqualTo(checkButton.snp.leading).inset(12)
             $0.height.equalTo(24)
         }
         
@@ -139,6 +135,7 @@ class DeleteImjangNoteTableViewCell: UITableViewCell {
     }
     
     func designView() {
+        contentView.backgroundColor = .white
         roomNameStackView.axis = .horizontal
         roomNameStackView.spacing = 4
         roomNameStackView.alignment = .center
@@ -158,6 +155,11 @@ class DeleteImjangNoteTableViewCell: UITableViewCell {
         scoreLabel.design(text:"", textColor: ColorStyle.mainOrange, font: .pretendard(size: 14, weight: .semiBold))
         addressLabel.design(text: "", textColor: ColorStyle.textGray, font: .pretendard(size: 14, weight: .medium))
         
-        
+        checkButton.design(image: ImageStyle.off, backgroundColor: ColorStyle.textWhite)
     }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
 }

@@ -22,6 +22,7 @@ class ImjangListViewController: UIViewController {
         
         var container = AttributeContainer()
         container.font = .pretendard(size: 14, weight: .semiBold)
+        container.foregroundColor = ColorStyle.darkGray
         configuration.attributedTitle = AttributedString(filterList[0].title, attributes: container)
         configuration.imagePadding = 2
         let button = UIButton(configuration: configuration, primaryAction: nil)

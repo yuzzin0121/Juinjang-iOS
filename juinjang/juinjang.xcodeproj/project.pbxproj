@@ -111,6 +111,8 @@
 		61A7B92D2B4C4EC300795B49 /* Pretendard-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 61A7B9242B4C4EC300795B49 /* Pretendard-Bold.otf */; };
 		61A7B92E2B4C4EC300795B49 /* Pretendard-ExtraBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 61A7B9252B4C4EC300795B49 /* Pretendard-ExtraBold.otf */; };
 		61AD50A92B58039B00314673 /* DeletePopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AD50A82B58039B00314673 /* DeletePopupViewController.swift */; };
+		61B0C99B2B697B2F00BE86D2 /* DeleteImjangTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0C99A2B697B2F00BE86D2 /* DeleteImjangTableHeaderView.swift */; };
+		61B0C9A72B6A143A00BE86D2 /* ButtonTappedDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0C9A62B6A143A00BE86D2 /* ButtonTappedDelegate.swift */; };
 		61D925052B486508002A16B4 /* RecordingFileViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D925042B486508002A16B4 /* RecordingFileViewCell.swift */; };
 		61D925082B486706002A16B4 /* RecordingFileItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D925072B486706002A16B4 /* RecordingFileItem.swift */; };
 		61D9250A2B49506D002A16B4 /* RecordingFilesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D925092B49506D002A16B4 /* RecordingFilesViewController.swift */; };
@@ -216,6 +218,8 @@
 		61A7B9242B4C4EC300795B49 /* Pretendard-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.otf"; sourceTree = "<group>"; };
 		61A7B9252B4C4EC300795B49 /* Pretendard-ExtraBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-ExtraBold.otf"; sourceTree = "<group>"; };
 		61AD50A82B58039B00314673 /* DeletePopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletePopupViewController.swift; sourceTree = "<group>"; };
+		61B0C99A2B697B2F00BE86D2 /* DeleteImjangTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteImjangTableHeaderView.swift; sourceTree = "<group>"; };
+		61B0C9A62B6A143A00BE86D2 /* ButtonTappedDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonTappedDelegate.swift; sourceTree = "<group>"; };
 		61D925042B486508002A16B4 /* RecordingFileViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingFileViewCell.swift; sourceTree = "<group>"; };
 		61D925072B486706002A16B4 /* RecordingFileItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingFileItem.swift; sourceTree = "<group>"; };
 		61D925092B49506D002A16B4 /* RecordingFilesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingFilesViewController.swift; sourceTree = "<group>"; };
@@ -542,6 +546,7 @@
 			isa = PBXGroup;
 			children = (
 				619269E22B67743A00D4DD3E /* ReuseableProtocol.swift */,
+				61B0C9A62B6A143A00BE86D2 /* ButtonTappedDelegate.swift */,
 			);
 			path = Protocol;
 			sourceTree = "<group>";
@@ -565,6 +570,7 @@
 				619269EF2B67747F00D4DD3E /* ScrapCollectionViewCell.swift */,
 				619269F02B67747F00D4DD3E /* SearchKeywordHeaderView.swift */,
 				619269F12B67747F00D4DD3E /* ImjangListHeaderView.swift */,
+				61B0C99A2B697B2F00BE86D2 /* DeleteImjangTableHeaderView.swift */,
 			);
 			path = ImjangList;
 			sourceTree = "<group>";
@@ -724,6 +730,7 @@
 				0A2DED1A2B55198D00A96BAA /* STTLoadingViewController.swift in Sources */,
 				619269DA2B6773FE00D4DD3E /* DeleteImjangViewController.swift in Sources */,
 				619269E82B67745900D4DD3E /* ImageStyle.swift in Sources */,
+				61B0C9A72B6A143A00BE86D2 /* ButtonTappedDelegate.swift in Sources */,
 				619269F22B67747F00D4DD3E /* DeleteImjangNoteTableViewCell.swift in Sources */,
 				619269E32B67743A00D4DD3E /* ReuseableProtocol.swift in Sources */,
 				0A554CE02B52DB100023BB49 /* RecordViewController.swift in Sources */,
@@ -747,6 +754,7 @@
 				0A95D7312B682FB4000A9C06 /* ToSItemTableViewCell.swift in Sources */,
 				0A3EBEBE2B654E71004D8DCE /* OpenNewPagePopupViewController.swift in Sources */,
 				0A2471192B68CAAF00A7382B /* ToSItem.swift in Sources */,
+				61B0C99B2B697B2F00BE86D2 /* DeleteImjangTableHeaderView.swift in Sources */,
 				0A24711F2B6924BA00A7382B /* RecordingRightsViewController.swift in Sources */,
 				0AB34CC12B4F11B000150A15 /* OpenNewPage2ViewController.swift in Sources */,
 				0A24711B2B68FCF700A7382B /* SignupPopupViewController.swift in Sources */,
