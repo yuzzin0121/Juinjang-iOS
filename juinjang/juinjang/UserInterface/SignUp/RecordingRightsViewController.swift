@@ -113,7 +113,8 @@ class RecordingRightsViewController: UIViewController {
         // 확인 Button
         confirmButton.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-33)
+            $0.bottom.equalToSuperview().offset(-33)
+//            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-33)
             $0.leading.equalToSuperview().offset(24)
             $0.trailing.equalToSuperview().offset(-24)
             $0.height.equalTo(52)
@@ -127,6 +128,9 @@ class RecordingRightsViewController: UIViewController {
     @objc func buttonTapped(_ sender: UIButton) {
         // 녹음 권한 팝업창 띄우기
         requestMicrophonePermission()
+        let mainVC = MainViewController()
+        mainVC.modalPresentationStyle = .fullScreen
+        self.present(mainVC, animated: false, completion: nil)
     }
     
     func requestMicrophonePermission(){
@@ -136,9 +140,6 @@ class RecordingRightsViewController: UIViewController {
             } else {
                 print("Mic: 권한 거부")
             }
-            let mainVC = MainViewController()
-            mainVC.modalPresentationStyle = .fullScreen
-            self.present(mainVC, animated: false, completion: nil)
         })
     }
 }
