@@ -136,6 +136,7 @@ class ImjangNoteTableViewCell: UITableViewCell {
     }
     
     func designView() {
+        contentView.backgroundColor = .white
         roomNameStackView.axis = .horizontal
         roomNameStackView.spacing = 4
         roomNameStackView.alignment = .center

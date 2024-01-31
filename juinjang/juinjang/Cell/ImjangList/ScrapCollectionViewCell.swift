@@ -60,6 +60,7 @@ class ScrapCollectionViewCell: UICollectionViewCell {
     let roomAddressLabel = UILabel()
     let bookMarkButton = UIButton()
     
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureHierarchy()
