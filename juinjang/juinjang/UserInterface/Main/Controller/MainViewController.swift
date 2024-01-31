@@ -6,17 +6,9 @@ import Then
 class MainViewController: UIViewController {
 // MARK: - 변수, 상수 설정
     //설정 버튼, 메인 로고, 스피커 버튼
-    var settingButton = UIButton().then {
-        $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.setImage(UIImage(named:"setting"), for: .normal)
-    }
-    
+
     var mainLogoImageView = UIImageView().then {
         $0.image = UIImage(named:"mainLogo")
-    }
-    var speakerButton = UIButton().then {
-        $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.setImage(UIImage(named:"speaker"), for: .normal)
     }
     
     //배경

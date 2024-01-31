@@ -92,10 +92,7 @@ class SelectMaemullViewController : UIViewController {
     }
     @objc
     func applyBtnTap(_ sender: UIButton) {
-        let vc = ReportViewController()
-        vc.modalPresentationStyle = .overFullScreen
-       // vc.tabViewController.defaultPage(for: CompareViewController())
-        self.present(vc, animated: false)
+        self.navigationController?.popViewController(animated: true)
     }
     
     func setFilterData() {
