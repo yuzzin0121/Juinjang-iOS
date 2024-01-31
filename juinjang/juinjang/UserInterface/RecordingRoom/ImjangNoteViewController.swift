@@ -165,6 +165,8 @@ class ImjangNoteViewController: UIViewController {
         [scrollView, upButton, editButton].forEach {
             view.addSubview($0)
         }
+        
+        upButton.isHidden = true
 
         scrollView.addSubview(contentView)
         

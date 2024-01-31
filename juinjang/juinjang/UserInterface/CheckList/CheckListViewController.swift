@@ -84,13 +84,13 @@ class CheckListViewController: UIViewController {
         }
         
         // 체크리스트 선택 완료 시 버튼 로직 처리
-//        completedButton.snp.makeConstraints {
-//            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-26)
-//            $0.bottom.equalTo(view.snp.bottom).offset(-26)
-//            $0.trailing.equalTo(view.snp.trailing).offset(-24)
-//        }
-//        
-//        view.bringSubviewToFront(completedButton)
+        completedButton.snp.makeConstraints {
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-26)
+            $0.bottom.equalTo(view.snp.bottom).offset(-26)
+            $0.trailing.equalTo(view.snp.trailing).offset(-24)
+        }
+        
+        view.bringSubviewToFront(completedButton)
         
         tableView.snp.makeConstraints {
             $0.top.equalTo(contentView)

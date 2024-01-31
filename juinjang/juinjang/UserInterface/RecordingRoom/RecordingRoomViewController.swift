@@ -10,6 +10,7 @@ import SnapKit
 import Then
 
 class RecordingRoomViewController: UIViewController {
+    
     // 스크롤뷰
     let scrollView = UIScrollView().then {
         $0.backgroundColor = .white
