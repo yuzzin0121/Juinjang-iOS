@@ -120,9 +120,20 @@ class ImjangNoteViewController: UIViewController {
         setUpUI()
         setConstraints()
         upButton.addTarget(self, action: #selector(upToTop), for: .touchUpInside)
-        
+        setReportStackViewClick()
         NotificationCenter.default.addObserver(self, selector: #selector(didStoppedChildScroll), name: NSNotification.Name("didStoppedChildScroll"), object: nil)
         recordingSegmentedVC.imjangNoteViewController = self
+    }
+    
+    func setReportStackViewClick() {
+        reportStackView.isUserInteractionEnabled = true
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(showReportVC))
+        reportStackView.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc func showReportVC() {
+        let ReportVC = ReportViewController()
+        navigationController?.pushViewController(ReportVC, animated: true)
     }
     
     @objc func didStoppedChildScroll() {
@@ -151,7 +162,7 @@ class ImjangNoteViewController: UIViewController {
         let backImage = UIImage(named: "arrow-left")
 
         // UIBarButtonItem 생성 및 이미지 설정
-        let backButtonItem = UIBarButtonItem(image: backImage, style: .plain, target: self, action: nil)
+        let backButtonItem = UIBarButtonItem(image: backImage, style: .plain, target: self, action: #selector(popView))
         
         let editButtonItem = UIBarButtonItem(title: "편집", style: .plain, target: self, action: nil)
         editButtonItem.tintColor = UIColor(named: "textGray")
@@ -159,6 +170,10 @@ class ImjangNoteViewController: UIViewController {
         // 네비게이션 아이템에 백 버튼 아이템 설정
         self.navigationItem.leftBarButtonItem = backButtonItem
         self.navigationItem.rightBarButtonItem = editButtonItem
+    }
+    
+    @objc func popView() {
+        navigationController?.popViewController(animated: true)
     }
     
     // MARK: - addSubView()
