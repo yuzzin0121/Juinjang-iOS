@@ -39,7 +39,7 @@ class ToSViewController: UIViewController {
         $0.addTarget(self, action: #selector(checkButtonPressed(_:)), for: .touchUpInside)
         $0.adjustsImageWhenHighlighted = false // 버튼이 눌릴 때 색상 변경 방지
 
-        $0.setImage(UIImage(named: "record-check-off"), for: .normal)
+        $0.setImage(UIImage(named: "check-off"), for: .normal)
         $0.imageView?.contentMode = .scaleAspectFill
 
         $0.semanticContentAttribute = .forceLeftToRight
@@ -141,7 +141,8 @@ class ToSViewController: UIViewController {
         // 다음으로 Button
         nextButton.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-33)
+            $0.bottom.equalToSuperview().offset(-33)
+//            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-33)
             $0.leading.equalToSuperview().offset(24)
             $0.trailing.equalToSuperview().offset(-24)
             $0.height.equalTo(52)
@@ -152,12 +153,12 @@ class ToSViewController: UIViewController {
         isChecked = !isChecked
         if isChecked {
             print("선택")
-            checkButton.setImage(UIImage(named: "record-check-on"), for: .normal)
+            checkButton.setImage(UIImage(named: "check-on"), for: .normal)
             nextButton.backgroundColor = UIColor(named: "textBlack")
             nextButton.isEnabled = true
         } else {
             print("선택 해제")
-            checkButton.setImage(UIImage(named: "record-check-off"), for: .normal)
+            checkButton.setImage(UIImage(named: "check-off"), for: .normal)
             nextButton.backgroundColor = UIColor(named: "lightGray")
             nextButton.isEnabled = false
         }

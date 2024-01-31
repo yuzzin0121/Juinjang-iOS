@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>A message that tells the user why the app is requesting access to the device’s microphone.</string>
+	<string>마이크 접근 권한을 허용하는 경우에만 녹음을 통한 노트 생성 및 음성 인식 서비스 이용이 가능합니다. (필수 권한)</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Pretendard-Black.otf</string>
