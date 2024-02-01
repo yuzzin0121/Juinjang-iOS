@@ -3,9 +3,9 @@ import UIKit
 import SnapKit
 import Then
 
-//import KakaoSDKCommon
-//import KakaoSDKAuth
-//import KakaoSDKUser
+import KakaoSDKCommon
+import KakaoSDKAuth
+import KakaoSDKUser
 
 class LoginViewController: UIViewController {
     

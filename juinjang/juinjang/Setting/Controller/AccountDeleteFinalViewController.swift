@@ -100,7 +100,6 @@ class AccountDeleteFinalViewController: UIViewController {
                 $0.backgroundColor = UIColor(named: "100")
                 $0.layer.cornerRadius = 10
                 $0.isUserInteractionEnabled = true
-                
             }
             
             let buttonLabel = UILabel().then {

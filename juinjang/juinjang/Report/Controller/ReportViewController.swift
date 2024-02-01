@@ -15,22 +15,6 @@ import Tabman
 import Pageboy
 
 class ReportViewController : UIViewController {
-    func designNavigationBar() {
-        self.navigationController?.navigationBar.tintColor = .black
-        navigationItem.title = "주인장 리포트"
-        
-        let shareButtonItem = UIBarButtonItem(image: UIImage(named: "share"), style: .plain, target: self, action: nil)
-        let backButtonItem = UIBarButtonItem(image: UIImage(named:"leftArrow"), style: .plain, target: self, action: #selector(backBtnTap))
-
-        // 네비게이션 아이템에 백 버튼 아이템 설정
-        //self.navigationItem.hidesBackButton = true
-        self.navigationItem.leftBarButtonItem = backButtonItem
-        self.navigationItem.rightBarButtonItem = shareButtonItem
-    }
-    @objc
-    func backBtnTap() {
-        self.navigationController?.popViewController(animated: true)
-    }
     //MARK: - 상단
     /*var backButton = UIButton().then {
         $0.translatesAutoresizingMaskIntoConstraints = false
@@ -87,21 +71,6 @@ class ReportViewController : UIViewController {
     let tabViewController = TabViewController()
     
     func setConstraint() {
-        /*backButton.snp.makeConstraints{
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(13.16)
-            $0.left.equalToSuperview().inset(24)
-            $0.width.height.equalTo(22)
-        }
-        reportLabel.snp.makeConstraints{
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(12.16)
-            $0.centerX.equalToSuperview()
-        }
-        shareButton.snp.makeConstraints{
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(13.16)
-            $0.right.equalToSuperview().inset(24)
-            $0.width.height.equalTo(22)
-        }*/
-        
         totalGradeLabel.snp.makeConstraints{
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(28)
             $0.left.equalToSuperview().offset(24)
@@ -121,14 +90,29 @@ class ReportViewController : UIViewController {
         }
     }
     
+    func designNavigationBar() {
+        self.navigationController?.navigationBar.tintColor = .black
+        navigationItem.title = "주인장 리포트"
+        
+        let shareButtonItem = UIBarButtonItem(image: UIImage(named: "share"), style: .plain, target: self, action: nil)
+        let backButtonItem = UIBarButtonItem(image: UIImage(named:"leftArrow"), style: .plain, target: self, action: #selector(backBtnTap))
+
+        // 네비게이션 아이템에 백 버튼 아이템 설정
+        //self.navigationItem.hidesBackButton = true
+        self.navigationItem.leftBarButtonItem = backButtonItem
+        self.navigationItem.rightBarButtonItem = shareButtonItem
+    }
+    @objc
+    func backBtnTap() {
+        let vc = ImjangNoteViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         designNavigationBar()
         
         view.backgroundColor = .white
-        //view.addSubview(backButton)
-        //view.addSubview(reportLabel)
-        //view.addSubview(shareButton)
         
         view.addSubview(totalGradeLabel)
         view.addSubview(priceLabel)

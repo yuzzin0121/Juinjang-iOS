@@ -194,7 +194,8 @@ class GraphViewController : UIViewController {
         dataSet3.fillColor = dataColor
         dataSet4.fillColor = dataColor
         dataSet5.fillColor = dataColor
-        compareDataSet1.fillColor = dataColor1
+        compareDataSet1.fillAlpha = CGFloat(0.6)
+        compareDataSet1.fillColor = UIColor(red: 1, green: 0.386, blue: 0.158, alpha: 1)
         
         dataSet1.valueFormatter = DataSetValueFormatter()
         dataSet2.valueFormatter = DataSetValueFormatter()
