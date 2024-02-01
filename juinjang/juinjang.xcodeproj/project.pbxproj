@@ -78,6 +78,7 @@
 		345855A32B69504500432C06 /* SelectMaemullViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345855A22B69504500432C06 /* SelectMaemullViewController.swift */; };
 		345855A42B69E44D00432C06 /* NoMaemullPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345855A02B69487500432C06 /* NoMaemullPopupView.swift */; };
 		345855A72B6A039600432C06 /* ReportImjangListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345855A62B6A039600432C06 /* ReportImjangListTableViewCell.swift */; };
+		345855C02B6A42B600432C06 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345855BF2B6A42B600432C06 /* LoginViewController.swift */; };
 		611757382B67D5E60043E958 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 611757372B67D5E60043E958 /* Assets.xcassets */; };
 		611F14552B47070B00B983F1 /* RecordingSegmentedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F14542B47070B00B983F1 /* RecordingSegmentedViewController.swift */; };
 		611F145A2B4707CC00B983F1 /* RecordingRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F14592B4707CC00B983F1 /* RecordingRoomViewController.swift */; };
@@ -188,6 +189,7 @@
 		345855A02B69487500432C06 /* NoMaemullPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoMaemullPopupView.swift; sourceTree = "<group>"; };
 		345855A22B69504500432C06 /* SelectMaemullViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectMaemullViewController.swift; sourceTree = "<group>"; };
 		345855A62B6A039600432C06 /* ReportImjangListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportImjangListTableViewCell.swift; sourceTree = "<group>"; };
+		345855BF2B6A42B600432C06 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		611757372B67D5E60043E958 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		611F14542B47070B00B983F1 /* RecordingSegmentedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingSegmentedViewController.swift; sourceTree = "<group>"; };
 		611F14592B4707CC00B983F1 /* RecordingRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingRoomViewController.swift; sourceTree = "<group>"; };
@@ -375,6 +377,7 @@
 		0A9E0A452B3DCAB90094595A /* juinjang */ = {
 			isa = PBXGroup;
 			children = (
+				345855BE2B6A42A100432C06 /* Login */,
 				345855932B692DE300432C06 /* Report */,
 				345855792B689CC300432C06 /* Setting */,
 				619269E42B67745900D4DD3E /* Constants */,
@@ -500,6 +503,14 @@
 				345855A62B6A039600432C06 /* ReportImjangListTableViewCell.swift */,
 			);
 			path = Cell;
+			sourceTree = "<group>";
+		};
+		345855BE2B6A42A100432C06 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				345855BF2B6A42B600432C06 /* LoginViewController.swift */,
+			);
+			path = Login;
 			sourceTree = "<group>";
 		};
 		616408EA2B407A2100EC3B5E /* Extension */ = {
@@ -791,6 +802,7 @@
 				345855952B692DF100432C06 /* ReportViewController.swift in Sources */,
 				0A4EBE342B5EA25300909B7A /* ExpandedCalendarTableViewCell.swift in Sources */,
 				616408EC2B407A2D00EC3B5E /* UIView+Extensions.swift in Sources */,
+				345855C02B6A42B600432C06 /* LoginViewController.swift in Sources */,
 				619269F72B67747F00D4DD3E /* ImjangListHeaderView.swift in Sources */,
 				0A2471252B697E3D00A7382B /* EditBasicInfoViewController.swift in Sources */,
 				61864C4D2B653E140073C175 /* UIViewController+Extension.swift in Sources */,
