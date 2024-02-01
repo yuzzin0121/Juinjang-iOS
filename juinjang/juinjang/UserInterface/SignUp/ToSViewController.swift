@@ -9,8 +9,6 @@ import UIKit
 
 class ToSViewController: UIViewController {
     
-    var selectedIndexPath: IndexPath?
-    
     lazy var guideLabel = UILabel().then {
         $0.text = "주인장 서비스의\n이용 약관에 동의해 주세요"
         $0.textAlignment = .left
@@ -80,6 +78,9 @@ class ToSViewController: UIViewController {
         setNavigationBar()
         addSubViews()
         setupLayout()
+        NotificationCenter.default.addObserver(self, selector: #selector(updateCell(_:)), name: NSNotification.Name("UpdateCell"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleCheckButtonChecked), name: NSNotification.Name("CheckButtonChecked"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleCheckButtonUnchecked), name: NSNotification.Name("CheckButtonUnchecked"), object: nil)
     }
     
     func setNavigationBar() {
@@ -149,21 +150,6 @@ class ToSViewController: UIViewController {
         }
     }
     
-    @objc func checkButtonPressed(_ sender: UIButton) {
-        isChecked = !isChecked
-        if isChecked {
-            print("선택")
-            checkButton.setImage(UIImage(named: "check-on"), for: .normal)
-            nextButton.backgroundColor = UIColor(named: "textBlack")
-            nextButton.isEnabled = true
-        } else {
-            print("선택 해제")
-            checkButton.setImage(UIImage(named: "check-off"), for: .normal)
-            nextButton.backgroundColor = UIColor(named: "lightGray")
-            nextButton.isEnabled = false
-        }
-    }
-    
     @objc func backButtonTapped() {
         let SignupPopupVC = SignupPopupViewController()
         SignupPopupVC.modalPresentationStyle = .overCurrentContext
@@ -175,6 +161,65 @@ class ToSViewController: UIViewController {
         setNickNameVC.modalPresentationStyle = .fullScreen
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         self.navigationController?.pushViewController(setNickNameVC, animated: true)
+    }
+    
+    func updateCheckButtonImages() {
+        if isChecked {
+            checkButton.setImage(UIImage(named: "check-on"), for: .normal)
+            nextButton.backgroundColor = UIColor(named: "textBlack")
+            nextButton.isEnabled = true
+        } else {
+            checkButton.setImage(UIImage(named: "check-off"), for: .normal)
+            nextButton.backgroundColor = UIColor(named: "lightGray")
+            nextButton.isEnabled = false
+        }
+    }
+    
+    @objc func checkButtonPressed(_ sender: UIButton) {
+        isChecked = !isChecked
+        updateCheckButtonImages()
+    }
+    
+    @objc func updateCell(_ notification: Notification) {
+        if let tag = notification.object as? Int,
+           let indexPath = indexPathForTag(tag),
+           let tosCell = itemtableView.cellForRow(at: indexPath) as? ToSItemTableViewCell {
+            // 셀에 액세스하고 checkButton 상태를 업데이트합니다.
+            tosCell.checkButton.isSelected.toggle()
+            tosCell.checkButton.setImage(UIImage(named: "record-check-on"), for: .normal)
+        }
+    }
+
+    @objc func handleCheckButtonChecked() {
+        areAllTermsChecked()
+    }
+    
+    @objc func handleCheckButtonUnchecked() {
+        areNotAllTermsChecked()
+    }
+    
+    func areAllTermsChecked() {
+        for i in 0..<termsOfService.count {
+            let indexPath = IndexPath(row: i, section: 0)
+            if let cell = itemtableView.cellForRow(at: indexPath) as? ToSItemTableViewCell, !cell.checkButton.isSelected {
+                return
+            }
+        }
+        // 모든 약관이 체크됨
+        isChecked = true
+        updateCheckButtonImages()
+    }
+    
+    func areNotAllTermsChecked() {
+        // cell 버튼 개별 동작 시 전체 동의 버튼, 다음으로 버튼 개별 처리
+        checkButton.setImage(UIImage(named: "check-off"), for: .normal)
+        nextButton.backgroundColor = UIColor(named: "lightGray")
+        nextButton.isEnabled = false
+    }
+
+
+    func indexPathForTag(_ tag: Int) -> IndexPath? {
+        return IndexPath(row: tag, section: 0)
     }
 }
 
@@ -189,21 +234,8 @@ extension ToSViewController: UITableViewDelegate, UITableViewDataSource {
         }
         
         let toSItem = termsOfService[indexPath.row]
-        
-        let cleanedContent = toSItem.content.replacingOccurrences(of: "\\", with: "") // 백 슬래쉬 제거
-        let attributedString = NSMutableAttributedString(string: cleanedContent)
-        
-        // cleanedContent에 "(필수)"가 포함되어 있는지 확인
-        if let range = cleanedContent.range(of: "(필수)") {
-            attributedString.addAttribute(.foregroundColor, value: UIColor(named: "mainOrange")!, range: NSRange(range, in: cleanedContent))
-        // "(선택)"이 포함되어 있는지 확인
-        } else if let range = cleanedContent.range(of: "(선택)") {
-            attributedString.addAttribute(.foregroundColor, value: UIColor(named: "textGray")!, range: NSRange(range, in: cleanedContent))
-        }
-        
-        cell.checkButton.tag = indexPath.row
-        cell.checkButton.setAttributedTitle(attributedString, for: .normal)
         cell.configure(with: toSItem, isChecked: isChecked)
+        cell.checkButton.tag = indexPath.row
 
         return cell
     }
