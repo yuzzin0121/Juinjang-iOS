@@ -306,6 +306,7 @@ class EditBasicInfoDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        setDelegate()
         setNavigationBar()
         addressTextField.isUserInteractionEnabled = false // 사용자 입력 방지
         setupWidgets()
