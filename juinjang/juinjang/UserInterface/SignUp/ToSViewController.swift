@@ -184,7 +184,6 @@ class ToSViewController: UIViewController {
         if let tag = notification.object as? Int,
            let indexPath = indexPathForTag(tag),
            let tosCell = itemtableView.cellForRow(at: indexPath) as? ToSItemTableViewCell {
-            // 셀에 액세스하고 checkButton 상태를 업데이트합니다.
             tosCell.checkButton.isSelected.toggle()
             tosCell.checkButton.setImage(UIImage(named: "record-check-on"), for: .normal)
         }

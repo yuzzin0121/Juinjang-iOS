@@ -29,8 +29,7 @@ class ReportViewController : UIViewController {
     }
     @objc
     func backBtnTap() {
-        let vc = ImjangNoteViewController()
-        self.navigationController?.pushViewController(vc, animated: true)
+        self.navigationController?.popViewController(animated: true)
     }
     //MARK: - 상단
     /*var backButton = UIButton().then {
