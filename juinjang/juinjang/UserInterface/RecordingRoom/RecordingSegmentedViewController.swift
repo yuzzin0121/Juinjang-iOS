@@ -32,6 +32,8 @@ class RecordingSegmentedViewController: TabmanViewController {
         addViewControllers()
         setDelegate()
         createBar()
+        NotificationCenter.default.addObserver(self, selector: #selector(handleEditButtonToggled), name: NSNotification.Name("EditButtonToggled"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(editCheckList), name: NSNotification.Name("EditCheckList"), object: nil)
     }
     
     func addBottomBorder(with color: UIColor?, andWidth borderWidth: CGFloat) {
@@ -40,12 +42,37 @@ class RecordingSegmentedViewController: TabmanViewController {
     }
     
     func addViewControllers() {
-        let checkListVC = CheckListViewController()
+        let checkListVC = NotEnteredCheckListViewController()
         let recordingRoomVC = RecordingRoomViewController()
         
         viewControllers.append(contentsOf: [checkListVC, recordingRoomVC])
     }
     
+    @objc func handleEditButtonToggled(_ notification: Notification) {
+        if let isSelected = notification.object as? Bool {
+            let checkListVC: UIViewController = isSelected ? CheckListViewController() : NotEnteredCheckListViewController()
+
+            if let index = viewControllers.firstIndex(where: { $0 is NotEnteredCheckListViewController }) {
+                viewControllers[index] = checkListVC
+                self.reloadData()
+            } else if let index = viewControllers.firstIndex(where: { $0 is CheckListViewController }) {
+                viewControllers[index] = checkListVC
+                self.reloadData()
+            }
+        }
+    }
+    
+    @objc func editCheckList() {
+        // CheckListViewController로 교체
+        let checkListVC = CheckListViewController()
+
+        if let index = viewControllers.firstIndex(where: { $0 is NotEnteredCheckListViewController }) {
+            viewControllers[index] = checkListVC
+            self.reloadData()
+        }
+        imjangNoteViewController?.editButton.setImage(UIImage(named: "completed-button"), for: .normal)
+    }
+
     func setDelegate() {
         self.dataSource = self
     }

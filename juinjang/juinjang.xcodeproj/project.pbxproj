@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A0FE7572B6C0031001866C8 /* ReportPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0FE7562B6C0031001866C8 /* ReportPopupViewController.swift */; };
 		0A129BE92B6251E10022819B /* ChecklistManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A129BE82B6251E10022819B /* ChecklistManager.swift */; };
 		0A14E36F2B569A840008FD28 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A14E36E2B569A840008FD28 /* SignUpViewController.swift */; };
 		0A14E3712B56B31A0008FD28 /* SetNickNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A14E3702B56B31A0008FD28 /* SetNickNameViewController.swift */; };
@@ -125,6 +126,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0A0FE7562B6C0031001866C8 /* ReportPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportPopupViewController.swift; sourceTree = "<group>"; };
 		0A129BE82B6251E10022819B /* ChecklistManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistManager.swift; sourceTree = "<group>"; };
 		0A14E36E2B569A840008FD28 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		0A14E3702B56B31A0008FD28 /* SetNickNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetNickNameViewController.swift; sourceTree = "<group>"; };
@@ -340,6 +342,7 @@
 				0A4EBE3A2B5EF2BC00909B7A /* ExpandedDropdownTableViewCell.swift */,
 				0A2471242B697E3D00A7382B /* EditBasicInfoViewController.swift */,
 				0A2471262B69803000A7382B /* EditBasicInfoDetailViewController.swift */,
+				0A0FE7562B6C0031001866C8 /* ReportPopupViewController.swift */,
 			);
 			path = CheckList;
 			sourceTree = "<group>";
@@ -758,6 +761,7 @@
 				0A2DED1A2B55198D00A96BAA /* STTLoadingViewController.swift in Sources */,
 				619269DA2B6773FE00D4DD3E /* DeleteImjangViewController.swift in Sources */,
 				619269E82B67745900D4DD3E /* ImageStyle.swift in Sources */,
+				0A0FE7572B6C0031001866C8 /* ReportPopupViewController.swift in Sources */,
 				61B0C9A72B6A143A00BE86D2 /* ButtonTappedDelegate.swift in Sources */,
 				619269F22B67747F00D4DD3E /* DeleteImjangNoteTableViewCell.swift in Sources */,
 				619269E32B67743A00D4DD3E /* ReuseableProtocol.swift in Sources */,

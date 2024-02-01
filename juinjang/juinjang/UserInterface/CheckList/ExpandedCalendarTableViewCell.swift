@@ -255,14 +255,14 @@ extension ExpandedCalendarTableViewCell: FSCalendarDelegate, FSCalendarDataSourc
         selectedDate = date
     }
     
-    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
-        let calendar = Calendar.current
-        let dayOfWeek = calendar.component(.weekday, from: date)
-        
-        if dayOfWeek == 1 { // 일요일
-            return .red
-        } else {
-            return nil // 다른 날짜의 경우 기본값으로 설정
-        }
-    }
+//    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
+//        let calendar = Calendar.current
+//        let dayOfWeek = calendar.component(.weekday, from: date)
+//        
+//        if dayOfWeek == 1 { // 일요일
+//            return .red
+//        } else {
+//            return nil // 다른 날짜의 경우 기본값으로 설정
+//        }
+//    }
 }
