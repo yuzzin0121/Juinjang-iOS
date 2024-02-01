@@ -14,13 +14,14 @@ struct ImjangNote {
     let score: Double?
     let location: String
     var isBookmarked: Bool
+    var isSelected : Bool = false
 //    let Date: String
 }
 
 class ImjangList {
     static let list = [
         ImjangNote(images: [], roomName: "판교푸르지오월드마크", price: "30억 1천만원", score: 4.6, location: "경기도 성남시 분당구", isBookmarked: true),
-        ImjangNote(images: ["1"], roomName: "행복빌라", price: "1억 3천만원", score: 4.7, location: "서울시 어쩌구", isBookmarked: false),
+        ImjangNote(images: ["1"], roomName: "happy", price: "1억 3천만원", score: 4.7, location: "서울시 어쩌구", isBookmarked: false),
         ImjangNote(images: ["1","2","3"], roomName: "남양주 이편한세상", price: "3억 6천만원", score: 4.2, location: "경기도 남양주시 저쩌구", isBookmarked: true),
         ImjangNote(images: [], roomName: "강원도 땅끝마을", price: "12억 6천만원", score: 3.5, location: "강원도 속초시", isBookmarked: false),
         ImjangNote(images: ["2"], roomName: "와르르맨션", price: "3천만원", score: 4.6, location: "짱구네 마을", isBookmarked: true),

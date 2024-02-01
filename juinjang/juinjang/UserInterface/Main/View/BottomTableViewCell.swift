@@ -66,8 +66,12 @@ class BottomTableViewCell: UITableViewCell{
         
     private func addContentView() {
         contentView.addSubview(recentImjangLabel)
+        
+        //최근 본 임장 없을 때
         //contentView.addSubview(noImjangImageView)
         //contentView.addSubview(noImjaneLabel)
+        
+        //최근 본 임장 있을 때
         contentView.addSubview(collectionView)
     }
         
@@ -77,6 +81,7 @@ class BottomTableViewCell: UITableViewCell{
             $0.left.equalToSuperview().inset(24)
         }
         
+        //최근 본 임장 없을 떄
         /*noImjangImageView.snp.makeConstraints{
             $0.top.equalTo(recentImjangLabel.snp.bottom).offset(49)
             $0.left.right.equalToSuperview().inset(149)
@@ -88,6 +93,7 @@ class BottomTableViewCell: UITableViewCell{
             $0.left.equalToSuperview().offset(122)
         }*/
         
+        //최근 본 임장 있을 때
         collectionView.snp.makeConstraints{
             $0.top.equalTo(recentImjangLabel.snp.bottom).offset(15)
             $0.left.right.equalToSuperview()

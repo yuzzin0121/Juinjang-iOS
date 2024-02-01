@@ -10,40 +10,6 @@ import SnapKit
 
 class SelectMaemullViewController : UIViewController {
     
-    func designNavigationBar() {
-        self.navigationController?.navigationBar.tintColor = .black
-        navigationItem.title = "비교할 매물 고르기"
-
-        // UIBarButtonItem 생성 및 이미지 설정
-        let backButtonItem = UIBarButtonItem(image: UIImage(named: "leftArrow"), style: .plain, target: self, action: #selector(backBtnTap))
-        
-        let searchButtonItem = UIBarButtonItem(image: UIImage(named:"search"), style: .plain, target: self, action: nil)
-
-        // 네비게이션 아이템에 백 버튼 아이템 설정
-        self.navigationItem.leftBarButtonItem = backButtonItem
-        self.navigationItem.rightBarButtonItem = searchButtonItem
-    }
-    @objc
-    func backBtnTap() {
-        self.navigationController?.popViewController(animated: true)
-    }
-    
-    /*var backButton = UIButton().then {
-        $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.setImage(UIImage(named:"leftArrow"), for: .normal)
-        $0.addTarget(self, action: #selector(backBtnTap), for: .touchUpInside)
-    }
-    
-    var compareLabel = UILabel().then {
-        $0.text = "비교할 매물 고르기"
-        $0.font = UIFont(name: "Pretendard-SemiBold", size: 16)
-        $0.translatesAutoresizingMaskIntoConstraints = false
-    }
-    var searchButton = UIButton().then {
-        $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.setImage(UIImage(named:"search"), for: .normal)
-    }*/
-    
     var contentView = UIView().then {
         $0.backgroundColor = .white
     }
@@ -67,16 +33,14 @@ class SelectMaemullViewController : UIViewController {
     lazy var filterList = Filter.allCases
     var imjangList: [ImjangNote] = ImjangList.list
     
-    let tableView: UITableView = {
-        let tableView = UITableView(frame: .zero)
-        tableView.estimatedRowHeight = UITableView.automaticDimension
-        tableView.separatorStyle = .none
-        tableView.showsVerticalScrollIndicator = false
-        tableView.backgroundColor = .white
-        tableView.contentInset = UIEdgeInsets.init(top: 5, left: 0, bottom: 0, right: 0)
-        tableView.register(ReportImjangListTableViewCell.self, forCellReuseIdentifier: ReportImjangListTableViewCell.identifier)
-        return tableView
-    }()
+    let tableView = UITableView().then {
+        $0.estimatedRowHeight = UITableView.automaticDimension
+        $0.separatorStyle = .none
+        $0.showsVerticalScrollIndicator = false
+        $0.backgroundColor = .white
+        $0.contentInset = UIEdgeInsets.init(top: 5, left: 0, bottom: 0, right: 0)
+        $0.register(ReportImjangListTableViewCell.self, forCellReuseIdentifier: ReportImjangListTableViewCell.identifier)
+    }
     
     var btnBackGroundView = UIView().then{
         $0.backgroundColor = .white
@@ -92,7 +56,12 @@ class SelectMaemullViewController : UIViewController {
     }
     @objc
     func applyBtnTap(_ sender: UIButton) {
-        self.navigationController?.popViewController(animated: true)
+        let vc = ReportViewController()
+        vc.tabViewController.index = 1
+        vc.tabViewController.compareVC.isCompared = true
+        vc.tabViewController.compareVC.compareDataSet2.fillAlpha = CGFloat(0.8)
+        vc.tabViewController.compareVC.compareDataSet2.fillColor = .white
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func setFilterData() {
@@ -115,20 +84,6 @@ class SelectMaemullViewController : UIViewController {
     }
     
     func setConstraint() {
-        /*backButton.snp.makeConstraints{
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(13.16)
-            $0.left.equalToSuperview().inset(24)
-            $0.width.height.equalTo(22)
-        }
-        compareLabel.snp.makeConstraints{
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(12.16)
-            $0.centerX.equalToSuperview()
-        }
-        searchButton.snp.makeConstraints{
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(13.16)
-            $0.right.equalToSuperview().inset(24)
-            $0.width.height.equalTo(22)
-        }*/
         btnBackGroundView.snp.makeConstraints{
             $0.bottom.equalToSuperview()
             $0.left.right.equalToSuperview()
@@ -148,7 +103,6 @@ class SelectMaemullViewController : UIViewController {
             $0.top.equalToSuperview().offset(32)
             $0.left.equalToSuperview().offset(20)
             $0.height.equalTo(19)
-            //$0.width.equalTo(73.3)
         }
         tableView.snp.makeConstraints{
             $0.top.equalTo(contentView.snp.bottom)
@@ -158,6 +112,27 @@ class SelectMaemullViewController : UIViewController {
         
     }
     
+    func designNavigationBar() {
+        self.navigationController?.navigationBar.tintColor = .black
+        navigationItem.title = "비교할 매물 고르기"
+
+        // UIBarButtonItem 생성 및 이미지 설정
+        let backButtonItem = UIBarButtonItem(image: UIImage(named: "leftArrow"), style: .plain, target: self, action: #selector(backBtnTap))
+        
+        let searchButtonItem = UIBarButtonItem(image: UIImage(named:"search"), style: .plain, target: self, action: #selector(searchBtnTap))
+
+        // 네비게이션 아이템에 백 버튼 아이템 설정
+        self.navigationItem.leftBarButtonItem = backButtonItem
+        self.navigationItem.rightBarButtonItem = searchButtonItem
+    }
+    @objc func backBtnTap() {
+        self.navigationController?.popViewController(animated: true)
+    }
+    @objc func searchBtnTap() {
+        let searchVC = CompareSearchViewController()
+        navigationController?.pushViewController(searchVC, animated: true)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         designNavigationBar()
@@ -165,16 +140,13 @@ class SelectMaemullViewController : UIViewController {
         tableView.dataSource = self
         view.backgroundColor = .white
         
-        //view.addSubview(backButton)
-        //view.addSubview(compareLabel)
-        //view.addSubview(searchButton)
         view.addSubview(contentView)
         contentView.addSubview(filterselectBtn)
         view.addSubview(tableView)
         
         view.addSubview(btnBackGroundView)
         btnBackGroundView.addSubview(applyBtn)
-        applyBtn.addTarget(self, action: #selector(applyBtnTap), for: .touchUpInside)
+        //applyBtn.addTarget(self, action: #selector(applyBtnTap), for: .touchUpInside)
         
         setFilterData()
         setConstraint()
@@ -195,10 +167,20 @@ extension SelectMaemullViewController: UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        var cell = tableView.cellForRow(at: indexPath as IndexPath)!
-        cell.contentView.backgroundColor = UIColor(named: "main100")
-        cell.contentView.layer.borderColor = UIColor(named: "juinjang")?.cgColor
-        applyBtn.backgroundColor = UIColor(named: "500")
+        let cell = tableView.cellForRow(at: indexPath as IndexPath)!
+        imjangList[indexPath.row].isSelected.toggle()
+        if imjangList[indexPath.row].isSelected == true {
+            cell.contentView.backgroundColor = UIColor(named: "main100")
+            cell.contentView.layer.borderColor = UIColor(named: "juinjang")?.cgColor
+            applyBtn.backgroundColor = UIColor(named: "500")
+            applyBtn.addTarget(self, action: #selector(applyBtnTap), for: .touchUpInside)
+        }
+        else {
+            cell.contentView.backgroundColor = .white
+            cell.contentView.layer.borderColor = ColorStyle.strokeGray.cgColor
+            applyBtn.backgroundColor = UIColor(named: "null")
+            applyBtn.removeTarget(self, action: #selector(applyBtnTap), for: .touchUpInside)
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

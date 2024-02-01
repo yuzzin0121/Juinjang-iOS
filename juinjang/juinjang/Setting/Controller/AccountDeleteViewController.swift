@@ -14,11 +14,9 @@ class AccountDeleteViewController : DimmedViewController {
         $0.backgroundColor = .white
         $0.layer.cornerRadius = 30
     }
-    
     var logoImageView = UIImageView().then {
         $0.image = UIImage(named:"로고")
     }
-    
     var qLabel = UILabel().then {
         $0.text = "땡땡님, \n정말 계정을 삭제하시겠어요?"
         $0.numberOfLines = 0
@@ -64,14 +62,7 @@ class AccountDeleteViewController : DimmedViewController {
         $0.setTitleColor(.white, for: .normal)
         $0.titleLabel?.font = UIFont(name: "Pretendard-SemiBold", size: 16)
         $0.layer.cornerRadius = 10
-        $0.addTarget(self, action: #selector(no), for: .touchUpInside)
     }
-    @objc
-    func no(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
-        
-    }
-    
     var yesButton = UIButton().then {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.backgroundColor = UIColor(named: "juinjang")
@@ -79,10 +70,18 @@ class AccountDeleteViewController : DimmedViewController {
         $0.setTitleColor(.white, for: .normal)
         $0.titleLabel?.font = UIFont(name: "Pretendard-SemiBold", size: 16)
         $0.layer.cornerRadius = 10
-        $0.addTarget(self, action: #selector(tapYesButton), for: .touchUpInside)
     }
-    @objc
-    func tapYesButton(_ sender: Any) {
+    
+//MARK: - 함수
+    func addTarget() {
+        noButton.addTarget(self, action: #selector(no), for: .touchUpInside)
+        yesButton.addTarget(self, action: #selector(tapYesButton), for: .touchUpInside)
+    }
+    @objc func no(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
+        
+    }
+    @objc func tapYesButton(_ sender: Any) {
         
         switch yesButton.titleLabel?.text {
         case "네,계정을 삭제할게요":
@@ -97,7 +96,7 @@ class AccountDeleteViewController : DimmedViewController {
     
     func list(listName: [String], num: Int, from: UIImageView, offset: Int) {
         for i in 0...(num-1) {
-            var label = UILabel().then {
+            let label = UILabel().then {
                 let text1 = NSTextAttachment()
                 text1.image = UIImage(named: "check")
                 let text2 = "    " + listName[i]
@@ -177,6 +176,8 @@ class AccountDeleteViewController : DimmedViewController {
         view.insertSubview(noButton, at: 2)
         accountDeleteView.addSubview(yesButton)
         view.insertSubview(yesButton, at: 2)
+        
+        addTarget()
         setConstraint()
     }
 }

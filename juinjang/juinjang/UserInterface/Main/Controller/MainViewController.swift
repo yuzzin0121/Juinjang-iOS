@@ -6,7 +6,6 @@ import Then
 class MainViewController: UIViewController {
 // MARK: - 변수, 상수 설정
     //설정 버튼, 메인 로고, 스피커 버튼
-
     var mainLogoImageView = UIImageView().then {
         $0.image = UIImage(named:"mainLogo")
     }
@@ -24,42 +23,22 @@ class MainViewController: UIViewController {
         $0.register(BottomTableViewCell.self, forCellReuseIdentifier: BottomTableViewCell.id)
     }
     
-    @objc
-    func newImjangBtnTap() {
+    @objc func newImjangBtnTap() {
         let vc = OpenNewPageViewController()
         self.navigationController?.pushViewController(vc, animated: true)
     }
-    @objc
-    func myImjangBtnTap() {
+    @objc func myImjangBtnTap() {
         let vc = ImjangListViewController()
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
-    @objc
-    func setttingBtnTap() {
+    @objc func setttingBtnTap() {
         let vc = SettingViewController()
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
 //MARK: - 함수 선언
     func setConstraint() {
-        //설정 버튼, 메인 로고, 스피커 버튼
-//        settingButton.snp.makeConstraints{
-//            $0.top.equalTo(view.safeAreaLayoutGuide).offset(10.16)
-//            $0.height.equalTo(24)
-//            $0.left.equalToSuperview().offset(26.73)
-//        }
-//        mainLogoImageView.snp.makeConstraints{
-//            $0.top.equalTo(view.safeAreaLayoutGuide).offset(12.16)
-//            $0.height.equalTo(21)
-//            $0.centerX.equalToSuperview()
-//        }
-//        speakerButton.snp.makeConstraints{
-//            $0.top.equalTo(view.safeAreaLayoutGuide).offset(10.16)
-//            $0.height.width.equalTo(24)
-//            $0.right.equalToSuperview().inset(26.55)
-//        }
-        
         //배경
         backgroundImageView.snp.makeConstraints{
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(37.82)
@@ -86,13 +65,8 @@ class MainViewController: UIViewController {
         tableView.rowHeight = 710
         tableView.backgroundColor = .clear
         
-//        self.navigationController?.navigationBar.isHidden = true
-        
         view.backgroundColor = .white
         view.addSubview(backgroundImageView)
-//        view.addSubview(settingButton)
-//        view.addSubview(speakerButton)
-//        view.addSubview(mainLogoImageView)
         view.addSubview(tableView)
         setConstraint()
     }

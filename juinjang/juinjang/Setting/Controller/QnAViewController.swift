@@ -9,33 +9,6 @@ import SnapKit
 import Then
 
 class QnAViewController : UIViewController {
-    
-    func designNavigationBar() {
-        self.navigationController?.navigationBar.tintColor = .black
-        navigationItem.title = "자주 묻는 질문"
-        
-        let closeButtonItem = UIBarButtonItem(image: UIImage(named:"X"), style: .plain, target: self, action: #selector(tapCloseButton))
-
-        // 네비게이션 아이템에 백 버튼 아이템 설정
-        self.navigationItem.leftBarButtonItem = closeButtonItem
-    }
-    @objc
-    func tapCloseButton() {
-        _ = self.navigationController?.popViewController(animated: false)
-    }
-    
-    /*var closeButton = UIButton().then {
-        $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.setImage(UIImage(named:"X"), for: .normal)
-        $0.addTarget(self, action: #selector(tapCloseButton), for: .touchUpInside)
-    }
-    
-    var useLabel = UILabel().then {
-        $0.text = "자주 묻는 질문"
-        $0.font = UIFont(name: "Pretendard-SemiBold", size: 16)
-        $0.translatesAutoresizingMaskIntoConstraints = false
-        //$0.textColor = UIColor(named: "500")
-    }*/
     //MARK: - 본문
     var titleLabel = UILabel().then {
         $0.text = "자주 묻는 질문이란?"
@@ -91,16 +64,21 @@ class QnAViewController : UIViewController {
     
     var dataSource = Sections.sections
     
+//MARK: - 함수
+    func designNavigationBar() {
+        self.navigationController?.navigationBar.tintColor = .black
+        navigationItem.title = "자주 묻는 질문"
+        
+        let closeButtonItem = UIBarButtonItem(image: UIImage(named:"X"), style: .plain, target: self, action: #selector(tapCloseButton))
+
+        // 네비게이션 아이템에 백 버튼 아이템 설정
+        self.navigationItem.leftBarButtonItem = closeButtonItem
+    }
+    @objc func tapCloseButton() {
+        _ = self.navigationController?.popViewController(animated: false)
+    }
+    
     func setConstraint() {
-        /*closeButton.snp.makeConstraints{
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(17.16)
-            $0.left.equalToSuperview().offset(24)
-            $0.height.width.equalTo(12)
-        }
-        useLabel.snp.makeConstraints{
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(12.16)
-            $0.centerX.equalToSuperview()
-        }*/
         titleLabel.snp.makeConstraints{
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(36)
             $0.left.equalToSuperview().offset(24)
@@ -123,8 +101,6 @@ class QnAViewController : UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         designNavigationBar()
-        //view.addSubview(closeButton)
-        //view.addSubview(useLabel)
         view.addSubview(titleLabel)
         view.addSubview(describeView)
         describeView.addSubview(describeLabel)
@@ -139,6 +115,7 @@ class QnAViewController : UIViewController {
     }
 }
 
+//MARK: - Extension
 extension QnAViewController : UITableViewDelegate, UITableViewDataSource{
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1

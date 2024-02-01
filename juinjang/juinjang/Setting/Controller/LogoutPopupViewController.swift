@@ -11,8 +11,7 @@ import Then
 
 class LogoutPopupViewController: UIViewController {
     private let popupView: LogoutPopupView
-    @objc
-    func no(_ sender: UIButton) {
+    @objc func no(_ sender: UIButton) {
         self.dismiss(animated: false, completion: nil)
     }
   

@@ -10,35 +10,7 @@ import Then
 import SnapKit
 
 class UseViewController : UIViewController {
-    
-    func designNavigationBar() {
-        self.navigationController?.navigationBar.tintColor = .black
-        navigationItem.title = "이용약관"
-        
-        let closeButtonItem = UIBarButtonItem(image: UIImage(named:"X"), style: .plain, target: self, action: #selector(tapCloseButton))
-
-        // 네비게이션 아이템에 백 버튼 아이템 설정
-        self.navigationItem.leftBarButtonItem = closeButtonItem
-    }
-    @objc
-    func tapCloseButton() {
-        _ = self.navigationController?.popViewController(animated: false)
-    }
-    
-    /*var closeButton = UIButton().then {
-        $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.setImage(UIImage(named:"X"), for: .normal)
-        $0.addTarget(self, action: #selector(tapCloseButton), for: .touchUpInside)
-    }
-    
-    var useLabel = UILabel().then {
-        $0.text = "이용약관"
-        $0.font = UIFont(name: "Pretendard-SemiBold", size: 16)
-        $0.translatesAutoresizingMaskIntoConstraints = false
-        //$0.textColor = UIColor(named: "500")
-    }*/
-    
-    private let scrollView = UIScrollView().then {
+   private let scrollView = UIScrollView().then {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.isScrollEnabled = true
         $0.indicatorStyle = .black
@@ -157,23 +129,26 @@ class UseViewController : UIViewController {
         $0.textAlignment = .justified
     }
     
-    func setConstraint() {
-        /*closeButton.snp.makeConstraints{
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(17.16)
-            $0.left.equalToSuperview().offset(24)
-            $0.height.width.equalTo(12)
-        }
-        useLabel.snp.makeConstraints{
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(12.16)
-            $0.centerX.equalToSuperview()
-        }*/
+//MARK: - 함수
+    func designNavigationBar() {
+        self.navigationController?.navigationBar.tintColor = .black
+        navigationItem.title = "이용약관"
         
+        let closeButtonItem = UIBarButtonItem(image: UIImage(named:"X"), style: .plain, target: self, action: #selector(tapCloseButton))
+
+        // 네비게이션 아이템에 백 버튼 아이템 설정
+        self.navigationItem.leftBarButtonItem = closeButtonItem
+    }
+    @objc func tapCloseButton() {
+        _ = self.navigationController?.popViewController(animated: false)
+    }
+    
+    func setConstraint() {
         scrollView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(46)
             $0.left.right.equalToSuperview().inset(24)
             $0.bottom.equalToSuperview().inset(33)
         }
-        
         contentLabel1.snp.makeConstraints {
             $0.top.equalToSuperview().offset(16)
             $0.left.equalToSuperview().offset(16)
@@ -260,8 +235,6 @@ class UseViewController : UIViewController {
         super.viewDidLoad()
         designNavigationBar()
         
-        //view.addSubview(closeButton)
-        //view.addSubview(useLabel)
         view.addSubview(scrollView)
         scrollView.addSubview(contentLabel1)
         scrollView.addSubview(contentLabel2)
@@ -298,6 +271,7 @@ class UseViewController : UIViewController {
     }
 }
 
+//MARK: - Extension
 extension UILabel {
     func asFont(targetString: String, font: UIFont) {
         let fullText = text ?? ""
