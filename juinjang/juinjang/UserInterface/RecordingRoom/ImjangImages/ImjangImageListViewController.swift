@@ -14,6 +14,8 @@ class ImjangImageListViewController: UIViewController {
     let galleryImageView = UIImageView()
     let noImageMessageLabel = UILabel()
     
+    let imagePicker = UIImagePickerController()
+    
     lazy var imageCollectionView = UICollectionView(frame: .zero, collectionViewLayout: configureCollectionViewFlowLayout())
     var imageList: [String] = ["1", "2", "3"]  // 일단 String 배열
 
@@ -23,6 +25,7 @@ class ImjangImageListViewController: UIViewController {
         checkImage()
         configureCollectionView()
         configureHierarchy()
+        imagePicker.delegate = self
         configureLayout()
         configureView()
     }
@@ -32,7 +35,14 @@ class ImjangImageListViewController: UIViewController {
     }
     
     @objc func addImage() { // + 버튼 눌렀을 때 -> 이미지 추가
-        
+        let alert =  UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let library =  UIAlertAction(title: "앨범에서 가져오기", style: .default) { (action) in self.openLibrary() }
+        let camera =  UIAlertAction(title: "카메라", style: .default) { (action) in self.openCamera() }
+        let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        alert.addAction(library)
+        alert.addAction(camera)
+        alert.addAction(cancel)
+        present(alert, animated: true, completion: nil)
     }
     
     func checkImage() {
@@ -131,6 +141,16 @@ class ImjangImageListViewController: UIViewController {
         noImageMessageLabel.setLineSpacing(spacing: 4)
         noImageMessageLabel.textAlignment = .center
     }
+    
+    // imagePicker로 화면 전환
+    func openLibrary(){
+        imagePicker.sourceType = .photoLibrary
+        present(imagePicker, animated: false, completion: nil)
+    }
+    func openCamera(){
+        imagePicker.sourceType = .camera
+        present(imagePicker, animated: false, completion: nil)
+    }
 }
 
 extension ImjangImageListViewController: UICollectionViewDelegate, UICollectionViewDataSource {
@@ -148,7 +168,23 @@ extension ImjangImageListViewController: UICollectionViewDelegate, UICollectionV
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let index = indexPath.row
-        
+        showEnlargePhotoVC(index: index, photoList: imageList)
     }
     
+    func showEnlargePhotoVC(index: Int, photoList: [String]) {
+        let enlargePhotoVC = EnlargePhotoViewController()
+        enlargePhotoVC.currentIndex = index
+        enlargePhotoVC.photoList = photoList
+        enlargePhotoVC.modalPresentationStyle = .overFullScreen
+        present(enlargePhotoVC, animated: false)
+    }
+}
+
+extension ImjangImageListViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage{
+            
+        }
+        dismiss(animated: true, completion: nil)
+    }
 }

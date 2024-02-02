@@ -133,6 +133,9 @@
 		61B0C9D22B6C0B0000BE86D2 /* ImjangImageListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0C9D12B6C0B0000BE86D2 /* ImjangImageListViewController.swift */; };
 		61B0C9D42B6C10CD00BE86D2 /* UIStackView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0C9D32B6C10CC00BE86D2 /* UIStackView+Extension.swift */; };
 		61B0C9D72B6C16BD00BE86D2 /* ImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0C9D62B6C16BD00BE86D2 /* ImageCollectionViewCell.swift */; };
+		61B0C9D92B6C1B9600BE86D2 /* EnlargePhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0C9D82B6C1B9600BE86D2 /* EnlargePhotoViewController.swift */; };
+		61B0C9DF2B6C8D9400BE86D2 /* PhotoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0C9DE2B6C8D9400BE86D2 /* PhotoCollectionViewCell.swift */; };
+		61B0C9E52B6CDA0300BE86D2 /* PaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0C9E42B6CDA0300BE86D2 /* PaddingLabel.swift */; };
 		61D925052B486508002A16B4 /* RecordingFileViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D925042B486508002A16B4 /* RecordingFileViewCell.swift */; };
 		61D925082B486706002A16B4 /* RecordingFileItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D925072B486706002A16B4 /* RecordingFileItem.swift */; };
 		61D9250A2B49506D002A16B4 /* RecordingFilesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D925092B49506D002A16B4 /* RecordingFilesViewController.swift */; };
@@ -248,6 +251,9 @@
 		61B0C9D12B6C0B0000BE86D2 /* ImjangImageListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImjangImageListViewController.swift; sourceTree = "<group>"; };
 		61B0C9D32B6C10CC00BE86D2 /* UIStackView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Extension.swift"; sourceTree = "<group>"; };
 		61B0C9D62B6C16BD00BE86D2 /* ImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCollectionViewCell.swift; sourceTree = "<group>"; };
+		61B0C9D82B6C1B9600BE86D2 /* EnlargePhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnlargePhotoViewController.swift; sourceTree = "<group>"; };
+		61B0C9DE2B6C8D9400BE86D2 /* PhotoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewCell.swift; sourceTree = "<group>"; };
+		61B0C9E42B6CDA0300BE86D2 /* PaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingLabel.swift; sourceTree = "<group>"; };
 		61D925042B486508002A16B4 /* RecordingFileViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingFileViewCell.swift; sourceTree = "<group>"; };
 		61D925072B486706002A16B4 /* RecordingFileItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingFileItem.swift; sourceTree = "<group>"; };
 		61D925092B49506D002A16B4 /* RecordingFilesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingFilesViewController.swift; sourceTree = "<group>"; };
@@ -411,6 +417,8 @@
 		0A9E0A452B3DCAB90094595A /* juinjang */ = {
 			isa = PBXGroup;
 			children = (
+				61B0C9E32B6CD9E200BE86D2 /* CustomView */,
+				345855BE2B6A42A100432C06 /* Login */,
 				345855932B692DE300432C06 /* Report */,
 				345855792B689CC300432C06 /* Setting */,
 				619269E42B67745900D4DD3E /* Constants */,
@@ -642,6 +650,7 @@
 			isa = PBXGroup;
 			children = (
 				61B0C9D12B6C0B0000BE86D2 /* ImjangImageListViewController.swift */,
+				61B0C9D82B6C1B9600BE86D2 /* EnlargePhotoViewController.swift */,
 			);
 			path = ImjangImages;
 			sourceTree = "<group>";
@@ -650,8 +659,17 @@
 			isa = PBXGroup;
 			children = (
 				61B0C9D62B6C16BD00BE86D2 /* ImageCollectionViewCell.swift */,
+				61B0C9DE2B6C8D9400BE86D2 /* PhotoCollectionViewCell.swift */,
 			);
 			path = ImageList;
+			sourceTree = "<group>";
+		};
+		61B0C9E32B6CD9E200BE86D2 /* CustomView */ = {
+			isa = PBXGroup;
+			children = (
+				61B0C9E42B6CDA0300BE86D2 /* PaddingLabel.swift */,
+			);
+			path = CustomView;
 			sourceTree = "<group>";
 		};
 		61D925032B4864E8002A16B4 /* Cell */ = {
@@ -820,6 +838,7 @@
 				345855822B689D7200432C06 /* QnATableViewCell.swift in Sources */,
 				345855A32B69504500432C06 /* SelectMaemullViewController.swift in Sources */,
 				3458558E2B689E2D00432C06 /* AccountDeleteViewController.swift in Sources */,
+				61B0C9D92B6C1B9600BE86D2 /* EnlargePhotoViewController.swift in Sources */,
 				61864BEA2B6003520073C175 /* UIButton+Extension.swift in Sources */,
 				0A2DED1A2B55198D00A96BAA /* STTLoadingViewController.swift in Sources */,
 				619269DA2B6773FE00D4DD3E /* DeleteImjangViewController.swift in Sources */,
@@ -848,6 +867,7 @@
 				611F14552B47070B00B983F1 /* RecordingSegmentedViewController.swift in Sources */,
 				0A4EBE3B2B5EF2BC00909B7A /* ExpandedDropdownTableViewCell.swift in Sources */,
 				0A95D7312B682FB4000A9C06 /* ToSItemTableViewCell.swift in Sources */,
+				61B0C9E52B6CDA0300BE86D2 /* PaddingLabel.swift in Sources */,
 				0A3EBEBE2B654E71004D8DCE /* OpenNewPagePopupViewController.swift in Sources */,
 				0A2471192B68CAAF00A7382B /* ToSItem.swift in Sources */,
 				61B0C99B2B697B2F00BE86D2 /* DeleteImjangTableHeaderView.swift in Sources */,
@@ -869,7 +889,7 @@
 				0A1EC4862B6A17FD009248E4 /* NotEnteredCheckListViewController.swift in Sources */,
 				345855952B692DF100432C06 /* ReportViewController.swift in Sources */,
 				0A4EBE342B5EA25300909B7A /* ExpandedCalendarTableViewCell.swift in Sources */,
-				616408EC2B407A2D00EC3B5E /* UIView+Extension.swift in Sources */,
+				61B0C9DF2B6C8D9400BE86D2 /* PhotoCollectionViewCell.swift in Sources */,
 				616408EC2B407A2D00EC3B5E /* UIView+Extension.swift in Sources */,
 				345855DB2B6B8D5100432C06 /* CompareSearchViewController.swift in Sources */,
 				619269F72B67747F00D4DD3E /* ImjangListHeaderView.swift in Sources */,
