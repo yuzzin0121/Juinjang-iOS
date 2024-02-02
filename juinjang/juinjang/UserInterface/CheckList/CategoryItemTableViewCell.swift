@@ -34,9 +34,7 @@ class CategoryItemTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         print("CategoryItemTableViewCell initialized")
         
-        [categoryImage,
-         categoryLabel,
-         expandButton].forEach { addSubview($0) }
+        [categoryImage, categoryLabel, expandButton].forEach { addSubview($0) }
         setupLayout()
     }
     

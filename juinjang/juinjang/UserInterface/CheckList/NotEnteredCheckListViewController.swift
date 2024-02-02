@@ -14,17 +14,7 @@ class NotEnteredCheckListViewController: UIViewController {
         $0.separatorStyle = .none
         $0.showsVerticalScrollIndicator = false
         $0.isScrollEnabled = false
-        $0.register(NotEnteredCalendarTableViewCell.self, forCellReuseIdentifier: NotEnteredCalendarTableViewCell.identifier)
-        $0.register(CategoryItemTableViewCell.self, forCellReuseIdentifier: CategoryItemTableViewCell.identifier)
-        $0.register(ExpandedScoreTableViewCell.self, forCellReuseIdentifier: ExpandedScoreTableViewCell.identifier)
-        $0.register(ExpandedCalendarTableViewCell.self, forCellReuseIdentifier: ExpandedCalendarTableViewCell.identifier)
-        $0.register(ExpandedTextFieldTableViewCell.self, forCellReuseIdentifier: ExpandedTextFieldTableViewCell.identifier)
-        $0.register(ExpandedDropdownTableViewCell.self, forCellReuseIdentifier: ExpandedDropdownTableViewCell.identifier)
     }
-    
-    var CategoryItems: [Category] = []
-    
-    var checklistManager: ChecklistManager!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,8 +23,7 @@ class NotEnteredCheckListViewController: UIViewController {
         tableView.dataSource = self
         addSubViews()
         setupLayout()
-        // ChecklistManager 초기화
-        checklistManager = ChecklistManager(categories: categories)
+        registerCell()
         NotificationCenter.default.addObserver(self, selector: #selector(didStoppedParentScroll), name: NSNotification.Name("didStoppedParentScroll"), object: nil)
     }
     
@@ -69,21 +58,30 @@ class NotEnteredCheckListViewController: UIViewController {
         }
     }
     
+    private func registerCell() {
+        tableView.register(NotEnteredCalendarTableViewCell.self, forCellReuseIdentifier: NotEnteredCalendarTableViewCell.identifier)
+        tableView.register(CategoryItemTableViewCell.self, forCellReuseIdentifier: CategoryItemTableViewCell.identifier)
+        tableView.register(ExpandedScoreTableViewCell.self, forCellReuseIdentifier: ExpandedScoreTableViewCell.identifier)
+        tableView.register(ExpandedCalendarTableViewCell.self, forCellReuseIdentifier: ExpandedCalendarTableViewCell.identifier)
+        tableView.register(ExpandedTextFieldTableViewCell.self, forCellReuseIdentifier: ExpandedTextFieldTableViewCell.identifier)
+        tableView.register(ExpandedDropdownTableViewCell.self, forCellReuseIdentifier: ExpandedDropdownTableViewCell.identifier)
+    }
+    
     var selectedDates: [Date?] = Array(repeating: nil, count: 2)
 }
 
 extension NotEnteredCheckListViewController : UITableViewDelegate, UITableViewDataSource  {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1 + categories.count
+        return 1 + enabledCategories.count
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
             return 1 // 기한 카테고리 섹션은 항상 1 반환
         } else {
-            if categories[section - 1].isExpanded {
-                return 1 + categories[section - 1].items.count
+            if enabledCategories[section - 1].isExpanded {
+                return 1 + enabledCategories[section - 1].items.count
             } else {
                 return 1
             }
@@ -99,11 +97,17 @@ extension NotEnteredCheckListViewController : UITableViewDelegate, UITableViewDa
             // 나머지 섹션의 셀 처리
             if indexPath.row == 0 {
                 let cell: CategoryItemTableViewCell = tableView.dequeueReusableCell(withIdentifier: CategoryItemTableViewCell.identifier, for: indexPath) as! CategoryItemTableViewCell
-                cell.categoryImage.image = categories[indexPath.section - 1].image
-                cell.categoryLabel.text = categories[indexPath.section - 1].name
+                
+                let category = enabledCategories[indexPath.section - 1]
+                cell.categoryImage.image = enabledCategories[indexPath.section - 1].image
+                cell.categoryLabel.text = enabledCategories[indexPath.section - 1].name
+                
+                let arrowImage = category.isExpanded ? UIImage(named: "contraction-items") : UIImage(named: "expand-items")
+                cell.expandButton.setImage(arrowImage, for: .normal)
+                
                 return cell
             } else {
-                let category = categories[indexPath.section - 1]
+                let category = enabledCategories[indexPath.section - 1]
                 let selectedItem = category.items[indexPath.row - 1]
             
                 if let scoreItem = category.items[indexPath.row - 1] as? ScoreItem {
@@ -158,12 +162,10 @@ extension NotEnteredCheckListViewController : UITableViewDelegate, UITableViewDa
         if let cell = tableView.cellForRow(at: indexPath) as? CategoryItemTableViewCell {
             // 카테고리 셀을 눌렀을 때
             if indexPath.row == 0 {
-                if categories[indexPath.section - 1].isExpanded == true {
-                    categories[indexPath.section - 1].isExpanded = false
-                    cell.expandButton.setImage(UIImage(named: "contraction-items"), for: .normal)
+                if enabledCategories[indexPath.section - 1].isExpanded == true {
+                    enabledCategories[indexPath.section - 1].isExpanded = false
                 } else {
-                    categories[indexPath.section - 1].isExpanded = true
-                    cell.expandButton.setImage(UIImage(named: "expand-items"), for: .normal)
+                    enabledCategories[indexPath.section - 1].isExpanded = true
                 }
                 let section = IndexSet.init(integer: indexPath.section)
                 tableView.reloadSections(section, with: .fade)
@@ -177,7 +179,7 @@ extension NotEnteredCheckListViewController : UITableViewDelegate, UITableViewDa
             return 63
         }
 
-        let category = categories[indexPath.section - 1]
+        let category = enabledCategories[indexPath.section - 1]
         let selectedItem = category.items[indexPath.row - 1]
 
         switch selectedItem {

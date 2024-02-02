@@ -8,11 +8,17 @@
 import UIKit
 import SnapKit
 
+protocol ExpandedScoreCellDelegate: AnyObject {
+    func buttonTapped(at index: Int)
+}
+
 class ExpandedScoreTableViewCell: UITableViewCell {
     
     var score: String? // 선택된 버튼의 값을 저장할 변수
     var indexPath: IndexPath?
     var item: Item?
+    weak var delegate: ExpandedScoreCellDelegate?
+    var cellIndex: Int?
     
     lazy var questionImage = UIImageView().then {
         $0.contentMode = .scaleAspectFit
@@ -124,6 +130,7 @@ class ExpandedScoreTableViewCell: UITableViewCell {
         }
 
         if sender.isSelected {
+            
             // 현재 눌린 버튼을 선택된 상태로 변경
             sender.setImage(UIImage(named: "checked-button"), for: .normal)
             // 셀의 배경색을 변경
@@ -133,6 +140,19 @@ class ExpandedScoreTableViewCell: UITableViewCell {
                 if button != sender {
                     button.isSelected = false
                     button.setImage(UIImage(named: "checklist-completed-button"), for: .normal)
+                    // 버튼이 눌렸을 때 호출되는 메서드
+                    guard let indexPath = indexPath, let delegate = delegate else {
+                        return
+                    }
+
+                    // 버튼의 선택 상태 업데이트
+                    let buttonTag = sender.tag
+
+                    // 선택 상태에 따라 다른 동작 수행
+                    guard let index = cellIndex else {
+                        return
+                    }
+                    delegate.buttonTapped(at: index)
                 }
             }
         } else {

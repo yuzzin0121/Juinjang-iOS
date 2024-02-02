@@ -7,11 +7,15 @@
 
 import UIKit
 import SnapKit
-import SwiftyMenu
+
+protocol DropdownDelegate: AnyObject {
+    func didSelectOption(_ option: String)
+}
 
 class ExpandedDropdownTableViewCell: UITableViewCell {
-    
+
     var selectedOption: String?
+    weak var delegate: DropdownDelegate?
     
     lazy var questionImage = UIImageView().then {
         $0.contentMode = .scaleAspectFit
@@ -129,6 +133,8 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
             
             let selectedOption = options[row]
             print("Selected option: \(selectedOption)")
+        
+            delegate?.didSelectOption(selectedOption)
         }
     
     func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
