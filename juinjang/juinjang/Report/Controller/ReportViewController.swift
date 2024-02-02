@@ -9,29 +9,17 @@ import UIKit
 import Then
 import SnapKit
 
-
-
 import Tabman
 import Pageboy
 
+import KakaoSDKAuth
+import KakaoSDKCommon
+import KakaoSDKShare
+import SafariServices
+
 class ReportViewController : UIViewController {
-    //MARK: - 상단
-    /*var backButton = UIButton().then {
-        $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.setImage(UIImage(named:"leftArrow"), for: .normal)
-        $0.addTarget(self, action: #selector(backBtnTap), for: .touchUpInside)
-    }
-    
-    var reportLabel = UILabel().then {
-        $0.text = "주인장 리포트"
-        $0.font = UIFont(name: "Pretendard-SemiBold", size: 16)
-        $0.translatesAutoresizingMaskIntoConstraints = false
-    }
-    var shareButton = UIButton().then {
-        $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.setImage(UIImage(named:"share"), for: .normal)
-    }*/
-    
+    let templateId = 103560
+    var safariViewController : SFSafariViewController?
     //MARK: - 총 평점 멘트, 가격, 주소
     var totalGradeLabel = UILabel().then {
         $0.textColor = UIColor(named: "600")
@@ -94,7 +82,7 @@ class ReportViewController : UIViewController {
         self.navigationController?.navigationBar.tintColor = .black
         navigationItem.title = "주인장 리포트"
         
-        let shareButtonItem = UIBarButtonItem(image: UIImage(named: "share"), style: .plain, target: self, action: nil)
+        let shareButtonItem = UIBarButtonItem(image: UIImage(named: "share"), style: .plain, target: self, action: #selector(shareBtnTap))
         let backButtonItem = UIBarButtonItem(image: UIImage(named:"leftArrow"), style: .plain, target: self, action: #selector(backBtnTap))
 
         // 네비게이션 아이템에 백 버튼 아이템 설정
@@ -102,10 +90,38 @@ class ReportViewController : UIViewController {
         self.navigationItem.leftBarButtonItem = backButtonItem
         self.navigationItem.rightBarButtonItem = shareButtonItem
     }
-    @objc
-    func backBtnTap() {
+    @objc func backBtnTap() {
         let vc = ImjangNoteViewController()
         self.navigationController?.pushViewController(vc, animated: true)
+    }
+    @objc func shareBtnTap() {
+        if ShareApi.isKakaoTalkSharingAvailable() {
+            // 카카오톡으로 카카오톡 공유 가능
+            ShareApi.shared.shareCustom(templateId: Int64(templateId), templateArgs:["title":"제목입니다.", "description":"설명입니다."]) {(sharingResult, error) in
+                if let error = error {
+                    print(error)
+                }
+                else {
+                    print("shareCustom() success.")
+                    if let sharingResult = sharingResult {
+                        UIApplication.shared.open(sharingResult.url, options: [:], completionHandler: nil)
+                    }
+                }
+            }
+        }
+        else {
+            // 카카오톡 미설치: 웹 공유 사용 권장
+            // Custom WebView 또는 디폴트 브라우져 사용 가능
+            // 웹 공유 예시 코드
+            if let url = ShareApi.shared.makeCustomUrl(templateId: Int64(templateId), templateArgs:["title":"제목입니다.", "description":"설명입니다."]) {
+                self.safariViewController = SFSafariViewController(url: url)
+                self.safariViewController?.modalTransitionStyle = .crossDissolve
+                self.safariViewController?.modalPresentationStyle = .overCurrentContext
+                self.present(self.safariViewController!, animated: true) {
+                    print("웹 present success")
+                }
+            }
+        }
     }
     
     override func viewDidLoad() {
