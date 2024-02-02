@@ -148,7 +148,15 @@ extension ImjangImageListViewController: UICollectionViewDelegate, UICollectionV
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let index = indexPath.row
-        
+        showEnlargePhotoVC(index: index, photoList: imageList)
+    }
+    
+    func showEnlargePhotoVC(index: Int, photoList: [String]) {
+        let enlargePhotoVC = EnlargePhotoViewController()
+        enlargePhotoVC.currentIndex = index
+        enlargePhotoVC.photoList = photoList
+        enlargePhotoVC.modalPresentationStyle = .overFullScreen
+        present(enlargePhotoVC, animated: false)
     }
     
 }
