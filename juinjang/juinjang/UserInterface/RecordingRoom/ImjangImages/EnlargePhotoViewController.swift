@@ -84,10 +84,7 @@ class EnlargePhotoViewController: UIViewController {
         closeButton.design(image: ImageStyle.x, tintColor: .black ,backgroundColor: .white)
     }
     
-    @objc func  pinchAction(_ sender :UIPinchGestureRecognizer){
-        sender.transform = sender.transform.scaledBy(x: sender.scale, y: sender.scale)
-        sender.scale = 1.0
-    }
+   
 }
 
 extension EnlargePhotoViewController: UICollectionViewDelegate, UICollectionViewDataSource {
@@ -100,8 +97,6 @@ extension EnlargePhotoViewController: UICollectionViewDelegate, UICollectionView
         
         let image = UIImage(named: photoList[indexPath.row])
         
-        let pinch = UIPinchGestureRecognizer(target: self, action: #selector(pinchAction))
-        cell.contentView.addGestureRecognizer(pinch) // 핀치 제스처 등록
         cell.configureCell(image: image, index: indexPath.row + 1, totalCount: photoList.count)
         
         return cell
