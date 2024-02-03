@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import SwiftyMenu
 
 protocol DropdownDelegate: AnyObject {
     func didSelectOption(_ option: String)
@@ -26,33 +27,6 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
         $0.font = .pretendard(size: 16, weight: .regular)
         $0.textColor = UIColor(named: "textBlack")
     }
-
-//    private let dropDownOptionsDataSource = [
-//        MealSize(id: 1, name: "Small"),
-//        MealSize(id: 2, name: "Medium"),
-//        MealSize(id: 3, name: "Large"),
-//        MealSize(id: 4, name: "Combo Large")
-//    ]
-//    public enum ArrowStyle {
-//        case customStyle(isEnabled: Bool, image: UIImage?)
-//        // 나머지 코드...
-//    }
-//
-//    
-//    lazy var dropdown = SwiftyMenu().then {
-//        $0.layer.cornerRadius = 20
-//        $0.backgroundColor = UIColor(named: "lightGray")
-//
-//        // SwiftyMenu 속성(attributes) 설정
-//        let attributes = SwiftyMenuAttributes(
-//            arrowStyle: .customStyle(isEnabled: true, image: UIImage(named: "option-expand"))
-//            // 다른 속성들을 설정하고,
-//        )
-//        $0.configure(with: attributes)
-//
-//        // SwiftyMenu에 데이터 소스(items) 설정
-//        $0.items = dropDownOptionsDataSource
-//    }
     
     lazy var pickerView = UIPickerView()
     
@@ -147,92 +121,3 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
     }
 
 }
-
-//extension ExpandedDropdownTableViewCell: SwiftyMenuDelegate {
-//    
-//    // Get selected option from SwiftyMenu
-//    func swiftyMenu(_ swiftyMenu: SwiftyMenu, didSelectItem item: SwiftyMenuDisplayable, atIndex index: Int) {
-//        print("Selected item: \(item), at index: \(index)")
-//    }
-//    
-//    // SwiftyMenu drop down menu will expand
-//    func swiftyMenu(willExpand swiftyMenu: SwiftyMenu) {
-//        print("SwiftyMenu willExpand.")
-//    }
-//
-//    // SwiftyMenu drop down menu did expand
-//    func swiftyMenu(didExpand swiftyMenu: SwiftyMenu) {
-//        print("SwiftyMenu didExpand.")
-//    }
-//
-//    // SwiftyMenu drop down menu will collapse
-//    func swiftyMenu(willCollapse swiftyMenu: SwiftyMenu) {
-//        print("SwiftyMenu willCollapse.")
-//    }
-//
-//    // SwiftyMenu drop down menu did collapse
-//    func swiftyMenu(didCollapse swiftyMenu: SwiftyMenu) {
-//        print("SwiftyMenu didCollapse.")
-//    }
-//}
-//
-//struct MealSize {
-//    let id: Int
-//    let name: String
-//}
-//
-//extension MealSize: SwiftyMenuDisplayable {
-//    public var displayableValue: String {
-//        return self.name
-//    }
-//
-//    public var retrievableValue: Any {
-//        return self.id
-//    }
-//}
-//
-//
-//extension String: SwiftyMenuDisplayable {
-//    public var retrievableValue: Any {
-//        return self
-//    }
-//    
-//    public var displayableValue: String {
-//        return self
-//    }
-//    
-//    public var retrivableValue: Any {
-//        return self
-//    }
-//}
-
-//public extension SwiftyMenuAttributes {
-//    // 다른 속성들을 설정하는 코드...
-//
-//    public func configure(with attributes: SwiftyMenuAttributes) {
-//        // 다른 속성 설정
-//        // ...
-//
-//        // ArrowStyle 설정
-//        let arrowStyleValues = attributes.arrowStyle.arrowStyleValues(defaultImage: defaultImage)
-//        // 이후 arrowStyleValues를 사용하여 SwiftyMenu 내부에서 설정하도록 구현
-//        // ...
-//    }
-//}
-//
-//public extension SwiftyMenuAttributes.ArrowStyle {
-//    func arrowStyleValues(defaultImage: UIImage) -> (isEnabled: Bool, image: UIImage?) {
-//        switch self {
-//        case let .customStyle(isEnabled, image):
-//            if isEnabled && image != nil {
-//                return (isEnabled: isEnabled, image: image)
-//            } else if isEnabled {
-//                return (isEnabled: isEnabled, image: defaultImage)
-//            } else {
-//                return (isEnabled: isEnabled, image: nil)
-//            }
-//        case .default:
-//            return (isEnabled: true, image: defaultImage)
-//        }
-//    }
-//}

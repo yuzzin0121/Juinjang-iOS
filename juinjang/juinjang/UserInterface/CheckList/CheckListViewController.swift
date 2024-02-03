@@ -36,6 +36,13 @@ class CheckListViewController: UIViewController, ExpandedScoreCellDelegate {
         addSubViews()
         setupLayout()
         registerCell()
+        NotificationCenter.default.addObserver(self, selector: #selector(didStoppedParentScroll), name: NSNotification.Name("didStoppedParentScroll"), object: nil)
+    }
+    @objc
+    func didStoppedParentScroll() {
+        DispatchQueue.main.async {
+            self.tableView.isScrollEnabled = true
+        }
     }
     
     // 키보드 내리기
@@ -58,9 +65,7 @@ class CheckListViewController: UIViewController, ExpandedScoreCellDelegate {
         tableView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(48)
             $0.leading.trailing.equalToSuperview()
-            // 스크롤 안되는데 bottom 어떻게 주어야 할까
             $0.bottom.equalToSuperview()
-            $0.height.equalTo(view).multipliedBy(5.23)
         }
     }
     
@@ -83,10 +88,6 @@ class CheckListViewController: UIViewController, ExpandedScoreCellDelegate {
     func loadValueForCategory(categoryIndex: Int, itemIndex: Int) -> Any? {
         let key = "Category\(categoryIndex)_Item\(itemIndex)_Value"
         return UserDefaults.standard.value(forKey: key)
-    }
-    
-    private func loadSelectedDate() -> Date? {
-        return UserDefaults.standard.value(forKey: "SelectedDateKey") as? Date
     }
 }
 
@@ -127,14 +128,22 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource  
             if let calendarItem = category.items[indexPath.row - 1] as? CalendarItem {
                 // CalendarItem인 경우
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: ExpandedCalendarTableViewCell.identifier, for: indexPath) as? ExpandedCalendarTableViewCell else { return UITableViewCell() }
+                // 선택된 날짜를 저장하고 불러오기
+                cell.saveSelectedDate()
+                cell.selectedDate = cell.loadSelectedDate() ?? Date()
                 
-                cell.calendarItems = [CalendarItem(content: calendarItem.content)]
+                cell.calendarItems = [CalendarItem(content: calendarItem.content, inputDate: calendarItem.inputDate, isSelected: calendarItem.isSelected)]
                 cell.contentLabel.text = calendarItem.content
-                cell.selectedDate = calendarItem.inputDate
+//                cell.selectedDate = cell.calendarItems[index]
+                
                 // 선택 상태에 따라 배경색 설정
                 cell.backgroundColor = calendarItem.isSelected ? UIColor(named: "lightOrange") : UIColor.white
-                cell.selectedDate = loadSelectedDate()
+                
+                // 저장된 날짜가 없으면 기본값으로 설정
+                cell.selectedDate = cell.loadSelectedDate() ?? Date()
+                
                 print(cell.calendarItems)
+                
                 
                 return cell
             } else if let scoreItem = category.items[indexPath.row - 1] as? ScoreItem {
@@ -250,5 +259,4 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource  
             return UITableView.automaticDimension
         }
     }
-
 }

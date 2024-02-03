@@ -28,21 +28,9 @@ protocol Item {
 }
 
 struct CalendarItem: Item {
-    var content: String
-    var inputDate: Date?
+    let content: String
+    var inputDate: Date
     var isSelected: Bool
-    
-    var selectedDate: Date? {
-        didSet {
-            // 선택된 날짜가 업데이트될 때 isSelected 업데이트
-            isSelected = selectedDate != nil
-        }
-    }
-    
-    init(content: String) {
-        self.content = content
-        self.isSelected = false
-    }
 }
 
 struct ScoreItem: Item {
@@ -85,10 +73,11 @@ protocol DataUpdateDelegate: AnyObject {
     func updateItem(item: Item, at indexPath: IndexPath)
 }
 
+// -MARK: 임장용 체크리스트 항목
 var categories: [Category] = [
     Category(image: UIImage(named: "deadline-item")!, name: "기한", items: [
-        CalendarItem(content: "입주 가능 날짜는 어떻게 되나요?"),
-        CalendarItem(content: "잔금은 언제까지 치뤄야 하나요?")
+        CalendarItem(content: "입주 가능 날짜는 어떻게 되나요?", inputDate: Date(), isSelected: false),
+        CalendarItem(content: "잔금은 언제까지 치뤄야 하나요?", inputDate: Date(), isSelected: false)
     ], isExpanded: false),
     Category(image: UIImage(named: "location-conditions-item")!, name: "입지여건", items: [
         ScoreItem(content: "역세권인가요?"),
@@ -151,7 +140,7 @@ var categories: [Category] = [
         ScoreItem(content: "화장실 세면대 수압의 상태는 어떤가요?"),
         ScoreItem(content: "욕조/샤워부스가 따로 마련되어 있나요?"),
         ScoreItem(content: "소방대피시설이 잘 갖춰져 있나요?")
-    ], isExpanded: false),
+    ], isExpanded: false)
 ]
 
 var enabledCategories: [Category] = [
@@ -167,7 +156,7 @@ var enabledCategories: [Category] = [
         ScoreItem(content: "여러 브랜드의 편의점이 근거리에 분포해있나요?"),
         ScoreItem(content: "입주자가 사용하는 은행이 근거리에 분포해있나요?"),
         SelectionItem(content: "건물뷰를 골라주세요.", options: ["선택안함", "강", "공원", "아파트 단지"]),
-        SelectionItem(content: "동향/서향/남향/북향", options: ["선택안함", "동향", "서향", "남향", "북향"]),
+        SelectionItem(content: "동향 / 서향 / 남향 / 북향", options: ["선택안함", "동향", "서향", "남향", "북향"]),
         ScoreItem(content: "창문이 적절한 위치와 적절한 갯수를 갖추고 있나요?"),
         ScoreItem(content: "빛이 잘 들어오나요?"),
         ScoreItem(content: "근처에 술집, 노래방 등의 유흥시설이 가까운가요?"),
@@ -216,5 +205,93 @@ var enabledCategories: [Category] = [
         ScoreItem(content: "화장실 세면대 수압의 상태는 어떤가요?"),
         ScoreItem(content: "욕조/샤워부스가 따로 마련되어 있나요?"),
         ScoreItem(content: "소방대피시설이 잘 갖춰져 있나요?")
-    ], isExpanded: false),
+    ], isExpanded: false)
 ]
+
+// -MARK: 원룸용 체크리스트 항목
+var oneRoomCategories: [Category] = [
+    Category(image: UIImage(named: "deadline-item")!, name: "기한", items: [
+        CalendarItem(content: "입주 가능 날짜는 어떻게 되나요?", inputDate: Date(), isSelected: false),
+        CalendarItem(content: "잔금은 언제까지 치뤄야 하나요?", inputDate: Date(), isSelected: false),
+    ], isExpanded: false),
+    Category(image: UIImage(named: "location-conditions-item")!, name: "입지여건", items: [
+        SelectionItem(content: "여성전용 / 남성전용 / 혼용", options: ["여성전용", "남성전용", "혼용"]),
+        SelectionItem(content: "지하철 노선도를 선택해 주세요.", options: ["선택안함", "1호선", "2호선", "3호선", "4호선", "5호선", "6호선", "7호선", "8호선", "9호선", "수인분당", "경의중앙", "신분당", "공항철도", "경춘선"]),
+        ScoreItem(content: "역으로 도보 5분 이내 접근이 가능한가요?"),
+        ScoreItem(content: "버스 주요 노선이 지역 중심부 접근이 용이한가요?"),
+        ScoreItem(content: "직장 혹은 학교에 가는 데 무리가 없나요?"),
+        ScoreItem(content: "주변 소음으로부터 차단되는 정도를 입력해주세요."),
+        ScoreItem(content: "편의점, 은행과 같은 시설이 밀집해 있나요?"),
+        ScoreItem(content: "집가는 길이 언덕에 위치해있나요?"),
+        ScoreItem(content: "집가는 길에 cctv나 가로등이 충분한가요?")
+    ], isExpanded: false),
+    Category(image: UIImage(named: "public-space-item")!, name: "공용공간", items: [
+        InputItem(content: "주차공간이 세대 당 몇 대인가요?"),
+        ScoreItem(content: "공동 현관 비밀번호가 있나요?"),
+        ScoreItem(content: "현관문 이중 잠금장치가 있나요?"),
+        ScoreItem(content: "출입구와 계단, 엘리베이터, 복도에 cctv가 있나요?"),
+        ScoreItem(content: "관리자분이 상주하고 있나요?"),
+        ScoreItem(content: "분리수거 환경이 잘 조성되어 있나요?")
+    ], isExpanded: false),
+    Category(image: UIImage(named: "indoor-item")!, name: "실내", items: [
+        ScoreItem(content: "수압의 상태는 어떤가요?"),
+        ScoreItem(content: "온수는 잘 나오는 편인가요?"),
+        ScoreItem(content: "배수구는 잘 내려가나요?"),
+        ScoreItem(content: "햇빛이 잘 들어오나요?"),
+        ScoreItem(content: "방충망 상태가 양호한가요?"),
+        ScoreItem(content: "환기하는 데 문제가 없나요?"),
+        ScoreItem(content: "옆 건물로부터 사생활이 지켜지나요?"),
+        ScoreItem(content: "화장실 내부에 창문이 있나요?"),
+        ScoreItem(content: "화장실 배수구 냄새가 올라오는 편인가요?"),
+        ScoreItem(content: "화장실 내 샤워 공간이 충분한가요?"),
+        ScoreItem(content: "화장실 내 곰팡이 흔적 정도는 어떤 편인가요?"),
+        SelectionItem(content: "화구의 종류는 무엇인가요?", options: ["인덕션", "하이라이트", "가스", "기타"]),
+        ScoreItem(content: "기본 옵션 필요없다면 치워줄 수 있나요?"),
+        ScoreItem(content: "벽지에 곰팡이 핀 흔적이 있나요?"),
+        ScoreItem(content: "콘센트가 적절한 위치에 배치되어 있나요?"),
+        ScoreItem(content: "인터폰 영상이 지원되나요?"),
+        InputItem(content: "방음은 잘 되나요?")
+    ], isExpanded: false)
+]
+
+var enabledOneRoomCategories: [Category] = [
+    Category(image: UIImage(named: "location-conditions-item")!, name: "입지여건", items: [
+        SelectionItem(content: "여성전용 / 남성전용 / 혼용", options: ["여성전용", "남성전용", "혼용"]),
+        SelectionItem(content: "지하철 노선도를 선택해 주세요.", options: ["선택안함", "1호선", "2호선", "3호선", "4호선", "5호선", "6호선", "7호선", "8호선", "9호선", "수인분당", "경의중앙", "신분당", "공항철도", "경춘선"]),
+        ScoreItem(content: "역으로 도보 5분 이내 접근이 가능한가요?"),
+        ScoreItem(content: "버스 주요 노선이 지역 중심부 접근이 용이한가요?"),
+        ScoreItem(content: "직장 혹은 학교에 가는 데 무리가 없나요?"),
+        ScoreItem(content: "주변 소음으로부터 차단되는 정도를 입력해주세요."),
+        ScoreItem(content: "편의점, 은행과 같은 시설이 밀집해 있나요?"),
+        ScoreItem(content: "집가는 길이 언덕에 위치해있나요?"),
+        ScoreItem(content: "집가는 길에 cctv나 가로등이 충분한가요?")
+    ], isExpanded: false),
+    Category(image: UIImage(named: "public-space-item")!, name: "공용공간", items: [
+        InputItem(content: "주차공간이 세대 당 몇 대인가요?"),
+        ScoreItem(content: "공동 현관 비밀번호가 있나요?"),
+        ScoreItem(content: "현관문 이중 잠금장치가 있나요?"),
+        ScoreItem(content: "출입구와 계단, 엘리베이터, 복도에 cctv가 있나요?"),
+        ScoreItem(content: "관리자분이 상주하고 있나요?"),
+        ScoreItem(content: "분리수거 환경이 잘 조성되어 있나요?")
+    ], isExpanded: false),
+    Category(image: UIImage(named: "indoor-item")!, name: "실내", items: [
+        ScoreItem(content: "수압의 상태는 어떤가요?"),
+        ScoreItem(content: "온수는 잘 나오는 편인가요?"),
+        ScoreItem(content: "배수구는 잘 내려가나요?"),
+        ScoreItem(content: "햇빛이 잘 들어오나요?"),
+        ScoreItem(content: "방충망 상태가 양호한가요?"),
+        ScoreItem(content: "환기하는 데 문제가 없나요?"),
+        ScoreItem(content: "옆 건물로부터 사생활이 지켜지나요?"),
+        ScoreItem(content: "화장실 내부에 창문이 있나요?"),
+        ScoreItem(content: "화장실 배수구 냄새가 올라오는 편인가요?"),
+        ScoreItem(content: "화장실 내 샤워 공간이 충분한가요?"),
+        ScoreItem(content: "화장실 내 곰팡이 흔적 정도는 어떤 편인가요?"),
+        SelectionItem(content: "화구의 종류는 무엇인가요?", options: ["인덕션", "하이라이트", "가스", "기타"]),
+        ScoreItem(content: "기본 옵션 필요없다면 치워줄 수 있나요?"),
+        ScoreItem(content: "벽지에 곰팡이 핀 흔적이 있나요?"),
+        ScoreItem(content: "콘센트가 적절한 위치에 배치되어 있나요?"),
+        ScoreItem(content: "인터폰 영상이 지원되나요?"),
+        InputItem(content: "방음은 잘 되나요?")
+    ], isExpanded: false)
+]
+

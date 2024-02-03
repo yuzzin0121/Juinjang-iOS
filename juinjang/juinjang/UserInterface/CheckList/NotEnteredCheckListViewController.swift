@@ -13,7 +13,7 @@ class NotEnteredCheckListViewController: UIViewController {
     lazy var tableView = UITableView().then {
         $0.separatorStyle = .none
         $0.showsVerticalScrollIndicator = false
-        $0.isScrollEnabled = false
+        $0.isScrollEnabled = true
     }
 
     override func viewDidLoad() {
@@ -147,7 +147,7 @@ extension NotEnteredCheckListViewController : UITableViewDelegate, UITableViewDa
                     // 선택 상태에 따라 배경색 설정
                     cell.backgroundColor = UIColor(named: "gray0")
                     cell.contentLabel.textColor = UIColor(named: "lightGray")
-                    cell.pickerView.isUserInteractionEnabled = false
+                    cell.dropDown.isUserInteractionEnabled = false
 //                    cell.backgroundColor = selectionItem.isSelected ? UIColor(named: "lightOrange") : UIColor.clear
                     
                     return cell

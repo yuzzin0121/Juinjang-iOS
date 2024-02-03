@@ -16,7 +16,7 @@ class ChecklistManager {
 
     // MARK: - Update methods for specific item types
 
-    func setSelectedDate(_ date: Date?, forItemAtIndex index: Int, inCategory categoryIndex: Int) {
+    func setSelectedDate(_ date: Date, forItemAtIndex index: Int, inCategory categoryIndex: Int) {
         // 해당 인덱스의 날짜 항목에 대한 처리
         guard let category = categories[safe: categoryIndex], index < category.items.count else {
             return

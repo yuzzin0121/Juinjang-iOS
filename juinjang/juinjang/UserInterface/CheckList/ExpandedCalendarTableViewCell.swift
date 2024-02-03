@@ -17,10 +17,19 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
     
     var calendarItems: [CalendarItem] = []
     weak var delegate: DatePickerDelegate?
+    var isExpanded: Bool = false
     
-    var selectedDate: Date? {
-        didSet {
-            // 선택된 날짜가 변경될 때마다 호출되는 메서드
+    var selectedDate: Date?
+    
+    func setExpanded(_ expanded: Bool) {
+        isExpanded = expanded
+
+        // 확장되거나 접혔을 때 선택된 날짜를 저장하거나 불러오기
+        if isExpanded {
+            // 저장된 날짜가 있으면 불러오기, 없으면 현재 선택된 날짜 저장
+            selectedDate = selectedDate ?? loadSelectedDate() ?? Date()
+        } else {
+            // 접혔을 때 선택된 날짜 저장
             saveSelectedDate()
         }
     }
@@ -194,12 +203,34 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
         calendar.setCurrentPage(currentPage!, animated: true)
     }
     
-    private func saveSelectedDate() {
-        // 선택된 날짜를 1일 더한 값으로 업데이트
-        if let nextDate = Calendar.current.date(byAdding: .day, value: -1, to: selectedDate ?? Date()) {
-            for index in 0..<calendarItems.count {
-                calendarItems[index].inputDate = nextDate
+    func saveSelectedDate() {
+        // 선택된 날짜를 UserDefaults에 저장
+        if let selectedDate = selectedDate {
+            UserDefaults.standard.set(selectedDate, forKey: "SelectedDateKey")
+        } else {
+            // 선택된 날짜가 nil인 경우 UserDefaults에서 해당 키의 값을 제거
+            UserDefaults.standard.removeObject(forKey: "SelectedDateKey")
+        }
+    }
+    
+    func loadSelectedDate() -> Date? {
+        return UserDefaults.standard.value(forKey: "SelectedDateKey") as? Date
+    }
+    
+    // 선택된 날짜 업데이트 함수
+    private func updateCalendarItem(withContent content: String, selectedDate: Date) {
+        print(selectedDate)
+        // 찾으려는 content와 일치하는 CalendarItem을 찾음
+        if let index = calendarItems.firstIndex(where: { $0.content == content }) {
+            // 찾은 CalendarItem의 inputDate를 새로 선택된 날짜로 변경
+            calendarItems[index].inputDate = selectedDate
+            calendarItems[index].isSelected = true
+            
+            // calendarItem 확인
+            for calendarItem in calendarItems {
+                print(calendarItem)
             }
+            saveSelectedDate()
         }
     }
 }
@@ -256,30 +287,26 @@ extension ExpandedCalendarTableViewCell: FSCalendarDelegate, FSCalendarDataSourc
         dateFormatter.dateFormat = "yyyy년 MM월 dd일"
         print("Selected Date: \(dateFormatter.string(from: date))")
 
-        // 현재 선택된 날짜 업데이트
-        if let nextDate = Calendar.current.date(byAdding: .day, value: 1, to: date) {
-            selectedDate = nextDate
-            print(selectedDate)
-        }
-        
-        if let calendarItemIndex = calendarItems.firstIndex(where: { $0.inputDate == date }) {
-            calendarItems[calendarItemIndex].isSelected = true
-        }
-
-        // Print to check isSelected
-        for calendarItem in calendarItems {
-            print(calendarItem)
+        // 선택된 날짜의 시간 성분을 12:00 PM으로 설정 (UTC로 변환)
+        if let selectedDateNoon = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: date)?.addingTimeInterval(TimeInterval(NSTimeZone.system.secondsFromGMT())) {
+            print("Selected Date (after adjustment): \(selectedDateNoon)")
+            
+            // 현재 선택된 날짜 업데이트
+            selectedDate = selectedDateNoon
+            
+            // 선택된 날짜를 해당 CalendarItem에 저장
+            updateCalendarItem(withContent: contentLabel.text ?? "", selectedDate: selectedDateNoon)
         }
     }
     
-//    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
-//        let calendar = Calendar.current
-//        let dayOfWeek = calendar.component(.weekday, from: date)
-//        
-//        if dayOfWeek == 1 { // 일요일
-//            return .red
-//        } else {
-//            return nil // 다른 날짜의 경우 기본값으로 설정
-//        }
-//    }
+    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
+        let calendar = Calendar.current
+        let dayOfWeek = calendar.component(.weekday, from: date)
+        
+        if dayOfWeek == 1 { // 일요일
+            return .red
+        } else {
+            return nil // 다른 날짜의 경우 기본값으로 설정
+        }
+    }
 }
