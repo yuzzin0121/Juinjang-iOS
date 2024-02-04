@@ -9,6 +9,7 @@ class CompareSearchViewController: UIViewController {
         $0.searchTextField.font = .pretendard(size: 14, weight: .medium)
         $0.searchTextField.borderStyle = .roundedRect
         $0.searchTextField.clipsToBounds = true
+        //$0.searchTextField.leftViewMode = .never
         $0.searchTextField.layer.cornerRadius = 15
         //$0.setImage(ImageStyle.search, for: .clear, state: .normal)
     }
@@ -73,10 +74,13 @@ class CompareSearchViewController: UIViewController {
 
         // UIBarButtonItem 생성 및 이미지 설정
         let backButtonItem = UIBarButtonItem(image: ImageStyle.arrowLeft, style: .plain, target: self, action: #selector(popView))
+        backButtonItem.tintColor = UIColor(named: "300")
+        backButtonItem.imageInsets = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 0)
     
         // 네비게이션 아이템에 백 버튼 아이템 설정
         self.navigationItem.leftBarButtonItem = backButtonItem
         self.navigationItem.titleView = searchBar
+        let searchView = UIImageView(image: UIImage(named: "search"))
     }
     
     func hideKeyboardWhenTappedAround() {
@@ -86,6 +90,14 @@ class CompareSearchViewController: UIViewController {
     }
     @objc func dismissKeyboard() {
         searchBar.resignFirstResponder()
+    }
+    @objc func applyBtnTap() {
+        let vc = ReportViewController()
+        vc.tabViewController.index = 1
+        vc.tabViewController.compareVC.isCompared = true
+        vc.tabViewController.compareVC.compareDataSet2.fillAlpha = CGFloat(0.8)
+        vc.tabViewController.compareVC.compareDataSet2.fillColor = .white
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func setupConstraints() {
@@ -115,7 +127,6 @@ class CompareSearchViewController: UIViewController {
             searchedTableView.isHidden = false
             applyBtn.isHidden = false
             //searchedTableView.reloadData()
-            
         }
     }
     override func viewDidLoad() {
@@ -134,7 +145,7 @@ class CompareSearchViewController: UIViewController {
         view.addSubview(searchedTableView)
         view.addSubview(applyBtn)
         searchBar.searchTextField.addTarget(self, action: #selector(CompareSearchViewController.textFieldDidChange(_:)), for: .editingChanged)
-        applyBtn.addTarget(self, action: #selector(SelectMaemullViewController().applyBtnTap), for: .touchUpInside)
+        applyBtn.addTarget(self, action: #selector(applyBtnTap), for: .touchUpInside)
         setupConstraints()
     }
 }
@@ -155,18 +166,30 @@ extension CompareSearchViewController: UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath as IndexPath)!
-        totalImjangList[indexPath.row].isSelected.toggle()
-        if totalImjangList[indexPath.row].isSelected == true {
+        let cell = tableView.cellForRow(at: indexPath) as! ReportImjangListTableViewCell
+        if cell.isSelect == false {
+            cell.isSelect = true
             cell.contentView.backgroundColor = UIColor(named: "main100")
             cell.contentView.layer.borderColor = UIColor(named: "juinjang")?.cgColor
             applyBtn.backgroundColor = UIColor(named: "500")
+            applyBtn.addTarget(self, action: #selector(applyBtnTap), for: .touchUpInside)
         }
         else {
+            cell.isSelect = false
             cell.contentView.backgroundColor = .white
             cell.contentView.layer.borderColor = ColorStyle.strokeGray.cgColor
             applyBtn.backgroundColor = UIColor(named: "null")
+            applyBtn.removeTarget(self, action: #selector(applyBtnTap), for: .touchUpInside)
         }
+    }
+    
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath) as! ReportImjangListTableViewCell
+        cell.isSelect = false
+        cell.contentView.backgroundColor = .white
+        cell.contentView.layer.borderColor = ColorStyle.strokeGray.cgColor
+        applyBtn.backgroundColor = UIColor(named: "null")
+        applyBtn.removeTarget(self, action: #selector(applyBtnTap), for: .touchUpInside)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

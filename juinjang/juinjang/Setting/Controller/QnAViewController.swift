@@ -59,7 +59,6 @@ class QnAViewController : UIViewController {
     let tableView = UITableView().then {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.register(ExpandableTableViewCell.self, forCellReuseIdentifier: ExpandableTableViewCell.id)
-       // $0.register(<#T##nib: UINib?##UINib?#>, forCellReuseIdentifier: <#T##String#>)
     }
     
     var dataSource = Sections.sections
@@ -70,6 +69,8 @@ class QnAViewController : UIViewController {
         navigationItem.title = "자주 묻는 질문"
         
         let closeButtonItem = UIBarButtonItem(image: UIImage(named:"X"), style: .plain, target: self, action: #selector(tapCloseButton))
+        closeButtonItem.tintColor = UIColor(named: "300")
+        closeButtonItem.imageInsets = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 0)
 
         // 네비게이션 아이템에 백 버튼 아이템 설정
         self.navigationItem.leftBarButtonItem = closeButtonItem

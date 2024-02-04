@@ -82,13 +82,15 @@ class ReportViewController : UIViewController {
         self.navigationController?.navigationBar.tintColor = .black
         navigationItem.title = "주인장 리포트"
         
-        let shareButtonItem = UIBarButtonItem(image: UIImage(named: "share"), style: .plain, target: self, action: #selector(shareBtnTap))
+        //let shareButtonItem = UIBarButtonItem(image: UIImage(named: "share"), style: .plain, target: self, action: #selector(shareBtnTap))
         let backButtonItem = UIBarButtonItem(image: UIImage(named:"leftArrow"), style: .plain, target: self, action: #selector(backBtnTap))
-
+        backButtonItem.tintColor = UIColor(named: "300")
+        backButtonItem.imageInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
+        
         // 네비게이션 아이템에 백 버튼 아이템 설정
         //self.navigationItem.hidesBackButton = true
         self.navigationItem.leftBarButtonItem = backButtonItem
-        self.navigationItem.rightBarButtonItem = shareButtonItem
+        //self.navigationItem.rightBarButtonItem = shareButtonItem
     }
     func changeItem() {
         self.navigationItem.rightBarButtonItem = .none

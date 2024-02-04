@@ -135,6 +135,8 @@ class UseViewController : UIViewController {
         navigationItem.title = "이용약관"
         
         let closeButtonItem = UIBarButtonItem(image: UIImage(named:"X"), style: .plain, target: self, action: #selector(tapCloseButton))
+        closeButtonItem.tintColor = UIColor(named: "300")
+        closeButtonItem.imageInsets = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 0)
 
         // 네비게이션 아이템에 백 버튼 아이템 설정
         self.navigationItem.leftBarButtonItem = closeButtonItem

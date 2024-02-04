@@ -54,15 +54,6 @@ class SelectMaemullViewController : UIViewController {
         $0.setTitleColor(UIColor.white, for: .normal)
         
     }
-    @objc
-    func applyBtnTap(_ sender: UIButton) {
-        let vc = ReportViewController()
-        vc.tabViewController.index = 1
-        vc.tabViewController.compareVC.isCompared = true
-        vc.tabViewController.compareVC.compareDataSet2.fillAlpha = CGFloat(0.8)
-        vc.tabViewController.compareVC.compareDataSet2.fillColor = .white
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
     
     func setFilterData() {
         for filter in filterList {
@@ -118,8 +109,12 @@ class SelectMaemullViewController : UIViewController {
 
         // UIBarButtonItem 생성 및 이미지 설정
         let backButtonItem = UIBarButtonItem(image: UIImage(named: "leftArrow"), style: .plain, target: self, action: #selector(backBtnTap))
-        
+        backButtonItem.tintColor = UIColor(named: "300")
+        backButtonItem.imageInsets = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 0)
+
         let searchButtonItem = UIBarButtonItem(image: UIImage(named:"search"), style: .plain, target: self, action: #selector(searchBtnTap))
+        searchButtonItem.tintColor = UIColor(named: "300")
+        searchButtonItem.imageInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 12)
 
         // 네비게이션 아이템에 백 버튼 아이템 설정
         self.navigationItem.leftBarButtonItem = backButtonItem
@@ -131,6 +126,14 @@ class SelectMaemullViewController : UIViewController {
     @objc func searchBtnTap() {
         let searchVC = CompareSearchViewController()
         navigationController?.pushViewController(searchVC, animated: true)
+    }
+    @objc func applyBtnTap() {
+        let vc = ReportViewController()
+        vc.tabViewController.index = 1
+        vc.tabViewController.compareVC.isCompared = true
+        vc.tabViewController.compareVC.compareDataSet2.fillAlpha = CGFloat(0.8)
+        vc.tabViewController.compareVC.compareDataSet2.fillColor = .white
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     override func viewDidLoad() {
@@ -167,20 +170,30 @@ extension SelectMaemullViewController: UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath as IndexPath)!
-        imjangList[indexPath.row].isSelected.toggle()
-        if imjangList[indexPath.row].isSelected == true {
+        let cell = tableView.cellForRow(at: indexPath) as! ReportImjangListTableViewCell
+        if cell.isSelect == false {
+            cell.isSelect = true
             cell.contentView.backgroundColor = UIColor(named: "main100")
             cell.contentView.layer.borderColor = UIColor(named: "juinjang")?.cgColor
             applyBtn.backgroundColor = UIColor(named: "500")
             applyBtn.addTarget(self, action: #selector(applyBtnTap), for: .touchUpInside)
         }
         else {
+            cell.isSelect = false
             cell.contentView.backgroundColor = .white
             cell.contentView.layer.borderColor = ColorStyle.strokeGray.cgColor
             applyBtn.backgroundColor = UIColor(named: "null")
             applyBtn.removeTarget(self, action: #selector(applyBtnTap), for: .touchUpInside)
         }
+    }
+    
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath) as! ReportImjangListTableViewCell
+        cell.isSelect = false
+        cell.contentView.backgroundColor = .white
+        cell.contentView.layer.borderColor = ColorStyle.strokeGray.cgColor
+        applyBtn.backgroundColor = UIColor(named: "null")
+        applyBtn.removeTarget(self, action: #selector(applyBtnTap), for: .touchUpInside)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

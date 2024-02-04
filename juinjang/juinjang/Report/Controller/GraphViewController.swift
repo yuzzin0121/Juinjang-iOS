@@ -102,7 +102,6 @@ class GraphViewController : UIViewController {
         $0.innerWebLineWidth = 1.5
         $0.innerWebColor = .clear
         $0.frame = CGRect(x: 60, y: 300, width: 300, height: 300)
-       
         
         let xAxis = $0.xAxis
         xAxis.labelFont = UIFont(name: "Pretendard-SemiBold`", size: 14) ?? .systemFont(ofSize: 14)
@@ -118,7 +117,6 @@ class GraphViewController : UIViewController {
         yAxis.axisMinimum = 0
         yAxis.valueFormatter = YAxisFormatter()
         
-        
         $0.rotationEnabled = false
         $0.legend.enabled = false
     }
@@ -131,6 +129,7 @@ class GraphViewController : UIViewController {
                 RadarChartDataEntry(value: 1.0)
             ]
         )
+
         let dataSet2 = RadarChartDataSet(
             entries: [
                 RadarChartDataEntry(value: 2.0),

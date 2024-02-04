@@ -37,7 +37,8 @@ class CompareViewController : UIViewController {
     }
     
     var compareView2 = UIImageView().then {
-        $0.image = UIImage(named: "compareView2")
+        $0.image = UIImage(named: "compareView1")
+        $0.tintColor = UIColor(named: "300")
     }
     var closeButton = UIButton().then {
         $0.setImage(UIImage(named: "xButton"), for: .normal)

@@ -250,6 +250,8 @@ class SettingViewController : UIViewController{
         navigationItem.title = "설정"
         
         let backButtonItem = UIBarButtonItem(image: UIImage(named:"Vector"), style: .plain, target: self, action: #selector(backBtnTap))
+        backButtonItem.tintColor = UIColor(named: "300")
+        backButtonItem.imageInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 12)
 
         // 네비게이션 아이템에 백 버튼 아이템 설정
         self.navigationItem.hidesBackButton = true
