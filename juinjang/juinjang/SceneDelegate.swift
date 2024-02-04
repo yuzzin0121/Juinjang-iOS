@@ -18,7 +18,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
+<<<<<<< HEAD
         let mainViewController = ImjangListViewController()
+=======
+        let mainViewController = SettingViewController()
+>>>>>>> 97e7b90 ([Fix]설정 계정삭제하기 수정)
         let navigationController = UINavigationController(rootViewController: mainViewController)
 //        navigationController.navigationBar.scrollEdgeAppearance?.backgroundColor = .white
         window?.rootViewController = navigationController

@@ -13,8 +13,8 @@ class BottomTableViewCell: UITableViewCell{
     
     static let id = "BottomTableViewCell"
     static let cellHeight = 250.0
-    
-//MARK: - 변수 설정
+    var yesRecentImjang : Bool = true
+    //MARK: - 변수 설정
     //컬렉션 뷰
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -44,14 +44,12 @@ class BottomTableViewCell: UITableViewCell{
     var noImjangImageView = UIImageView().then {
         $0.image = UIImage(named: "투명로고")
         $0.contentMode = .scaleAspectFill
-        $0.alpha = 0.0
     }
-    var noImjaneLabel = UILabel().then {
+    var noImjangLabel = UILabel().then {
         $0.text = "아직 등록된 집이 없어요"
         $0.textColor = UIColor(named: "450")
         $0.font = UIFont(name: "Pretendard-SemiBold", size: 16)
         $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.alpha = 0.0
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -64,15 +62,25 @@ class BottomTableViewCell: UITableViewCell{
         fatalError("init(coder:) has not been implemented")
     }
         
+    func isHidden() {
+        if yesRecentImjang == true {
+            noImjangLabel.isHidden = true
+            noImjangImageView.isHidden = true
+        } else {
+            collectionView.isHidden = true
+        }
+    }
     private func addContentView() {
         contentView.addSubview(recentImjangLabel)
         
         //최근 본 임장 없을 때
-        //contentView.addSubview(noImjangImageView)
-        //contentView.addSubview(noImjaneLabel)
+        contentView.addSubview(noImjangImageView)
+        contentView.addSubview(noImjangLabel)
         
         //최근 본 임장 있을 때
         contentView.addSubview(collectionView)
+        
+        isHidden()
     }
         
     private func autoLayout() {
@@ -82,16 +90,16 @@ class BottomTableViewCell: UITableViewCell{
         }
         
         //최근 본 임장 없을 떄
-        /*noImjangImageView.snp.makeConstraints{
+        noImjangImageView.snp.makeConstraints{
             $0.top.equalTo(recentImjangLabel.snp.bottom).offset(49)
-            $0.left.right.equalToSuperview().inset(149)
+            $0.centerX.equalToSuperview()
             $0.height.equalTo(108.83)
         }
         
-        noImjaneLabel.snp.makeConstraints{
+        noImjangLabel.snp.makeConstraints{
             $0.top.equalTo(noImjangImageView.snp.bottom).offset(33.17)
-            $0.left.equalToSuperview().offset(122)
-        }*/
+            $0.centerX.equalToSuperview()
+        }
         
         //최근 본 임장 있을 때
         collectionView.snp.makeConstraints{

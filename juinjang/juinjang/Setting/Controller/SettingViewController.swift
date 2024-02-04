@@ -85,8 +85,8 @@ class SettingViewController : UIViewController{
     //MARK: - 이용약관, 자주 묻는 질문
     var useButton = UIButton().then {
         $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.addTarget(self, action: #selector(click1), for: .touchUpInside)
     }
+    
     var useImageView = UIImageView().then {
         $0.image = UIImage(named:"이용약관")
     }
@@ -139,6 +139,7 @@ class SettingViewController : UIViewController{
     func addTarget() {
         nicknameTextField.addTarget(self, action: #selector(SettingViewController.textFieldDidChange(_:)), for: .editingChanged)
         saveButton.addTarget(self, action: #selector(tapChangeButton), for: .touchUpInside)
+        useButton.addTarget(self, action: #selector(click1), for: .touchUpInside)
         qnaButton.addTarget(self, action: #selector(click2), for: .touchUpInside)
         logoutButton.addTarget(self, action: #selector(logoutButtonTap), for: .touchUpInside)
         accountDeleteButton.addTarget(self, action: #selector(click4), for: .touchUpInside)
@@ -219,8 +220,7 @@ class SettingViewController : UIViewController{
     }
     
     @objc func backBtnTap() {
-        let vc = MainViewController()
-        self.navigationController?.pushViewController(vc, animated: true)
+        navigationController?.popViewController(animated: true)
     }
     
     func designNavigationBar() {

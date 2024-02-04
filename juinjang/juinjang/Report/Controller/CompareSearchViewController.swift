@@ -123,6 +123,7 @@ class CompareSearchViewController: UIViewController {
         designNavigationBar()
         hideKeyboardWhenTappedAround()
         //searching()
+        
         view.backgroundColor = .white
         searchBar.delegate = self
         searchedTableView.delegate = self

@@ -82,16 +82,9 @@ class AccountDeleteViewController : DimmedViewController {
         
     }
     @objc func tapYesButton(_ sender: Any) {
-        
-        switch yesButton.titleLabel?.text {
-        case "네,계정을 삭제할게요":
-            yesButton.setTitle("계정 삭제하기", for: .normal)
-            yesButton.backgroundColor = UIColor(named: "juinjang")
-            let vc = AccountDeleteFinalViewController()
-            view.insertSubview(vc.view, at: 1)
-        default:
-            return
-        }
+        let vc = AccountDeleteFinalViewController()
+        vc.modalPresentationStyle = .overFullScreen
+        self.present(vc, animated: false)
     }
     
     func list(listName: [String], num: Int, from: UIImageView, offset: Int) {
@@ -173,9 +166,7 @@ class AccountDeleteViewController : DimmedViewController {
         accountDeleteView.addSubview(dotLine2)
         list(listName: list3, num: 1, from: dotLine2, offset: 16)
         accountDeleteView.addSubview(noButton)
-        view.insertSubview(noButton, at: 2)
         accountDeleteView.addSubview(yesButton)
-        view.insertSubview(yesButton, at: 2)
         
         addTarget()
         setConstraint()

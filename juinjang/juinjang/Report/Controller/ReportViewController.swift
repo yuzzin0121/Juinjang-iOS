@@ -90,6 +90,9 @@ class ReportViewController : UIViewController {
         self.navigationItem.leftBarButtonItem = backButtonItem
         self.navigationItem.rightBarButtonItem = shareButtonItem
     }
+    func changeItem() {
+        self.navigationItem.rightBarButtonItem = .none
+    }
     @objc func backBtnTap() {
         let vc = ImjangNoteViewController()
         self.navigationController?.pushViewController(vc, animated: true)

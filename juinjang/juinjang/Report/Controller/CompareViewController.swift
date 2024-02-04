@@ -370,7 +370,6 @@ class CompareViewController : UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         view.backgroundColor = UIColor(named: "reportBG")
         view.addSubview(backgroundImageView)
         view.addSubview(compareLabel1)
