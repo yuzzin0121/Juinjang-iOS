@@ -29,7 +29,7 @@ protocol Item {
 
 struct CalendarItem: Item {
     let content: String
-    var inputDate: Date
+    var inputDate: Date?
     var isSelected: Bool
 }
 
@@ -57,15 +57,20 @@ struct InputItem: Item {
 
 struct SelectionItem: Item {
     var content: String
-    var options: [String]
+    var options: [OptionItem]
     var selectAnswer: String?
     var isSelected: Bool
     
-    init(content: String, options: [String]) {
+    init(content: String, options: [OptionItem]) {
         self.content = content
-        self.options = options
         self.isSelected = false
+        self.options = options
     }
+}
+
+struct OptionItem {
+    var image: UIImage?
+    var option: String
 }
 
 protocol DataUpdateDelegate: AnyObject {
@@ -81,7 +86,22 @@ var categories: [Category] = [
     ], isExpanded: false),
     Category(image: UIImage(named: "location-conditions-item")!, name: "입지여건", items: [
         ScoreItem(content: "역세권인가요?"),
-        SelectionItem(content: "지하철 노선도를 선택해 주세요.", options: ["선택안함", "1호선", "2호선", "3호선", "4호선", "5호선", "6호선", "7호선", "8호선", "9호선", "수인분당", "경의중앙", "신분당", "공항철도", "경춘선"]),
+        SelectionItem(content: "지하철 노선도를 선택해 주세요.", options: [
+            OptionItem(image: nil, option: "선택안함"),
+            OptionItem(image: UIImage(named: "line1")!, option: "1호선"),
+            OptionItem(image: UIImage(named: "line2")!, option: "2호선"),
+            OptionItem(image: UIImage(named: "line3")!, option: "3호선"),
+            OptionItem(image: UIImage(named: "line4")!, option: "4호선"),
+            OptionItem(image: UIImage(named: "line5")!, option: "5호선"),
+            OptionItem(image: UIImage(named: "line6")!, option: "6호선"),
+            OptionItem(image: UIImage(named: "line7")!, option: "7호선"),
+            OptionItem(image: UIImage(named: "line8")!, option: "8호선"),
+            OptionItem(image: UIImage(named: "line9")!, option: "9호선"),
+            OptionItem(image: UIImage(named: "SuinBundangLine")!, option: "수인분당"),
+            OptionItem(image: UIImage(named: "GyeonguiJungangLine")!, option: "경의중앙"),
+            OptionItem(image: UIImage(named: "ShinbundangLine")!, option: "신분당"),
+            OptionItem(image: UIImage(named: "AirportRailroadLine")!, option: "공항철도"),
+            OptionItem(image: UIImage(named: "GyeongchunLine")!, option: "경춘선")]),
         ScoreItem(content: "버스 주요노선이 지역중심부에 접근이 용이한가요?"),
         ScoreItem(content: "공립 어린이집 혹은 유치원이 충분히 가까운가요?"),
         ScoreItem(content: "초등학교가 반경 5분~10분 이내에 있나요?"),
@@ -90,8 +110,17 @@ var categories: [Category] = [
         ScoreItem(content: "대형마트, 시장이 도보로 이용 가능한가요?"),
         ScoreItem(content: "여러 브랜드의 편의점이 근거리에 분포해있나요?"),
         ScoreItem(content: "입주자가 사용하는 은행이 근거리에 분포해있나요?"),
-        SelectionItem(content: "건물뷰를 골라주세요.", options: ["선택안함", "강", "공원", "아파트 단지"]),
-        SelectionItem(content: "동향/서향/남향/북향", options: ["선택안함", "동향", "서향", "남향", "북향"]),
+        SelectionItem(content: "건물뷰를 골라주세요.", options: [
+            OptionItem(image: nil, option: "선택안함"),
+            OptionItem(image: nil, option: "강"),
+            OptionItem(image: nil, option: "기타"),
+            OptionItem(image: nil, option: "아파트 단지")]),
+        SelectionItem(content: "동향/서향/남향/북향", options: [
+            OptionItem(image: nil, option: "선택안함"),
+            OptionItem(image: nil, option: "동향"),
+            OptionItem(image: nil, option: "서향"),
+            OptionItem(image: nil, option: "남향"),
+            OptionItem(image: nil, option: "북향")]),
         ScoreItem(content: "창문이 적절한 위치와 적절한 갯수를 갖추고 있나요?"),
         ScoreItem(content: "빛이 잘 들어오나요?"),
         ScoreItem(content: "근처에 술집, 노래방 등의 유흥시설이 가까운가요?"),
@@ -111,7 +140,11 @@ var categories: [Category] = [
         ScoreItem(content: "단지 내 유모차 이동이 자유롭나요?")
     ], isExpanded: false),
     Category(image: UIImage(named: "indoor-item")!, name: "실내", items: [
-        SelectionItem(content: "시스템 에어컨 / 설치형에어컨 / 기타", options: ["선택안함", "시스템 에어컨", "설치형에어컨", "기타"]),
+        SelectionItem(content: "시스템 에어컨 / 설치형 에어컨 / 기타", options: [
+            OptionItem(image: nil, option: "선택안함"),
+            OptionItem(image: nil, option: "시스템 에어컨"),
+            OptionItem(image: nil, option: "설치형 에어컨"),
+            OptionItem(image: nil, option: "기타")]),
         ScoreItem(content: "냉난방 시스템이 장 작동하나요?"),
         ScoreItem(content: "창문은 이중창인가요?"),
         ScoreItem(content: "복도형 구조 / 거실중앙형 구조 / 기타"),
@@ -146,7 +179,22 @@ var categories: [Category] = [
 var enabledCategories: [Category] = [
     Category(image: UIImage(named: "location-conditions-item")!, name: "입지여건", items: [
         ScoreItem(content: "역세권인가요?"),
-        SelectionItem(content: "지하철 노선도를 선택해 주세요.", options: ["선택안함", "1호선", "2호선", "3호선", "4호선", "5호선", "6호선", "7호선", "8호선", "9호선", "수인분당", "경의중앙", "신분당", "공항철도", "경춘선"]),
+        SelectionItem(content: "지하철 노선도를 선택해 주세요.", options: [
+            OptionItem(image: nil, option: "선택안함"),
+            OptionItem(image: UIImage(named: "line1")!, option: "1호선"),
+            OptionItem(image: UIImage(named: "line2")!, option: "2호선"),
+            OptionItem(image: UIImage(named: "line3")!, option: "3호선"),
+            OptionItem(image: UIImage(named: "line4")!, option: "4호선"),
+            OptionItem(image: UIImage(named: "line5")!, option: "5호선"),
+            OptionItem(image: UIImage(named: "line6")!, option: "6호선"),
+            OptionItem(image: UIImage(named: "line7")!, option: "7호선"),
+            OptionItem(image: UIImage(named: "line8")!, option: "8호선"),
+            OptionItem(image: UIImage(named: "line9")!, option: "9호선"),
+            OptionItem(image: UIImage(named: "line3")!, option: "수인분당"),
+            OptionItem(image: UIImage(named: "line3")!, option: "경의중앙"),
+            OptionItem(image: UIImage(named: "line3")!, option: "신분당"),
+            OptionItem(image: UIImage(named: "line3")!, option: "공항철도"),
+            OptionItem(image: UIImage(named: "line3")!, option: "경춘선")]),
         ScoreItem(content: "버스 주요노선이 지역중심부에 접근이 용이한가요?"),
         ScoreItem(content: "공립 어린이집 혹은 유치원이 충분히 가까운가요?"),
         ScoreItem(content: "초등학교가 반경 5분~10분 이내에 있나요?"),
@@ -155,8 +203,17 @@ var enabledCategories: [Category] = [
         ScoreItem(content: "대형마트, 시장이 도보로 이용 가능한가요?"),
         ScoreItem(content: "여러 브랜드의 편의점이 근거리에 분포해있나요?"),
         ScoreItem(content: "입주자가 사용하는 은행이 근거리에 분포해있나요?"),
-        SelectionItem(content: "건물뷰를 골라주세요.", options: ["선택안함", "강", "공원", "아파트 단지"]),
-        SelectionItem(content: "동향 / 서향 / 남향 / 북향", options: ["선택안함", "동향", "서향", "남향", "북향"]),
+        SelectionItem(content: "건물뷰를 골라주세요.", options: [
+            OptionItem(image: nil, option: "선택안함"),
+            OptionItem(image: nil, option: "강"),
+            OptionItem(image: nil, option: "기타"),
+            OptionItem(image: nil, option: "아파트 단지")]),
+        SelectionItem(content: "동향/서향/남향/북향", options: [
+            OptionItem(image: nil, option: "선택안함"),
+            OptionItem(image: nil, option: "동향"),
+            OptionItem(image: nil, option: "서향"),
+            OptionItem(image: nil, option: "남향"),
+            OptionItem(image: nil, option: "북향")]),
         ScoreItem(content: "창문이 적절한 위치와 적절한 갯수를 갖추고 있나요?"),
         ScoreItem(content: "빛이 잘 들어오나요?"),
         ScoreItem(content: "근처에 술집, 노래방 등의 유흥시설이 가까운가요?"),
@@ -176,7 +233,11 @@ var enabledCategories: [Category] = [
         ScoreItem(content: "단지 내 유모차 이동이 자유롭나요?")
     ], isExpanded: false),
     Category(image: UIImage(named: "indoor-item")!, name: "실내", items: [
-        SelectionItem(content: "시스템 에어컨 / 설치형에어컨 / 기타", options: ["선택안함", "시스템 에어컨", "설치형에어컨", "기타"]),
+        SelectionItem(content: "시스템 에어컨 / 설치형 에어컨 / 기타", options: [
+            OptionItem(image: nil, option: "선택안함"),
+            OptionItem(image: nil, option: "시스템 에어컨"),
+            OptionItem(image: nil, option: "설치형 에어컨"),
+            OptionItem(image: nil, option: "기타")]),
         ScoreItem(content: "냉난방 시스템이 장 작동하나요?"),
         ScoreItem(content: "창문은 이중창인가요?"),
         ScoreItem(content: "복도형 구조 / 거실중앙형 구조 / 기타"),
@@ -215,8 +276,27 @@ var oneRoomCategories: [Category] = [
         CalendarItem(content: "잔금은 언제까지 치뤄야 하나요?", inputDate: Date(), isSelected: false),
     ], isExpanded: false),
     Category(image: UIImage(named: "location-conditions-item")!, name: "입지여건", items: [
-        SelectionItem(content: "여성전용 / 남성전용 / 혼용", options: ["여성전용", "남성전용", "혼용"]),
-        SelectionItem(content: "지하철 노선도를 선택해 주세요.", options: ["선택안함", "1호선", "2호선", "3호선", "4호선", "5호선", "6호선", "7호선", "8호선", "9호선", "수인분당", "경의중앙", "신분당", "공항철도", "경춘선"]),
+        SelectionItem(content: "여성전용 / 남성전용 / 혼용", options: [
+            OptionItem(image: nil, option: "선택안함"),
+            OptionItem(image: nil, option: "여성전용"),
+            OptionItem(image: nil, option: "남성전용"),
+            OptionItem(image: nil, option: "혼용")]),
+        SelectionItem(content: "지하철 노선도를 선택해 주세요.", options: [
+            OptionItem(image: nil, option: "선택안함"),
+            OptionItem(image: UIImage(named: "line1")!, option: "1호선"),
+            OptionItem(image: UIImage(named: "line2")!, option: "2호선"),
+            OptionItem(image: UIImage(named: "line3")!, option: "3호선"),
+            OptionItem(image: UIImage(named: "line4")!, option: "4호선"),
+            OptionItem(image: UIImage(named: "line5")!, option: "5호선"),
+            OptionItem(image: UIImage(named: "line6")!, option: "6호선"),
+            OptionItem(image: UIImage(named: "line7")!, option: "7호선"),
+            OptionItem(image: UIImage(named: "line8")!, option: "8호선"),
+            OptionItem(image: UIImage(named: "line9")!, option: "9호선"),
+            OptionItem(image: UIImage(named: "line3")!, option: "수인분당"),
+            OptionItem(image: UIImage(named: "line3")!, option: "경의중앙"),
+            OptionItem(image: UIImage(named: "line3")!, option: "신분당"),
+            OptionItem(image: UIImage(named: "line3")!, option: "공항철도"),
+            OptionItem(image: UIImage(named: "line3")!, option: "경춘선")]),
         ScoreItem(content: "역으로 도보 5분 이내 접근이 가능한가요?"),
         ScoreItem(content: "버스 주요 노선이 지역 중심부 접근이 용이한가요?"),
         ScoreItem(content: "직장 혹은 학교에 가는 데 무리가 없나요?"),
@@ -245,7 +325,12 @@ var oneRoomCategories: [Category] = [
         ScoreItem(content: "화장실 배수구 냄새가 올라오는 편인가요?"),
         ScoreItem(content: "화장실 내 샤워 공간이 충분한가요?"),
         ScoreItem(content: "화장실 내 곰팡이 흔적 정도는 어떤 편인가요?"),
-        SelectionItem(content: "화구의 종류는 무엇인가요?", options: ["인덕션", "하이라이트", "가스", "기타"]),
+        SelectionItem(content: "화구의 종류는 무엇인가요?", options: [
+            OptionItem(image: nil, option: "선택안함"),
+            OptionItem(image: nil, option: "인덕션"),
+            OptionItem(image: nil, option: "하이라이트"),
+            OptionItem(image: nil, option: "가스"),
+            OptionItem(image: nil, option: "기타")]),
         ScoreItem(content: "기본 옵션 필요없다면 치워줄 수 있나요?"),
         ScoreItem(content: "벽지에 곰팡이 핀 흔적이 있나요?"),
         ScoreItem(content: "콘센트가 적절한 위치에 배치되어 있나요?"),
@@ -256,8 +341,27 @@ var oneRoomCategories: [Category] = [
 
 var enabledOneRoomCategories: [Category] = [
     Category(image: UIImage(named: "location-conditions-item")!, name: "입지여건", items: [
-        SelectionItem(content: "여성전용 / 남성전용 / 혼용", options: ["여성전용", "남성전용", "혼용"]),
-        SelectionItem(content: "지하철 노선도를 선택해 주세요.", options: ["선택안함", "1호선", "2호선", "3호선", "4호선", "5호선", "6호선", "7호선", "8호선", "9호선", "수인분당", "경의중앙", "신분당", "공항철도", "경춘선"]),
+        SelectionItem(content: "여성전용 / 남성전용 / 혼용", options: [
+            OptionItem(image: nil, option: "선택안함"),
+            OptionItem(image: nil, option: "여성전용"),
+            OptionItem(image: nil, option: "남성전용"),
+            OptionItem(image: nil, option: "혼용")]),
+        SelectionItem(content: "지하철 노선도를 선택해 주세요.", options: [
+            OptionItem(image: nil, option: "선택안함"),
+            OptionItem(image: UIImage(named: "line1")!, option: "1호선"),
+            OptionItem(image: UIImage(named: "line2")!, option: "2호선"),
+            OptionItem(image: UIImage(named: "line3")!, option: "3호선"),
+            OptionItem(image: UIImage(named: "line4")!, option: "4호선"),
+            OptionItem(image: UIImage(named: "line5")!, option: "5호선"),
+            OptionItem(image: UIImage(named: "line6")!, option: "6호선"),
+            OptionItem(image: UIImage(named: "line7")!, option: "7호선"),
+            OptionItem(image: UIImage(named: "line8")!, option: "8호선"),
+            OptionItem(image: UIImage(named: "line9")!, option: "9호선"),
+            OptionItem(image: UIImage(named: "line3")!, option: "수인분당"),
+            OptionItem(image: UIImage(named: "line3")!, option: "경의중앙"),
+            OptionItem(image: UIImage(named: "line3")!, option: "신분당"),
+            OptionItem(image: UIImage(named: "line3")!, option: "공항철도"),
+            OptionItem(image: UIImage(named: "line3")!, option: "경춘선")]),
         ScoreItem(content: "역으로 도보 5분 이내 접근이 가능한가요?"),
         ScoreItem(content: "버스 주요 노선이 지역 중심부 접근이 용이한가요?"),
         ScoreItem(content: "직장 혹은 학교에 가는 데 무리가 없나요?"),
@@ -286,7 +390,12 @@ var enabledOneRoomCategories: [Category] = [
         ScoreItem(content: "화장실 배수구 냄새가 올라오는 편인가요?"),
         ScoreItem(content: "화장실 내 샤워 공간이 충분한가요?"),
         ScoreItem(content: "화장실 내 곰팡이 흔적 정도는 어떤 편인가요?"),
-        SelectionItem(content: "화구의 종류는 무엇인가요?", options: ["인덕션", "하이라이트", "가스", "기타"]),
+        SelectionItem(content: "화구의 종류는 무엇인가요?", options: [
+            OptionItem(image: nil, option: "선택안함"),
+            OptionItem(image: nil, option: "인덕션"),
+            OptionItem(image: nil, option: "하이라이트"),
+            OptionItem(image: nil, option: "가스"),
+            OptionItem(image: nil, option: "기타")]),
         ScoreItem(content: "기본 옵션 필요없다면 치워줄 수 있나요?"),
         ScoreItem(content: "벽지에 곰팡이 핀 흔적이 있나요?"),
         ScoreItem(content: "콘센트가 적절한 위치에 배치되어 있나요?"),

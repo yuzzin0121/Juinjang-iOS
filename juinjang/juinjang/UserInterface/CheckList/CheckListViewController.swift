@@ -119,6 +119,9 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource  
             let arrowImage = category.isExpanded ? UIImage(named: "contraction-items") : UIImage(named: "expand-items")
             cell.expandButton.setImage(arrowImage, for: .normal)
             
+            let itemcell = ExpandedDropdownTableViewCell()
+            itemcell.itemTableView.isUserInteractionEnabled = true
+            
             return cell
             
         } else {
@@ -175,7 +178,7 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource  
             } else if let selectionItem = category.items[indexPath.row - 1] as? SelectionItem {
                 // SelectionItem인 경우
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: ExpandedDropdownTableViewCell.identifier, for: indexPath) as? ExpandedDropdownTableViewCell else { return UITableViewCell() }
-                
+
                 cell.contentLabel.text = selectionItem.content
                 cell.options = selectionItem.options
                 cell.selectedOption = selectionItem.selectAnswer

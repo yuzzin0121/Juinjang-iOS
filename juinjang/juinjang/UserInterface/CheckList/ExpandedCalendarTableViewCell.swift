@@ -230,6 +230,7 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
             for calendarItem in calendarItems {
                 print(calendarItem)
             }
+            
             saveSelectedDate()
         }
     }
@@ -297,6 +298,7 @@ extension ExpandedCalendarTableViewCell: FSCalendarDelegate, FSCalendarDataSourc
             // 선택된 날짜를 해당 CalendarItem에 저장
             updateCalendarItem(withContent: contentLabel.text ?? "", selectedDate: selectedDateNoon)
         }
+        selectedDate = date
     }
     
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {

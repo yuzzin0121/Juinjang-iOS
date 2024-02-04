@@ -141,18 +141,18 @@ class ExpandedScoreTableViewCell: UITableViewCell {
                     button.isSelected = false
                     button.setImage(UIImage(named: "checklist-completed-button"), for: .normal)
                     // 버튼이 눌렸을 때 호출되는 메서드
-                    guard let indexPath = indexPath, let delegate = delegate else {
-                        return
-                    }
-
-                    // 버튼의 선택 상태 업데이트
-                    let buttonTag = sender.tag
-
-                    // 선택 상태에 따라 다른 동작 수행
-                    guard let index = cellIndex else {
-                        return
-                    }
-                    delegate.buttonTapped(at: index)
+//                    guard let indexPath = indexPath, let delegate = delegate else {
+//                        return
+//                    }
+//
+//                    // 버튼의 선택 상태 업데이트
+//                    let buttonTag = sender.tag
+//
+//                    // 선택 상태에 따라 다른 동작 수행
+//                    guard let index = cellIndex else {
+//                        return
+//                    }
+//                    delegate.buttonTapped(at: index)
                 }
             }
         } else {
