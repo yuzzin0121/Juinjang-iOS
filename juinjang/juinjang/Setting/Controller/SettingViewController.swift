@@ -51,6 +51,12 @@ class SettingViewController : UIViewController{
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.textColor = UIColor(named: "juinjang")
     }
+    var nicknameSameWarnLabel = UILabel().then {
+        $0.text = "동일한 닉네임이 존재해요"
+        $0.font = UIFont(name: "Pretendard-Medium", size: 12)
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        $0.textColor = UIColor(named: "juinjang")
+    }
     var saveButton = UIButton().then {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.layer.cornerRadius = 10
@@ -216,6 +222,22 @@ class SettingViewController : UIViewController{
                 saveButton.setTitle("저장", for: .normal)
                 saveButton.backgroundColor = UIColor(named: "juinjang")
             }
+        }
+        if nicknameTextField.text == "dodo" {
+            view.addSubview(nicknameWarnImageView)
+            view.addSubview(nicknameSameWarnLabel)
+            nicknameWarnImageView.snp.makeConstraints{
+                $0.top.equalTo(line1.snp.bottom).offset(9)
+                $0.left.equalToSuperview().offset(24)
+                $0.height.equalTo(16)
+            }
+            nicknameSameWarnLabel.snp.makeConstraints{
+                $0.top.equalTo(line1.snp.bottom).offset(9)
+                $0.left.equalTo(nicknameWarnImageView.snp.right).offset(3)
+            }
+        } else {
+            nicknameSameWarnLabel.removeFromSuperview()
+            nicknameWarnImageView.removeFromSuperview()
         }
     }
     
@@ -392,6 +414,7 @@ extension SettingViewController: UITextFieldDelegate {
             }
             return false
         }
+        
         nicknameWarnLabel.removeFromSuperview()
         nicknameWarnImageView.removeFromSuperview()
         return true
