@@ -131,6 +131,7 @@ class RecordingFilesViewController: UIViewController {
     func showDeletePopup(indexPath: IndexPath) {
         let deletePopupVC = DeletePopupViewController()
         deletePopupVC.fileIndexPath = indexPath
+        deletePopupVC.fileName = fileItems[indexPath.row].name
         deletePopupVC.completionHandler = { [weak self] indexPath in
             self?.fileItems.remove(at: indexPath.row)
             self?.recordingFileTableView.deleteRows(at: [indexPath], with: .fade)

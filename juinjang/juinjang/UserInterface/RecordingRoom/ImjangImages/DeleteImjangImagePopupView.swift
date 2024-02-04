@@ -1,15 +1,15 @@
 //
-//  DeletePopupViewController.swift
+//  DeleteImjangImagePopupView.swift
 //  juinjang
 //
-//  Created by 조유진 on 1/17/24.
+//  Created by 조유진 on 2/4/24.
 //
 
 import UIKit
 import Then
 import SnapKit
 
-class DeletePopupViewController: UIViewController {
+class DeleteImjangImagePopupView: UIViewController {
     lazy var popupView = UIView().then { // 팝업창 뷰
         $0.backgroundColor = .white
         $0.layer.cornerRadius = 10
@@ -27,15 +27,14 @@ class DeletePopupViewController: UIViewController {
     }
     
     lazy var messageLabel = UILabel().then {
-        $0.text = "\n녹음 파일을 정말 삭제할까요?"
+        $0.text = "사진을 정말 삭제할까요?\n삭제한 사진은 다시 되돌릴 수 없습니다."
         $0.textColor = UIColor(named: "nomalText")
         $0.numberOfLines = 0
         $0.textAlignment = .center
     }
     
-    var fileIndexPath: IndexPath? = nil
-    var fileName: String? = nil
-    var completionHandler: ((IndexPath) -> (Void))?
+    var selectedCount: Int? = nil
+    var completionHandler: (() -> (Void))?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,13 +57,13 @@ class DeletePopupViewController: UIViewController {
     
     func designViews() {
         designButton(cancelButton, title: "아니요", backgroundColor: UIColor(named: "buttonGray")!)
-        designButton(confirmButton, title: "예", backgroundColor: UIColor(named: "textBlack")!, textColor: .white)
-        if let fileName {
-            messageLabel.text = "\(fileName).mp3\n녹음 파일을 정말 삭제할까요?"
-            messageLabel.font = .pretendard(size: 16, weight: .regular)
+        designButton(confirmButton, title: "삭제하기", backgroundColor: UIColor(named: "textBlack")!, textColor: .white)
+        if let selectedCount {
+            messageLabel.text = "총 \(selectedCount)개의 사진을 정말 삭제할까요?\n삭제한 사진은 다시 되돌릴 수 없습니다."
+            messageLabel.font = .pretendard(size: 16, weight: .medium)
             messageLabel.setLineSpacing(spacing: 4)
+            messageLabel.asColor(targetString: "총 \(selectedCount)개", color: ColorStyle.mainOrange)
             messageLabel.textAlignment = .center
-            messageLabel.changeFont(targetString: "\(fileName).mp3", font: .pretendard(size: 16, weight: .bold))
         } else {
             messageLabel.text = "녹음 파일을 정말 삭제할까요?"
         }
@@ -102,11 +101,11 @@ class DeletePopupViewController: UIViewController {
     }
     
     @objc func confirmAction(_ sender: UIButton) {
-        self.completionHandler?(fileIndexPath!)
+        self.completionHandler?()
         dismiss(animated: false, completion: nil)
     }
     
-    func designButton(_ button: UIButton, title: String = "확인", backgroundColor: UIColor = .white, textColor: UIColor = UIColor(named: "textBlack")!) {
+    func designButton(_ button: UIButton, title: String = "삭제하기", backgroundColor: UIColor = .white, textColor: UIColor = UIColor(named: "textBlack")!) {
         button.setTitle(title, for: .normal)
         button.setTitleColor(textColor, for: .normal)
         
