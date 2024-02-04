@@ -29,8 +29,8 @@ class ImageCollectionViewCell: UICollectionViewCell {
     
     override func draw(_ rect: CGRect) {
         DispatchQueue.main.async {
-            self.imageView.layer.cornerRadius = 5
-            self.imageView.clipsToBounds = true
+            self.contentView.layer.cornerRadius = 5
+            self.contentView.clipsToBounds = true
         }
     }
     

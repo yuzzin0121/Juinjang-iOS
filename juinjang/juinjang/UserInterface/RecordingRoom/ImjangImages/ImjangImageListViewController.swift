@@ -18,6 +18,9 @@ class ImjangImageListViewController: UIViewController {
     
     lazy var imageCollectionView = UICollectionView(frame: .zero, collectionViewLayout: configureCollectionViewFlowLayout())
     var imageList: [String] = ["1", "2", "3"]  // 일단 String 배열
+    
+    var isLongTap: Bool = false
+    var selectedIndexs: Set<Int> = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,10 +66,34 @@ class ImjangImageListViewController: UIViewController {
         }
     }
     
+    @objc func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
+        let location = gesture.location(in: imageCollectionView)
+        
+        switch gesture.state {
+        case .began, .changed:
+            // 위치에 해당하는 셀의 인덱스 패스 찾기
+            guard let indexPath = imageCollectionView.indexPathForItem(at: location) else { return }
+            // 해당 셀을 선택 상태로 변경
+            isLongTap = true
+            selectedIndexs.insert(indexPath.row)
+            imageCollectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
+            // UICollectionViewDelegate 메서드를 수동으로 호출하여 선택을 처리
+            imageCollectionView.delegate?.collectionView?(imageCollectionView, didSelectItemAt: indexPath)
+        case .ended:
+            // 드래그 종료 시 필요한 작업 수행
+            break
+        default:
+            break
+        }
+    }
+    
     func configureCollectionView() {
         imageCollectionView.delegate = self
         imageCollectionView.dataSource = self
         imageCollectionView.register(ImageCollectionViewCell.self, forCellWithReuseIdentifier: ImageCollectionViewCell.identifier)
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
+        imageCollectionView.addGestureRecognizer(panGesture)
+        imageCollectionView.allowsMultipleSelection = true
     }
     
     func configureCollectionViewFlowLayout() -> UICollectionViewFlowLayout {
@@ -88,12 +115,35 @@ class ImjangImageListViewController: UIViewController {
         // UIBarButtonItem 생성 및 이미지 설정
         let backButtonItem = UIBarButtonItem(image: ImageStyle.arrowLeft, style: .plain, target: self, action: #selector(popView))
        
+        let deleteImageButtonItem = UIBarButtonItem(image: ImageStyle.trash, style: .plain, target: self, action: #selector(deleteImages))
         let addButtonItem = UIBarButtonItem(image: ImageStyle.add, style: .plain, target: self, action: #selector(addImage))
         addButtonItem.tintColor = ColorStyle.darkGray
 
         // 네비게이션 아이템에 백 버튼 아이템 설정
         self.navigationItem.leftBarButtonItem = backButtonItem
-        self.navigationItem.rightBarButtonItem = addButtonItem
+        self.navigationItem.rightBarButtonItems = [addButtonItem, deleteImageButtonItem]
+    }
+    
+    @objc func deleteImages() {
+        // 선택된 인덱스에 해당하는 요소를 배열에서 삭제
+        if selectedIndexs.isEmpty {
+            return
+        }
+        
+        print("우잉")
+        let deletePopupVC = DeleteImjangImagePopupView()
+        deletePopupVC.selectedCount = selectedIndexs.count
+        deletePopupVC.modalPresentationStyle = .overFullScreen
+        deletePopupVC.completionHandler = {
+            self.selectedIndexs.sorted(by: >)
+            for index in self.selectedIndexs {
+                if index < self.imageList.count {
+                    self.imageList.remove(at: index)
+                }
+            }
+            self.imageCollectionView.reloadData()
+        }
+        present(deletePopupVC, animated: false)
     }
     
     func configureHierarchy() {
@@ -128,7 +178,6 @@ class ImjangImageListViewController: UIViewController {
         noImageMessageLabel.snp.makeConstraints {
             $0.height.equalTo(52)
         }
-        
     }
     
     func configureView() {
@@ -140,6 +189,14 @@ class ImjangImageListViewController: UIViewController {
                                    numberOfLines: 2)
         noImageMessageLabel.setLineSpacing(spacing: 4)
         noImageMessageLabel.textAlignment = .center
+    }
+    
+    func showEnlargePhotoVC(index: Int, photoList: [String]) {
+        let enlargePhotoVC = EnlargePhotoViewController()
+        enlargePhotoVC.currentIndex = index
+        enlargePhotoVC.photoList = photoList
+        enlargePhotoVC.modalPresentationStyle = .overFullScreen
+        present(enlargePhotoVC, animated: false)
     }
     
     // imagePicker로 화면 전환
@@ -168,15 +225,26 @@ extension ImjangImageListViewController: UICollectionViewDelegate, UICollectionV
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let index = indexPath.row
-        showEnlargePhotoVC(index: index, photoList: imageList)
+        if isLongTap {
+            guard let cell = collectionView.cellForItem(at: indexPath) else { return }
+            cell.contentView.layer.borderWidth = 3
+            cell.contentView.layer.borderColor = ColorStyle.mainStrokeOrange?.cgColor
+            isLongTap = false
+        } else {
+            showEnlargePhotoVC(index: index, photoList: imageList)
+        }
     }
     
-    func showEnlargePhotoVC(index: Int, photoList: [String]) {
-        let enlargePhotoVC = EnlargePhotoViewController()
-        enlargePhotoVC.currentIndex = index
-        enlargePhotoVC.photoList = photoList
-        enlargePhotoVC.modalPresentationStyle = .overFullScreen
-        present(enlargePhotoVC, animated: false)
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        guard let cell = collectionView.cellForItem(at: indexPath) else { return }
+        // 선택 해제된 셀의 시각적 강조 해제, 예를 들면 배경색을 원래대로
+        cell.contentView.layer.borderWidth = 0
+        selectedIndexs.sorted(by: >)
+        for index in selectedIndexs {
+            if index < imageList.count {
+                imageList.remove(at: index)
+            }
+        }
     }
 }
 

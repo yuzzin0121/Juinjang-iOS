@@ -36,4 +36,12 @@ extension UILabel {
         attributedString.addAttribute(.foregroundColor, value: color as Any, range: range)
         attributedText = attributedString
     }
+    
+    func changeFont(targetString: String, font: UIFont) {
+        guard let text = self.text else { return }
+        let attributedString = NSMutableAttributedString(string: text)
+        attributedString.addAttribute(.font, value: font, range: (text as NSString).range(of: targetString))
+                                      
+        self.attributedText = attributedString
+    }
 }
