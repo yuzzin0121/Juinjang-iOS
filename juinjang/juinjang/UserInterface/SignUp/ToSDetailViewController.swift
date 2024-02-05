@@ -11,6 +11,10 @@ import SnapKit
 
 class ToSDetailViewController: UIViewController {
     
+    var toSItem: ToSItem?
+    var indexPath: IndexPath?
+    var tag: Int? // 몇번째 셀인지 확인하기 위한 tag
+    
     let scrollView = UIScrollView().then {
         $0.backgroundColor = UIColor(named: "gray0")
         $0.layer.cornerRadius = 10
@@ -111,7 +115,8 @@ class ToSDetailViewController: UIViewController {
     }
     
     @objc func buttonTapped(_ sender: UIButton) {
-        // -TODO: itemtableView의 checkButton 체크 상태로 변경시키기
+        NotificationCenter.default.post(name: NSNotification.Name("UpdateCell"), object: tag)
+        NotificationCenter.default.post(name: NSNotification.Name("CheckButtonChecked"), object: nil)
         navigationController?.popViewController(animated: true)
     }
 }

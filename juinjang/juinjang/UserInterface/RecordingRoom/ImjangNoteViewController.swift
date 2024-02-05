@@ -121,6 +121,7 @@ class ImjangNoteViewController: UIViewController {
         setConstraints()
         upButton.addTarget(self, action: #selector(upToTop), for: .touchUpInside)
         setReportStackViewClick()
+        setImageStackViewClick()
         NotificationCenter.default.addObserver(self, selector: #selector(didStoppedChildScroll), name: NSNotification.Name("didStoppedChildScroll"), object: nil)
         recordingSegmentedVC.imjangNoteViewController = self
     }
@@ -132,8 +133,29 @@ class ImjangNoteViewController: UIViewController {
     }
     
     @objc func showReportVC() {
-        let ReportVC = ReportViewController()
-        navigationController?.pushViewController(ReportVC, animated: true)
+        // 현재 ViewController를 검사해서 미입력 상태라면
+        if let currentVC = recordingSegmentedVC.currentViewController,
+           currentVC.isKind(of: NotEnteredCheckListViewController.self) {
+            // 팝업창이 뜸
+            let reportPopupVC = ReportPopupViewController()
+            reportPopupVC.modalPresentationStyle = .overCurrentContext
+            present(reportPopupVC, animated: false, completion: nil)
+        } else {
+            // 아니라면 ReportViewController로 이동
+            let reportVC = ReportViewController()
+            navigationController?.pushViewController(reportVC, animated: true)
+        }
+    }
+    
+    func setImageStackViewClick() {
+        stackView.isUserInteractionEnabled = true
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(showImjangImageListVC))
+        stackView.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc func showImjangImageListVC() {
+        let imjangImageListVC = ImjangImageListViewController()
+        navigationController?.pushViewController(imjangImageListVC, animated: true)
     }
     
     @objc func didStoppedChildScroll() {
@@ -263,9 +285,6 @@ class ImjangNoteViewController: UIViewController {
                      distribution: .fill,
                      spacing: 12,
                      isImageRight: false)
-//                    textColor: UIColor(named:"textGray")!)
-        
-
         
         // 리포트 보기 레이블
         designLabel(showReportLabel, text: "리포트 보기",
@@ -580,11 +599,13 @@ class ImjangNoteViewController: UIViewController {
         sender.isSelected.toggle()
         if sender.isSelected {
             editButton.setImage(UIImage(named: "completed-button"), for: .normal)
+            NotificationCenter.default.post(name: NSNotification.Name("EditButtonToggled"), object: sender.isSelected)
         } else {
             editButton.setImage(UIImage(named: "edit-button"), for: .normal)
+            NotificationCenter.default.post(name: NSNotification.Name("EditButtonToggled"), object: sender.isSelected)
+            let reportVC = ReportViewController()
+            self.navigationController?.pushViewController(reportVC, animated: true)
         }
-        // -TODO: 체크리스트 수정 상태 진입
-        
     }
 }
 

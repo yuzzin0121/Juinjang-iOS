@@ -14,6 +14,7 @@ struct ImjangNote {
     let score: Double?
     let location: String
     var isBookmarked: Bool
+    var isSelected : Bool = false
 //    let Date: String
 }
 

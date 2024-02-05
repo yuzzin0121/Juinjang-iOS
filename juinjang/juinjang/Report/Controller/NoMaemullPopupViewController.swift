@@ -14,8 +14,7 @@ class NoMaemullPopupViewController: UIViewController {
     @objc
     func btnTap(_ sender: UIButton) {
         let vc = SelectMaemullViewController()
-        vc.modalPresentationStyle = .overFullScreen
-        self.present(vc, animated: false)
+        self.navigationController?.pushViewController(vc, animated: true)
     }
   
     init(ment: String) {

@@ -18,7 +18,8 @@ class ReportImjangListTableViewCell: UITableViewCell {
     let scoreLabel = UILabel()
     let starStackView = UIStackView()
     let addressLabel = UILabel()
-
+    var isSelect: Bool = false
+   
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         

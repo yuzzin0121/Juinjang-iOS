@@ -105,7 +105,7 @@ class ImjangListViewController: UIViewController {
                 self.callRequestFiltered(sort: filter.title)
             }))
         }
-        filterselectBtn.menu = UIMenu(options: .displayAsPalette, children: menuChildren)
+        filterselectBtn.menu = UIMenu(options: .displayAsPalette, preferredElementSize: .small ,children: menuChildren)
         
         filterselectBtn.showsMenuAsPrimaryAction = true
     }

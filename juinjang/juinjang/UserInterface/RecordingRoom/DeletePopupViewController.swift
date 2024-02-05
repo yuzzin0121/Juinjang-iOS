@@ -27,25 +27,24 @@ class DeletePopupViewController: UIViewController {
     }
     
     lazy var messageLabel = UILabel().then {
-        $0.text = "메인화면으로 돌아갈까요?\n입력한 정보는 저장되지 않습니다."
+        $0.text = "\n녹음 파일을 정말 삭제할까요?"
         $0.textColor = UIColor(named: "nomalText")
-        $0.font = .pretendard(size: 18, weight: .medium)
         $0.numberOfLines = 0
         $0.textAlignment = .center
     }
     
     var fileIndexPath: IndexPath? = nil
+    var fileName: String? = nil
     var completionHandler: ((IndexPath) -> (Void))?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.black.withAlphaComponent(0.7) // 흐리게 만듦
         addSubview()
-        designViews()
         setConstraints()
+        designViews()
         cancelButton.addTarget(self, action: #selector(cancelAction(_:)), for: .touchUpInside)
         confirmButton.addTarget(self, action: #selector(confirmAction(_:)), for: .touchUpInside)
-        print(fileIndexPath)
     }
     
     func addSubview() {
@@ -60,6 +59,15 @@ class DeletePopupViewController: UIViewController {
     func designViews() {
         designButton(cancelButton, title: "아니요", backgroundColor: UIColor(named: "buttonGray")!)
         designButton(confirmButton, title: "예", backgroundColor: UIColor(named: "textBlack")!, textColor: .white)
+        if let fileName {
+            messageLabel.text = "\(fileName).mp3\n녹음 파일을 정말 삭제할까요?"
+            messageLabel.font = .pretendard(size: 16, weight: .regular)
+            messageLabel.setLineSpacing(spacing: 4)
+            messageLabel.textAlignment = .center
+            messageLabel.changeFont(targetString: "\(fileName).mp3", font: .pretendard(size: 16, weight: .bold))
+        } else {
+            messageLabel.text = "녹음 파일을 정말 삭제할까요?"
+        }
     }
     
     func setConstraints() {
@@ -74,12 +82,6 @@ class DeletePopupViewController: UIViewController {
             $0.trailing.equalTo(view.snp.trailing).offset(-24)
             $0.height.equalTo(popupView.snp.width).multipliedBy(234.0 / 342.0)
         }
-//        NSLayoutConstraint.activate([
-//            popupView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-//            popupView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-//            popupView.widthAnchor.constraint(equalToConstant: 342),
-//            popupView.heightAnchor.constraint(equalToConstant: 234)
-//        ])
         
         messageLabel.snp.makeConstraints {
             $0.centerX.equalTo(popupView)
@@ -93,28 +95,6 @@ class DeletePopupViewController: UIViewController {
             $0.bottom.equalTo(popupView.snp.bottom).offset(-13)
             $0.height.equalTo(52)
         }
-        
-
-//        NSLayoutConstraint.activate([
-//            messageLabel.centerXAnchor.constraint(equalTo: popupView.centerXAnchor),
-//            messageLabel.topAnchor.constraint(equalTo: popupView.topAnchor, constant: 65)
-//        ])
-        
-        // "아니요" 버튼 위치 설정
-//        NSLayoutConstraint.activate([
-//            cancelButton.centerXAnchor.constraint(equalTo: popupView.centerXAnchor, constant: -81),
-//            cancelButton.topAnchor.constraint(equalTo: popupView.topAnchor, constant: 169),
-//            cancelButton.leadingAnchor.constraint(equalTo: popupView.leadingAnchor, constant: 12),
-//            cancelButton.bottomAnchor.constraint(equalTo: popupView.bottomAnchor, constant: -13)
-//        ])
-//        
-//        // "예" 버튼 위치 설정
-//        NSLayoutConstraint.activate([
-//            confirmButton.centerXAnchor.constraint(equalTo: popupView.centerXAnchor, constant: 81.5),
-//            confirmButton.topAnchor.constraint(equalTo: popupView.topAnchor, constant: 169),
-//            confirmButton.leadingAnchor.constraint(equalTo: cancelButton.trailingAnchor, constant: 7),
-//            confirmButton.bottomAnchor.constraint(equalTo: popupView.bottomAnchor, constant: -13)
-//        ])
     }
     
     @objc func cancelAction(_ sender: UIButton) {
@@ -122,27 +102,8 @@ class DeletePopupViewController: UIViewController {
     }
     
     @objc func confirmAction(_ sender: UIButton) {
-        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-              let window = windowScene.windows.first else {
-            // window가 nil인 상태 혹은 not found
-            return
-        }
-//        guard let navigationController = window.rootViewController as? UINavigationController else {
-//            // 네비게이션 컨트롤러가 nil인 상태 혹은 not found
-//            return
-//        }
-//        
-//        navigationController.popToRootViewController(animated: true)
         self.completionHandler?(fileIndexPath!)
         dismiss(animated: false, completion: nil)
-
-        
-        // 현재 나타난 팝업창을 찾아서 닫기
-//        if let presentedViewController = navigationController.presentedViewController {
-//            guard let fileIndexPath = fileIndexPath else { return }
-//            self.completionHandler?(fileIndexPath)
-//            presentedViewController.dismiss(animated: false, completion: nil)
-//        }
     }
     
     func designButton(_ button: UIButton, title: String = "확인", backgroundColor: UIColor = .white, textColor: UIColor = UIColor(named: "textBlack")!) {

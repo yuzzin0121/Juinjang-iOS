@@ -10,7 +10,6 @@ import UIKit
 class ToSItemTableViewCell: UITableViewCell {
     
     var toSItem: ToSItem?
-    
     var indexPath: IndexPath?
     
     lazy var checkButton = UIButton().then {
@@ -73,14 +72,16 @@ class ToSItemTableViewCell: UITableViewCell {
     }
     
     @objc func checkButtonPressed(_ sender: UIButton) {
-        checkButton.isSelected = !checkButton.isSelected
-        if checkButton.isSelected {
+        sender.isSelected = !sender.isSelected
+        if sender.isSelected {
             print("선택")
-            checkButton.setImage(UIImage(named: "record-check-on"), for: .normal)
+            sender.setImage(UIImage(named: "record-check-on"), for: .normal)
         } else {
             print("선택 해제")
-            checkButton.setImage(UIImage(named: "record-check-off"), for: .normal)
+            sender.setImage(UIImage(named: "record-check-off"), for: .normal)
+            NotificationCenter.default.post(name: NSNotification.Name("CheckButtonUnchecked"), object: nil)
         }
+        NotificationCenter.default.post(name: NSNotification.Name("CheckButtonChecked"), object: nil)
     }
     
     @objc func openContentButtonPressed(_ sender: UIButton) {
@@ -90,6 +91,7 @@ class ToSItemTableViewCell: UITableViewCell {
         let tosDetailVC = ToSDetailViewController()
         if let parentVC = parentViewController {
             parentVC.navigationController?.pushViewController(tosDetailVC, animated: true)
+            tosDetailVC.tag = sender.tag
             tosDetailVC.contentLabel.text = selectedDetail.contentLabel
             tosDetailVC.contentDetailLabel.text = selectedDetail.contentDetailLabel
         }
@@ -106,10 +108,25 @@ class ToSItemTableViewCell: UITableViewCell {
         return nil
     }
     
-    func configure(with item: ToSItem, isChecked: Bool) {
+    func configure(with item: ToSItem?, isChecked: Bool) {
+        // item이 nil인지 확인하고, nil이면 함수 종료
+        guard let toSItem = item else {
+            return
+        }
+
+        let cleanedContent = toSItem.content.replacingOccurrences(of: "\\", with: "")
+        let attributedString = NSMutableAttributedString(string: cleanedContent)
+
+        if let range = cleanedContent.range(of: "(필수)") {
+            attributedString.addAttribute(.foregroundColor, value: UIColor(named: "mainOrange")!, range: NSRange(range, in: cleanedContent))
+        } else if let range = cleanedContent.range(of: "(선택)") {
+            attributedString.addAttribute(.foregroundColor, value: UIColor(named: "textGray")!, range: NSRange(range, in: cleanedContent))
+        }
+
+        checkButton.setAttributedTitle(attributedString, for: .normal)
         checkButton.isSelected = isChecked
         let imageName = isChecked ? "record-check-on" : "record-check-off"
         checkButton.setImage(UIImage(named: imageName), for: .normal)
-        openContentButton.tag = item.tag
+        openContentButton.tag = toSItem.tag
     }
 }

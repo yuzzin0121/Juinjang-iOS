@@ -9,33 +9,17 @@ import UIKit
 import Then
 import SnapKit
 
-
-
 import Tabman
 import Pageboy
 
+import KakaoSDKAuth
+import KakaoSDKCommon
+import KakaoSDKShare
+import SafariServices
+
 class ReportViewController : UIViewController {
-    //MARK: - 상단
-    var backButton = UIButton().then {
-        $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.setImage(UIImage(named:"leftArrow"), for: .normal)
-        $0.addTarget(self, action: #selector(backBtnTap), for: .touchUpInside)
-    }
-    @objc
-    func backBtnTap() {
-        let vc = MainViewController()
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
-    var reportLabel = UILabel().then {
-        $0.text = "주인장 리포트"
-        $0.font = UIFont(name: "Pretendard-SemiBold", size: 16)
-        $0.translatesAutoresizingMaskIntoConstraints = false
-    }
-    var shareButton = UIButton().then {
-        $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.setImage(UIImage(named:"share"), for: .normal)
-    }
-    
+    let templateId = 103560
+    var safariViewController : SFSafariViewController?
     //MARK: - 총 평점 멘트, 가격, 주소
     var totalGradeLabel = UILabel().then {
         $0.textColor = UIColor(named: "600")
@@ -75,23 +59,8 @@ class ReportViewController : UIViewController {
     let tabViewController = TabViewController()
     
     func setConstraint() {
-        backButton.snp.makeConstraints{
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(13.16)
-            $0.left.equalToSuperview().inset(24)
-            $0.width.height.equalTo(22)
-        }
-        reportLabel.snp.makeConstraints{
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(12.16)
-            $0.centerX.equalToSuperview()
-        }
-        shareButton.snp.makeConstraints{
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(13.16)
-            $0.right.equalToSuperview().inset(24)
-            $0.width.height.equalTo(22)
-        }
-        
         totalGradeLabel.snp.makeConstraints{
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(74.16)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(28)
             $0.left.equalToSuperview().offset(24)
         }
         priceLabel.snp.makeConstraints{
@@ -109,12 +78,62 @@ class ReportViewController : UIViewController {
         }
     }
     
+    func designNavigationBar() {
+        self.navigationController?.navigationBar.tintColor = .black
+        navigationItem.title = "주인장 리포트"
+        
+        //let shareButtonItem = UIBarButtonItem(image: UIImage(named: "share"), style: .plain, target: self, action: #selector(shareBtnTap))
+        let backButtonItem = UIBarButtonItem(image: UIImage(named:"leftArrow"), style: .plain, target: self, action: #selector(backBtnTap))
+        backButtonItem.tintColor = UIColor(named: "300")
+        backButtonItem.imageInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
+        
+        // 네비게이션 아이템에 백 버튼 아이템 설정
+        //self.navigationItem.hidesBackButton = true
+        self.navigationItem.leftBarButtonItem = backButtonItem
+        //self.navigationItem.rightBarButtonItem = shareButtonItem
+    }
+    func changeItem() {
+        self.navigationItem.rightBarButtonItem = .none
+    }
+    @objc func backBtnTap() {
+        let vc = ImjangNoteViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    @objc func shareBtnTap() {
+        if ShareApi.isKakaoTalkSharingAvailable() {
+            // 카카오톡으로 카카오톡 공유 가능
+            ShareApi.shared.shareCustom(templateId: Int64(templateId), templateArgs:["title":"제목입니다.", "description":"설명입니다."]) {(sharingResult, error) in
+                if let error = error {
+                    print(error)
+                }
+                else {
+                    print("shareCustom() success.")
+                    if let sharingResult = sharingResult {
+                        UIApplication.shared.open(sharingResult.url, options: [:], completionHandler: nil)
+                    }
+                }
+            }
+        }
+        else {
+            // 카카오톡 미설치: 웹 공유 사용 권장
+            // Custom WebView 또는 디폴트 브라우져 사용 가능
+            // 웹 공유 예시 코드
+            if let url = ShareApi.shared.makeCustomUrl(templateId: Int64(templateId), templateArgs:["title":"제목입니다.", "description":"설명입니다."]) {
+                self.safariViewController = SFSafariViewController(url: url)
+                self.safariViewController?.modalTransitionStyle = .crossDissolve
+                self.safariViewController?.modalPresentationStyle = .overCurrentContext
+                self.present(self.safariViewController!, animated: true) {
+                    print("웹 present success")
+                }
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        designNavigationBar()
+        
         view.backgroundColor = .white
-        view.addSubview(backButton)
-        view.addSubview(reportLabel)
-        view.addSubview(shareButton)
         
         view.addSubview(totalGradeLabel)
         view.addSubview(priceLabel)
