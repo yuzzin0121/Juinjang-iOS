@@ -81,7 +81,6 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
         self.selectionStyle = .none
         itemPickerView.delegate = self
         itemPickerView.dataSource = self
-//        itemPickerView.register(CellClass.self, forCellReuseIdentifier: "Cell")
         [questionImage, contentLabel, itemButton].forEach { contentView.addSubview($0) }
         setupLayout()
     }
@@ -246,11 +245,11 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
         pickerView.subviews[1].backgroundColor = .clear // 선택된 항목 회색 바탕으로 표시되지 않게 함
 
         var label: UILabel
-        if let reusedLabel = view as? UILabel {
-            label = reusedLabel
-        } else {
-            label = UILabel()
-        }
+            if let reusedLabel = view as? UILabel {
+                label = reusedLabel
+            } else {
+                label = UILabel()
+            }
 
         let option = options[row]
         label.font = UIFont.pretendard(size: fontSize, weight: .regular)
@@ -258,9 +257,14 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
         label.textAlignment = .left
 
         if let image = option.image {
-            // Add image to label
+            // 이미지가 있으면 이미지와 텍스트 같이 표시
             let imageAttachment = NSTextAttachment()
             imageAttachment.image = image
+
+            // 이미지의 bounds를 설정하여 위치 조정
+            let yOffset = (label.font.capHeight - image.size.height) / 2
+            imageAttachment.bounds = CGRect(x: 0, y: yOffset, width: image.size.width, height: image.size.height)
+
             let imageString = NSAttributedString(attachment: imageAttachment)
 
             let mutableAttributedString = NSMutableAttributedString()
@@ -269,12 +273,11 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
 
             label.attributedText = mutableAttributedString
         } else {
-            // 이미지가 없을 경우 왼쪽 padding 설정
-            label.text = " " + option.option
+            // 이미지가 없으면 텍스트만 표시하고 왼쪽 패딩 적용
+            label.text = option.option
             label.frame.origin.x = leftPadding
         }
-        
-        return label
+         return label
     }
     
     func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {

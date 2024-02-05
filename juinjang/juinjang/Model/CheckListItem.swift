@@ -113,7 +113,7 @@ var categories: [Category] = [
         SelectionItem(content: "건물뷰를 골라주세요.", options: [
             OptionItem(image: nil, option: "선택안함"),
             OptionItem(image: nil, option: "강"),
-            OptionItem(image: nil, option: "기타"),
+            OptionItem(image: nil, option: "공원"),
             OptionItem(image: nil, option: "아파트 단지")]),
         SelectionItem(content: "동향/서향/남향/북향", options: [
             OptionItem(image: nil, option: "선택안함"),
