@@ -6,15 +6,16 @@
 //
 
 import UIKit
-
-import UIKit
 import SnapKit
+
+protocol TextFieldDelegate: AnyObject {
+    func didEnterText(_ text: String)
+}
 
 class ExpandedTextFieldTableViewCell: UITableViewCell {
     
-    static let id = "ExpandedTextFieldTableViewCell"
-    
     var inputAnswer: String?
+    weak var delegate: TextFieldDelegate?
     
     lazy var questionImage = UIImageView().then {
         $0.contentMode = .scaleAspectFit
@@ -81,8 +82,6 @@ class ExpandedTextFieldTableViewCell: UITableViewCell {
             $0.top.equalTo(contentLabel.snp.bottom).offset(12)
             $0.leading.equalToSuperview().offset(24)
             $0.trailing.equalToSuperview().offset(-24)
-//            $0.bottom.equalToSuperview().offset(-16)
-            $0.width.equalTo(342)
             $0.height.equalTo(31)
         }
     }
@@ -121,6 +120,8 @@ extension ExpandedTextFieldTableViewCell: UITextFieldDelegate {
             // 입력된 텍스트에 따라 동적으로 너비 조절
             let calculatedWidth = calculateTextFieldWidth(for: text, maxCharacterCount: 20)
             let leftPadding = (342 - calculatedWidth) / 2
+            
+            delegate?.didEnterText(textField.text ?? "")
 
             // 텍스트 필드의 너비 및 위치 업데이트
             updateTextFieldWidthConstraint(for: textField, constant: calculatedWidth, shouldRemoveLeadingConstraint: true)
@@ -165,6 +166,4 @@ extension ExpandedTextFieldTableViewCell: UITextFieldDelegate {
             }
         }
     }
-    
-    
 }

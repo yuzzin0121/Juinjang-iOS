@@ -9,13 +9,27 @@ import UIKit
 import SnapKit
 import FSCalendar
 
+protocol DatePickerDelegate: AnyObject {
+    func didSelectDate(_ date: Date)
+}
+
 class ExpandedCalendarTableViewCell: UITableViewCell {
     
-    var calendarItem: CalendarItem?
+    var calendarItems: [CalendarItem] = []
+    weak var delegate: DatePickerDelegate?
+    var isExpanded: Bool = false
     
-    var selectedDate: Date? {
-        didSet {
-            // 선택된 날짜가 변경될 때마다 호출되는 메서드
+    var selectedDate: Date?
+    
+    func setExpanded(_ expanded: Bool) {
+        isExpanded = expanded
+
+        // 확장되거나 접혔을 때 선택된 날짜를 저장하거나 불러오기
+        if isExpanded {
+            // 저장된 날짜가 있으면 불러오기, 없으면 현재 선택된 날짜 저장
+            selectedDate = selectedDate ?? loadSelectedDate() ?? Date()
+        } else {
+            // 접혔을 때 선택된 날짜 저장
             saveSelectedDate()
         }
     }
@@ -33,8 +47,6 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
     // 달력
     lazy var calendar = FSCalendar()
     
-    var calendarItems: [Item] = []
-    
     let today = Date()
     private var calendarCurrent: Calendar = Calendar.current
     private var currentPage: Date?
@@ -51,7 +63,7 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
         $0.setImage(UIImage(named: "move-to-next-button"), for: .normal)
         $0.addTarget(self, action: #selector(moveToNext(_:)), for: .touchUpInside)
     }
-
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.selectionStyle = .none
@@ -71,10 +83,14 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
     }
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         // Configure the view for the selected state
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
     }
     
     func setupLayout() {
@@ -115,10 +131,10 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
     }
     
     func calendarStyle() {
-
+        
         // 언어를 한국어로 변경
         calendar.locale = Locale(identifier: "ko_KR")
-            
+        
         // 상단 헤더 뷰
         calendar.headerHeight = 66 // YYYY년 M월 표시부 영역 높이
         calendar.weekdayHeight = 41 // 날짜 표시부 행의 높이
@@ -126,7 +142,7 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
         calendar.appearance.headerDateFormat = "YYYY.MM" // 헤더 표시 형식
         calendar.appearance.headerTitleColor = .black // 헤더 색
         calendar.calendarWeekdayView.weekdayLabels.first?.textColor = UIColor(named: "mainOrange")
-
+        
         
         // 날짜 부분
         calendar.backgroundColor = .white // 배경색
@@ -135,15 +151,15 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
         calendar.appearance.titleSelectionColor = UIColor(named: "mainOrange") // 선택되었을 때 텍스트 색
         calendar.appearance.titleWeekendColor = .black // 주말 날짜 색
         calendar.appearance.titleDefaultColor = .black // 기본 날짜 색
-            
+        
         // 오늘 날짜
         calendar.appearance.titleTodayColor = .black // Today에 표시되는 특정 글자색
         calendar.appearance.todayColor = .clear // Today에 표시되는 선택 전 동그라미 색
         calendar.appearance.todaySelectionColor = .none  // Today에 표시되는 선택 후 동그라미 색
-
+        
         // Month 폰트
         calendar.appearance.headerTitleFont = .pretendard(size: 18, weight: .bold)
-            
+        
         // day 폰트
         calendar.appearance.titleFont = .pretendard(size: 14, weight: .medium)
         
@@ -151,14 +167,14 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
         calendar.layer.cornerRadius = 9.97
     }
     
-
+    
     // 달력 페이지 이동
     @objc func moveToNext(_ sender: UIButton) {
         self.moveCurrentPage(moveUp: true)
         
         // 선택되지 않은 날짜의 테두리를 초기화
         let nonSelectedCells = calendar.visibleCells().compactMap { $0 as? FSCalendarCell }
-
+        
         for nonSelectedCell in nonSelectedCells {
             nonSelectedCell.layer.borderWidth = 0.0
         }
@@ -172,7 +188,7 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
         
         // 선택되지 않은 날짜의 테두리를 초기화
         let nonSelectedCells = calendar.visibleCells().compactMap { $0 as? FSCalendarCell }
-
+        
         for nonSelectedCell in nonSelectedCells {
             nonSelectedCell.layer.borderWidth = 0.0
         }
@@ -187,8 +203,36 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
         calendar.setCurrentPage(currentPage!, animated: true)
     }
     
-    private func saveSelectedDate() {
-        // 선택된 날짜를 입력값으로 추가
+    func saveSelectedDate() {
+        // 선택된 날짜를 UserDefaults에 저장
+        if let selectedDate = selectedDate {
+            UserDefaults.standard.set(selectedDate, forKey: "SelectedDateKey")
+        } else {
+            // 선택된 날짜가 nil인 경우 UserDefaults에서 해당 키의 값을 제거
+            UserDefaults.standard.removeObject(forKey: "SelectedDateKey")
+        }
+    }
+    
+    func loadSelectedDate() -> Date? {
+        return UserDefaults.standard.value(forKey: "SelectedDateKey") as? Date
+    }
+    
+    // 선택된 날짜 업데이트 함수
+    private func updateCalendarItem(withContent content: String, selectedDate: Date) {
+        print(selectedDate)
+        // 찾으려는 content와 일치하는 CalendarItem을 찾음
+        if let index = calendarItems.firstIndex(where: { $0.content == content }) {
+            // 찾은 CalendarItem의 inputDate를 새로 선택된 날짜로 변경
+            calendarItems[index].inputDate = selectedDate
+            calendarItems[index].isSelected = true
+            
+            // calendarItem 확인
+            for calendarItem in calendarItems {
+                print(calendarItem)
+            }
+            
+            saveSelectedDate()
+        }
     }
 }
 
@@ -210,10 +254,6 @@ extension ExpandedCalendarTableViewCell: FSCalendarDelegate, FSCalendarDataSourc
                 backgroundColor = .white
                 questionImage.image = UIImage(named: "question-image")
             }
-            
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy년 MM월 dd일"
-            print("Date deselected: \(dateFormatter.string(from: date))")
             
             return
         }
@@ -244,25 +284,31 @@ extension ExpandedCalendarTableViewCell: FSCalendarDelegate, FSCalendarDataSourc
             selectedCell.layer.borderColor = UIColor(named: "mainOrange")?.cgColor
         }
         
-        
-        // 선택된 날짜를 해당 CalendarItem에 저장
-        calendarItem?.inputDate = date
-        
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy년 MM월 dd일"
         print("Selected Date: \(dateFormatter.string(from: date))")
-        // 현재 선택된 날짜 업데이트
+
+        // 선택된 날짜의 시간 성분을 12:00 PM으로 설정 (UTC로 변환)
+        if let selectedDateNoon = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: date)?.addingTimeInterval(TimeInterval(NSTimeZone.system.secondsFromGMT())) {
+            print("Selected Date (after adjustment): \(selectedDateNoon)")
+            
+            // 현재 선택된 날짜 업데이트
+            selectedDate = selectedDateNoon
+            
+            // 선택된 날짜를 해당 CalendarItem에 저장
+            updateCalendarItem(withContent: contentLabel.text ?? "", selectedDate: selectedDateNoon)
+        }
         selectedDate = date
     }
     
-//    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
-//        let calendar = Calendar.current
-//        let dayOfWeek = calendar.component(.weekday, from: date)
-//        
-//        if dayOfWeek == 1 { // 일요일
-//            return .red
-//        } else {
-//            return nil // 다른 날짜의 경우 기본값으로 설정
-//        }
-//    }
+    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
+        let calendar = Calendar.current
+        let dayOfWeek = calendar.component(.weekday, from: date)
+        
+        if dayOfWeek == 1 { // 일요일
+            return .red
+        } else {
+            return nil // 다른 날짜의 경우 기본값으로 설정
+        }
+    }
 }

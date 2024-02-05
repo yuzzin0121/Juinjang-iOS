@@ -28,6 +28,15 @@
       }
     },
     {
+      "identity" : "iosdropdown",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/jriosdev/iOSDropDown",
+      "state" : {
+        "revision" : "945c4f1945ed37a31055e812a5ee11a3d06e88ab",
+        "version" : "0.4.0"
+      }
+    },
+    {
       "identity" : "iqkeyboardmanager",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/hackiftekhar/IQKeyboardManager",
@@ -70,15 +79,6 @@
       "state" : {
         "revision" : "e74fe2a978d1216c3602b129447c7301573cc2d8",
         "version" : "5.7.0"
-      }
-    },
-    {
-      "identity" : "swiftymenu",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/KarimEbrahemAbdelaziz/SwiftyMenu",
-      "state" : {
-        "revision" : "fe77ef6c6cf93809f5c1bc680c807cb664e571d0",
-        "version" : "1.0.1"
       }
     },
     {

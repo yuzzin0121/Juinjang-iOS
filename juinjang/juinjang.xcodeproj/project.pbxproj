@@ -42,6 +42,7 @@
 		0A73E60D2B5855CD00EF1C89 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A73E60C2B5855CD00EF1C89 /* UserInfo.swift */; };
 		0A7AC0EF2B640CA80032C9DF /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 0A7AC0EE2B640CA80032C9DF /* Alamofire */; };
 		0A7AC0F12B6412760032C9DF /* KakaoZipCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7AC0F02B6412760032C9DF /* KakaoZipCodeViewController.swift */; };
+		0A94FCD22B6EB47F00F0E2AF /* iOSDropDown in Frameworks */ = {isa = PBXBuildFile; productRef = 0A94FCD12B6EB47F00F0E2AF /* iOSDropDown */; };
 		0A95D72F2B682013000A9C06 /* ToSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A95D72E2B682013000A9C06 /* ToSViewController.swift */; };
 		0A95D7312B682FB4000A9C06 /* ToSItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A95D7302B682FB4000A9C06 /* ToSItemTableViewCell.swift */; };
 		0A9E0A472B3DCAB90094595A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9E0A462B3DCAB90094595A /* AppDelegate.swift */; };
@@ -52,7 +53,6 @@
 		0AB34CC32B4F11B000150A15 /* OpenNewPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB34CC02B4F11B000150A15 /* OpenNewPageViewController.swift */; };
 		0AE388892B5986BC0041A979 /* CategoryItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE388882B5986BC0041A979 /* CategoryItemTableViewCell.swift */; };
 		0AE3888B2B5992870041A979 /* CheckListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE3888A2B5992870041A979 /* CheckListItem.swift */; };
-		0AEB63C02B616DF200427EA7 /* SwiftyMenu in Frameworks */ = {isa = PBXBuildFile; productRef = 0AEB63BF2B616DF200427EA7 /* SwiftyMenu */; };
 		0AF968242B5BDF3300A3CBBB /* CheckListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF968232B5BDF3300A3CBBB /* CheckListViewController.swift */; };
 		3458556B2B68998A00432C06 /* DGCharts in Frameworks */ = {isa = PBXBuildFile; productRef = 3458556A2B68998A00432C06 /* DGCharts */; };
 		3458556D2B68998A00432C06 /* DGChartsDynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 3458556C2B68998A00432C06 /* DGChartsDynamic */; };
@@ -728,7 +728,6 @@
 				0A4EBE2C2B5E9E8B00909B7A /* SnapKit */,
 				0A4EBE2E2B5E9E8B00909B7A /* SnapKit-Dynamic */,
 				0A4EBE312B5EA21100909B7A /* FSCalendar */,
-				0AEB63BF2B616DF200427EA7 /* SwiftyMenu */,
 				3458556A2B68998A00432C06 /* DGCharts */,
 				3458556C2B68998A00432C06 /* DGChartsDynamic */,
 				345855C22B6B7F7600432C06 /* KakaoSDK */,
@@ -780,7 +779,6 @@
 				0A4EBE282B5E9E6A00909B7A /* XCRemoteSwiftPackageReference "Tabman" */,
 				0A4EBE2B2B5E9E8B00909B7A /* XCRemoteSwiftPackageReference "SnapKit" */,
 				0A4EBE302B5EA21100909B7A /* XCRemoteSwiftPackageReference "FSCalendar" */,
-				0AEB63BE2B616DF200427EA7 /* XCRemoteSwiftPackageReference "SwiftyMenu" */,
 				345855692B68998A00432C06 /* XCRemoteSwiftPackageReference "Charts" */,
 				345855C12B6B7F7600432C06 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
 				346CF6B12B70B54B00C70C7A /* XCRemoteSwiftPackageReference "lottie-ios" */,
@@ -1188,12 +1186,12 @@
 				minimumVersion = 5.8.1;
 			};
 		};
-		0AEB63BE2B616DF200427EA7 /* XCRemoteSwiftPackageReference "SwiftyMenu" */ = {
+		0A94FCD02B6EB47F00F0E2AF /* XCRemoteSwiftPackageReference "iOSDropDown" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/KarimEbrahemAbdelaziz/SwiftyMenu";
+			repositoryURL = "https://github.com/jriosdev/iOSDropDown";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.1;
+				minimumVersion = 0.4.0;
 			};
 		};
 		345855692B68998A00432C06 /* XCRemoteSwiftPackageReference "Charts" */ = {
@@ -1261,10 +1259,10 @@
 			package = 0A7AC0ED2B640CA80032C9DF /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
 		};
-		0AEB63BF2B616DF200427EA7 /* SwiftyMenu */ = {
+		0A94FCD12B6EB47F00F0E2AF /* iOSDropDown */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 0AEB63BE2B616DF200427EA7 /* XCRemoteSwiftPackageReference "SwiftyMenu" */;
-			productName = SwiftyMenu;
+			package = 0A94FCD02B6EB47F00F0E2AF /* XCRemoteSwiftPackageReference "iOSDropDown" */;
+			productName = iOSDropDown;
 		};
 		3458556A2B68998A00432C06 /* DGCharts */ = {
 			isa = XCSwiftPackageProductDependency;
