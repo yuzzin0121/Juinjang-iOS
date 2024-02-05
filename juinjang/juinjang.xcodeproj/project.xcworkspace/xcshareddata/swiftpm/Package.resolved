@@ -28,15 +28,6 @@
       }
     },
     {
-      "identity" : "iosdropdown",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/jriosdev/iOSDropDown",
-      "state" : {
-        "revision" : "945c4f1945ed37a31055e812a5ee11a3d06e88ab",
-        "version" : "0.4.0"
-      }
-    },
-    {
       "identity" : "iqkeyboardmanager",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/hackiftekhar/IQKeyboardManager",
@@ -84,7 +75,7 @@
     {
       "identity" : "tabman",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/uias/Tabman.git",
+      "location" : "https://github.com/uias/Tabman",
       "state" : {
         "revision" : "e32c0d821b03566ed966753f941113883f268da0",
         "version" : "3.0.2"
