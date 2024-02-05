@@ -14,7 +14,7 @@ import Pageboy
 class TabViewController: TabmanViewController {
     
     private var viewControllers: Array<UIViewController> = []
-    
+    var index = 0
     let tabView = UIView().then {
         $0.backgroundColor = .white
     }
@@ -22,10 +22,10 @@ class TabViewController: TabmanViewController {
     let lineView = UIView().then {
         $0.backgroundColor = UIColor(named: "100")
     }
+    let graphVC = GraphViewController()
+    let compareVC = CompareViewController()
     
     func addViewControllers() {
-        let graphVC = GraphViewController()
-        let compareVC = CompareViewController()
         viewControllers.append(graphVC)
         viewControllers.append(compareVC)
     }
@@ -96,7 +96,7 @@ extension TabViewController: PageboyViewControllerDataSource, TMBarDataSource {
     }
 
     func defaultPage(for pageboyViewController: PageboyViewController) -> PageboyViewController.Page? {
-        .at(index: 0)
+        .at(index: index)
     }
 }
 

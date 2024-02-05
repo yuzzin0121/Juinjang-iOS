@@ -10,35 +10,7 @@ import Then
 import SnapKit
 
 class UseViewController : UIViewController {
-    
-    func designNavigationBar() {
-        self.navigationController?.navigationBar.tintColor = .black
-        navigationItem.title = "이용약관"
-        
-        let closeButtonItem = UIBarButtonItem(image: UIImage(named:"X"), style: .plain, target: self, action: #selector(tapCloseButton))
-
-        // 네비게이션 아이템에 백 버튼 아이템 설정
-        self.navigationItem.leftBarButtonItem = closeButtonItem
-    }
-    @objc
-    func tapCloseButton() {
-        _ = self.navigationController?.popViewController(animated: false)
-    }
-    
-    /*var closeButton = UIButton().then {
-        $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.setImage(UIImage(named:"X"), for: .normal)
-        $0.addTarget(self, action: #selector(tapCloseButton), for: .touchUpInside)
-    }
-    
-    var useLabel = UILabel().then {
-        $0.text = "이용약관"
-        $0.font = UIFont(name: "Pretendard-SemiBold", size: 16)
-        $0.translatesAutoresizingMaskIntoConstraints = false
-        //$0.textColor = UIColor(named: "500")
-    }*/
-    
-    private let scrollView = UIScrollView().then {
+   private let scrollView = UIScrollView().then {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.isScrollEnabled = true
         $0.indicatorStyle = .black
@@ -68,28 +40,28 @@ class UseViewController : UIViewController {
     }
     
     private let contentLabel4 = UILabel().then {
-        $0.text = "제2조(개인정보의 처리 및 보유 기간) \n① ‘회사’는 법령에 따른 개인정보 보유·이용기간 또는 정보주체로부터 개인정보를 수집 시에 동의받은 개인정보 보유·이용기간 내에서 개인정보를 처리·보유합니다. \n② 각각의 개인정보 처리 및 보유 기간은 다음과 같습니다. \n1. 개인정보는 수집.이용에 관한 동의일로부터까지 위 이용목적을 위하여 보유, 이용됩니다. \n2. 보유근거 : 개인화 콘텐츠 제공 \n3.관련법령 : \n1) 소비자의 불만 또는 분쟁처리에 관한 기록 : 3년 \n2) 대금결제 및 재화 등의 공급에 관한 기록 : 5년 \n3) 계약 또는 청약철회 등에 관한 기록 : 5년"
+        $0.text = "제2조(개인정보의 처리 및 보유 기간) \n① ‘회사’는 법령에 따른 개인정보 보유·이용기간 또는 정보주체로부터 개인정보를 수집 시에 동의받은 개인정보 보유·이용기간 내에서 개인정보를 처리·보유합니다. \n② 각각의 개인정보 처리 및 보유 기간은 다음과 같습니다. \n 1. 개인정보는 수집.이용에 관한 동의일로부터까지 위 이용목적을 위하여 보유, 이용됩니다. \n 2. 보유근거 : 개인화 콘텐츠 제공 \n 3.관련법령 : \n  1) 소비자의 불만 또는 분쟁처리에 관한 기록 : 3년 \n  2) 대금결제 및 재화 등의 공급에 관한 기록 : 5년 \n  3) 계약 또는 청약철회 등에 관한 기록 : 5년"
         $0.font = UIFont(name: "Pretendard-Light", size: 14)
         $0.numberOfLines = 0
         $0.textAlignment = .justified
     }
     
     private let contentLabel5 = UILabel().then {
-        $0.text = "제3조(처리하는 개인정보의 항목) \n① ‘회사’는 다음의 개인정보 항목을 처리하고 있습니다. \n1. 홈페이지 회원가입 및 관리 \n2. 필수항목 : 이메일, 비밀번호, 로그인ID, 성별 \n3. 선택항목 : 이메일, 휴대전화번호, 자택주소, 생년월일, 이름"
+        $0.text = "제3조(처리하는 개인정보의 항목) \n① ‘회사’는 다음의 개인정보 항목을 처리하고 있습니다. \n 1. 홈페이지 회원가입 및 관리 \n 2. 필수항목 : 이메일, 비밀번호, 로그인ID, 성별 \n 3. 선택항목 : 이메일, 휴대전화번호, 자택주소, 생년월일, 이름"
         $0.font = UIFont(name: "Pretendard-Light", size: 14)
         $0.numberOfLines = 0
         $0.textAlignment = .justified
     }
     
     private let contentLabel6 = UILabel().then {
-        $0.text = "제4조(만 14세 미만 아동의 개인정보 처리에 관한 사항) \n① ‘회사’는 만 14세 미만 아동에 대해 개인정보를 수집할 때 법정대리인의 동의를 얻어 해당 서비스 수행에 필요한 최소한의 개인정보를 수집합니다. \n1. 필수항목 : 법정 대리인의 성명, 관계, 연락처 \n② 또한, 의 관련 홍보를 위해 아동의 개인정보를 수집할 경우에는 법정대리인으로부터 별도의 동의를 얻습니다. \n③ ‘회사’는 만 14세 미만 아동의 개인정보를 수집할 때에는 아동에게 법정대리인의 성명, 연락처와 같이 최소한의 정보를 요구할 수 있으며, 다음 중 하나의 방법으로 적법한 법정대리인이 동의하였는지를 확인합니다. \n1. 동의 내용을 게재한 인터넷 사이트에 법정대리인이 동의 여부를 표시하도록 하고 개인정보처리자가 그 동의 표시를 확인했음을 법정대리인의 휴대전화 문자 메시지로 알리는 방법 \n2. 동의 내용을 게재한 인터넷 사이트에 법정대리인이 동의 여부를 표시하도록 하고 법정대리인의 신용카드·직불카드 등의 카드정보를 제공받는 방법 \n3. 동의 내용을 게재한 인터넷 사이트에 법정대리인이 동의 여부를 표시하도록 하고 법정대리인의 휴대전화 본인인증 등을 통해 본인 여부를 확인하는 방법 \n4. 동의 내용이 적힌 서면을 법정대리인에게 직접 발급하거나, 우편 또는 팩스를 통하여 전달하고 법정대리인이 동의 내용에 대하여 서명날인 후 제출하도록 하는 방법 \n5. 동의 내용이 적힌 전자우편을 발송하여 법정대리인으로부터 동의의 의사표시가 적힌 전자우편을 전송받는 방법 \n6. 전화를 통하여 동의 내용을 법정대리인에게 알리고 동의를 얻거나 인터넷주소 등 동의 내용을 확인할 수 있는 방법을 안내하고 재차 전화 통화를 통하여 동의를 얻는 방법 \n7. 그 밖에 위와 준하는 방법으로 법정대리인에게 동의 내용을 알리고 동의의 의사표시를 확인하는 방법"
+        $0.text = "제4조(만 14세 미만 아동의 개인정보 처리에 관한 사항) \n① ‘회사’는 만 14세 미만 아동에 대해 개인정보를 수집할 때 법정대리인의 동의를 얻어 해당 서비스 수행에 필요한 최소한의 개인정보를 수집합니다. \n 1. 필수항목 : 법정 대리인의 성명, 관계, 연락처 \n② 또한, 의 관련 홍보를 위해 아동의 개인정보를 수집할 경우에는 법정대리인으로부터 별도의 동의를 얻습니다. \n③ ‘회사’는 만 14세 미만 아동의 개인정보를 수집할 때에는 아동에게 법정대리인의 성명, 연락처와 같이 최소한의 정보를 요구할 수 있으며, 다음 중 하나의 방법으로 적법한 법정대리인이 동의하였는지를 확인합니다. \n 1. 동의 내용을 게재한 인터넷 사이트에 법정대리인이 동의 여부를 표시하도록 하고 개인정보처리자가 그 동의 표시를 확인했음을 법정대리인의 휴대전화 문자 메시지로 알리는 방법 \n 2. 동의 내용을 게재한 인터넷 사이트에 법정대리인이 동의 여부를 표시하도록 하고 법정대리인의 신용카드·직불카드 등의 카드정보를 제공받는 방법 \n 3. 동의 내용을 게재한 인터넷 사이트에 법정대리인이 동의 여부를 표시하도록 하고 법정대리인의 휴대전화 본인인증 등을 통해 본인 여부를 확인하는 방법 \n 4. 동의 내용이 적힌 서면을 법정대리인에게 직접 발급하거나, 우편 또는 팩스를 통하여 전달하고 법정대리인이 동의 내용에 대하여 서명날인 후 제출하도록 하는 방법 \n 5. 동의 내용이 적힌 전자우편을 발송하여 법정대리인으로부터 동의의 의사표시가 적힌 전자우편을 전송받는 방법 \n 6. 전화를 통하여 동의 내용을 법정대리인에게 알리고 동의를 얻거나 인터넷주소 등 동의 내용을 확인할 수 있는 방법을 안내하고 재차 전화 통화를 통하여 동의를 얻는 방법 \n 7. 그 밖에 위와 준하는 방법으로 법정대리인에게 동의 내용을 알리고 동의의 의사표시를 확인하는 방법"
         $0.font = UIFont(name: "Pretendard-Light", size: 14)
         $0.numberOfLines = 0
         $0.textAlignment = .justified
     }
     
     private let contentLabel7 = UILabel().then {
-        $0.text = "제5조(개인정보의 파기절차 및 파기방법) \n① ‘회사’는 개인정보 보유기간의 경과, 처리목적 달성 등 개인정보가 불필요하게 되었을 때에는 지체없이 해당 개인정보를 파기합니다. \n② 정보주체로부터 동의받은 개인정보 보유기간이 경과하거나 처리목적이 달성되었음에도 불구하고 다른 법령에 따라 개인정보를 계속 보존하여야 하는 경우에는, 해당 개인정보를 별도의 데이터베이스(DB)로 옮기거나 보관장소를 달리하여 보존합니다. \n③ 개인정보 파기의 절차 및 방법은 다음과 같습니다. \n1. (파기절차) ‘회사’는 파기 사유가 발생한 개인정보를 선정하고, ‘회사’의 개인정보 보호책임자의 승인을 받아 개인정보를 파기합니다."
+        $0.text = "제5조(개인정보의 파기절차 및 파기방법) \n① ‘회사’는 개인정보 보유기간의 경과, 처리목적 달성 등 개인정보가 불필요하게 되었을 때에는 지체없이 해당 개인정보를 파기합니다. \n② 정보주체로부터 동의받은 개인정보 보유기간이 경과하거나 처리목적이 달성되었음에도 불구하고 다른 법령에 따라 개인정보를 계속 보존하여야 하는 경우에는, 해당 개인정보를 별도의 데이터베이스(DB)로 옮기거나 보관장소를 달리하여 보존합니다. \n③ 개인정보 파기의 절차 및 방법은 다음과 같습니다. \n 1. (파기절차) ‘회사’는 파기 사유가 발생한 개인정보를 선정하고, ‘회사’의 개인정보 보호책임자의 승인을 받아 개인정보를 파기합니다."
         $0.font = UIFont(name: "Pretendard-Light", size: 14)
         $0.numberOfLines = 0
         $0.textAlignment = .justified
@@ -117,7 +89,7 @@ class UseViewController : UIViewController {
     }
     
     private let contentLabel11 = UILabel().then {
-        $0.text = "제9조(개인정보를 자동으로 수집하는 장치의 설치·운영 및 그 거부에 관한 사항) \n① ‘회사’는 이용자에게 개별적인 맞춤서비스를 제공하기 위해 이용정보를 저장하고 수시로 불러오는 ‘쿠키(cookie)’를 사용합니다. \n② 쿠키는 웹사이트를 운영하는데 이용되는 서버(http)가 이용자의 컴퓨터 브라우저에게 보내는 소량의 정보이며 이용자들의 PC 컴퓨터내의 하드디스크에 저장되기도 합니다. \n1. 쿠키의 사용 목적 : 이용자가 방문한 각 서비스와 웹 사이트들에 대한 방문 및 이용형태, 인기 검색어, 보안접속 여부, 등을 파악하여 이용자에게 최적화된 정보 제공을 위해 사용됩니다. \n2. 쿠키의 설치 운영 및 거부 : 웹브라우저 상단의 도구 >인터넷 옵션>개인정보 메뉴의 옵션 설정을 통해 쿠키 저장을 거부 할 수 있습니다. \n3. 쿠키 저장을 거부할 경우 맞춤형 서비스 이용에 어려움이 발생할 수 있습니다."
+        $0.text = "제9조(개인정보를 자동으로 수집하는 장치의 설치·운영 및 그 거부에 관한 사항) \n① ‘회사’는 이용자에게 개별적인 맞춤서비스를 제공하기 위해 이용정보를 저장하고 수시로 불러오는 ‘쿠키(cookie)’를 사용합니다. \n② 쿠키는 웹사이트를 운영하는데 이용되는 서버(http)가 이용자의 컴퓨터 브라우저에게 보내는 소량의 정보이며 이용자들의 PC 컴퓨터내의 하드디스크에 저장되기도 합니다. \n 1. 쿠키의 사용 목적 : 이용자가 방문한 각 서비스와 웹 사이트들에 대한 방문 및 이용형태, 인기 검색어, 보안접속 여부, 등을 파악하여 이용자에게 최적화된 정보 제공을 위해 사용됩니다. \n 2. 쿠키의 설치 운영 및 거부 : 웹브라우저 상단의 도구 >인터넷 옵션>개인정보 메뉴의 옵션 설정을 통해 쿠키 저장을 거부 할 수 있습니다. \n 3. 쿠키 저장을 거부할 경우 맞춤형 서비스 이용에 어려움이 발생할 수 있습니다."
         $0.font = UIFont(name: "Pretendard-Light", size: 14)
         $0.numberOfLines = 0
         $0.textAlignment = .justified
@@ -131,7 +103,7 @@ class UseViewController : UIViewController {
     }
     
     private let contentLabel13 = UILabel().then {
-        $0.text = "제11조(추가적인 이용·제공 판단기준) \n‘회사’는 ‘개인정보 보호법’ 제15조 제3항 및 제17조 제4 항에 따라 ‘개인정보 보호법 시행령’ 제14조의2에 따른 사항을 고려하여 정보주체의 동의 없이 개인정보를 추가적으로 이용·제공할 수 있습니다. \n① 이에 따라 ‘회사’가 정보주체의 동의 없이 추가적인 이용·제공을 하기 위해서 다음과 같은 사항을 고려하였습니다. \n1. 개인정보를 추가적으로 이용·제공하려는 목적이 당초 수집 목적과 관련성이 있는지 여부 \n2. 개인정보를 수집한 정황 또는 처리 관행에 비추어 볼 때 추가적인 이용·제공에 대한 예측 가능성이 있는지 여부 \n3. 개인정보의 추가적인 이용·제공이 정보주체의 이익을 부당하게 침해하는지 여부 \n4. 가명처리 또는 암호화 등 안전성 확보에 필요한 조치를 하였는지 여부 \n※ 추가적인 이용·제공 시 고려사항에 대한 판단기준은 사업자/단체 스스로 자율적으로 판단하여 작성·공개함"
+        $0.text = "제11조(추가적인 이용·제공 판단기준) \n‘회사’는 ‘개인정보 보호법’ 제15조 제3항 및 제17조 제4 항에 따라 ‘개인정보 보호법 시행령’ 제14조의2에 따른 사항을 고려하여 정보주체의 동의 없이 개인정보를 추가적으로 이용·제공할 수 있습니다. \n① 이에 따라 ‘회사’가 정보주체의 동의 없이 추가적인 이용·제공을 하기 위해서 다음과 같은 사항을 고려하였습니다. \n 1. 개인정보를 추가적으로 이용·제공하려는 목적이 당초 수집 목적과 관련성이 있는지 여부 \n 2. 개인정보를 수집한 정황 또는 처리 관행에 비추어 볼 때 추가적인 이용·제공에 대한 예측 가능성이 있는지 여부 \n 3. 개인정보의 추가적인 이용·제공이 정보주체의 이익을 부당하게 침해하는지 여부 \n 4. 가명처리 또는 암호화 등 안전성 확보에 필요한 조치를 하였는지 여부 \n※ 추가적인 이용·제공 시 고려사항에 대한 판단기준은 사업자/단체 스스로 자율적으로 판단하여 작성·공개함"
         $0.font = UIFont(name: "Pretendard-Light", size: 14)
         $0.numberOfLines = 0
         $0.textAlignment = .justified
@@ -144,7 +116,7 @@ class UseViewController : UIViewController {
         $0.textAlignment = .justified
     }
     private let contentLabel15 = UILabel().then {
-        $0.text = "제13조(정보주체의 권익침해에 대한 구제방법) \n정보주체는 개인정보침해로 인한 구제를 받기 위하여 개인정보분쟁조정위원회, 한국인터넷진흥원 개인정보침해신고센터 등에 분쟁해결이나 상담 등을 신청할 수 있습니다. 이 밖에 기타 개인정보침해의 신고, 상담에 대하여는 아래의 기관에 문의하시기 바랍니다. \n1. 개인정보분쟁조정위원회 : (국번없이) 1833-6972 (www.kopico.go.kr) \n2. 개인정보침해신고센터 : (국번없이) 118 (privacy.kisa.or.kr) \n3. 대검찰청 : (국번없이) 1301 (www.spo.go.kr) \n4. 경찰청 : (국번없이) 182 (ecrm.cyber.go.kr) \n① 「개인정보보호법」 제35조(개인정보의 열람), 제36조(개인정보의 정정·삭제), 제37조( 개인정보의 처리정지 등)의 규정에 의한 요구에 대 하여 공공기관의 장이 행한 처분 또는 부작위로 인하여 권리 또는 이익의 침해를 받은 자는 행정심판법이 정하는 바에 따라 행정심판을 청구할 수 있습니다 \n※ 행정심판에 대해 자세한 사항은 중앙행정심판위원회(www.simpan.go.kr) 홈페이지를 참고하시기 바랍니다."
+        $0.text = "제13조(정보주체의 권익침해에 대한 구제방법) \n정보주체는 개인정보침해로 인한 구제를 받기 위하여 개인정보분쟁조정위원회, 한국인터넷진흥원 개인정보침해신고센터 등에 분쟁해결이나 상담 등을 신청할 수 있습니다. 이 밖에 기타 개인정보침해의 신고, 상담에 대하여는 아래의 기관에 문의하시기 바랍니다. \n 1. 개인정보분쟁조정위원회 : (국번없이) 1833-6972 (www.kopico.go.kr) \n 2. 개인정보침해신고센터 : (국번없이) 118 (privacy.kisa.or.kr) \n 3. 대검찰청 : (국번없이) 1301 (www.spo.go.kr) \n 4. 경찰청 : (국번없이) 182 (ecrm.cyber.go.kr) \n① 「개인정보보호법」 제35조(개인정보의 열람), 제36조(개인정보의 정정·삭제), 제37조( 개인정보의 처리정지 등)의 규정에 의한 요구에 대 하여 공공기관의 장이 행한 처분 또는 부작위로 인하여 권리 또는 이익의 침해를 받은 자는 행정심판법이 정하는 바에 따라 행정심판을 청구할 수 있습니다 \n※ 행정심판에 대해 자세한 사항은 중앙행정심판위원회(www.simpan.go.kr) 홈페이지를 참고하시기 바랍니다."
         $0.font = UIFont(name: "Pretendard-Light", size: 14)
         $0.numberOfLines = 0
         $0.textAlignment = .justified
@@ -157,23 +129,28 @@ class UseViewController : UIViewController {
         $0.textAlignment = .justified
     }
     
-    func setConstraint() {
-        /*closeButton.snp.makeConstraints{
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(17.16)
-            $0.left.equalToSuperview().offset(24)
-            $0.height.width.equalTo(12)
-        }
-        useLabel.snp.makeConstraints{
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(12.16)
-            $0.centerX.equalToSuperview()
-        }*/
+//MARK: - 함수
+    func designNavigationBar() {
+        self.navigationController?.navigationBar.tintColor = .black
+        navigationItem.title = "이용약관"
         
+        let closeButtonItem = UIBarButtonItem(image: UIImage(named:"X"), style: .plain, target: self, action: #selector(tapCloseButton))
+        closeButtonItem.tintColor = UIColor(named: "300")
+        closeButtonItem.imageInsets = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 0)
+
+        // 네비게이션 아이템에 백 버튼 아이템 설정
+        self.navigationItem.leftBarButtonItem = closeButtonItem
+    }
+    @objc func tapCloseButton() {
+        _ = self.navigationController?.popViewController(animated: false)
+    }
+    
+    func setConstraint() {
         scrollView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(46)
             $0.left.right.equalToSuperview().inset(24)
             $0.bottom.equalToSuperview().inset(33)
         }
-        
         contentLabel1.snp.makeConstraints {
             $0.top.equalToSuperview().offset(16)
             $0.left.equalToSuperview().offset(16)
@@ -260,8 +237,6 @@ class UseViewController : UIViewController {
         super.viewDidLoad()
         designNavigationBar()
         
-        //view.addSubview(closeButton)
-        //view.addSubview(useLabel)
         view.addSubview(scrollView)
         scrollView.addSubview(contentLabel1)
         scrollView.addSubview(contentLabel2)
@@ -298,6 +273,7 @@ class UseViewController : UIViewController {
     }
 }
 
+//MARK: - Extension
 extension UILabel {
     func asFont(targetString: String, font: UIFont) {
         let fullText = text ?? ""

@@ -1,12 +1,12 @@
 import UIKit
 import SnapKit
 import Then
+import Lottie
 
 
 class MainViewController: UIViewController {
 // MARK: - 변수, 상수 설정
     //설정 버튼, 메인 로고, 스피커 버튼
-
     var mainLogoImageView = UIImageView().then {
         $0.image = UIImage(named:"mainLogo")
     }
@@ -24,42 +24,22 @@ class MainViewController: UIViewController {
         $0.register(BottomTableViewCell.self, forCellReuseIdentifier: BottomTableViewCell.id)
     }
     
-    @objc
-    func newImjangBtnTap() {
+    @objc func newImjangBtnTap() {
         let vc = OpenNewPageViewController()
         self.navigationController?.pushViewController(vc, animated: true)
     }
-    @objc
-    func myImjangBtnTap() {
+    @objc func myImjangBtnTap() {
         let vc = ImjangListViewController()
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
-    @objc
-    func setttingBtnTap() {
+    @objc func setttingBtnTap() {
         let vc = SettingViewController()
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
 //MARK: - 함수 선언
     func setConstraint() {
-        //설정 버튼, 메인 로고, 스피커 버튼
-//        settingButton.snp.makeConstraints{
-//            $0.top.equalTo(view.safeAreaLayoutGuide).offset(10.16)
-//            $0.height.equalTo(24)
-//            $0.left.equalToSuperview().offset(26.73)
-//        }
-//        mainLogoImageView.snp.makeConstraints{
-//            $0.top.equalTo(view.safeAreaLayoutGuide).offset(12.16)
-//            $0.height.equalTo(21)
-//            $0.centerX.equalToSuperview()
-//        }
-//        speakerButton.snp.makeConstraints{
-//            $0.top.equalTo(view.safeAreaLayoutGuide).offset(10.16)
-//            $0.height.width.equalTo(24)
-//            $0.right.equalToSuperview().inset(26.55)
-//        }
-        
         //배경
         backgroundImageView.snp.makeConstraints{
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(37.82)
@@ -79,21 +59,18 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        designNavigationBar()
+        
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
         tableView.rowHeight = 710
         tableView.backgroundColor = .clear
-        
-//        self.navigationController?.navigationBar.isHidden = true
-        
         view.backgroundColor = .white
+        
         view.addSubview(backgroundImageView)
-//        view.addSubview(settingButton)
-//        view.addSubview(speakerButton)
-//        view.addSubview(mainLogoImageView)
         view.addSubview(tableView)
+       
+        designNavigationBar()
         setConstraint()
     }
     
@@ -107,13 +84,16 @@ class MainViewController: UIViewController {
 
         // UIBarButtonItem 생성 및 이미지 설정
         let speakerButtonItem = UIBarButtonItem(image: speaker, style: .plain, target: self, action: nil)
+        speakerButtonItem.tintColor = UIColor(named: "300")
+        speakerButtonItem.imageInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 12)
         
         let settingButtonItem = UIBarButtonItem(image: UIImage(named:"setting"), style: .plain, target: self, action: #selector(setttingBtnTap))
-        settingButtonItem.tintColor = UIColor(named: "textGray")
-
+        settingButtonItem.tintColor = UIColor(named: "300")
+        settingButtonItem.imageInsets = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 0)
         // 네비게이션 아이템에 백 버튼 아이템 설정
         self.navigationItem.leftBarButtonItem = settingButtonItem
         self.navigationItem.rightBarButtonItem = speakerButtonItem
+        
     }
 }
 

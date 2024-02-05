@@ -20,7 +20,7 @@ enum ImageStyle {
     static let on = UIImage(named: "on")!
     static let search = UIImage(named: "search")!
     static let clock = UIImage(named: "clock")!
-    static let x = UIImage(named: "x")
+    static let x = UIImage(named: "X")!
     static let star = UIImage(named: "star")!
     static let starEmpty = UIImage(named: "starEmpty")!
     static let emptyImage = UIImage(named: "emptyImage")!
