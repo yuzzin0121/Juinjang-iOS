@@ -247,6 +247,24 @@ extension ImjangListHeaderView: UICollectionViewDelegate, UICollectionViewDataSo
     }
     
     
+}
+
+var currentIndex = 0
+
+extension ImjangListHeaderView: UICollectionViewDelegateFlowLayout {
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        let scrolledOffsetX = targetContentOffset.pointee.x + scrollView.contentInset.left
+        let cellWidth = Const.bigItemSize.width + Const.itemSpacing
+        let index = round(scrolledOffsetX / cellWidth)
+        currentIndex = Int(index)
+//        print(index)
+        targetContentOffset.pointee = CGPoint(x: index * cellWidth - scrollView.contentInset.left,
+                                              y: scrollView.contentInset.top)
+        self.collectionView.reloadData()
+    }
+}
+
+extension ImjangListHeaderView {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard let layout = self.collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
         
@@ -288,23 +306,5 @@ extension ImjangListHeaderView: UICollectionViewDelegate, UICollectionViewDataSo
                 zoomCell.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
         },
             completion: nil)
-        
     }
-}
-
-var currentIndex = 0
-
-extension ImjangListHeaderView: UICollectionViewDelegateFlowLayout {
-    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        let scrolledOffsetX = targetContentOffset.pointee.x + scrollView.contentInset.left
-        let cellWidth = Const.bigItemSize.width + Const.itemSpacing
-        let index = round(scrolledOffsetX / cellWidth)
-        currentIndex = Int(index)
-//        print(index)
-        targetContentOffset.pointee = CGPoint(x: index * cellWidth - scrollView.contentInset.left,
-                                              y: scrollView.contentInset.top)
-        self.collectionView.reloadData()
-    }
-    
-
 }
