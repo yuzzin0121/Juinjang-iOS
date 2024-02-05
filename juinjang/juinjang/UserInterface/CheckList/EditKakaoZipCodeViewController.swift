@@ -1,14 +1,14 @@
 //
-//  KakaoZipCodeViewController.swift
+//  EditKakaoZipCodeViewController.swift
 //  juinjang
 //
-//  Created by 임수진 on 1/27/24.
+//  Created by 임수진 on 2/6/24.
 //
 
 import UIKit
 import WebKit
 
-class KakaoZipCodeViewController: UIViewController {
+class EditKakaoZipCodeViewController: UIViewController {
     
     var webView: WKWebView?
     let indicator = UIActivityIndicatorView(style: .medium)
@@ -55,7 +55,7 @@ class KakaoZipCodeViewController: UIViewController {
     }
 }
 
-extension KakaoZipCodeViewController: WKScriptMessageHandler {
+extension EditKakaoZipCodeViewController: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         if let data = message.body as? [String: Any] {
             address = data["roadAddress"] as? String ?? ""
@@ -66,19 +66,14 @@ extension KakaoZipCodeViewController: WKScriptMessageHandler {
         // 현재 뷰 컨트롤러를 present한 뷰 컨트롤러가 UINavigationController인지 검사
         if let navigationController = presentingViewController as? UINavigationController {
             // navigationController의 topViewController를 검사
-            if let openNewPage2VC = navigationController.topViewController as? OpenNewPage2ViewController {
-                openNewPage2VC.addressTextField.text = address
-            } else if let editBasicInfoVC = navigationController.topViewController as? EditBasicInfoViewController {
-                editBasicInfoVC.addressTextField.text = address
-            } else if let editBasicInfoDetailVC = navigationController.topViewController as? EditBasicInfoDetailViewController {
-                editBasicInfoDetailVC.addressTextField.text = address
-            }
+            let openNewPage2VC = navigationController.topViewController as? EditBasicInfoViewController
+            openNewPage2VC?.addressTextField.text = address
         }
         self.dismiss(animated: true, completion: nil)
     }
 }
 
-extension KakaoZipCodeViewController: WKNavigationDelegate {
+extension EditKakaoZipCodeViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         indicator.startAnimating()
     }

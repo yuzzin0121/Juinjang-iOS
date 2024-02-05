@@ -535,9 +535,9 @@ class EditBasicInfoViewController: UIViewController {
     }
     
     @objc func nextButtonTapped(_ sender: UIButton) {
-        let newPageViewController = CheckListViewController()
+        let imjangNoteVC = ImjangNoteViewController()
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        navigationController?.pushViewController(newPageViewController, animated: true)
+        navigationController?.pushViewController(imjangNoteVC, animated: true)
     }
 }
 
