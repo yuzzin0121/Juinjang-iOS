@@ -9,9 +9,7 @@ class CompareSearchViewController: UIViewController {
         $0.searchTextField.font = .pretendard(size: 14, weight: .medium)
         $0.searchTextField.borderStyle = .roundedRect
         $0.searchTextField.clipsToBounds = true
-        //$0.searchTextField.leftViewMode = .never
         $0.searchTextField.layer.cornerRadius = 15
-        //$0.setImage(ImageStyle.search, for: .clear, state: .normal)
     }
     
     let searchedTableView: UITableView = {
@@ -19,7 +17,6 @@ class CompareSearchViewController: UIViewController {
         tableView.rowHeight = 116
         tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = false
-        tableView.backgroundColor = ColorStyle.textWhite
         tableView.isHidden = true
         tableView.register(ReportImjangListTableViewCell.self, forCellReuseIdentifier: ReportImjangListTableViewCell.identifier)
         return tableView
@@ -48,25 +45,6 @@ class CompareSearchViewController: UIViewController {
     var searchedImjangList: [ImjangNote] = []
     var totalImjangList = ImjangList.list
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        setData()
-    }
-    func setData() {
-        for item in totalImjangList {
-            if item.roomName.contains(searchKeyword) || item.location.contains(searchKeyword) {
-                searchedImjangList.append(item)
-            }
-        }
-    }
-
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){ self.view.endEditing(true)
-    }
-    
-    @objc func popView() {
-        navigationController?.popViewController(animated: true)
-    }
-    
     // 네비게이션 바 디자인
     func designNavigationBar() {
         self.navigationItem.hidesSearchBarWhenScrolling = false
@@ -80,17 +58,12 @@ class CompareSearchViewController: UIViewController {
         // 네비게이션 아이템에 백 버튼 아이템 설정
         self.navigationItem.leftBarButtonItem = backButtonItem
         self.navigationItem.titleView = searchBar
-        let searchView = UIImageView(image: UIImage(named: "search"))
     }
     
-    func hideKeyboardWhenTappedAround() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        tap.cancelsTouchesInView = false
-        view.addGestureRecognizer(tap)
+    @objc func popView() {
+        navigationController?.popViewController(animated: true)
     }
-    @objc func dismissKeyboard() {
-        searchBar.resignFirstResponder()
-    }
+    
     @objc func applyBtnTap() {
         let vc = ReportViewController()
         vc.tabViewController.index = 1
@@ -98,6 +71,27 @@ class CompareSearchViewController: UIViewController {
         vc.tabViewController.compareVC.compareDataSet2.fillAlpha = CGFloat(0.8)
         vc.tabViewController.compareVC.compareDataSet2.fillColor = .white
         self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @objc func textFieldDidChange(_ sender: Any?) {
+        searchedImjangList.removeAll()
+        searchedTableView.reloadData()
+        if searchBar.searchTextField.text == "" {
+            searchedTableView.isHidden = true
+            applyBtn.isHidden = true
+        } else {
+            searchedTableView.isHidden = true
+            applyBtn.isHidden = true
+            searchKeyword = searchBar.text!
+            for item in totalImjangList {
+                if item.roomName.contains(searchKeyword) || item.location.contains(searchKeyword) {
+                    searchedImjangList.append(item)
+                    searchedTableView.isHidden = false
+                    applyBtn.isHidden = false
+                }
+            }
+            searchedTableView.reloadData()
+        }
     }
     
     func setupConstraints() {
@@ -119,21 +113,10 @@ class CompareSearchViewController: UIViewController {
             $0.height.equalTo(52)
         }
     }
-    @objc func textFieldDidChange(_ sender: Any?) {
-        if searchBar.searchTextField.text == "" {
-            searchedTableView.isHidden = true
-            applyBtn.isHidden = true
-        } else {
-            searchedTableView.isHidden = false
-            applyBtn.isHidden = false
-            //searchedTableView.reloadData()
-        }
-    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         designNavigationBar()
-        hideKeyboardWhenTappedAround()
-        //searching()
         
         view.backgroundColor = .white
         searchBar.delegate = self
@@ -144,24 +127,23 @@ class CompareSearchViewController: UIViewController {
         view.addSubview(mentLabel)
         view.addSubview(searchedTableView)
         view.addSubview(applyBtn)
-        searchBar.searchTextField.addTarget(self, action: #selector(CompareSearchViewController.textFieldDidChange(_:)), for: .editingChanged)
         applyBtn.addTarget(self, action: #selector(applyBtnTap), for: .touchUpInside)
+        searchBar.searchTextField.addTarget(self, action: #selector(CompareSearchViewController.textFieldDidChange(_:)), for: .editingChanged)
+        
         setupConstraints()
     }
 }
 
 extension CompareSearchViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        totalImjangList.count
-        //searchedImjangList.count
+        searchedImjangList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ReportImjangListTableViewCell.identifier, for: indexPath) as! ReportImjangListTableViewCell
         
         cell.selectionStyle = .none
-        cell.configureCell(imjangNote: totalImjangList[indexPath.row])
-        //cell.configureCell(imjangNote: searchedImjangList[indexPath.row])
+        cell.configureCell(imjangNote: searchedImjangList[indexPath.row])
         return cell
     }
     
@@ -198,17 +180,10 @@ extension CompareSearchViewController: UITableViewDelegate, UITableViewDataSourc
 }
 
 extension CompareSearchViewController: UISearchBarDelegate {
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        let keyword = searchBar.text!
-        if keyword.count < 2 {
-            return
-        }
-        searchKeyword = searchBar.searchTextField.text!
-        
-        //view.endEditing(true)
-    }
-    
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.text = ""
+        searchBar.resignFirstResponder()
     }
 }
+
+
