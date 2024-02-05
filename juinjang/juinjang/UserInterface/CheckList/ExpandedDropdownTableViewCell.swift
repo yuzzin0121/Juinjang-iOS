@@ -81,6 +81,7 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
         self.selectionStyle = .none
         itemPickerView.delegate = self
         itemPickerView.dataSource = self
+        etcTextField.delegate = self
         [questionImage, contentLabel, itemButton].forEach { contentView.addSubview($0) }
         setupLayout()
     }
@@ -235,6 +236,11 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
             backgroundColor = UIColor(named: "lightOrange")
             questionImage.image = UIImage(named: "question-selected-image")
         }
+        
+        if options[row].option == "기타" {
+            backgroundColor = .white
+            questionImage.image = UIImage(named: "question-image")
+        }
     }
     
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
@@ -245,11 +251,11 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
         pickerView.subviews[1].backgroundColor = .clear // 선택된 항목 회색 바탕으로 표시되지 않게 함
 
         var label: UILabel
-            if let reusedLabel = view as? UILabel {
-                label = reusedLabel
-            } else {
-                label = UILabel()
-            }
+        if let reusedLabel = view as? UILabel {
+            label = reusedLabel
+        } else {
+            label = UILabel()
+        }
 
         let option = options[row]
         label.font = UIFont.pretendard(size: fontSize, weight: .regular)
@@ -315,5 +321,83 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
         selectedButton.sizeToFit()
         selectedButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: titleInset, bottom: 0, right: -imageInset)
         selectedButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: selectedButton.bounds.width - 35, bottom: 0, right: -imageInset)
+    }
+}
+
+extension ExpandedDropdownTableViewCell: UITextFieldDelegate {
+
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        // 백 스페이스 실행 가능하도록
+        if let char = string.cString(using: String.Encoding.utf8) {
+            let isBackSpace = strcmp(char, "\\b")
+            if (isBackSpace == -92) {
+                return true
+            }
+        }
+        
+        // 글자 수 8글자 제한
+        guard textField.text!.count < 8 else { return false }
+        
+        textField.becomeFirstResponder()
+        backgroundColor = UIColor(named: "lightOrange")
+        questionImage.image = UIImage(named: "question-selected-image")
+        textField.backgroundColor = UIColor(named: "lightBackgroundOrange")
+        updateTextFieldWidthConstraint(for: textField, constant: 218, shouldRemoveLeadingConstraint: false)
+    
+        return true
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if let text = textField.text, !text.isEmpty {
+            // 텍스트 필드가 비어 있지 않은 경우
+            backgroundColor = UIColor(named: "lightOrange")
+            questionImage.image = UIImage(named: "question-selected-image")
+            textField.backgroundColor = .white
+            // 입력된 텍스트에 따라 동적으로 너비 조절
+            let calculatedWidth = calculateTextFieldWidth(for: text, maxCharacterCount: 8)
+
+            // 텍스트 필드의 너비 및 위치 업데이트
+            updateTextFieldWidthConstraint(for: textField, constant: calculatedWidth, shouldRemoveLeadingConstraint: true)
+            textField.layoutIfNeeded()
+            textField.contentHorizontalAlignment = .left
+        } else {
+            // 비어있는 경우 기존 너비로
+            backgroundColor = .white
+            questionImage.image = UIImage(named: "question-image")
+            textField.backgroundColor = UIColor(named: "lightBackgroundOrange")
+            updateTextFieldWidthConstraint(for: textField, constant: 218, shouldRemoveLeadingConstraint: false)
+        }
+    }
+
+    func calculateTextFieldWidth(for text: String, maxCharacterCount: Int) -> CGFloat {
+        let font = UIFont.pretendard(size: 16, weight: .regular)
+        
+        // 최대 글자 수에 따라 너비 계산
+        let truncatedText = String(text.prefix(maxCharacterCount))
+        let size = truncatedText.size(withAttributes: [.font: font])
+
+        let calculatedWidth = size.width + 25
+        return calculatedWidth
+    }
+    
+    func updateTextFieldWidthConstraint(for textField: UITextField, constant: CGFloat, shouldRemoveLeadingConstraint: Bool) {
+        // 텍스트 필드 너비 업데이트
+        for constraint in textField.constraints where constraint.firstAttribute == .width {
+            constraint.constant = constant
+        }
+        
+        // 좌측 여백 제약 추가하거나 제거하는 조건
+        if shouldRemoveLeadingConstraint {
+            textField.superview?.constraints.forEach { constraint in
+                if constraint.firstAttribute == .leading && constraint.firstItem === textField {
+                    constraint.isActive = false
+                }
+            }
+        } else {
+            textField.snp.makeConstraints {
+                    $0.trailing.equalToSuperview().offset(-24) // 오른쪽으로 24만큼 이동
+            }
+        }
     }
 }
