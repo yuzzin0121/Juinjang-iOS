@@ -66,12 +66,13 @@ class ImjangListViewController: UIViewController {
         
         designNavigationBar()
         addSubviews()
-        setData()
-        designView()
-        configureTableView()
         setEmptyConstraints()
         setupConstraints()
+        configureTableView()
+        setData()
+        designView()
         setFilterData()
+        imjangTableView.reloadData()
     }
     
     func setData() {
@@ -141,6 +142,11 @@ class ImjangListViewController: UIViewController {
         let openNewPageVC = OpenNewPageViewController()
         self.navigationController?.pushViewController(openNewPageVC, animated: true)
     }
+    
+    @objc func showImjangNoteVC() {
+        let imjangNoteVC = ImjangNoteViewController()
+        self.navigationController?.pushViewController(imjangNoteVC, animated: true)
+    }
 }
 
 extension ImjangListViewController: UITableViewDelegate, UITableViewDataSource {
@@ -148,7 +154,7 @@ extension ImjangListViewController: UITableViewDelegate, UITableViewDataSource {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
 //        print(scrollView.contentOffset.y, CGFloat(imjangTableView.tableHeaderView?.frame.minY ?? 181) - 54)
         
-        let filterY = scrapImjangList.isEmpty ? 132.0 : 278.0
+        let filterY = scrapImjangList.isEmpty ? 132.0 : 280.0
         // 필터뷰의 시작 Y를 통해 sticky 타이밍을 계산
         let shouldShowSticky = scrollView.contentOffset.y >= filterY
         
@@ -196,6 +202,10 @@ extension ImjangListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 116
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        showImjangNoteVC()
+    }
 }
 extension ImjangListViewController {
     // 네비게이션 바 디자인
@@ -205,9 +215,7 @@ extension ImjangListViewController {
 
         // UIBarButtonItem 생성 및 이미지 설정
         let backButtonItem = UIBarButtonItem(image: ImageStyle.arrowLeft, style: .plain, target: self, action: #selector(popView))
-        
         let addButtonItem = UIBarButtonItem(image: ImageStyle.add, style: .plain, target: self, action: #selector(openNewPageVC))
-        
         let searchButtonItem = UIBarButtonItem(image: ImageStyle.search, style: .plain, target: self, action: #selector(showSearchVC))
 
         // 네비게이션 아이템에 백 버튼 아이템 설정
