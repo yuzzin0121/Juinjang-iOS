@@ -205,7 +205,6 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
     }
 
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        
         let selectedOption = options[row]
         print("Selected option: \(selectedOption)")
         
@@ -225,6 +224,8 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
             $0.height.equalTo(31)
             $0.width.equalTo(116)
         }
+        
+        etcTextField.removeFromSuperview()
         
         // 기본값 설정
         if row == 0 {

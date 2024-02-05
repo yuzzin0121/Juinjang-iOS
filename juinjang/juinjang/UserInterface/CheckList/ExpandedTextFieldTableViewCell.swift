@@ -166,6 +166,4 @@ extension ExpandedTextFieldTableViewCell: UITextFieldDelegate {
             }
         }
     }
-    
-    
 }
