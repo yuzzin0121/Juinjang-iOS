@@ -120,7 +120,7 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource  
             cell.expandButton.setImage(arrowImage, for: .normal)
             
             let itemcell = ExpandedDropdownTableViewCell()
-            itemcell.itemTableView.isUserInteractionEnabled = true
+            itemcell.itemPickerView.isUserInteractionEnabled = true
             
             return cell
             

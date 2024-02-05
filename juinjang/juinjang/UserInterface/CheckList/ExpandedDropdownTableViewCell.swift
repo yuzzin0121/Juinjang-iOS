@@ -12,57 +12,7 @@ protocol DropdownDelegate: AnyObject {
     func didSelectOption(_ option: String)
 }
 
-class CellClass: UITableViewCell {
-    
-    lazy var iconImage = UIImageView().then {
-        $0.contentMode = .scaleAspectFit
-    }
-    
-    lazy var iconLabel = UILabel().then() {
-        $0.font = .pretendard(size: 16, weight: .regular)
-        $0.textColor = UIColor(named: "darkGray")
-        $0.adjustsFontSizeToFitWidth = true
-    }
-    
-    lazy var expandButton = UIButton().then {
-        $0.contentMode = .scaleAspectFit
-        $0.setImage(UIImage(named: "item-arrow-down"), for: .normal)
-    }
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        [iconImage, iconLabel, expandButton].forEach { contentView.addSubview($0) }
-        setupLayout()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func setupLayout() {
-        iconImage.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(12)
-            $0.centerY.equalToSuperview()
-            $0.width.equalTo(16)
-            $0.height.equalTo(16)
-        }
-        
-        iconLabel.snp.makeConstraints {
-            $0.leading.equalTo(iconImage.snp.trailing).offset(8)
-            $0.centerY.equalToSuperview()
-        }
-        
-        expandButton.snp.makeConstraints {
-            $0.trailing.equalToSuperview().offset(-8)
-            $0.centerY.equalToSuperview()
-            $0.width.equalTo(16)
-            $0.height.equalTo(16)
-        }
-    }
-}
-
 class ExpandedDropdownTableViewCell: UITableViewCell {
-    
     var selectedOption: String?
     weak var delegate: DropdownDelegate?
     
@@ -91,27 +41,22 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
         $0.contentMode = .scaleAspectFit
         $0.semanticContentAttribute = .forceRightToLeft
         
-        // 전체 버튼 크기에 따른 비율 조정
-        let labelWidth = 55  // 예시 비율 (60%)
-        let imageWidth = 16  // 예시 비율 (40%)
-        
         // 여백 설정
         let titleInset: CGFloat = 12.0
         let imageInset: CGFloat = 8.0
-        
-        $0.imageEdgeInsets = UIEdgeInsets(top: 0, left: 40, bottom: 0, right: -imageInset)
-        $0.titleEdgeInsets = UIEdgeInsets(top: 0, left: titleInset, bottom: 0, right: 0)
+        $0.sizeToFit()
+        $0.titleEdgeInsets = UIEdgeInsets(top: 0, left: titleInset, bottom: 0, right: -imageInset)
+        $0.imageEdgeInsets = UIEdgeInsets(top: 0, left: $0.bounds.width - 35, bottom: 0, right: -imageInset)
     }
     
     lazy var transparentView = UIView()
     
-    lazy var itemTableView = UITableView().then {
+    lazy var itemPickerView = UIPickerView().then {
         $0.layer.cornerRadius = 20
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor(named: "gray4")?.cgColor
         $0.layer.backgroundColor = UIColor(named: "textWhite")?.cgColor
-        $0.frame = CGRect(x: 0, y: 0, width: 116, height: 235)
-        $0.separatorStyle = .none
+//        $0.separatorStyle = .none
     }
     
     lazy var etcTextField = UITextField().then {
@@ -134,9 +79,9 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.selectionStyle = .none
-        itemTableView.delegate = self
-        itemTableView.dataSource = self
-        itemTableView.register(CellClass.self, forCellReuseIdentifier: "Cell")
+        itemPickerView.delegate = self
+        itemPickerView.dataSource = self
+//        itemPickerView.register(CellClass.self, forCellReuseIdentifier: "Cell")
         [questionImage, contentLabel, itemButton].forEach { contentView.addSubview($0) }
         setupLayout()
     }
@@ -180,96 +125,47 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
     }
     
     func addTransparentView(frames: CGRect) {
-        let window = UIApplication.shared.keyWindow
-        transparentView.frame = window?.frame ?? self.contentView.frame
-        self.contentView.addSubview(transparentView)
+        guard let window = UIApplication.shared.keyWindow else { return }
         
-        // itemButton 정중앙 계산
+        // itemButton의 정중앙 좌표 계산
         let itemButtonCenterX = frames.origin.x + frames.width / 2
         let itemButtonCenterY = frames.origin.y + frames.height / 2
-        
+
         let calculatedHeight = CGFloat(options.count) * 39 + CGFloat(options.count - 1)
         let maxHeight: CGFloat = 235
         let finalHeight = min(calculatedHeight, maxHeight)
-        
-        // tableView 정중앙 위치 계산
-        let tableViewOriginX = itemButtonCenterX - frames.width / 2
-        let tableViewOriginY = itemButtonCenterY - (finalHeight / 2)
-        
-        itemTableView.frame = CGRect(x: tableViewOriginX, y: tableViewOriginY, width: frames.width, height: 0)
-        self.contentView.addSubview(itemTableView)
 
-        itemTableView.reloadData()
+        // itemButton을 기준으로 하여 itemPickerView 좌표 계산
+        let pickerViewOriginX = itemButtonCenterX - frames.width / 2
+        let pickerViewOriginY = itemButtonCenterY - (finalHeight / 2)
+
+        // itemPickerView의 좌표를 window 기준으로 변환
+        let pickerViewFrameInWindow = CGRect(x: pickerViewOriginX, y: pickerViewOriginY, width: frames.width, height: finalHeight)
+        let pickerViewFrameInWindowConverted = window.convert(pickerViewFrameInWindow, from: self.contentView)
+
+        transparentView.frame = window.frame
+        window.addSubview(transparentView)
+        window.addSubview(itemPickerView)
+
+        itemPickerView.frame = pickerViewFrameInWindowConverted
+
         let tapgesture = UITapGestureRecognizer(target: self, action: #selector(removeTransparentView))
         transparentView.addGestureRecognizer(tapgesture)
-        
-        transparentView.isUserInteractionEnabled = true
-        
-        self.itemTableView.frame = CGRect(x: tableViewOriginX, y: tableViewOriginY, width: frames.width, height: finalHeight)
     }
+
+
 
 
     @objc func removeTransparentView() {
-        let frames = selectedButton.frame
-        self.itemTableView.frame = CGRect(x: frames.origin.x, y: frames.origin.y + frames.height, width: frames.width, height: 0)
-        self.transparentView.removeFromSuperview()
-    }
-
-    
-    @objc func openItemOptions(_ sender: UIButton) {
-        let selectedOptions = options.map { $0.option }
-        dataSource = selectedOptions
-        selectedButton = sender
-        addTransparentView(frames: sender.frame)
-       }
-}
-
-extension ExpandedDropdownTableViewCell: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return options.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as? CellClass ?? CellClass(style: .default, reuseIdentifier: "Cell")
-        let option = options[indexPath.row]
-        
-        if let image = option.image {
-            cell.iconImage.isHidden = false
-            cell.iconImage.image = image
-            cell.iconLabel.snp.updateConstraints {
-                $0.leading.equalTo(cell.iconImage.snp.trailing).offset(8)
-            }
-        } else {
-            // option의 image가 nil일 경우
-            cell.iconImage.isHidden = true  // 이미지 뷰 숨김
-            cell.iconLabel.snp.updateConstraints {
-                $0.leading.equalTo(cell.iconImage.snp.trailing).offset(-16)
-            }
-        }
-        
-        // 아이콘 이미지와 레이블 설정
-        cell.iconImage.image = option.image
-        cell.iconLabel.text = option.option
-        
-        return cell
-    }
-
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 39
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedButton.setTitle(options[indexPath.row].option, for: .normal)
-        selectedButton.backgroundColor = .white
-        selectedButton.setTitleColor(UIColor(named: "darkGray"), for: .normal)
+        transparentView.removeFromSuperview()
+        itemPickerView.removeFromSuperview()
         
         // 선택한 옵션이 "기타"일 경우
         if selectedButton.title(for: .normal) == "기타" {
             selectedButton.backgroundColor = UIColor(named: "shadowGray")
             selectedButton.setTitleColor(UIColor(named: "darkGray"), for: .normal)
             selectedButton.snp.updateConstraints {
-                $0.trailing.equalToSuperview().offset(-250) // -24를 더해서 왼쪽으로 24만큼 이동
+                $0.trailing.equalToSuperview().offset(-250)
             }
             
             contentView.addSubview(etcTextField)
@@ -282,31 +178,139 @@ extension ExpandedDropdownTableViewCell: UITableViewDelegate, UITableViewDataSou
             }
         } else {
             etcTextField.removeFromSuperview()
-            
-            // 답변 항목 Button
-            selectedButton.snp.updateConstraints {
-                $0.trailing.equalToSuperview().offset(-24)
-                $0.top.equalTo(contentLabel.snp.bottom).offset(20)
-                $0.height.equalTo(31)
-                $0.width.equalTo(116)
-            }
+        }
+    }
+
+    @objc func openItemOptions(_ sender: UIButton) {
+        let selectedOptions = options.map { $0.option }
+        dataSource = selectedOptions
+        selectedButton = sender
+        addTransparentView(frames: sender.frame)
+    }
+}
+
+extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataSource {
+    // MARK: - UIPickerViewDataSource
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return options.count
+    }
+
+    // MARK: - UIPickerViewDelegate
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return options[row].option
+    }
+
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
+        let selectedOption = options[row]
+        print("Selected option: \(selectedOption)")
+        
+        // 선택한 옵션으로 selectedButton 설정
+        setSelectedInset()
+        selectedButton.setTitle(selectedOption.option, for: .normal)
+        selectedButton.backgroundColor = .white
+        selectedButton.setTitleColor(UIColor(named: "darkGray"), for: .normal)
+        selectedButton.setImage(selectedOption.image, for: .normal)
+        selectedButton.semanticContentAttribute = .forceLeftToRight
+        setSelectedInset()
+
+        // 답변 항목 Button
+        selectedButton.snp.updateConstraints {
+            $0.trailing.equalToSuperview().offset(-24)
+            $0.top.equalTo(contentLabel.snp.bottom).offset(20)
+            $0.height.equalTo(31)
+            $0.width.equalTo(116)
         }
         
-        if indexPath.row == 0 {
+        // 기본값 설정
+        if row == 0 {
             backgroundColor = .white
             questionImage.image = UIImage(named: "question-image")
-        } else if selectedButton.title(for: .normal) == "기타" {
-            backgroundColor = .white
-            questionImage.image = UIImage(named: "question-image")
+            itemButton.layer.backgroundColor = UIColor(named: "shadowGray")?.cgColor
+            setBasicInset()
         } else {
             backgroundColor = UIColor(named: "lightOrange")
             questionImage.image = UIImage(named: "question-selected-image")
         }
-        
-        let selectedOption = options[indexPath.row].option
-        print("Selected option: \(selectedOption)")
+    }
     
-        delegate?.didSelectOption(selectedOption)
-        removeTransparentView()
+    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+    
+        let fontSize: CGFloat = 16
+        let leftPadding: CGFloat = 12
+        
+        pickerView.subviews[1].backgroundColor = .clear // 선택된 항목 회색 바탕으로 표시되지 않게 함
+
+        var label: UILabel
+        if let reusedLabel = view as? UILabel {
+            label = reusedLabel
+        } else {
+            label = UILabel()
+        }
+
+        let option = options[row]
+        label.font = UIFont.pretendard(size: fontSize, weight: .regular)
+        label.textColor = UIColor.black
+        label.textAlignment = .left
+
+        if let image = option.image {
+            // Add image to label
+            let imageAttachment = NSTextAttachment()
+            imageAttachment.image = image
+            let imageString = NSAttributedString(attachment: imageAttachment)
+
+            let mutableAttributedString = NSMutableAttributedString()
+            mutableAttributedString.append(imageString)
+            mutableAttributedString.append(NSAttributedString(string: " \(option.option)"))
+
+            label.attributedText = mutableAttributedString
+        } else {
+            // 이미지가 없을 경우 왼쪽 padding 설정
+            label.text = " " + option.option
+            label.frame.origin.x = leftPadding
+        }
+        
+        return label
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
+        return 39
+    }
+    
+    // pickerView에서 항목 선택 시, 여백 설정
+    func setSelectedInset() {
+        let imageInset: CGFloat = 12.0
+        let titleInset: CGFloat = 17.0
+        
+        selectedButton.sizeToFit()
+        
+        if let image = selectedButton.image(for: .normal) {
+            // 이미지가 있는 경우
+            selectedButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: imageInset, bottom: 0, right: titleInset)
+            selectedButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: titleInset, bottom: 0, right: 0)
+        } else {
+            // 이미지가 없는 경우
+            selectedButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            selectedButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: imageInset, bottom: 0, right: 0)
+        }
+    }
+
+    
+    // pickerView에서 기본 여백 설정
+    func setBasicInset() {
+        let buttonImage = UIImage(named: "item-arrow-down")
+        selectedButton.setImage(buttonImage, for: .normal)
+        selectedButton.contentMode = .scaleAspectFit
+        selectedButton.semanticContentAttribute = .forceRightToLeft
+        
+        let titleInset: CGFloat = 12.0
+        let imageInset: CGFloat = 8.0
+        selectedButton.sizeToFit()
+        selectedButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: titleInset, bottom: 0, right: -imageInset)
+        selectedButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: selectedButton.bounds.width - 35, bottom: 0, right: -imageInset)
     }
 }
