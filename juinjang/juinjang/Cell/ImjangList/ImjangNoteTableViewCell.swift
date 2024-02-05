@@ -32,9 +32,8 @@ class ImjangNoteTableViewCell: UITableViewCell {
         [starIcon, scoreLabel].forEach {
             starStackView.addArrangedSubview($0)
         }
-        designView()
         setConstraints()
-        
+        designView()
     }
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -47,14 +46,6 @@ class ImjangNoteTableViewCell: UITableViewCell {
     
     func configureCell(imjangNote: ImjangNote?) {
         guard let imjangNote else { return }
-        if let images = imjangNote.images {
-            if images.isEmpty {
-                roomThumbnailImageView.image = ImageStyle.emptyImage
-            } else {
-                roomThumbnailImageView.image = UIImage(named: "1")  // 임시
-            }
-        }
-        
         
         roomNameLabel.text = imjangNote.roomName
         priceLabel.text = imjangNote.price
@@ -75,6 +66,20 @@ class ImjangNoteTableViewCell: UITableViewCell {
         
         let image = imjangNote.isBookmarked ? ImageStyle.bookmarkSelected : ImageStyle.bookmark
         bookMarkButton.setImage(image, for: .normal)
+        
+        if let images = imjangNote.images {
+            if images.isEmpty {
+                let image = ImageStyle.emptyImage
+                DispatchQueue.main.async {
+                    self.roomThumbnailImageView.image = image
+                }
+            } else {
+                let image = images[0]
+                DispatchQueue.main.async {
+                    self.roomThumbnailImageView.image = UIImage(named: image)  // 임시
+                }
+            }
+        }
     }
     
     func setConstraints() {
@@ -125,6 +130,7 @@ class ImjangNoteTableViewCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         configureCell(imjangNote: nil)
+        self.roomThumbnailImageView.image = nil
     }
     
     override func draw(_ rect: CGRect) {
@@ -132,11 +138,16 @@ class ImjangNoteTableViewCell: UITableViewCell {
         contentView.layer.cornerRadius = 10
         contentView.layer.borderWidth = 1.5
         contentView.layer.borderColor = ColorStyle.strokeGray.cgColor
-        roomThumbnailImageView.design(contentMode: .scaleAspectFill, cornerRadius: 5)
+        DispatchQueue.main.async {
+            self.roomThumbnailImageView.layer.cornerRadius = 5
+            self.roomThumbnailImageView.clipsToBounds = true
+        }
     }
     
     func designView() {
         contentView.backgroundColor = .white
+        
+        roomThumbnailImageView.contentMode = .scaleAspectFill
         roomNameStackView.axis = .horizontal
         roomNameStackView.spacing = 4
         roomNameStackView.alignment = .center
