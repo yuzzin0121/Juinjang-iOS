@@ -1,6 +1,7 @@
 import UIKit
 import SnapKit
 import Then
+import Lottie
 
 
 class MainViewController: UIViewController {
@@ -58,16 +59,18 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        designNavigationBar()
+        
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
         tableView.rowHeight = 710
         tableView.backgroundColor = .clear
-        
         view.backgroundColor = .white
+        
         view.addSubview(backgroundImageView)
         view.addSubview(tableView)
+       
+        designNavigationBar()
         setConstraint()
     }
     

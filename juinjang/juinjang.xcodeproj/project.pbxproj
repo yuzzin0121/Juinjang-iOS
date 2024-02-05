@@ -92,6 +92,9 @@
 		345855D72B6B7F7600432C06 /* KakaoSDKTemplate in Frameworks */ = {isa = PBXBuildFile; productRef = 345855D62B6B7F7600432C06 /* KakaoSDKTemplate */; };
 		345855D92B6B7F7600432C06 /* KakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = 345855D82B6B7F7600432C06 /* KakaoSDKUser */; };
 		345855DB2B6B8D5100432C06 /* CompareSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345855DA2B6B8D5000432C06 /* CompareSearchViewController.swift */; };
+		346CF6AE2B70B46B00C70C7A /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346CF6AD2B70B46B00C70C7A /* SplashViewController.swift */; };
+		346CF6B02B70B4D300C70C7A /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = 346CF6AF2B70B4D300C70C7A /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json */; };
+		346CF6B32B70B54B00C70C7A /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 346CF6B22B70B54B00C70C7A /* Lottie */; };
 		611757382B67D5E60043E958 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 611757372B67D5E60043E958 /* Assets.xcassets */; };
 		611F14552B47070B00B983F1 /* RecordingSegmentedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F14542B47070B00B983F1 /* RecordingSegmentedViewController.swift */; };
 		611F145A2B4707CC00B983F1 /* RecordingRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F14592B4707CC00B983F1 /* RecordingRoomViewController.swift */; };
@@ -211,6 +214,8 @@
 		345855A22B69504500432C06 /* SelectMaemullViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectMaemullViewController.swift; sourceTree = "<group>"; };
 		345855A62B6A039600432C06 /* ReportImjangListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportImjangListTableViewCell.swift; sourceTree = "<group>"; };
 		345855DA2B6B8D5000432C06 /* CompareSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompareSearchViewController.swift; sourceTree = "<group>"; };
+		346CF6AD2B70B46B00C70C7A /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
+		346CF6AF2B70B4D300C70C7A /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json"; sourceTree = "<group>"; };
 		611757372B67D5E60043E958 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		611F14542B47070B00B983F1 /* RecordingSegmentedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingSegmentedViewController.swift; sourceTree = "<group>"; };
 		611F14592B4707CC00B983F1 /* RecordingRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingRoomViewController.swift; sourceTree = "<group>"; };
@@ -272,6 +277,7 @@
 				345855D72B6B7F7600432C06 /* KakaoSDKTemplate in Frameworks */,
 				0A4EBE2F2B5E9E8B00909B7A /* SnapKit-Dynamic in Frameworks */,
 				345855D12B6B7F7600432C06 /* KakaoSDKNavi in Frameworks */,
+				346CF6B32B70B54B00C70C7A /* Lottie in Frameworks */,
 				0A4EBE322B5EA21100909B7A /* FSCalendar in Frameworks */,
 				345855C72B6B7F7600432C06 /* KakaoSDKCert in Frameworks */,
 				61D9250F2B4965D0002A16B4 /* IQKeyboardManagerSwift in Frameworks */,
@@ -419,6 +425,7 @@
 		0A9E0A452B3DCAB90094595A /* juinjang */ = {
 			isa = PBXGroup;
 			children = (
+				346CF6AC2B70B41F00C70C7A /* Splash */,
 				61B0C9E32B6CD9E200BE86D2 /* CustomView */,
 				345855932B692DE300432C06 /* Report */,
 				345855792B689CC300432C06 /* Setting */,
@@ -546,6 +553,15 @@
 			children = (
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		346CF6AC2B70B41F00C70C7A /* Splash */ = {
+			isa = PBXGroup;
+			children = (
+				346CF6AF2B70B4D300C70C7A /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json */,
+				346CF6AD2B70B46B00C70C7A /* SplashViewController.swift */,
+			);
+			path = Splash;
 			sourceTree = "<group>";
 		};
 		616408EA2B407A2100EC3B5E /* Extension */ = {
@@ -727,6 +743,7 @@
 				345855D42B6B7F7600432C06 /* KakaoSDKTalk */,
 				345855D62B6B7F7600432C06 /* KakaoSDKTemplate */,
 				345855D82B6B7F7600432C06 /* KakaoSDKUser */,
+				346CF6B22B70B54B00C70C7A /* Lottie */,
 			);
 			productName = juinjang;
 			productReference = 0A9E0A432B3DCAB90094595A /* juinjang.app */;
@@ -766,6 +783,7 @@
 				0AEB63BE2B616DF200427EA7 /* XCRemoteSwiftPackageReference "SwiftyMenu" */,
 				345855692B68998A00432C06 /* XCRemoteSwiftPackageReference "Charts" */,
 				345855C12B6B7F7600432C06 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
+				346CF6B12B70B54B00C70C7A /* XCRemoteSwiftPackageReference "lottie-ios" */,
 			);
 			productRefGroup = 0A9E0A442B3DCAB90094595A /* Products */;
 			projectDirPath = "";
@@ -783,6 +801,7 @@
 			files = (
 				61A7B92D2B4C4EC300795B49 /* Pretendard-Bold.otf in Resources */,
 				0A9E0AA92B3DD4D20094595A /* .gitignore in Resources */,
+				346CF6B02B70B4D300C70C7A /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json in Resources */,
 				61A7B92E2B4C4EC300795B49 /* Pretendard-ExtraBold.otf in Resources */,
 				61A7B9262B4C4EC300795B49 /* Pretendard-Regular.otf in Resources */,
 				61A7B9292B4C4EC300795B49 /* Pretendard-Thin.otf in Resources */,
@@ -811,6 +830,7 @@
 				345855882B689E0100432C06 /* UseViewController.swift in Sources */,
 				619269E02B67742B00D4DD3E /* Filter.swift in Sources */,
 				616408E12B405B7200EC3B5E /* ImjangNoteViewController.swift in Sources */,
+				346CF6AE2B70B46B00C70C7A /* SplashViewController.swift in Sources */,
 				3458558C2B689E1E00432C06 /* LogoutPopupViewController.swift in Sources */,
 				619269EA2B67745900D4DD3E /* ColorStyle.swift in Sources */,
 				61D9250A2B49506D002A16B4 /* RecordingFilesViewController.swift in Sources */,
@@ -1192,6 +1212,14 @@
 				minimumVersion = 2.20.0;
 			};
 		};
+		346CF6B12B70B54B00C70C7A /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.4.0;
+			};
+		};
 		61D9250D2B4965D0002A16B4 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager";
@@ -1307,6 +1335,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 345855C12B6B7F7600432C06 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
 			productName = KakaoSDKUser;
+		};
+		346CF6B22B70B54B00C70C7A /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 346CF6B12B70B54B00C70C7A /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
 		};
 		61D9250E2B4965D0002A16B4 /* IQKeyboardManagerSwift */ = {
 			isa = XCSwiftPackageProductDependency;

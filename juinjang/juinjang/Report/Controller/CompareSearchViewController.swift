@@ -116,6 +116,7 @@ class CompareSearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         designNavigationBar()
         
         view.backgroundColor = .white
