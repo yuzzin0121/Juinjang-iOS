@@ -8,11 +8,26 @@
 import UIKit
 import SnapKit
 import Then
+import KakaoSDKAuth
+import KakaoSDKUser
+import KakaoSDKCommon
 
 class LogoutPopupViewController: UIViewController {
     private let popupView: LogoutPopupView
     @objc func no(_ sender: UIButton) {
         self.dismiss(animated: false, completion: nil)
+    }
+    
+    @objc func yes(_ sender: UIButton) {
+        UserApi.shared.logout {(error) in
+            if let error = error {
+                print(error)
+            }
+            else {
+                print("logout() success.")
+                self.dismiss(animated: false, completion: nil)
+            }
+        }
     }
   
     init(name: String, email: String, ment: String) {
