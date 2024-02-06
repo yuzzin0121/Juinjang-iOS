@@ -33,8 +33,22 @@ struct CalendarItem: Item {
     var isSelected: Bool
 }
 
-struct ScoreItem: Item {
+struct CalendarCellState: Item {
     var content: String
+    var isSelected: Bool
+    var isExpanded: Bool
+    var selectedDate: Date?
+
+    init(content: String, isSelected: Bool, isExpanded: Bool, selectedDate: Date?) {
+        self.content = content
+        self.isSelected = isSelected
+        self.isExpanded = isExpanded
+        self.selectedDate = selectedDate
+    }
+}
+
+struct ScoreItem: Item {
+    let content: String
     var score: String?
     var isSelected: Bool
     
@@ -45,7 +59,7 @@ struct ScoreItem: Item {
 }
 
 struct InputItem: Item {
-    var content: String
+    let content: String
     var inputAnswer: String?
     var isSelected: Bool
     
@@ -56,7 +70,7 @@ struct InputItem: Item {
 }
 
 struct SelectionItem: Item {
-    var content: String
+    let content: String
     var options: [OptionItem]
     var selectAnswer: String?
     var isSelected: Bool
@@ -70,12 +84,7 @@ struct SelectionItem: Item {
 
 struct OptionItem {
     var image: UIImage?
-    var option: String
-}
-
-protocol DataUpdateDelegate: AnyObject {
-    func getItem(at indexPath: IndexPath) -> Item
-    func updateItem(item: Item, at indexPath: IndexPath)
+    let option: String
 }
 
 // -MARK: 임장용 체크리스트 항목

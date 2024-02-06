@@ -14,25 +14,26 @@ protocol DatePickerDelegate: AnyObject {
 }
 
 class ExpandedCalendarTableViewCell: UITableViewCell {
-    
-    var calendarItems: [CalendarItem] = []
     weak var delegate: DatePickerDelegate?
+    var calendarItems: [String: (inputDate: Date?, isSelected: Bool)] = [:]
+    var expandedCellStates: [IndexPath: Bool] = [:]
     var isExpanded: Bool = false
-    
     var selectedDate: Date?
     
     func setExpanded(_ expanded: Bool) {
         isExpanded = expanded
-
         // 확장되거나 접혔을 때 선택된 날짜를 저장하거나 불러오기
         if isExpanded {
             // 저장된 날짜가 있으면 불러오기, 없으면 현재 선택된 날짜 저장
             selectedDate = selectedDate ?? loadSelectedDate() ?? Date()
         } else {
-            // 접혔을 때 선택된 날짜 저장
-            saveSelectedDate()
+            // 저장된 날짜가 있으면 불러오기, 없으면 현재 선택된 날짜 저장
+            selectedDate = selectedDate ?? loadSelectedDate() ?? Date()
         }
     }
+    
+    // 선택된 날짜를 외부로 전달하는 콜백 클로저
+    var selectionHandler: ((Date) -> Void)?
     
     lazy var questionImage = UIImageView().then {
         $0.contentMode = .scaleAspectFit
@@ -87,10 +88,6 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         // Configure the view for the selected state
-    }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
     }
     
     func setupLayout() {
@@ -204,9 +201,10 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
     }
     
     func saveSelectedDate() {
-        // 선택된 날짜를 UserDefaults에 저장
+        // 선택된 날짜의 시간 성분을 12:00 PM으로 설정 (UTC로 변환)
         if let selectedDate = selectedDate {
-            UserDefaults.standard.set(selectedDate, forKey: "SelectedDateKey")
+            let noonDate = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: selectedDate)?.addingTimeInterval(TimeInterval(NSTimeZone.system.secondsFromGMT()))
+            UserDefaults.standard.set(noonDate, forKey: "SelectedDateKey")
         } else {
             // 선택된 날짜가 nil인 경우 UserDefaults에서 해당 키의 값을 제거
             UserDefaults.standard.removeObject(forKey: "SelectedDateKey")
@@ -214,24 +212,39 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
     }
     
     func loadSelectedDate() -> Date? {
-        return UserDefaults.standard.value(forKey: "SelectedDateKey") as? Date
+        if let storedDate = UserDefaults.standard.value(forKey: "SelectedDateKey") as? Date {
+            // 저장된 날짜의 시간 성분 제거
+            return Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: storedDate)
+        }
+        return nil
     }
     
-    // 선택된 날짜 업데이트 함수
     private func updateCalendarItem(withContent content: String, selectedDate: Date) {
-        print(selectedDate)
         // 찾으려는 content와 일치하는 CalendarItem을 찾음
-        if let index = calendarItems.firstIndex(where: { $0.content == content }) {
+        if let index = calendarItems.index(forKey: content) {
             // 찾은 CalendarItem의 inputDate를 새로 선택된 날짜로 변경
-            calendarItems[index].inputDate = selectedDate
-            calendarItems[index].isSelected = true
+            // 여기서 12:00 PM으로 설정
+            let noonDate = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: selectedDate)?.addingTimeInterval(TimeInterval(NSTimeZone.system.secondsFromGMT()))
+            calendarItems.updateValue((noonDate, true), forKey: content)
             
-            // calendarItem 확인
-            for calendarItem in calendarItems {
-                print(calendarItem)
+            // 딕셔너리 확인
+            for (content, data) in calendarItems {
+                print("\(content): \(data)")
             }
-            
             saveSelectedDate()
+        }
+    }
+    
+    // 확장 여부 및 선택된 날짜를 기반으로 상태 설정
+    func configureCell(_ cell: ExpandedCalendarTableViewCell, at indexPath: IndexPath) {
+        let isExpanded = expandedCellStates[indexPath] ?? false
+        cell.setExpanded(isExpanded)
+
+        // 다른 설정들...
+
+        // 선택된 날짜를 설정하고 초기화되는 것을 방지
+        if let selectedDate = selectedDate {
+            cell.selectedDate = selectedDate
         }
     }
 }
@@ -254,7 +267,6 @@ extension ExpandedCalendarTableViewCell: FSCalendarDelegate, FSCalendarDataSourc
                 backgroundColor = .white
                 questionImage.image = UIImage(named: "question-image")
             }
-            
             return
         }
         
@@ -297,7 +309,11 @@ extension ExpandedCalendarTableViewCell: FSCalendarDelegate, FSCalendarDataSourc
             
             // 선택된 날짜를 해당 CalendarItem에 저장
             updateCalendarItem(withContent: contentLabel.text ?? "", selectedDate: selectedDateNoon)
+            
+            // 외부로 선택된 날짜 전달
+            selectionHandler?(selectedDate ?? Date())
         }
+        // 현재 선택된 날짜 업데이트
         selectedDate = date
     }
     

@@ -8,19 +8,22 @@
 import UIKit
 import SnapKit
 
-class CheckListViewController: UIViewController, ExpandedScoreCellDelegate {
-    
-    var buttonStates: [Int: Bool] = [:]
-    
-    func buttonTapped(at index: Int) {
-        // 해당 버튼의 상태를 딕셔너리에 업데이트
-        buttonStates[index] = !buttonStates[index, default: false]
-
-        // 필요한 작업 수행
-        // 예: 특정 인덱스의 버튼 상태를 가져와 사용
-        let buttonState = buttonStates[index] ?? false
-        print("Button at index \(index) tapped. State: \(buttonState)")
+class CheckListViewController: UIViewController, DatePickerDelegate {
+    func didSelectDate(_ date: Date) {
+        print(date)
     }
+    
+//    var buttonStates: [Int: Bool] = [:]
+//    
+//    func buttonTapped(at index: Int) {
+//        // 해당 버튼의 상태를 딕셔너리에 업데이트
+//        buttonStates[index] = !buttonStates[index, default: false]
+//
+//        // 필요한 작업 수행
+//        // 예: 특정 인덱스의 버튼 상태를 가져와 사용
+//        let buttonState = buttonStates[index] ?? false
+//        print("Button at index \(index) tapped. State: \(buttonState)")
+//    }
     
     lazy var tableView = UITableView().then {
         $0.separatorStyle = .none
@@ -131,23 +134,33 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource  
             if let calendarItem = category.items[indexPath.row - 1] as? CalendarItem {
                 // CalendarItem인 경우
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: ExpandedCalendarTableViewCell.identifier, for: indexPath) as? ExpandedCalendarTableViewCell else { return UITableViewCell() }
-                // 선택된 날짜를 저장하고 불러오기
-                cell.saveSelectedDate()
-                cell.selectedDate = cell.loadSelectedDate() ?? Date()
                 
-                cell.calendarItems = [CalendarItem(content: calendarItem.content, inputDate: calendarItem.inputDate, isSelected: calendarItem.isSelected)]
+                let contentKey = calendarItem.content
+
+                // 저장된 날짜를 가져오기
+                let savedData = cell.calendarItems[contentKey]
+
+                // 새로운 값으로 업데이트
+                cell.calendarItems[contentKey] = (inputDate: calendarItem.inputDate, isSelected: savedData?.isSelected ?? false)
+                
                 cell.contentLabel.text = calendarItem.content
-//                cell.selectedDate = cell.calendarItems[index]
+                
+                cell.configureCell(cell, at: indexPath)
                 
                 // 선택 상태에 따라 배경색 설정
-                cell.backgroundColor = calendarItem.isSelected ? UIColor(named: "lightOrange") : UIColor.white
-                
+                cell.backgroundColor = cell.calendarItems[contentKey]?.isSelected ?? false ? UIColor(named: "lightOrange") : UIColor.white
+
                 // 저장된 날짜가 없으면 기본값으로 설정
                 cell.selectedDate = cell.loadSelectedDate() ?? Date()
-                
-                print(cell.calendarItems)
-                
-                
+
+                // 셀이 선택된 경우 호출되는 클로저 설정
+                cell.selectionHandler = { [weak self, weak cell] selectedDate in
+                    // 여기에서 선택된 날짜를 처리
+                    print("Selected Date in TableView:", selectedDate)
+                    
+                    cell?.saveSelectedDate()
+                }
+                print("셀에서 가져온 데이터", cell.calendarItems)
                 return cell
             } else if let scoreItem = category.items[indexPath.row - 1] as? ScoreItem {
                 // ScoreItem인 경우
@@ -155,7 +168,7 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource  
                 
                 cell.contentLabel.text = scoreItem.content
                 cell.score = scoreItem.score
-                cell.delegate = self
+//                cell.delegate = self
 //                // 버튼의 초기 상태 설정
 //                for buttonTag in 1...5 {
 //                    cell.answerButton[buttonTag].isSelected = cell.buttonStates[buttonTag] ?? false
@@ -206,38 +219,36 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource  
                 }
                 let section = IndexSet.init(integer: indexPath.section)
                 tableView.reloadSections(section, with: .fade)
+            } else {
+                tableView.reloadRows(at: [indexPath], with: .automatic)
             }
         } else if let cell = tableView.cellForRow(at: indexPath) as? ExpandedCalendarTableViewCell {
             // 확장된 캘린더 셀을 눌렀을 때
             if let selectedDate = cell.selectedDate, var item = category.items[indexPath.row - 1] as? CalendarItem {
                 item.inputDate = selectedDate
                 item.isSelected = true
-            } else {
-                // 캐스팅 실패 또는 selectedDate가 nil인 경우 처리
+                category.items[indexPath.row - 1] = item
             }
         } else if let cell = tableView.cellForRow(at: indexPath) as? ExpandedScoreTableViewCell {
             // 확장 점수 셀을 눌렀을 때
             if let selectedAnswer = cell.score, var item = category.items[indexPath.row - 1] as? ScoreItem {
                 item.score = selectedAnswer
                 item.isSelected = true
-            } else {
-                // 캐스팅 실패 또는 selectedAnswer가 nil인 경우 처리
+                category.items[indexPath.row - 1] = item
             }
         } else if let cell = tableView.cellForRow(at: indexPath) as? ExpandedTextFieldTableViewCell {
             // 확장 입력 셀을 눌렀을 때
             if let inputAnswer = cell.inputAnswer, var item = category.items[indexPath.row - 1] as? InputItem {
                 item.inputAnswer = inputAnswer
                 item.isSelected = true
-            } else {
-                // 캐스팅 실패 또는 inputAnswer가 nil인 경우 처리
+                category.items[indexPath.row - 1] = item
             }
         } else if let cell = tableView.cellForRow(at: indexPath) as? ExpandedDropdownTableViewCell {
             // 확장 드롭다운 셀을 눌렀을 때
             if let selectedOption = cell.selectedOption, var item = category.items[indexPath.row - 1] as? SelectionItem {
                 item.selectAnswer = selectedOption
                 item.isSelected = true
-            } else {
-                // 캐스팅 실패 또는 selectedOption이 nil인 경우 처리
+                category.items[indexPath.row - 1] = item
             }
         }
     }
