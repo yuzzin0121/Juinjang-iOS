@@ -158,10 +158,4 @@ extension ImjangSearchResultViewController: UISearchBarDelegate {
         searchedTableView.reloadData()
     }
     
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText == "" {
-            searchedImjangList = []
-            searchedTableView.reloadData()
-        }
-    }
 }
