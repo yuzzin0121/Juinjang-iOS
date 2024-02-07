@@ -17,12 +17,18 @@ class DeleteImjangNoteTableViewCell: UITableViewCell {
     let scoreLabel = UILabel()
     let starStackView = UIStackView()
     let addressLabel = UILabel()
-    let checkButton = UIButton()
+    let checkImageView = UIImageView()
+    
+    var isClicked = false {
+        didSet {
+            checkImageView.image = isClicked ? ImageStyle.on : ImageStyle.off
+        }
+    }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        [roomThumbnailImageView, roomNameStackView, priceLabel, starStackView, addressLabel, checkButton].forEach {
+        [roomThumbnailImageView, roomNameStackView, priceLabel, starStackView, addressLabel, checkImageView].forEach {
             contentView.addSubview($0)
         }
         [roomNameLabel, roomIcon].forEach {
@@ -33,9 +39,8 @@ class DeleteImjangNoteTableViewCell: UITableViewCell {
         }
         designView()
         setConstraints()
-        
     }
-    
+
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -48,7 +53,7 @@ class DeleteImjangNoteTableViewCell: UITableViewCell {
             if images.isEmpty {
                 roomThumbnailImageView.image = ImageStyle.emptyImage
             } else {
-                roomThumbnailImageView.image = UIImage(named: "1")  // 임시
+                roomThumbnailImageView.image = UIImage(named: images[0])  // 임시
             }
         }
         
@@ -68,13 +73,11 @@ class DeleteImjangNoteTableViewCell: UITableViewCell {
         }
         
         addressLabel.text = imjangNote.location
-        
-        checkButton.setImage(ImageStyle.off, for: .normal)
     }
     
     func setConstraints() {
         
-        checkButton.snp.makeConstraints {
+        checkImageView.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.trailing.equalTo(contentView).inset(16)
             $0.size.equalTo(20)
@@ -89,7 +92,7 @@ class DeleteImjangNoteTableViewCell: UITableViewCell {
         roomNameStackView.snp.makeConstraints {
             $0.top.equalTo(contentView).offset(12)
             $0.leading.equalTo(roomThumbnailImageView.snp.trailing).offset(8)
-            $0.trailing.lessThanOrEqualTo(checkButton.snp.leading).inset(12)
+            $0.trailing.lessThanOrEqualTo(checkImageView.snp.leading).inset(12)
             $0.height.equalTo(24)
         }
         
@@ -100,7 +103,7 @@ class DeleteImjangNoteTableViewCell: UITableViewCell {
         priceLabel.snp.makeConstraints {
             $0.top.equalTo(roomNameStackView.snp.bottom)
             $0.leading.equalTo(roomNameLabel.snp.leading)
-            $0.trailing.greaterThanOrEqualTo(checkButton.snp.leading).inset(12)
+            $0.trailing.greaterThanOrEqualTo(checkImageView.snp.leading).inset(12)
         }
         
         starStackView.snp.makeConstraints {
@@ -116,7 +119,7 @@ class DeleteImjangNoteTableViewCell: UITableViewCell {
         addressLabel.snp.makeConstraints {
             $0.leading.equalTo(roomNameLabel.snp.leading)
             $0.top.equalTo(starStackView.snp.bottom)
-            $0.trailing.greaterThanOrEqualTo(checkButton.snp.leading).inset(12)
+            $0.trailing.greaterThanOrEqualTo(checkImageView.snp.leading).inset(12)
         }
         
     }
@@ -131,11 +134,16 @@ class DeleteImjangNoteTableViewCell: UITableViewCell {
         contentView.layer.cornerRadius = 10
         contentView.layer.borderWidth = 1.5
         contentView.layer.borderColor = ColorStyle.strokeGray.cgColor
-        roomThumbnailImageView.design(contentMode: .scaleAspectFill, cornerRadius: 5)
+        DispatchQueue.main.async {
+            self.roomThumbnailImageView.layer.cornerRadius = 5
+            self.roomThumbnailImageView.clipsToBounds = true
+        }
     }
     
     func designView() {
         contentView.backgroundColor = .white
+        roomThumbnailImageView.contentMode = .scaleAspectFill
+        
         roomNameStackView.axis = .horizontal
         roomNameStackView.spacing = 4
         roomNameStackView.alignment = .center
@@ -155,7 +163,7 @@ class DeleteImjangNoteTableViewCell: UITableViewCell {
         scoreLabel.design(text:"", textColor: ColorStyle.mainOrange, font: .pretendard(size: 14, weight: .semiBold))
         addressLabel.design(text: "", textColor: ColorStyle.textGray, font: .pretendard(size: 14, weight: .medium))
         
-        checkButton.design(image: ImageStyle.off, backgroundColor: ColorStyle.textWhite)
+        checkImageView.design(image: ImageStyle.off, contentMode: .scaleAspectFit)
     }
     
     required init?(coder: NSCoder) {
