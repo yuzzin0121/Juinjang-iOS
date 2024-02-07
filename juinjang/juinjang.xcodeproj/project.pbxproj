@@ -145,6 +145,7 @@
 		61D9250A2B49506D002A16B4 /* RecordingFilesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D925092B49506D002A16B4 /* RecordingFilesViewController.swift */; };
 		61D9250F2B4965D0002A16B4 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 61D9250E2B4965D0002A16B4 /* IQKeyboardManagerSwift */; };
 		61D925112B4983A1002A16B4 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D925102B4983A1002A16B4 /* UILabel+Extension.swift */; };
+		61E8EC0C2B726C9100BEAFE5 /* DeleteImjangPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E8EC0B2B726C9100BEAFE5 /* DeleteImjangPopupViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -266,6 +267,7 @@
 		61D925072B486706002A16B4 /* RecordingFileItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingFileItem.swift; sourceTree = "<group>"; };
 		61D925092B49506D002A16B4 /* RecordingFilesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingFilesViewController.swift; sourceTree = "<group>"; };
 		61D925102B4983A1002A16B4 /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
+		61E8EC0B2B726C9100BEAFE5 /* DeleteImjangPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteImjangPopupViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -611,6 +613,7 @@
 				619269D42B6773FE00D4DD3E /* ImjangSearchViewController.swift */,
 				619269D52B6773FE00D4DD3E /* ImjangListViewController.swift */,
 				619269D62B6773FE00D4DD3E /* DeleteImjangViewController.swift */,
+				61E8EC0B2B726C9100BEAFE5 /* DeleteImjangPopupViewController.swift */,
 			);
 			path = ImjangList;
 			sourceTree = "<group>";
@@ -891,6 +894,7 @@
 				0A24711B2B68FCF700A7382B /* SignupPopupViewController.swift in Sources */,
 				619269F62B67747F00D4DD3E /* SearchKeywordHeaderView.swift in Sources */,
 				616409022B407FB300EC3B5E /* UIFont+Pretendard.swift in Sources */,
+				61E8EC0C2B726C9100BEAFE5 /* DeleteImjangPopupViewController.swift in Sources */,
 				61B0C9E72B6F5AD300BE86D2 /* DeleteImjangImagePopupView.swift in Sources */,
 				345855A72B6A039600432C06 /* ReportImjangListTableViewCell.swift in Sources */,
 				345855972B692DFB00432C06 /* GraphViewController.swift in Sources */,

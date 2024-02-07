@@ -23,6 +23,12 @@ class DeleteImjangViewController: UIViewController {
     }
     let deleteButton = UIButton()
     
+    var selectedIndexes: Set<Int> = [] {
+        didSet {
+            setDeleteButtonDesign()
+        }
+    }
+    
     var imjangList: [ImjangNote] = ImjangList.list
     
     override func viewDidLoad() {
@@ -34,6 +40,27 @@ class DeleteImjangViewController: UIViewController {
         configureLayout()
         configureView()
         deleteImjangTableView.reloadData()
+        deleteButton.addTarget(self, action: #selector(deleteButtonClicked), for: .touchUpInside)
+    }
+    
+    @objc func deleteButtonClicked() {
+        let deleteImjangPopupVC = DeleteImjangPopupViewController()
+        guard let roomIndex = selectedIndexes.first else { return }
+        deleteImjangPopupVC.selectedRoomName = imjangList[roomIndex].roomName
+        deleteImjangPopupVC.selectedCount = selectedIndexes.count
+        deleteImjangPopupVC.modalPresentationStyle = .overFullScreen
+        
+        deleteImjangPopupVC.completionHandler = {
+            self.selectedIndexes.sorted(by: <)
+            for index in self.selectedIndexes {
+                if index < self.imjangList.count {
+                    self.imjangList.remove(at: index)
+                }
+            }
+            self.selectedIndexes.removeAll()
+            self.deleteImjangTableView.reloadData()
+        }
+        present(deleteImjangPopupVC, animated: false)
     }
     
     func configureTableView() {
@@ -42,6 +69,7 @@ class DeleteImjangViewController: UIViewController {
         deleteImjangTableView.rowHeight = 116
         deleteImjangTableView.separatorStyle = .none
         deleteImjangTableView.showsVerticalScrollIndicator = false
+        deleteImjangTableView.allowsMultipleSelection = true
         deleteImjangTableView.sectionHeaderTopPadding = 0
         deleteImjangTableView.register(DeleteImjangTableHeaderView.self, forHeaderFooterViewReuseIdentifier: DeleteImjangTableHeaderView.identifier)
         deleteImjangTableView.register(DeleteImjangNoteTableViewCell.self, forCellReuseIdentifier: DeleteImjangNoteTableViewCell.identifier)
@@ -94,13 +122,27 @@ class DeleteImjangViewController: UIViewController {
                             cornerRadius: 10)
     }
     
-    @objc func removeAllCheckButtonClicked() {
-        
+    func setDeleteButtonDesign() {
+        deleteButton.backgroundColor = selectedIndexes.count > 0 ? ColorStyle.mainOrange : ColorStyle.null
+        deleteButton.isEnabled = selectedIndexes.count > 0 ? true : false
+    }
+    
+    @objc func removeAllCheckButtonClicked(sender: UIButton) {
+        sender.isSelected.toggle()
+        if sender.isSelected == true {
+            sender.setImage(ImageStyle.on, for: .normal)
+            self.selectedIndexes = Set(0...imjangList.count - 1)
+            deleteImjangTableView.reloadData()
+        } else {
+            sender.setImage(ImageStyle.off, for: .normal)
+            self.selectedIndexes.removeAll()
+            deleteImjangTableView.reloadData()
+        }
     }
 }
 
 extension DeleteImjangViewController: UITableViewDelegate, UITableViewDataSource {
-    
+    // 헤더의 높이
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 50
     }
@@ -110,7 +152,10 @@ extension DeleteImjangViewController: UITableViewDelegate, UITableViewDataSource
             return UITableViewHeaderFooterView()
         }
         
-        headerView.selectedCountLabel.text = "0개 선택됨"   // 개수 변경 필요
+        headerView.selectedCountLabel.text = "\(selectedIndexes.count)개 선택됨"   // 개수 변경 필요
+        headerView.selectedCountLabel.textColor = selectedIndexes.count > 0 ? ColorStyle.mainOrange : ColorStyle.textGray
+        
+        headerView.removeAllCheckButton.setImage(selectedIndexes.count == imjangList.count ? ImageStyle.on : ImageStyle.off, for: .normal)
         headerView.removeAllCheckButton.addTarget(self, action: #selector(removeAllCheckButtonClicked), for: .touchUpInside)
         
         return headerView
@@ -126,12 +171,32 @@ extension DeleteImjangViewController: UITableViewDelegate, UITableViewDataSource
         }
         
         cell.selectionStyle = .none
+    
+        if selectedIndexes.contains(indexPath.row) {
+            cell.isClicked = true
+        } else {
+            cell.isClicked = false
+        }
+        
+        cell.isClicked = selectedIndexes.contains(indexPath.row)
 
         cell.configureCell(imjangNote: imjangList[indexPath.row])
-        cell.checkButton.tag = indexPath.row
+        cell.checkImageView.tag = indexPath.row
         
         return cell
     }
     
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let cell = tableView.cellForRow(at: indexPath) as? DeleteImjangNoteTableViewCell else {
+            return
+        }
+        cell.isClicked.toggle()
+        if cell.isClicked == true {
+            selectedIndexes.insert(indexPath.row)
+        } else {
+            selectedIndexes.remove(indexPath.row)
+        }
+        
+        deleteImjangTableView.reloadData()
+    }
 }
