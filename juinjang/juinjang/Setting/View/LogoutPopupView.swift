@@ -44,6 +44,7 @@ class LogoutPopupView: UIView {
         $0.setTitleColor(.white, for: .normal)
         $0.backgroundColor = UIColor(named: "500")
         $0.layer.cornerRadius = 10
+        $0.addTarget(self, action: #selector(LogoutPopupViewController.yes(_:)), for: .touchUpInside)
     }
   
     init(name: String, email: String, ment: String, leftButtonTitle: String = "아니요", rightButtonTitle: String = "예") {

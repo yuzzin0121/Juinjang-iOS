@@ -360,7 +360,7 @@ class ImjangNoteViewController: UIViewController {
     }
     
     func setImage2() {
-        let imagesWidth = view.frame.width - (24*2) - 8
+//        let imagesWidth = view.frame.width - (24*2) - 8
         [firstImage, secondImage].forEach { stackView.addArrangedSubview($0)}
         secondImage.addSubview(maximizeImageView)
         
@@ -382,7 +382,7 @@ class ImjangNoteViewController: UIViewController {
     
     func setImage3() {
         let images = [firstImage, secondImage, thirdImage]
-        let imagesWidth = view.frame.width - (24 * 2)
+//        let imagesWidth = view.frame.width - (24 * 2)
         
         [images[0],vStackView].forEach {
             stackView.addArrangedSubview($0)
@@ -397,7 +397,7 @@ class ImjangNoteViewController: UIViewController {
         images[0].snp.makeConstraints {
             $0.height.equalTo(images[0].snp.width).multipliedBy(171.0 / 225.0)
         }
-        let vstackHeight = images[0].frame.height - 8
+//        let vstackHeight = images[0].frame.height - 8
         
         images[1].snp.makeConstraints {
             $0.height.equalTo(images[1].snp.width).multipliedBy(89.0 / 109.0)

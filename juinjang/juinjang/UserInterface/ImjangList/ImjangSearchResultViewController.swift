@@ -36,8 +36,8 @@ class ImjangSearchResultViewController: UIViewController {
 
         designNavigationBar()
         configureHierarchy()
-        designView()
         setupConstraints()
+        designView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -67,7 +67,6 @@ class ImjangSearchResultViewController: UIViewController {
 
         // UIBarButtonItem 생성 및 이미지 설정
         let backButtonItem = UIBarButtonItem(image: ImageStyle.arrowLeft, style: .plain, target: self, action: #selector(popView))
-
         let searchTextFieldItem = UIBarButtonItem(customView: searchBar)
     
         // 네비게이션 아이템에 백 버튼 아이템 설정
@@ -82,6 +81,7 @@ class ImjangSearchResultViewController: UIViewController {
     func designView() {
         view.backgroundColor = .white
         searchBar.placeholder = searchKeyword
+        searchBar.delegate = self
         searchedTableView.delegate = self
         searchedTableView.dataSource = self
     }
@@ -98,6 +98,21 @@ class ImjangSearchResultViewController: UIViewController {
         imjangNote.isBookmarked.toggle()
         searchedImjangList[sender.tag] = imjangNote
         searchedTableView.reloadRows(at: [IndexPath(row: sender.tag, section: 0)], with: .fade)
+    }
+    
+    func saveSearchKeyword(keyword: String) {
+        var keywordArray = UserDefaultManager.shared.searchKeywords
+        
+        if let index = keywordArray.firstIndex(where: { $0 == keyword }) {
+            keywordArray.remove(at: index)
+            keywordArray.insert(keyword, at: 0)
+        } else {
+            if keywordArray.count < 3 {
+                keywordArray.insert(keyword, at: 0)
+            }
+        }
+        
+        UserDefaultManager.shared.searchKeywords = keywordArray
     }
 }
 
@@ -116,6 +131,31 @@ extension ImjangSearchResultViewController: UITableViewDelegate, UITableViewData
         
         return cell
     }
-    
+}
+
+extension ImjangSearchResultViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        let text = searchBar.text!
+        if text.count < 2 {
+            return
+        }
+        saveSearchKeyword(keyword: text)
+        print("text")
+        for list in self.totalImjangList {
+            if list.roomName.contains(text.lowercased()) || list.location.contains(text.lowercased()) {
+                print("있음")
+                searchedImjangList.append(list)
+            } else if list.roomName.contains(text.uppercased()) || list.location.contains(text.uppercased()) {
+                print("있음")
+                searchedImjangList.append(list)
+            }
+        }
+        searchedTableView.reloadData()
+    }
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.text = ""
+        searchedImjangList = []
+        searchedTableView.reloadData()
+    }
     
 }
