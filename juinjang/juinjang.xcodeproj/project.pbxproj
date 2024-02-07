@@ -50,6 +50,7 @@
 		0A9E0AA92B3DD4D20094595A /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 0A9E0AA82B3DD4D20094595A /* .gitignore */; };
 		0AB34CC12B4F11B000150A15 /* OpenNewPage2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB34CBE2B4F11B000150A15 /* OpenNewPage2ViewController.swift */; };
 		0AB34CC32B4F11B000150A15 /* OpenNewPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB34CC02B4F11B000150A15 /* OpenNewPageViewController.swift */; };
+		0AD529D62B729B6500FE7D9E /* CheckListPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD529D52B729B6500FE7D9E /* CheckListPopUpViewController.swift */; };
 		0AE388892B5986BC0041A979 /* CategoryItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE388882B5986BC0041A979 /* CategoryItemTableViewCell.swift */; };
 		0AE3888B2B5992870041A979 /* CheckListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE3888A2B5992870041A979 /* CheckListItem.swift */; };
 		0AF968242B5BDF3300A3CBBB /* CheckListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF968232B5BDF3300A3CBBB /* CheckListViewController.swift */; };
@@ -186,6 +187,7 @@
 		0A9E0AA82B3DD4D20094595A /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; name = .gitignore; path = ../.gitignore; sourceTree = "<group>"; };
 		0AB34CBE2B4F11B000150A15 /* OpenNewPage2ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenNewPage2ViewController.swift; sourceTree = "<group>"; };
 		0AB34CC02B4F11B000150A15 /* OpenNewPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenNewPageViewController.swift; sourceTree = "<group>"; };
+		0AD529D52B729B6500FE7D9E /* CheckListPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckListPopUpViewController.swift; sourceTree = "<group>"; };
 		0AE388882B5986BC0041A979 /* CategoryItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryItemTableViewCell.swift; sourceTree = "<group>"; };
 		0AE3888A2B5992870041A979 /* CheckListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckListItem.swift; sourceTree = "<group>"; };
 		0AF968232B5BDF3300A3CBBB /* CheckListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckListViewController.swift; sourceTree = "<group>"; };
@@ -386,6 +388,7 @@
 				0A2471242B697E3D00A7382B /* EditBasicInfoViewController.swift */,
 				0A2471262B69803000A7382B /* EditBasicInfoDetailViewController.swift */,
 				0A0FE7562B6C0031001866C8 /* ReportPopupViewController.swift */,
+				0AD529D52B729B6500FE7D9E /* CheckListPopUpViewController.swift */,
 			);
 			path = CheckList;
 			sourceTree = "<group>";
@@ -844,6 +847,7 @@
 				0A554CE42B5420F20023BB49 /* WarningMessageViewController.swift in Sources */,
 				0A14E3712B56B31A0008FD28 /* SetNickNameViewController.swift in Sources */,
 				0AE388892B5986BC0041A979 /* CategoryItemTableViewCell.swift in Sources */,
+				0AD529D62B729B6500FE7D9E /* CheckListPopUpViewController.swift in Sources */,
 				0A14E3732B56B6F70008FD28 /* WelcomeViewController.swift in Sources */,
 				345855822B689D7200432C06 /* QnATableViewCell.swift in Sources */,
 				345855A32B69504500432C06 /* SelectMaemullViewController.swift in Sources */,

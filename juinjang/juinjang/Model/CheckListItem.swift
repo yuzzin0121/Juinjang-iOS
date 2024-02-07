@@ -33,20 +33,6 @@ struct CalendarItem: Item {
     var isSelected: Bool
 }
 
-struct CalendarCellState: Item {
-    var content: String
-    var isSelected: Bool
-    var isExpanded: Bool
-    var selectedDate: Date?
-
-    init(content: String, isSelected: Bool, isExpanded: Bool, selectedDate: Date?) {
-        self.content = content
-        self.isSelected = isSelected
-        self.isExpanded = isExpanded
-        self.selectedDate = selectedDate
-    }
-}
-
 struct ScoreItem: Item {
     let content: String
     var score: String?

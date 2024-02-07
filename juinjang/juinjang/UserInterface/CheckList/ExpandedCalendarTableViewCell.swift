@@ -10,15 +10,23 @@ import SnapKit
 import FSCalendar
 
 protocol DatePickerDelegate: AnyObject {
-    func didSelectDate(_ date: Date)
+    func didSelectDate(_ date: Date, inCell cell: ExpandedCalendarTableViewCell, at: IndexPath)
 }
 
 class ExpandedCalendarTableViewCell: UITableViewCell {
+    
     weak var delegate: DatePickerDelegate?
     var calendarItems: [String: (inputDate: Date?, isSelected: Bool)] = [:]
-    var expandedCellStates: [IndexPath: Bool] = [:]
     var isExpanded: Bool = false
     var selectedDate: Date?
+    
+    // 외부에서 전달된 입력값 저장
+    var inputValue: String? {
+        didSet {
+            // 값이 변경되면 레이블에 설정
+            contentLabel.text = inputValue
+        }
+    }
     
     func setExpanded(_ expanded: Bool) {
         isExpanded = expanded
@@ -164,7 +172,6 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
         calendar.layer.cornerRadius = 9.97
     }
     
-    
     // 달력 페이지 이동
     @objc func moveToNext(_ sender: UIButton) {
         self.moveCurrentPage(moveUp: true)
@@ -205,16 +212,13 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
         if let selectedDate = selectedDate {
             let noonDate = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: selectedDate)?.addingTimeInterval(TimeInterval(NSTimeZone.system.secondsFromGMT()))
             UserDefaults.standard.set(noonDate, forKey: "SelectedDateKey")
-        } else {
-            // 선택된 날짜가 nil인 경우 UserDefaults에서 해당 키의 값을 제거
-            UserDefaults.standard.removeObject(forKey: "SelectedDateKey")
         }
     }
     
     func loadSelectedDate() -> Date? {
         if let storedDate = UserDefaults.standard.value(forKey: "SelectedDateKey") as? Date {
-            // 저장된 날짜의 시간 성분 제거
-            return Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: storedDate)
+            // 저장된 날짜의 시간 성분을 유지
+            return storedDate
         }
         return nil
     }
@@ -232,19 +236,6 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
                 print("\(content): \(data)")
             }
             saveSelectedDate()
-        }
-    }
-    
-    // 확장 여부 및 선택된 날짜를 기반으로 상태 설정
-    func configureCell(_ cell: ExpandedCalendarTableViewCell, at indexPath: IndexPath) {
-        let isExpanded = expandedCellStates[indexPath] ?? false
-        cell.setExpanded(isExpanded)
-
-        // 다른 설정들...
-
-        // 선택된 날짜를 설정하고 초기화되는 것을 방지
-        if let selectedDate = selectedDate {
-            cell.selectedDate = selectedDate
         }
     }
 }
@@ -315,6 +306,9 @@ extension ExpandedCalendarTableViewCell: FSCalendarDelegate, FSCalendarDataSourc
         }
         // 현재 선택된 날짜 업데이트
         selectedDate = date
+        
+        // delegate에게 선택된 날짜를 전달
+//        delegate?.didSelectDate(date, inCell: self, at: indexPath)
     }
     
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
