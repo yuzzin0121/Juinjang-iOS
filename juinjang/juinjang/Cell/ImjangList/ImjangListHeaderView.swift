@@ -106,7 +106,7 @@ class ImjangListHeaderView: UITableViewHeaderFooterView {
                 self.callRequestFiltered(sort: filter.title)
             }))
         }
-        let menu = UIMenu(options: .destructive, children: menuChildren)
+        let menu = UIMenu(options: .displayAsPalette, children: menuChildren)
         filterselectBtn.menu = menu
         
         filterselectBtn.showsMenuAsPrimaryAction = true
@@ -117,7 +117,13 @@ class ImjangListHeaderView: UITableViewHeaderFooterView {
     }
     
     func changefilterTitle(_ title: String) {
-        filterselectBtn.setTitle(title, for: .normal)
+        var config = filterselectBtn.configuration
+        var container = AttributeContainer()
+        container.font = .pretendard(size: 14, weight: .semiBold)
+        container.foregroundColor = ColorStyle.darkGray
+        config?.attributedTitle = AttributedString(title, attributes: container)
+        config?.imagePadding = 2
+        filterselectBtn.configuration = config
     }
     
     func configureHierarchy() {
@@ -249,62 +255,62 @@ extension ImjangListHeaderView: UICollectionViewDelegate, UICollectionViewDataSo
     
 }
 
-var currentIndex = 0
-
-extension ImjangListHeaderView: UICollectionViewDelegateFlowLayout {
-    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        let scrolledOffsetX = targetContentOffset.pointee.x + scrollView.contentInset.left
-        let cellWidth = Const.bigItemSize.width + Const.itemSpacing
-        let index = round(scrolledOffsetX / cellWidth)
-        currentIndex = Int(index)
-//        print(index)
-        targetContentOffset.pointee = CGPoint(x: index * cellWidth - scrollView.contentInset.left,
-                                              y: scrollView.contentInset.top)
-        self.collectionView.reloadData()
-    }
-}
-
-extension ImjangListHeaderView {
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard let layout = self.collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
-        
-        let cellWidthIncludeSpacing = Const.smallItemSize.width + Const.itemSpacing
-        let offsetX = collectionView.contentOffset.x
-        let index = (offsetX + collectionView.contentInset.left) / cellWidthIncludeSpacing
-        let roundedIndex = round(index)
-        print(roundedIndex)
-        let indexPath = IndexPath(item: Int(roundedIndex), section: 0)
-        if let cell = collectionView.cellForItem(at: indexPath) {
-            animateZoomforCell(zoomCell: cell)
-        }
-        if Int(roundedIndex) != Const.previousIndex {
-            let preIndexPath = IndexPath(item: Const.previousIndex, section: 0)
-           if let preCell = collectionView.cellForItem(at: preIndexPath) {
-               animateZoomforCellremove(zoomCell: preCell)
-           }
-            Const.previousIndex = indexPath.item
-       }
-    }
-    
-    func animateZoomforCell(zoomCell: UICollectionViewCell) {
-        UIView.animate(
-            withDuration: 0.2,
-            delay: 0,
-            options: .curveEaseOut,
-            animations: {
-                zoomCell.transform = .identity
-        },
-            completion: nil)
-    }
-    
-    func animateZoomforCellremove(zoomCell: UICollectionViewCell) {
-        UIView.animate(
-            withDuration: 0.2,
-            delay: 0,
-            options: .curveEaseOut,
-            animations: {
-                zoomCell.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
-        },
-            completion: nil)
-    }
-}
+//var currentIndex = 0
+//
+//extension ImjangListHeaderView: UICollectionViewDelegateFlowLayout {
+//    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+//        let scrolledOffsetX = targetContentOffset.pointee.x + scrollView.contentInset.left
+//        let cellWidth = Const.bigItemSize.width + Const.itemSpacing
+//        let index = round(scrolledOffsetX / cellWidth)
+//        currentIndex = Int(index)
+////        print(index)
+//        targetContentOffset.pointee = CGPoint(x: index * cellWidth - scrollView.contentInset.left,
+//                                              y: scrollView.contentInset.top)
+//        self.collectionView.reloadData()
+//    }
+//}
+//
+//extension ImjangListHeaderView {
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        guard let layout = self.collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
+//        
+//        let cellWidthIncludeSpacing = Const.smallItemSize.width + Const.itemSpacing
+//        let offsetX = collectionView.contentOffset.x
+//        let index = (offsetX + collectionView.contentInset.left) / cellWidthIncludeSpacing
+//        let roundedIndex = round(index)
+//        print(roundedIndex)
+//        let indexPath = IndexPath(item: Int(roundedIndex), section: 0)
+//        if let cell = collectionView.cellForItem(at: indexPath) {
+//            animateZoomforCell(zoomCell: cell)
+//        }
+//        if Int(roundedIndex) != Const.previousIndex {
+//            let preIndexPath = IndexPath(item: Const.previousIndex, section: 0)
+//           if let preCell = collectionView.cellForItem(at: preIndexPath) {
+//               animateZoomforCellremove(zoomCell: preCell)
+//           }
+//            Const.previousIndex = indexPath.item
+//       }
+//    }
+//    
+//    func animateZoomforCell(zoomCell: UICollectionViewCell) {
+//        UIView.animate(
+//            withDuration: 0.2,
+//            delay: 0,
+//            options: .curveEaseOut,
+//            animations: {
+//                zoomCell.transform = .identity
+//        },
+//            completion: nil)
+//    }
+//    
+//    func animateZoomforCellremove(zoomCell: UICollectionViewCell) {
+//        UIView.animate(
+//            withDuration: 0.2,
+//            delay: 0,
+//            options: .curveEaseOut,
+//            animations: {
+//                zoomCell.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+//        },
+//            completion: nil)
+//    }
+//}

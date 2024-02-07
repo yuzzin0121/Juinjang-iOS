@@ -27,14 +27,20 @@ class ScrapCollectionViewCell: UICollectionViewCell {
         $0.backgroundColor = ColorStyle.emptyGray
     }
     let emptyImage = UIImageView().then {
-        $0.image = ImageStyle.emptyImage
+        $0.image = ImageStyle.gallery
         $0.contentMode = .scaleAspectFit
     }
     
     // 하우스 이미지뷰
-    let firstImage = UIImageView()
-    let secondImage = UIImageView()
-    let thirdImage = UIImageView()
+    lazy var firstImage = UIImageView().then {
+        $0.design(contentMode: .scaleAspectFill, cornerRadius: 5)
+    }
+    lazy var secondImage = UIImageView().then {
+        $0.design(contentMode: .scaleAspectFill, cornerRadius: 5)
+    }
+    lazy var thirdImage = UIImageView().then {
+        $0.design(contentMode: .scaleAspectFill, cornerRadius: 5)
+    }
     
     // 방 이름 레이블
     let roomNameStackView = UIStackView().then {
@@ -71,9 +77,67 @@ class ScrapCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func setImage1(image: String) {
+        DispatchQueue.main.async {
+            self.firstImage.image = UIImage(named: image)
+        }
+        totalStackView.addArrangedSubview(firstImage)
+    }
+    
+    func setImage2(images: [String]) {
+        DispatchQueue.main.async {
+            self.firstImage.image = UIImage(named: images[0])
+            self.secondImage.image = UIImage(named: images[1])
+        }
+//        let imagesWidth = contentView.frame.width - (12*2) - 4
+        [firstImage, secondImage].forEach { totalStackView.addArrangedSubview($0)}
+  
+        firstImage.snp.makeConstraints {
+            $0.height.equalTo(firstImage.snp.width).multipliedBy(117.0 / 190.0)
+        }
+        
+        secondImage.snp.makeConstraints {
+            $0.height.equalTo(secondImage.snp.width).multipliedBy(117.0 / 85.0)
+        }
+    }
+    
+    func setImage3(images: [String]) {
+        DispatchQueue.main.async {
+            self.firstImage.image = UIImage(named: images[0])
+            self.secondImage.image = UIImage(named: images[1])
+            self.thirdImage.image = UIImage(named: images[2])
+        }
+//        let imagesWidth = contentView.frame.width - (12 * 2)
+        
+        [firstImage, imageVStackView].forEach {
+            totalStackView.addArrangedSubview($0)
+        }
+        
+        [secondImage, thirdImage].forEach {
+            imageVStackView.addArrangedSubview($0)
+        }
+       
+        firstImage.snp.makeConstraints {
+            $0.height.equalTo(firstImage.snp.width).multipliedBy(117.0 / 190.0)
+        }
+//        let vstackHeight = firstImage.frame.height - 4
+        
+        secondImage.snp.makeConstraints {
+            $0.height.equalTo(secondImage.snp.width).multipliedBy(66.0 / 85.0)
+        }
+        
+        thirdImage.snp.makeConstraints {
+            $0.height.equalTo(thirdImage.snp.width).multipliedBy(47.0 / 85.0)
+        }
+        
+    }
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         setData(imjangNote: nil)
+        firstImage.image = nil
+        secondImage.image = nil
+        thirdImage.image = nil
     }
     
     func setData(imjangNote: ImjangNote?) {
@@ -84,12 +148,39 @@ class ScrapCollectionViewCell: UICollectionViewCell {
         roomAddressLabel.text = imjangNote.location
         let bookmarkImage = imjangNote.isBookmarked ? ImageStyle.bookmarkSelected : ImageStyle.bookmark
         bookMarkButton.setImage(bookmarkImage, for: .normal)
+        
+        if let images = imjangNote.images {
+            switch images.count {
+            case 0:
+                setStackViewBackground(isEmpty: true)
+            case 1:
+                setImage1(image: images[0])
+                setStackViewBackground(isEmpty: false)
+            case 2:
+                setImage2(images: images)
+                setStackViewBackground(isEmpty: false)
+            case 3...:
+                setImage3(images: images)
+                setStackViewBackground(isEmpty: false)
+            default:
+                print("알 수 없는 오류 발생")
+            }
+        } else {
+            setStackViewBackground(isEmpty: true)
+        }
+    }
+    
+    func setStackViewBackground(isEmpty: Bool) {
+        emptyImage.isHidden = isEmpty ? false : true
+        totalStackView.backgroundColor = isEmpty ? ColorStyle.emptyGray : UIColor.white
     }
     
     func configureHierarchy() {
-        [totalStackView, roomNameStackView, starStackView, roomPriceLabel, roomAddressLabel, bookMarkButton].forEach {
+        [totalStackView,roomNameStackView, starStackView, roomPriceLabel, roomAddressLabel, bookMarkButton].forEach {
             contentView.addSubview($0)
         }
+        totalStackView.addSubview(emptyImage)
+        
         [roomNameLabel, roomIcon].forEach {
             roomNameStackView.addArrangedSubview($0)
         }
@@ -101,8 +192,9 @@ class ScrapCollectionViewCell: UICollectionViewCell {
     
     override func draw(_ rect: CGRect) {
         contentView.layer.cornerRadius = 10
-        totalStackView.layer.cornerRadius = 5
-        emptyBackgroundView.layer.cornerRadius = 5
+        DispatchQueue.main.async {
+            self.totalStackView.layer.cornerRadius = 5
+        }
     }
     
     func configureView() {
@@ -126,7 +218,11 @@ class ScrapCollectionViewCell: UICollectionViewCell {
             $0.top.leading.trailing.equalToSuperview().inset(12)
             $0.height.equalTo(117)
         }
-        
+      
+        emptyImage.snp.makeConstraints {
+            $0.center.equalTo(totalStackView)
+            $0.size.equalTo(50)
+        }
         
         roomNameStackView.snp.makeConstraints {
             $0.leading.equalTo(totalStackView.snp.leading)
