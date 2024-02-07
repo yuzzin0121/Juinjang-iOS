@@ -111,7 +111,13 @@ class ImjangListViewController: UIViewController {
     }
     
     func changefilterTitle(_ title: String) {
-        filterselectBtn.setTitle(title, for: .normal)
+        var config = filterselectBtn.configuration
+        var container = AttributeContainer()
+        container.font = .pretendard(size: 14, weight: .semiBold)
+        container.foregroundColor = ColorStyle.darkGray
+        config?.attributedTitle = AttributedString(title, attributes: container)
+        config?.imagePadding = 2
+        filterselectBtn.configuration = config
     }
     
     func callRequestFiltered(sort: String) {
@@ -340,7 +346,6 @@ extension ImjangListViewController {
                 stackView.addArrangedSubview($0)
             }
         }
-        
     }
 }
 

@@ -12,8 +12,8 @@ extension UIImageView {
         self.image = image
         self.contentMode = contentMode
         if let cornerRadius {
-            self.clipsToBounds = true
             self.layer.cornerRadius = cornerRadius
+            self.clipsToBounds = true
         }
     }
 }
