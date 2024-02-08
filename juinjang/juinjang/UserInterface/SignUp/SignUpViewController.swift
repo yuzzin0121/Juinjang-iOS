@@ -14,8 +14,7 @@ import KakaoSDKAuth
 import KakaoSDKUser
 
 class SignUpViewController: UIViewController {
-    var userAccessToken = ""
-    
+
     lazy var juinjangLogoImage = UIImageView().then {
         $0.image = UIImage(named: "juinjang-logo-image")
         $0.contentMode = .scaleAspectFill
@@ -29,14 +28,12 @@ class SignUpViewController: UIViewController {
     lazy var kakaoLoginButton = UIButton().then {
         $0.setBackgroundImage(UIImage(named: "kakao-logo"), for: .normal)
         $0.contentMode = .scaleAspectFill
-        $0.adjustsImageWhenHighlighted = false
         $0.addTarget(self, action: #selector(loginButtonTapped(_:)), for: .touchUpInside)
     }
     
     lazy var appleLoginButton = UIButton().then {
         $0.setBackgroundImage(UIImage(named: "apple-logo"), for: .normal)
         $0.contentMode = .scaleAspectFill
-        $0.adjustsImageWhenHighlighted = false
         $0.addTarget(self, action: #selector(loginButtonTapped(_:)), for: .touchUpInside)
     }
     
@@ -101,16 +98,8 @@ class SignUpViewController: UIViewController {
     
     @objc func loginButtonTapped(_ sender: UIButton) {
         let vc = SignUpWebViewController()
+        present(vc, animated: true)
         
-        if vc.userAccessToken == ""{
-            present(vc, animated: true)
-        } else {
-            let mainVC = MainViewController()
-            self.navigationController?.pushViewController(vc, animated: true)
-        }
-        
-        
-        // -TODO: 로그인 처리
         /*if UserApi.isKakaoTalkLoginAvailable() {
             // 카카오톡 로그인. api 호출 결과를 클로저로 전달.
             loginWithApp()
@@ -121,7 +110,7 @@ class SignUpViewController: UIViewController {
     }
 }
 
-extension SignUpViewController {
+/*extension SignUpViewController {
     
     // 카카오톡 앱으로 로그인
     func loginWithApp() {
@@ -167,4 +156,4 @@ extension SignUpViewController {
         let nextVC = ToSViewController()
         self.navigationController?.pushViewController(nextVC, animated: true)
     }
-}
+}*/

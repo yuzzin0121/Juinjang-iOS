@@ -19,14 +19,26 @@ class LogoutPopupViewController: UIViewController {
     }
     
     @objc func yes(_ sender: UIButton) {
-        UserApi.shared.logout {(error) in
-            if let error = error {
-                print(error)
+       
+        print("logout() success.")
+        let signupViewController = SignUpViewController()
+        let vc = SignUpWebViewController()
+        vc.userAccessToken = ""
+
+        // 현재 내비게이션 컨트롤러가 nil인지 확인
+        if let navigationController = self.navigationController {
+            navigationController.pushViewController(signupViewController, animated: true)
+            print("SignUpViewController로 push됨") // 확인용 로그 추가
+        } else {
+            // 현재 내비게이션 컨트롤러가 없는 경우, 새로운 내비게이션 컨트롤러를 시작하고 SignUpViewController를 rootViewController로 설정
+            let navigationController = UINavigationController(rootViewController: signupViewController)
+            if let windowScene = UIApplication.shared.connectedScenes
+                .first(where: { $0 is UIWindowScene }) as? UIWindowScene {
+                if let window = windowScene.windows.first {
+                    window.rootViewController = navigationController
+                }
             }
-            else {
-                print("logout() success.")
-                self.dismiss(animated: false, completion: nil)
-            }
+            print("SignUpViewController로 새로운 내비게이션 스택 시작됨") // 확인용 로그 추가
         }
     }
   

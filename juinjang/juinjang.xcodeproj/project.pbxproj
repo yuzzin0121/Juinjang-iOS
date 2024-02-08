@@ -92,7 +92,6 @@
 		345855D72B6B7F7600432C06 /* KakaoSDKTemplate in Frameworks */ = {isa = PBXBuildFile; productRef = 345855D62B6B7F7600432C06 /* KakaoSDKTemplate */; };
 		345855D92B6B7F7600432C06 /* KakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = 345855D82B6B7F7600432C06 /* KakaoSDKUser */; };
 		345855DB2B6B8D5100432C06 /* CompareSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345855DA2B6B8D5000432C06 /* CompareSearchViewController.swift */; };
-		346C7E562B74EF8E00B4E044 /* JuinjangAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346C7E552B74EF8E00B4E044 /* JuinjangAPI.swift */; };
 		346CF6AE2B70B46B00C70C7A /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346CF6AD2B70B46B00C70C7A /* SplashViewController.swift */; };
 		346CF6B02B70B4D300C70C7A /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = 346CF6AF2B70B4D300C70C7A /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json */; };
 		346CF6B32B70B54B00C70C7A /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 346CF6B22B70B54B00C70C7A /* Lottie */; };
@@ -218,7 +217,6 @@
 		345855A22B69504500432C06 /* SelectMaemullViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectMaemullViewController.swift; sourceTree = "<group>"; };
 		345855A62B6A039600432C06 /* ReportImjangListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportImjangListTableViewCell.swift; sourceTree = "<group>"; };
 		345855DA2B6B8D5000432C06 /* CompareSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompareSearchViewController.swift; sourceTree = "<group>"; };
-		346C7E552B74EF8E00B4E044 /* JuinjangAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JuinjangAPI.swift; sourceTree = "<group>"; };
 		346CF6AD2B70B46B00C70C7A /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		346CF6AF2B70B4D300C70C7A /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json"; sourceTree = "<group>"; };
 		3485CD682B73D3A700E8B9D6 /* SignUpWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpWebViewController.swift; sourceTree = "<group>"; };
@@ -319,6 +317,7 @@
 			isa = PBXGroup;
 			children = (
 				0A14E36E2B569A840008FD28 /* SignUpViewController.swift */,
+				3485CD682B73D3A700E8B9D6 /* SignUpWebViewController.swift */,
 				0A95D72E2B682013000A9C06 /* ToSViewController.swift */,
 				0A95D7302B682FB4000A9C06 /* ToSItemTableViewCell.swift */,
 				0A24711C2B69147200A7382B /* ToSDetailViewController.swift */,
@@ -328,8 +327,6 @@
 				0A14E3702B56B31A0008FD28 /* SetNickNameViewController.swift */,
 				0A14E3722B56B6F70008FD28 /* WelcomeViewController.swift */,
 				0A24711E2B6924BA00A7382B /* RecordingRightsViewController.swift */,
-				3485CD682B73D3A700E8B9D6 /* SignUpWebViewController.swift */,
-				346C7E552B74EF8E00B4E044 /* JuinjangAPI.swift */,
 			);
 			path = SignUp;
 			sourceTree = "<group>";
@@ -934,7 +931,6 @@
 				0AF968242B5BDF3300A3CBBB /* CheckListViewController.swift in Sources */,
 				61B0C9D72B6C16BD00BE86D2 /* ImageCollectionViewCell.swift in Sources */,
 				0A9E0A472B3DCAB90094595A /* AppDelegate.swift in Sources */,
-				346C7E562B74EF8E00B4E044 /* JuinjangAPI.swift in Sources */,
 				0A2DED202B551CF900A96BAA /* RecordBottomViewController.swift in Sources */,
 				611F145A2B4707CC00B983F1 /* RecordingRoomViewController.swift in Sources */,
 			);

@@ -264,7 +264,7 @@ class SettingViewController : UIViewController {
         self.navigationItem.rightBarButtonItem = backButtonItem
     }
     
-    func setUserInfo() {
+    /*func setUserInfo() {
         UserApi.shared.me { (user, error) in
             if let error = error {
                 print(error)
@@ -273,7 +273,7 @@ class SettingViewController : UIViewController {
                 self.logInfoMailLabel.text = user?.kakaoAccount?.email
             }
         }
-    }
+    }*/
     
     func setConstraint() {
         profileImageView.snp.makeConstraints{
@@ -402,7 +402,7 @@ class SettingViewController : UIViewController {
         accountDeleteButton.addSubview(accountDeleteLabel)
         
         view.backgroundColor = .white
-        setUserInfo()
+        //setUserInfo()
         addTarget()
         setConstraint()
     }
