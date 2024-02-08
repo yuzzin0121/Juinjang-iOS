@@ -469,8 +469,7 @@ class ImjangNoteViewController: UIViewController {
         contentView.snp.makeConstraints {
             $0.edges.equalTo(scrollView.contentLayoutGuide)
             $0.width.equalTo(scrollView.frameLayoutGuide)
-//            $0.height.equalTo(view).multipliedBy(1.6)
-            $0.height.equalTo(view).multipliedBy(5) // 체크리스트 뷰 컨트롤러에서는 변경될 수 있게 적절한 값으로 설정 필요
+            $0.height.equalTo(view).multipliedBy(5.6)
         }
         
         setImageViewConstraints()
@@ -532,7 +531,8 @@ class ImjangNoteViewController: UIViewController {
             $0.top.equalTo(infoStackView.snp.bottom).offset(12)
             $0.leading.trailing.equalTo(contentView)
 //            $0.bottom.equalTo(contentView).offset(-24)
-            $0.height.equalTo(view).multipliedBy(1.5)
+//            $0.height.equalTo(view).multipliedBy(1.5)
+            $0.height.equalTo(view).multipliedBy(5) // 체크리스트 뷰 컨트롤러에서는 변경될 수 있게 적절한 값으로 설정 필요
         }
         
         recordingSegmentedVC.view.snp.makeConstraints {

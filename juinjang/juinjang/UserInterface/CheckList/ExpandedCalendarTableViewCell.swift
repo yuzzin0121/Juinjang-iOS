@@ -17,27 +17,56 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
     
     weak var delegate: DatePickerDelegate?
     var calendarItems: [String: (inputDate: Date?, isSelected: Bool)] = [:]
-    var isExpanded: Bool = false
+    var isExpanded: Bool = true
     var selectedDate: Date?
+    var monthPosition: FSCalendarMonthPosition?
     
-    // 외부에서 전달된 입력값 저장
-    var inputValue: String? {
-        didSet {
-            // 값이 변경되면 레이블에 설정
-            contentLabel.text = inputValue
+    func configure(with data: CalendarItem, at indexPath: IndexPath) {
+        // indexPath를 사용하여 특정 위치에 해당하는 업데이트 로직 수행
+        let currentItem = categories[indexPath.section].items[indexPath.row - 1]
+        let content = currentItem.content
+        contentLabel.text = content
+
+        // 선택된 날짜가 있으면 표시
+        if let storedData = calendarItems[content] {
+            selectedDate = storedData.inputDate
+
+            if let position = monthPosition, let selectedCell = calendar.cell(for: storedData.inputDate!, at: position) {
+                selectedCell.layer.cornerRadius = 9.97
+                selectedCell.layer.borderWidth = 1.5
+                selectedCell.layer.borderColor = UIColor(named: "mainOrange")?.cgColor
+            } else {
+                selectedDate = nil
+            }
+        } else {
+            // 선택된 날짜가 없으면 표시 초기화
+            selectedDate = nil
         }
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+
+        // 셀 내용 초기화
+        selectedDate = nil
+
+        // 달력 초기화
+        calendar.deselect(calendar.selectedDate ?? Date())
+        calendar.setCurrentPage(today, animated: false)
+
+        // 테두리 초기화
+        let nonSelectedCells = calendar.visibleCells().compactMap { $0 as? FSCalendarCell }
+        for nonSelectedCell in nonSelectedCells {
+            nonSelectedCell.layer.borderWidth = 0.0
+        }
+
+        // 배경색 초기화
+        backgroundColor = .white
+    }
+    
+    // 셀이 확장되거나 접힐 때
     func setExpanded(_ expanded: Bool) {
         isExpanded = expanded
-        // 확장되거나 접혔을 때 선택된 날짜를 저장하거나 불러오기
-        if isExpanded {
-            // 저장된 날짜가 있으면 불러오기, 없으면 현재 선택된 날짜 저장
-            selectedDate = selectedDate ?? loadSelectedDate() ?? Date()
-        } else {
-            // 저장된 날짜가 있으면 불러오기, 없으면 현재 선택된 날짜 저장
-            selectedDate = selectedDate ?? loadSelectedDate() ?? Date()
-        }
     }
     
     // 선택된 날짜를 외부로 전달하는 콜백 클로저
@@ -119,6 +148,7 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
             $0.leading.equalToSuperview().offset(24)
             $0.trailing.equalToSuperview().offset(-24)
             $0.top.equalTo(contentLabel.snp.bottom).offset(12)
+            $0.height.equalTo(356)
             $0.bottom.equalTo(contentView.snp.bottom).offset(-30)
         }
         
@@ -207,28 +237,27 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
         calendar.setCurrentPage(currentPage!, animated: true)
     }
     
-    func saveSelectedDate() {
-        // 선택된 날짜의 시간 성분을 12:00 PM으로 설정 (UTC로 변환)
-        if let selectedDate = selectedDate {
-            let noonDate = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: selectedDate)?.addingTimeInterval(TimeInterval(NSTimeZone.system.secondsFromGMT()))
-            UserDefaults.standard.set(noonDate, forKey: "SelectedDateKey")
-            print("저장 성공")
-        } else {
-            print("저장 실패")
-        }
-    }
-    
-    func loadSelectedDate() -> Date? {
-        if let storedDate = UserDefaults.standard.value(forKey: "SelectedDateKey") as? Date {
-            // 현재 사용자의 타임존으로 변환
-            let userTimeZone = TimeZone.current
-            let convertedDate = storedDate.addingTimeInterval(TimeInterval(userTimeZone.secondsFromGMT()))
-            print("저장된 값 로드", convertedDate)
-            return convertedDate
-        }
-        return nil
-    }
-
+//    func saveSelectedDate() {
+//        // 선택된 날짜의 시간 성분을 12:00 PM으로 설정 (UTC로 변환)
+//        if let selectedDate = selectedDate {
+//            let noonDate = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: selectedDate)?.addingTimeInterval(TimeInterval(NSTimeZone.system.secondsFromGMT()))
+//            UserDefaults.standard.set(noonDate, forKey: "SelectedDateKey")
+//            print("저장 성공")
+//        } else {
+//            print("저장 실패")
+//        }
+//    }
+//    
+//    func loadSelectedDate() -> Date? {
+//        if let storedDate = UserDefaults.standard.value(forKey: "SelectedDateKey") as? Date {
+//            // 현재 사용자의 타임존으로 변환
+//            let userTimeZone = TimeZone.current
+//            let convertedDate = storedDate.addingTimeInterval(TimeInterval(userTimeZone.secondsFromGMT()))
+//            print("저장된 값 로드", convertedDate)
+//            return convertedDate
+//        }
+//        return nil
+//    }
     
     private func updateCalendarItem(withContent content: String, selectedDate: Date) {
         // 찾으려는 content와 일치하는 CalendarItem을 찾음
@@ -242,7 +271,7 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
             for (content, data) in calendarItems {
                 print("\(content): \(data)")
             }
-            saveSelectedDate()
+//            saveSelectedDate()
         }
     }
 }
@@ -251,6 +280,7 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
 extension ExpandedCalendarTableViewCell: FSCalendarDelegate, FSCalendarDataSource, FSCalendarDelegateAppearance {
     // 날짜를 선택했을 때
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+        self.monthPosition = monthPosition
         backgroundColor = UIColor(named: "lightOrange")
         questionImage.image = UIImage(named: "question-selected-image")
         
