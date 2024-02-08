@@ -9,10 +9,6 @@ import UIKit
 import Then
 import SnapKit
 
-import KakaoSDKAuth
-import KakaoSDKUser
-import KakaoSDKCommon
-
 class SettingViewController : UIViewController {
     
     static let id = "SettingViewController"

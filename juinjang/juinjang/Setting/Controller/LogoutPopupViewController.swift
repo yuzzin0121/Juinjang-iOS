@@ -8,11 +8,17 @@
 import UIKit
 import SnapKit
 import Then
-import KakaoSDKAuth
-import KakaoSDKUser
-import KakaoSDKCommon
+import Alamofire
 
 class LogoutPopupViewController: UIViewController {
+    
+    let urlString = "http://juinjang1227.com:8080/api/auth/logout"
+    
+    let headers: HTTPHeaders = [
+        "Content-Type" : "application/json",
+        "Authorization" : "Bearer \(SignUpWebViewController().userRefreshToken)"
+    ]
+    
     private let popupView: LogoutPopupView
     @objc func no(_ sender: UIButton) {
         self.dismiss(animated: false, completion: nil)
@@ -21,6 +27,17 @@ class LogoutPopupViewController: UIViewController {
     @objc func yes(_ sender: UIButton) {
        
         print("logout() success.")
+        
+        AF.request(urlString, method: .post, encoding: JSONEncoding.default, headers: headers).responseJSON { response in
+            switch response.result {
+            case .success(let value):
+                print("Response: \(value)")
+                // 서버 응답을 처리하는 코드를 여기에 추가합니다.
+            case .failure(let error):
+                print("Error: \(error.localizedDescription)")
+            }
+        }
+        
         let signupViewController = SignUpViewController()
         let vc = SignUpWebViewController()
         vc.userAccessToken = ""
