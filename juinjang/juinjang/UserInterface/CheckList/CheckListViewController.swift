@@ -145,7 +145,7 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource  
                     print("Selected button in TableView:", score)
                     cell?.saveSelectedScore()
                 }
-//                print("셀에서 가져온 데이터", cell.scoreItems)
+                print("셀에서 가져온 데이터", cell.scoreItems)
                 return cell
             } else if let inputItem = category.items[indexPath.row - 1] as? InputItem {
                 // InputItem인 경우

@@ -125,12 +125,6 @@ class ExpandedScoreTableViewCell: UITableViewCell {
     @objc func buttonPressed(_ sender: UIButton) {
         sender.isSelected.toggle()
         
-        // 외부로 선택된 점수 전달
-        selectionHandler?(score ?? String())
-        
-        // 선택된 점수를 해당 ScoreItem에 저장
-        updateScoreItem(withContent: contentLabel.text ?? "", score: String(sender.tag))
-        
         // 선택한 버튼이 아닌 경우 선택 해제
         for button in [answerButton1, answerButton2, answerButton3, answerButton4, answerButton5] {
             if button != sender {
@@ -166,20 +160,36 @@ class ExpandedScoreTableViewCell: UITableViewCell {
         } else {
             print("Button Pressed: No answer")
         }
+        
+        // 외부로 선택된 점수 전달
+        selectionHandler?(score ?? String())
+        
+        // 선택된 점수를 해당 ScoreItem에 저장
+        updateScoreItem(withContent: contentLabel.text ?? "", score: String(sender.tag))
     }
     
     func saveSelectedScore() {
+        print("저장이 됐는지 확인", score)
         if let score = score {
             UserDefaults.standard.set(score, forKey: "SelectedScoreKey")
+            print("저장 성공")
         } else {
             // 선택된 버튼이 nil인 경우 UserDefaults에서 해당 키의 값을 제거
             UserDefaults.standard.removeObject(forKey: "SelectedScoreKey")
+            print("저장 실패")
         }
     }
     
     func loadSelectedScore() -> String? {
-        return UserDefaults.standard.value(forKey: "SelectedScoreKey") as? String
+        print("값 찾으러옴")
+        if let selectedScore = UserDefaults.standard.value(forKey: "SelectedScoreKey") as? String {
+            print("값?", selectedScore)
+            return selectedScore
+        } else {
+            return nil
+        }
     }
+
     
     private func updateScoreItem(withContent content: String, score: String) {
         // 찾으려는 content와 일치하는 ScoreItem을 찾음

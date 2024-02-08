@@ -212,16 +212,23 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
         if let selectedDate = selectedDate {
             let noonDate = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: selectedDate)?.addingTimeInterval(TimeInterval(NSTimeZone.system.secondsFromGMT()))
             UserDefaults.standard.set(noonDate, forKey: "SelectedDateKey")
+            print("저장 성공")
+        } else {
+            print("저장 실패")
         }
     }
     
     func loadSelectedDate() -> Date? {
         if let storedDate = UserDefaults.standard.value(forKey: "SelectedDateKey") as? Date {
-            // 저장된 날짜의 시간 성분을 유지
-            return storedDate
+            // 현재 사용자의 타임존으로 변환
+            let userTimeZone = TimeZone.current
+            let convertedDate = storedDate.addingTimeInterval(TimeInterval(userTimeZone.secondsFromGMT()))
+            print("저장된 값 로드", convertedDate)
+            return convertedDate
         }
         return nil
     }
+
     
     private func updateCalendarItem(withContent content: String, selectedDate: Date) {
         // 찾으려는 content와 일치하는 CalendarItem을 찾음
