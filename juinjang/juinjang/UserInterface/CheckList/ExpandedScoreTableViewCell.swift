@@ -189,7 +189,23 @@ class ExpandedScoreTableViewCell: UITableViewCell {
             return nil
         }
     }
-
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        // 버튼 초기화
+        score = nil
+        
+        for button in [answerButton1, answerButton2, answerButton3, answerButton4, answerButton5] {
+                button.isSelected = false
+                button.setImage(UIImage(named: "answer\(button.tag)"), for: .normal)
+        }
+        
+//        let setScore = loadSelectedScore()
+//        let content = contentLabel.text
+//        if let index = scoreItems.index(forKey: content!) {
+//            scoreItems.updateValue((setScore, false), forKey: content!)
+//        }
+    }
     
     private func updateScoreItem(withContent content: String, score: String) {
         // 찾으려는 content와 일치하는 ScoreItem을 찾음

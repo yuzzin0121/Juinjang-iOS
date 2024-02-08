@@ -33,6 +33,11 @@ struct CalendarItem: Item {
     var isSelected: Bool
 }
 
+struct NotEnteredCalendarItem {
+    let savedDate: Date?
+    var isSelected: Bool
+}
+
 struct ScoreItem: Item {
     let content: String
     var score: String?
@@ -185,11 +190,11 @@ var enabledCategories: [Category] = [
             OptionItem(image: UIImage(named: "line7")!, option: "7호선"),
             OptionItem(image: UIImage(named: "line8")!, option: "8호선"),
             OptionItem(image: UIImage(named: "line9")!, option: "9호선"),
-            OptionItem(image: UIImage(named: "line3")!, option: "수인분당"),
-            OptionItem(image: UIImage(named: "line3")!, option: "경의중앙"),
-            OptionItem(image: UIImage(named: "line3")!, option: "신분당"),
-            OptionItem(image: UIImage(named: "line3")!, option: "공항철도"),
-            OptionItem(image: UIImage(named: "line3")!, option: "경춘선")]),
+            OptionItem(image: UIImage(named: "SuinBundangLine")!, option: "수인분당"),
+            OptionItem(image: UIImage(named: "GyeonguiJungangLine")!, option: "경의중앙"),
+            OptionItem(image: UIImage(named: "ShinbundangLine")!, option: "신분당"),
+            OptionItem(image: UIImage(named: "AirportRailroadLine")!, option: "공항철도"),
+            OptionItem(image: UIImage(named: "GyeongchunLine")!, option: "경춘선")]),
         ScoreItem(content: "버스 주요노선이 지역중심부에 접근이 용이한가요?"),
         ScoreItem(content: "공립 어린이집 혹은 유치원이 충분히 가까운가요?"),
         ScoreItem(content: "초등학교가 반경 5분~10분 이내에 있나요?"),
@@ -287,11 +292,11 @@ var oneRoomCategories: [Category] = [
             OptionItem(image: UIImage(named: "line7")!, option: "7호선"),
             OptionItem(image: UIImage(named: "line8")!, option: "8호선"),
             OptionItem(image: UIImage(named: "line9")!, option: "9호선"),
-            OptionItem(image: UIImage(named: "line3")!, option: "수인분당"),
-            OptionItem(image: UIImage(named: "line3")!, option: "경의중앙"),
-            OptionItem(image: UIImage(named: "line3")!, option: "신분당"),
-            OptionItem(image: UIImage(named: "line3")!, option: "공항철도"),
-            OptionItem(image: UIImage(named: "line3")!, option: "경춘선")]),
+            OptionItem(image: UIImage(named: "SuinBundangLine")!, option: "수인분당"),
+            OptionItem(image: UIImage(named: "GyeonguiJungangLine")!, option: "경의중앙"),
+            OptionItem(image: UIImage(named: "ShinbundangLine")!, option: "신분당"),
+            OptionItem(image: UIImage(named: "AirportRailroadLine")!, option: "공항철도"),
+            OptionItem(image: UIImage(named: "GyeongchunLine")!, option: "경춘선")]),
         ScoreItem(content: "역으로 도보 5분 이내 접근이 가능한가요?"),
         ScoreItem(content: "버스 주요 노선이 지역 중심부 접근이 용이한가요?"),
         ScoreItem(content: "직장 혹은 학교에 가는 데 무리가 없나요?"),
@@ -352,11 +357,11 @@ var enabledOneRoomCategories: [Category] = [
             OptionItem(image: UIImage(named: "line7")!, option: "7호선"),
             OptionItem(image: UIImage(named: "line8")!, option: "8호선"),
             OptionItem(image: UIImage(named: "line9")!, option: "9호선"),
-            OptionItem(image: UIImage(named: "line3")!, option: "수인분당"),
-            OptionItem(image: UIImage(named: "line3")!, option: "경의중앙"),
-            OptionItem(image: UIImage(named: "line3")!, option: "신분당"),
-            OptionItem(image: UIImage(named: "line3")!, option: "공항철도"),
-            OptionItem(image: UIImage(named: "line3")!, option: "경춘선")]),
+            OptionItem(image: UIImage(named: "SuinBundangLine")!, option: "수인분당"),
+            OptionItem(image: UIImage(named: "GyeonguiJungangLine")!, option: "경의중앙"),
+            OptionItem(image: UIImage(named: "ShinbundangLine")!, option: "신분당"),
+            OptionItem(image: UIImage(named: "AirportRailroadLine")!, option: "공항철도"),
+            OptionItem(image: UIImage(named: "GyeongchunLine")!, option: "경춘선")]),
         ScoreItem(content: "역으로 도보 5분 이내 접근이 가능한가요?"),
         ScoreItem(content: "버스 주요 노선이 지역 중심부 접근이 용이한가요?"),
         ScoreItem(content: "직장 혹은 학교에 가는 데 무리가 없나요?"),
