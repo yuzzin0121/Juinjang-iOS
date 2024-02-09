@@ -14,8 +14,7 @@ class SignUpWebViewController: UIViewController {
     var webView: WKWebView?
     let indicator = UIActivityIndicatorView(style: .medium)
     
-    var userAccessToken = ""
-    var userRefreshToken = ""
+    
     
    
     func setAttributes() {
@@ -99,11 +98,12 @@ extension SignUpWebViewController: WKNavigationDelegate {
                             if let result = json["result"] as? [String: Any],
                                 let accessToken = result["accessToken"] as? String,
                                 let refreshToken = result["refreshToken"] as? String {
-                                self.userAccessToken = accessToken
+                                userAccessToken = accessToken
                                 self.hasToken(userToken: accessToken)
-                                self.userRefreshToken = refreshToken
-                                print("accessToken: \(self.userAccessToken)")
-                                print("refreshToken: \(self.userRefreshToken)")
+                                userRefreshToken = refreshToken
+                                
+                                print("accessToken: \(userAccessToken)")
+                                print("refreshToken: \(userRefreshToken)")
                             }
                         } catch {
                             print("JSON 파싱 오류: \(error.localizedDescription)")
