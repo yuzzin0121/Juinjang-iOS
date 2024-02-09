@@ -191,6 +191,7 @@ class ToSViewController: UIViewController {
 
     @objc func handleCheckButtonChecked() {
         areAllTermsChecked()
+        isEssentialTermsChecked()
     }
     
     @objc func handleCheckButtonUnchecked() {
@@ -200,7 +201,8 @@ class ToSViewController: UIViewController {
     func areAllTermsChecked() {
         for i in 0..<termsOfService.count {
             let indexPath = IndexPath(row: i, section: 0)
-            if let cell = itemtableView.cellForRow(at: indexPath) as? ToSItemTableViewCell, !cell.checkButton.isSelected {
+            let cell = itemtableView.cellForRow(at: indexPath) as? ToSItemTableViewCell
+            if let cell, !cell.checkButton.isSelected {
                 return
             }
         }
@@ -215,7 +217,31 @@ class ToSViewController: UIViewController {
         nextButton.backgroundColor = UIColor(named: "lightGray")
         nextButton.isEnabled = false
     }
+    
+    // 필수 항목 조건 검사
+    func isEssentialTermsChecked() {
+        var isFirstTermChecked = false
+        var isSecondTermChecked = false
 
+        for i in 0..<termsOfService.count {
+            let indexPath = IndexPath(row: i, section: 0)
+            if let cell = itemtableView.cellForRow(at: indexPath) as? ToSItemTableViewCell {
+                if i == 0 && cell.checkButton.isSelected {
+                    isFirstTermChecked = true
+                } else if i == 1 && cell.checkButton.isSelected {
+                    isSecondTermChecked = true
+                }
+            }
+        }
+
+        if isFirstTermChecked && isSecondTermChecked {
+            nextButton.backgroundColor = UIColor(named: "textBlack")
+            nextButton.isEnabled = true
+        } else {
+            nextButton.backgroundColor = UIColor(named: "lightGray")
+            nextButton.isEnabled = false
+        }
+    }
 
     func indexPathForTag(_ tag: Int) -> IndexPath? {
         return IndexPath(row: tag, section: 0)
