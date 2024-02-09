@@ -233,7 +233,7 @@
 		345855A22B69504500432C06 /* SelectMaemullViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectMaemullViewController.swift; sourceTree = "<group>"; };
 		345855A62B6A039600432C06 /* ReportImjangListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportImjangListTableViewCell.swift; sourceTree = "<group>"; };
 		345855DA2B6B8D5000432C06 /* CompareSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompareSearchViewController.swift; sourceTree = "<group>"; };
-		346CF6AD2B70B46B00C70C7A /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
+		346CF6AD2B70B46B00C70C7A /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; wrapsLines = 0; };
 		346CF6AF2B70B4D300C70C7A /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json"; sourceTree = "<group>"; };
 		3485CD682B73D3A700E8B9D6 /* SignUpWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpWebViewController.swift; sourceTree = "<group>"; };
 		6108CFDE2B761AA300EF302F /* JuinjangAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JuinjangAPI.swift; sourceTree = "<group>"; };
@@ -386,12 +386,15 @@
 		0A3D5D5D2B4D376C00574686 /* UserInterface */ = {
 			isa = PBXGroup;
 			children = (
+				346CF6AC2B70B41F00C70C7A /* Splash */,
 				3458556E2B6899D300432C06 /* Main */,
 				619269D22B6773FE00D4DD3E /* ImjangList */,
 				0A3D5D5F2B4D37B000574686 /* CheckList */,
 				0A14E36D2B569A2E0008FD28 /* SignUp */,
 				0A3D5D5E2B4D379300574686 /* RecordingRoom */,
 				0A3D5D5C2B4D370A00574686 /* OpenNewpage */,
+				345855932B692DE300432C06 /* Report */,
+				345855792B689CC300432C06 /* Setting */,
 			);
 			path = UserInterface;
 			sourceTree = "<group>";
@@ -462,10 +465,7 @@
 		0A9E0A452B3DCAB90094595A /* juinjang */ = {
 			isa = PBXGroup;
 			children = (
-				346CF6AC2B70B41F00C70C7A /* Splash */,
 				61B0C9E32B6CD9E200BE86D2 /* CustomView */,
-				345855932B692DE300432C06 /* Report */,
-				345855792B689CC300432C06 /* Setting */,
 				619269E42B67745900D4DD3E /* Constants */,
 				619269E12B67743A00D4DD3E /* Protocol */,
 				619269DE2B67742B00D4DD3E /* Enum */,

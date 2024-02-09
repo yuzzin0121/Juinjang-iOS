@@ -23,9 +23,18 @@
 		<string>kakaolink</string>
 	</array>
 	<key>NSAppTransportSecurity</key>
+    
 	<dict>
 		<key>NSAllowsArbitraryLoadsInWebContent</key>
 		<true/>
+        <key>NSExceptionDomains</key>
+        <dict>
+            <key>juinjang1227.com</key>
+            <dict>
+                <key>NSExceptionAllowsInsecureHTTPLoads</key>
+                <true/>
+            </dict>
+        </dict>
 	</dict>
 	<key>UIAppFonts</key>
 	<array>
