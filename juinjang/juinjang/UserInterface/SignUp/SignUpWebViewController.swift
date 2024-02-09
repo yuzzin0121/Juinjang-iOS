@@ -17,9 +17,6 @@ class SignUpWebViewController: UIViewController {
     var webView: WKWebView?
     let indicator = UIActivityIndicatorView(style: .medium)
     
-    
-    
-   
     func setAttributes() {
         let contentController = WKUserContentController()
         //contentController.add(self, name: "callBackHandler")

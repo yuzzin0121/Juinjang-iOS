@@ -11,28 +11,6 @@ import Then
 import Alamofire
 
 class LogoutPopupViewController: UIViewController {
-    func logout() {
-        // 로그아웃 API의 URL
-        let urlString = "http://juinjang1227.com:8080/api/auth/logout"
-        // Authorization 헤더에 포함할 토큰
-        print("토큰값: \(userRefreshToken)")
-        // HTTP 요청 보내기
-        AF.request(urlString, method: .post, headers: HTTPHeaders(["Authorization": "Bearer \(userRefreshToken)"])).responseData { response in
-            switch response.result {
-            case .success(let data):
-                // 응답 확인
-                if let httpResponse = response.response {
-                    print("Status code: \(httpResponse.statusCode)")
-                }
-                // 응답 데이터 출력
-                if let responseString = String(data: data, encoding: .utf8) {
-                    print("Response data: \(responseString)")
-                }
-            case .failure(let error):
-                print("Error: \(error)")
-            }
-        }
-    }
     
     private let popupView: LogoutPopupView
     @objc func no(_ sender: UIButton) {
@@ -60,6 +38,29 @@ class LogoutPopupViewController: UIViewController {
         }
     }
   
+    func logout() {
+        // 로그아웃 API의 URL
+        let urlString = "http://juinjang1227.com:8080/api/auth/logout"
+        // Authorization 헤더에 포함할 토큰
+        print("토큰값: \(userRefreshToken)")
+        // HTTP 요청 보내기
+        AF.request(urlString, method: .post, headers: HTTPHeaders(["Authorization": "Bearer \(userRefreshToken)"])).responseData { response in
+            switch response.result {
+            case .success(let data):
+                // 응답 확인
+                if let httpResponse = response.response {
+                    print("Status code: \(httpResponse.statusCode)")
+                }
+                // 응답 데이터 출력
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("Response data: \(responseString)")
+                }
+            case .failure(let error):
+                print("Error: \(error)")
+            }
+        }
+    }
+    
     init(name: String, email: String, ment: String) {
         self.popupView = LogoutPopupView(name: name, email: email, ment: ment)
         super.init(nibName: nil, bundle: nil)
