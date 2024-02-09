@@ -10,9 +10,6 @@ import SnapKit
 import Lottie
 import Then
 
-var userAccessToken = ""
-var userRefreshToken = ""
-
 class SplashViewController: UIViewController {
     
     let animationView = LottieAnimationView(name: "splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json").then {
