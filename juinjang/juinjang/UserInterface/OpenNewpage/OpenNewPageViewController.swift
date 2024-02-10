@@ -40,7 +40,7 @@ class OpenNewPageViewController: UIViewController {
     var selectedPurposeType: Int?
     var selectedPropertyType: Int?
     var selectedPriceType: Int = 3 // 기본값 실거래가로 설정
-    var selectedPrice: [String] = ["", "", ""]
+    var selectedPrice: [String] = []
     
     var backgroundImageViewWidthConstraint: NSLayoutConstraint? // 배경 이미지의 너비 제약조건
     

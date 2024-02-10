@@ -18,7 +18,7 @@ class OpenNewPage2ViewController: UIViewController, WarningMessageDelegate {
     func createImjang() {
         let url = JuinjangAPI.createImjang.endpoint
         
-        // 이전 뷰 컨트롤러에서 가져온 값들을 postDto에 할당
+        // 이전 뷰 컨트롤러에서 가져온 값들을 parameters에 할당
         let parameters: Parameters = [
             "purposeType": newImjang?.purposeType,
             "propertyType": newImjang?.propertyType,
@@ -30,15 +30,14 @@ class OpenNewPage2ViewController: UIViewController, WarningMessageDelegate {
         ]
         
         print(parameters)
-
         print("토큰값: \(userAccessToken)")
+        
         let header : HTTPHeaders = ["Content-Type": "application/json", "Authorization": "Bearer \(userAccessToken)"]
         let dataRequest = AF.request(url,
                                      method: .post,
                                      parameters: parameters,
                                      encoding: JSONEncoding.default,
                                      headers: header)
-        
         
         dataRequest
             .validate(statusCode: 200..<300)
