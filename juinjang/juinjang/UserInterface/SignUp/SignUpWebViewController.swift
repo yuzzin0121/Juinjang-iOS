@@ -104,6 +104,7 @@ extension SignUpWebViewController: WKNavigationDelegate {
                                 
                                 print("accessToken: \(userAccessToken)")
                                 print("refreshToken: \(userRefreshToken)")
+                                self.saveTokens(accessToken: userAccessToken, refreshToken: userRefreshToken)
                             }
                         } catch {
                             print("JSON 파싱 오류: \(error.localizedDescription)")
@@ -113,5 +114,12 @@ extension SignUpWebViewController: WKNavigationDelegate {
                 print("JavaScript 오류: \(error.localizedDescription)")
             }
         }
+    }
+}
+
+extension SignUpWebViewController {
+    func saveTokens(accessToken: String, refreshToken: String) {
+        UserDefaultManager.shared.accessToken = accessToken
+        UserDefaultManager.shared.refreshToken = refreshToken
     }
 }

@@ -13,6 +13,9 @@ class UserDefaultManager {
     
     enum UDKey: String, CaseIterable {
         case searchKeywords
+        case accessToken
+        case refreshToken
+        case nickname
     }
     
     let ud = UserDefaults.standard
@@ -20,6 +23,21 @@ class UserDefaultManager {
     var searchKeywords: [String] {
         get { ud.array(forKey: UDKey.searchKeywords.rawValue) as? [String] ?? [] }
         set { ud.set(newValue, forKey: UDKey.searchKeywords.rawValue) }
+    }
+    
+    var accessToken: String {
+        get { ud.string(forKey: UDKey.accessToken.rawValue) ?? "" }
+        set { ud.set(newValue, forKey: UDKey.accessToken.rawValue) }
+    }
+    
+    var refreshToken: String {
+        get { ud.string(forKey: UDKey.refreshToken.rawValue) ?? "" }
+        set { ud.set(newValue, forKey: UDKey.refreshToken.rawValue) }
+    }
+    
+    var nickname: String {
+        get { ud.string(forKey: UDKey.nickname.rawValue) ?? "" }
+        set { ud.set(newValue, forKey: UDKey.nickname.rawValue) }
     }
 }
 
