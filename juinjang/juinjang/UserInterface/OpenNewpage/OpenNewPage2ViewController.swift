@@ -8,11 +8,59 @@
 import UIKit
 import Then
 import SnapKit
+import Alamofire
 
 class OpenNewPage2ViewController: UIViewController, WarningMessageDelegate {
     
-    var backgroundImageViewWidthConstraint: NSLayoutConstraint? // 배경 이미지의 너비 제약조건
+    var newImjang: PostDto?
     
+    // -MARK: API 요청
+    func createImjang() {
+        let url = JuinjangAPI.createImjang.endpoint
+        
+        // 이전 뷰 컨트롤러에서 가져온 값들을 postDto에 할당
+        let parameters: Parameters = [
+            "purposeType": newImjang?.purposeType,
+            "propertyType": newImjang?.propertyType,
+            "priceType": newImjang?.priceType,
+            "price": newImjang?.price,
+            "address": addressTextField.text ?? "",
+            "addressDetail": addressDetailTextField.text ?? "",
+            "nickname": houseNicknameTextField.text ?? ""
+        ]
+        
+        print(parameters)
+
+        print("토큰값: \(userAccessToken)")
+        let header : HTTPHeaders = ["Content-Type": "application/json", "Authorization": "Bearer \(userAccessToken)"]
+        let dataRequest = AF.request(url,
+                                     method: .post,
+                                     parameters: parameters,
+                                     encoding: JSONEncoding.default,
+                                     headers: header)
+        
+        
+        dataRequest
+            .validate(statusCode: 200..<300)
+            .responseData { response in
+            switch response.result {
+            case .success(let data):
+                // 응답 확인
+                if let httpResponse = response.response {
+                    print("Status code: \(httpResponse.statusCode)")
+                }
+                // 응답 데이터 출력
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("Response data: \(responseString)")
+                }
+            case .failure(let error):
+                print("Error: \(error)")
+                
+            }
+        }
+    }
+    
+    var backgroundImageViewWidthConstraint: NSLayoutConstraint? // 배경 이미지의 너비 제약조건
     var transactionModel = TransactionModel()
     
     func makeImageView(_ imageView: UIImageView, imageName: String) {
@@ -191,6 +239,7 @@ class OpenNewPage2ViewController: UIViewController, WarningMessageDelegate {
     }
 
     override func viewDidLoad() {
+        print("전달받은 데이터:", newImjang)
         super.viewDidLoad()
         view.backgroundColor = .white
         self.navigationItem.title = "새 페이지 펼치기"
@@ -429,6 +478,7 @@ class OpenNewPage2ViewController: UIViewController, WarningMessageDelegate {
     }
     
     @objc func nextButtonTapped(_ sender: UIButton) {
+        createImjang()
         let ImjangNoteVC = ImjangNoteViewController()
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         navigationController?.pushViewController(ImjangNoteVC, animated: true)
