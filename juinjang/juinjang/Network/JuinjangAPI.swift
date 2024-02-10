@@ -66,8 +66,9 @@ enum JuinjangAPI {
 //    var header: HTTPHeaders {
 //        switch self {
 //        case .kakaoLogin, .regenerateToken:
-//            return ["Authorization": ""]
-//        
+//            return ["Authorization": "Bearer \(UserDefaults.standard.string(forKey: "accessToken") ?? "")"]
+//
+//
 //        }
 //    }
     
@@ -79,7 +80,7 @@ enum JuinjangAPI {
             return .get
         case .nickname, .modifyImjang:
             return .patch
-        case .deleteImjangs(imjangId: let imjangId):
+        case .deleteImjangs:
             return .delete
         }
     }
