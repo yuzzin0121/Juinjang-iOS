@@ -8,6 +8,20 @@
 import UIKit
 import Then
 import SnapKit
+import Alamofire
+
+struct UserInfoResponse: Codable {
+    let isSuccess: Bool
+    let code: String
+    let message: String
+    let result: UserInfoResult
+}
+
+struct UserInfoResult: Codable {
+    let nickname: String?
+    let email: String
+    let provider: String
+}
 
 class SettingViewController : UIViewController {
     
@@ -31,7 +45,7 @@ class SettingViewController : UIViewController {
         $0.textColor = UIColor(named: "450")
     }
     var nickname = UILabel().then {
-        $0.text = "땡땡"
+        $0.text = nickName
         $0.font = UIFont(name: "Pretendard-Medium", size: 16)
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.textColor = UIColor(named: "500")
@@ -40,7 +54,7 @@ class SettingViewController : UIViewController {
         $0.backgroundColor = .white
         $0.returnKeyType = .done
         $0.placeholder = "8자 이내"
-        $0.text = "땡땡"
+        $0.text = nickName
         $0.font = UIFont(name: "Pretendard-Medium", size: 16)
     }
     var nicknameWarnImageView = UIImageView().then {
@@ -152,9 +166,38 @@ class SettingViewController : UIViewController {
         logoutButton.addTarget(self, action: #selector(logoutButtonTap), for: .touchUpInside)
         accountDeleteButton.addTarget(self, action: #selector(click4), for: .touchUpInside)
     }
+    func getUserInfo() {
+        // 로그아웃 API의 URL
+        let urlString = "http://juinjang1227.com:8080/api/profile"
+        
+        // HTTP 요청 보내기
+        AF.request(urlString, method: .get, headers: HTTPHeaders(["Authorization": "Bearer \(userAccessToken)"])).responseData { [self] response in
+            switch response.result {
+            case .success(let data):
+                // 응답 확인
+                if let httpResponse = response.response {
+                    print("Status code: \(httpResponse.statusCode)")
+                }
+                // 응답 데이터 출력
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("Response data: \(responseString)")
+                }
+                // JSON 데이터 파싱
+                do {
+                    let userInfoResponse = try JSONDecoder().decode(UserInfoResponse.self, from: data)
+                    let email = userInfoResponse.result.email
+                    logInfoMailLabel.text = email
+                    print("Email: \(logInfoMailLabel.text ?? "")")
+                } catch {
+                    print("Error parsing JSON: \(error)")
+                }
+            case .failure(let error):
+                print("Error: \(error)")
+            }
+        }
+    }
     
-    @objc
-    func click1(_ sender: Any) {
+    @objc func click1(_ sender: Any) {
         let vc = UseViewController()
         self.navigationController?.pushViewController(vc, animated: false)
     }
@@ -165,7 +208,7 @@ class SettingViewController : UIViewController {
     }
     
     @objc func logoutButtonTap() {
-        let popupViewController = LogoutPopupViewController(name: "땡땡", email: logInfoMailLabel.text!, ment: "계정에서 로그아웃할까요?")
+        let popupViewController = LogoutPopupViewController(name: nickName, email: logInfoMailLabel.text!, ment: "계정에서 로그아웃할까요?")
         popupViewController.modalPresentationStyle = .overFullScreen
         self.present(popupViewController, animated: false)
     }
@@ -209,6 +252,7 @@ class SettingViewController : UIViewController {
             nicknameWarnLabel.removeFromSuperview()
             nicknameWarnImageView.removeFromSuperview()
             nickname.text = nicknameTextField.text
+            nickName = nickname.text!
         }
     }
     
@@ -244,7 +288,8 @@ class SettingViewController : UIViewController {
     }
     
     @objc func backBtnTap() {
-        navigationController?.popViewController(animated: true)
+        let mainVC = MainViewController()
+        self.navigationController?.pushViewController(mainVC, animated: true)
     }
     
     func designNavigationBar() {
@@ -259,17 +304,6 @@ class SettingViewController : UIViewController {
         self.navigationItem.hidesBackButton = true
         self.navigationItem.rightBarButtonItem = backButtonItem
     }
-    
-    /*func setUserInfo() {
-        UserApi.shared.me { (user, error) in
-            if let error = error {
-                print(error)
-            } else {
-               // self.logInfoMailLabel.text = user?.kakaoAccount?.profile?.nickname
-                self.logInfoMailLabel.text = user?.kakaoAccount?.email
-            }
-        }
-    }*/
     
     func setConstraint() {
         profileImageView.snp.makeConstraints{
@@ -370,6 +404,7 @@ class SettingViewController : UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        getUserInfo()
         designNavigationBar()
         view.addSubview(profileImageView)
         view.addSubview(editButton)

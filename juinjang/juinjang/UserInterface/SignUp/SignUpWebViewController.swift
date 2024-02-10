@@ -10,14 +10,13 @@ import SnapKit
 import Then
 import WebKit
 
+var userAccessToken = ""
+var userRefreshToken = ""
+
 class SignUpWebViewController: UIViewController {
     var webView: WKWebView?
     let indicator = UIActivityIndicatorView(style: .medium)
     
-    var userAccessToken = ""
-    var userRefreshToken = ""
-    
-   
     func setAttributes() {
         let contentController = WKUserContentController()
         //contentController.add(self, name: "callBackHandler")
@@ -46,22 +45,22 @@ class SignUpWebViewController: UIViewController {
     
     func hasToken(userToken : String) {
         if userAccessToken == userToken {
-            let mainViewController = MainViewController()
+            let toSViewController = ToSViewController()
             // 현재 내비게이션 컨트롤러가 nil인지 확인
             if let navigationController = self.navigationController {
                 // 내비게이션 컨트롤러 스택에 MainViewController를 push
-                navigationController.pushViewController(mainViewController, animated: true)
-                print("MainViewController로 push됨") // 확인용 로그 추가
+                navigationController.pushViewController(toSViewController, animated: true)
+                print("ToSViewController로 push됨") // 확인용 로그 추가
             } else {
                 // 현재 내비게이션 컨트롤러가 없는 경우, 새로운 내비게이션 컨트롤러를 시작하고 MainViewController를 rootViewController로 설정
-                let navigationController = UINavigationController(rootViewController: mainViewController)
+                let navigationController = UINavigationController(rootViewController: toSViewController)
                 if let windowScene = UIApplication.shared.connectedScenes
                     .first(where: { $0 is UIWindowScene }) as? UIWindowScene {
                     if let window = windowScene.windows.first {
                         window.rootViewController = navigationController
                     }
                 }
-                print("MainViewController로 새로운 내비게이션 스택 시작됨") // 확인용 로그 추가
+                print("ToSViewController로 새로운 내비게이션 스택 시작됨") // 확인용 로그 추가
             }
         }    }
     override func viewDidLoad() {
@@ -99,11 +98,13 @@ extension SignUpWebViewController: WKNavigationDelegate {
                             if let result = json["result"] as? [String: Any],
                                 let accessToken = result["accessToken"] as? String,
                                 let refreshToken = result["refreshToken"] as? String {
-                                self.userAccessToken = accessToken
+                                userAccessToken = accessToken
                                 self.hasToken(userToken: accessToken)
-                                self.userRefreshToken = refreshToken
-                                print("accessToken: \(self.userAccessToken)")
-                                print("refreshToken: \(self.userRefreshToken)")
+                                userRefreshToken = refreshToken
+                                
+                                print("accessToken: \(userAccessToken)")
+                                print("refreshToken: \(userRefreshToken)")
+                                self.saveTokens(accessToken: userAccessToken, refreshToken: userRefreshToken)
                             }
                         } catch {
                             print("JSON 파싱 오류: \(error.localizedDescription)")
@@ -113,5 +114,12 @@ extension SignUpWebViewController: WKNavigationDelegate {
                 print("JavaScript 오류: \(error.localizedDescription)")
             }
         }
+    }
+}
+
+extension SignUpWebViewController {
+    func saveTokens(accessToken: String, refreshToken: String) {
+        UserDefaultManager.shared.accessToken = accessToken
+        UserDefaultManager.shared.refreshToken = refreshToken
     }
 }

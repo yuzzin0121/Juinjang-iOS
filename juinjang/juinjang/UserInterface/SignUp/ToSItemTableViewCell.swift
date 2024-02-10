@@ -82,6 +82,12 @@ class ToSItemTableViewCell: UITableViewCell {
             NotificationCenter.default.post(name: NSNotification.Name("CheckButtonUnchecked"), object: nil)
         }
         NotificationCenter.default.post(name: NSNotification.Name("CheckButtonChecked"), object: nil)
+        
+        if sender.isSelected {
+            if let parentVC = parentViewController as? ToSViewController {
+                parentVC.isEssentialTermsChecked()
+            }
+        }
     }
     
     @objc func openContentButtonPressed(_ sender: UIButton) {

@@ -36,7 +36,7 @@ class MainViewController: UIViewController {
     
     @objc func setttingBtnTap() {
         let vc = SettingViewController()
-        self.navigationController?.pushViewController(vc, animated: true)
+        self.navigationController?.pushViewController(vc, animated: false)
     }
     
 //MARK: - 함수 선언

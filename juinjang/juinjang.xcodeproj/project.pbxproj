@@ -101,6 +101,18 @@
 		346CF6B02B70B4D300C70C7A /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = 346CF6AF2B70B4D300C70C7A /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json */; };
 		346CF6B32B70B54B00C70C7A /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 346CF6B22B70B54B00C70C7A /* Lottie */; };
 		3485CD692B73D3A700E8B9D6 /* SignUpWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3485CD682B73D3A700E8B9D6 /* SignUpWebViewController.swift */; };
+		6108CFDF2B761AA300EF302F /* JuinjangAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6108CFDE2B761AA300EF302F /* JuinjangAPI.swift */; };
+		6108CFE12B761B3A00EF302F /* BaseResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6108CFE02B761B3A00EF302F /* BaseResponse.swift */; };
+		6108CFE62B761D0000EF302F /* LoginResponseDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6108CFE52B761D0000EF302F /* LoginResponseDto.swift */; };
+		6108CFE82B761E5900EF302F /* TotalListDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6108CFE72B761E5900EF302F /* TotalListDto.swift */; };
+		6108CFEA2B76208600EF302F /* PostDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6108CFE92B76208600EF302F /* PostDto.swift */; };
+		6108CFEC2B76233200EF302F /* PostResponseDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6108CFEB2B76233200EF302F /* PostResponseDto.swift */; };
+		6108CFF02B76285B00EF302F /* DetailDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6108CFEF2B76285B00EF302F /* DetailDto.swift */; };
+		6108CFF22B76295200EF302F /* ImagesListDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6108CFF12B76295200EF302F /* ImagesListDto.swift */; };
+		6108CFF42B762AA400EF302F /* ReportDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6108CFF32B762AA400EF302F /* ReportDto.swift */; };
+		6108CFF62B762CA600EF302F /* ProfileDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6108CFF52B762CA600EF302F /* ProfileDto.swift */; };
+		6108CFF82B76308F00EF302F /* RecordRequestDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6108CFF72B76308F00EF302F /* RecordRequestDto.swift */; };
+		6108CFFA2B76395B00EF302F /* JuinjangAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6108CFF92B76395B00EF302F /* JuinjangAPIManager.swift */; };
 		611757382B67D5E60043E958 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 611757372B67D5E60043E958 /* Assets.xcassets */; };
 		611F14552B47070B00B983F1 /* RecordingSegmentedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F14542B47070B00B983F1 /* RecordingSegmentedViewController.swift */; };
 		611F145A2B4707CC00B983F1 /* RecordingRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F14592B4707CC00B983F1 /* RecordingRoomViewController.swift */; };
@@ -191,7 +203,7 @@
 		0A9E0A482B3DCAB90094595A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		0A9E0A522B3DCAB90094595A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0A9E0A542B3DCAB90094595A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		0A9E0AA82B3DD4D20094595A /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; name = .gitignore; path = ../.gitignore; sourceTree = "<group>"; };
+		0A9E0AA82B3DD4D20094595A /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		0AB34CBE2B4F11B000150A15 /* OpenNewPage2ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenNewPage2ViewController.swift; sourceTree = "<group>"; };
 		0AB34CC02B4F11B000150A15 /* OpenNewPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenNewPageViewController.swift; sourceTree = "<group>"; };
 		0AD529D52B729B6500FE7D9E /* CheckListPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckListPopUpViewController.swift; sourceTree = "<group>"; };
@@ -223,9 +235,21 @@
 		345855A22B69504500432C06 /* SelectMaemullViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectMaemullViewController.swift; sourceTree = "<group>"; };
 		345855A62B6A039600432C06 /* ReportImjangListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportImjangListTableViewCell.swift; sourceTree = "<group>"; };
 		345855DA2B6B8D5000432C06 /* CompareSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompareSearchViewController.swift; sourceTree = "<group>"; };
-		346CF6AD2B70B46B00C70C7A /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
+		346CF6AD2B70B46B00C70C7A /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; wrapsLines = 0; };
 		346CF6AF2B70B4D300C70C7A /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json"; sourceTree = "<group>"; };
 		3485CD682B73D3A700E8B9D6 /* SignUpWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpWebViewController.swift; sourceTree = "<group>"; };
+		6108CFDE2B761AA300EF302F /* JuinjangAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JuinjangAPI.swift; sourceTree = "<group>"; };
+		6108CFE02B761B3A00EF302F /* BaseResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseResponse.swift; sourceTree = "<group>"; };
+		6108CFE52B761D0000EF302F /* LoginResponseDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginResponseDto.swift; sourceTree = "<group>"; };
+		6108CFE72B761E5900EF302F /* TotalListDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalListDto.swift; sourceTree = "<group>"; };
+		6108CFE92B76208600EF302F /* PostDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDto.swift; sourceTree = "<group>"; };
+		6108CFEB2B76233200EF302F /* PostResponseDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostResponseDto.swift; sourceTree = "<group>"; };
+		6108CFEF2B76285B00EF302F /* DetailDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailDto.swift; sourceTree = "<group>"; };
+		6108CFF12B76295200EF302F /* ImagesListDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListDto.swift; sourceTree = "<group>"; };
+		6108CFF32B762AA400EF302F /* ReportDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportDto.swift; sourceTree = "<group>"; };
+		6108CFF52B762CA600EF302F /* ProfileDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDto.swift; sourceTree = "<group>"; };
+		6108CFF72B76308F00EF302F /* RecordRequestDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordRequestDto.swift; sourceTree = "<group>"; };
+		6108CFF92B76395B00EF302F /* JuinjangAPIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JuinjangAPIManager.swift; sourceTree = "<group>"; };
 		611757372B67D5E60043E958 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		611F14542B47070B00B983F1 /* RecordingSegmentedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingSegmentedViewController.swift; sourceTree = "<group>"; };
 		611F14592B4707CC00B983F1 /* RecordingRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingRoomViewController.swift; sourceTree = "<group>"; };
@@ -364,12 +388,15 @@
 		0A3D5D5D2B4D376C00574686 /* UserInterface */ = {
 			isa = PBXGroup;
 			children = (
+				346CF6AC2B70B41F00C70C7A /* Splash */,
 				3458556E2B6899D300432C06 /* Main */,
 				619269D22B6773FE00D4DD3E /* ImjangList */,
 				0A3D5D5F2B4D37B000574686 /* CheckList */,
 				0A14E36D2B569A2E0008FD28 /* SignUp */,
 				0A3D5D5E2B4D379300574686 /* RecordingRoom */,
 				0A3D5D5C2B4D370A00574686 /* OpenNewpage */,
+				345855932B692DE300432C06 /* Report */,
+				345855792B689CC300432C06 /* Setting */,
 			);
 			path = UserInterface;
 			sourceTree = "<group>";
@@ -425,7 +452,6 @@
 		0A9E0A3A2B3DCAB90094595A = {
 			isa = PBXGroup;
 			children = (
-				0A9E0AA82B3DD4D20094595A /* .gitignore */,
 				0A9E0A452B3DCAB90094595A /* juinjang */,
 				0A9E0A442B3DCAB90094595A /* Products */,
 			);
@@ -442,15 +468,13 @@
 		0A9E0A452B3DCAB90094595A /* juinjang */ = {
 			isa = PBXGroup;
 			children = (
-				346CF6AC2B70B41F00C70C7A /* Splash */,
 				61B0C9E32B6CD9E200BE86D2 /* CustomView */,
-				345855932B692DE300432C06 /* Report */,
-				345855792B689CC300432C06 /* Setting */,
 				619269E42B67745900D4DD3E /* Constants */,
 				619269E12B67743A00D4DD3E /* Protocol */,
 				619269DE2B67742B00D4DD3E /* Enum */,
 				0A3D5D5D2B4D376C00574686 /* UserInterface */,
 				616408EA2B407A2100EC3B5E /* Extension */,
+				6108CFDD2B761A8A00EF302F /* Network */,
 				61D925062B4866D9002A16B4 /* Model */,
 				61D925032B4864E8002A16B4 /* Cell */,
 				0A9E0A462B3DCAB90094595A /* AppDelegate.swift */,
@@ -459,6 +483,7 @@
 				0A9E0A542B3DCAB90094595A /* Info.plist */,
 				616408ED2B407E4400EC3B5E /* Resources */,
 				611757372B67D5E60043E958 /* Assets.xcassets */,
+				0A9E0AA82B3DD4D20094595A /* .gitignore */,
 			);
 			path = juinjang;
 			sourceTree = "<group>";
@@ -579,6 +604,38 @@
 				346CF6AD2B70B46B00C70C7A /* SplashViewController.swift */,
 			);
 			path = Splash;
+			sourceTree = "<group>";
+		};
+		6108CFDD2B761A8A00EF302F /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				6108CFDE2B761AA300EF302F /* JuinjangAPI.swift */,
+				6108CFF92B76395B00EF302F /* JuinjangAPIManager.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		6108CFE32B761CED00EF302F /* Decodable */ = {
+			isa = PBXGroup;
+			children = (
+				6108CFE52B761D0000EF302F /* LoginResponseDto.swift */,
+				6108CFE72B761E5900EF302F /* TotalListDto.swift */,
+				6108CFEB2B76233200EF302F /* PostResponseDto.swift */,
+				6108CFEF2B76285B00EF302F /* DetailDto.swift */,
+				6108CFF12B76295200EF302F /* ImagesListDto.swift */,
+				6108CFF32B762AA400EF302F /* ReportDto.swift */,
+				6108CFF52B762CA600EF302F /* ProfileDto.swift */,
+			);
+			path = Decodable;
+			sourceTree = "<group>";
+		};
+		6108CFE42B761CF300EF302F /* Encodable */ = {
+			isa = PBXGroup;
+			children = (
+				6108CFE92B76208600EF302F /* PostDto.swift */,
+				6108CFF72B76308F00EF302F /* RecordRequestDto.swift */,
+			);
+			path = Encodable;
 			sourceTree = "<group>";
 		};
 		616408EA2B407A2100EC3B5E /* Extension */ = {
@@ -713,11 +770,14 @@
 		61D925062B4866D9002A16B4 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				6108CFE42B761CF300EF302F /* Encodable */,
+				6108CFE32B761CED00EF302F /* Decodable */,
 				0A3D5D4A2B4D333900574686 /* TransactionModel.swift */,
 				61D925072B486706002A16B4 /* RecordingFileItem.swift */,
 				0A73E60C2B5855CD00EF1C89 /* UserInfo.swift */,
 				61864BEE2B600E920073C175 /* ImjangNote.swift */,
 				0AE3888A2B5992870041A979 /* CheckListItem.swift */,
+				6108CFE02B761B3A00EF302F /* BaseResponse.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -869,11 +929,14 @@
 				0A554CE42B5420F20023BB49 /* WarningMessageViewController.swift in Sources */,
 				0A14E3712B56B31A0008FD28 /* SetNickNameViewController.swift in Sources */,
 				0AE388892B5986BC0041A979 /* CategoryItemTableViewCell.swift in Sources */,
+				6108CFF62B762CA600EF302F /* ProfileDto.swift in Sources */,
 				0AD529D62B729B6500FE7D9E /* CheckListPopUpViewController.swift in Sources */,
 				0A14E3732B56B6F70008FD28 /* WelcomeViewController.swift in Sources */,
+				6108CFEA2B76208600EF302F /* PostDto.swift in Sources */,
 				345855822B689D7200432C06 /* QnATableViewCell.swift in Sources */,
 				345855A32B69504500432C06 /* SelectMaemullViewController.swift in Sources */,
 				3458558E2B689E2D00432C06 /* AccountDeleteViewController.swift in Sources */,
+				6108CFE82B761E5900EF302F /* TotalListDto.swift in Sources */,
 				61B0C9D92B6C1B9600BE86D2 /* EnlargePhotoViewController.swift in Sources */,
 				61864BEA2B6003520073C175 /* UIButton+Extension.swift in Sources */,
 				0A2DED1A2B55198D00A96BAA /* STTLoadingViewController.swift in Sources */,
@@ -885,9 +948,11 @@
 				619269E32B67743A00D4DD3E /* ReuseableProtocol.swift in Sources */,
 				0A554CE02B52DB100023BB49 /* RecordViewController.swift in Sources */,
 				619269D92B6773FE00D4DD3E /* ImjangListViewController.swift in Sources */,
+				6108CFF22B76295200EF302F /* ImagesListDto.swift in Sources */,
 				0A129BE92B6251E10022819B /* ChecklistManager.swift in Sources */,
 				61B0C9D42B6C10CD00BE86D2 /* UIStackView+Extension.swift in Sources */,
 				61D925082B486706002A16B4 /* RecordingFileItem.swift in Sources */,
+				6108CFDF2B761AA300EF302F /* JuinjangAPI.swift in Sources */,
 				0A2DED1C2B551CB100A96BAA /* RecordPlaybackViewController.swift in Sources */,
 				0A2DED1E2B551CEE00A96BAA /* RecordTopViewController.swift in Sources */,
 				0A2471212B69693400A7382B /* ToSDetailItem.swift in Sources */,
@@ -900,13 +965,17 @@
 				0A73E60D2B5855CD00EF1C89 /* UserInfo.swift in Sources */,
 				345855802B689D4C00432C06 /* LogoutPopupView.swift in Sources */,
 				619269D82B6773FE00D4DD3E /* ImjangSearchViewController.swift in Sources */,
+				6108CFEC2B76233200EF302F /* PostResponseDto.swift in Sources */,
 				61D925052B486508002A16B4 /* RecordingFileViewCell.swift in Sources */,
 				611F14552B47070B00B983F1 /* RecordingSegmentedViewController.swift in Sources */,
 				0A4EBE3B2B5EF2BC00909B7A /* ExpandedDropdownTableViewCell.swift in Sources */,
+				6108CFF82B76308F00EF302F /* RecordRequestDto.swift in Sources */,
+				6108CFF02B76285B00EF302F /* DetailDto.swift in Sources */,
 				0A95D7312B682FB4000A9C06 /* ToSItemTableViewCell.swift in Sources */,
 				61B0C9E52B6CDA0300BE86D2 /* PaddingLabel.swift in Sources */,
 				0A3EBEBE2B654E71004D8DCE /* OpenNewPagePopupViewController.swift in Sources */,
 				0A2471192B68CAAF00A7382B /* ToSItem.swift in Sources */,
+				6108CFE62B761D0000EF302F /* LoginResponseDto.swift in Sources */,
 				61B0C99B2B697B2F00BE86D2 /* DeleteImjangTableHeaderView.swift in Sources */,
 				0A24711F2B6924BA00A7382B /* RecordingRightsViewController.swift in Sources */,
 				0AB34CC12B4F11B000150A15 /* OpenNewPage2ViewController.swift in Sources */,
@@ -937,10 +1006,13 @@
 				345855862B689DEC00432C06 /* SettingViewController.swift in Sources */,
 				0A9E0A492B3DCAB90094595A /* SceneDelegate.swift in Sources */,
 				3458559B2B692E0C00432C06 /* CompareViewController.swift in Sources */,
+				6108CFF42B762AA400EF302F /* ReportDto.swift in Sources */,
 				619269F42B67747F00D4DD3E /* ImjangNoteTableViewCell.swift in Sources */,
 				345855722B689A5300432C06 /* MainViewController.swift in Sources */,
+				6108CFFA2B76395B00EF302F /* JuinjangAPIManager.swift in Sources */,
 				61AD50A92B58039B00314673 /* DeletePopupViewController.swift in Sources */,
 				345855902B689E3B00432C06 /* DimmedViewController.swift in Sources */,
+				6108CFE12B761B3A00EF302F /* BaseResponse.swift in Sources */,
 				0A3D5D632B4D707300574686 /* BottomSheetViewController.swift in Sources */,
 				0A4EBE362B5EA27B00909B7A /* ExpandedScoreTableViewCell.swift in Sources */,
 				0A95D72F2B682013000A9C06 /* ToSViewController.swift in Sources */,

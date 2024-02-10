@@ -147,6 +147,7 @@ class SetNickNameViewController: UIViewController {
         if let nickname = nickNameTextField.text, !nickname.isEmpty {
             let welcomeViewController = WelcomeViewController()
             welcomeViewController.userInfo = UserInfo(nickname: nickname)
+            UserDefaultManager.shared.nickname = nickname
             navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
             navigationController?.pushViewController(welcomeViewController, animated: true)
         }
@@ -176,7 +177,7 @@ extension SetNickNameViewController: UITextFieldDelegate {
             }
         }
         // 글자 수 제한
-        guard textField.text!.count < 8 else { return false }
+        guard text.count < 8 else { return false }
         
         return true
     }
