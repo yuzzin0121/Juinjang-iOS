@@ -11,6 +11,7 @@ import Then
 import Kingfisher
 
 class ImjangNoteViewController: UIViewController {
+    var version: VersionInfo?
     // 스크롤뷰
     let scrollView = UIScrollView().then {
         $0.backgroundColor = .white
@@ -118,6 +119,7 @@ class ImjangNoteViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        print("버전 확인:", version)
         setDelegate()
         designNavigationBar()
         addSubView()

@@ -36,6 +36,7 @@ class OpenNewPageViewController: UIViewController {
     var isMoveTypeSelected: Bool = false
     
     var transactionModel = TransactionModel()
+    var versionInfo: VersionInfo?
     var newImjang: PostDto?
     var selectedPurposeType: Int?
     var selectedPropertyType: Int?
@@ -970,6 +971,23 @@ class OpenNewPageViewController: UIViewController {
         }
     }
     
+    // -MARK: 버전 정보 설정
+    func setVersionInfo() {
+        // 버전 정보 설정
+        if realestateInvestmentButton.isSelected {
+            versionInfo = VersionInfo(version: 0)
+            print("임장용 버전 확인", versionInfo?.version)
+        } else if moveInDirectlyButton.isSelected {
+            if apartmentButton.isSelected || houseButton.isSelected {
+                versionInfo = VersionInfo(version: 0)
+                print("임장용(부동산 투자 - 아파트, 단독주택) 버전 확인", versionInfo?.version)
+            } else if villaButton.isSelected || officetelButton.isSelected {
+                versionInfo = VersionInfo(version: 1)
+                print("원룸용(직접 입주 - 빌라, 오피스텔) 버전 확인", versionInfo?.version)
+            }
+        }
+    }
+    
     func checkPriceDetailLabel() {
         if let priceDetailLabel = priceDetailLabel {
             priceView.addSubview(priceDetailLabel)
@@ -1071,9 +1089,10 @@ class OpenNewPageViewController: UIViewController {
     
     @objc func buttonTapped(_ sender: UIButton) {
         let newPageViewController = OpenNewPage2ViewController()
+        setVersionInfo()
         // 데이터 전달
         newPageViewController.transactionModel = transactionModel
-        
+        newPageViewController.versionInfo = versionInfo
         // threeDisitPriceField와 fourDisitPriceField의 값을 합쳐서 selectedPrice에 저장
         let threeDisitPrice = Int(threeDisitPriceField.text ?? "") ?? 0
         let fourDisitPrice = Int(fourDisitPriceField.text ?? "") ?? 0

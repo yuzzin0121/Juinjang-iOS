@@ -12,6 +12,7 @@ import Alamofire
 
 class OpenNewPage2ViewController: UIViewController, WarningMessageDelegate {
     var newImjang: PostDto?
+    var versionInfo: VersionInfo?
     var imjangId: Int? = nil
     
     // -MARK: API 요청
@@ -301,6 +302,7 @@ class OpenNewPage2ViewController: UIViewController, WarningMessageDelegate {
 
     // MARK: - viewDidLoad()
     override func viewDidLoad() {
+        print("버전:", versionInfo)
         print("전달받은 데이터:", newImjang)
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -550,6 +552,7 @@ class OpenNewPage2ViewController: UIViewController, WarningMessageDelegate {
                 let ImjangNoteVC = ImjangNoteViewController()
                 ImjangNoteVC.previousVCType = .createImjangVC
                 ImjangNoteVC.imjangId = imjangId
+                ImjangNoteVC.version = self.versionInfo
                 self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
                 self.navigationController?.pushViewController(ImjangNoteVC, animated: true)
             } else {
