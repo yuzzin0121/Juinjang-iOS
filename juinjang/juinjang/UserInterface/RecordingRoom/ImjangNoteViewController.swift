@@ -168,12 +168,12 @@ class ImjangNoteViewController: UIViewController {
     }
     
     func adjustLabelHeight() {
-        let maxSize = CGSize(width: addressStackView.bounds.width - 50, height: 0) // 여백 고려
+        let maxSize = CGSize(width: addressBackgroundView.bounds.width - 30, height: CGFloat.greatestFiniteMagnitude) // 여백 고려
         let expectedSize = roomAddressLabel.sizeThatFits(maxSize)
 
         // 텍스트 길이에 따라 조건적으로 높이 업데이트
         roomAddressLabel.snp.updateConstraints { make in
-            if expectedSize.height > 20 { // someThreshold는 조건에 맞는 텍스트 높이입니다.
+            if expectedSize.height > 30 { // someThreshold는 조건에 맞는 텍스트 높이입니다.
                 make.height.equalTo(42) // 텍스트 높이의 2배로 설정
             } else {
                 make.height.equalTo(21) // 예상된 텍스트 높이로 설정
@@ -197,6 +197,7 @@ class ImjangNoteViewController: UIViewController {
         }
     }
     
+    // 리포트 보기 클릭 했을 때 - showReportVC 호출
     func setReportStackViewClick() {
         reportStackView.isUserInteractionEnabled = true
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(showReportVC))
@@ -218,6 +219,7 @@ class ImjangNoteViewController: UIViewController {
         }
     }
     
+    // 방 사진 클릭했을 때 - showImjangImageListVC. 호출
     func setImageStackViewClick() {
         stackView.isUserInteractionEnabled = true
         noImageBackgroundView.isUserInteractionEnabled = true
@@ -226,6 +228,7 @@ class ImjangNoteViewController: UIViewController {
         noImageBackgroundView.addGestureRecognizer(tapGesture)
     }
     
+    // 이미지 리스트 화면으로 이동
     @objc func showImjangImageListVC() {
         guard let imjangId = imjangId else { return }
         let imjangImageListVC = ImjangImageListViewController()
@@ -268,6 +271,7 @@ class ImjangNoteViewController: UIViewController {
         self.navigationItem.rightBarButtonItem = editButtonItem
     }
     
+    // 뒤로가기 버튼 클릭했을 때
     @objc func popView() {
         navigationController?.popViewController(animated: true)
     }
