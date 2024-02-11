@@ -295,6 +295,7 @@ class OpenNewPageViewController: UIViewController {
         $0.titleLabel?.lineBreakMode = .byTruncatingTail
     }
     
+    // MARK: - viewDidLoad()
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
@@ -319,6 +320,10 @@ class OpenNewPageViewController: UIViewController {
         fourDisitMonthlyRentField.delegate = self
         checkNextButtonActivation()
         nextButton.isEnabled = false
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
     }
     
     func setupScrollView() {

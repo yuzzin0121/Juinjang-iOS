@@ -63,14 +63,15 @@ enum JuinjangAPI {
         }
     }
     
-//    var header: HTTPHeaders {
-//        switch self {
-//        case .kakaoLogin, .regenerateToken:
-//            return ["Authorization": "Bearer \(UserDefaults.standard.string(forKey: "accessToken") ?? "")"]
-//
-//
-//        }
-//    }
+    var header: HTTPHeaders {
+        switch self {
+        case .kakaoLogin, .regenerateToken, .detailImjang:
+            return ["Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"]
+
+        default:
+            return [:]
+        }
+    }
     
     var method: HTTPMethod {
         switch self {
@@ -82,6 +83,15 @@ enum JuinjangAPI {
             return .patch
         case .deleteImjangs:
             return .delete
+        }
+    }
+    
+    var parameter: Parameters {
+        switch self {
+        case .detailImjang(let imjangId):
+            [:]
+        default:
+            [:]
         }
     }
 }

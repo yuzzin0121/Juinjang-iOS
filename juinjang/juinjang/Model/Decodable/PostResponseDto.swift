@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct PostResponseDto: Decodable {
+struct PostResponseDto: Codable {
     let limjangId: Int
     let createdAt: String
 }

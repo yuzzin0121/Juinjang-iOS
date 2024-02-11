@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import Then
+import Kingfisher
 
 class ImjangNoteViewController: UIViewController {
     // 스크롤뷰
@@ -60,7 +61,7 @@ class ImjangNoteViewController: UIViewController {
     let roomAddressLabel = UILabel()
     let addressStackView = UIStackView()
     let addressBackgroundView = UIView().then {
-        $0.backgroundColor = UIColor(named: "gray0")
+        $0.backgroundColor = ColorStyle.gray0
         $0.layer.cornerRadius = 10
     }
     
@@ -68,7 +69,7 @@ class ImjangNoteViewController: UIViewController {
     let reportImageView = UIImageView()
     let reportStackView = UIStackView()
     
-    let modifiedDateString = UILabel()
+    let modifiedDateStringLabel = UILabel()
     let modifiedDate = UILabel()
     let modifiedDateStackView = UIStackView().then {
         $0.axis = .horizontal
@@ -108,17 +109,22 @@ class ImjangNoteViewController: UIViewController {
     var roomAddress: String = "경기도 성남시 분당구 삼평동 741"
     var mDateString: String = "23.12.01"
     
-    lazy var images: [UIImage?] = [UIImage(named: "1"), UIImage(named: "2"), UIImage(named: "3")]
+//    lazy var images: [UIImage?] = [UIImage(named: "1"), UIImage(named: "2"), UIImage(named: "3")]
+    lazy var images: [String] = []
+    var imjangId: Int? = nil
+    var detailDto: DetailDto? = nil
+    var previousVCType: PreviousVCType = .createImjangVC
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         setDelegate()
         designNavigationBar()
-        designViews()
         addSubView()
-        setUpUI()
         setConstraints()
+        designViews()
+        callRequest()
+//        setUpImageUI()
         upButton.addTarget(self, action: #selector(upToTop), for: .touchUpInside)
         setReportStackViewClick()
         setImageStackViewClick()
@@ -126,6 +132,73 @@ class ImjangNoteViewController: UIViewController {
         recordingSegmentedVC.imjangNoteViewController = self
     }
     
+    func callRequest() {
+        guard let imjangId = imjangId else { return }
+        JuinjangAPIManager.shared.fetchData(type: BaseResponse<DetailDto>.self, api: .detailImjang(imjangId: imjangId)) { detailDto, error in
+            if error == nil {
+                guard let result = detailDto else { return }
+                if let detailDto = result.result {
+                    print(detailDto)
+                    self.setData(detailDto: detailDto)
+                }
+            } else {
+                guard let error else { return }
+                switch error {
+                case .failedRequest:
+                    print("failedRequest")
+                case .noData:
+                    print("noData")
+                case .invalidResponse:
+                    print("invalidResponse")
+                case .invalidData:
+                    print("invalidData")
+                }
+            }
+        }
+    }
+    
+    func setData(detailDto: DetailDto) {
+        self.navigationItem.title = detailDto.nickname
+        roomNameLabel.text = detailDto.nickname
+        setPriceLabel(priceList: detailDto.priceList)
+        roomAddressLabel.text = "\(detailDto.address) \(detailDto.addressDetail)"
+        modifiedDateStringLabel.text = "최근 수정 날짜 \(String.dateToString(target: detailDto.updatedAt))"
+        images = detailDto.images
+        setUpImageUI()
+        adjustLabelHeight()
+    }
+    
+    func adjustLabelHeight() {
+        let maxSize = CGSize(width: addressBackgroundView.bounds.width - 30, height: CGFloat.greatestFiniteMagnitude) // 여백 고려
+        let expectedSize = roomAddressLabel.sizeThatFits(maxSize)
+
+        // 텍스트 길이에 따라 조건적으로 높이 업데이트
+        roomAddressLabel.snp.updateConstraints { make in
+            if expectedSize.height > 30 { // someThreshold는 조건에 맞는 텍스트 높이입니다.
+                make.height.equalTo(42) // 텍스트 높이의 2배로 설정
+            } else {
+                make.height.equalTo(21) // 예상된 텍스트 높이로 설정
+            }
+        }
+    }
+    
+    // 방 가격 설정
+    func setPriceLabel(priceList: [String]) {
+        switch priceList.count {
+        case 1:
+            let priceString = priceList[0]
+            roomPriceLabel.text = priceString.formatToKoreanCurrencyWithZero()
+        case 2:
+            let priceString1 = priceList[0].formatToKoreanCurrencyWithZero()
+            let priceString2 = priceList[1].formatToKoreanCurrencyWithZero()
+            roomPriceLabel.text = "\(priceString1) • 월 \(priceString2)"
+            roomPriceLabel.asColor(targetString: "• 월", color: ColorStyle.mainStrokeOrange)
+        default:
+            roomPriceLabel.text = "편집을 통해 가격을 설정해주세요."
+        }
+    }
+    
+    // 리포트 보기 클릭 했을 때 - showReportVC 호출
     func setReportStackViewClick() {
         reportStackView.isUserInteractionEnabled = true
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(showReportVC))
@@ -147,14 +220,20 @@ class ImjangNoteViewController: UIViewController {
         }
     }
     
+    // 방 사진 클릭했을 때 - showImjangImageListVC. 호출
     func setImageStackViewClick() {
         stackView.isUserInteractionEnabled = true
+        noImageBackgroundView.isUserInteractionEnabled = true
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(showImjangImageListVC))
         stackView.addGestureRecognizer(tapGesture)
+        noImageBackgroundView.addGestureRecognizer(tapGesture)
     }
     
+    // 이미지 리스트 화면으로 이동
     @objc func showImjangImageListVC() {
+        guard let imjangId = imjangId else { return }
         let imjangImageListVC = ImjangImageListViewController()
+        imjangImageListVC.imjangId = imjangId
         navigationController?.pushViewController(imjangImageListVC, animated: true)
     }
     
@@ -180,22 +259,30 @@ class ImjangNoteViewController: UIViewController {
     func designNavigationBar() {
         self.navigationItem.title = "판교푸르지오월드마크"     // TODO: - 나중에 roomName 으로 연결
         self.navigationController?.navigationBar.tintColor = .black
-        // 이미지 로드
-        let backImage = UIImage(named: "arrow-left")
-
+       
         // UIBarButtonItem 생성 및 이미지 설정
-        let backButtonItem = UIBarButtonItem(image: backImage, style: .plain, target: self, action: #selector(popView))
+        let backButtonItem = UIBarButtonItem(image: ImageStyle.arrowLeft, style: .plain, target: self, action: #selector(popView))
         
         let editButtonItem = UIBarButtonItem(title: "편집", style: .plain, target: self, action: #selector(editView))
-        editButtonItem.tintColor = UIColor(named: "textGray")
+        backButtonItem.tintColor = ColorStyle.textGray
+        editButtonItem.tintColor = ColorStyle.textGray
 
         // 네비게이션 아이템에 백 버튼 아이템 설정
         self.navigationItem.leftBarButtonItem = backButtonItem
         self.navigationItem.rightBarButtonItem = editButtonItem
     }
     
+    // 뒤로가기 버튼 클릭했을 때
     @objc func popView() {
-        navigationController?.popViewController(animated: true)
+        switch previousVCType {
+        case .createImjangVC:
+            let mainVC = MainViewController()
+            let nav = UINavigationController(rootViewController: mainVC)
+            nav.modalPresentationStyle = .fullScreen
+            present(nav, animated: true)
+        case .imjangList:
+            navigationController?.popViewController(animated: true)
+        }
     }
     
     @objc func editView() {
@@ -226,13 +313,16 @@ class ImjangNoteViewController: UIViewController {
             reportStackView.addArrangedSubview($0)
         }
         
-        [modifiedDateString, modifiedDate].forEach {
+        [modifiedDateStringLabel, modifiedDate].forEach {
             modifiedDateStackView.addArrangedSubview($0)
         }
         
         [modifiedDateStackView, reportStackView].forEach {
             infoStackView.addArrangedSubview($0)
         }
+        
+        addChild(recordingSegmentedVC)
+        containerView.addSubview(recordingSegmentedVC.view)
     }
     
     // 뷰들 디자인
@@ -245,7 +335,7 @@ class ImjangNoteViewController: UIViewController {
         
         // 집 아이콘 이미지뷰
         designImageView(houseImageView,
-                        image: UIImage(named: "house"),
+                        image: ImageStyle.house,
                         contentMode: .scaleAspectFit)
         
         // 방 이름 레이블
@@ -253,7 +343,7 @@ class ImjangNoteViewController: UIViewController {
                     text: roomName,
                     alignment: .left,
                     font: UIFont.pretendard(size: 20, weight: .extraBold),
-                    textColor: UIColor(named: "mainOrange")!)
+                    textColor: ColorStyle.mainOrange)
         
         // 방 이름 스택뷰
         setStackView(roomStackView,
@@ -267,13 +357,13 @@ class ImjangNoteViewController: UIViewController {
         designLabel(roomPriceLabel,
                     text: roomPriceString,
                     font: UIFont.pretendard(size: 20, weight: .bold),
-                    textColor: UIColor(named: "textBlack")!)
+                    textColor: ColorStyle.textBlack)
         
         // 방 주소 레이블
         designLabel(roomAddressLabel,
                     text: roomAddress,
                     font: UIFont.pretendard(size: 16, weight: .medium),
-                    textColor: UIColor(named:"textGray")!, numberOfLines: 2)
+                    textColor: ColorStyle.textGray, numberOfLines: 2)
         designImageView(roomLocationIcon,
                         image: UIImage(named: "location"),
                         contentMode: .scaleAspectFit)
@@ -290,7 +380,7 @@ class ImjangNoteViewController: UIViewController {
         designLabel(showReportLabel, text: "리포트 보기",
                     alignment: .left,
                     font: UIFont.pretendard(size: 14, weight: .bold),
-                    textColor: UIColor(named: "textBlack")!)
+                    textColor: ColorStyle.textBlack)
         
         // 리포트 이미지뷰
         designImageView(reportImageView,
@@ -306,24 +396,22 @@ class ImjangNoteViewController: UIViewController {
                      isImageRight: true)
         
         // 최근 수정날짜 레이블
-        designLabel(modifiedDateString,
+        designLabel(modifiedDateStringLabel,
                     text: "최근 수정날짜",
                     font: UIFont.pretendard(size: 14, weight: .semiBold),
-                    textColor: UIColor(named: "textGray")!)
+                    textColor: ColorStyle.textGray)
         
         // 최근 수정날짜값 레이블
         designLabel(modifiedDate,
                     text: mDateString,
                     font: UIFont.pretendard(size: 14, weight: .semiBold),
-                    textColor: UIColor(named: "textGray")!)
+                    textColor: ColorStyle.textGray)
         
-        
-        addChild(recordingSegmentedVC)
-        containerView.addSubview(recordingSegmentedVC.view)
+    
     }
     
     // 이미지 개수에 따라 stackView 설정
-    func setUpUI() {
+    func setUpImageUI() {
         noImageBackgroundView.isHidden = true
         let imageCount = images.count
         print("이미지 개수\(imageCount)")
@@ -357,6 +445,10 @@ class ImjangNoteViewController: UIViewController {
             $0.trailing.equalTo(firstImage.snp.trailing).offset(-12)
             $0.width.height.equalTo(24)
         }
+        
+        if let image = images.first, let url = URL(string: image) {
+            firstImage.kf.setImage(with: url, placeholder: UIImage(named: "1"))
+        }
     }
     
     func setImage2() {
@@ -378,39 +470,56 @@ class ImjangNoteViewController: UIViewController {
             $0.width.height.equalTo(24)
         }
 
+        if let image1 = images.first, let url1 = URL(string: image1) {
+            firstImage.kf.setImage(with: url1, placeholder: UIImage(named: "1"))
+        }
+        
+        if let url2 = URL(string: images[1]) {
+            secondImage.kf.setImage(with: url2, placeholder: UIImage(named: "2"))
+        }
     }
     
     func setImage3() {
-        let images = [firstImage, secondImage, thirdImage]
+//        let images = [firstImage, secondImage, thirdImage]
 //        let imagesWidth = view.frame.width - (24 * 2)
         
-        [images[0],vStackView].forEach {
+        [firstImage,vStackView].forEach {
             stackView.addArrangedSubview($0)
         }
         
-        [images[1], images[2]].forEach {
+        [secondImage, thirdImage].forEach {
             vStackView.addArrangedSubview($0)
         }
         
-        images[2].addSubview(maximizeImageView)
+        thirdImage.addSubview(maximizeImageView)
         
-        images[0].snp.makeConstraints {
-            $0.height.equalTo(images[0].snp.width).multipliedBy(171.0 / 225.0)
+        firstImage.snp.makeConstraints {
+            $0.height.equalTo(firstImage.snp.width).multipliedBy(171.0 / 225.0)
         }
 //        let vstackHeight = images[0].frame.height - 8
         
-        images[1].snp.makeConstraints {
-            $0.height.equalTo(images[1].snp.width).multipliedBy(89.0 / 109.0)
+        secondImage.snp.makeConstraints {
+            $0.height.equalTo(secondImage.snp.width).multipliedBy(89.0 / 109.0)
         }
         
-        images[2].snp.makeConstraints {
-            $0.height.equalTo(images[2].snp.width).multipliedBy(74.0 / 109.0)
+        thirdImage.snp.makeConstraints {
+            $0.height.equalTo(thirdImage.snp.width).multipliedBy(74.0 / 109.0)
         }
         
         maximizeImageView.snp.makeConstraints {
-            $0.bottom.equalTo(images[2].snp.bottom).offset(-12)
-            $0.trailing.equalTo(images[2].snp.trailing).offset(-12)
+            $0.bottom.equalTo(thirdImage.snp.bottom).offset(-12)
+            $0.trailing.equalTo(thirdImage.snp.trailing).offset(-12)
             $0.width.height.equalTo(24)
+        }
+        
+        if let image1 = images.first, let url1 = URL(string: image1) {
+            firstImage.kf.setImage(with: url1, placeholder: UIImage(named: "1"))
+        }
+        if let url2 = URL(string: images[1]) {
+            secondImage.kf.setImage(with: url2, placeholder: UIImage(named: "2"))
+        }
+        if let url3 = URL(string: images[2]) {
+            thirdImage.kf.setImage(with: url3, placeholder: UIImage(named: "3"))
         }
     }
     
@@ -505,7 +614,6 @@ class ImjangNoteViewController: UIViewController {
             $0.leading.equalTo(topView!.snp.leading)
             $0.trailing.equalTo(topView!.snp.trailing)
             $0.top.equalTo(roomPriceLabel.snp.bottom).offset(6)
-//            $0.height.equalTo(37)
         }
         
         addressStackView.snp.makeConstraints {
@@ -514,6 +622,7 @@ class ImjangNoteViewController: UIViewController {
             $0.top.equalTo(addressBackgroundView.snp.top).offset(8)
             $0.bottom.equalTo(addressBackgroundView.snp.bottom).offset(-8)
         }
+        
         
         // 위치 아이콘
         roomLocationIcon.snp.makeConstraints {
@@ -536,7 +645,7 @@ class ImjangNoteViewController: UIViewController {
         }
         
         recordingSegmentedVC.view.snp.makeConstraints {
-            $0.leading.trailing.top.bottom.equalToSuperview()
+            $0.edges.equalToSuperview()
         }
         recordingSegmentedVC.didMove(toParent: self)
     }
@@ -563,14 +672,13 @@ class ImjangNoteViewController: UIViewController {
                 stackView.addArrangedSubview($0)
             }
         }
-        
     }
     
     // 방 이미지뷰 설정
     func setRoomImages() {
         let imageViews = [firstImage, secondImage, thirdImage]
         for index in 1...imageViews.count {
-            designImageView(imageViews[index-1], image: UIImage(named: "\(index)"), contentMode: .scaleAspectFill, cornerRadius: 5)
+            designImageView(imageViews[index-1], image: nil, contentMode: .scaleAspectFill, cornerRadius: 5)
         }
     }
     
@@ -583,7 +691,6 @@ class ImjangNoteViewController: UIViewController {
         if cornerRadius != nil {
             imageView.layer.cornerRadius = cornerRadius!
         }
-        
     }
     
     // 레이블 디자인

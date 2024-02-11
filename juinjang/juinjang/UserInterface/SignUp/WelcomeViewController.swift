@@ -186,6 +186,7 @@ class WelcomeViewController: UIViewController {
     }
     
     @objc func buttonTapped(_ sender: UIButton) {
+        UserDefaultManager.shared.userStatus = true
         let RecordingRightsVC = RecordingRightsViewController()
         RecordingRightsVC.modalPresentationStyle = .fullScreen
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)

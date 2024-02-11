@@ -74,6 +74,10 @@ class SetNickNameViewController: UIViewController {
         setupLayout()
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
+    
     func setNavigationBar() {
         self.navigationItem.title = "닉네임 정하기"
         self.navigationController?.navigationBar.tintColor = .black
