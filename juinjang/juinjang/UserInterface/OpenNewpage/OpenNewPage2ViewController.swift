@@ -16,14 +16,15 @@ class OpenNewPage2ViewController: UIViewController, WarningMessageDelegate {
     
     // -MARK: API 요청
     func createImjang(completionHandler: @escaping (Int?, NetworkError?) -> Void) {
+        guard let newImjang = newImjang else { return }
         let url = JuinjangAPI.createImjang.endpoint
         
         // 이전 뷰 컨트롤러에서 가져온 값들을 parameters에 할당
         let parameters: Parameters = [
-            "purposeType": newImjang?.purposeType,
-            "propertyType": newImjang?.propertyType,
-            "priceType": newImjang?.priceType,
-            "price": newImjang?.price,
+            "purposeType": newImjang.purposeType,
+            "propertyType": newImjang.propertyType,
+            "priceType": newImjang.priceType,
+            "price": newImjang.price,
             "address": addressTextField.text ?? "",
             "addressDetail": addressDetailTextField.text ?? "",
             "nickname": houseNicknameTextField.text ?? ""
@@ -73,7 +74,7 @@ class OpenNewPage2ViewController: UIViewController, WarningMessageDelegate {
 //        }
     }
     
-    var newImjang: PostDto?
+//    var newImjang: PostDto? = nil
     
     // -MARK: API 요청
     func createImjang() {
