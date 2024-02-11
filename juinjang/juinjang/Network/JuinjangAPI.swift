@@ -65,7 +65,7 @@ enum JuinjangAPI {
     
     var header: HTTPHeaders {
         switch self {
-        case .kakaoLogin, .regenerateToken, .detailImjang:
+        case .kakaoLogin, .regenerateToken, .detailImjang, .totalImjang, .scrap, .searchImjang:
             return ["Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"]
 
         default:

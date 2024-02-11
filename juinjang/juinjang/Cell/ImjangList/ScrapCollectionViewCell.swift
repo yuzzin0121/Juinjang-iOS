@@ -7,6 +7,7 @@
 
 import UIKit
 import Then
+import Kingfisher
 
 class ScrapCollectionViewCell: UICollectionViewCell {
     var totalStackView = UIStackView().then {
@@ -78,17 +79,30 @@ class ScrapCollectionViewCell: UICollectionViewCell {
     }
     
     func setImage1(image: String) {
-        DispatchQueue.main.async {
-            self.firstImage.image = UIImage(named: image)
+        if let url = URL(string: image) {
+            DispatchQueue.main.async {
+                self.firstImage.kf.setImage(with: url, placeholder: UIImage(named: "1"))
+            }
         }
+        
         totalStackView.addArrangedSubview(firstImage)
     }
     
     func setImage2(images: [String]) {
-        DispatchQueue.main.async {
-            self.firstImage.image = UIImage(named: images[0])
-            self.secondImage.image = UIImage(named: images[1])
+        if let url1 = URL(string: images[0]) {
+            DispatchQueue.main.async {
+                self.firstImage.kf.setImage(with: url1, placeholder: UIImage(named: "1"))
+            }
         }
+        if let url2 = URL(string: images[1]) {
+            DispatchQueue.main.async {
+                self.secondImage.kf.setImage(with: url2, placeholder: UIImage(named: "2"))
+            }
+        }
+//        DispatchQueue.main.async {
+//            self.firstImage.image = UIImage(named: images[0])
+//            self.secondImage.image = UIImage(named: images[1])
+//        }
 //        let imagesWidth = contentView.frame.width - (12*2) - 4
         [firstImage, secondImage].forEach { totalStackView.addArrangedSubview($0)}
   
@@ -102,11 +116,26 @@ class ScrapCollectionViewCell: UICollectionViewCell {
     }
     
     func setImage3(images: [String]) {
-        DispatchQueue.main.async {
-            self.firstImage.image = UIImage(named: images[0])
-            self.secondImage.image = UIImage(named: images[1])
-            self.thirdImage.image = UIImage(named: images[2])
+        if let url1 = URL(string: images[0]) {
+            DispatchQueue.main.async {
+                self.firstImage.kf.setImage(with: url1, placeholder: UIImage(named: "1"))
+            }
         }
+        if let url2 = URL(string: images[1]) {
+            DispatchQueue.main.async {
+                self.secondImage.kf.setImage(with: url2, placeholder: UIImage(named: "2"))
+            }
+        }
+        if let url3 = URL(string: images[2]) {
+            DispatchQueue.main.async {
+                self.secondImage.kf.setImage(with: url3, placeholder: UIImage(named: "3"))
+            }
+        }
+//        DispatchQueue.main.async {
+//            self.firstImage.image = UIImage(named: images[0])
+//            self.secondImage.image = UIImage(named: images[1])
+//            self.thirdImage.image = UIImage(named: images[2])
+//        }
 //        let imagesWidth = contentView.frame.width - (12 * 2)
         
         [firstImage, imageVStackView].forEach {
@@ -140,33 +169,30 @@ class ScrapCollectionViewCell: UICollectionViewCell {
         thirdImage.image = nil
     }
     
-    func setData(imjangNote: ImjangNote?) {
+    func setData(imjangNote: ListDto?) {
         guard let imjangNote else { return }
-        roomNameLabel.text = imjangNote.roomName
-        scoreLabel.text = String(format: "%.1f", imjangNote.score ?? 0.0)
-        roomPriceLabel.text = imjangNote.price
-        roomAddressLabel.text = imjangNote.location
-        let bookmarkImage = imjangNote.isBookmarked ? ImageStyle.bookmarkSelected : ImageStyle.bookmark
+        roomNameLabel.text = imjangNote.nickname
+        scoreLabel.text = String(format: "%.1f", imjangNote.totalAverage ?? 0.0)
+        roomPriceLabel.text = imjangNote.priceList[0]
+        roomAddressLabel.text = imjangNote.address
+        let bookmarkImage = imjangNote.isScraped ? ImageStyle.bookmarkSelected : ImageStyle.bookmark
         bookMarkButton.setImage(bookmarkImage, for: .normal)
         
-        if let images = imjangNote.images {
-            switch images.count {
-            case 0:
-                setStackViewBackground(isEmpty: true)
-            case 1:
-                setImage1(image: images[0])
-                setStackViewBackground(isEmpty: false)
-            case 2:
-                setImage2(images: images)
-                setStackViewBackground(isEmpty: false)
-            case 3...:
-                setImage3(images: images)
-                setStackViewBackground(isEmpty: false)
-            default:
-                print("알 수 없는 오류 발생")
-            }
-        } else {
+        let images = imjangNote.images
+        switch images.count {
+        case 0:
             setStackViewBackground(isEmpty: true)
+        case 1:
+            setImage1(image: images[0])
+            setStackViewBackground(isEmpty: false)
+        case 2:
+            setImage2(images: images)
+            setStackViewBackground(isEmpty: false)
+        case 3...:
+            setImage3(images: images)
+            setStackViewBackground(isEmpty: false)
+        default:
+            print("알 수 없는 오류 발생")
         }
     }
     

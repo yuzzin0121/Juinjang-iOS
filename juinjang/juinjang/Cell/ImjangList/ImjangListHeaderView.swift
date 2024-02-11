@@ -80,15 +80,15 @@ class ImjangListHeaderView: UITableViewHeaderFooterView {
     
     var menuChildren: [UIMenuElement] = []
     let filterList = Filter.allCases
-    lazy var scrapedList: [ImjangNote] = ImjangList.list
+    lazy var scrapedList: [ListDto] = []
     weak var delegate: ButtonTappedDelegate?    // 북마크 버튼 클릭했을 때
     
     // MARK: - init
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         configureHierarchy()
-        collectionView.delegate = self
-        collectionView.dataSource = self
+//        collectionView.delegate = self
+//        collectionView.dataSource = self
         setupConstraints()
         configureView()
         setFilterData()
@@ -237,23 +237,23 @@ class ImjangListHeaderView: UITableViewHeaderFooterView {
     }
 }
 
-extension ImjangListHeaderView: UICollectionViewDelegate, UICollectionViewDataSource {
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        scrapedList.count
-    }
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ScrapCollectionViewCell.identifier, for: indexPath) as! ScrapCollectionViewCell
-        
-        cell.bookMarkButton.tag = indexPath.row
-        cell.setData(imjangNote: scrapedList[indexPath.row])
-        cell.bookMarkButton.addTarget(self, action: #selector(bookMarkButtonClicked), for: .touchUpInside)
-        
-        return cell
-    }
-    
-    
-}
+//extension ImjangListHeaderView: UICollectionViewDelegate, UICollectionViewDataSource {
+//    
+//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//        scrapedList.count
+//    }
+//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ScrapCollectionViewCell.identifier, for: indexPath) as! ScrapCollectionViewCell
+//        
+//        cell.bookMarkButton.tag = indexPath.row
+//        cell.setData(imjangNote: scrapedList[indexPath.row])
+//        cell.bookMarkButton.addTarget(self, action: #selector(bookMarkButtonClicked), for: .touchUpInside)
+//        
+//        return cell
+//    }
+//    
+//    
+//}
 
 //var currentIndex = 0
 //

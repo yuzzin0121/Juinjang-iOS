@@ -28,8 +28,8 @@ class ImjangSearchResultViewController: UIViewController {
     }()
     
     var searchKeyword  = ""
-    var searchedImjangList: [ImjangNote] = []
-    var totalImjangList = ImjangList.list
+    var searchedImjangList: [ListDto] = []
+    var totalImjangList: [ListDto] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,18 +42,48 @@ class ImjangSearchResultViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setData()
+//        setData()
+        searchRequest()
     }
     
     func setData() {
-        for item in totalImjangList {
-            if item.roomName.contains(searchKeyword) || item.location.contains(searchKeyword) {
-                searchedImjangList.append(item)
+//        for item in totalImjangList {
+//            if item.roomName.contains(searchKeyword) || item.location.contains(searchKeyword) {
+//                searchedImjangList.append(item)
+//            }
+//        }
+        
+    }
+    
+    func searchRequest() {
+        if searchKeyword.count > 0 {
+            JuinjangAPIManager.shared.fetchData(type: BaseResponse<TotalListDto>.self, api: .searchImjang(keyword: searchKeyword)) { response, error in
+                if error == nil {
+                    guard let response = response else { return }
+                    guard let result = response.result else { return }
+                    self.searchedImjangList = result.scrapedList
+                    self.searchedImjangList.append(contentsOf: result.notScrapedList)
+                    print("요청성공")
+                    self.searchedTableView.reloadData()
+                } else {
+                    guard let error else { return }
+                    switch error {
+                    case .failedRequest:
+                        print("failedRequest")
+                    case .noData:
+                        print("noData")
+                    case .invalidResponse:
+                        print("invalidResponse")
+                    case .invalidData:
+                        print("invalidData")
+                    }
+                }
             }
         }
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){ self.view.endEditing(true)
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
     
     @objc func popView() {
@@ -95,9 +125,30 @@ class ImjangSearchResultViewController: UIViewController {
     
     @objc func bookMarkButtonClicked(sender: UIButton) {
         var imjangNote = searchedImjangList[sender.tag]
-        imjangNote.isBookmarked.toggle()
+        imjangNote.isScraped.toggle()
         searchedImjangList[sender.tag] = imjangNote
+        scrapRequest(imjangId: imjangNote.limjangId)
         searchedTableView.reloadRows(at: [IndexPath(row: sender.tag, section: 0)], with: .fade)
+    }
+    func scrapRequest(imjangId: Int) {
+        JuinjangAPIManager.shared.fetchData(type: NoResultResponse.self, api: .scrap(imjangId: imjangId)) { response, error in
+            if error == nil {
+                guard let response = response else { return }
+                print(response.message)
+            } else {
+                guard let error else { return }
+                switch error {
+                case .failedRequest:
+                    print("failedRequest")
+                case .noData:
+                    print("noData")
+                case .invalidResponse:
+                    print("invalidResponse")
+                case .invalidData:
+                    print("invalidData")
+                }
+            }
+        }
     }
     
     func saveSearchKeyword(keyword: String) {
@@ -140,17 +191,18 @@ extension ImjangSearchResultViewController: UISearchBarDelegate {
             return
         }
         saveSearchKeyword(keyword: text)
-        print("text")
-        for list in self.totalImjangList {
-            if list.roomName.contains(text.lowercased()) || list.location.contains(text.lowercased()) {
-                print("있음")
-                searchedImjangList.append(list)
-            } else if list.roomName.contains(text.uppercased()) || list.location.contains(text.uppercased()) {
-                print("있음")
-                searchedImjangList.append(list)
-            }
-        }
-        searchedTableView.reloadData()
+//        for list in self.totalImjangList {
+//            if list.nickname.contains(text.lowercased()) || list.address.contains(text.lowercased()) {
+//                print("있음")
+//                searchedImjangList.append(list)
+//            } else if list.nickname.contains(text.uppercased()) || list.address.contains(text.uppercased()) {
+//                print("있음")
+//                searchedImjangList.append(list)
+//            }
+//        }
+        searchKeyword = text
+        searchRequest()
+//        searchedTableView.reloadData()
     }
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.text = ""

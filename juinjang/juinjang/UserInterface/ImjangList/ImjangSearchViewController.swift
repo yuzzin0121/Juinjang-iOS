@@ -64,6 +64,7 @@ class ImjangSearchViewController: UIViewController {
     
     func setKeywordList() {
         searchedKeywordList = UserDefaultManager.shared.searchKeywords
+        imjangSearchTableView.reloadData()
     }
     
     func setDelegate() {
