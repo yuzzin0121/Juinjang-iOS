@@ -8,8 +8,70 @@
 import UIKit
 import Then
 import SnapKit
+import Alamofire
 
 class OpenNewPage2ViewController: UIViewController, WarningMessageDelegate {
+    var newImjang: PostDto?
+    var imjangId: Int? = nil
+    
+    // -MARK: API 요청
+    func createImjang(completionHandler: @escaping (Int?, NetworkError?) -> Void) {
+        let url = JuinjangAPI.createImjang.endpoint
+        
+        // 이전 뷰 컨트롤러에서 가져온 값들을 parameters에 할당
+        let parameters: Parameters = [
+            "purposeType": newImjang?.purposeType,
+            "propertyType": newImjang?.propertyType,
+            "priceType": newImjang?.priceType,
+            "price": newImjang?.price,
+            "address": addressTextField.text ?? "",
+            "addressDetail": addressDetailTextField.text ?? "",
+            "nickname": houseNicknameTextField.text ?? ""
+        ]
+        
+        print(parameters)
+        print("토큰값: \(userAccessToken)")
+        
+        let header : HTTPHeaders = ["Content-Type": "application/json", "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"]
+        AF.request(url,
+                 method: .post,
+                 parameters: parameters,
+                 encoding: JSONEncoding.default,
+                 headers: header)
+        .validate(statusCode: 200..<300)
+        .responseDecodable(of: BaseResponse<PostResponseDto>.self) { response in
+            switch response.result {
+            case .success(let success):
+                if let limjangId = success.result?.limjangId {
+                    print(limjangId)
+                    self.imjangId = limjangId
+                    completionHandler(self.imjangId, nil)
+                }
+        
+            case .failure(let failure):
+                print("Error: \(failure)")
+                completionHandler(nil, NetworkError.failedRequest)
+            }
+        }
+//        dataRequest
+//            .validate(statusCode: 200..<300)
+//            .responseData { response in
+//            switch response.result {
+//            case .success(let data):
+//                // 응답 확인
+//                if let httpResponse = response.response {
+//                    print("Status code: \(httpResponse.statusCode)")
+//                }
+//                // 응답 데이터 출력
+//                if let responseString = String(data: data, encoding: .utf8) {
+//                    print("Response data: \(responseString)")
+//                }
+//            case .failure(let error):
+//                print("Error: \(error)")
+//                
+//            }
+//        }
+    }
     
     var backgroundImageViewWidthConstraint: NSLayoutConstraint? // 배경 이미지의 너비 제약조건
     
@@ -190,6 +252,7 @@ class OpenNewPage2ViewController: UIViewController, WarningMessageDelegate {
         $0.addTarget(self, action: #selector(nextButtonTapped(_:)), for: .touchUpInside)
     }
 
+    // MARK: - viewDidLoad()
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -203,6 +266,10 @@ class OpenNewPage2ViewController: UIViewController, WarningMessageDelegate {
         houseNicknameTextField.delegate = self
         updateImageViewsFromModel()
         setupWidgets()
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
     }
     
     func setupWidgets() {
@@ -429,9 +496,27 @@ class OpenNewPage2ViewController: UIViewController, WarningMessageDelegate {
     }
     
     @objc func nextButtonTapped(_ sender: UIButton) {
-        let ImjangNoteVC = ImjangNoteViewController()
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        navigationController?.pushViewController(ImjangNoteVC, animated: true)
+        createImjang { imjangId, error in
+            if error == nil {
+                guard let imjangId else { return }
+                let ImjangNoteVC = ImjangNoteViewController()
+                ImjangNoteVC.imjangId = imjangId
+                self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+                self.navigationController?.pushViewController(ImjangNoteVC, animated: true)
+            } else {
+                guard let error else { return }
+                switch error {
+                case .failedRequest:
+                    print("failedRequest")
+                case .noData:
+                    print("noData")
+                case .invalidResponse:
+                    print("invalidResponse")
+                case .invalidData:
+                    print("invalidData")
+                }
+            }
+        }
     }
 }
 

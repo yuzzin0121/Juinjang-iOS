@@ -21,6 +21,7 @@ class ImjangImageListViewController: UIViewController {
     
     var isLongTap: Bool = false
     var selectedIndexs: Set<Int> = []
+    var imjangId: Int? = nil
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -30,8 +30,6 @@
 		0A3EBEBE2B654E71004D8DCE /* OpenNewPagePopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3EBEBD2B654E71004D8DCE /* OpenNewPagePopupViewController.swift */; };
 		0A4EBE272B5E9E5F00909B7A /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 0A4EBE262B5E9E5F00909B7A /* Then */; };
 		0A4EBE2A2B5E9E6A00909B7A /* Tabman in Frameworks */ = {isa = PBXBuildFile; productRef = 0A4EBE292B5E9E6A00909B7A /* Tabman */; };
-		0A4EBE2D2B5E9E8B00909B7A /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0A4EBE2C2B5E9E8B00909B7A /* SnapKit */; };
-		0A4EBE2F2B5E9E8B00909B7A /* SnapKit-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 0A4EBE2E2B5E9E8B00909B7A /* SnapKit-Dynamic */; };
 		0A4EBE322B5EA21100909B7A /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 0A4EBE312B5EA21100909B7A /* FSCalendar */; };
 		0A4EBE342B5EA25300909B7A /* ExpandedCalendarTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4EBE332B5EA25300909B7A /* ExpandedCalendarTableViewCell.swift */; };
 		0A4EBE362B5EA27B00909B7A /* ExpandedScoreTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4EBE352B5EA27B00909B7A /* ExpandedScoreTableViewCell.swift */; };
@@ -40,7 +38,6 @@
 		0A554CE02B52DB100023BB49 /* RecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A554CDF2B52DB100023BB49 /* RecordViewController.swift */; };
 		0A554CE42B5420F20023BB49 /* WarningMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A554CE32B5420F20023BB49 /* WarningMessageViewController.swift */; };
 		0A73E60D2B5855CD00EF1C89 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A73E60C2B5855CD00EF1C89 /* UserInfo.swift */; };
-		0A7AC0EF2B640CA80032C9DF /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 0A7AC0EE2B640CA80032C9DF /* Alamofire */; };
 		0A7AC0F12B6412760032C9DF /* KakaoZipCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7AC0F02B6412760032C9DF /* KakaoZipCodeViewController.swift */; };
 		0A95D72F2B682013000A9C06 /* ToSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A95D72E2B682013000A9C06 /* ToSViewController.swift */; };
 		0A95D7312B682FB4000A9C06 /* ToSItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A95D7302B682FB4000A9C06 /* ToSItemTableViewCell.swift */; };
@@ -54,8 +51,6 @@
 		0AE388892B5986BC0041A979 /* CategoryItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE388882B5986BC0041A979 /* CategoryItemTableViewCell.swift */; };
 		0AE3888B2B5992870041A979 /* CheckListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE3888A2B5992870041A979 /* CheckListItem.swift */; };
 		0AF968242B5BDF3300A3CBBB /* CheckListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF968232B5BDF3300A3CBBB /* CheckListViewController.swift */; };
-		3458556B2B68998A00432C06 /* DGCharts in Frameworks */ = {isa = PBXBuildFile; productRef = 3458556A2B68998A00432C06 /* DGCharts */; };
-		3458556D2B68998A00432C06 /* DGChartsDynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 3458556C2B68998A00432C06 /* DGChartsDynamic */; };
 		345855722B689A5300432C06 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345855712B689A5300432C06 /* MainViewController.swift */; };
 		345855742B689A7E00432C06 /* BottomCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345855732B689A7E00432C06 /* BottomCollectionViewCell.swift */; };
 		345855762B689AAE00432C06 /* TopTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345855752B689AAE00432C06 /* TopTableViewCell.swift */; };
@@ -93,9 +88,6 @@
 		345855D92B6B7F7600432C06 /* KakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = 345855D82B6B7F7600432C06 /* KakaoSDKUser */; };
 		345855DB2B6B8D5100432C06 /* CompareSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345855DA2B6B8D5000432C06 /* CompareSearchViewController.swift */; };
 		346C7E582B753C6C00B4E044 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 346C7E572B753C6C00B4E044 /* SnapKit */; };
-		346C7E5A2B753C6C00B4E044 /* SnapKit-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 346C7E592B753C6C00B4E044 /* SnapKit-Dynamic */; };
-		346C7E5C2B753C8900B4E044 /* DGCharts in Frameworks */ = {isa = PBXBuildFile; productRef = 346C7E5B2B753C8900B4E044 /* DGCharts */; };
-		346C7E5E2B753C8900B4E044 /* DGChartsDynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 346C7E5D2B753C8900B4E044 /* DGChartsDynamic */; };
 		346CF6AE2B70B46B00C70C7A /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346CF6AD2B70B46B00C70C7A /* SplashViewController.swift */; };
 		346CF6B02B70B4D300C70C7A /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = 346CF6AF2B70B4D300C70C7A /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json */; };
 		346CF6B32B70B54B00C70C7A /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 346CF6B22B70B54B00C70C7A /* Lottie */; };
@@ -112,6 +104,11 @@
 		6108CFF62B762CA600EF302F /* ProfileDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6108CFF52B762CA600EF302F /* ProfileDto.swift */; };
 		6108CFF82B76308F00EF302F /* RecordRequestDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6108CFF72B76308F00EF302F /* RecordRequestDto.swift */; };
 		6108CFFA2B76395B00EF302F /* JuinjangAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6108CFF92B76395B00EF302F /* JuinjangAPIManager.swift */; };
+		6108D0012B78A83B00EF302F /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6108D0002B78A83B00EF302F /* String+Extension.swift */; };
+		6108D0042B78AC9E00EF302F /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 6108D0032B78AC9E00EF302F /* Kingfisher */; };
+		6108D0072B78C40800EF302F /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 6108D0062B78C40800EF302F /* Alamofire */; };
+		6108D00D2B78C45300EF302F /* DGCharts in Frameworks */ = {isa = PBXBuildFile; productRef = 6108D00C2B78C45300EF302F /* DGCharts */; };
+		6108D0102B78C4FE00EF302F /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6108D00F2B78C4FE00EF302F /* SnapKit */; };
 		611757382B67D5E60043E958 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 611757372B67D5E60043E958 /* Assets.xcassets */; };
 		611F14552B47070B00B983F1 /* RecordingSegmentedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F14542B47070B00B983F1 /* RecordingSegmentedViewController.swift */; };
 		611F145A2B4707CC00B983F1 /* RecordingRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F14592B4707CC00B983F1 /* RecordingRoomViewController.swift */; };
@@ -248,6 +245,7 @@
 		6108CFF52B762CA600EF302F /* ProfileDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDto.swift; sourceTree = "<group>"; };
 		6108CFF72B76308F00EF302F /* RecordRequestDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordRequestDto.swift; sourceTree = "<group>"; };
 		6108CFF92B76395B00EF302F /* JuinjangAPIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JuinjangAPIManager.swift; sourceTree = "<group>"; };
+		6108D0002B78A83B00EF302F /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		611757372B67D5E60043E958 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		611F14542B47070B00B983F1 /* RecordingSegmentedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingSegmentedViewController.swift; sourceTree = "<group>"; };
 		611F14592B4707CC00B983F1 /* RecordingRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingRoomViewController.swift; sourceTree = "<group>"; };
@@ -305,29 +303,25 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0A7AC0EF2B640CA80032C9DF /* Alamofire in Frameworks */,
 				345855C32B6B7F7600432C06 /* KakaoSDK in Frameworks */,
 				345855D72B6B7F7600432C06 /* KakaoSDKTemplate in Frameworks */,
-				0A4EBE2F2B5E9E8B00909B7A /* SnapKit-Dynamic in Frameworks */,
 				345855D12B6B7F7600432C06 /* KakaoSDKNavi in Frameworks */,
 				346C7E582B753C6C00B4E044 /* SnapKit in Frameworks */,
 				346CF6B32B70B54B00C70C7A /* Lottie in Frameworks */,
-				346C7E5C2B753C8900B4E044 /* DGCharts in Frameworks */,
+				6108D0102B78C4FE00EF302F /* SnapKit in Frameworks */,
 				0A4EBE322B5EA21100909B7A /* FSCalendar in Frameworks */,
 				345855C72B6B7F7600432C06 /* KakaoSDKCert in Frameworks */,
+				6108D0072B78C40800EF302F /* Alamofire in Frameworks */,
 				61D9250F2B4965D0002A16B4 /* IQKeyboardManagerSwift in Frameworks */,
 				345855D32B6B7F7600432C06 /* KakaoSDKShare in Frameworks */,
-				346C7E5A2B753C6C00B4E044 /* SnapKit-Dynamic in Frameworks */,
 				345855C92B6B7F7600432C06 /* KakaoSDKCertCore in Frameworks */,
-				0A4EBE2D2B5E9E8B00909B7A /* SnapKit in Frameworks */,
 				0A4EBE2A2B5E9E6A00909B7A /* Tabman in Frameworks */,
 				345855D92B6B7F7600432C06 /* KakaoSDKUser in Frameworks */,
 				345855CF2B6B7F7600432C06 /* KakaoSDKFriendCore in Frameworks */,
-				3458556B2B68998A00432C06 /* DGCharts in Frameworks */,
-				3458556D2B68998A00432C06 /* DGChartsDynamic in Frameworks */,
 				0A4EBE272B5E9E5F00909B7A /* Then in Frameworks */,
+				6108D0042B78AC9E00EF302F /* Kingfisher in Frameworks */,
 				345855CB2B6B7F7600432C06 /* KakaoSDKCommon in Frameworks */,
-				346C7E5E2B753C8900B4E044 /* DGChartsDynamic in Frameworks */,
+				6108D00D2B78C45300EF302F /* DGCharts in Frameworks */,
 				345855D52B6B7F7600432C06 /* KakaoSDKTalk in Frameworks */,
 				345855C52B6B7F7600432C06 /* KakaoSDKAuth in Frameworks */,
 				345855CD2B6B7F7600432C06 /* KakaoSDKFriend in Frameworks */,
@@ -646,6 +640,7 @@
 				61864BE92B6003520073C175 /* UIButton+Extension.swift */,
 				61864C4C2B653E140073C175 /* UIViewController+Extension.swift */,
 				61B0C9D32B6C10CC00BE86D2 /* UIStackView+Extension.swift */,
+				6108D0002B78A83B00EF302F /* String+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -797,14 +792,9 @@
 			name = juinjang;
 			packageProductDependencies = (
 				61D9250E2B4965D0002A16B4 /* IQKeyboardManagerSwift */,
-				0A7AC0EE2B640CA80032C9DF /* Alamofire */,
 				0A4EBE262B5E9E5F00909B7A /* Then */,
 				0A4EBE292B5E9E6A00909B7A /* Tabman */,
-				0A4EBE2C2B5E9E8B00909B7A /* SnapKit */,
-				0A4EBE2E2B5E9E8B00909B7A /* SnapKit-Dynamic */,
 				0A4EBE312B5EA21100909B7A /* FSCalendar */,
-				3458556A2B68998A00432C06 /* DGCharts */,
-				3458556C2B68998A00432C06 /* DGChartsDynamic */,
 				345855C22B6B7F7600432C06 /* KakaoSDK */,
 				345855C42B6B7F7600432C06 /* KakaoSDKAuth */,
 				345855C62B6B7F7600432C06 /* KakaoSDKCert */,
@@ -819,9 +809,10 @@
 				345855D82B6B7F7600432C06 /* KakaoSDKUser */,
 				346CF6B22B70B54B00C70C7A /* Lottie */,
 				346C7E572B753C6C00B4E044 /* SnapKit */,
-				346C7E592B753C6C00B4E044 /* SnapKit-Dynamic */,
-				346C7E5B2B753C8900B4E044 /* DGCharts */,
-				346C7E5D2B753C8900B4E044 /* DGChartsDynamic */,
+				6108D0032B78AC9E00EF302F /* Kingfisher */,
+				6108D0062B78C40800EF302F /* Alamofire */,
+				6108D00C2B78C45300EF302F /* DGCharts */,
+				6108D00F2B78C4FE00EF302F /* SnapKit */,
 			);
 			productName = juinjang;
 			productReference = 0A9E0A432B3DCAB90094595A /* juinjang.app */;
@@ -853,14 +844,15 @@
 			mainGroup = 0A9E0A3A2B3DCAB90094595A;
 			packageReferences = (
 				61D9250D2B4965D0002A16B4 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
-				0A7AC0ED2B640CA80032C9DF /* XCRemoteSwiftPackageReference "Alamofire" */,
 				0A4EBE252B5E9E5F00909B7A /* XCRemoteSwiftPackageReference "Then" */,
 				0A4EBE282B5E9E6A00909B7A /* XCRemoteSwiftPackageReference "Tabman" */,
-				0A4EBE2B2B5E9E8B00909B7A /* XCRemoteSwiftPackageReference "SnapKit" */,
 				0A4EBE302B5EA21100909B7A /* XCRemoteSwiftPackageReference "FSCalendar" */,
-				345855692B68998A00432C06 /* XCRemoteSwiftPackageReference "Charts" */,
 				345855C12B6B7F7600432C06 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
 				346CF6B12B70B54B00C70C7A /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				6108D0022B78AC9E00EF302F /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				6108D0052B78C40800EF302F /* XCRemoteSwiftPackageReference "Alamofire" */,
+				6108D00B2B78C45300EF302F /* XCRemoteSwiftPackageReference "Charts" */,
+				6108D00E2B78C4FE00EF302F /* XCRemoteSwiftPackageReference "SnapKit" */,
 			);
 			productRefGroup = 0A9E0A442B3DCAB90094595A /* Products */;
 			projectDirPath = "";
@@ -907,6 +899,7 @@
 				345855882B689E0100432C06 /* UseViewController.swift in Sources */,
 				619269E02B67742B00D4DD3E /* Filter.swift in Sources */,
 				616408E12B405B7200EC3B5E /* ImjangNoteViewController.swift in Sources */,
+				6108D0012B78A83B00EF302F /* String+Extension.swift in Sources */,
 				346CF6AE2B70B46B00C70C7A /* SplashViewController.swift in Sources */,
 				3458558C2B689E1E00432C06 /* LogoutPopupViewController.swift in Sources */,
 				619269EA2B67745900D4DD3E /* ColorStyle.swift in Sources */,
@@ -1159,7 +1152,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = DNJ2FDQWSL;
+				DEVELOPMENT_TEAM = T2Q8P9627P;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = juinjang/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "카메라 접근 권한이 필요합니다.";
@@ -1194,7 +1187,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = T2Q8P9627P;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = juinjang/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "카메라 접근 권한이 필요합니다.";
@@ -1262,36 +1255,12 @@
 				minimumVersion = 3.0.2;
 			};
 		};
-		0A4EBE2B2B5E9E8B00909B7A /* XCRemoteSwiftPackageReference "SnapKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SnapKit/SnapKit";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.7.0;
-			};
-		};
 		0A4EBE302B5EA21100909B7A /* XCRemoteSwiftPackageReference "FSCalendar" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/WenchaoD/FSCalendar";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 2.8.4;
-			};
-		};
-		0A7AC0ED2B640CA80032C9DF /* XCRemoteSwiftPackageReference "Alamofire" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Alamofire/Alamofire";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.8.1;
-			};
-		};
-		345855692B68998A00432C06 /* XCRemoteSwiftPackageReference "Charts" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/danielgindi/Charts.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.0.0;
 			};
 		};
 		345855C12B6B7F7600432C06 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */ = {
@@ -1308,6 +1277,38 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 4.4.0;
+			};
+		};
+		6108D0022B78AC9E00EF302F /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.10.2;
+			};
+		};
+		6108D0052B78C40800EF302F /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.8.1;
+			};
+		};
+		6108D00B2B78C45300EF302F /* XCRemoteSwiftPackageReference "Charts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/danielgindi/Charts";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+		6108D00E2B78C4FE00EF302F /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.0;
 			};
 		};
 		61D9250D2B4965D0002A16B4 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
@@ -1331,35 +1332,10 @@
 			package = 0A4EBE282B5E9E6A00909B7A /* XCRemoteSwiftPackageReference "Tabman" */;
 			productName = Tabman;
 		};
-		0A4EBE2C2B5E9E8B00909B7A /* SnapKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 0A4EBE2B2B5E9E8B00909B7A /* XCRemoteSwiftPackageReference "SnapKit" */;
-			productName = SnapKit;
-		};
-		0A4EBE2E2B5E9E8B00909B7A /* SnapKit-Dynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 0A4EBE2B2B5E9E8B00909B7A /* XCRemoteSwiftPackageReference "SnapKit" */;
-			productName = "SnapKit-Dynamic";
-		};
 		0A4EBE312B5EA21100909B7A /* FSCalendar */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 0A4EBE302B5EA21100909B7A /* XCRemoteSwiftPackageReference "FSCalendar" */;
 			productName = FSCalendar;
-		};
-		0A7AC0EE2B640CA80032C9DF /* Alamofire */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 0A7AC0ED2B640CA80032C9DF /* XCRemoteSwiftPackageReference "Alamofire" */;
-			productName = Alamofire;
-		};
-		3458556A2B68998A00432C06 /* DGCharts */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 345855692B68998A00432C06 /* XCRemoteSwiftPackageReference "Charts" */;
-			productName = DGCharts;
-		};
-		3458556C2B68998A00432C06 /* DGChartsDynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 345855692B68998A00432C06 /* XCRemoteSwiftPackageReference "Charts" */;
-			productName = DGChartsDynamic;
 		};
 		345855C22B6B7F7600432C06 /* KakaoSDK */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -1425,24 +1401,30 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = SnapKit;
 		};
-		346C7E592B753C6C00B4E044 /* SnapKit-Dynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = "SnapKit-Dynamic";
-		};
-		346C7E5B2B753C8900B4E044 /* DGCharts */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 345855692B68998A00432C06 /* XCRemoteSwiftPackageReference "Charts" */;
-			productName = DGCharts;
-		};
-		346C7E5D2B753C8900B4E044 /* DGChartsDynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 345855692B68998A00432C06 /* XCRemoteSwiftPackageReference "Charts" */;
-			productName = DGChartsDynamic;
-		};
 		346CF6B22B70B54B00C70C7A /* Lottie */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 346CF6B12B70B54B00C70C7A /* XCRemoteSwiftPackageReference "lottie-ios" */;
 			productName = Lottie;
+		};
+		6108D0032B78AC9E00EF302F /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6108D0022B78AC9E00EF302F /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+		6108D0062B78C40800EF302F /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6108D0052B78C40800EF302F /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		6108D00C2B78C45300EF302F /* DGCharts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6108D00B2B78C45300EF302F /* XCRemoteSwiftPackageReference "Charts" */;
+			productName = DGCharts;
+		};
+		6108D00F2B78C4FE00EF302F /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6108D00E2B78C4FE00EF302F /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
 		};
 		61D9250E2B4965D0002A16B4 /* IQKeyboardManagerSwift */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -7,6 +7,7 @@
 
 import UIKit
 import KakaoSDKAuth
+import IQKeyboardManagerSwift
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -20,10 +21,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
 
         let mainViewController = SplashViewController()
-        let navigationController = UINavigationController(rootViewController: mainViewController)
+//        let navigationController = UINavigationController(rootViewController: mainViewController)
 //        navigationController.navigationBar.scrollEdgeAppearance?.backgroundColor = .white
-        window?.rootViewController = navigationController
+        window?.rootViewController = mainViewController
         window?.makeKeyAndVisible()
+        
+        IQKeyboardManager.shared.enable = true
+        
     }
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
         if let url = URLContexts.first?.url {
