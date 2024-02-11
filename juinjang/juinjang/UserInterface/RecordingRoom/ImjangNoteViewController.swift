@@ -288,10 +288,13 @@ class ImjangNoteViewController: UIViewController {
     }
     
     @objc func editView() {
-        // TODO: 실거래가 / 매매-전세-월세 구분 필요
         let editVC = EditBasicInfoViewController()
-        self.navigationController?.pushViewController(editVC, animated: true)
-        
+        let editDetailVC = EditBasicInfoDetailViewController()
+        if version?.editCriteria == 0 {
+            self.navigationController?.pushViewController(editVC, animated: true)
+        } else if version?.editCriteria == 1 {
+            self.navigationController?.pushViewController(editDetailVC, animated: true)
+        }
     }
     
     // MARK: - addSubView()

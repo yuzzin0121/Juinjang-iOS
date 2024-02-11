@@ -975,15 +975,18 @@ class OpenNewPageViewController: UIViewController {
     func setVersionInfo() {
         // 버전 정보 설정
         if realestateInvestmentButton.isSelected {
-            versionInfo = VersionInfo(version: 0)
+            versionInfo = VersionInfo(version: 0, editCriteria: 0)
             print("임장용 버전 확인", versionInfo?.version)
+            print("수정정보 기준 확인", versionInfo?.editCriteria)
         } else if moveInDirectlyButton.isSelected {
             if apartmentButton.isSelected || houseButton.isSelected {
-                versionInfo = VersionInfo(version: 0)
+                versionInfo = VersionInfo(version: 0, editCriteria: 1)
                 print("임장용(부동산 투자 - 아파트, 단독주택) 버전 확인", versionInfo?.version)
+                print("수정정보 기준 확인", versionInfo?.editCriteria)
             } else if villaButton.isSelected || officetelButton.isSelected {
-                versionInfo = VersionInfo(version: 1)
+                versionInfo = VersionInfo(version: 1, editCriteria: 1)
                 print("원룸용(직접 입주 - 빌라, 오피스텔) 버전 확인", versionInfo?.version)
+                print("수정정보 기준 확인", versionInfo?.editCriteria)
             }
         }
     }

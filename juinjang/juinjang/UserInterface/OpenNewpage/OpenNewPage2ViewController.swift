@@ -302,7 +302,7 @@ class OpenNewPage2ViewController: UIViewController, WarningMessageDelegate {
 
     // MARK: - viewDidLoad()
     override func viewDidLoad() {
-        print("버전:", versionInfo)
+        print("VersionInfo:", versionInfo)
         print("전달받은 데이터:", newImjang)
         super.viewDidLoad()
         view.backgroundColor = .white
