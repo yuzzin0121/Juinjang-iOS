@@ -36,6 +36,11 @@ class OpenNewPageViewController: UIViewController {
     var isMoveTypeSelected: Bool = false
     
     var transactionModel = TransactionModel()
+    var newImjang: PostDto?
+    var selectedPurposeType: Int?
+    var selectedPropertyType: Int?
+    var selectedPriceType: Int = 3 // 기본값 실거래가로 설정
+    var selectedPrice: [String] = []
     
     var backgroundImageViewWidthConstraint: NSLayoutConstraint? // 배경 이미지의 너비 제약조건
     
@@ -786,6 +791,7 @@ class OpenNewPageViewController: UIViewController {
             
             // 버튼에 따라 사용자 표시
             if sender == realestateInvestmentButton {
+                selectedPurposeType = 0
                 transactionModel.selectedPurposeButtonImage = investorImageView.image
                 backgroundImageView.addSubview(investorImageView)
                 priceView2.isHidden = true
@@ -801,6 +807,7 @@ class OpenNewPageViewController: UIViewController {
                 }
                 movingUserImageView.removeFromSuperview()
             } else if sender == moveInDirectlyButton {
+                selectedPurposeType = 1
                 transactionModel.selectedPurposeButtonImage = movingUserImageView.image
                 backgroundImageView.addSubview(movingUserImageView)
                 priceDetailLabel?.removeFromSuperview()
@@ -824,18 +831,22 @@ class OpenNewPageViewController: UIViewController {
             
             // 버튼에 따라 집 표시
             if sender == apartmentButton {
+                selectedPropertyType = 0
                 transactionModel.selectedPropertyTypeButtonImage = apartmentImageView.image
                 RemovePropertyImageViews()
                 apartmentImageView.isHidden = false
             } else if sender == villaButton {
+                selectedPropertyType = 1
                 transactionModel.selectedPropertyTypeButtonImage = villaImageView.image
                 RemovePropertyImageViews()
                 villaImageView.isHidden = false
             } else if sender == officetelButton {
+                selectedPropertyType = 2
                 transactionModel.selectedPropertyTypeButtonImage = officetelImageView.image
                 RemovePropertyImageViews()
                 officetelImageView.isHidden = false
             } else if sender == houseButton {
+                selectedPropertyType = 3
                 transactionModel.selectedPropertyTypeButtonImage = houseImageView.image
                 RemovePropertyImageViews()
                 houseImageView.isHidden = false
@@ -856,6 +867,7 @@ class OpenNewPageViewController: UIViewController {
             
             // 버튼에 따라 가격 View 표시
             if sender == saleButton {
+                selectedPriceType = 0
                 threeDisitPriceField.text = ""
                 fourDisitPriceField.text = ""
                 priceView2.isHidden = true
@@ -863,6 +875,7 @@ class OpenNewPageViewController: UIViewController {
                 priceDetailLabel = priceDetailLabels[1]
                 checkPriceDetailLabel()
             } else if sender == jeonseButton {
+                selectedPriceType = 1
                 threeDisitPriceField.text = ""
                 fourDisitPriceField.text = ""
                 priceView2.isHidden = true
@@ -870,6 +883,7 @@ class OpenNewPageViewController: UIViewController {
                 priceDetailLabel = priceDetailLabels[3]
                 checkPriceDetailLabel()
             } else if sender == monthlyRentButton {
+                selectedPriceType = 2
                 threeDisitPriceField.text = ""
                 fourDisitPriceField.text = ""
                 fourDisitMonthlyRentField.text = ""
@@ -1057,7 +1071,31 @@ class OpenNewPageViewController: UIViewController {
     
     @objc func buttonTapped(_ sender: UIButton) {
         let newPageViewController = OpenNewPage2ViewController()
-        newPageViewController.transactionModel = transactionModel // 데이터 전달
+        // 데이터 전달
+        newPageViewController.transactionModel = transactionModel
+        
+        // threeDisitPriceField와 fourDisitPriceField의 값을 합쳐서 selectedPrice에 저장
+        let threeDisitPrice = Int(threeDisitPriceField.text ?? "") ?? 0
+        let fourDisitPrice = Int(fourDisitPriceField.text ?? "") ?? 0
+        selectedPrice = [String(threeDisitPrice * 100000000 + fourDisitPrice * 10000)]
+
+        // fourDisitMonthlyRentField의 값이 있다면 추가
+        if let monthlyRentValue = fourDisitMonthlyRentField.text, !monthlyRentValue.isEmpty {
+            if let monthlyRent = Int(monthlyRentValue) {
+                selectedPrice.append(String(monthlyRent))
+            }
+        }
+        
+        newImjang = PostDto(
+            purposeType: selectedPurposeType!,
+            propertyType: selectedPropertyType!,
+            priceType: selectedPriceType,
+            price: selectedPrice,
+            address: "",  // 다음 뷰에서 사용할 값
+            addressDetail: "",  // 다음 뷰에서 사용할 값
+            nickname: ""  // 다음 뷰에서 사용할 값
+        )
+        newPageViewController.newImjang = newImjang
         print("Selected Purpose Button Image: \(transactionModel.selectedPurposeButtonImage)")
         print("Selected Property Type Button Image: \(transactionModel.selectedPropertyTypeButtonImage)")
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
