@@ -113,6 +113,7 @@ class ImjangNoteViewController: UIViewController {
     lazy var images: [String] = []
     var imjangId: Int? = nil
     var detailDto: DetailDto? = nil
+    var previousVCType: PreviousVCType = .createImjangVC
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -273,7 +274,15 @@ class ImjangNoteViewController: UIViewController {
     
     // 뒤로가기 버튼 클릭했을 때
     @objc func popView() {
-        navigationController?.popViewController(animated: true)
+        switch previousVCType {
+        case .createImjangVC:
+            let mainVC = MainViewController()
+            let nav = UINavigationController(rootViewController: mainVC)
+            nav.modalPresentationStyle = .fullScreen
+            present(nav, animated: true)
+        case .imjangList:
+            navigationController?.popViewController(animated: true)
+        }
     }
     
     @objc func editView() {

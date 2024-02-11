@@ -109,6 +109,7 @@
 		6108D0072B78C40800EF302F /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 6108D0062B78C40800EF302F /* Alamofire */; };
 		6108D00D2B78C45300EF302F /* DGCharts in Frameworks */ = {isa = PBXBuildFile; productRef = 6108D00C2B78C45300EF302F /* DGCharts */; };
 		6108D0102B78C4FE00EF302F /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6108D00F2B78C4FE00EF302F /* SnapKit */; };
+		6108D0122B78CFFA00EF302F /* PreviousVCType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6108D0112B78CFFA00EF302F /* PreviousVCType.swift */; };
 		611757382B67D5E60043E958 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 611757372B67D5E60043E958 /* Assets.xcassets */; };
 		611F14552B47070B00B983F1 /* RecordingSegmentedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F14542B47070B00B983F1 /* RecordingSegmentedViewController.swift */; };
 		611F145A2B4707CC00B983F1 /* RecordingRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F14592B4707CC00B983F1 /* RecordingRoomViewController.swift */; };
@@ -246,6 +247,7 @@
 		6108CFF72B76308F00EF302F /* RecordRequestDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordRequestDto.swift; sourceTree = "<group>"; };
 		6108CFF92B76395B00EF302F /* JuinjangAPIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JuinjangAPIManager.swift; sourceTree = "<group>"; };
 		6108D0002B78A83B00EF302F /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
+		6108D0112B78CFFA00EF302F /* PreviousVCType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousVCType.swift; sourceTree = "<group>"; };
 		611757372B67D5E60043E958 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		611F14542B47070B00B983F1 /* RecordingSegmentedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingSegmentedViewController.swift; sourceTree = "<group>"; };
 		611F14592B4707CC00B983F1 /* RecordingRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingRoomViewController.swift; sourceTree = "<group>"; };
@@ -685,6 +687,7 @@
 			isa = PBXGroup;
 			children = (
 				619269DF2B67742B00D4DD3E /* Filter.swift */,
+				6108D0112B78CFFA00EF302F /* PreviousVCType.swift */,
 			);
 			path = Enum;
 			sourceTree = "<group>";
@@ -922,6 +925,7 @@
 				6108CFF62B762CA600EF302F /* ProfileDto.swift in Sources */,
 				0AD529D62B729B6500FE7D9E /* CheckListPopUpViewController.swift in Sources */,
 				0A14E3732B56B6F70008FD28 /* WelcomeViewController.swift in Sources */,
+				6108D0122B78CFFA00EF302F /* PreviousVCType.swift in Sources */,
 				6108CFEA2B76208600EF302F /* PostDto.swift in Sources */,
 				345855822B689D7200432C06 /* QnATableViewCell.swift in Sources */,
 				345855A32B69504500432C06 /* SelectMaemullViewController.swift in Sources */,

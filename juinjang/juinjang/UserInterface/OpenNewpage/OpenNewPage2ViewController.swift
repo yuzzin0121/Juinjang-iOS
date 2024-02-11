@@ -548,6 +548,7 @@ class OpenNewPage2ViewController: UIViewController, WarningMessageDelegate {
             if error == nil {
                 guard let imjangId else { return }
                 let ImjangNoteVC = ImjangNoteViewController()
+                ImjangNoteVC.previousVCType = .createImjangVC
                 ImjangNoteVC.imjangId = imjangId
                 self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
                 self.navigationController?.pushViewController(ImjangNoteVC, animated: true)
