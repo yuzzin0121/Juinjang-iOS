@@ -54,8 +54,8 @@ class ImjangListViewController: UIViewController {
         $0.backgroundColor = .white
     }
     
-    var scrapImjangList: [ImjangNote] = []
-    var imjangList: [ImjangNote] = ImjangList.list
+    var scrapImjangList: [ListDto] = []
+    var imjangList: [ListDto] = []
     
     var menuChildren: [UIMenuElement] = []
     lazy var filterList = Filter.allCases
@@ -63,21 +63,50 @@ class ImjangListViewController: UIViewController {
     // MARK: - viewDidLoad()
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        view.backgroundColor = .white
         designNavigationBar()
         addSubviews()
         setEmptyConstraints()
         setupConstraints()
         configureTableView()
-        setData()
-        designView()
+//        setData()
+        callRequest()   // 서버 요청 (total Imjang List)
+//        designView()
         setFilterData()
-        imjangTableView.reloadData()
+//        imjangTableView.reloadData()
     }
     
-    func setData() {
-        for item in imjangList {
-            if item.isBookmarked && scrapImjangList.count < 10 {
+    func callRequest() {
+        JuinjangAPIManager.shared.fetchData(type: BaseResponse<TotalListDto>.self, api: .totalImjang) { response, error in
+            if error == nil {
+                guard let response = response else { return }
+                guard let result = response.result else { return }
+//                print(result)
+                self.imjangList.append(contentsOf: result.scrapedList)
+                self.imjangList.append(contentsOf: result.notScrapedList)
+                self.setData(scrapedList: result.scrapedList)
+                self.imjangTableView.reloadData()
+                self.designView()
+            } else {
+                guard let error else { return }
+                switch error {
+                case .failedRequest:
+                    print("failedRequest")
+                case .noData:
+                    print("noData")
+                case .invalidResponse:
+                    print("invalidResponse")
+                case .invalidData:
+                    print("invalidData")
+                }
+            }
+        }
+    }
+    
+    // 스크랩 리스트 설정
+    func setData(scrapedList: [ListDto]) {
+        for item in scrapedList {
+            if item.isScraped && scrapImjangList.count < 10 {
                 scrapImjangList.append(item)
             }
         }
@@ -86,9 +115,6 @@ class ImjangListViewController: UIViewController {
     func configureTableView() {
         imjangTableView.delegate = self
         imjangTableView.dataSource = self
-    }
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        view.endEditing(true)
     }
     
     // 검색 화면으로 이동
@@ -133,15 +159,55 @@ class ImjangListViewController: UIViewController {
         self.navigationController?.pushViewController(DeleteImjangVC, animated: true)
     }
     
+    
+    
     @objc func bookMarkButtonClicked(sender: UIButton) {
         var imjangNote = imjangList[sender.tag]
-        imjangNote.isBookmarked.toggle()
-        if scrapImjangList.count < 10 {
-            scrapImjangList.append(imjangNote)
-        }
+        scrapRequest(imjangId: imjangNote.limjangId)
+        callRequest()
+        imjangNote.isScraped.toggle()
+//        if scrapImjangList.count < 10 {
+//            scrapImjangList.append(imjangNote)
+//        }
+//
+//        imjangList[sender.tag] = imjangNote
+//        imjangTableView.reloadData()
+    }
+    
+    @objc func scrapBookMarkButtonClicked(sender: UIButton) {
+        var imjangNote = scrapImjangList[sender.tag]
         
-        imjangList[sender.tag] = imjangNote
-        imjangTableView.reloadData()
+        imjangNote.isScraped.toggle()
+        scrapRequest(imjangId: imjangNote.limjangId)
+        callRequest()
+//        if scrapImjangList.count < 10 {
+//            scrapImjangList.append(imjangNote)
+//        }
+//        
+//        imjangList[sender.tag] = imjangNote
+//        imjangTableView.reloadData()
+
+    }
+    
+    func scrapRequest(imjangId: Int) {
+        JuinjangAPIManager.shared.fetchData(type: NoResultResponse.self, api: .scrap(imjangId: imjangId)) { response, error in
+            if error == nil {
+                guard let response = response else { return }
+                print(response.message)
+            } else {
+                guard let error else { return }
+                switch error {
+                case .failedRequest:
+                    print("failedRequest")
+                case .noData:
+                    print("noData")
+                case .invalidResponse:
+                    print("invalidResponse")
+                case .invalidData:
+                    print("invalidData")
+                }
+            }
+        }
     }
     
     @objc func openNewPageVC() {
@@ -149,8 +215,11 @@ class ImjangListViewController: UIViewController {
         self.navigationController?.pushViewController(openNewPageVC, animated: true)
     }
     
-    @objc func showImjangNoteVC() {
+    func showImjangNoteVC(imjangId: Int?) {
+        guard let imjangId = imjangId else { return }
         let imjangNoteVC = ImjangNoteViewController()
+        imjangNoteVC.imjangId = imjangId
+        imjangNoteVC.previousVCType = .imjangList
         self.navigationController?.pushViewController(imjangNoteVC, animated: true)
     }
 }
@@ -182,6 +251,8 @@ extension ImjangListViewController: UITableViewDelegate, UITableViewDataSource {
             return UIView()
         }
         imjangListHeaderView.scrapedList = scrapImjangList
+        imjangListHeaderView.collectionView.delegate = self
+        imjangListHeaderView.collectionView.dataSource = self
         imjangListHeaderView.deleteButton.addTarget(self, action: #selector(showDeleteImjangVC), for: .touchUpInside)
         if scrapImjangList.isEmpty {
             imjangListHeaderView.setFilterView(isEmpty: true)
@@ -210,9 +281,26 @@ extension ImjangListViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        showImjangNoteVC()
+        let imjangId = imjangList[indexPath.row].limjangId
+        showImjangNoteVC(imjangId: imjangId)
     }
 }
+
+extension ImjangListViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        scrapImjangList.count
+    }
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ScrapCollectionViewCell.identifier, for: indexPath) as! ScrapCollectionViewCell
+        
+        cell.bookMarkButton.tag = indexPath.row
+        cell.setData(imjangNote: scrapImjangList[indexPath.row])
+        cell.bookMarkButton.addTarget(self, action: #selector(bookMarkButtonClicked), for: .touchUpInside)
+        
+        return cell
+    }
+}
+
 extension ImjangListViewController {
     // 네비게이션 바 디자인
     func designNavigationBar() {
@@ -240,13 +328,13 @@ extension ImjangListViewController {
             emptyBackgroundView.addSubview($0)
         }
         
-        if imjangList.isEmpty {
-            emptyBackgroundView.isHidden = false
-            imjangTableView.isHidden = true
-        } else {
-            emptyBackgroundView.isHidden = true
-            imjangTableView.isHidden = false
-        }
+//        if imjangList.isEmpty {
+//            emptyBackgroundView.isHidden = false
+//            imjangTableView.isHidden = true
+//        } else {
+//            emptyBackgroundView.isHidden = true
+//            imjangTableView.isHidden = false
+//        }
         view.addSubview(stickyfilterBackgroundView)
         stickyfilterBackgroundView.addSubview(filterselectBtn)
         stickyfilterBackgroundView.addSubview(deleteButton)
@@ -276,6 +364,14 @@ extension ImjangListViewController {
         deleteButton.design(image: ImageStyle.trash, backgroundColor: .clear)
         
         imjangTableView.backgroundColor = .white
+        
+        if imjangList.isEmpty {
+            emptyBackgroundView.isHidden = false
+            imjangTableView.isHidden = true
+        } else {
+            emptyBackgroundView.isHidden = true
+            imjangTableView.isHidden = false
+        }
     }
     
     func setupConstraints() {

@@ -32,7 +32,7 @@ final class JuinjangAPIManager {
            case .failure(let failure):
                print(failure)
                completionHandler(nil, .failedRequest)
-               fatalError("네트워킹 오류")
+//               fatalError("네트워킹 오류")
            }
        }
     }
