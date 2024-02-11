@@ -15,11 +15,8 @@ protocol ExpandedScoreCellDelegate: AnyObject {
 class ExpandedScoreTableViewCell: UITableViewCell {
     
     var score: String? // 선택된 버튼의 값을 저장할 변수
-    var indexPath: IndexPath?
     var scoreItems: [String: (score: String?, isSelected: Bool)] = [:]
-    var item: Item?
     weak var delegate: ExpandedScoreCellDelegate?
-    var cellIndex: Int?
     
     // 선택된 점수를 외부로 전달하는 콜백 클로저
     var selectionHandler: ((String) -> Void)?
@@ -169,7 +166,7 @@ class ExpandedScoreTableViewCell: UITableViewCell {
     }
     
     func saveSelectedScore() {
-        print("저장이 됐는지 확인", score)
+        print("score:", score)
         if let score = score {
             UserDefaults.standard.set(score, forKey: "SelectedScoreKey")
             print("저장 성공")
@@ -181,12 +178,37 @@ class ExpandedScoreTableViewCell: UITableViewCell {
     }
     
     func loadSelectedScore() -> String? {
-        print("값 찾으러옴")
+        print("loadSelectedScore 함수 호출")
         if let selectedScore = UserDefaults.standard.value(forKey: "SelectedScoreKey") as? String {
-            print("값?", selectedScore)
+            print("값:", selectedScore)
             return selectedScore
         } else {
             return nil
+        }
+    }
+    
+    func configure(with data: ScoreItem, at indexPath: IndexPath) {
+        // indexPath를 사용하여 특정 위치에 해당하는 업데이트 로직 수행
+        let currentItem = categories[indexPath.section].items[indexPath.row - 1]
+        let content = currentItem.content
+        contentLabel.text = content
+
+        // 선택된 날짜가 있으면 표시
+        if let storedData = scoreItems[content] {
+            score = storedData.score
+
+            for button in [answerButton1, answerButton2, answerButton3, answerButton4, answerButton5] {
+                if String(button.tag) == score {
+                    button.isSelected = true
+                    button.setImage(UIImage(named: "checked-button"), for: .normal)
+                } else {
+                    button.isSelected = false
+                    button.setImage(UIImage(named: "checklist-completed-button"), for: .normal)
+                }
+            }
+        } else {
+            // 선택된 날짜가 없으면 표시 초기화
+            score = nil
         }
     }
     
@@ -200,11 +222,8 @@ class ExpandedScoreTableViewCell: UITableViewCell {
                 button.setImage(UIImage(named: "answer\(button.tag)"), for: .normal)
         }
         
-//        let setScore = loadSelectedScore()
-//        let content = contentLabel.text
-//        if let index = scoreItems.index(forKey: content!) {
-//            scoreItems.updateValue((setScore, false), forKey: content!)
-//        }
+        // 배경색 초기화
+        backgroundColor = .white
     }
     
     private func updateScoreItem(withContent content: String, score: String) {
