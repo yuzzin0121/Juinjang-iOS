@@ -1082,7 +1082,7 @@ class OpenNewPageViewController: UIViewController {
         // fourDisitMonthlyRentField의 값이 있다면 추가
         if let monthlyRentValue = fourDisitMonthlyRentField.text, !monthlyRentValue.isEmpty {
             if let monthlyRent = Int(monthlyRentValue) {
-                selectedPrice.append(String(monthlyRent))
+                selectedPrice.append(String(monthlyRent * 10000))
             }
         }
         
