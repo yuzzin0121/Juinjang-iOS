@@ -42,9 +42,9 @@ class LogoutPopupViewController: UIViewController {
         // 로그아웃 API의 URL
         let urlString = "http://juinjang1227.com:8080/api/auth/logout"
         // Authorization 헤더에 포함할 토큰
-        print("토큰값: \(userRefreshToken)")
+        print("토큰값: \(UserDefaultManager.shared.refreshToken)")
         // HTTP 요청 보내기
-        AF.request(urlString, method: .post, headers: HTTPHeaders(["Authorization": "Bearer \(userRefreshToken)"])).responseData { response in
+        AF.request(urlString, method: .post, headers: HTTPHeaders(["Authorization": "Bearer \(UserDefaultManager.shared.refreshToken)"])).responseData { response in
             switch response.result {
             case .success(let data):
                 // 응답 확인

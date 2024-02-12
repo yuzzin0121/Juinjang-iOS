@@ -173,7 +173,6 @@ class WelcomeViewController: UIViewController {
     
     func setNickname() {
         if let nickname = userInfo?.nickname {
-            nickName = nickname
             greetingLabel.text = "반가워요, \(nickname)님"
             nickNameLabel.text = nickname
             greetingLabel.asColor(targetString: nickname, color: UIColor(named: "mainOrange"))

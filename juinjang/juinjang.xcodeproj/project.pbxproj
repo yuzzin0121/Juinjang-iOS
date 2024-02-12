@@ -12,7 +12,7 @@
 		0A14E36F2B569A840008FD28 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A14E36E2B569A840008FD28 /* SignUpViewController.swift */; };
 		0A14E3712B56B31A0008FD28 /* SetNickNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A14E3702B56B31A0008FD28 /* SetNickNameViewController.swift */; };
 		0A14E3732B56B6F70008FD28 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A14E3722B56B6F70008FD28 /* WelcomeViewController.swift */; };
-		0A1C8F2C2B7A049A006B6B2B /* omyu pretty.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0A1C8F2B2B7A049A006B6B2B /* omyu pretty.ttf */; };
+		0A1C8F312B7A0DF1006B6B2B /* omyu pretty.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0A1C8F302B7A0DF1006B6B2B /* omyu pretty.ttf */; };
 		0A1EC4862B6A17FD009248E4 /* NotEnteredCheckListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1EC4852B6A17FD009248E4 /* NotEnteredCheckListViewController.swift */; };
 		0A1EC48E2B6AE1FF009248E4 /* NotEnteredCalendarTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1EC48D2B6AE1FF009248E4 /* NotEnteredCalendarTableViewCell.swift */; };
 		0A2471192B68CAAF00A7382B /* ToSItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2471182B68CAAF00A7382B /* ToSItem.swift */; };
@@ -171,7 +171,7 @@
 		0A14E36E2B569A840008FD28 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		0A14E3702B56B31A0008FD28 /* SetNickNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetNickNameViewController.swift; sourceTree = "<group>"; };
 		0A14E3722B56B6F70008FD28 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
-		0A1C8F2B2B7A049A006B6B2B /* omyu pretty.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "omyu pretty.ttf"; path = "../../../../../../../Downloads/omyu pretty.ttf"; sourceTree = "<group>"; };
+		0A1C8F302B7A0DF1006B6B2B /* omyu pretty.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "omyu pretty.ttf"; sourceTree = "<group>"; };
 		0A1EC4852B6A17FD009248E4 /* NotEnteredCheckListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotEnteredCheckListViewController.swift; sourceTree = "<group>"; };
 		0A1EC48D2B6AE1FF009248E4 /* NotEnteredCalendarTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotEnteredCalendarTableViewCell.swift; sourceTree = "<group>"; };
 		0A2471182B68CAAF00A7382B /* ToSItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToSItem.swift; sourceTree = "<group>"; };
@@ -662,6 +662,7 @@
 		616408EE2B407E6300EC3B5E /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				0A1C8F302B7A0DF1006B6B2B /* omyu pretty.ttf */,
 				61A7B9232B4C4EC300795B49 /* Pretendard-Black.otf */,
 				61A7B9242B4C4EC300795B49 /* Pretendard-Bold.otf */,
 				61A7B9252B4C4EC300795B49 /* Pretendard-ExtraBold.otf */,
@@ -671,7 +672,6 @@
 				61A7B91D2B4C4EC200795B49 /* Pretendard-Regular.otf */,
 				61A7B91F2B4C4EC200795B49 /* Pretendard-SemiBold.otf */,
 				61A7B9202B4C4EC200795B49 /* Pretendard-Thin.otf */,
-				0A1C8F2B2B7A049A006B6B2B /* omyu pretty.ttf */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
@@ -880,7 +880,7 @@
 				61A7B92D2B4C4EC300795B49 /* Pretendard-Bold.otf in Resources */,
 				0A9E0AA92B3DD4D20094595A /* .gitignore in Resources */,
 				346CF6B02B70B4D300C70C7A /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json in Resources */,
-				0A1C8F2C2B7A049A006B6B2B /* omyu pretty.ttf in Resources */,
+				0A1C8F312B7A0DF1006B6B2B /* omyu pretty.ttf in Resources */,
 				61A7B92E2B4C4EC300795B49 /* Pretendard-ExtraBold.otf in Resources */,
 				61A7B9262B4C4EC300795B49 /* Pretendard-Regular.otf in Resources */,
 				61A7B9292B4C4EC300795B49 /* Pretendard-Thin.otf in Resources */,

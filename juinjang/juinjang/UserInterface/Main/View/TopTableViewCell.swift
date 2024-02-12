@@ -6,11 +6,6 @@
 //
 
 import UIKit
-import KakaoSDKUser
-import KakaoSDKAuth
-import KakaoSDKCommon
-
-var nickName = ""
 
 class TopTableViewCell: UITableViewCell {
     static let id = "TopTableViewCell"
@@ -18,12 +13,12 @@ class TopTableViewCell: UITableViewCell {
 //MARK: - 변수 설정
     //환영멘트
     var greetLabel = UILabel().then {
-        $0.text = "반가워요, \(nickName)님 \n오늘은 어떤 집으로 가볼까요?"
+        $0.text = "반가워요, \(UserDefaultManager.shared.nickname)님 \n오늘은 어떤 집으로 가볼까요?"
         $0.numberOfLines = 0
         $0.textColor = UIColor(named: "600")
         
         let attrString = NSMutableAttributedString(string: $0.text!)
-        let range = ($0.text! as NSString).range(of: nickName)
+        let range = ($0.text! as NSString).range(of: UserDefaultManager.shared.nickname)
         attrString.addAttribute(.foregroundColor, value: UIColor(named: "juinjang")!, range: range)
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 8.0
