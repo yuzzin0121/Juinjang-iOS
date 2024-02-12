@@ -171,7 +171,7 @@ class SettingViewController : UIViewController {
         let urlString = "http://juinjang1227.com:8080/api/profile"
         
         // HTTP 요청 보내기
-        AF.request(urlString, method: .get, headers: HTTPHeaders(["Authorization": "Bearer \(userAccessToken)"])).responseData { [self] response in
+        AF.request(urlString, method: .get, headers: HTTPHeaders(["Authorization": "Bearer \(UserDefaultManager.shared.refreshToken)"])).responseData { [self] response in
             switch response.result {
             case .success(let data):
                 // 응답 확인
