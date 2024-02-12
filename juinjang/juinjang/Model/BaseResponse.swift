@@ -19,3 +19,10 @@ struct NoResultResponse: Codable {
     let code: String
     let message: String
 }
+
+struct BaseResponseString: Codable {
+    let isSuccess: Bool
+    let code: String
+    let message: String
+    let result: String
+}
