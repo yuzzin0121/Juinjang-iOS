@@ -29,7 +29,7 @@ class DeleteImjangViewController: UIViewController {
         }
     }
     
-    var imjangList: [ImjangNote] = ImjangList.list
+    var imjangList: [ListDto] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,28 +39,83 @@ class DeleteImjangViewController: UIViewController {
         configureHierarchy()
         configureLayout()
         configureView()
-        deleteImjangTableView.reloadData()
+        callRequest()
+//        deleteImjangTableView.reloadData()
         deleteButton.addTarget(self, action: #selector(deleteButtonClicked), for: .touchUpInside)
     }
     
     @objc func deleteButtonClicked() {
         let deleteImjangPopupVC = DeleteImjangPopupViewController()
         guard let roomIndex = selectedIndexes.first else { return }
-        deleteImjangPopupVC.selectedRoomName = imjangList[roomIndex].roomName
+        deleteImjangPopupVC.selectedRoomName = imjangList[roomIndex].nickname
         deleteImjangPopupVC.selectedCount = selectedIndexes.count
         deleteImjangPopupVC.modalPresentationStyle = .overFullScreen
         
         deleteImjangPopupVC.completionHandler = {
-            self.selectedIndexes.sorted(by: <)
-            for index in self.selectedIndexes {
-                if index < self.imjangList.count {
-                    self.imjangList.remove(at: index)
-                }
+            let indexs = self.selectedIndexes.sorted(by: <)
+            print(indexs)
+//            for index in self.selectedIndexes {
+//                if index < self.imjangList.count {
+//                    self.imjangList.remove(at: index)
+//                }
+//            }
+//            self.selectedIndexes.removeAll()
+//            self.deleteImjangTableView.reloadData()
+            var ids: [Int] = []
+            for index in indexs {
+                ids.append(self.imjangList[index].limjangId)
             }
-            self.selectedIndexes.removeAll()
-            self.deleteImjangTableView.reloadData()
+            print(ids)
+            self.deleteRequest(imjangIds: ids)
         }
         present(deleteImjangPopupVC, animated: false)
+    }
+    
+    func deleteRequest(imjangIds: [Int]) {
+        JuinjangAPIManager.shared.fetchData(type: BaseResponseString.self, api: .deleteImjangs(imjangIds: imjangIds)) { response, error in
+            if error == nil {
+                guard let response = response else { return }
+                print(response)
+                self.callRequest()
+            } else {
+                guard let error else { return }
+                switch error {
+                case .failedRequest:
+                    print("failedRequest")
+                case .noData:
+                    print("noData")
+                case .invalidResponse:
+                    print("invalidResponse")
+                case .invalidData:
+                    print("invalidData")
+                }
+            }
+        }
+    }
+    
+    func callRequest() {
+        JuinjangAPIManager.shared.fetchData(type: BaseResponse<TotalListDto>.self, api: .totalImjang) { response, error in
+            if error == nil {
+                guard let response = response else { return }
+                guard let result = response.result else { return }
+//                print(result)
+                self.imjangList = result.scrapedList
+                self.imjangList.append(contentsOf: result.notScrapedList)
+                self.deleteImjangTableView.reloadData()
+            } else {
+                guard let error else { return }
+                switch error {
+                case .failedRequest:
+                    print("failedRequest")
+                case .noData:
+                    print("noData")
+                case .invalidResponse:
+                    print("invalidResponse")
+                case .invalidData:
+                    print("invalidData")
+                }
+            }
+        }
     }
     
     func configureTableView() {
