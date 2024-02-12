@@ -133,7 +133,6 @@ extension SignUpWebViewController: WKNavigationDelegate {
                                 userAccessToken = accessToken
                                 self.hasToken(userToken: accessToken)
                                 userRefreshToken = refreshToken
-                                self.
                                 print("accessToken: \(userAccessToken)")
                                 print("refreshToken: \(userRefreshToken)")
                                 self.saveTokens(accessToken: userAccessToken, refreshToken: userRefreshToken)
