@@ -166,36 +166,7 @@ class SettingViewController : UIViewController {
         logoutButton.addTarget(self, action: #selector(logoutButtonTap), for: .touchUpInside)
         accountDeleteButton.addTarget(self, action: #selector(click4), for: .touchUpInside)
     }
-    func getUserInfo() {
-        // 로그아웃 API의 URL
-        let urlString = "http://juinjang1227.com:8080/api/profile"
-        
-        // HTTP 요청 보내기
-        AF.request(urlString, method: .get, headers: HTTPHeaders(["Authorization": "Bearer \(UserDefaultManager.shared.refreshToken)"])).responseData { [self] response in
-            switch response.result {
-            case .success(let data):
-                // 응답 확인
-                if let httpResponse = response.response {
-                    print("Status code: \(httpResponse.statusCode)")
-                }
-                // 응답 데이터 출력
-                if let responseString = String(data: data, encoding: .utf8) {
-                    print("Response data: \(responseString)")
-                }
-                // JSON 데이터 파싱
-                do {
-                    let userInfoResponse = try JSONDecoder().decode(UserInfoResponse.self, from: data)
-                    let email = userInfoResponse.result.email
-                    logInfoMailLabel.text = email
-                    print("Email: \(logInfoMailLabel.text ?? "")")
-                } catch {
-                    print("Error parsing JSON: \(error)")
-                }
-            case .failure(let error):
-                print("Error: \(error)")
-            }
-        }
-    }
+    
     
     @objc func click1(_ sender: Any) {
         let vc = UseViewController()
@@ -404,7 +375,7 @@ class SettingViewController : UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        getUserInfo()
+        //getUserInfo()
         designNavigationBar()
         view.addSubview(profileImageView)
         view.addSubview(editButton)
