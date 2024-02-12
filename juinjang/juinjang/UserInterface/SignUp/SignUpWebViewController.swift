@@ -85,6 +85,7 @@ class SignUpWebViewController: UIViewController {
                 do {
                     let userInfoResponse = try JSONDecoder().decode(UserInfoResponse.self, from: data)
                     let email = userInfoResponse.result.email
+                    UserDefaultManager.shared.email = email
                     //logInfoMailLabel.text = email
                    // print("Email: \(logInfoMailLabel.text ?? "")")
                 } catch {
@@ -133,7 +134,7 @@ extension SignUpWebViewController: WKNavigationDelegate {
                                 userAccessToken = accessToken
                                 self.hasToken(userToken: accessToken)
                                 userRefreshToken = refreshToken
-                                self.
+                                self.getUserInfo()
                                 print("accessToken: \(userAccessToken)")
                                 print("refreshToken: \(userRefreshToken)")
                                 self.saveTokens(accessToken: userAccessToken, refreshToken: userRefreshToken)
