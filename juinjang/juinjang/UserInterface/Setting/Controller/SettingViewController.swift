@@ -45,7 +45,7 @@ class SettingViewController : UIViewController {
         $0.textColor = UIColor(named: "450")
     }
     var nickname = UILabel().then {
-        $0.text = nickName
+        $0.text = UserDefaultManager.shared.nickname
         $0.font = UIFont(name: "Pretendard-Medium", size: 16)
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.textColor = UIColor(named: "500")
@@ -54,7 +54,7 @@ class SettingViewController : UIViewController {
         $0.backgroundColor = .white
         $0.returnKeyType = .done
         $0.placeholder = "8자 이내"
-        $0.text = nickName
+        $0.text = UserDefaultManager.shared.nickname
         $0.font = UIFont(name: "Pretendard-Medium", size: 16)
     }
     var nicknameWarnImageView = UIImageView().then {
@@ -171,7 +171,7 @@ class SettingViewController : UIViewController {
         let urlString = "http://juinjang1227.com:8080/api/profile"
         
         // HTTP 요청 보내기
-        AF.request(urlString, method: .get, headers: HTTPHeaders(["Authorization": "Bearer \(userAccessToken)"])).responseData { [self] response in
+        AF.request(urlString, method: .get, headers: HTTPHeaders(["Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"])).responseData { [self] response in
             switch response.result {
             case .success(let data):
                 // 응답 확인
@@ -208,7 +208,7 @@ class SettingViewController : UIViewController {
     }
     
     @objc func logoutButtonTap() {
-        let popupViewController = LogoutPopupViewController(name: nickName, email: logInfoMailLabel.text!, ment: "계정에서 로그아웃할까요?")
+        let popupViewController = LogoutPopupViewController(name: UserDefaultManager.shared.nickname, email: logInfoMailLabel.text!, ment: "계정에서 로그아웃할까요?")
         popupViewController.modalPresentationStyle = .overFullScreen
         self.present(popupViewController, animated: false)
     }
@@ -252,7 +252,7 @@ class SettingViewController : UIViewController {
             nicknameWarnLabel.removeFromSuperview()
             nicknameWarnImageView.removeFromSuperview()
             nickname.text = nicknameTextField.text
-            nickName = nickname.text!
+            UserDefaultManager.shared.nickname = nickname.text!
         }
     }
     
