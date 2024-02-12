@@ -95,7 +95,7 @@ class SettingViewController : UIViewController {
     }
     var logInfoMailLabel = UILabel().then {
         let vc = ToSViewController()
-        $0.text = "juinjang@daum.net"
+        $0.text = "\(UserDefaultManager.shared.email)"
         $0.font = UIFont(name: "Pretendard-Medium", size: 16)
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.textColor = UIColor(named: "500")

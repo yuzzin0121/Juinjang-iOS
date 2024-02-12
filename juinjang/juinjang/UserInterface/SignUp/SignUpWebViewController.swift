@@ -87,7 +87,7 @@ class SignUpWebViewController: UIViewController {
                     let email = userInfoResponse.result.email
                     UserDefaultManager.shared.email = email
                     //logInfoMailLabel.text = email
-                   // print("Email: \(logInfoMailLabel.text ?? "")")
+                    print("Email: \(UserDefaultManager.shared.email)")
                 } catch {
                     print("Error parsing JSON: \(error)")
                 }
