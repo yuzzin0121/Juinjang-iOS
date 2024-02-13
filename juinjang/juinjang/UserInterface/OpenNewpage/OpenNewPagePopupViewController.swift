@@ -10,7 +10,8 @@ import Then
 
 // 경고 팝업 메시지를 받아오기 위한 프로토콜
 protocol WarningMessageDelegate: AnyObject {
-    func getWarningMessage() -> String // 문자열을 반환
+    func getWarningMessage() -> String // 문자열 반환
+    func navigateBack()
 }
 
 class OpenNewPagePopupViewController: UIViewController {
@@ -73,14 +74,17 @@ class OpenNewPagePopupViewController: UIViewController {
         setWarningLabel()
      }
 
-     func setWarningLabel() {
-         // delegate를 통해 경고 메시지를 받아옴
-         if let warningMessage = warningDelegate?.getWarningMessage() {
-             messageLabel.text = warningMessage
-         } else {
-             messageLabel.text = "메인화면으로 돌아갈까요?\n입력한 정보는 저장되지 않습니다."
-         }
-     }
+    func setWarningLabel() {
+        // delegate를 통해 경고 메시지를 받아옴
+        if let warningMessage = warningDelegate?.getWarningMessage() {
+            messageLabel.text = warningMessage
+            if warningMessage == "임장노트로 돌아갈까요?\n입력한 정보는 저장되지 않습니다." {
+                goBackButton.setTitle("목록으로", for: .normal)
+            }
+        } else {
+            messageLabel.text = "메인화면으로 돌아갈까요?\n입력한 정보는 저장되지 않습니다."
+        }
+    }
 
      // WarningMessageDelegate 프로토콜을 구현한 메서드
      func getWarningMessage() -> String {
@@ -132,21 +136,18 @@ class OpenNewPagePopupViewController: UIViewController {
     }
     
     @objc func confirmAction(_ sender: UIButton) {
-        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-              let window = windowScene.windows.first else {
-            // window가 nil인 상태 혹은 not found
-            return
-        }
-        guard let navigationController = window.rootViewController as? UINavigationController else {
-            // 네비게이션 컨트롤러가 nil인 상태 혹은 not found
-            return
-        }
-        navigationController.popToRootViewController(animated: true)
-        
-        // 현재 나타난 팝업창을 찾아서 닫기
-        if let presentedViewController = navigationController.presentedViewController {
-            presentedViewController.dismiss(animated: false, completion: nil)
+        dismiss(animated: false, completion: nil)
+
+        // 경고 메시지에 따라 뷰 컨트롤러 이동
+        if let warningMessage = warningDelegate?.getWarningMessage() {
+            switch warningMessage {
+            case "임장노트로 돌아갈까요?\n입력한 정보는 저장되지 않습니다.":
+                warningDelegate?.navigateBack()
+            case "메인화면으로 돌아갈까요?\n입력한 정보는 저장되지 않습니다.":
+                warningDelegate?.navigateBack()
+            default:
+                break
+            }
         }
     }
-
 }
