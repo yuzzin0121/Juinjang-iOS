@@ -304,7 +304,7 @@ extension ImjangListViewController: UICollectionViewDelegate, UICollectionViewDa
 extension ImjangListViewController {
     // 네비게이션 바 디자인
     func designNavigationBar() {
-        self.navigationItem.title = "님의 임장노트"     // TODO: - 나중에 nickname 으로 연결
+        self.navigationItem.title = "\(UserDefaultManager.shared.nickname)님의 임장노트"     // TODO: - 나중에 nickname 으로 연결
         self.navigationController?.navigationBar.tintColor = .black
 
         // UIBarButtonItem 생성 및 이미지 설정

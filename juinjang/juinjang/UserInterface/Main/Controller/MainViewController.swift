@@ -60,7 +60,7 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        UserDefaultManager.shared.userStatus = true
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none

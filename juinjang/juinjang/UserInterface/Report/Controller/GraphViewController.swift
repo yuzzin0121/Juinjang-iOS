@@ -102,6 +102,7 @@ class GraphViewController : UIViewController {
         $0.innerWebLineWidth = 1.5
         $0.innerWebColor = .clear
         $0.frame = CGRect(x: 60, y: 300, width: 300, height: 300)
+        $0.highlightPerTapEnabled = false
         
         let xAxis = $0.xAxis
         xAxis.labelFont = UIFont(name: "Pretendard-SemiBold`", size: 14) ?? .systemFont(ofSize: 14)
