@@ -10,18 +10,6 @@ import Then
 import SnapKit
 import Alamofire
 
-struct UserInfoResponse: Codable {
-    let isSuccess: Bool
-    let code: String
-    let message: String
-    let result: UserInfoResult
-}
-
-struct UserInfoResult: Codable {
-    let nickname: String?
-    let email: String
-    let provider: String
-}
 
 class SettingViewController : UIViewController {
     
@@ -224,6 +212,7 @@ class SettingViewController : UIViewController {
             nicknameWarnImageView.removeFromSuperview()
             nickname.text = nicknameTextField.text
             UserDefaultManager.shared.nickname = nickname.text!
+            SetNickNameViewController().sendNickName()
         }
     }
     
