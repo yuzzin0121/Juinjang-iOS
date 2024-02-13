@@ -24,7 +24,7 @@ enum JuinjangAPI {
     case searchImjang(keyword: String)
     case mainImjang
     case detailImjang(imjangId: Int)
-    case deleteImjangs(imjangId: [Int])
+    case deleteImjangs(imjangIds: [Int])
     
     var baseURL: String {
         return "http://juinjang1227.com:8080/api/"
@@ -63,14 +63,15 @@ enum JuinjangAPI {
         }
     }
     
-//    var header: HTTPHeaders {
-//        switch self {
-//        case .kakaoLogin, .regenerateToken:
-//            return ["Authorization": "Bearer \(UserDefaults.standard.string(forKey: "accessToken") ?? "")"]
-//
-//
-//        }
-//    }
+    var header: HTTPHeaders {
+        switch self {
+        case .kakaoLogin, .regenerateToken, .detailImjang, .totalImjang, .scrap, .searchImjang, .deleteImjangs:
+            return ["Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"]
+
+        default:
+            return [:]
+        }
+    }
     
     var method: HTTPMethod {
         switch self {
@@ -82,6 +83,15 @@ enum JuinjangAPI {
             return .patch
         case .deleteImjangs:
             return .delete
+        }
+    }
+    
+    var parameter: Parameters {
+        switch self {
+        case .detailImjang(let imjangId):
+            [:]
+        default:
+            [:]
         }
     }
 }

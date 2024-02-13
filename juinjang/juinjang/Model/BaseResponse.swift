@@ -13,3 +13,16 @@ struct BaseResponse<T: Codable>: Codable {
     let message: String
     let result: T?
 }
+
+struct NoResultResponse: Codable {
+    let isSuccess: Bool
+    let code: String
+    let message: String
+}
+
+struct BaseResponseString: Codable {
+    let isSuccess: Bool
+    let code: String
+    let message: String
+    let result: String
+}

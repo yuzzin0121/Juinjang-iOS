@@ -74,6 +74,10 @@ class SetNickNameViewController: UIViewController {
         setupLayout()
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
+    
     func setNavigationBar() {
         self.navigationItem.title = "닉네임 정하기"
         self.navigationController?.navigationBar.tintColor = .black
@@ -143,7 +147,14 @@ class SetNickNameViewController: UIViewController {
     }
     
     @objc func buttonTapped(_ sender: UIButton) {
+        // -TODO: 동일한 닉네임이 존재할 경우 팝업창 띄움
+//        let alertController = UIAlertController(title: "", message: "동일한 닉네임이 존재합니다.", preferredStyle: .alert)
+//        let okAction = UIAlertAction(title: "확인", style: .default, handler: nil)
+//        alertController.addAction(okAction)
+//        
+//        present(alertController, animated: true, completion: nil)
         
+        // -TODO: 동일한 닉네임이 존재하지 않을 경우 다음 뷰 컨트롤러로 이동
         if let nickname = nickNameTextField.text, !nickname.isEmpty {
             let welcomeViewController = WelcomeViewController()
             welcomeViewController.userInfo = UserInfo(nickname: nickname)

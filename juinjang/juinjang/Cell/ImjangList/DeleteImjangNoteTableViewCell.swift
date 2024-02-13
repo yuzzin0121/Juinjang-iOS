@@ -46,21 +46,40 @@ class DeleteImjangNoteTableViewCell: UITableViewCell {
         super.layoutSubviews()
         contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 0, left: 24, bottom: 8, right: 24))
     }
+    
+    func setPriceLabel(priceList: [String]) {
+        switch priceList.count {
+        case 1:
+            let priceString = priceList[0]
+            priceLabel.text = priceString.formatToKoreanCurrencyWithZero()
+        case 2:
+            let priceString1 = priceList[0].formatToKoreanCurrencyWithZero()
+            let priceString2 = priceList[1].formatToKoreanCurrencyWithZero()
+            priceLabel.text = "\(priceString1) • 월 \(priceString2)"
+            priceLabel.asColor(targetString: "•", color: ColorStyle.mainStrokeOrange)
+        default:
+            priceLabel.text = "편집을 통해 가격을 설정해주세요."
+        }
+    }
 
-    func configureCell(imjangNote: ImjangNote?) {
+    func configureCell(imjangNote: ListDto?) {
         guard let imjangNote else { return }
-        if let images = imjangNote.images {
-            if images.isEmpty {
-                roomThumbnailImageView.image = ImageStyle.emptyImage
+        let images = imjangNote.images
+        if images.isEmpty {
+            roomThumbnailImageView.image = ImageStyle.emptyImage
+        } else {
+            if let url = URL(string: images[0]) {
+                roomThumbnailImageView.kf.setImage(with: url, placeholder: UIImage(named: "1"))
             } else {
-                roomThumbnailImageView.image = UIImage(named: images[0])  // 임시
+                roomThumbnailImageView.image = UIImage(named: "1")
             }
         }
         
-        roomNameLabel.text = imjangNote.roomName
-        priceLabel.text = imjangNote.price
         
-        if let score = imjangNote.score {
+        roomNameLabel.text = imjangNote.nickname
+        setPriceLabel(priceList: imjangNote.priceList)
+        
+        if let score = imjangNote.totalAverage {
             DispatchQueue.main.async {
                 self.starIcon.image = ImageStyle.star
             }
@@ -70,9 +89,10 @@ class DeleteImjangNoteTableViewCell: UITableViewCell {
                 self.starIcon.image = ImageStyle.starEmpty
             }
             scoreLabel.text = "0.0"
+            scoreLabel.textColor = ColorStyle.null
         }
         
-        addressLabel.text = imjangNote.location
+        addressLabel.text = imjangNote.address
     }
     
     func setConstraints() {

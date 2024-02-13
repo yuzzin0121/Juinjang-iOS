@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 import Then
 import WebKit
+import Alamofire
 
 var userAccessToken = ""
 var userRefreshToken = ""
@@ -62,7 +63,39 @@ class SignUpWebViewController: UIViewController {
                 }
                 print("ToSViewController로 새로운 내비게이션 스택 시작됨") // 확인용 로그 추가
             }
-        }    }
+        }
+    }
+    func getUserInfo() {
+        // 로그아웃 API의 URL
+        let urlString = "http://juinjang1227.com:8080/api/profile"
+        
+        // HTTP 요청 보내기
+        AF.request(urlString, method: .get, headers: HTTPHeaders(["Authorization": "Bearer \(UserDefaultManager.shared.refreshToken)"])).responseData { [self] response in
+            switch response.result {
+            case .success(let data):
+                // 응답 확인
+                if let httpResponse = response.response {
+                    print("Status code: \(httpResponse.statusCode)")
+                }
+                // 응답 데이터 출력
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("Response data: \(responseString)")
+                }
+                // JSON 데이터 파싱
+                do {
+                    let userInfoResponse = try JSONDecoder().decode(UserInfoResponse.self, from: data)
+                    let email = userInfoResponse.result.email
+                    UserDefaultManager.shared.email = email
+                    //logInfoMailLabel.text = email
+                    print("Email: \(UserDefaultManager.shared.email)")
+                } catch {
+                    print("Error parsing JSON: \(error)")
+                }
+            case .failure(let error):
+                print("Error: \(error)")
+            }
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         setAttributes()
@@ -101,7 +134,8 @@ extension SignUpWebViewController: WKNavigationDelegate {
                                 userAccessToken = accessToken
                                 self.hasToken(userToken: accessToken)
                                 userRefreshToken = refreshToken
-                                
+                                self.getUserInfo()
+
                                 print("accessToken: \(userAccessToken)")
                                 print("refreshToken: \(userRefreshToken)")
                                 self.saveTokens(accessToken: userAccessToken, refreshToken: userRefreshToken)

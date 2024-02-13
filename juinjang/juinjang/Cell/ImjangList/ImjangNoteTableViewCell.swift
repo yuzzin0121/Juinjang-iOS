@@ -43,14 +43,29 @@ class ImjangNoteTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    func setPriceLabel(priceList: [String]) {
+        switch priceList.count {
+        case 1:
+            let priceString = priceList[0]
+            priceLabel.text = priceString.formatToKoreanCurrencyWithZero()
+        case 2:
+            let priceString1 = priceList[0].formatToKoreanCurrencyWithZero()
+            let priceString2 = priceList[1].formatToKoreanCurrencyWithZero()
+            priceLabel.text = "\(priceString1) • 월 \(priceString2)"
+            priceLabel.asColor(targetString: "•", color: ColorStyle.mainStrokeOrange)
+        default:
+            priceLabel.text = "편집을 통해 가격을 설정해주세요."
+        }
+    }
     
-    func configureCell(imjangNote: ImjangNote?) {
+    func configureCell(imjangNote: ListDto?) {
         guard let imjangNote else { return }
         
-        roomNameLabel.text = imjangNote.roomName
-        priceLabel.text = imjangNote.price
+        roomNameLabel.text = imjangNote.nickname
+        setPriceLabel(priceList: imjangNote.priceList)
+//        priceLabel.text = imjangNote.priceList[0].formatToKoreanCurrencyWithZero()
         
-        if let score = imjangNote.score {
+        if let score = imjangNote.totalAverage {
             DispatchQueue.main.async {
                 self.starIcon.image = ImageStyle.star
             }
@@ -60,26 +75,31 @@ class ImjangNoteTableViewCell: UITableViewCell {
                 self.starIcon.image = ImageStyle.starEmpty
             }
             scoreLabel.text = "0.0"
+            scoreLabel.textColor = ColorStyle.null
         }
         
-        addressLabel.text = imjangNote.location
+        addressLabel.text = imjangNote.address
         
-        let image = imjangNote.isBookmarked ? ImageStyle.bookmarkSelected : ImageStyle.bookmark
+        let image = imjangNote.isScraped ? ImageStyle.bookmarkSelected : ImageStyle.bookmark
         bookMarkButton.setImage(image, for: .normal)
         
-        if let images = imjangNote.images {
-            if images.isEmpty {
-                let image = ImageStyle.emptyImage
+        let images = imjangNote.images
+        if images.isEmpty {
+            let image = ImageStyle.emptyImage
+            DispatchQueue.main.async {
+                self.roomThumbnailImageView.image = image
+            }
+        } else {
+            let image = images[0]
+            if let url = URL(string: image) {
                 DispatchQueue.main.async {
-                    self.roomThumbnailImageView.image = image
-                }
-            } else {
-                let image = images[0]
-                DispatchQueue.main.async {
-                    self.roomThumbnailImageView.image = UIImage(named: image)  // 임시
+    //                self.roomThumbnailImageView.image = UIImage(named: image)  // 임시
+                    self.roomThumbnailImageView.kf.setImage(with: url, placeholder: UIImage(named: "1"))
                 }
             }
+            
         }
+        
     }
     
     func setConstraints() {
@@ -116,15 +136,16 @@ class ImjangNoteTableViewCell: UITableViewCell {
         starIcon.snp.makeConstraints {
             $0.width.height.equalTo(14)
         }
-        addressLabel.snp.makeConstraints {
-            $0.leading.equalTo(roomNameLabel.snp.leading)
-            $0.top.equalTo(starStackView.snp.bottom)
-            $0.trailing.greaterThanOrEqualTo(bookMarkButton.snp.leading).inset(8)
-        }
         bookMarkButton.snp.makeConstraints {
             $0.bottom.trailing.equalTo(contentView).inset(12)
             $0.size.equalTo(18)
         }
+        addressLabel.snp.makeConstraints {
+            $0.leading.equalTo(roomNameLabel.snp.leading)
+            $0.top.equalTo(starStackView.snp.bottom)
+            $0.trailing.equalTo(bookMarkButton.snp.leading).offset(-8)
+        }
+        
     }
     
     override func prepareForReuse() {

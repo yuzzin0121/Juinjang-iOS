@@ -45,7 +45,7 @@ class SettingViewController : UIViewController {
         $0.textColor = UIColor(named: "450")
     }
     var nickname = UILabel().then {
-        $0.text = nickName
+        $0.text = UserDefaultManager.shared.nickname
         $0.font = UIFont(name: "Pretendard-Medium", size: 16)
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.textColor = UIColor(named: "500")
@@ -54,7 +54,7 @@ class SettingViewController : UIViewController {
         $0.backgroundColor = .white
         $0.returnKeyType = .done
         $0.placeholder = "8자 이내"
-        $0.text = nickName
+        $0.text = UserDefaultManager.shared.nickname
         $0.font = UIFont(name: "Pretendard-Medium", size: 16)
     }
     var nicknameWarnImageView = UIImageView().then {
@@ -95,7 +95,7 @@ class SettingViewController : UIViewController {
     }
     var logInfoMailLabel = UILabel().then {
         let vc = ToSViewController()
-        $0.text = "juinjang@daum.net"
+        $0.text = "\(UserDefaultManager.shared.email)"
         $0.font = UIFont(name: "Pretendard-Medium", size: 16)
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.textColor = UIColor(named: "500")
@@ -166,36 +166,7 @@ class SettingViewController : UIViewController {
         logoutButton.addTarget(self, action: #selector(logoutButtonTap), for: .touchUpInside)
         accountDeleteButton.addTarget(self, action: #selector(click4), for: .touchUpInside)
     }
-    func getUserInfo() {
-        // 로그아웃 API의 URL
-        let urlString = "http://juinjang1227.com:8080/api/profile"
-        
-        // HTTP 요청 보내기
-        AF.request(urlString, method: .get, headers: HTTPHeaders(["Authorization": "Bearer \(userAccessToken)"])).responseData { [self] response in
-            switch response.result {
-            case .success(let data):
-                // 응답 확인
-                if let httpResponse = response.response {
-                    print("Status code: \(httpResponse.statusCode)")
-                }
-                // 응답 데이터 출력
-                if let responseString = String(data: data, encoding: .utf8) {
-                    print("Response data: \(responseString)")
-                }
-                // JSON 데이터 파싱
-                do {
-                    let userInfoResponse = try JSONDecoder().decode(UserInfoResponse.self, from: data)
-                    let email = userInfoResponse.result.email
-                    logInfoMailLabel.text = email
-                    print("Email: \(logInfoMailLabel.text ?? "")")
-                } catch {
-                    print("Error parsing JSON: \(error)")
-                }
-            case .failure(let error):
-                print("Error: \(error)")
-            }
-        }
-    }
+    
     
     @objc func click1(_ sender: Any) {
         let vc = UseViewController()
@@ -208,7 +179,7 @@ class SettingViewController : UIViewController {
     }
     
     @objc func logoutButtonTap() {
-        let popupViewController = LogoutPopupViewController(name: nickName, email: logInfoMailLabel.text!, ment: "계정에서 로그아웃할까요?")
+        let popupViewController = LogoutPopupViewController(name: UserDefaultManager.shared.nickname, email: logInfoMailLabel.text!, ment: "계정에서 로그아웃할까요?")
         popupViewController.modalPresentationStyle = .overFullScreen
         self.present(popupViewController, animated: false)
     }
@@ -252,7 +223,7 @@ class SettingViewController : UIViewController {
             nicknameWarnLabel.removeFromSuperview()
             nicknameWarnImageView.removeFromSuperview()
             nickname.text = nicknameTextField.text
-            nickName = nickname.text!
+            UserDefaultManager.shared.nickname = nickname.text!
         }
     }
     
@@ -404,7 +375,7 @@ class SettingViewController : UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        getUserInfo()
+        //getUserInfo()
         designNavigationBar()
         view.addSubview(profileImageView)
         view.addSubview(editButton)

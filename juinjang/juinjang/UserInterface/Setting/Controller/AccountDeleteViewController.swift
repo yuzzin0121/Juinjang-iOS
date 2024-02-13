@@ -18,7 +18,7 @@ class AccountDeleteViewController : DimmedViewController {
         $0.image = UIImage(named:"로고")
     }
     var qLabel = UILabel().then {
-        $0.text = "\(nickName)님, \n정말 계정을 삭제하시겠어요?"
+        $0.text = "\(UserDefaultManager.shared.nickname)님, \n정말 계정을 삭제하시겠어요?"
         $0.numberOfLines = 0
         $0.font = UIFont(name: "Pretendard-Bold", size: 20)
         $0.translatesAutoresizingMaskIntoConstraints = false

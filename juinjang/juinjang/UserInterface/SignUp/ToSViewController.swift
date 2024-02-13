@@ -66,7 +66,6 @@ class ToSViewController: UIViewController {
         $0.layer.cornerRadius = 8
         $0.isEnabled = false
         $0.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
-        
         $0.titleLabel?.font = .pretendard(size: 16, weight: .semiBold)
     }
 

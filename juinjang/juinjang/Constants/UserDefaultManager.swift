@@ -16,6 +16,8 @@ class UserDefaultManager {
         case accessToken
         case refreshToken
         case nickname
+        case userStatus
+        case email
     }
     
     let ud = UserDefaults.standard
@@ -38,6 +40,16 @@ class UserDefaultManager {
     var nickname: String {
         get { ud.string(forKey: UDKey.nickname.rawValue) ?? "" }
         set { ud.set(newValue, forKey: UDKey.nickname.rawValue) }
+    }
+    
+    var userStatus: Bool {
+        get { ud.bool(forKey: UDKey.userStatus.rawValue) }
+        set { ud.set(newValue, forKey: UDKey.userStatus.rawValue) }
+    }
+    
+    var email: String {
+        get { ud.string(forKey: UDKey.email.rawValue) ?? "" }
+        set { ud.set(newValue, forKey: UDKey.email.rawValue) }
     }
 }
 
