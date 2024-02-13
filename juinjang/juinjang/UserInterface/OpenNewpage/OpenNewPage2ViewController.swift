@@ -541,6 +541,12 @@ class OpenNewPage2ViewController: UIViewController, WarningMessageDelegate {
         }
     }
 
+    func navigateBack() {
+        if let viewControllers = navigationController?.viewControllers, viewControllers.count >= 3 {
+            navigationController?.popToViewController(viewControllers[viewControllers.count - 3], animated: true)
+        }
+    }
+
     @objc func backButtonTapped(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
     }

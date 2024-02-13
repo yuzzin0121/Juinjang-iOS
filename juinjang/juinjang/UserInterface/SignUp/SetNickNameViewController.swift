@@ -176,15 +176,15 @@ class SetNickNameViewController: UIViewController {
 //        let alertController = UIAlertController(title: "", message: "동일한 닉네임이 존재합니다.", preferredStyle: .alert)
 //        let okAction = UIAlertAction(title: "확인", style: .default, handler: nil)
 //        alertController.addAction(okAction)
-        
-        //present(alertController, animated: true, completion: nil)
-        
+
+//        present(alertController, animated: true, completion: nil)
+
         // -TODO: 동일한 닉네임이 존재하지 않을 경우 다음 뷰 컨트롤러로 이동
         if let nickname = nickNameTextField.text, !nickname.isEmpty {
             let welcomeViewController = WelcomeViewController()
             welcomeViewController.userInfo = UserInfo(nickname: nickname)
             UserDefaultManager.shared.nickname = nickname
-            sendNickName()
+
             navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
             navigationController?.pushViewController(welcomeViewController, animated: true)
         }
