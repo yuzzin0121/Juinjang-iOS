@@ -291,8 +291,10 @@ class ImjangNoteViewController: UIViewController {
         let editVC = EditBasicInfoViewController()
         let editDetailVC = EditBasicInfoDetailViewController()
         if version?.editCriteria == 0 {
+            editVC.imjangId = imjangId
             self.navigationController?.pushViewController(editVC, animated: true)
         } else if version?.editCriteria == 1 {
+            editDetailVC.imjangId = imjangId
             self.navigationController?.pushViewController(editDetailVC, animated: true)
         }
     }

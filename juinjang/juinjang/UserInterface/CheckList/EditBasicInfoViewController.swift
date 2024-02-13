@@ -6,10 +6,12 @@
 //
 
 import UIKit
+import Alamofire
 
 class EditBasicInfoViewController: UIViewController {
     
     var transactionModel = TransactionModel()
+    var imjangId: Int? = nil
     
     var moveTypeButtons: [UIButton] = [] // "입주 유형"을 나타내는 선택지
     
@@ -294,8 +296,62 @@ class EditBasicInfoViewController: UIViewController {
         $0.titleLabel?.lineBreakMode = .byTruncatingTail
         $0.addTarget(self, action: #selector(nextButtonTapped(_:)), for: .touchUpInside)
     }
+    
+    // -MARK: API 요청
+    func getImjang() {
+        guard let imjangId = imjangId else { return }
+        JuinjangAPIManager.shared.fetchData(type: BaseResponse<DetailDto>.self, api: .detailImjang(imjangId: imjangId)) { detailDto, error in
+            if error == nil {
+                guard let result = detailDto else { return }
+                if let detailDto = result.result {
+                    print(detailDto)
+                    self.setData(detailDto: detailDto)
+                }
+            } else {
+                guard let error else { return }
+                switch error {
+                case .failedRequest:
+                    print("failedRequest")
+                case .noData:
+                    print("noData")
+                case .invalidResponse:
+                    print("invalidResponse")
+                case .invalidData:
+                    print("invalidData")
+                }
+            }
+        }
+    }
+//    func getImjang(completionHandler: @escaping (Int?, NetworkError?) -> Void) {
+//        guard let imjangId = imjangId else { return }
+//        let url = JuinjangAPI.detailImjang(imjangId: imjangId)
+//        
+//        let header : HTTPHeaders = ["Content-Type": "application/json", "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"]
+//        AF.request(url as! URLConvertible,
+//                   method: .get,
+//                   headers: header)
+//        .validate(statusCode: 200..<300)
+//        .responseDecodable(of: BaseResponse<DetailDto>.self) { response in
+//            switch response.result {
+//            case .success(let success):
+//                print("임장 상세 조회", success.result)
+//                addressTextField.text = success.result?.address
+//                if let limjangId = success.result?.limjangId {
+//                    print(limjangId)
+//                    self.imjangId = limjangId
+//                    completionHandler(self.imjangId, nil)
+//                }
+//                
+//            case .failure(let failure):
+//                print("Error: \(failure)")
+//                completionHandler(nil, NetworkError.failedRequest)
+//            }
+//        }
+//    }
 
     override func viewDidLoad() {
+        print("임장 아이디: \(imjangId)")
+        getImjang()
         super.viewDidLoad()
         view.backgroundColor = .white
         setDelegate()
@@ -318,6 +374,32 @@ class EditBasicInfoViewController: UIViewController {
         threeDisitPriceField.delegate = self
         fourDisitPriceField.delegate = self
         fourDisitMonthlyRentField.delegate = self
+    }
+    
+    func setData(detailDto: DetailDto) {
+        addressTextField.text = detailDto.address
+        addressDetailTextField.text = detailDto.addressDetail
+        houseNicknameTextField.text = detailDto.nickname
+        setMoveTypeButton(priceType: detailDto.priceType)
+        setPriceLabel(priceList: detailDto.priceList)
+    }
+    
+    func setMoveTypeButton(priceType: Int) {
+        if priceType == 0 {
+            saleButton.isSelected = true
+        } else if priceType == 1 {
+            jeonseButton.isSelected = true
+        } else if priceType == 2 {
+            monthlyRentButton.isSelected = true
+        }
+    }
+    
+    func setPriceLabel(priceList: [String]) {
+        let priceString = priceList[0]
+        let (units, remainder) = priceString.twoSplitAmount()
+        print("\(units)억 \(remainder)만원")
+        threeDisitPriceField.text = units
+        fourDisitPriceField.text = remainder
     }
     
     func setupWidgets() {
@@ -425,9 +507,6 @@ class EditBasicInfoViewController: UIViewController {
         moveTypeStackView.translatesAutoresizingMaskIntoConstraints = false
         moveTypeStackView.axis = .horizontal
         moveTypeStackView.spacing = 8
-        
-        // 매매 버튼이 기본으로 선택되어 있음
-        saleButton.isSelected = true
 
         // 가격 입력칸 Stack View
         inputPriceStackView = UIStackView(
