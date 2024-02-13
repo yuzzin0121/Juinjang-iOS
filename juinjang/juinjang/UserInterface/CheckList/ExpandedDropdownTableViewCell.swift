@@ -110,14 +110,13 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
         contentLabel.text = content
 
         // 선택된 옵션이 있으면 표시
-        if let storedData = selectionItems[content] {
-            selectedOption = storedData.option
+        if let storedData = selectionItems[content] as? SelectionItem {
+            selectedOption = storedData.selectAnswer
 
             // selectedOption이 몇 번째 행에 해당하는지 찾기
-//            if let row = options.firstIndex(where: { $0 == selectedOption }) {
-//                itemPickerView.selectRow(row, inComponent: 0, animated: false)
-//            }
-
+            if let row = storedData.options.firstIndex(where: { $0.option == selectedOption }) {
+                itemPickerView.selectRow(row, inComponent: 0, animated: false)
+            }
         } else {
             // 선택된 옵션이 없으면 표시 초기화
             selectedOption = nil
@@ -129,8 +128,6 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
 
         // 셀 내용 초기화
         selectedOption = nil
-        // pickerView의 선택된 행을 0으로 설정
-        itemPickerView.selectRow(0, inComponent: 0, animated: false)
         
         // 배경색 초기화
         backgroundColor = .white
@@ -311,6 +308,8 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
     }
     
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+        
+        
     
         let fontSize: CGFloat = 16
         let leftPadding: CGFloat = 12
