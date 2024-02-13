@@ -8,6 +8,7 @@
 import UIKit
 import Then
 import SnapKit
+import Alamofire
 
 class SetNickNameViewController: UIViewController {
     
@@ -142,26 +143,51 @@ class SetNickNameViewController: UIViewController {
         }
     }
     
+    func sendNickName() {
+        // 요청 URL 설정
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)", // 예시: 인증 토큰
+            "Content-Type": "application/json"
+        ]
+
+        let parameters: [String: Any] = [
+            "nickname": UserDefaultManager.shared.nickname
+        ]
+
+        let urlString = "http://juinjang1227.com:8080/api/nickname"
+
+        AF.request(urlString, method: .patch, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    print("Success: \(value)")
+                case .failure(let error):
+                    print("Error: \(error)")
+                }
+            }
+    }
+    
     @objc func backButtonTapped() {
         navigationController?.popViewController(animated: true)
     }
     
     @objc func buttonTapped(_ sender: UIButton) {
         // -TODO: 동일한 닉네임이 존재할 경우 팝업창 띄움
-        let alertController = UIAlertController(title: "", message: "동일한 닉네임이 존재합니다.", preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "확인", style: .default, handler: nil)
-        alertController.addAction(okAction)
+//        let alertController = UIAlertController(title: "", message: "동일한 닉네임이 존재합니다.", preferredStyle: .alert)
+//        let okAction = UIAlertAction(title: "확인", style: .default, handler: nil)
+//        alertController.addAction(okAction)
         
-        present(alertController, animated: true, completion: nil)
+        //present(alertController, animated: true, completion: nil)
         
         // -TODO: 동일한 닉네임이 존재하지 않을 경우 다음 뷰 컨트롤러로 이동
-//        if let nickname = nickNameTextField.text, !nickname.isEmpty {
-//            let welcomeViewController = WelcomeViewController()
-//            welcomeViewController.userInfo = UserInfo(nickname: nickname)
-//            UserDefaultManager.shared.nickname = nickname
-//            navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-//            navigationController?.pushViewController(welcomeViewController, animated: true)
-//        }
+        if let nickname = nickNameTextField.text, !nickname.isEmpty {
+            let welcomeViewController = WelcomeViewController()
+            welcomeViewController.userInfo = UserInfo(nickname: nickname)
+            UserDefaultManager.shared.nickname = nickname
+            sendNickName()
+            navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+            navigationController?.pushViewController(welcomeViewController, animated: true)
+        }
     }
     
     func checkNextButtonActivation() {

@@ -18,15 +18,6 @@ class SplashViewController: UIViewController {
     }
     
     func hasLogin() {
-//        if userAccessToken.isEmpty {
-//            print("hi\(userAccessToken)")
-//            let signupVC = SignUpViewController()
-//            self.navigationController?.pushViewController(signupVC, animated: true)
-//        }
-//        else {
-//            let mainVC = MainViewController()
-//            self.navigationController?.pushViewController(mainVC, animated: true)
-//        }
         if UserDefaultManager.shared.userStatus {
             let mainVC = MainViewController()
             let nav = UINavigationController(rootViewController: mainVC)

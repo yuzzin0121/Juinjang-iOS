@@ -36,6 +36,7 @@ class LogoutPopupViewController: UIViewController {
             }
             print("SignUpViewController로 새로운 내비게이션 스택 시작됨") // 확인용 로그 추가
         }
+        UserDefaultManager.shared.userStatus = false
     }
   
     func logout() {
