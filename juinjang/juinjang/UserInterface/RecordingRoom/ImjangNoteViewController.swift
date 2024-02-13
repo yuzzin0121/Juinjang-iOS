@@ -119,7 +119,7 @@ class ImjangNoteViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        print("버전 확인:", version)
+        print("버전 확인: \(version)")
         setDelegate()
         designNavigationBar()
         addSubView()
@@ -292,9 +292,11 @@ class ImjangNoteViewController: UIViewController {
         let editDetailVC = EditBasicInfoDetailViewController()
         if version?.editCriteria == 0 {
             editVC.imjangId = imjangId
+            editVC.versionInfo = version
             self.navigationController?.pushViewController(editVC, animated: true)
         } else if version?.editCriteria == 1 {
             editDetailVC.imjangId = imjangId
+            editDetailVC.versionInfo = version
             self.navigationController?.pushViewController(editDetailVC, animated: true)
         }
     }

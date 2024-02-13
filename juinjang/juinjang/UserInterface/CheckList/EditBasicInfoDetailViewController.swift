@@ -5,19 +5,14 @@
 //  Created by 임수진 on 1/31/24.
 //
 
-//
-//  EditBasicInfoViewController.swift
-//  juinjang
-//
-//  Created by 임수진 on 1/31/24.
-//
-
 import UIKit
+import Alamofire
 
 class EditBasicInfoDetailViewController: UIViewController {
     
     var transactionModel = TransactionModel()
     var imjangId: Int? = nil
+    var versionInfo: VersionInfo? = nil
     
     var moveTypeButtons: [UIButton] = [] // "입주 유형"을 나타내는 선택지
     var selectedMoveTypeButton: UIButton? // 입주 유형 카테고리의 버튼
@@ -32,7 +27,6 @@ class EditBasicInfoDetailViewController: UIViewController {
     
     let contentView = UIView().then {
         $0.translatesAutoresizingMaskIntoConstraints = false
-//        $0.backgroundColor = .blue
     }
     
     func configureLabel(_ label: UILabel, text: String) {
@@ -329,9 +323,67 @@ class EditBasicInfoDetailViewController: UIViewController {
             }
         }
     }
+    
+    func modifyImjang(completionHandler: @escaping (NetworkError?) -> Void) {
+        guard let imjangId = imjangId else { return }
+        let url = JuinjangAPI.modifyImjang.endpoint
+        
+        // -MARK: 매매-전세-월세 선택값 가져오기
+        var selectedPriceType: Int? = nil
+        if saleButton.isSelected == true {
+            selectedPriceType = 0
+        } else if jeonseButton.isSelected == true {
+            selectedPriceType = 1
+        } else if monthlyRentButton.isSelected == true {
+            selectedPriceType = 2
+        }
+        
+        // -MARK: 가격 리스트 가져오기
+        // threeDisitPriceField와 fourDisitPriceField의 값을 합쳐서 selectedPrice에 저장
+        let threeDisitPrice = Int(threeDisitPriceField.text ?? "") ?? 0
+        let fourDisitPrice = Int(fourDisitPriceField.text ?? "") ?? 0
+        var priceList = [String(threeDisitPrice * 100000000 + fourDisitPrice * 10000)]
+        
+        // fourDisitMonthlyRentField 추가
+        if let monthlyRentValue = fourDisitMonthlyRentField.text, !monthlyRentValue.isEmpty {
+            if let monthlyRent = Int(monthlyRentValue) {
+                priceList.append(String(monthlyRent * 10000))
+            }
+            print(priceList)
+        }
+        
+        let parameter: Parameters = [
+            "limjangId": imjangId,
+            "address": addressTextField.text ?? "",
+            "addressDetail": addressDetailTextField.text ?? "",
+            "nickname": houseNicknameTextField.text ?? "",
+            "priceType": selectedPriceType,
+            "priceList": priceList
+        ]
+        
+        print(parameter)
+        
+        let header : HTTPHeaders = ["Content-Type": "application/json", "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"]
+        AF.request(url,
+                 method: .patch,
+                 parameters: parameter,
+                 encoding: JSONEncoding.default,
+                 headers: header)
+        .validate(statusCode: 200..<300)
+        .responseDecodable(of: BaseResponse<String>.self) { response in
+            switch response.result {
+            case .success(let success):
+                print(success)
+                completionHandler(nil)
+        
+            case .failure(let failure):
+                print("Error: \(failure)")
+                completionHandler(NetworkError.failedRequest)
+            }
+        }
+    }
 
     override func viewDidLoad() {
-        print("임장 아이디: \(imjangId)")
         getImjang()
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -368,12 +420,18 @@ class EditBasicInfoDetailViewController: UIViewController {
     func setMoveTypeButton(priceType: Int) {
         if priceType == 0 {
             saleButton.isSelected = true
+            isMoveTypeSelected = saleButton.isSelected
+            selectedMoveTypeButton = saleButton.isSelected ? saleButton : nil
             setSaleView()
         } else if priceType == 1 {
             jeonseButton.isSelected = true
+            isMoveTypeSelected = jeonseButton.isSelected
+            selectedMoveTypeButton = jeonseButton.isSelected ? jeonseButton : nil
             setJeonseView()
         } else if priceType == 2 {
             monthlyRentButton.isSelected = true
+            isMoveTypeSelected = monthlyRentButton.isSelected
+            selectedMoveTypeButton = monthlyRentButton.isSelected ? monthlyRentButton : nil
             setmonthlyRentView()
         }
     }
@@ -578,27 +636,27 @@ class EditBasicInfoDetailViewController: UIViewController {
     
     @objc func buttonPressed(_ sender: UIButton) {
         guard !sender.isSelected else { return } // 이미 선택된 버튼이면 아무 동작도 하지 않음
-        // 해당 버튼의 선택 여부를 반전
-        sender.isSelected = !sender.isSelected
-        isMoveTypeSelected = sender.isSelected
         
-        if sender != saleButton {
-            saleButton.isSelected = false
-        }
         // 매물 유형 카테고리의 버튼일 경우
         if let selectedButton = selectedMoveTypeButton, selectedButton != sender {
             // 이전에 선택된 버튼이 있고 새로운 버튼과 다른 경우에는 이전 버튼의 선택을 해제
             selectedButton.isSelected = false
         }
-        
+
+        // 해당 버튼의 선택 여부를 반전
+        sender.isSelected = !sender.isSelected
+        isMoveTypeSelected = sender.isSelected
+
         // 버튼에 따라 가격 View 표시
         if sender == saleButton {
             threeDisitPriceField.text = ""
             fourDisitPriceField.text = ""
+            fourDisitMonthlyRentField.text = ""
             setSaleView()
         } else if sender == jeonseButton {
             threeDisitPriceField.text = ""
             fourDisitPriceField.text = ""
+            fourDisitMonthlyRentField.text = ""
             setJeonseView()
         } else if sender == monthlyRentButton {
             threeDisitPriceField.text = ""
@@ -680,9 +738,27 @@ class EditBasicInfoDetailViewController: UIViewController {
     }
     
     @objc func nextButtonTapped(_ sender: UIButton) {
-        let imjangNoteVC = ImjangNoteViewController()
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        navigationController?.pushViewController(imjangNoteVC, animated: true)
+        modifyImjang { error in
+            if error == nil {
+                let imjangNoteVC = ImjangNoteViewController()
+                imjangNoteVC.imjangId = self.imjangId
+                imjangNoteVC.version = self.versionInfo
+                self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+                self.navigationController?.pushViewController(imjangNoteVC, animated: true)
+            } else {
+                guard let error else { return }
+                switch error {
+                case .failedRequest:
+                    print("failedRequest")
+                case .noData:
+                    print("noData")
+                case .invalidResponse:
+                    print("invalidResponse")
+                case .invalidData:
+                    print("invalidData")
+                }
+            }
+        }
     }
 }
 

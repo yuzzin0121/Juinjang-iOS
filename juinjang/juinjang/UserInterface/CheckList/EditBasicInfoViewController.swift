@@ -12,6 +12,7 @@ class EditBasicInfoViewController: UIViewController {
     
     var transactionModel = TransactionModel()
     var imjangId: Int? = nil
+    var versionInfo: VersionInfo? = nil
     
     var moveTypeButtons: [UIButton] = [] // "입주 유형"을 나타내는 선택지
     
@@ -140,29 +141,6 @@ class EditBasicInfoViewController: UIViewController {
             $0.leftView = paddingView
             $0.leftViewMode = .always
             $0.translatesAutoresizingMaskIntoConstraints = false
-    }
-    
-    func configureButton(_ button: UIButton, normalImage: UIImage?, selectedImage: UIImage?, action: Selector) {
-        button.frame = CGRect(x: 0, y: 0, width: 200, height: 50)
-        button.setBackgroundImage(normalImage, for: .normal)
-        button.setBackgroundImage(selectedImage, for: .selected)
-        button.layer.cornerRadius = 10
-        button.layer.masksToBounds = true
-        button.contentMode = .scaleAspectFit
-        button.addTarget(self, action: action, for: .touchUpInside)
-        button.adjustsImageWhenHighlighted = false // 버튼이 눌릴 때 색상 변경 방지
-    }
-    
-    lazy var saleButton = UIButton().then {
-        configureButton($0, normalImage: UIImage(named: "sale-button"), selectedImage: UIImage(named: "sale-selected-button"), action: #selector(buttonPressed))
-    }
-    
-    lazy var jeonseButton = UIButton().then {
-        configureButton($0, normalImage: UIImage(named: "jeonse-button"), selectedImage: UIImage(named: "jeonse-selected-button"), action: #selector(buttonPressed))
-    }
-    
-    lazy var monthlyRentButton = UIButton().then {
-        configureButton($0, normalImage: UIImage(named: "monthlyrent-button"), selectedImage: UIImage(named: "monthlyrent-selected-button"), action: #selector(buttonPressed))
     }
     
     lazy var priceView = UIView().then {
@@ -322,35 +300,48 @@ class EditBasicInfoViewController: UIViewController {
             }
         }
     }
-//    func getImjang(completionHandler: @escaping (Int?, NetworkError?) -> Void) {
-//        guard let imjangId = imjangId else { return }
-//        let url = JuinjangAPI.detailImjang(imjangId: imjangId)
-//        
-//        let header : HTTPHeaders = ["Content-Type": "application/json", "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"]
-//        AF.request(url as! URLConvertible,
-//                   method: .get,
-//                   headers: header)
-//        .validate(statusCode: 200..<300)
-//        .responseDecodable(of: BaseResponse<DetailDto>.self) { response in
-//            switch response.result {
-//            case .success(let success):
-//                print("임장 상세 조회", success.result)
-//                addressTextField.text = success.result?.address
-//                if let limjangId = success.result?.limjangId {
-//                    print(limjangId)
-//                    self.imjangId = limjangId
-//                    completionHandler(self.imjangId, nil)
-//                }
-//                
-//            case .failure(let failure):
-//                print("Error: \(failure)")
-//                completionHandler(nil, NetworkError.failedRequest)
-//            }
-//        }
-//    }
+    
+    func modifyImjang(completionHandler: @escaping (NetworkError?) -> Void) {
+        guard let imjangId = imjangId else { return }
+        let url = JuinjangAPI.modifyImjang.endpoint
+        
+        // threeDisitPriceField와 fourDisitPriceField의 값을 합쳐서 selectedPrice에 저장
+        let threeDisitPrice = Int(threeDisitPriceField.text ?? "") ?? 0
+        let fourDisitPrice = Int(fourDisitPriceField.text ?? "") ?? 0
+        var priceList = [String(threeDisitPrice * 100000000 + fourDisitPrice * 10000)]
+        
+        let parameter: Parameters = [
+            "limjangId": imjangId,
+            "address": addressTextField.text ?? "",
+            "addressDetail": addressDetailTextField.text ?? "",
+            "nickname": houseNicknameTextField.text ?? "",
+            "priceType": 3,
+            "priceList": priceList
+        ]
+        
+        print(parameter)
+        
+        let header : HTTPHeaders = ["Content-Type": "application/json", "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"]
+        AF.request(url,
+                 method: .patch,
+                 parameters: parameter,
+                 encoding: JSONEncoding.default,
+                 headers: header)
+        .validate(statusCode: 200..<300)
+        .responseDecodable(of: BaseResponse<String>.self) { response in
+            switch response.result {
+            case .success(let success):
+                print(success)
+                completionHandler(nil)
+        
+            case .failure(let failure):
+                print("Error: \(failure)")
+                completionHandler(NetworkError.failedRequest)
+            }
+        }
+    }
 
     override func viewDidLoad() {
-        print("임장 아이디: \(imjangId)")
         getImjang()
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -380,18 +371,7 @@ class EditBasicInfoViewController: UIViewController {
         addressTextField.text = detailDto.address
         addressDetailTextField.text = detailDto.addressDetail
         houseNicknameTextField.text = detailDto.nickname
-        setMoveTypeButton(priceType: detailDto.priceType)
         setPriceLabel(priceList: detailDto.priceList)
-    }
-    
-    func setMoveTypeButton(priceType: Int) {
-        if priceType == 0 {
-            saleButton.isSelected = true
-        } else if priceType == 1 {
-            jeonseButton.isSelected = true
-        } else if priceType == 2 {
-            monthlyRentButton.isSelected = true
-        }
     }
     
     func setPriceLabel(priceList: [String]) {
@@ -496,17 +476,6 @@ class EditBasicInfoViewController: UIViewController {
         }
         
         priceView2.isHidden = true
-        
-        // 입주 유형 Stack View
-        moveTypeStackView = UIStackView(
-            arrangedSubviews:
-                [saleButton,
-                 jeonseButton,
-                 monthlyRentButton])
-        
-        moveTypeStackView.translatesAutoresizingMaskIntoConstraints = false
-        moveTypeStackView.axis = .horizontal
-        moveTypeStackView.spacing = 8
 
         // 가격 입력칸 Stack View
         inputPriceStackView = UIStackView(
@@ -563,47 +532,6 @@ class EditBasicInfoViewController: UIViewController {
 
     }
     
-    // 각 카테고리에 따른 버튼을 나타내기 위한 처리
-    func setButton() {
-        // 입주 유형 카테고리에 속한 버튼
-        moveTypeButtons = [saleButton, jeonseButton, monthlyRentButton]
-    }
-    
-    @objc func buttonPressed(_ sender: UIButton) {
-        guard !sender.isSelected else { return } // 이미 선택된 버튼이면 아무 동작도 하지 않음
-        // 해당 버튼의 선택 여부를 반전
-        sender.isSelected = !sender.isSelected
-        
-        moveTypeStackView.removeFromSuperview() // moveTypeStackView을 숨김
-        saleButton.isSelected = true
-        jeonseButton.isSelected = false
-        monthlyRentButton.isSelected = false
-        contentView.addSubview(priceView)
-        priceView.snp.makeConstraints {
-            $0.top.equalTo(priceLabel.snp.bottom).offset(12)
-            $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(view.snp.height).multipliedBy(0.05)
-        }
-    }
-    
-    func checkPriceDetailLabel() {
-        if let priceDetailLabel = priceDetailLabel {
-            priceView.addSubview(priceDetailLabel)
-            priceView.addSubview(inputPriceStackView)
-            priceDetailLabel.snp.makeConstraints {
-                $0.centerY.equalTo(priceView.snp.centerY)
-                $0.top.equalTo(priceView.snp.top).offset(8)
-                $0.leading.equalTo(priceView.snp.leading).offset(24)
-            }
-            inputPriceStackView.snp.makeConstraints {
-                $0.leading.equalTo(priceDetailLabel.snp.trailing).offset(16)
-                $0.centerY.equalTo(priceView.snp.centerY)
-                $0.height.lessThanOrEqualTo(view.snp.height).multipliedBy(0.5)
-                $0.top.equalTo(priceView.snp.top).offset(8)
-            }
-        }
-    }
-    
     @objc func searchAddressButtonTapped(_ sender: UIButton) {
         let KakaoZipCodeVC = KakaoZipCodeViewController()
         present(KakaoZipCodeVC, animated: true)
@@ -614,9 +542,27 @@ class EditBasicInfoViewController: UIViewController {
     }
     
     @objc func nextButtonTapped(_ sender: UIButton) {
-        let imjangNoteVC = ImjangNoteViewController()
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        navigationController?.pushViewController(imjangNoteVC, animated: true)
+        modifyImjang { error in
+            if error == nil {
+                let imjangNoteVC = ImjangNoteViewController()
+                imjangNoteVC.imjangId = self.imjangId
+                imjangNoteVC.version = self.versionInfo
+                self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+                self.navigationController?.pushViewController(imjangNoteVC, animated: true)
+            } else {
+                guard let error else { return }
+                switch error {
+                case .failedRequest:
+                    print("failedRequest")
+                case .noData:
+                    print("noData")
+                case .invalidResponse:
+                    print("invalidResponse")
+                case .invalidData:
+                    print("invalidData")
+                }
+            }
+        }
     }
 }
 
