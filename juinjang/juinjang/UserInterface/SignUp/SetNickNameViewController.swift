@@ -144,6 +144,7 @@ class SetNickNameViewController: UIViewController {
     }
     
     func sendNickName() {
+        
         // 요청 URL 설정
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)", // 예시: 인증 토큰
@@ -157,7 +158,7 @@ class SetNickNameViewController: UIViewController {
         let urlString = "http://juinjang1227.com:8080/api/nickname"
 
         AF.request(urlString, method: .patch, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
-            .responseJSON { response in
+            .responseString(encoding: .utf8) { response in
                 switch response.result {
                 case .success(let value):
                     print("Success: \(value)")
@@ -165,6 +166,7 @@ class SetNickNameViewController: UIViewController {
                     print("Error: \(error)")
                 }
             }
+        MainViewController().refreshToken()
     }
     
     @objc func backButtonTapped() {

@@ -73,7 +73,6 @@ class SignUpWebViewController: UIViewController {
     }
     
     func hasToken(){
-        print("nickname : \(UserDefaultManager.shared.nickname)")
         let mainViewController = MainViewController()
             // 현재 내비게이션 컨트롤러가 nil인지 확인
         if let navigationController = self.navigationController {
@@ -94,7 +93,6 @@ class SignUpWebViewController: UIViewController {
             
     }
     func noToken() {
-        //print("nickname : \(UserDefaultManager.shared.nickname)")
             let toSViewController = ToSViewController()
             // 현재 내비게이션 컨트롤러가 nil인지 확인
             if let navigationController = self.navigationController {
@@ -126,7 +124,7 @@ class SignUpWebViewController: UIViewController {
                     // 응답 확인
                     if let httpResponse = response.response {
                         print("Status code: \(httpResponse.statusCode)")
-                        print("Token: \(UserDefaultManager.shared.accessToken)")
+                        //print("Token: \(UserDefaultManager.shared.accessToken)")
                     }
                     // 응답 데이터 출력
                     if let responseString = String(data: data, encoding: .utf8) {
@@ -139,7 +137,7 @@ class SignUpWebViewController: UIViewController {
                         let nickname = userInfoResponse.result.nickname
                         UserDefaultManager.shared.email = email
                         print("Email: \(UserDefaultManager.shared.email)")
-                        print("Nickname : \(nickname)")
+                        print("Nickname : \(nickname ?? "")")
                         if nickname == nil {
                             noToken()
                         } else {
@@ -187,8 +185,8 @@ extension SignUpWebViewController: WKNavigationDelegate {
                             UserDefaultManager.shared.refreshToken = refreshToken
                             self.loading()
                             self.getUserInfo(userToken: UserDefaultManager.shared.accessToken)
-                            print("accessToken: \(UserDefaultManager.shared.accessToken)")
-                            print("refreshToken: \(UserDefaultManager.shared.refreshToken)")
+                            //print("accessToken: \(UserDefaultManager.shared.accessToken)")
+                            //print("refreshToken: \(UserDefaultManager.shared.refreshToken)")
                             if accessToken.isEmpty == false {
                                 //self.dismiss(animated: false, completion: nil)
                             }
