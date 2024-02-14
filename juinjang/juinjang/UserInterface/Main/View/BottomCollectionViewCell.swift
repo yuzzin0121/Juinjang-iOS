@@ -56,7 +56,7 @@ class BottomCollectionViewCell: UICollectionViewCell {
     }
     var rateLabel = UILabel().then {
         let text1 = NSTextAttachment()
-        text1.image = UIImage(named: "mainstar")
+        text1.image = UIImage(named: "Mainstar")
         let text2 = " " + "4.5"
         let text3 = NSMutableAttributedString(string: "")
         text3.append(NSAttributedString(attachment: text1))

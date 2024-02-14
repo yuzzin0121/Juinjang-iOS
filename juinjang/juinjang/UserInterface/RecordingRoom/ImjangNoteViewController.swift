@@ -119,7 +119,7 @@ class ImjangNoteViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        print("버전 확인:", version)
+        print("버전 확인: \(version)")
         setDelegate()
         designNavigationBar()
         addSubView()
@@ -138,8 +138,14 @@ class ImjangNoteViewController: UIViewController {
         guard let imjangId = imjangId else { return }
         JuinjangAPIManager.shared.fetchData(type: BaseResponse<DetailDto>.self, api: .detailImjang(imjangId: imjangId)) { detailDto, error in
             if error == nil {
+                print("뭐임")
                 guard let result = detailDto else { return }
+                print("에에엥")
+                print(imjangId)
+                print(result)
+                print(result.result)
                 if let detailDto = result.result {
+                    print("뭐야")
                     print(detailDto)
                     self.setData(detailDto: detailDto)
                 }
@@ -160,6 +166,7 @@ class ImjangNoteViewController: UIViewController {
     }
     
     func setData(detailDto: DetailDto) {
+        print(#function)
         self.navigationItem.title = detailDto.nickname
         roomNameLabel.text = detailDto.nickname
         setPriceLabel(priceList: detailDto.priceList)
@@ -291,8 +298,12 @@ class ImjangNoteViewController: UIViewController {
         let editVC = EditBasicInfoViewController()
         let editDetailVC = EditBasicInfoDetailViewController()
         if version?.editCriteria == 0 {
+            editVC.imjangId = imjangId
+            editVC.versionInfo = version
             self.navigationController?.pushViewController(editVC, animated: true)
         } else if version?.editCriteria == 1 {
+            editDetailVC.imjangId = imjangId
+            editDetailVC.versionInfo = version
             self.navigationController?.pushViewController(editDetailVC, animated: true)
         }
     }
@@ -332,6 +343,8 @@ class ImjangNoteViewController: UIViewController {
     
     // 뷰들 디자인
     func designViews() {
+        print(#function)
+        
         upButton.alpha = 0
         designImageView(maximizeImageView, image: UIImage(named: "maximize"), contentMode: .scaleAspectFit)
         
@@ -583,8 +596,7 @@ class ImjangNoteViewController: UIViewController {
         contentView.snp.makeConstraints {
             $0.edges.equalTo(scrollView.contentLayoutGuide)
             $0.width.equalTo(scrollView.frameLayoutGuide)
-//            $0.height.equalTo(view).multipliedBy(1.6)
-            $0.height.equalTo(view).multipliedBy(5) // 체크리스트 뷰 컨트롤러에서는 변경될 수 있게 적절한 값으로 설정 필요
+            $0.height.equalTo(view).multipliedBy(5.6)
         }
         
         setImageViewConstraints()
@@ -646,7 +658,8 @@ class ImjangNoteViewController: UIViewController {
             $0.top.equalTo(infoStackView.snp.bottom).offset(12)
             $0.leading.trailing.equalTo(contentView)
 //            $0.bottom.equalTo(contentView).offset(-24)
-            $0.height.equalTo(view).multipliedBy(1.5)
+//            $0.height.equalTo(view).multipliedBy(1.5)
+            $0.height.equalTo(view).multipliedBy(5) // 체크리스트 뷰 컨트롤러에서는 변경될 수 있게 적절한 값으로 설정 필요
         }
         
         recordingSegmentedVC.view.snp.makeConstraints {

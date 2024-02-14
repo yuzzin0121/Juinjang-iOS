@@ -58,15 +58,15 @@ enum JuinjangAPI {
             return URL(string: baseURL + "limjang/main")!
         case .detailImjang(let imjangId):
             return URL(string: baseURL + "limjang/detail/\(imjangId)")!
-        case .deleteImjangs(let imjangIds):
-            return URL(string: baseURL + "limjang/\(imjangIds)")!
+        case .deleteImjangs:
+            return URL(string: baseURL + "limjang/delete")!
         }
     }
     
     var header: HTTPHeaders {
         switch self {
         case .kakaoLogin, .regenerateToken, .detailImjang, .totalImjang, .scrap, .searchImjang, .deleteImjangs:
-            return ["Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"]
+            return ["Content-Type": "application/json", "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"]
 
         default:
             return [:]
@@ -75,21 +75,29 @@ enum JuinjangAPI {
     
     var method: HTTPMethod {
         switch self {
-        case .scrap, .createImjang, .regenerateToken, .logout:
+        case .scrap, .createImjang, .regenerateToken, .logout, .deleteImjangs:
             return .post
         case .totalImjang, .searchImjang, .mainImjang, .detailImjang, .kakaoLogin, .kakaoLoginCallback, .profile:
             return .get
         case .nickname, .modifyImjang:
             return .patch
-        case .deleteImjangs:
-            return .delete
         }
     }
+    
+    var encoding: ParameterEncoding {
+        switch self {
+        case .deleteImjangs:
+            return JSONEncoding.default
+        default:
+            return URLEncoding(destination: .queryString)
+        }
+    }
+
     
     var parameter: Parameters {
         switch self {
         case .detailImjang(let imjangId):
-            [:]
+            ["limjangIdList": imjangId]
         default:
             [:]
         }

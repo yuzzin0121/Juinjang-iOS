@@ -45,4 +45,31 @@ extension String {
         let dateString = myFormatter.string(from: isoDate)
         return dateString
     }
+    
+    func twoSplitAmount() -> (String, String) {
+        // 문자열을 숫자로 변환
+        if let amount = Int(self) {
+            let units = amount / 100000000
+            let remainder = (amount % 100000000) / 10000
+
+            // 나눈 결과를 문자열로 변환하여 반환
+            return (String(units), String(remainder))
+        } else {
+            // 변환 실패 시 기본값 반환
+            return ("0", "0")
+        }
+    }
+    
+    func oneSplitAmount() -> String {
+        // 문자열을 숫자로 변환
+        if let amount = Int(self) {
+            let remainder = (amount % 100000000) / 10000
+
+            // 문자열로 변환하여 반환
+            return String(remainder)
+        } else {
+            // 변환 실패 시 기본값 반환
+            return ("0")
+        }
+    }
 }
