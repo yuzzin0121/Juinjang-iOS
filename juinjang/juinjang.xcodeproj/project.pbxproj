@@ -97,7 +97,6 @@
 		34AA14D72B7C911300CF10FC /* splash.mp4.lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = 34AA14D62B7C911300CF10FC /* splash.mp4.lottie.json */; };
 		34AA14D92B7C948400CF10FC /* 1_ezgif.com_crop.json in Resources */ = {isa = PBXBuildFile; fileRef = 34AA14D82B7C948400CF10FC /* 1_ezgif.com_crop.json */; };
 		34AA14DB2B7CA45B00CF10FC /* 1-ezgif.com-gif-to-mp4-converter.mp4.lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = 34AA14DA2B7CA45B00CF10FC /* 1-ezgif.com-gif-to-mp4-converter.mp4.lottie.json */; };
-		34AA14DD2B7CA46700CF10FC /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = 34AA14DC2B7CA46700CF10FC /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json */; };
 		6108CFDF2B761AA300EF302F /* JuinjangAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6108CFDE2B761AA300EF302F /* JuinjangAPI.swift */; };
 		6108CFE12B761B3A00EF302F /* BaseResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6108CFE02B761B3A00EF302F /* BaseResponse.swift */; };
 		6108CFE62B761D0000EF302F /* LoginResponseDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6108CFE52B761D0000EF302F /* LoginResponseDto.swift */; };
@@ -246,7 +245,6 @@
 		34AA14D62B7C911300CF10FC /* splash.mp4.lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = splash.mp4.lottie.json; sourceTree = "<group>"; };
 		34AA14D82B7C948400CF10FC /* 1_ezgif.com_crop.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = 1_ezgif.com_crop.json; sourceTree = "<group>"; };
 		34AA14DA2B7CA45B00CF10FC /* 1-ezgif.com-gif-to-mp4-converter.mp4.lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "1-ezgif.com-gif-to-mp4-converter.mp4.lottie.json"; sourceTree = "<group>"; };
-		34AA14DC2B7CA46700CF10FC /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json"; path = "../../../../../../../Downloads/splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json"; sourceTree = "<group>"; };
 		6108CFDE2B761AA300EF302F /* JuinjangAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JuinjangAPI.swift; sourceTree = "<group>"; };
 		6108CFE02B761B3A00EF302F /* BaseResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseResponse.swift; sourceTree = "<group>"; };
 		6108CFE52B761D0000EF302F /* LoginResponseDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginResponseDto.swift; sourceTree = "<group>"; };
@@ -611,7 +609,6 @@
 				34AA14D82B7C948400CF10FC /* 1_ezgif.com_crop.json */,
 				34AA14D62B7C911300CF10FC /* splash.mp4.lottie.json */,
 				34AA14DA2B7CA45B00CF10FC /* 1-ezgif.com-gif-to-mp4-converter.mp4.lottie.json */,
-				34AA14DC2B7CA46700CF10FC /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json */,
 				346CF6AD2B70B46B00C70C7A /* SplashViewController.swift */,
 			);
 			path = Splash;
@@ -904,7 +901,6 @@
 				61A7B92C2B4C4EC300795B49 /* Pretendard-Black.otf in Resources */,
 				61A7B9272B4C4EC300795B49 /* Pretendard-ExtraLight.otf in Resources */,
 				61A7B9282B4C4EC300795B49 /* Pretendard-SemiBold.otf in Resources */,
-				34AA14DD2B7CA46700CF10FC /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json in Resources */,
 				0A9E0A532B3DCAB90094595A /* LaunchScreen.storyboard in Resources */,
 				34AA14DB2B7CA45B00CF10FC /* 1-ezgif.com-gif-to-mp4-converter.mp4.lottie.json in Resources */,
 				611757382B67D5E60043E958 /* Assets.xcassets in Resources */,
