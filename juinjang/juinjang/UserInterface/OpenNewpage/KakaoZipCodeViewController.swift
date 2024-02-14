@@ -59,7 +59,7 @@ extension KakaoZipCodeViewController: WKScriptMessageHandler {
         if let data = message.body as? [String: Any] {
             address = data["roadAddress"] as? String ?? ""
         }
-        print("도로명 주소:", address)
+        print("도로명 주소: \(address)")
         
         // -MARK: 모달로 표시된 뷰 컨트롤러가 UINavigationController를 포함하는 경우
         // 현재 뷰 컨트롤러를 present한 뷰 컨트롤러가 UINavigationController인지 검사

@@ -103,6 +103,39 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
+    func configure(with data: SelectionItem, at indexPath: IndexPath) {
+        // indexPath를 사용하여 특정 위치에 해당하는 업데이트 로직 수행
+        let currentItem = categories[indexPath.section].items[indexPath.row - 1]
+        let content = currentItem.content
+        contentLabel.text = content
+
+        // 선택된 옵션이 있으면 표시
+        if let storedData = selectionItems[content] {
+            selectedOption = storedData.option
+
+            // selectedOption이 몇 번째 행에 해당하는지 찾기
+//            if let row = options.firstIndex(where: { $0 == selectedOption }) {
+//                itemPickerView.selectRow(row, inComponent: 0, animated: false)
+//            }
+
+        } else {
+            // 선택된 옵션이 없으면 표시 초기화
+            selectedOption = nil
+        }
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+
+        // 셀 내용 초기화
+        selectedOption = nil
+        // pickerView의 선택된 행을 0으로 설정
+        itemPickerView.selectRow(0, inComponent: 0, animated: false)
+        
+        // 배경색 초기화
+        backgroundColor = .white
+    }
+    
     func setupLayout() {
         // 질문 구분 imageView
         questionImage.snp.makeConstraints {

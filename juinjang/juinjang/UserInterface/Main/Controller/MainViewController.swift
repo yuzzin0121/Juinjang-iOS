@@ -2,7 +2,11 @@ import UIKit
 import SnapKit
 import Then
 import Lottie
-
+import Alamofire
+struct RefreshTokenResponse: Decodable {
+    let code: String
+    // 다른 필요한 속성들도 추가할 수 있습니다.
+}
 
 class MainViewController: UIViewController {
     
@@ -40,6 +44,40 @@ class MainViewController: UIViewController {
     }
     
 //MARK: - 함수 선언
+    func refreshToken() {
+        let url = "http://juinjang1227.com:8080/api/auth/regenerate-token"
+        let headers : HTTPHeaders = [
+            "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)", // 현재 Access Token
+            "Refresh-Token": "Bearer \(UserDefaultManager.shared.refreshToken)" // Refresh Token
+        ]
+        
+        AF.request(url, method: .post, headers: headers).responseData { response in
+            switch response.result {
+            case .success(let value):
+                if let httpResponse = response.response {
+                    print("Status code: \(httpResponse.statusCode)")
+                }
+                // 응답 데이터 출력
+                if let responseString = String(data: value, encoding: .utf8) {
+                    print("Response data: \(responseString)")
+                }
+                do {
+                    let decoder = JSONDecoder()
+                    let refreshTokenResponse = try decoder.decode(RefreshTokenResponse.self, from: value)
+                    if refreshTokenResponse.code == "TOKEN402" {
+                        // "code"가 "TOKEN402"인 경우 로그아웃 함수 호출
+                        let settingViewController = SettingViewController()
+                        settingViewController.logout()
+                    }
+                } catch {
+                    print("Error decoding JSON: \(error)")
+                }
+            case .failure(let error):
+                print("Error: \(error)")
+            }
+        }
+    }
+    
     func setConstraint() {
         //배경
         backgroundImageView.snp.makeConstraints{
@@ -60,7 +98,8 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        refreshToken()
+        UserDefaultManager.shared.userStatus = true
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none

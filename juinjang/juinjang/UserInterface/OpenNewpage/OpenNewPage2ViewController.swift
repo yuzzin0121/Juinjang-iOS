@@ -302,8 +302,8 @@ class OpenNewPage2ViewController: UIViewController, WarningMessageDelegate {
 
     // MARK: - viewDidLoad()
     override func viewDidLoad() {
-        print("VersionInfo:", versionInfo)
-        print("전달받은 데이터:", newImjang)
+        print("VersionInfo: \(versionInfo)")
+        print("전달받은 데이터: \(newImjang)")
         super.viewDidLoad()
         view.backgroundColor = .white
         self.navigationItem.title = "새 페이지 펼치기"
@@ -538,6 +538,12 @@ class OpenNewPage2ViewController: UIViewController, WarningMessageDelegate {
         } else {
             // 기본은 메인으로 향하는 걸로 설정
             return "메인화면으로 돌아갈까요?\n입력한 정보는 저장되지 않습니다."
+        }
+    }
+
+    func navigateBack() {
+        if let viewControllers = navigationController?.viewControllers, viewControllers.count >= 3 {
+            navigationController?.popToViewController(viewControllers[viewControllers.count - 3], animated: true)
         }
     }
 

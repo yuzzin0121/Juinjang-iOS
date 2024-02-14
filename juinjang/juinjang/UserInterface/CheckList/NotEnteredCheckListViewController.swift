@@ -55,6 +55,7 @@ class NotEnteredCheckListViewController: UIViewController {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(48)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
+            $0.height.equalTo(2.3)
         }
     }
     
