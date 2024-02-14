@@ -138,8 +138,14 @@ class ImjangNoteViewController: UIViewController {
         guard let imjangId = imjangId else { return }
         JuinjangAPIManager.shared.fetchData(type: BaseResponse<DetailDto>.self, api: .detailImjang(imjangId: imjangId)) { detailDto, error in
             if error == nil {
+                print("뭐임")
                 guard let result = detailDto else { return }
+                print("에에엥")
+                print(imjangId)
+                print(result)
+                print(result.result)
                 if let detailDto = result.result {
+                    print("뭐야")
                     print(detailDto)
                     self.setData(detailDto: detailDto)
                 }
@@ -160,6 +166,7 @@ class ImjangNoteViewController: UIViewController {
     }
     
     func setData(detailDto: DetailDto) {
+        print(#function)
         self.navigationItem.title = detailDto.nickname
         roomNameLabel.text = detailDto.nickname
         setPriceLabel(priceList: detailDto.priceList)
@@ -332,6 +339,8 @@ class ImjangNoteViewController: UIViewController {
     
     // 뷰들 디자인
     func designViews() {
+        print(#function)
+        
         upButton.alpha = 0
         designImageView(maximizeImageView, image: UIImage(named: "maximize"), contentMode: .scaleAspectFit)
         
