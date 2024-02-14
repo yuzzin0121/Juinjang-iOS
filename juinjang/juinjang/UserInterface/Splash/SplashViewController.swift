@@ -12,7 +12,7 @@ import Then
 
 class SplashViewController: UIViewController {
     
-    let animationView = LottieAnimationView(name: "splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json").then {
+    let animationView = LottieAnimationView(name: "1-ezgif.com-gif-to-mp4-converter.mp4.lottie.json").then {
         $0.frame = CGRect(x: 0, y: 0, width: 250, height: 250)
         $0.contentMode = .scaleAspectFit
     }

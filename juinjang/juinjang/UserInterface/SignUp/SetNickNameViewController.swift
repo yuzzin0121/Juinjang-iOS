@@ -144,6 +144,7 @@ class SetNickNameViewController: UIViewController {
     }
     
     func sendNickName() {
+        
         // 요청 URL 설정
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)", // 예시: 인증 토큰
@@ -157,7 +158,7 @@ class SetNickNameViewController: UIViewController {
         let urlString = "http://juinjang1227.com:8080/api/nickname"
 
         AF.request(urlString, method: .patch, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
-            .responseJSON { response in
+            .responseString(encoding: .utf8) { response in
                 switch response.result {
                 case .success(let value):
                     print("Success: \(value)")
@@ -165,6 +166,7 @@ class SetNickNameViewController: UIViewController {
                     print("Error: \(error)")
                 }
             }
+        MainViewController().refreshToken()
     }
     
     @objc func backButtonTapped() {
@@ -178,13 +180,11 @@ class SetNickNameViewController: UIViewController {
 //        alertController.addAction(okAction)
 
 //        present(alertController, animated: true, completion: nil)
-
         // -TODO: 동일한 닉네임이 존재하지 않을 경우 다음 뷰 컨트롤러로 이동
         if let nickname = nickNameTextField.text, !nickname.isEmpty {
             let welcomeViewController = WelcomeViewController()
             welcomeViewController.userInfo = UserInfo(nickname: nickname)
             UserDefaultManager.shared.nickname = nickname
-
             navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
             navigationController?.pushViewController(welcomeViewController, animated: true)
         }

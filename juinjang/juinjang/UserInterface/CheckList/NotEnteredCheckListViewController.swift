@@ -13,8 +13,9 @@ class NotEnteredCheckListViewController: UIViewController {
     lazy var tableView = UITableView().then {
         $0.separatorStyle = .none
         $0.showsVerticalScrollIndicator = false
-        $0.isScrollEnabled = true
+        $0.isScrollEnabled = false
     }
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,7 +34,7 @@ class NotEnteredCheckListViewController: UIViewController {
             self.tableView.isScrollEnabled = true
         }
     }
-    
+
     // 키보드 내리기
     func hideKeyboardWhenTappedArround() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
@@ -54,8 +55,8 @@ class NotEnteredCheckListViewController: UIViewController {
         tableView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(48)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview()
-            $0.height.equalTo(2.3)
+            $0.height.equalTo(698)
+//            $0.bottom.equalToSuperview()
         }
     }
     
@@ -71,7 +72,20 @@ class NotEnteredCheckListViewController: UIViewController {
     var selectedDates: [Date?] = Array(repeating: nil, count: 2)
 }
 
-extension NotEnteredCheckListViewController : UITableViewDelegate, UITableViewDataSource  {
+extension NotEnteredCheckListViewController : UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView == self.tableView {
+            let offset = scrollView.contentOffset.y
+
+            // 스크롤이 맨 위에 있을 때만 tableView의 스크롤을 비활성화
+            if offset <= 0 {
+                tableView.isScrollEnabled = false
+                NotificationCenter.default.post(name: NSNotification.Name("didStoppedChildScroll"), object: nil)
+            } else {
+                tableView.isScrollEnabled = true
+            }
+        }
+    }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1 + enabledCategories.count

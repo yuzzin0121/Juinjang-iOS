@@ -31,6 +31,7 @@ class CheckListViewController: UIViewController {
         registerCell()
         NotificationCenter.default.addObserver(self, selector: #selector(didStoppedParentScroll), name: NSNotification.Name("didStoppedParentScroll"), object: nil)
     }
+    
     @objc
     func didStoppedParentScroll() {
         DispatchQueue.main.async {
@@ -58,8 +59,8 @@ class CheckListViewController: UIViewController {
         tableView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(48)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview()
-            
+//            $0.bottom.equalToSuperview()
+            $0.height.equalTo(698)
         }
     }
     
@@ -72,7 +73,20 @@ class CheckListViewController: UIViewController {
     }
 }
 
-extension CheckListViewController : UITableViewDelegate, UITableViewDataSource  {
+extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView == self.tableView {
+            let offset = scrollView.contentOffset.y
+
+            // 스크롤이 맨 위에 있을 때만 tableView의 스크롤을 비활성화
+            if offset <= 0 {
+                tableView.isScrollEnabled = false
+                NotificationCenter.default.post(name: NSNotification.Name("didStoppedChildScroll"), object: nil)
+            } else {
+                tableView.isScrollEnabled = true
+            }
+        }
+    }
  
     // section 개수
     func numberOfSections(in tableView: UITableView) -> Int {
