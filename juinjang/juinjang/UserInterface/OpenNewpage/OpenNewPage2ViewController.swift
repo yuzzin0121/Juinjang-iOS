@@ -302,8 +302,8 @@ class OpenNewPage2ViewController: UIViewController, WarningMessageDelegate {
 
     // MARK: - viewDidLoad()
     override func viewDidLoad() {
-        print("VersionInfo:", versionInfo)
-        print("전달받은 데이터:", newImjang)
+        print("VersionInfo: \(versionInfo)")
+        print("전달받은 데이터: \(newImjang)")
         super.viewDidLoad()
         view.backgroundColor = .white
         self.navigationItem.title = "새 페이지 펼치기"

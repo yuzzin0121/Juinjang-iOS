@@ -10,6 +10,11 @@ import SnapKit
 
 class CheckListViewController: UIViewController {
     
+    var calendarItems: [String: (inputDate: Date, isSelected: Bool)] = [:]
+    var scoreItems: [String: (score: String, isSelected: Bool)] = [:]
+    var inputItems: [String: (inputAnswer: String, isSelected: Bool)] = [:]
+    var selectionItems: [String: (option: String, isSelected: Bool)] = [:]
+    
     lazy var tableView = UITableView().then {
         $0.separatorStyle = .none
         $0.showsVerticalScrollIndicator = false
@@ -54,6 +59,7 @@ class CheckListViewController: UIViewController {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(48)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
+            
         }
     }
     
@@ -106,90 +112,83 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource  
             if let calendarItem = category.items[indexPath.row - 1] as? CalendarItem {
                 // CalendarItem인 경우
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: ExpandedCalendarTableViewCell.identifier, for: indexPath) as? ExpandedCalendarTableViewCell else { return UITableViewCell() }
-                
                 cell.contentLabel.text = calendarItem.content
-                cell.selectedDate = calendarItem.inputDate
+                cell.configure(with: calendarItem, at: indexPath)
                 
-                // 데이터 모델에서 저장된 값으로 셀 구성
+//                // 데이터 모델에서 저장된 값으로 셀 구성
                 let contentKey = calendarItem.content
-                let savedData = cell.calendarItems[contentKey] // 저장된 날짜를 가져오기
-                cell.calendarItems[contentKey] = (inputDate: calendarItem.inputDate, isSelected: savedData?.isSelected ?? false)
                 cell.backgroundColor = cell.calendarItems[contentKey]?.isSelected ?? false ? UIColor(named: "lightOrange") : UIColor.white // 상태에 따라 배경색 설정
-                cell.selectedDate = cell.loadSelectedDate() ?? Date()
 
                 // 셀이 선택된 경우 클로저 호출
                 cell.selectionHandler = { [weak self, weak cell] selectedDate in
                     print("Selected Date in TableView:", selectedDate)
-                    cell?.saveSelectedDate()
+                    self?.calendarItems.updateValue((selectedDate, true), forKey: contentKey)
                 }
-                print("셀에서 가져온 데이터", cell.calendarItems)
+                
+                cell.calendarItems = calendarItems
+                print("calendarItems 데이터", calendarItems)
                 return cell
             } else if let scoreItem = category.items[indexPath.row - 1] as? ScoreItem {
                 // ScoreItem인 경우
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: ExpandedScoreTableViewCell.identifier, for: indexPath) as? ExpandedScoreTableViewCell else { return UITableViewCell() }
                 
                 cell.contentLabel.text = scoreItem.content
-                cell.score = scoreItem.score
+                cell.configure(with: scoreItem, at: indexPath)
+//                cell.score = scoreItem.score
                 
                 // 데이터 모델에서 저장된 값으로 셀 구성
                 let contentKey = scoreItem.content
-                let savedData = cell.scoreItems[contentKey]
-                cell.scoreItems[contentKey] = (score: scoreItem.score, isSelected: savedData?.isSelected ?? false)
                 cell.backgroundColor = cell.scoreItems[contentKey]?.isSelected ?? false ? UIColor(named: "lightOrange") : UIColor.white // 상태에 따라 배경색 설정
-
-                // 저장된 값이 없으면 기본값으로 설정
-                cell.score = cell.loadSelectedScore() ?? String()
 
                 // 셀이 선택된 경우 클로저 호출
                 cell.selectionHandler = { [weak self, weak cell] score in
                     print("Selected button in TableView:", score)
-                    cell?.saveSelectedScore()
+                    self?.scoreItems.updateValue((score, true), forKey: contentKey)
                 }
-//                print("셀에서 가져온 데이터", cell.scoreItems)
+                cell.scoreItems = scoreItems
+                print("scoreItems 데이터", cell.scoreItems)
                 return cell
             } else if let inputItem = category.items[indexPath.row - 1] as? InputItem {
                 // InputItem인 경우
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: ExpandedTextFieldTableViewCell.identifier, for: indexPath) as? ExpandedTextFieldTableViewCell else { return UITableViewCell() }
                 
                 cell.contentLabel.text = inputItem.content
-                cell.inputAnswer = inputItem.inputAnswer
+                cell.configure(with: inputItem, at: indexPath)
+//                cell.inputAnswer = inputItem.inputAnswer
                 
                 // 데이터 모델에서 저장된 값으로 셀 구성
                 let contentKey = inputItem.content
-                let savedData = cell.inputItems[contentKey]
-                cell.inputItems[contentKey] = (inputAnswer: inputItem.inputAnswer, isSelected: savedData?.isSelected ?? false)
                 cell.backgroundColor = cell.inputItems[contentKey]?.isSelected ?? false ? UIColor(named: "lightOrange") : UIColor.white // 상태에 따라 배경색 설정
-
-                // 저장된 값이 없으면 기본값으로 설정
-                cell.inputAnswer = cell.loadInputAnswer() ?? String()
 
                 // 셀이 선택된 경우 클로저 호출
                 cell.inputHandler = { [weak self, weak cell] inputAnswer in
                     print("Inputed answer in TableView:", inputAnswer)
-                    cell?.saveInputAnswer()
+                    self?.inputItems.updateValue((inputAnswer, true), forKey: contentKey)
                 }
                 
+                cell.inputItems = inputItems
+                print("inputItems 데이터", cell.inputItems)
                 return cell
             } else if let selectionItem = category.items[indexPath.row - 1] as? SelectionItem {
                 // SelectionItem인 경우
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: ExpandedDropdownTableViewCell.identifier, for: indexPath) as? ExpandedDropdownTableViewCell else { return UITableViewCell() }
 
                 cell.contentLabel.text = selectionItem.content
+                cell.configure(with: selectionItem, at: indexPath)
                 cell.options = selectionItem.options
                 cell.selectedOption = selectionItem.selectAnswer
                 
                 // 데이터 모델에서 저장된 값으로 셀 구성
                 let contentKey = selectionItem.content
-                let savedData = cell.selectionItems[contentKey]
-                cell.selectionItems[contentKey] = (option: selectionItem.selectAnswer, isSelected: savedData?.isSelected ?? false)
                 cell.backgroundColor = cell.selectionItems[contentKey]?.isSelected ?? false ? UIColor(named: "lightOrange") : UIColor.white // 상태에 따라 배경색 설정
-                cell.selectedOption = cell.loadSelectedOption() ?? String() // 저장된 값이 없으면 기본값으로 설정
 
                 // 셀이 선택된 경우 클로저 호출
                 cell.selectionHandler = { [weak self, weak cell] selectedOption in
                     print("selected Option in TableView:", selectedOption)
-                    cell?.saveSelectedOption()
+                    self?.selectionItems.updateValue((selectedOption, true), forKey: contentKey)
                 }
+                cell.selectionItems = selectionItems
+                print("selectionItems 데이터", cell.selectionItems)
                 return cell
             } 
             return UITableViewCell()
@@ -212,7 +211,7 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource  
                 let section = IndexSet.init(integer: indexPath.section)
                 tableView.reloadSections(section, with: .fade)
             } else {
-                tableView.reloadRows(at: [indexPath], with: .automatic)
+                tableView.reloadRows(at: [indexPath], with: .none)
             }
         } else if let cell = tableView.cellForRow(at: indexPath) as? ExpandedCalendarTableViewCell {
             // 확장된 캘린더 셀을 눌렀을 때
