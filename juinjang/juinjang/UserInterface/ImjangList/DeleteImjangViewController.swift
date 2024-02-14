@@ -8,6 +8,7 @@
 import UIKit
 import Then
 import SnapKit
+import Toast
 
 class DeleteImjangViewController: UIViewController {
     let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width*0.6, height: 24)).then {
@@ -54,13 +55,6 @@ class DeleteImjangViewController: UIViewController {
         deleteImjangPopupVC.completionHandler = {
             let indexs = self.selectedIndexes.sorted(by: <)
             print(indexs)
-//            for index in self.selectedIndexes {
-//                if index < self.imjangList.count {
-//                    self.imjangList.remove(at: index)
-//                }
-//            }
-//            self.selectedIndexes.removeAll()
-//            self.deleteImjangTableView.reloadData()
             var ids: [Int] = []
             for index in indexs {
                 ids.append(self.imjangList[index].limjangId)
@@ -72,10 +66,13 @@ class DeleteImjangViewController: UIViewController {
     }
     
     func deleteRequest(imjangIds: [Int]) {
-        JuinjangAPIManager.shared.fetchData(type: BaseResponseString.self, api: .deleteImjangs(imjangIds: imjangIds)) { response, error in
+        print(#function, "\(imjangIds)")
+        JuinjangAPIManager.shared.deleteImjang(type: BaseResponseString.self, api: .deleteImjangs(imjangIds: imjangIds), ids: imjangIds) { response, error in
             if error == nil {
                 guard let response = response else { return }
                 print(response)
+                self.selectedIndexes.removeAll()
+                self.view.makeToast("선택된 임장이 삭제되었습니다.", duration: 1.0)
                 self.callRequest()
             } else {
                 guard let error else { return }
@@ -101,6 +98,7 @@ class DeleteImjangViewController: UIViewController {
 //                print(result)
                 self.imjangList = result.scrapedList
                 self.imjangList.append(contentsOf: result.notScrapedList)
+                print(self.imjangList.count)
                 self.deleteImjangTableView.reloadData()
             } else {
                 guard let error else { return }
@@ -183,6 +181,11 @@ class DeleteImjangViewController: UIViewController {
     }
     
     @objc func removeAllCheckButtonClicked(sender: UIButton) {
+        if imjangList.isEmpty {
+            sender.isSelected = false
+            sender.setImage(ImageStyle.off, for: .normal)
+            return
+        }
         sender.isSelected.toggle()
         if sender.isSelected == true {
             sender.setImage(ImageStyle.on, for: .normal)
@@ -210,7 +213,7 @@ extension DeleteImjangViewController: UITableViewDelegate, UITableViewDataSource
         headerView.selectedCountLabel.text = "\(selectedIndexes.count)개 선택됨"   // 개수 변경 필요
         headerView.selectedCountLabel.textColor = selectedIndexes.count > 0 ? ColorStyle.mainOrange : ColorStyle.textGray
         
-        headerView.removeAllCheckButton.setImage(selectedIndexes.count == imjangList.count ? ImageStyle.on : ImageStyle.off, for: .normal)
+        headerView.removeAllCheckButton.setImage(selectedIndexes.count == imjangList.count && imjangList.count > 0 ? ImageStyle.on : ImageStyle.off, for: .normal)
         headerView.removeAllCheckButton.addTarget(self, action: #selector(removeAllCheckButtonClicked), for: .touchUpInside)
         
         return headerView

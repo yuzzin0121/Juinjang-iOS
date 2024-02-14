@@ -120,6 +120,7 @@
 		611F14552B47070B00B983F1 /* RecordingSegmentedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F14542B47070B00B983F1 /* RecordingSegmentedViewController.swift */; };
 		611F145A2B4707CC00B983F1 /* RecordingRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F14592B4707CC00B983F1 /* RecordingRoomViewController.swift */; };
 		611F145E2B471ECA00B983F1 /* CALayer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F145D2B471ECA00B983F1 /* CALayer+Extension.swift */; };
+		614649642B7CFFC400DA894C /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = 614649632B7CFFC400DA894C /* Toast */; };
 		616408E12B405B7200EC3B5E /* ImjangNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616408E02B405B7200EC3B5E /* ImjangNoteViewController.swift */; };
 		616408EC2B407A2D00EC3B5E /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616408EB2B407A2D00EC3B5E /* UIView+Extension.swift */; };
 		616409022B407FB300EC3B5E /* UIFont+Pretendard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616409012B407FB300EC3B5E /* UIFont+Pretendard.swift */; };
@@ -322,6 +323,7 @@
 				345855D12B6B7F7600432C06 /* KakaoSDKNavi in Frameworks */,
 				346C7E582B753C6C00B4E044 /* SnapKit in Frameworks */,
 				346CF6B32B70B54B00C70C7A /* Lottie in Frameworks */,
+				614649642B7CFFC400DA894C /* Toast in Frameworks */,
 				6108D0102B78C4FE00EF302F /* SnapKit in Frameworks */,
 				0A4EBE322B5EA21100909B7A /* FSCalendar in Frameworks */,
 				345855C72B6B7F7600432C06 /* KakaoSDKCert in Frameworks */,
@@ -834,6 +836,7 @@
 				6108D0062B78C40800EF302F /* Alamofire */,
 				6108D00C2B78C45300EF302F /* DGCharts */,
 				6108D00F2B78C4FE00EF302F /* SnapKit */,
+				614649632B7CFFC400DA894C /* Toast */,
 			);
 			productName = juinjang;
 			productReference = 0A9E0A432B3DCAB90094595A /* juinjang.app */;
@@ -874,6 +877,7 @@
 				6108D0052B78C40800EF302F /* XCRemoteSwiftPackageReference "Alamofire" */,
 				6108D00B2B78C45300EF302F /* XCRemoteSwiftPackageReference "Charts" */,
 				6108D00E2B78C4FE00EF302F /* XCRemoteSwiftPackageReference "SnapKit" */,
+				614649622B7CFFC400DA894C /* XCRemoteSwiftPackageReference "Toast-Swift" */,
 			);
 			productRefGroup = 0A9E0A442B3DCAB90094595A /* Products */;
 			projectDirPath = "";
@@ -1339,6 +1343,14 @@
 				minimumVersion = 5.7.0;
 			};
 		};
+		614649622B7CFFC400DA894C /* XCRemoteSwiftPackageReference "Toast-Swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scalessec/Toast-Swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.1.0;
+			};
+		};
 		61D9250D2B4965D0002A16B4 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager";
@@ -1453,6 +1465,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6108D00E2B78C4FE00EF302F /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		614649632B7CFFC400DA894C /* Toast */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 614649622B7CFFC400DA894C /* XCRemoteSwiftPackageReference "Toast-Swift" */;
+			productName = Toast;
 		};
 		61D9250E2B4965D0002A16B4 /* IQKeyboardManagerSwift */ = {
 			isa = XCSwiftPackageProductDependency;
