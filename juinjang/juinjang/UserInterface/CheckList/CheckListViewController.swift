@@ -269,7 +269,7 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
 
         switch selectedItem {
         case is CalendarItem:
-            return 443
+            return 480
         case is ScoreItem, is InputItem:
             return 98
         case is SelectionItem:
