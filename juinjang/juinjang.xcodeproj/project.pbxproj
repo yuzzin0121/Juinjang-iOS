@@ -94,10 +94,8 @@
 		346CF6AE2B70B46B00C70C7A /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346CF6AD2B70B46B00C70C7A /* SplashViewController.swift */; };
 		346CF6B32B70B54B00C70C7A /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 346CF6B22B70B54B00C70C7A /* Lottie */; };
 		3485CD692B73D3A700E8B9D6 /* SignUpWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3485CD682B73D3A700E8B9D6 /* SignUpWebViewController.swift */; };
-		34AA14D72B7C911300CF10FC /* splash.mp4.lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = 34AA14D62B7C911300CF10FC /* splash.mp4.lottie.json */; };
-		34AA14D92B7C948400CF10FC /* 1_ezgif.com_crop.json in Resources */ = {isa = PBXBuildFile; fileRef = 34AA14D82B7C948400CF10FC /* 1_ezgif.com_crop.json */; };
-		34AA14DB2B7CA45B00CF10FC /* 1-ezgif.com-gif-to-mp4-converter.mp4.lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = 34AA14DA2B7CA45B00CF10FC /* 1-ezgif.com-gif-to-mp4-converter.mp4.lottie.json */; };
 		34AA14DD2B7CA46700CF10FC /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = 34AA14DC2B7CA46700CF10FC /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json */; };
+		34AA14E22B7CAD6000CF10FC /* AlamofireImage in Frameworks */ = {isa = PBXBuildFile; productRef = 34AA14E12B7CAD6000CF10FC /* AlamofireImage */; };
 		6108CFDF2B761AA300EF302F /* JuinjangAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6108CFDE2B761AA300EF302F /* JuinjangAPI.swift */; };
 		6108CFE12B761B3A00EF302F /* BaseResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6108CFE02B761B3A00EF302F /* BaseResponse.swift */; };
 		6108CFE62B761D0000EF302F /* LoginResponseDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6108CFE52B761D0000EF302F /* LoginResponseDto.swift */; };
@@ -242,9 +240,6 @@
 		345855DA2B6B8D5000432C06 /* CompareSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompareSearchViewController.swift; sourceTree = "<group>"; };
 		346CF6AD2B70B46B00C70C7A /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; wrapsLines = 0; };
 		3485CD682B73D3A700E8B9D6 /* SignUpWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpWebViewController.swift; sourceTree = "<group>"; };
-		34AA14D62B7C911300CF10FC /* splash.mp4.lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = splash.mp4.lottie.json; sourceTree = "<group>"; };
-		34AA14D82B7C948400CF10FC /* 1_ezgif.com_crop.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = 1_ezgif.com_crop.json; sourceTree = "<group>"; };
-		34AA14DA2B7CA45B00CF10FC /* 1-ezgif.com-gif-to-mp4-converter.mp4.lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "1-ezgif.com-gif-to-mp4-converter.mp4.lottie.json"; sourceTree = "<group>"; };
 		34AA14DC2B7CA46700CF10FC /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json"; path = "../../../../../../../Downloads/splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json"; sourceTree = "<group>"; };
 		6108CFDE2B761AA300EF302F /* JuinjangAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JuinjangAPI.swift; sourceTree = "<group>"; };
 		6108CFE02B761B3A00EF302F /* BaseResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseResponse.swift; sourceTree = "<group>"; };
@@ -328,6 +323,7 @@
 				6108D0072B78C40800EF302F /* Alamofire in Frameworks */,
 				61D9250F2B4965D0002A16B4 /* IQKeyboardManagerSwift in Frameworks */,
 				345855D32B6B7F7600432C06 /* KakaoSDKShare in Frameworks */,
+				34AA14E22B7CAD6000CF10FC /* AlamofireImage in Frameworks */,
 				345855C92B6B7F7600432C06 /* KakaoSDKCertCore in Frameworks */,
 				0A4EBE2A2B5E9E6A00909B7A /* Tabman in Frameworks */,
 				345855D92B6B7F7600432C06 /* KakaoSDKUser in Frameworks */,
@@ -606,9 +602,6 @@
 		346CF6AC2B70B41F00C70C7A /* Splash */ = {
 			isa = PBXGroup;
 			children = (
-				34AA14D82B7C948400CF10FC /* 1_ezgif.com_crop.json */,
-				34AA14D62B7C911300CF10FC /* splash.mp4.lottie.json */,
-				34AA14DA2B7CA45B00CF10FC /* 1-ezgif.com-gif-to-mp4-converter.mp4.lottie.json */,
 				34AA14DC2B7CA46700CF10FC /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json */,
 				346CF6AD2B70B46B00C70C7A /* SplashViewController.swift */,
 			);
@@ -834,6 +827,7 @@
 				6108D0062B78C40800EF302F /* Alamofire */,
 				6108D00C2B78C45300EF302F /* DGCharts */,
 				6108D00F2B78C4FE00EF302F /* SnapKit */,
+				34AA14E12B7CAD6000CF10FC /* AlamofireImage */,
 			);
 			productName = juinjang;
 			productReference = 0A9E0A432B3DCAB90094595A /* juinjang.app */;
@@ -874,6 +868,7 @@
 				6108D0052B78C40800EF302F /* XCRemoteSwiftPackageReference "Alamofire" */,
 				6108D00B2B78C45300EF302F /* XCRemoteSwiftPackageReference "Charts" */,
 				6108D00E2B78C4FE00EF302F /* XCRemoteSwiftPackageReference "SnapKit" */,
+				34AA14E02B7CAD6000CF10FC /* XCRemoteSwiftPackageReference "AlamofireImage" */,
 			);
 			productRefGroup = 0A9E0A442B3DCAB90094595A /* Products */;
 			projectDirPath = "";
@@ -889,7 +884,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				34AA14D72B7C911300CF10FC /* splash.mp4.lottie.json in Resources */,
 				61A7B92D2B4C4EC300795B49 /* Pretendard-Bold.otf in Resources */,
 				0A9E0AA92B3DD4D20094595A /* .gitignore in Resources */,
 				0A1C8F312B7A0DF1006B6B2B /* omyu pretty.ttf in Resources */,
@@ -902,9 +896,7 @@
 				61A7B9282B4C4EC300795B49 /* Pretendard-SemiBold.otf in Resources */,
 				34AA14DD2B7CA46700CF10FC /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json in Resources */,
 				0A9E0A532B3DCAB90094595A /* LaunchScreen.storyboard in Resources */,
-				34AA14DB2B7CA45B00CF10FC /* 1-ezgif.com-gif-to-mp4-converter.mp4.lottie.json in Resources */,
 				611757382B67D5E60043E958 /* Assets.xcassets in Resources */,
-				34AA14D92B7C948400CF10FC /* 1_ezgif.com_crop.json in Resources */,
 				61A7B92B2B4C4EC300795B49 /* Pretendard-Light.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1307,6 +1299,14 @@
 				minimumVersion = 4.4.0;
 			};
 		};
+		34AA14E02B7CAD6000CF10FC /* XCRemoteSwiftPackageReference "AlamofireImage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/AlamofireImage.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.3.0;
+			};
+		};
 		6108D0022B78AC9E00EF302F /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onevcat/Kingfisher";
@@ -1433,6 +1433,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 346CF6B12B70B54B00C70C7A /* XCRemoteSwiftPackageReference "lottie-ios" */;
 			productName = Lottie;
+		};
+		34AA14E12B7CAD6000CF10FC /* AlamofireImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 34AA14E02B7CAD6000CF10FC /* XCRemoteSwiftPackageReference "AlamofireImage" */;
+			productName = AlamofireImage;
 		};
 		6108D0032B78AC9E00EF302F /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
