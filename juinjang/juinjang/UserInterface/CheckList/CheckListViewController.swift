@@ -71,6 +71,79 @@ class CheckListViewController: UIViewController {
         tableView.register(ExpandedTextFieldTableViewCell.self, forCellReuseIdentifier: ExpandedTextFieldTableViewCell.identifier)
         tableView.register(ExpandedDropdownTableViewCell.self, forCellReuseIdentifier: ExpandedDropdownTableViewCell.identifier)
     }
+    
+    // -MARK: API 요청
+    func responseQuestion() {
+        guard let imjangId = imjangId else { return }
+        JuinjangAPIManager.shared.fetchData(type: BaseResponse<CheckListResponseDto>.self, api: .checklist) { CheckListResponseDto, error in
+            if error == nil {
+                guard let result = CheckListResponseDto else { return }
+                if let CheckListResponseDto = result.result {
+                    print(CheckListResponseDto)
+                    self.setData(CheckListResponseDto: CheckListResponseDto)
+                }
+            } else {
+                guard let error else { return }
+                switch error {
+                case .failedRequest:
+                    print("failedRequest")
+                case .noData:
+                    print("noData")
+                case .invalidResponse:
+                    print("invalidResponse")
+                case .invalidData:
+                    print("invalidData")
+                }
+            }
+        }
+    }
+    
+    func setData(CheckListResponseDto: CheckListResponseDto) {
+        var categories: [Category] = []
+        
+        for questionDto in checkListResponseDto.result {
+            let categoryId = questionDto.category
+            let category: String
+            
+            if categoryId == 0 {
+                category = "기한"
+            } else if categoryId == 1 {
+                category = "입지여건"
+            } else if categoryId == 2 {
+                category = "공용공간"
+            } else if categoryId == 3 {
+                category = "실내"
+            } else {
+                print("존재하지 않는 CategoryId: \(categoryId)")
+                continue
+            }
+            
+            newCategory = Category(name: category, items: [], isExpanded: false)
+            categories.append(newCategory!)
+            
+            // QuestionDto 기반 체크리스트 항목 생성
+            let questionItem = createQuestionItem(questionDto: questionDto)
+            
+            // 항목을 카테고리 목록에 추가
+            existingCategory?.items.append(questionItem)
+        }
+    }
+    
+    func createQuestionItem(questionDto: QuestionDtO) -> ChecklistItem {
+        switch questionDto.answerType {
+        // 달력, 점수형, 텍스트필드, 드롭다운 형태
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+            let options = questionDto.options.map { optionDto in
+                OptionItem(image: nil, option: optionDto.optionValue)
+            }
+            return SelectionItem(content: questionDto.question, options: options)
+        default:
+            fatalError("찾을 수 없는 답변 형태: \(questionDto.answerType)")
+        }
+    }
 }
 
 extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {

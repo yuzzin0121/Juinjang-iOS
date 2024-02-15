@@ -17,6 +17,9 @@ enum JuinjangAPI {
     case nickname
     case profile
     
+    case checklist
+    case checklist(imjangId: Int)
+    
     case scrap(imjangId: Int)
     case totalImjang
     case createImjang
@@ -46,6 +49,11 @@ enum JuinjangAPI {
         case .profile:
             return URL(string: baseURL + "profile")!
             
+        case .checklist:
+            return URL(string: baseURL + "checklist")!
+        case .checklist:
+            return URL(string: baseURL + "checklist/\(imjangId)")!
+            
         case .scrap(let imjangId):
             return URL(string: baseURL + "scrap/\(imjangId)")!
         case .totalImjang, .createImjang, .modifyImjang:
@@ -65,7 +73,7 @@ enum JuinjangAPI {
     
     var header: HTTPHeaders {
         switch self {
-        case .kakaoLogin, .regenerateToken, .detailImjang, .totalImjang, .scrap, .searchImjang, .deleteImjangs:
+        case .kakaoLogin, .regenerateToken, .checklist, .detailImjang, .totalImjang, .scrap, .searchImjang, .deleteImjangs:
             return ["Content-Type": "application/json", "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"]
 
         default:
