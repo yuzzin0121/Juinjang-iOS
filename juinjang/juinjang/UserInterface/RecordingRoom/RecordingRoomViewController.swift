@@ -247,7 +247,7 @@ class RecordingRoomViewController: UIViewController {
             $0.top.equalTo(notePadLabel.snp.bottom).offset(12)
             $0.leading.equalTo(contentView).offset(24)
             $0.trailing.equalTo(contentView).offset(-24)
-            $0.height.equalTo(view).multipliedBy(0.51)
+            $0.height.equalTo(368)
         }
     }
     

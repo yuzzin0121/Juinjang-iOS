@@ -140,7 +140,7 @@ class WarningMessageViewController: UIViewController {
             $0.leading.trailing.equalToSuperview().inset(24)
             $0.centerX.equalToSuperview()
             $0.top.equalTo(checkButton.snp.bottom).offset(16)
-            $0.bottom.equalTo(bottomSheetView.safeAreaLayoutGuide.snp.bottom).offset(-16)
+            $0.bottom.equalTo(view.snp.bottom).offset(-33)
         }
     }
 
