@@ -20,7 +20,7 @@ struct NoResultResponse: Codable {
     let message: String
 }
 
-struct BaseResponseString: Codable {
+struct BaseResponseString: Decodable {
     let isSuccess: Bool
     let code: String
     let message: String

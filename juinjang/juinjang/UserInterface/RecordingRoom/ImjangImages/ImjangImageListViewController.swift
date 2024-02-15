@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import PhotosUI
 
 class ImjangImageListViewController: UIViewController {
     let noImageBackgroundView = UIView()
@@ -18,6 +19,7 @@ class ImjangImageListViewController: UIViewController {
     
     lazy var imageCollectionView = UICollectionView(frame: .zero, collectionViewLayout: configureCollectionViewFlowLayout())
     var imageList: [String] = ["1", "2", "3"]  // 일단 String 배열
+    var imageArr: [UIImage?] = []
     
     var isLongTap: Bool = false
     var selectedIndexs: Set<Int> = []
@@ -39,14 +41,21 @@ class ImjangImageListViewController: UIViewController {
     }
     
     @objc func addImage() { // + 버튼 눌렀을 때 -> 이미지 추가
-        let alert =  UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        let library =  UIAlertAction(title: "앨범에서 가져오기", style: .default) { (action) in self.openLibrary() }
-        let camera =  UIAlertAction(title: "카메라", style: .default) { (action) in self.openCamera() }
-        let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-        alert.addAction(library)
-        alert.addAction(camera)
-        alert.addAction(cancel)
-        present(alert, animated: true, completion: nil)
+        var configuration = PHPickerConfiguration()
+        configuration.selectionLimit = 5
+        configuration.filter = .any(of: [.images])
+        
+        let picker = PHPickerViewController(configuration: configuration)
+        picker.delegate = self
+        self.present(picker, animated: true, completion: nil)
+//        let alert =  UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+//        let library =  UIAlertAction(title: "앨범에서 가져오기", style: .default) { (action) in self.openLibrary() }
+//        let camera =  UIAlertAction(title: "카메라", style: .default) { (action) in self.openCamera() }
+//        let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+//        alert.addAction(library)
+//        alert.addAction(camera)
+//        alert.addAction(cancel)
+//        present(alert, animated: true, completion: nil)
     }
     
     func checkImage() {
@@ -247,6 +256,25 @@ extension ImjangImageListViewController: UICollectionViewDelegate, UICollectionV
             }
         }
     }
+}
+
+extension ImjangImageListViewController: PHPickerViewControllerDelegate {
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true)
+        
+        let itemProvider = results.first?.itemProvider
+        
+        if let itemProvider = itemProvider,
+           itemProvider.canLoadObject(ofClass: UIImage.self) {
+            itemProvider.loadObject(ofClass: UIImage.self) { image, error in
+                self.imageArr.append(image as? UIImage ?? nil)
+            }
+        } else {
+            print("이미지 가져오기 실패")
+        }
+    }
+    
+    
 }
 
 extension ImjangImageListViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {

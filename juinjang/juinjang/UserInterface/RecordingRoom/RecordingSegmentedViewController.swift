@@ -46,6 +46,17 @@ class RecordingSegmentedViewController: TabmanViewController, MoveWarningMessage
         let recordingRoomVC = RecordingRoomViewController()
         
         viewControllers.append(contentsOf: [checkListVC, recordingRoomVC])
+        
+//        for viewController in viewControllers {
+//            addChild(viewController)
+//            viewController.view.frame = CGRect(x: 0, y: 0, width: tabView.frame.width, height: tabView.frame.height)
+//            viewController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+//            viewController.didMove(toParent: self)
+//        }
+//        
+//        if let firstViewController = viewControllers.first {
+//            tabView.addSubview(firstViewController.view)
+//        }
     }
     
     @objc func handleEditButtonToggled(_ notification: Notification) {

@@ -18,6 +18,11 @@ class DeleteImjangTableHeaderView: UITableViewHeaderFooterView {
         configureView()
     }
     
+    @objc func setEmpty() {
+        removeAllCheckButton.isSelected = false
+        removeAllCheckButton.setImage(ImageStyle.off, for: .normal)
+    }
+    
     func configureHierarchy() {
         contentView.addSubview(selectedCountLabel)
         contentView.addSubview(removeAllCheckButton)
