@@ -18,7 +18,7 @@ enum JuinjangAPI {
     case profile
     
     case checklist
-    case checklist(imjangId: Int)
+//    case checklist(imjangId: Int)
     
     case scrap(imjangId: Int)
     case totalImjang
@@ -51,8 +51,8 @@ enum JuinjangAPI {
             
         case .checklist:
             return URL(string: baseURL + "checklist")!
-        case .checklist:
-            return URL(string: baseURL + "checklist/\(imjangId)")!
+//        case .checklist(let imjangId):
+//            return URL(string: baseURL + "checklist/\(imjangId)")!
             
         case .scrap(let imjangId):
             return URL(string: baseURL + "scrap/\(imjangId)")!
@@ -83,9 +83,9 @@ enum JuinjangAPI {
     
     var method: HTTPMethod {
         switch self {
-        case .scrap, .createImjang, .regenerateToken, .logout, .deleteImjangs:
+        case .checklist, .scrap, .createImjang, .regenerateToken, .logout, .deleteImjangs:
             return .post
-        case .totalImjang, .searchImjang, .mainImjang, .detailImjang, .kakaoLogin, .kakaoLoginCallback, .profile:
+        case .checklist, .totalImjang, .searchImjang, .mainImjang, .detailImjang, .kakaoLogin, .kakaoLoginCallback, .profile:
             return .get
         case .nickname, .modifyImjang:
             return .patch

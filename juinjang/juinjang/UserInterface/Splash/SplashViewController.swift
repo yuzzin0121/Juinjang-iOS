@@ -9,7 +9,6 @@ import UIKit
 import SnapKit
 import Lottie
 import Then
-import AlamofireImage
 
 class SplashViewController: UIViewController {
     

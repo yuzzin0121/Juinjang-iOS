@@ -33,7 +33,8 @@ struct CalendarItem: Item {
     var isSelected: Bool
 }
 
-struct NotEnteredCalendarItem {
+struct NotEnteredCalendarItem: Item {
+    var content: String
     let savedDate: Date?
     var isSelected: Bool
 }

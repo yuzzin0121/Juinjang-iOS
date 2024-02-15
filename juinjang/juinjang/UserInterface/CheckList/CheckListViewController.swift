@@ -75,15 +75,13 @@ class CheckListViewController: UIViewController {
     // -MARK: API 요청
     func responseQuestion() {
         guard let imjangId = imjangId else { return }
-        JuinjangAPIManager.shared.fetchData(type: BaseResponse<CheckListResponseDto>.self, api: .checklist) { CheckListResponseDto, error in
+        JuinjangAPIManager.shared.fetchData(type: BaseResponse<CheckListResponseDto>.self, api: .checklist) { response, error in
             if error == nil {
-                guard let result = CheckListResponseDto else { return }
-                if let CheckListResponseDto = result.result {
-                    print(CheckListResponseDto)
-                    self.setData(CheckListResponseDto: CheckListResponseDto)
-                }
+                guard let checkListResponseDto = response?.result else { return }
+                print(checkListResponseDto)
+                self.setData(checkListResponseDto: checkListResponseDto)
             } else {
-                guard let error else { return }
+                guard let error = error else { return }
                 switch error {
                 case .failedRequest:
                     print("failedRequest")
@@ -97,44 +95,95 @@ class CheckListViewController: UIViewController {
             }
         }
     }
-    
-    func setData(CheckListResponseDto: CheckListResponseDto) {
+
+    func setData(checkListResponseDto: CheckListResponseDto) {
         var categories: [Category] = []
-        
-        for questionDto in checkListResponseDto.result {
+
+        for questionDto in checkListResponseDto.questionDtos {
             let categoryId = questionDto.category
             let category: String
+            let image: UIImage
+
+            if categoryId == 0 {
+                category = "기한"
+                image = UIImage(named: "deadline-item")!
+            } else if categoryId == 1 {
+                category = "입지여건"
+                image = UIImage(named: "location-conditions-item")!
+            } else {
+                // 다른 카테고리에 대한 처리
+                category = "기타"
+                image = UIImage(named: "default-item")!
+            }
+
+            var newCategory = Category(image: image, name: category, items: [], isExpanded: false)
+            categories.append(newCategory)
+
+            for optionItem in questionDto.options {
+                let questionItem = createQuestionItem(optionItem: optionItem)
+                newCategory.items.append(questionItem)
+            }
+        }
+    }
+
+    
+    func setData(CheckListResponseDto: BaseResponse<CheckListResponseDto>) {
+        guard let result = CheckListResponseDto.result else {
+             print("No result data available")
+             return
+         }
+        
+        var categories: [Category] = []
+        
+        for questionDto in result {
+            let categoryId = questionDto.category
+            let category: String
+            let image: UIImage
             
             if categoryId == 0 {
                 category = "기한"
+                image = UIImage(named: "deadline-item")
             } else if categoryId == 1 {
                 category = "입지여건"
+                image = UIImage(named: "location-conditions-item")
             } else if categoryId == 2 {
                 category = "공용공간"
+                image = UIImage(named: "public-space-item")
             } else if categoryId == 3 {
                 category = "실내"
+                image = UIImage(named: "indoor-item")
             } else {
                 print("존재하지 않는 CategoryId: \(categoryId)")
                 continue
             }
             
-            newCategory = Category(name: category, items: [], isExpanded: false)
-            categories.append(newCategory!)
+            // 옵셔널 바인딩을 사용하여 image가 nil이 아닌지 확인
+            guard let validImage = image else {
+                print("이미지 로드 실패")
+                continue
+            }
+            
+            // 이미지가 성공적으로 로드되었다면 Category 생성
+            let newCategory = Category(image: validImage, name: category, items: [], isExpanded: false)
+            categories.append(newCategory)
             
             // QuestionDto 기반 체크리스트 항목 생성
             let questionItem = createQuestionItem(questionDto: questionDto)
             
             // 항목을 카테고리 목록에 추가
-            existingCategory?.items.append(questionItem)
+            newCategory?.items.append(questionItem)
         }
     }
     
-    func createQuestionItem(questionDto: QuestionDtO) -> ChecklistItem {
+    func createQuestionItem(questionDto: QuestionDto) -> Item {
         switch questionDto.answerType {
         // 달력, 점수형, 텍스트필드, 드롭다운 형태
         case 0:
+            return CalendarItem(content: questionDto.question, inputDate: Date(), isSelected: false)
         case 1:
+            return ScoreItem(content: questionDto.question)
         case 2:
+            return InputItem(content: questionDto.question)
         case 3:
             let options = questionDto.options.map { optionDto in
                 OptionItem(image: nil, option: optionDto.optionValue)

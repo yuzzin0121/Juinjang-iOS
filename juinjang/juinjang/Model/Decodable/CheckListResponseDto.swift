@@ -17,10 +17,10 @@ struct QuestionDto: Decodable {
     let question: String
     let version: Int
     let answerType: Int
-    let options: [OptionItem]
+    let options: [OptionItems]
 }
 
-struct OptionItem: Decodable {
+struct OptionItems: Decodable {
     let indexNum: Int
     let questionId: Int
     let optionValue: String
