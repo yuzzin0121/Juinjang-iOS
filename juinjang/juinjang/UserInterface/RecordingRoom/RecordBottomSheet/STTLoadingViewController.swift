@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Lottie
 
 class STTLoadingViewController: UIViewController {
 
@@ -32,9 +33,14 @@ class STTLoadingViewController: UIViewController {
         $0.font = UIFont(name: "Pretendard-Medium", size: 16)
     }
     
-    lazy var loadingImage = UIImageView().then {
-        $0.image = UIImage(named: "record-loading")
-        $0.contentMode = .scaleAspectFill
+//    lazy var loadingImage = UIImageView().then {
+//        $0.image = UIImage(named: "record-loading")
+//        $0.contentMode = .scaleAspectFill
+//    }
+    lazy var animationView = LottieAnimationView(name: "Animation - 1707961785957.json").then {
+        $0.frame = CGRect(x: 156, y: 184, width: 73, height: 76)
+        $0.contentMode = .scaleAspectFit
+        $0.loopMode = .loop
     }
 
     override func viewDidLoad() {
@@ -46,8 +52,9 @@ class STTLoadingViewController: UIViewController {
     
     func addSubViews() {
         view.addSubview(bottomSheetView)
-        [sttConversionLabel,
-         loadingImage].forEach { bottomSheetView.addSubview($0) }
+        animationView.play()
+        [sttConversionLabel/*,
+         loadingImage*/, animationView].forEach { bottomSheetView.addSubview($0) }
     }
     
     func setupLayout() {
@@ -64,9 +71,9 @@ class STTLoadingViewController: UIViewController {
         }
         
         // 로딩 ImageView
-        loadingImage.snp.makeConstraints {
-            $0.top.equalTo(sttConversionLabel.snp.bottom).offset(78)
-            $0.centerX.equalTo(bottomSheetView.snp.centerX)
-        }
+//        loadingImage.snp.makeConstraints {
+//            $0.top.equalTo(sttConversionLabel.snp.bottom).offset(78)
+//            $0.centerX.equalTo(bottomSheetView.snp.centerX)
+//        }
     }
 }
