@@ -29,4 +29,5 @@ enum ColorStyle {
     static let textWhite = UIColor(named: "textWhite")!     // #FFFFFF
     static let lightOrange = UIColor(named: "lightOrange")! // #FFDECC
     static let mainStrokeOrange = UIColor(named: "mainStroke")
+    static let splash = UIColor(named: "splash")            // #FF7927
 }

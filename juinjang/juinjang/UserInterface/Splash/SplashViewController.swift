@@ -9,7 +9,6 @@ import UIKit
 import SnapKit
 import Lottie
 import Then
-import AlamofireImage
 
 class SplashViewController: UIViewController {
     
@@ -33,7 +32,7 @@ class SplashViewController: UIViewController {
     }
     
     override func viewDidLoad() {
-        view.backgroundColor = UIColor(named: "juinjang")
+        view.backgroundColor = UIColor(named: "splash")
         
         view.addSubview(animationView)
         animationView.center = view.center
