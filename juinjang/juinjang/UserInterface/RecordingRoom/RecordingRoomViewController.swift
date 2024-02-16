@@ -64,8 +64,8 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
         $0.textColor = UIColor(named: "placeholderOrange")
     }
     
-    
     let memoTextViewPlaceholder = "눌러서 메모를 추가해보세요!"
+
     var fileItems: [RecordingFileItem] = []
     var imjangId: Int? = nil {
         didSet {
@@ -84,7 +84,7 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
         setConstraints()
         hideKeyboardWhenTappedArround()
         showTotalRecordingButton.addTarget(self, action: #selector(showRecordingFilesVC), for: .touchUpInside)
-        
+        callFetchRequest()
         NotificationCenter.default.addObserver(self, selector: #selector(didStoppedParentScroll), name: NSNotification.Name("didStoppedParentScroll"), object: nil)
     }
     
@@ -102,6 +102,35 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
         callMemoRequest()
     }
     
+    // 녹음 3개까지, 메모 조회
+    func callFetchRequest() {
+        guard let imjangId = imjangId else { return }
+        JuinjangAPIManager.shared.fetchData(type: BaseResponse<RecordMemoDto>.self, api: .fetchRecordingRoom(imjangId: imjangId)) { recordMemoDto, error in
+            if error == nil {
+                guard let recordMemoDto = recordMemoDto else { return }
+                guard let result = recordMemoDto.result else { return }
+                print(result)
+                self.setMemo(memo: result.memo)
+            } else {
+                guard let error = error else { return }
+                switch error {
+                case .failedRequest:
+                    print("failedRequest")
+                case .noData:
+                    print("noData")
+                case .invalidResponse:
+                    print("invalidResponse")
+                case .invalidData:
+                    print("invalidData")
+                }
+            }
+        }
+    }
+    
+    func setMemo(memo: String) {
+        memoTextView.text = memo
+        memoTextView.textColor = memo.isEmpty ? ColorStyle.placeholderOrange : ColorStyle.textBlack
+    }
     
     // 메모장 생성/수정 요청
     func callMemoRequest() {
@@ -406,7 +435,7 @@ extension RecordingRoomViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == memoTextViewPlaceholder {
             textView.text = nil
-            textView.textColor = UIColor(named: "textBlack")
+            textView.textColor = ColorStyle.textBlack
         }
     }
     
@@ -414,7 +443,7 @@ extension RecordingRoomViewController: UITextViewDelegate {
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             textView.text = memoTextViewPlaceholder
-            textView.textColor = UIColor(named: "placeholderOrange")
+            textView.textColor = ColorStyle.placeholderOrange
         }
     }
 }

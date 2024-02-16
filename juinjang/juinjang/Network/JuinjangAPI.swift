@@ -27,6 +27,7 @@ enum JuinjangAPI {
     case deleteImjangs(imjangIds: [Int])
     
     case memo(imjangId: Int)
+    case fetchRecordingRoom(imjangId: Int)
     
     var baseURL: String {
         return "http://juinjang1227.com:8080/api/"
@@ -64,16 +65,18 @@ enum JuinjangAPI {
             return URL(string: baseURL + "limjang/delete")!
         case .memo(let imjangId):
             return URL(string: baseURL + "memo/\(imjangId)")!
+        case .fetchRecordingRoom(let imjangId):
+            return URL(string: baseURL + "record/\(imjangId)")!
         }
     }
     
     var header: HTTPHeaders {
         switch self {
-        case .kakaoLogin, .regenerateToken, .detailImjang, .totalImjang, .scrap, .searchImjang, .deleteImjangs, .memo:
+        case .kakaoLogin, .regenerateToken, .detailImjang, .totalImjang, .scrap, .searchImjang, .deleteImjangs, .memo, .fetchRecordingRoom:
             return ["Content-Type": "application/json", "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"]
 
         default:
-            return [:]
+            return ["Content-Type": "application/json", "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"]
         }
     }
     
@@ -81,7 +84,7 @@ enum JuinjangAPI {
         switch self {
         case .scrap, .createImjang, .regenerateToken, .logout, .deleteImjangs, .memo:
             return .post
-        case .totalImjang, .searchImjang, .mainImjang, .detailImjang, .kakaoLogin, .kakaoLoginCallback, .profile:
+        case .totalImjang, .searchImjang, .mainImjang, .detailImjang, .kakaoLogin, .kakaoLoginCallback, .profile, .fetchRecordingRoom:
             return .get
         case .nickname, .modifyImjang:
             return .patch
