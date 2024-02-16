@@ -10,6 +10,8 @@ import SnapKit
 import Tabman
 import Pageboy
 
+
+
 class RecordingSegmentedViewController: TabmanViewController, MoveWarningMessageDelegate {
     
     let tabView = UIView().then {
@@ -18,20 +20,26 @@ class RecordingSegmentedViewController: TabmanViewController, MoveWarningMessage
     }
     let border = UIView()
     
-    private var viewControllers: Array<UIViewController> = []
+    var viewControllers: Array<UIViewController> = [NotEnteredCheckListViewController(), RecordingRoomViewController()]
     let tabTitles = ["체크리스트", "기록룸"]
     
     var imjangNoteViewController: ImjangNoteViewController?
+    var imjangId: Int? = nil {
+        didSet {
+            print("히히\(imjangId)")
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         addSubView()
-        addBottomBorder(with: UIColor(named: "gray0"), andWidth: 1)
+        addBottomBorder(with: ColorStyle.gray0, andWidth: 1)
         setConstraints()
-        addViewControllers()
+//        addViewControllers()
         setDelegate()
         createBar()
+        print(imjangId)
         NotificationCenter.default.addObserver(self, selector: #selector(handleEditButtonToggled), name: NSNotification.Name("EditButtonToggled"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(editCheckList), name: NSNotification.Name("EditCheckList"), object: nil)
     }
@@ -44,7 +52,7 @@ class RecordingSegmentedViewController: TabmanViewController, MoveWarningMessage
     func addViewControllers() {
         let checkListVC = NotEnteredCheckListViewController()
         let recordingRoomVC = RecordingRoomViewController()
-        
+        recordingRoomVC.imjangId = imjangId
         viewControllers.append(contentsOf: [checkListVC, recordingRoomVC])
     }
     
@@ -146,6 +154,7 @@ extension RecordingSegmentedViewController: PageboyViewControllerDataSource, TMB
     func viewController(for pageboyViewController: Pageboy.PageboyViewController, at index: Pageboy.PageboyViewController.PageIndex) -> UIViewController? {
         
         let currentViewController = self.viewControllers[index]
+       
         print("Current View Controller: \(currentViewController)")
         
         if currentViewController == self.viewControllers[0] {
@@ -157,6 +166,9 @@ extension RecordingSegmentedViewController: PageboyViewControllerDataSource, TMB
             print("현재 ViewController", currentViewController)
             imjangNoteViewController?.editButton.isHidden = true
             imjangNoteViewController?.upButton.isHidden = false
+            if let imjangId {
+                imjangNoteViewController?.imjangId = imjangId
+            }
         }
         return viewControllers[index]
     }

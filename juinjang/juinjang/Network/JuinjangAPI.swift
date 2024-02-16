@@ -29,6 +29,9 @@ enum JuinjangAPI {
     case detailImjang(imjangId: Int)
     case deleteImjangs(imjangIds: [Int])
     
+    case memo(imjangId: Int)
+    case fetchRecordingRoom(imjangId: Int)
+    
     var baseURL: String {
         return "http://juinjang1227.com:8080/api/"
     }
@@ -68,24 +71,28 @@ enum JuinjangAPI {
             return URL(string: baseURL + "limjang/detail/\(imjangId)")!
         case .deleteImjangs:
             return URL(string: baseURL + "limjang/delete")!
+        case .memo(let imjangId):
+            return URL(string: baseURL + "memo/\(imjangId)")!
+        case .fetchRecordingRoom(let imjangId):
+            return URL(string: baseURL + "record/\(imjangId)")!
         }
     }
     
     var header: HTTPHeaders {
         switch self {
-        case .kakaoLogin, .regenerateToken, .checklist, .detailImjang, .totalImjang, .scrap, .searchImjang, .deleteImjangs:
+        case .kakaoLogin, .regenerateToken, .checklist, .detailImjang, .totalImjang, .scrap, .searchImjang, .deleteImjangs, .memo, .fetchRecordingRoom:
             return ["Content-Type": "application/json", "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"]
 
         default:
-            return [:]
+            return ["Content-Type": "application/json", "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"]
         }
     }
     
     var method: HTTPMethod {
         switch self {
-        case .checklist, .scrap, .createImjang, .regenerateToken, .logout, .deleteImjangs:
+        case .checklist, .scrap, .createImjang, .regenerateToken, .logout, .deleteImjangs, .memo:
             return .post
-        case .checklist, .totalImjang, .searchImjang, .mainImjang, .detailImjang, .kakaoLogin, .kakaoLoginCallback, .profile:
+        case .checklist, .totalImjang, .searchImjang, .mainImjang, .detailImjang, .kakaoLogin, .kakaoLoginCallback, .profile, .fetchRecordingRoom:
             return .get
         case .nickname, .modifyImjang:
             return .patch
@@ -94,7 +101,7 @@ enum JuinjangAPI {
     
     var encoding: ParameterEncoding {
         switch self {
-        case .deleteImjangs:
+        case .deleteImjangs, .memo:
             return JSONEncoding.default
         default:
             return URLEncoding(destination: .queryString)
@@ -102,12 +109,12 @@ enum JuinjangAPI {
     }
 
     
-    var parameter: Parameters {
+    var parameter: [String: Any] {
         switch self {
         case .detailImjang(let imjangId):
-            ["limjangIdList": imjangId]
+            return  ["limjangIdList": imjangId]
         default:
-            [:]
+            return [:]
         }
     }
 }
