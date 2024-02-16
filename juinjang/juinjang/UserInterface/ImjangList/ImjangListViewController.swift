@@ -74,6 +74,12 @@ class ImjangListViewController: UIViewController {
 //        designView()
         setFilterData()
 //        imjangTableView.reloadData()
+        newPageButton.addTarget(self, action: #selector(showNewPageVC), for: .touchUpInside)
+    }
+    
+    @objc func showNewPageVC() {
+        let openNewPageVC = OpenNewPageViewController()
+        navigationController?.pushViewController(openNewPageVC, animated: true)
     }
     
     func callRequest() {
@@ -82,11 +88,11 @@ class ImjangListViewController: UIViewController {
                 guard let response = response else { return }
                 guard let result = response.result else { return }
 //                print(result)
-                self.imjangList.append(contentsOf: result.scrapedList)
+                self.imjangList = result.scrapedList
                 self.imjangList.append(contentsOf: result.notScrapedList)
                 self.setData(scrapedList: result.scrapedList)
-                self.imjangTableView.reloadData()
                 self.designView()
+                self.imjangTableView.reloadData()
             } else {
                 guard let error else { return }
                 switch error {
@@ -163,9 +169,8 @@ class ImjangListViewController: UIViewController {
     
     @objc func bookMarkButtonClicked(sender: UIButton) {
         var imjangNote = imjangList[sender.tag]
-        scrapRequest(imjangId: imjangNote.limjangId)
-        callRequest()
         imjangNote.isScraped.toggle()
+        scrapRequest(imjangId: imjangNote.limjangId)
 //        if scrapImjangList.count < 10 {
 //            scrapImjangList.append(imjangNote)
 //        }
@@ -179,7 +184,7 @@ class ImjangListViewController: UIViewController {
         
         imjangNote.isScraped.toggle()
         scrapRequest(imjangId: imjangNote.limjangId)
-        callRequest()
+//        callRequest()
 //        if scrapImjangList.count < 10 {
 //            scrapImjangList.append(imjangNote)
 //        }
@@ -194,6 +199,7 @@ class ImjangListViewController: UIViewController {
             if error == nil {
                 guard let response = response else { return }
                 print(response.message)
+                self.callRequest()
             } else {
                 guard let error else { return }
                 switch error {
@@ -304,7 +310,7 @@ extension ImjangListViewController: UICollectionViewDelegate, UICollectionViewDa
 extension ImjangListViewController {
     // 네비게이션 바 디자인
     func designNavigationBar() {
-        self.navigationItem.title = "\(UserDefaultManager.shared.nickname)님의 임장노트"     // TODO: - 나중에 nickname 으로 연결
+        self.navigationItem.title = "\(UserDefaultManager.shared.nickname)님의 임장노트"
         self.navigationController?.navigationBar.tintColor = .black
 
         // UIBarButtonItem 생성 및 이미지 설정
@@ -328,13 +334,6 @@ extension ImjangListViewController {
             emptyBackgroundView.addSubview($0)
         }
         
-//        if imjangList.isEmpty {
-//            emptyBackgroundView.isHidden = false
-//            imjangTableView.isHidden = true
-//        } else {
-//            emptyBackgroundView.isHidden = true
-//            imjangTableView.isHidden = false
-//        }
         view.addSubview(stickyfilterBackgroundView)
         stickyfilterBackgroundView.addSubview(filterselectBtn)
         stickyfilterBackgroundView.addSubview(deleteButton)

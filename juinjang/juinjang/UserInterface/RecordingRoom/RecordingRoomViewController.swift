@@ -9,7 +9,14 @@ import UIKit
 import SnapKit
 import Then
 
-class RecordingRoomViewController: UIViewController {
+protocol PassDataDelegate: AnyObject {
+    func passData(id: Int)
+}
+
+class RecordingRoomViewController: UIViewController, PassDataDelegate {
+    func passData(id: Int) {
+        self.imjangId = id
+    }
     
     // 스크롤뷰
     let scrollView = UIScrollView().then {
@@ -60,6 +67,11 @@ class RecordingRoomViewController: UIViewController {
     
     let memoTextViewPlaceholder = "눌러서 메모를 추가해보세요!"
     var fileItems: [RecordingFileItem] = []
+    var imjangId: Int? = nil {
+        didSet {
+            print("임장룸\(imjangId)")
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -84,7 +96,40 @@ class RecordingRoomViewController: UIViewController {
         }
     }
     
-
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        print(#function)
+        callMemoRequest()
+    }
+    
+    
+    // 메모장 생성/수정 요청
+    func callMemoRequest() {
+        print(#function)
+        guard let imjangId = imjangId else { return }
+        guard let memo = memoTextView.text else { return }
+        let parameter = [
+            "memo": memo
+        ]
+        print(UserDefaultManager.shared.accessToken)
+        JuinjangAPIManager.shared.postData(type: BaseResponse<MemoDto>.self, api: .memo(imjangId: imjangId), parameter: parameter) { response, error in
+            if error == nil {
+                guard let response = response else { return }
+            } else {
+                guard let error = error else { return }
+                switch error {
+                case .failedRequest:
+                    print("failedRequest")
+                case .noData:
+                    print("noData")
+                case .invalidResponse:
+                    print("invalidResponse")
+                case .invalidData:
+                    print("invalidData")
+                }
+            }
+        }
+    }
     
     @objc
     func showRecordingFilesVC() {
@@ -147,7 +192,7 @@ class RecordingRoomViewController: UIViewController {
         designLabel(recordingFileLabel,
                     text: "녹음 파일",
                     font: .pretendard(size: 20, weight: .bold),
-                    textColor: UIColor(named: "textBlack")!)
+                    textColor: ColorStyle.textBlack)
         
         designButton(addRecordingButton,
                      image: UIImage(named: "addOrange"))
@@ -160,10 +205,9 @@ class RecordingRoomViewController: UIViewController {
         
         designButton(showTotalRecordingButton, title: "전체보기")
         
+        designLabel(emptyMessageLabel, text: "아직 녹음 파일이 없어요", font: .pretendard(size: 16, weight: .medium), textColor: ColorStyle.gray0)
         
-        designLabel(emptyMessageLabel, text: "아직 녹음 파일이 없어요", font: .pretendard(size: 16, weight: .medium), textColor: UIColor(named: "gray1")!)
-        
-        designLabel(notePadLabel, text: "메모장", font: .pretendard(size: 20, weight: .bold), textColor: UIColor(named: "textBlack")!)
+        designLabel(notePadLabel, text: "메모장", font: .pretendard(size: 20, weight: .bold), textColor: ColorStyle.textBlack)
     }
     
     func setConstraints() {
@@ -247,7 +291,8 @@ class RecordingRoomViewController: UIViewController {
             $0.top.equalTo(notePadLabel.snp.bottom).offset(12)
             $0.leading.equalTo(contentView).offset(24)
             $0.trailing.equalTo(contentView).offset(-24)
-            $0.height.equalTo(view).multipliedBy(0.51)
+//            $0.height.equalTo(UIScreen.main.bounds.height).multipliedBy(0.5)
+            $0.height.equalTo(640)
         }
     }
     
@@ -275,7 +320,6 @@ class RecordingRoomViewController: UIViewController {
                 stackView.addArrangedSubview($0)
             }
         }
-        
     }
     
     
@@ -288,7 +332,6 @@ class RecordingRoomViewController: UIViewController {
         if cornerRadius != nil {
             imageView.layer.cornerRadius = cornerRadius!
         }
-        
     }
     
     // 레이블 디자인
@@ -348,10 +391,10 @@ extension RecordingRoomViewController: UITableViewDataSource, UITableViewDelegat
 
 extension RecordingRoomViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        print("Child 스크롤 좌표 - \(scrollView.contentOffset.y)")
+//        print("Child 스크롤 좌표 - \(scrollView.contentOffset.y)")
         
         // Child 스크롤 0 이하일 때
-        if scrollView.contentOffset.y < -50 {
+        if scrollView.contentOffset.y < -30 {
             scrollView.contentOffset.y = 0
             scrollView.isScrollEnabled = false
             NotificationCenter.default.post(name: NSNotification.Name("didStoppedChildScroll"), object: nil)

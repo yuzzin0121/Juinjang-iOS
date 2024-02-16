@@ -20,6 +20,11 @@ class CheckListViewController: UIViewController {
         $0.showsVerticalScrollIndicator = false
         $0.isScrollEnabled = true
     }
+    var imjangId: Int? {
+        didSet {
+            print("체크리스트\(imjangId)")
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()

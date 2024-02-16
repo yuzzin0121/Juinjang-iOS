@@ -22,7 +22,7 @@ final class JuinjangAPIManager {
     
     func fetchData<T: Decodable>(type: T.Type, api: JuinjangAPI, completionHandler: @escaping (T?, NetworkError?) -> Void) {
         
-        print("\(api.header)")
+        print("\(api.parameter)")
         AF.request(api.endpoint,
                    method: api.method,
                    parameters: api.parameter,
@@ -40,13 +40,8 @@ final class JuinjangAPIManager {
        }
     }
     
-    func deleteImjang<T: Decodable>(type: T.Type, api: JuinjangAPI, ids: [Int], completionHandler: @escaping (T?, NetworkError?) -> Void) {
-        
-        let parameter: [String: Any] = [
-            "limjangIdList": ids
-        ]
-        
-        print("\(api.header)")
+    func postData<T: Decodable>(type: T.Type, api: JuinjangAPI, parameter: [String:Any], completionHandler: @escaping (T?, NetworkError?) -> Void) {
+        print("=====\(api.header)")
         AF.request(api.endpoint,
                    method: api.method,
                    parameters: parameter,
