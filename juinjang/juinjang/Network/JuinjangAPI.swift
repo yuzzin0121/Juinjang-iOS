@@ -17,8 +17,9 @@ enum JuinjangAPI {
     case nickname
     case profile
     
-    case checklist
-//    case checklist(imjangId: Int)
+    case showChecklist(imjangId: Int)
+    case saveChecklist(imjangId: Int)
+    case modifyChecklist(imjangId: Int)
     
     case scrap(imjangId: Int)
     case totalImjang
@@ -52,10 +53,12 @@ enum JuinjangAPI {
         case .profile:
             return URL(string: baseURL + "profile")!
             
-        case .checklist:
-            return URL(string: baseURL + "checklist")!
-//        case .checklist(let imjangId):
-//            return URL(string: baseURL + "checklist/\(imjangId)")!
+        case .showChecklist(let imjangId):
+            return URL(string: baseURL + "checklist/\(imjangId)")!
+        case .saveChecklist(let imjangId):
+            return URL(string: baseURL + "checklist/\(imjangId)")!
+        case .modifyChecklist(let imjangId):
+            return URL(string: baseURL + "checklist/\(imjangId)")!
             
         case .scrap(let imjangId):
             return URL(string: baseURL + "scrap/\(imjangId)")!
@@ -80,7 +83,7 @@ enum JuinjangAPI {
     
     var header: HTTPHeaders {
         switch self {
-        case .kakaoLogin, .regenerateToken, .checklist, .detailImjang, .totalImjang, .scrap, .searchImjang, .deleteImjangs, .memo, .fetchRecordingRoom:
+        case .kakaoLogin, .regenerateToken, .showChecklist, .saveChecklist, .modifyImjang, .detailImjang, .totalImjang, .scrap, .searchImjang, .deleteImjangs, .memo, .fetchRecordingRoom:
             return ["Content-Type": "application/json", "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"]
 
         default:
@@ -90,11 +93,11 @@ enum JuinjangAPI {
     
     var method: HTTPMethod {
         switch self {
-        case .checklist, .scrap, .createImjang, .regenerateToken, .logout, .deleteImjangs, .memo:
+        case .saveChecklist, .scrap, .createImjang, .regenerateToken, .logout, .deleteImjangs, .memo:
             return .post
-        case .checklist, .totalImjang, .searchImjang, .mainImjang, .detailImjang, .kakaoLogin, .kakaoLoginCallback, .profile, .fetchRecordingRoom:
+        case .showChecklist, .totalImjang, .searchImjang, .mainImjang, .detailImjang, .kakaoLogin, .kakaoLoginCallback, .profile, .fetchRecordingRoom:
             return .get
-        case .nickname, .modifyImjang:
+        case .nickname, .modifyImjang, .modifyChecklist:
             return .patch
         }
     }

@@ -9,7 +9,6 @@ import UIKit
 import SnapKit
 
 class CheckListViewController: UIViewController {
-    var imjangId: Int? = nil
     var calendarItems: [String: (inputDate: Date, isSelected: Bool)] = [:]
     var scoreItems: [String: (score: String, isSelected: Bool)] = [:]
     var inputItems: [String: (inputAnswer: String, isSelected: Bool)] = [:]
@@ -20,25 +19,34 @@ class CheckListViewController: UIViewController {
         $0.showsVerticalScrollIndicator = false
         $0.isScrollEnabled = true
     }
-    var imjangId: Int? {
+    
+    var imjangId: Int? = nil {
         didSet {
             print("체크리스트\(imjangId)")
+            responseQuestion()
         }
     }
+    
+    var categories: [Category] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         tableView.delegate = self
         tableView.dataSource = self
+        print("쳌ㅋ\(imjangId)")
         addSubViews()
         setupLayout()
         registerCell()
         NotificationCenter.default.addObserver(self, selector: #selector(didStoppedParentScroll), name: NSNotification.Name("didStoppedParentScroll"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadTableView), name: NSNotification.Name("ReloadTableView"), object: nil)
     }
     
-    @objc
-    func didStoppedParentScroll() {
+    @objc func reloadTableView() {
+        tableView.reloadData()
+    }
+    
+    @objc func didStoppedParentScroll() {
         DispatchQueue.main.async {
             self.tableView.isScrollEnabled = true
         }
@@ -80,11 +88,12 @@ class CheckListViewController: UIViewController {
     // -MARK: API 요청
     func responseQuestion() {
         guard let imjangId = imjangId else { return }
-        JuinjangAPIManager.shared.fetchData(type: BaseResponse<CheckListResponseDto>.self, api: .checklist) { response, error in
+        JuinjangAPIManager.shared.fetchData(type: BaseResponse<[CheckListResponseDto]>.self, api: .showChecklist(imjangId: imjangId)) { response, error in
             if error == nil {
                 guard let checkListResponseDto = response?.result else { return }
                 print(checkListResponseDto)
                 self.setData(checkListResponseDto: checkListResponseDto)
+                NotificationCenter.default.post(name: NSNotification.Name("ReloadTableView"), object: nil)
             } else {
                 guard let error = error else { return }
                 switch error {
@@ -101,133 +110,55 @@ class CheckListViewController: UIViewController {
         }
     }
 
-    func setData(checkListResponseDto: CheckListResponseDto) {
-        var categories: [Category] = []
-
-        for questionDto in checkListResponseDto.questionDtos {
-            let categoryId = questionDto.category
-            let category: String
-            let image: UIImage
-
-            if categoryId == 0 {
-                category = "기한"
-                image = UIImage(named: "deadline-item")!
-            } else if categoryId == 1 {
-                category = "입지여건"
-                image = UIImage(named: "location-conditions-item")!
-            } else if categoryId == 2 {
-               category = "공용공간"
-               image = UIImage(named: "public-space-item")!
-            } else if categoryId == 3 {
-               category = "실내"
-               image = UIImage(named: "indoor-item")!
-            } else {
-               print("존재하지 않는 CategoryId: \(categoryId)")
-               continue
-            }
-
-            var newCategory = Category(image: image, name: category, items: [], isExpanded: false)
-            categories.append(newCategory)
-
-            for optionItem in checkListResponseDto.questionDtos {
-                let questionItem = createQuestionItem(questionDto: optionItem)
-                newCategory.items.append(questionItem)
-            }
+    func setData(checkListResponseDto: [CheckListResponseDto]?) {
+        guard let result = checkListResponseDto else {
+            print("결과가 존재하지 않음.")
+            return
         }
-    }
-
-    func setData(checkListResponseDto: BaseResponse<[CheckListResponseDto]>) {
-        guard let result = checkListResponseDto.result else {
-             print("결과가 존재하지 않음.")
-             return
-         }
-
-        var categories: [Category] = []
-
+        
         for categoryResult in result {
             let categoryId = categoryResult.category
             let category: String
             let image: UIImage?
-
+            
             if categoryId == 0 {
                 category = "기한"
                 image = UIImage(named: "deadline-item")
+                print("기한")
             } else if categoryId == 1 {
                 category = "입지여건"
                 image = UIImage(named: "location-conditions-item")
+                print("입지여건")
             } else if categoryId == 2 {
                 category = "공용공간"
                 image = UIImage(named: "public-space-item")
+                print("공용공간")
             } else if categoryId == 3 {
                 category = "실내"
                 image = UIImage(named: "indoor-item")
+                print("실내")
             } else {
                 print("존재하지 않는 CategoryId: \(categoryId)")
                 continue
             }
-
+            
             // 옵셔널 바인딩을 사용하여 image가 nil이 아닌지 확인
             guard let validImage = image else {
                 print("이미지 로드 실패")
                 continue
             }
-
+            
             // 이미지가 성공적으로 로드되었다면 Category 생성
             var newCategory = Category(image: validImage, name: category, items: [], isExpanded: false)
             categories.append(newCategory)
-
+            
             // 카테고리 내의 QuestionDto 기반 체크리스트 항목 생성
             for questionDto in categoryResult.questionDtos {
                 let questionItem = createQuestionItem(questionDto: questionDto)
                 newCategory.items.append(questionItem)
             }
         }
-//    func setData(CheckListResponseDto: BaseResponse<[CheckListResponseDto]>) {
-//        guard let result = CheckListResponseDto.result else {
-//             print("결과가 존재하지 않음.")
-//             return
-//         }
-//        
-//        var categories: [Category] = []
-//        
-//        for questionDto in result {
-//            let categoryId = questionDto.category
-//            let category: String
-//            let image: UIImage?
-//            
-//            if categoryId == 0 {
-//                category = "기한"
-//                image = UIImage(named: "deadline-item")
-//            } else if categoryId == 1 {
-//                category = "입지여건"
-//                image = UIImage(named: "location-conditions-item")
-//            } else if categoryId == 2 {
-//                category = "공용공간"
-//                image = UIImage(named: "public-space-item")
-//            } else if categoryId == 3 {
-//                category = "실내"
-//                image = UIImage(named: "indoor-item")
-//            } else {
-//                print("존재하지 않는 CategoryId: \(categoryId)")
-//                continue
-//            }
-//            
-//            // 옵셔널 바인딩을 사용하여 image가 nil이 아닌지 확인
-//            guard let validImage = image else {
-//                print("이미지 로드 실패")
-//                continue
-//            }
-//            
-//            // 이미지가 성공적으로 로드되었다면 Category 생성
-//            var newCategory = Category(image: validImage, name: category, items: [], isExpanded: false)
-//            categories.append(newCategory)
-//            
-//            // QuestionDto 기반 체크리스트 항목 생성
-//            let questionItem = createQuestionItem(questionDto: questionDto)
-//            
-//            // 항목을 카테고리 목록에 추가
-//            newCategory.items.append(questionItem)
-//        }
+        print(categories)
     }
     
     func createQuestionItem(questionDto: QuestionDto) -> Item {
@@ -280,6 +211,7 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        print("카테고리 개수: \(categories.count)")
         if indexPath.row == 0 {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: CategoryItemTableViewCell.identifier, for: indexPath) as? CategoryItemTableViewCell else { return UITableViewCell() }
             
@@ -304,6 +236,7 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                 // CalendarItem인 경우
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: ExpandedCalendarTableViewCell.identifier, for: indexPath) as? ExpandedCalendarTableViewCell else { return UITableViewCell() }
                 cell.contentLabel.text = calendarItem.content
+                cell.categories = categories
                 cell.configure(with: calendarItem, at: indexPath)
                 
 //                // 데이터 모델에서 저장된 값으로 셀 구성
@@ -324,6 +257,7 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: ExpandedScoreTableViewCell.identifier, for: indexPath) as? ExpandedScoreTableViewCell else { return UITableViewCell() }
                 
                 cell.contentLabel.text = scoreItem.content
+                cell.categories = categories
                 cell.configure(with: scoreItem, at: indexPath)
 //                cell.score = scoreItem.score
                 
@@ -344,6 +278,7 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: ExpandedTextFieldTableViewCell.identifier, for: indexPath) as? ExpandedTextFieldTableViewCell else { return UITableViewCell() }
                 
                 cell.contentLabel.text = inputItem.content
+                cell.categories = categories
                 cell.configure(with: inputItem, at: indexPath)
 //                cell.inputAnswer = inputItem.inputAnswer
                 

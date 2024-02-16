@@ -20,6 +20,7 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
     var isExpanded: Bool = true
     var selectedDate: Date?
     var monthPosition: FSCalendarMonthPosition?
+    var categories: [Category]!
     
     func configure(with data: CalendarItem, at indexPath: IndexPath) {
         // indexPath를 사용하여 특정 위치에 해당하는 업데이트 로직 수행

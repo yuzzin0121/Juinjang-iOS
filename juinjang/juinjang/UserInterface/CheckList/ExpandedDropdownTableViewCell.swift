@@ -16,6 +16,7 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
     var selectedOption: String?
     var selectionItems: [String: (option: String?, isSelected: Bool)] = [:]
     weak var delegate: DropdownDelegate?
+    var categories: [Category]!
     
     // 선택된 점수를 외부로 전달하는 콜백 클로저
     var selectionHandler: ((String) -> Void)?

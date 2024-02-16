@@ -17,6 +17,7 @@ class ExpandedTextFieldTableViewCell: UITableViewCell {
     var inputAnswer: String?
     var inputItems: [String: (inputAnswer: String?, isSelected: Bool)] = [:]
     weak var delegate: TextFieldDelegate?
+    var categories: [Category]!
     
     // 입력한 답변을 외부로 전달하는 콜백 클로저
     var inputHandler: ((String) -> Void)?

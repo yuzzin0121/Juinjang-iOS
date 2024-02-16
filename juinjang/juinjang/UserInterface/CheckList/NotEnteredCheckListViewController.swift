@@ -16,6 +16,14 @@ class NotEnteredCheckListViewController: UIViewController {
         $0.isScrollEnabled = false
     }
     
+    var imjangId: Int? {
+        didSet {
+            print("입력 전 체크리스트\(imjangId)")
+            responseQuestion()
+        }
+    }
+    
+    var enabledCategories: [Category] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,10 +34,14 @@ class NotEnteredCheckListViewController: UIViewController {
         setupLayout()
         registerCell()
         NotificationCenter.default.addObserver(self, selector: #selector(didStoppedParentScroll), name: NSNotification.Name("didStoppedParentScroll"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadTableView), name: NSNotification.Name("ReloadTableView"), object: nil)
     }
     
-    @objc
-    func didStoppedParentScroll() {
+    @objc func reloadTableView() {
+        tableView.reloadData()
+    }
+    
+    @objc func didStoppedParentScroll() {
         DispatchQueue.main.async {
             self.tableView.isScrollEnabled = true
         }
@@ -69,7 +81,100 @@ class NotEnteredCheckListViewController: UIViewController {
         tableView.register(ExpandedDropdownTableViewCell.self, forCellReuseIdentifier: ExpandedDropdownTableViewCell.identifier)
     }
     
-    var selectedDates: [Date?] = Array(repeating: nil, count: 2)
+    // -MARK: API 요청
+    func responseQuestion() {
+        guard let imjangId = imjangId else { return }
+        JuinjangAPIManager.shared.fetchData(type: BaseResponse<[CheckListResponseDto]>.self, api: .showChecklist(imjangId: imjangId)) { response, error in
+            if error == nil {
+                guard let checkListResponseDto = response?.result else { return }
+                print(checkListResponseDto)
+                self.setData(checkListResponseDto: checkListResponseDto)
+                NotificationCenter.default.post(name: NSNotification.Name("ReloadTableView"), object: nil)
+            } else {
+                guard let error = error else { return }
+                switch error {
+                case .failedRequest:
+                    print("failedRequest")
+                case .noData:
+                    print("noData")
+                case .invalidResponse:
+                    print("invalidResponse")
+                case .invalidData:
+                    print("invalidData")
+                }
+            }
+        }
+    }
+
+    func setData(checkListResponseDto: [CheckListResponseDto]?) {
+        guard let result = checkListResponseDto else {
+            print("결과가 존재하지 않음.")
+            return
+        }
+        
+        for categoryResult in result {
+            let categoryId = categoryResult.category
+            let category: String
+            let image: UIImage?
+            
+            if categoryId == 0 {
+                category = "기한"
+                image = UIImage(named: "deadline-item")
+                print("기한")
+            } else if categoryId == 1 {
+                category = "입지여건"
+                image = UIImage(named: "location-conditions-item")
+                print("입지여건")
+            } else if categoryId == 2 {
+                category = "공용공간"
+                image = UIImage(named: "public-space-item")
+                print("공용공간")
+            } else if categoryId == 3 {
+                category = "실내"
+                image = UIImage(named: "indoor-item")
+                print("실내")
+            } else {
+                print("존재하지 않는 CategoryId: \(categoryId)")
+                continue
+            }
+            
+            // 옵셔널 바인딩을 사용하여 image가 nil이 아닌지 확인
+            guard let validImage = image else {
+                print("이미지 로드 실패")
+                continue
+            }
+            
+            // 이미지가 성공적으로 로드되었다면 Category 생성
+            var newCategory = Category(image: validImage, name: category, items: [], isExpanded: false)
+            enabledCategories.append(newCategory)
+            
+            // 카테고리 내의 QuestionDto 기반 체크리스트 항목 생성
+            for questionDto in categoryResult.questionDtos {
+                let questionItem = createQuestionItem(questionDto: questionDto)
+                newCategory.items.append(questionItem)
+            }
+        }
+        print(enabledCategories)
+    }
+    
+    func createQuestionItem(questionDto: QuestionDto) -> Item {
+        switch questionDto.answerType {
+        // 달력, 점수형, 텍스트필드, 드롭다운 형태
+        case 0:
+            return CalendarItem(content: questionDto.question, inputDate: Date(), isSelected: false)
+        case 1:
+            return ScoreItem(content: questionDto.question)
+        case 2:
+            return InputItem(content: questionDto.question)
+        case 3:
+            let options = questionDto.options.map { optionDto in
+                OptionItem(image: nil, option: optionDto.optionValue)
+            }
+            return SelectionItem(content: questionDto.question, options: options)
+        default:
+            fatalError("찾을 수 없는 답변 형태: \(questionDto.answerType)")
+        }
+    }
 }
 
 extension NotEnteredCheckListViewController : UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
@@ -104,6 +209,8 @@ extension NotEnteredCheckListViewController : UITableViewDelegate, UITableViewDa
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        print("카테고리 개수: \(enabledCategories.count)")
+
         if indexPath.section == 0 {
             // 기한 카테고리 섹션의 셀 처리 (NotEnteredCalendarTableViewCell)
             let cell: NotEnteredCalendarTableViewCell = tableView.dequeueReusableCell(withIdentifier: NotEnteredCalendarTableViewCell.identifier, for: indexPath) as! NotEnteredCalendarTableViewCell
@@ -130,6 +237,7 @@ extension NotEnteredCheckListViewController : UITableViewDelegate, UITableViewDa
                     let cell: ExpandedScoreTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedScoreTableViewCell.identifier, for: indexPath) as! ExpandedScoreTableViewCell
                     cell.contentLabel.text = scoreItem.content
                     cell.score = scoreItem.score
+                    cell.categories = enabledCategories
                     // 선택 상태에 따라 배경색 설정
                     cell.backgroundColor = UIColor(named: "gray0")
                     cell.contentLabel.textColor = UIColor(named: "lightGray")
@@ -145,6 +253,7 @@ extension NotEnteredCheckListViewController : UITableViewDelegate, UITableViewDa
                     let cell: ExpandedTextFieldTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedTextFieldTableViewCell.identifier, for: indexPath) as! ExpandedTextFieldTableViewCell
                     cell.contentLabel.text = inputItem.content
                     cell.inputAnswer = inputItem.inputAnswer
+                    cell.categories = enabledCategories
                     // 선택 상태에 따라 배경색 설정
                     cell.backgroundColor = UIColor(named: "gray0")
                     cell.contentLabel.textColor = UIColor(named: "lightGray")
@@ -159,6 +268,7 @@ extension NotEnteredCheckListViewController : UITableViewDelegate, UITableViewDa
                     cell.contentLabel.text = selectionItem.content
                     cell.options = selectionItem.options
                     cell.selectedOption = selectionItem.selectAnswer
+                    cell.categories = enabledCategories
                     // 선택 상태에 따라 배경색 설정
                     cell.backgroundColor = UIColor(named: "gray0")
                     cell.contentLabel.textColor = UIColor(named: "lightGray")
@@ -173,7 +283,6 @@ extension NotEnteredCheckListViewController : UITableViewDelegate, UITableViewDa
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
         if let cell = tableView.cellForRow(at: indexPath) as? CategoryItemTableViewCell {
             // 카테고리 셀을 눌렀을 때
             if indexPath.row == 0 {

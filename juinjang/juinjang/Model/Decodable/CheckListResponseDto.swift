@@ -17,11 +17,11 @@ struct QuestionDto: Codable {
     let question: String
     let version: Int
     let answerType: Int
-    let options: [OptionItems]
+    let options: [OptionDto]
     let answer: String
 }
 
-struct OptionItems: Codable {
+struct OptionDto: Codable {
     let indexNum: Int
     let questionId: Int
     let optionValue: String

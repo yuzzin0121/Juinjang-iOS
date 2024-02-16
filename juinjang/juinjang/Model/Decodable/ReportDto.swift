@@ -7,6 +7,11 @@
 
 import Foundation
 
+struct ContainerReportDto: Decodable {
+    let reportDTO: [ReportDto]
+    let limjangDto: [DetailDto]
+}
+
 struct ReportDto: Decodable {
     let reportId: Int
     let indoorKeyword: String

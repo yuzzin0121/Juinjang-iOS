@@ -17,6 +17,7 @@ class ExpandedScoreTableViewCell: UITableViewCell {
     var score: String? // 선택된 버튼의 값을 저장할 변수
     var scoreItems: [String: (score: String?, isSelected: Bool)] = [:]
     weak var delegate: ExpandedScoreCellDelegate?
+    var categories: [Category]!
     
     // 선택된 점수를 외부로 전달하는 콜백 클로저
     var selectionHandler: ((String) -> Void)?
