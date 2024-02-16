@@ -5,12 +5,12 @@
 //  Created by 임수진 on 2/15/24.
 //
 
-struct CheckListResponseDto: Decodable {
+struct CheckListResponseDto: Codable {
     let category: Int
     let questionDtos: [QuestionDto]
 }
 
-struct QuestionDto: Decodable {
+struct QuestionDto: Codable {
     let questionId: Int
     let category: Int
     let subCategory: String
@@ -18,9 +18,10 @@ struct QuestionDto: Decodable {
     let version: Int
     let answerType: Int
     let options: [OptionItems]
+    let answer: String
 }
 
-struct OptionItems: Decodable {
+struct OptionItems: Codable {
     let indexNum: Int
     let questionId: Int
     let optionValue: String
