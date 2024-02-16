@@ -38,7 +38,7 @@ struct RecordDto: Decodable {
     let updatedAt: String
 }
 
-struct memoDto: Decodable {
+struct MemoDto: Codable {
     let limjangId: Int
     let createdAt: String
     let updatedAt: String

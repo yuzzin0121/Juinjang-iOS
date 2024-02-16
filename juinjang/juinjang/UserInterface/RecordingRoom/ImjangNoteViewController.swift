@@ -109,6 +109,7 @@ class ImjangNoteViewController: UIViewController {
     var roomPriceString: String = "30억 1천만원"
     var roomAddress: String = "경기도 성남시 분당구 삼평동 741"
     var mDateString: String = "23.12.01"
+    var passDataDelegate: PassDataDelegate?
     
 //    lazy var images: [UIImage?] = [UIImage(named: "1"), UIImage(named: "2"), UIImage(named: "3")]
     lazy var images: [String] = []
@@ -132,21 +133,19 @@ class ImjangNoteViewController: UIViewController {
         setImageStackViewClick()
         NotificationCenter.default.addObserver(self, selector: #selector(didStoppedChildScroll), name: NSNotification.Name("didStoppedChildScroll"), object: nil)
         recordingSegmentedVC.imjangNoteViewController = self
+        if let imjangId = imjangId {
+            if let recordingRoomVC = recordingSegmentedVC.viewControllers[1] as? RecordingRoomViewController {
+                recordingRoomVC.imjangId = imjangId
+            }
+        }
     }
     
     func callRequest() {
         guard let imjangId = imjangId else { return }
         JuinjangAPIManager.shared.fetchData(type: BaseResponse<DetailDto>.self, api: .detailImjang(imjangId: imjangId)) { detailDto, error in
             if error == nil {
-                print("뭐임")
                 guard let result = detailDto else { return }
-                print("에에엥")
-                print(imjangId)
-                print(result)
-                print(result.result)
                 if let detailDto = result.result {
-                    print("뭐야")
-                    print(detailDto)
                     self.setData(detailDto: detailDto)
                 }
             } else {
@@ -339,6 +338,7 @@ class ImjangNoteViewController: UIViewController {
         
         addChild(recordingSegmentedVC)
         containerView.addSubview(recordingSegmentedVC.view)
+        recordingSegmentedVC.imjangId = imjangId
     }
     
     // 뷰들 디자인
@@ -739,19 +739,12 @@ class ImjangNoteViewController: UIViewController {
 extension ImjangNoteViewController: UIScrollViewDelegate {
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        print("스크롤 좌표 - \(scrollView.contentOffset.y), containerView 좌표 - \(containerView.frame.origin.y)")
+//        print("스크롤 좌표 - \(scrollView.contentOffset.y), containerView 좌표 - \(containerView.frame.origin.y)")
         
         let containerY = containerView.frame.origin.y
         
-        if scrollView.contentOffset.y > containerY {
-            scrollView.isScrollEnabled = false
-            scrollView.contentOffset.y = containerY
-        } else {
-            scrollView.isScrollEnabled = true
-        }
-        
-        // 0 이상이고, containerY 아래로 내려가지 않도록
-        if (scrollView.contentOffset.y > 0) && (scrollView.contentOffset.y > containerY - 20) {
+        // 0이상, && scrollView.contentOffset.y <= containerY
+        if (scrollView.contentOffset.y > 0) && (scrollView.contentOffset.y > containerY - 10){
             DispatchQueue.main.async {
                 scrollView.isScrollEnabled = false
                 UIView.animate(withDuration: 0.1) {
