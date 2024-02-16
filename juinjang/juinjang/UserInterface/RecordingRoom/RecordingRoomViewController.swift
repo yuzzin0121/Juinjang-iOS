@@ -291,8 +291,7 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
             $0.top.equalTo(notePadLabel.snp.bottom).offset(12)
             $0.leading.equalTo(contentView).offset(24)
             $0.trailing.equalTo(contentView).offset(-24)
-//            $0.height.equalTo(UIScreen.main.bounds.height).multipliedBy(0.5)
-            $0.height.equalTo(640)
+            $0.height.equalTo(368)
         }
     }
     

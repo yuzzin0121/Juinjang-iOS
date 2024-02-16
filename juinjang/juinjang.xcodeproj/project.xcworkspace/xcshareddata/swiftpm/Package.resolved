@@ -50,8 +50,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onevcat/Kingfisher",
       "state" : {
-        "revision" : "3ec0ab0bca4feb56e8b33e289c9496e89059dd08",
-        "version" : "7.10.2"
+        "revision" : "5b92f029fab2cce44386d28588098b5be0824ef5",
+        "version" : "7.11.0"
       }
     },
     {
@@ -84,7 +84,7 @@
     {
       "identity" : "tabman",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/uias/Tabman.git",
+      "location" : "https://github.com/uias/Tabman",
       "state" : {
         "revision" : "e32c0d821b03566ed966753f941113883f268da0",
         "version" : "3.0.2"
