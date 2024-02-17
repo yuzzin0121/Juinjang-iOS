@@ -22,7 +22,7 @@ enum JuinjangAPI {
     case modifyChecklist(imjangId: Int)
     
     case scrap(imjangId: Int)
-    case totalImjang
+    case totalImjang(sort: String)
     case createImjang
     case modifyImjang
     case searchImjang(keyword: String)
@@ -32,6 +32,9 @@ enum JuinjangAPI {
     
     case memo(imjangId: Int)
     case fetchRecordingRoom(imjangId: Int)
+    case fetchImage(imjangId: Int)
+    case addImage
+    case deleteImage
     
     var baseURL: String {
         return "http://juinjang1227.com:8080/api/"
@@ -78,42 +81,56 @@ enum JuinjangAPI {
             return URL(string: baseURL + "memo/\(imjangId)")!
         case .fetchRecordingRoom(let imjangId):
             return URL(string: baseURL + "record/\(imjangId)")!
+         
+        case .fetchImage(imjangId: let imjangId):
+            return URL(string: baseURL + "limjang/image/\(imjangId)")!
+        case .addImage:
+            return URL(string: baseURL + "limjang/image")!
+        case .deleteImage:
+            return URL(string: baseURL + "limjang/image/delete")!
         }
     }
     
     var header: HTTPHeaders {
         switch self {
-        case .kakaoLogin, .regenerateToken, .showChecklist, .saveChecklist, .modifyImjang, .detailImjang, .totalImjang, .scrap, .searchImjang, .deleteImjangs, .memo, .fetchRecordingRoom:
+        case .kakaoLogin, .regenerateToken, .showChecklist, .saveChecklist, .modifyImjang, .detailImjang, .totalImjang, .scrap, .searchImjang, .deleteImjangs, .memo, .fetchRecordingRoom, .fetchImage:
             return ["Content-Type": "application/json", "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"]
 
+        case .addImage:
+            return [
+                "Content-Type": "multipart/form-data",
+                "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"
+            ]
         default:
-            return ["Content-Type": "application/json", "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"]
+            return ["Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"]
         }
     }
     
     var method: HTTPMethod {
         switch self {
-        case .saveChecklist, .scrap, .createImjang, .regenerateToken, .logout, .deleteImjangs, .memo:
+        case .scrap, .createImjang, .regenerateToken, .logout, .deleteImjangs, .memo, .addImage, .deleteImage:
             return .post
-        case .showChecklist, .totalImjang, .searchImjang, .mainImjang, .detailImjang, .kakaoLogin, .kakaoLoginCallback, .profile, .fetchRecordingRoom:
+        case .showChecklist, .totalImjang, .searchImjang, .mainImjang, .detailImjang, .kakaoLogin, .kakaoLoginCallback, .profile, .fetchRecordingRoom, .fetchImage:
             return .get
         case .nickname, .modifyImjang, .modifyChecklist:
             return .patch
         }
     }
     
-    var encoding: ParameterEncoding {
-        switch self {
-        case .deleteImjangs, .memo:
-            return JSONEncoding.default
-        default:
-            return URLEncoding(destination: .queryString)
-        }
-    }
+//    var encoding: ParameterEncoding {
+//        switch self {
+//        case .deleteImjangs, .memo, .deleteImage:
+//            return JSONEncoding.default
+//        default:
+//            return URLEncoding(destination: .queryString)
+//        }
+//    }
 
     
     var parameter: [String: Any] {
         switch self {
+        case .totalImjang(let sort):
+            return ["sort":sort]
         case .detailImjang(let imjangId):
             return  ["limjangIdList": imjangId]
         default:
