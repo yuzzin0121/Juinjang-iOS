@@ -109,7 +109,7 @@ class ImjangNoteViewController: UIViewController {
     var roomPriceString: String = "30억 1천만원"
     var roomAddress: String = "경기도 성남시 분당구 삼평동 741"
     var mDateString: String = "23.12.01"
-    var passDataDelegate: PassDataDelegate?
+    var completionHandler: (() -> Void)?
     
 //    lazy var images: [UIImage?] = [UIImage(named: "1"), UIImage(named: "2"), UIImage(named: "3")]
     lazy var images: [String] = []
@@ -165,7 +165,6 @@ class ImjangNoteViewController: UIViewController {
     }
     
     func setData(detailDto: DetailDto) {
-        print(#function)
         self.navigationItem.title = detailDto.nickname
         roomNameLabel.text = detailDto.nickname
         setPriceLabel(priceList: detailDto.priceList)
@@ -249,7 +248,6 @@ class ImjangNoteViewController: UIViewController {
     
     // 이미지 리스트 화면으로 이동
     @objc func showImjangImageListVC() {
-        print("클릭ㅋㅇㅁㄴㅇㄹㅁㄴㅇㄹ")
         guard let imjangId = imjangId else { return }
         let imjangImageListVC = ImjangImageListViewController()
         imjangImageListVC.imjangId = imjangId
@@ -285,7 +283,6 @@ class ImjangNoteViewController: UIViewController {
        
         // UIBarButtonItem 생성 및 이미지 설정
         let backButtonItem = UIBarButtonItem(image: ImageStyle.arrowLeft, style: .plain, target: self, action: #selector(popView))
-        
         let editButtonItem = UIBarButtonItem(title: "편집", style: .plain, target: self, action: #selector(editView))
         backButtonItem.tintColor = ColorStyle.textGray
         editButtonItem.tintColor = ColorStyle.textGray
@@ -303,7 +300,8 @@ class ImjangNoteViewController: UIViewController {
             let nav = UINavigationController(rootViewController: mainVC)
             nav.modalPresentationStyle = .fullScreen
             present(nav, animated: true)
-        case .imjangList:
+        case .imjangList, .main:
+            completionHandler?()
             navigationController?.popViewController(animated: true)
         }
     }
@@ -358,8 +356,6 @@ class ImjangNoteViewController: UIViewController {
     
     // 뷰들 디자인
     func designViews() {
-        print(#function)
-        
         upButton.alpha = 0
         designImageView(maximizeImageView, image: UIImage(named: "maximize"), contentMode: .scaleAspectFit)
         
@@ -451,7 +447,6 @@ class ImjangNoteViewController: UIViewController {
         setUserInteraction(isEmpty: false)
         setImageStackViewClick(isEmpty: false)
         let imageCount = images.count
-        print("이미지 개수\(imageCount)")
         switch imageCount {
         case 0:
             noImageBackgroundView.isHidden = false
@@ -753,7 +748,7 @@ extension ImjangNoteViewController: UIScrollViewDelegate {
         if (scrollView.contentOffset.y > 0) && (scrollView.contentOffset.y > containerY - 10){
             DispatchQueue.main.async {
                 scrollView.isScrollEnabled = false
-                UIView.animate(withDuration: 0.1) {
+                UIView.animate(withDuration: 0.05) {
                     scrollView.contentOffset.y = containerY
                 }
             }

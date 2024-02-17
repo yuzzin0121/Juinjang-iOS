@@ -127,7 +127,8 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
         }
     }
     
-    func setMemo(memo: String) {
+    func setMemo(memo: String?) {
+        guard let memo = memo else { return }
         memoTextView.text = memo
         memoTextView.textColor = memo.isEmpty ? ColorStyle.placeholderOrange : ColorStyle.textBlack
     }

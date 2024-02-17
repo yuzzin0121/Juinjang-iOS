@@ -71,7 +71,7 @@ class ImjangListViewController: UIViewController {
         configureTableView()
 //        setData()
         callRequest()   // 서버 요청 (total Imjang List)
-//        designView()
+        designView()
         setFilterData()
 //        imjangTableView.reloadData()
         newPageButton.addTarget(self, action: #selector(showNewPageVC), for: .touchUpInside)
@@ -83,15 +83,16 @@ class ImjangListViewController: UIViewController {
     }
     
     func callRequest() {
-        JuinjangAPIManager.shared.fetchData(type: BaseResponse<TotalListDto>.self, api: .totalImjang) { response, error in
+        
+        JuinjangAPIManager.shared.fetchData(type: BaseResponse<TotalListDto>.self, api: .totalImjang(sort: Filter.update.sortValue)) { response, error in
             if error == nil {
                 guard let response = response else { return }
                 guard let result = response.result else { return }
 //                print(result)
-                self.imjangList = result.scrapedList
-                self.imjangList.append(contentsOf: result.notScrapedList)
-                self.setData(scrapedList: result.scrapedList)
-                self.designView()
+                self.imjangList = result.limjangList
+//                self.setData(scrapedList: result.scrapedList)
+//                self.designView()
+                self.setEmptyUI(isEmpty: self.imjangList.isEmpty)
                 self.imjangTableView.reloadData()
             } else {
                 guard let error else { return }
@@ -226,6 +227,9 @@ class ImjangListViewController: UIViewController {
         let imjangNoteVC = ImjangNoteViewController()
         imjangNoteVC.imjangId = imjangId
         imjangNoteVC.previousVCType = .imjangList
+        imjangNoteVC.completionHandler = {
+            self.callRequest()
+        }
         self.navigationController?.pushViewController(imjangNoteVC, animated: true)
     }
 }
@@ -363,14 +367,11 @@ extension ImjangListViewController {
         deleteButton.design(image: ImageStyle.trash, backgroundColor: .clear)
         
         imjangTableView.backgroundColor = .white
-        
-        if imjangList.isEmpty {
-            emptyBackgroundView.isHidden = false
-            imjangTableView.isHidden = true
-        } else {
-            emptyBackgroundView.isHidden = true
-            imjangTableView.isHidden = false
-        }
+    }
+    
+    func setEmptyUI(isEmpty: Bool) {
+        emptyBackgroundView.isHidden = isEmpty ? false : true
+        imjangTableView.isHidden = isEmpty ? true : false
     }
     
     func setupConstraints() {
