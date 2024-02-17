@@ -21,7 +21,6 @@ class ImjangImageListViewController: UIViewController {
     lazy var imageCollectionView = UICollectionView(frame: .zero, collectionViewLayout: configureCollectionViewFlowLayout())
     var imageList: [ImageDto] = [] {
         didSet {
-            print("추가도ㅒ쎠\(imageList.count)")
             checkImage()
         }
     }// 일단 String 배열
@@ -70,8 +69,7 @@ class ImjangImageListViewController: UIViewController {
     func callAddImageRequest(images: [UIImage]) {
         guard let imjangId = imjangId else { return }
         JuinjangAPIManager.shared.uploadImages(imjangId: imjangId, images: images, api: .addImage) { result in
-            print("머쥐")
-            self.callFetchImageRequest()
+            self.callFetchImageRequest()    // 이미지가 추가됐으니 다시 전체 이미지를 조회하자
         }
     }
     
@@ -103,7 +101,9 @@ class ImjangImageListViewController: UIViewController {
             print("안비었는뎅...")
             setEmptyLayout(false)
             DispatchQueue.main.async {
+                self.isLongTap = false
                 self.imageCollectionView.reloadData()
+                print(self.selectedIndexs)
             }
         }
     }
@@ -130,6 +130,7 @@ class ImjangImageListViewController: UIViewController {
             imageCollectionView.delegate?.collectionView?(imageCollectionView, didSelectItemAt: indexPath)
         case .ended:
             // 드래그 종료 시 필요한 작업 수행
+            isLongTap = false
             break
         default:
             break
@@ -184,6 +185,7 @@ class ImjangImageListViewController: UIViewController {
             if error == nil {
                 guard let response = response else { return }
                 print(response)
+                self.selectedIndexs.removeAll()
                 self.callFetchImageRequest()  // 삭제 완료시 전체 이미지 조회
             } else {
                 guard let error else { return }
@@ -201,6 +203,15 @@ class ImjangImageListViewController: UIViewController {
         }
     }
     
+    // 모두 선택 해제
+    func deselectAll() {
+        if let selectedItems = self.imageCollectionView.indexPathsForSelectedItems {
+            for indexPath in selectedItems {
+                self.imageCollectionView.deselectItem(at: indexPath, animated: true)
+            }
+        }
+    }
+    
     @objc func deleteImages() {
         // 선택된 인덱스에 해당하는 요소를 배열에서 삭제
         if selectedIndexs.isEmpty {
@@ -214,12 +225,6 @@ class ImjangImageListViewController: UIViewController {
             let indexes = self.selectedIndexs.sorted(by: >)
             print("삭제할 id들: \(indexes)")
             self.callDeleteImageRequest(imageIds: indexes)
-//            for index in indexes {
-//                if index < self.imageList.count {
-//                    self.imageList.remove(at: index)
-//                }
-//            }
-//            self.imageCollectionView.reloadData()
         }
         present(deletePopupVC, animated: false)
     }
@@ -280,14 +285,12 @@ class ImjangImageListViewController: UIViewController {
 
 extension ImjangImageListViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print("이미지 \(imageList.count)개")
         return imageList.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCollectionViewCell.identifier, for: indexPath) as? ImageCollectionViewCell else { return UICollectionViewCell() }
-        
-        print("으아아")
+        cell.contentView.layer.borderWidth = 0
         let item = imageList[indexPath.row]
         if let url = URL(string: item.imageUrl) {
             cell.imageView.kf.setImage(with: url, placeholder: UIImage(named: "1"))
