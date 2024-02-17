@@ -23,7 +23,7 @@ class CheckListViewController: UIViewController {
     var imjangId: Int? = nil {
         didSet {
             print("체크리스트\(imjangId)")
-            responseQuestion()
+//            responseQuestion()
         }
     }
     
@@ -91,7 +91,7 @@ class CheckListViewController: UIViewController {
         JuinjangAPIManager.shared.fetchData(type: BaseResponse<[CheckListResponseDto]>.self, api: .showChecklist(imjangId: imjangId)) { response, error in
             if error == nil {
                 guard let checkListResponseDto = response?.result else { return }
-                print(checkListResponseDto)
+//                print(checkListResponseDto)
                 self.setData(checkListResponseDto: checkListResponseDto)
                 NotificationCenter.default.post(name: NSNotification.Name("ReloadTableView"), object: nil)
             } else {
@@ -218,6 +218,7 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
             let category = categories[indexPath.section]
             cell.categoryImage.image = categories[indexPath.section].image
             cell.categoryLabel.text = categories[indexPath.section].name
+            cell.categories = categories
             
             // section 확장 유무에 따라서 화살표 이미지 변경
             let arrowImage = category.isExpanded ? UIImage(named: "contraction-items") : UIImage(named: "expand-items")

@@ -108,7 +108,7 @@ enum JuinjangAPI {
     
     var method: HTTPMethod {
         switch self {
-        case .scrap, .createImjang, .regenerateToken, .logout, .deleteImjangs, .memo, .addImage, .deleteImage:
+        case .saveChecklist, .scrap, .createImjang, .regenerateToken, .logout, .deleteImjangs, .memo, .addImage,    .deleteImage:
             return .post
         case .showChecklist, .totalImjang, .searchImjang, .mainImjang, .detailImjang, .kakaoLogin, .kakaoLoginCallback, .profile, .fetchRecordingRoom, .fetchImage:
             return .get
