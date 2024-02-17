@@ -21,12 +21,10 @@ final class JuinjangAPIManager {
     private init() { }
     
     func fetchData<T: Decodable>(type: T.Type, api: JuinjangAPI, completionHandler: @escaping (T?, NetworkError?) -> Void) {
-        
-        print("\(api.header)")
+
         AF.request(api.endpoint,
                    method: api.method,
                    parameters: api.parameter,
-                   encoding: api.encoding,
                    headers: api.header)
        .responseDecodable(of: type) { response in
            switch response.result {
@@ -41,11 +39,11 @@ final class JuinjangAPIManager {
     }
     
     func postData<T: Decodable>(type: T.Type, api: JuinjangAPI, parameter: [String:Any], completionHandler: @escaping (T?, NetworkError?) -> Void) {
-        print("=====\(api.header)")
+
         AF.request(api.endpoint,
                    method: api.method,
                    parameters: parameter,
-                   encoding: api.encoding,
+                   encoding: JSONEncoding.default,
                    headers: api.header)
        .responseDecodable(of: type) { response in
            switch response.result {
@@ -68,7 +66,6 @@ final class JuinjangAPIManager {
 
         AF.upload(multipartFormData: { multipartFormData in
             multipartFormData.append("\(imjangId)".data(using: .utf8)!, withName: "limjangId")
-            print("asdfmasdfasf")
             for (index, image) in images.enumerated() {
                 guard let imageData = image.jpegData(compressionQuality: 0.2) else { return }
                 // "imgUrl" 키에 대한 배열 형식으로 이미지 데이터를 전송
