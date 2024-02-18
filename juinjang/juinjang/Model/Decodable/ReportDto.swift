@@ -17,3 +17,5 @@ struct ReportDto: Decodable {
     let locationCoditionsRate: Float
     let totalRate: Float
 }
+
+
