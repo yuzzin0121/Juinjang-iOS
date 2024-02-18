@@ -10,8 +10,9 @@ import SnapKit
 import Then
 import Kingfisher
 
-class ImjangNoteViewController: UIViewController {
+class ImjangNoteViewController: UIViewController, CheckListViewControllerDelegate {
     var version: VersionInfo?
+    var isEditMode: Bool = false // 수정 모드 여부
     // 스크롤뷰
     let scrollView = UIScrollView().then {
         $0.backgroundColor = .white
@@ -103,7 +104,14 @@ class ImjangNoteViewController: UIViewController {
         $0.addTarget(self, action: #selector(editButtonTapped(_:)), for: .touchUpInside)
     }
     
+    func didToggleEditMode(_ isEditMode: Bool) {
+        self.isEditMode = isEditMode
+        print("수정 모드 진입")
+        print(isEditMode)
+    }
+    
     let recordingSegmentedVC = RecordingSegmentedViewController()
+    let checkListVC = CheckListViewController()
     
     var roomName: String = "판교푸르지오월드마크"
     var roomPriceString: String = "30억 1천만원"
@@ -134,16 +142,14 @@ class ImjangNoteViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(didStoppedChildScroll), name: NSNotification.Name("didStoppedChildScroll"), object: nil)
         recordingSegmentedVC.imjangNoteViewController = self
         if let imjangId = imjangId {
-            if let notEnteredCheckListVC = recordingSegmentedVC.viewControllers[0] as?
-                NotEnteredCheckListViewController {
-                notEnteredCheckListVC.imjangId = imjangId
-            } else if let checkListVC = recordingSegmentedVC.viewControllers[0] as?
+            if let checkListVC = recordingSegmentedVC.viewControllers[0] as?
                 CheckListViewController {
                     checkListVC.imjangId = imjangId
             } else if let recordingRoomVC = recordingSegmentedVC.viewControllers[1] as? RecordingRoomViewController {
                 recordingRoomVC.imjangId = imjangId
             }
         }
+        checkListVC.delegate = self
     }
     
     func callRequest() {
@@ -220,16 +226,23 @@ class ImjangNoteViewController: UIViewController {
     
     @objc func showReportVC() {
         // 현재 ViewController를 검사해서 미입력 상태라면
-        if let currentVC = recordingSegmentedVC.currentViewController,
-           currentVC.isKind(of: NotEnteredCheckListViewController.self) {
-            // 팝업창이 뜸
-            let reportPopupVC = ReportPopupViewController()
-            reportPopupVC.modalPresentationStyle = .overCurrentContext
-            present(reportPopupVC, animated: false, completion: nil)
-        } else {
-            // 아니라면 ReportViewController로 이동
-            let reportVC = ReportViewController()
-            navigationController?.pushViewController(reportVC, animated: true)
+        if let currentVC = recordingSegmentedVC.currentViewController as? CheckListViewController {
+            // 모든 문항이 값이 null인지 확인
+            let allItemsAreNull = currentVC.categories.allSatisfy { category in
+                return category.questionDtos.allSatisfy { questionDto in
+                    return questionDto.answer == nil
+                }
+            }
+            if allItemsAreNull {
+                // 팝업창이 뜸
+                let reportPopupVC = ReportPopupViewController()
+                reportPopupVC.modalPresentationStyle = .overCurrentContext
+                present(reportPopupVC, animated: false, completion: nil)
+            } else {
+                // 아니라면 ReportViewController로 이동
+                let reportVC = ReportViewController()
+                navigationController?.pushViewController(reportVC, animated: true)
+            }
         }
     }
     
@@ -732,13 +745,12 @@ class ImjangNoteViewController: UIViewController {
         sender.isSelected.toggle()
         if sender.isSelected {
             editButton.setImage(UIImage(named: "completed-button"), for: .normal)
-            NotificationCenter.default.post(name: NSNotification.Name("EditButtonToggled"), object: sender.isSelected)
         } else {
             editButton.setImage(UIImage(named: "edit-button"), for: .normal)
-            NotificationCenter.default.post(name: NSNotification.Name("EditButtonToggled"), object: sender.isSelected)
             let reportVC = ReportViewController()
             self.navigationController?.pushViewController(reportVC, animated: true)
         }
+        didToggleEditMode(sender.isSelected)
     }
 }
 

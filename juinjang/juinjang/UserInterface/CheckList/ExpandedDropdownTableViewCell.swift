@@ -16,7 +16,7 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
     var selectedOption: String?
     var selectionItems: [String: (option: String?, isSelected: Bool)] = [:]
     weak var delegate: DropdownDelegate?
-    var categories: [Category]!
+    var categories: [CheckListResponseDto]!
     
     // 선택된 점수를 외부로 전달하는 콜백 클로저
     var selectionHandler: ((String) -> Void)?
@@ -102,26 +102,6 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         // Configure the view for the selected state
-    }
-    
-    func configure(with data: SelectionItem, at indexPath: IndexPath) {
-        // indexPath를 사용하여 특정 위치에 해당하는 업데이트 로직 수행
-        let currentItem = categories[indexPath.section].items[indexPath.row - 1]
-        let content = currentItem.content
-        contentLabel.text = content
-
-        // 선택된 옵션이 있으면 표시
-        if let storedData = selectionItems[content] as? SelectionItem {
-            selectedOption = storedData.selectAnswer
-
-            // selectedOption이 몇 번째 행에 해당하는지 찾기
-            if let row = storedData.options.firstIndex(where: { $0.option == selectedOption }) {
-                itemPickerView.selectRow(row, inComponent: 0, animated: false)
-            }
-        } else {
-            // 선택된 옵션이 없으면 표시 초기화
-            selectedOption = nil
-        }
     }
     
     override func prepareForReuse() {
@@ -246,8 +226,22 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
         }
     }
     
-    func configure(with questionDto: QuestionDto) {
-        contentLabel.text = questionDto.question
+    func configure(with questionDto: QuestionDto, at indexPath: IndexPath) {
+        let content = questionDto.question
+        contentLabel.text = content
+
+        // 선택된 옵션이 있으면 표시
+        if let storedData = selectionItems[content] as? SelectionItem {
+            selectedOption = storedData.selectAnswer
+
+            // selectedOption이 몇 번째 행에 해당하는지 찾기
+            if let row = storedData.options.firstIndex(where: { $0.option == selectedOption }) {
+                itemPickerView.selectRow(row, inComponent: 0, animated: false)
+            }
+        } else {
+            // 선택된 옵션이 없으면 표시 초기화
+            selectedOption = nil
+        }
 
         var optionValues: [OptionItem] = []
 
