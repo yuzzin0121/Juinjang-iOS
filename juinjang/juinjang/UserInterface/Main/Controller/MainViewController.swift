@@ -29,73 +29,10 @@ class MainViewController: UIViewController {
         $0.register(BottomTableViewCell.self, forCellReuseIdentifier: BottomTableViewCell.id)
     }
     
-    @objc func newImjangBtnTap() {
-        let vc = OpenNewPageViewController()
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
-    @objc func myImjangBtnTap() {
-        let vc = ImjangListViewController()
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
+    var mainImjangList: [LimjangDto] = []
     
-    @objc func setttingBtnTap() {
-        let vc = SettingViewController()
-        self.navigationController?.pushViewController(vc, animated: false)
-    }
     
-//MARK: - 함수 선언
-    func refreshToken() {
-        let url = "http://juinjang1227.com:8080/api/auth/regenerate-token"
-        let headers : HTTPHeaders = [
-            "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)", // 현재 Access Token
-            "Refresh-Token": "Bearer \(UserDefaultManager.shared.refreshToken)" // Refresh Token
-        ]
-        
-        AF.request(url, method: .post, headers: headers).responseData { response in
-            switch response.result {
-            case .success(let value):
-                if let httpResponse = response.response {
-                    print("Status code: \(httpResponse.statusCode)")
-                }
-                // 응답 데이터 출력
-                if let responseString = String(data: value, encoding: .utf8) {
-                    print("Response data: \(responseString)")
-                }
-                do {
-                    let decoder = JSONDecoder()
-                    let refreshTokenResponse = try decoder.decode(RefreshTokenResponse.self, from: value)
-                    if refreshTokenResponse.code == "TOKEN402" {
-                        // "code"가 "TOKEN402"인 경우 로그아웃 함수 호출
-                        let settingViewController = SettingViewController()
-                        settingViewController.logout()
-                    }
-                } catch {
-                    print("Error decoding JSON: \(error)")
-                }
-            case .failure(let error):
-                print("Error: \(error)")
-            }
-        }
-    }
-    
-    func setConstraint() {
-        //배경
-        backgroundImageView.snp.makeConstraints{
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(37.82)
-            $0.height.equalTo(483.27)
-            $0.left.equalToSuperview().offset(-201.08)
-        }
-        UIView.animate(withDuration: 0.8, delay: 0.0, options: .curveEaseIn, animations: {
-            self.backgroundImageView.alpha = 1.0
-        }, completion: nil)
-    
-        //테이블 뷰
-        tableView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.left.right.bottom.equalToSuperview()
-        }
-    }
-    
+    // MARK: - viewDidLoad()
     override func viewDidLoad() {
         super.viewDidLoad()
         refreshToken()
@@ -112,6 +49,31 @@ class MainViewController: UIViewController {
        
         designNavigationBar()
         setConstraint()
+        callMainImjangRequest()
+    }
+    
+    func callMainImjangRequest() {
+        JuinjangAPIManager.shared.fetchData(type: BaseResponse<RecentUpdatedDto>.self, api: .mainImjang) { response, error in
+            if error == nil {
+                guard let response = response else { return }
+                guard let result = response.result else { return }
+                print(response)
+                self.mainImjangList = result.recentUpdatedList
+                self.tableView.reloadData()
+            } else {
+                guard let error else { return }
+                switch error {
+                case .failedRequest:
+                    print("failedRequest")
+                case .noData:
+                    print("noData")
+                case .invalidResponse:
+                    print("invalidResponse")
+                case .invalidData:
+                    print("invalidData")
+                }
+            }
+        }
     }
     
     // 네비게이션 바 디자인
@@ -135,6 +97,81 @@ class MainViewController: UIViewController {
         self.navigationItem.rightBarButtonItem = speakerButtonItem
         
     }
+    
+    func showImjangNoteVC(imjangId: Int?) {
+        guard let imjangId = imjangId else { return }
+        let imjangNoteVC = ImjangNoteViewController()
+        imjangNoteVC.imjangId = imjangId
+        imjangNoteVC.previousVCType = .main
+        imjangNoteVC.completionHandler = {
+            self.callMainImjangRequest()
+        }
+        navigationController?.pushViewController(imjangNoteVC, animated: true)
+    }
+    @objc func newImjangBtnTap() {
+        let vc = OpenNewPageViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    @objc func myImjangBtnTap() {
+        let vc = ImjangListViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    @objc func setttingBtnTap() {
+        let vc = SettingViewController()
+        self.navigationController?.pushViewController(vc, animated: false)
+    }
+    
+//MARK: - 함수 선언
+    func refreshToken() {
+        let url = "http://juinjang1227.com:8080/api/auth/regenerate-token"
+        let headers : HTTPHeaders = [
+            "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)", // 현재 Access Token
+            "Refresh-Token": "Bearer \(UserDefaultManager.shared.refreshToken)" // Refresh Token
+        ]
+        
+        AF.request(url, method: .post, headers: headers).responseData { response in
+            switch response.result {
+            case .success(let value):
+                if let httpResponse = response.response {
+//                    print("Status code: \(httpResponse.statusCode)")
+                }
+                // 응답 데이터 출력
+                if let responseString = String(data: value, encoding: .utf8) {
+//                    print("Response data: \(responseString)")
+                }
+                do {
+                    let decoder = JSONDecoder()
+                    let refreshTokenResponse = try decoder.decode(RefreshTokenResponse.self, from: value)
+                    if refreshTokenResponse.code == "TOKEN402" {
+                        // "code"가 "TOKEN402"인 경우 로그아웃 함수 호출
+                        let settingViewController = SettingViewController()
+                        settingViewController.logout()
+                    }
+                } catch {
+//                    print("Error decoding JSON: \(error)")
+                }
+            case .failure(let error):
+                print("Error: \(error)")
+            }
+        }
+    }
+    func setConstraint() {
+        //배경
+        backgroundImageView.snp.makeConstraints{
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(37.82)
+            $0.height.equalTo(483.27)
+            $0.left.equalToSuperview().offset(-201.08)
+        }
+        UIView.animate(withDuration: 0.8, delay: 0.0, options: .curveEaseIn, animations: {
+            self.backgroundImageView.alpha = 1.0
+        }, completion: nil)
+    
+        //테이블 뷰
+        tableView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.left.right.bottom.equalToSuperview()
+        }
+    }
 }
 
 //MARK: - extension
@@ -145,7 +182,7 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "TopTableViewCell", for: indexPath) as? TopTableViewCell
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: TopTableViewCell.identifier, for: indexPath) as? TopTableViewCell
             else{
                 return UITableViewCell()
             }
@@ -155,11 +192,16 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource{
             return cell
         }
         else {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "BottomTableViewCell", for: indexPath) as? BottomTableViewCell
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: BottomTableViewCell.identifier, for: indexPath) as? BottomTableViewCell
             else{
                 return UITableViewCell()
             }
+            print("임장 개수: \(mainImjangList.count)")
             cell.selectionStyle = .none
+            cell.collectionView.delegate = self
+            cell.collectionView.dataSource = self
+            cell.isHidden(mainImjangList.isEmpty)
+            cell.collectionView.reloadData()
             return cell
         }
     }
@@ -171,31 +213,32 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource{
             return BottomTableViewCell.cellHeight
         }
     }
-    
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cell.backgroundColor = .clear
-        guard let tableViewCell = cell as? BottomTableViewCell else {
-            return
-        }
-        tableViewCell.setCollectionViewDataSourceDelegate(dataSourceDelegate: self, forRow: indexPath.row)
-    }
 }
      
 extension MainViewController : UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-     return 5
-     }
+        return mainImjangList.count
+    }
      
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BottomCollectionViewCell", for: indexPath) as?
-                BottomCollectionViewCell else{
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BottomCollectionViewCell.identifier, for: indexPath) as? BottomCollectionViewCell else {
             return UICollectionViewCell()
-     }
+        }
+        
+        print("으아아앙")
+        let item = mainImjangList[indexPath.row]
+        cell.configureCell(listDto: item)
+        
         return cell
      }
      
      func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
          return CGSize(width: 143 , height: 204)
      }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let item = mainImjangList[indexPath.row]
+        showImjangNoteVC(imjangId: item.limjangId)
+    }
 }
 

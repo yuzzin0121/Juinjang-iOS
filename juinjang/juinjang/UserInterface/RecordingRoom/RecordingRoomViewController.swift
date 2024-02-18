@@ -9,7 +9,14 @@ import UIKit
 import SnapKit
 import Then
 
-class RecordingRoomViewController: UIViewController {
+protocol PassDataDelegate: AnyObject {
+    func passData(id: Int)
+}
+
+class RecordingRoomViewController: UIViewController, PassDataDelegate {
+    func passData(id: Int) {
+        self.imjangId = id
+    }
     
     // 스크롤뷰
     let scrollView = UIScrollView().then {
@@ -57,9 +64,14 @@ class RecordingRoomViewController: UIViewController {
         $0.textColor = UIColor(named: "placeholderOrange")
     }
     
-    
     let memoTextViewPlaceholder = "눌러서 메모를 추가해보세요!"
+
     var fileItems: [RecordingFileItem] = []
+    var imjangId: Int? = nil {
+        didSet {
+            print("임장룸\(imjangId)")
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,7 +84,7 @@ class RecordingRoomViewController: UIViewController {
         setConstraints()
         hideKeyboardWhenTappedArround()
         showTotalRecordingButton.addTarget(self, action: #selector(showRecordingFilesVC), for: .touchUpInside)
-        
+        callFetchRequest()
         NotificationCenter.default.addObserver(self, selector: #selector(didStoppedParentScroll), name: NSNotification.Name("didStoppedParentScroll"), object: nil)
     }
     
@@ -84,7 +96,70 @@ class RecordingRoomViewController: UIViewController {
         }
     }
     
-
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        print(#function)
+        callMemoRequest()
+    }
+    
+    // 녹음 3개까지, 메모 조회
+    func callFetchRequest() {
+        guard let imjangId = imjangId else { return }
+        JuinjangAPIManager.shared.fetchData(type: BaseResponse<RecordMemoDto>.self, api: .fetchRecordingRoom(imjangId: imjangId)) { recordMemoDto, error in
+            if error == nil {
+                guard let recordMemoDto = recordMemoDto else { return }
+                guard let result = recordMemoDto.result else { return }
+                print(result)
+                self.setMemo(memo: result.memo)
+            } else {
+                guard let error = error else { return }
+                switch error {
+                case .failedRequest:
+                    print("failedRequest")
+                case .noData:
+                    print("noData")
+                case .invalidResponse:
+                    print("invalidResponse")
+                case .invalidData:
+                    print("invalidData")
+                }
+            }
+        }
+    }
+    
+    func setMemo(memo: String?) {
+        guard let memo = memo else { return }
+        memoTextView.text = memo
+        memoTextView.textColor = memo.isEmpty ? ColorStyle.placeholderOrange : ColorStyle.textBlack
+    }
+    
+    // 메모장 생성/수정 요청
+    func callMemoRequest() {
+        print(#function)
+        guard let imjangId = imjangId else { return }
+        guard let memo = memoTextView.text else { return }
+        let parameter = [
+            "memo": memo
+        ]
+        print(UserDefaultManager.shared.accessToken)
+        JuinjangAPIManager.shared.postData(type: BaseResponse<MemoDto>.self, api: .memo(imjangId: imjangId), parameter: parameter) { response, error in
+            if error == nil {
+                guard let response = response else { return }
+            } else {
+                guard let error = error else { return }
+                switch error {
+                case .failedRequest:
+                    print("failedRequest")
+                case .noData:
+                    print("noData")
+                case .invalidResponse:
+                    print("invalidResponse")
+                case .invalidData:
+                    print("invalidData")
+                }
+            }
+        }
+    }
     
     @objc
     func showRecordingFilesVC() {
@@ -147,7 +222,7 @@ class RecordingRoomViewController: UIViewController {
         designLabel(recordingFileLabel,
                     text: "녹음 파일",
                     font: .pretendard(size: 20, weight: .bold),
-                    textColor: UIColor(named: "textBlack")!)
+                    textColor: ColorStyle.textBlack)
         
         designButton(addRecordingButton,
                      image: UIImage(named: "addOrange"))
@@ -160,10 +235,9 @@ class RecordingRoomViewController: UIViewController {
         
         designButton(showTotalRecordingButton, title: "전체보기")
         
+        designLabel(emptyMessageLabel, text: "아직 녹음 파일이 없어요", font: .pretendard(size: 16, weight: .medium), textColor: ColorStyle.gray0)
         
-        designLabel(emptyMessageLabel, text: "아직 녹음 파일이 없어요", font: .pretendard(size: 16, weight: .medium), textColor: UIColor(named: "gray1")!)
-        
-        designLabel(notePadLabel, text: "메모장", font: .pretendard(size: 20, weight: .bold), textColor: UIColor(named: "textBlack")!)
+        designLabel(notePadLabel, text: "메모장", font: .pretendard(size: 20, weight: .bold), textColor: ColorStyle.textBlack)
     }
     
     func setConstraints() {
@@ -275,7 +349,6 @@ class RecordingRoomViewController: UIViewController {
                 stackView.addArrangedSubview($0)
             }
         }
-        
     }
     
     
@@ -288,7 +361,6 @@ class RecordingRoomViewController: UIViewController {
         if cornerRadius != nil {
             imageView.layer.cornerRadius = cornerRadius!
         }
-        
     }
     
     // 레이블 디자인
@@ -348,10 +420,10 @@ extension RecordingRoomViewController: UITableViewDataSource, UITableViewDelegat
 
 extension RecordingRoomViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        print("Child 스크롤 좌표 - \(scrollView.contentOffset.y)")
+//        print("Child 스크롤 좌표 - \(scrollView.contentOffset.y)")
         
         // Child 스크롤 0 이하일 때
-        if scrollView.contentOffset.y < -50 {
+        if scrollView.contentOffset.y < -30 {
             scrollView.contentOffset.y = 0
             scrollView.isScrollEnabled = false
             NotificationCenter.default.post(name: NSNotification.Name("didStoppedChildScroll"), object: nil)
@@ -364,7 +436,7 @@ extension RecordingRoomViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == memoTextViewPlaceholder {
             textView.text = nil
-            textView.textColor = UIColor(named: "textBlack")
+            textView.textColor = ColorStyle.textBlack
         }
     }
     
@@ -372,7 +444,7 @@ extension RecordingRoomViewController: UITextViewDelegate {
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             textView.text = memoTextViewPlaceholder
-            textView.textColor = UIColor(named: "placeholderOrange")
+            textView.textColor = ColorStyle.placeholderOrange
         }
     }
 }

@@ -67,7 +67,10 @@ class DeleteImjangViewController: UIViewController {
     
     func deleteRequest(imjangIds: [Int]) {
         print(#function, "\(imjangIds)")
-        JuinjangAPIManager.shared.deleteImjang(type: BaseResponseString.self, api: .deleteImjangs(imjangIds: imjangIds), ids: imjangIds) { response, error in
+        let parameter: [String: Any] = [
+            "limjangIdList": imjangIds
+        ]
+        JuinjangAPIManager.shared.postData(type: BaseResponseString.self, api: .deleteImjangs(imjangIds: imjangIds), parameter: parameter) { response, error in
             if error == nil {
                 guard let response = response else { return }
                 print(response)
@@ -91,13 +94,12 @@ class DeleteImjangViewController: UIViewController {
     }
     
     func callRequest() {
-        JuinjangAPIManager.shared.fetchData(type: BaseResponse<TotalListDto>.self, api: .totalImjang) { response, error in
+        JuinjangAPIManager.shared.fetchData(type: BaseResponse<TotalListDto>.self, api: .totalImjang(sort: Filter.update.sortValue)) { response, error in
             if error == nil {
                 guard let response = response else { return }
                 guard let result = response.result else { return }
 //                print(result)
-                self.imjangList = result.scrapedList
-                self.imjangList.append(contentsOf: result.notScrapedList)
+                self.imjangList = result.limjangList
                 print(self.imjangList.count)
                 self.deleteImjangTableView.reloadData()
             } else {

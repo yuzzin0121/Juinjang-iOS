@@ -8,12 +8,20 @@
 import Foundation
 
 struct TotalListDto: Codable {
-    var scrapedList: [ListDto]
-    var notScrapedList: [ListDto]
+    var limjangList: [ListDto]
 }
 
 struct RecentUpdatedDto: Codable {
-    let recentUpdatedList: [ListDto]
+    let recentUpdatedList: [LimjangDto]
+}
+
+struct MainImjangDto: Codable {
+    let limjangId: Int
+    let image: String?
+    let nickname: String
+    let price: String
+    let totalAverage: String?
+    let address: String
 }
 
 struct ListDto: Codable {
@@ -26,6 +34,13 @@ struct ListDto: Codable {
     let priceList: [String]
     let totalAverage: String?    // 체크리스트 생선 전일 경우 값은 nil
     let address: String
-    let createdAt: String
-    let updatedAt: String
+}
+
+struct LimjangDto: Codable {
+    let limjangId: Int
+    let image: String?
+    let nickname: String
+    let price: String
+    let totalAverage: String?    // 체크리스트 생선 전일 경우 값은 nil
+    let address: String
 }
