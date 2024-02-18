@@ -57,6 +57,24 @@ final class JuinjangAPIManager {
        }
     }
     
+    func postCheckListItem<T: Decodable>(type: T.Type, api: JuinjangAPI, parameters: [[String: Any]], completionHandler: @escaping (T?, NetworkError?) -> Void) {
+        let parameters: Parameters? = parameters.isEmpty ? nil : ["data": parameters]
+
+        AF.request(api.endpoint,
+                   method: api.method,
+                   parameters: parameters,
+                   encoding: JSONEncoding.default,
+                   headers: api.header)
+        .responseDecodable(of: type) { response in
+            switch response.result {
+            case .success(let success):
+                completionHandler(success, nil)
+            case .failure(let failure):
+                print(failure)
+                completionHandler(nil, .failedRequest)
+            }
+        }
+    }
     
     func uploadImages(imjangId: Int, images: [UIImage], api: JuinjangAPI, completion: @escaping (Result<Void, Error>) -> Void) {
         
