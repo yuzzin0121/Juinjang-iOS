@@ -118,6 +118,8 @@
 		6108D0102B78C4FE00EF302F /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6108D00F2B78C4FE00EF302F /* SnapKit */; };
 		6108D0122B78CFFA00EF302F /* PreviousVCType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6108D0112B78CFFA00EF302F /* PreviousVCType.swift */; };
 		611757382B67D5E60043E958 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 611757372B67D5E60043E958 /* Assets.xcassets */; };
+		611AA7B62B81E187005DAC3B /* ScrapTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611AA7B52B81E187005DAC3B /* ScrapTableViewCell.swift */; };
+		611AA7B92B8253BC005DAC3B /* ImjangNoteCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611AA7B82B8253BC005DAC3B /* ImjangNoteCollectionViewCell.swift */; };
 		611F14552B47070B00B983F1 /* RecordingSegmentedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F14542B47070B00B983F1 /* RecordingSegmentedViewController.swift */; };
 		611F145A2B4707CC00B983F1 /* RecordingRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F14592B4707CC00B983F1 /* RecordingRoomViewController.swift */; };
 		611F145E2B471ECA00B983F1 /* CALayer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F145D2B471ECA00B983F1 /* CALayer+Extension.swift */; };
@@ -264,6 +266,8 @@
 		6108D0002B78A83B00EF302F /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		6108D0112B78CFFA00EF302F /* PreviousVCType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousVCType.swift; sourceTree = "<group>"; };
 		611757372B67D5E60043E958 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		611AA7B52B81E187005DAC3B /* ScrapTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrapTableViewCell.swift; sourceTree = "<group>"; };
+		611AA7B82B8253BC005DAC3B /* ImjangNoteCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImjangNoteCollectionViewCell.swift; sourceTree = "<group>"; };
 		611F14542B47070B00B983F1 /* RecordingSegmentedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingSegmentedViewController.swift; sourceTree = "<group>"; };
 		611F14592B4707CC00B983F1 /* RecordingRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingRoomViewController.swift; sourceTree = "<group>"; };
 		611F145D2B471ECA00B983F1 /* CALayer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+Extension.swift"; sourceTree = "<group>"; };
@@ -653,6 +657,36 @@
 			path = Encodable;
 			sourceTree = "<group>";
 		};
+		611AA7B32B81E14C005DAC3B /* Delete */ = {
+			isa = PBXGroup;
+			children = (
+				61B0C99A2B697B2F00BE86D2 /* DeleteImjangTableHeaderView.swift */,
+				619269EC2B67747F00D4DD3E /* DeleteImjangNoteTableViewCell.swift */,
+			);
+			path = Delete;
+			sourceTree = "<group>";
+		};
+		611AA7B42B81E15D005DAC3B /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				619269F02B67747F00D4DD3E /* SearchKeywordHeaderView.swift */,
+				619269ED2B67747F00D4DD3E /* RecentSearchKeywordTableViewCell.swift */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
+		611AA7B72B82539A005DAC3B /* List */ = {
+			isa = PBXGroup;
+			children = (
+				619269EE2B67747F00D4DD3E /* ImjangNoteTableViewCell.swift */,
+				611AA7B82B8253BC005DAC3B /* ImjangNoteCollectionViewCell.swift */,
+				619269EF2B67747F00D4DD3E /* ScrapCollectionViewCell.swift */,
+				619269F12B67747F00D4DD3E /* ImjangListHeaderView.swift */,
+				611AA7B52B81E187005DAC3B /* ScrapTableViewCell.swift */,
+			);
+			path = List;
+			sourceTree = "<group>";
+		};
 		616408EA2B407A2100EC3B5E /* Extension */ = {
 			isa = PBXGroup;
 			children = (
@@ -737,13 +771,9 @@
 		619269EB2B67747F00D4DD3E /* ImjangList */ = {
 			isa = PBXGroup;
 			children = (
-				619269EC2B67747F00D4DD3E /* DeleteImjangNoteTableViewCell.swift */,
-				619269ED2B67747F00D4DD3E /* RecentSearchKeywordTableViewCell.swift */,
-				619269EE2B67747F00D4DD3E /* ImjangNoteTableViewCell.swift */,
-				619269EF2B67747F00D4DD3E /* ScrapCollectionViewCell.swift */,
-				619269F02B67747F00D4DD3E /* SearchKeywordHeaderView.swift */,
-				619269F12B67747F00D4DD3E /* ImjangListHeaderView.swift */,
-				61B0C99A2B697B2F00BE86D2 /* DeleteImjangTableHeaderView.swift */,
+				611AA7B72B82539A005DAC3B /* List */,
+				611AA7B42B81E15D005DAC3B /* Search */,
+				611AA7B32B81E14C005DAC3B /* Delete */,
 			);
 			path = ImjangList;
 			sourceTree = "<group>";
@@ -940,6 +970,7 @@
 				345855762B689AAE00432C06 /* TopTableViewCell.swift in Sources */,
 				619269D72B6773FE00D4DD3E /* ImjangSearchResultViewController.swift in Sources */,
 				345855742B689A7E00432C06 /* BottomCollectionViewCell.swift in Sources */,
+				611AA7B62B81E187005DAC3B /* ScrapTableViewCell.swift in Sources */,
 				619269E92B67745900D4DD3E /* UserDefaultManager.swift in Sources */,
 				619269F52B67747F00D4DD3E /* ScrapCollectionViewCell.swift in Sources */,
 				3458557E2B689D2A00432C06 /* ExpandableTableViewCell.swift in Sources */,
@@ -995,6 +1026,7 @@
 				0A4EBE3B2B5EF2BC00909B7A /* ExpandedDropdownTableViewCell.swift in Sources */,
 				6108CFF82B76308F00EF302F /* RecordRequestDto.swift in Sources */,
 				6108CFF02B76285B00EF302F /* DetailDto.swift in Sources */,
+				611AA7B92B8253BC005DAC3B /* ImjangNoteCollectionViewCell.swift in Sources */,
 				0A95D7312B682FB4000A9C06 /* ToSItemTableViewCell.swift in Sources */,
 				61B0C9E52B6CDA0300BE86D2 /* PaddingLabel.swift in Sources */,
 				0A3EBEBE2B654E71004D8DCE /* OpenNewPagePopupViewController.swift in Sources */,

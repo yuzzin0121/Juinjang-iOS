@@ -24,7 +24,8 @@ struct MainImjangDto: Codable {
     let address: String
 }
 
-struct ListDto: Codable {
+struct ListDto: Codable, Hashable {
+    var id: UUID
     let limjangId: Int
     let images: [String]
     let purposeCode: Int        // 거래목적
@@ -34,6 +35,20 @@ struct ListDto: Codable {
     let priceList: [String]
     let totalAverage: String?    // 체크리스트 생선 전일 경우 값은 nil
     let address: String
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = UUID()
+        self.limjangId = try container.decode(Int.self, forKey: .limjangId)
+        self.images = try container.decode([String].self, forKey: .images)
+        self.purposeCode = try container.decode(Int.self, forKey: .purposeCode)
+        self.isScraped = try container.decode(Bool.self, forKey: .isScraped)
+        self.nickname = try container.decode(String.self, forKey: .nickname)
+        self.priceType = try container.decode(Int.self, forKey: .priceType)
+        self.priceList = try container.decode([String].self, forKey: .priceList)
+        self.totalAverage = try container.decodeIfPresent(String.self, forKey: .totalAverage)
+        self.address = try container.decode(String.self, forKey: .address)
+    }
 }
 
 struct LimjangDto: Codable {
