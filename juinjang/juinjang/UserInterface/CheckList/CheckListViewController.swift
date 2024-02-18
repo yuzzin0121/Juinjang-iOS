@@ -8,17 +8,12 @@
 import UIKit
 import SnapKit
 
-protocol CheckListViewControllerDelegate: AnyObject {
-    func didToggleEditMode(_ isEditMode: Bool)
-}
-
 class CheckListViewController: UIViewController {
     
     var calendarItems: [String: (inputDate: Date, isSelected: Bool)] = [:]
     var scoreItems: [String: (score: String, isSelected: Bool)] = [:]
     var inputItems: [String: (inputAnswer: String, isSelected: Bool)] = [:]
     var selectionItems: [String: (option: String, isSelected: Bool)] = [:]
-    weak var checkListDelegate: CheckListViewControllerDelegate?
     
     lazy var tableView = UITableView().then {
         $0.separatorStyle = .none
@@ -27,7 +22,6 @@ class CheckListViewController: UIViewController {
     }
 
     var isEditMode: Bool = true // 수정 모드 여부
-    weak var delegate: CheckListViewControllerDelegate?
     
     var imjangId: Int? {
         didSet {
@@ -45,7 +39,7 @@ class CheckListViewController: UIViewController {
     }
 
     var categories: [CheckListResponseDto] = []
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -55,6 +49,22 @@ class CheckListViewController: UIViewController {
         setupLayout()
         registerCell()
         NotificationCenter.default.addObserver(self, selector: #selector(didStoppedParentScroll), name: NSNotification.Name("didStoppedParentScroll"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleEditModeChange(_:)), name: Notification.Name("EditModeChanged"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleEditButtonTappedNotification), name: NSNotification.Name("EditButtonTapped"), object: nil)
+        
+    }
+    
+    @objc func handleEditModeChange(_ notification: Notification) {
+        if let userInfo = notification.userInfo, let isEditMode = userInfo["isEditMode"] as? Bool {
+            tableView.reloadData()
+            print("isEditMode 상태: \(isEditMode)")
+            tableView.reloadData()
+        }
+    }
+    
+    @objc func handleEditButtonTappedNotification() {
+        print("체크리스트 저장 좀 하고 싶다")
+        saveAnswer()
     }
     
     @objc func didStoppedParentScroll() {
@@ -115,17 +125,101 @@ class CheckListViewController: UIViewController {
                 completion(checkListResponseDto)
             } else {
                 guard let error = error else { return }
-                switch error {
-                case .failedRequest:
-                    print("failedRequest")
-                case .noData:
-                    print("noData")
-                case .invalidResponse:
-                    print("invalidResponse")
-                case .invalidData:
-                    print("invalidData")
+                self.handleNetworkError(error)
+            }
+        }
+    }
+    
+    func saveAnswer() {
+        print("saveAnswer 함수 호출")
+        guard let imjangId = imjangId else { return }
+        var parameters: [[String: Any]] = []
+
+        JuinjangAPIManager.shared.fetchData(type: BaseResponse<[CheckListResponseDto]>.self, api: .showChecklist(imjangId: imjangId)) { response, error in
+            guard let checkListResponse = response else {
+                // 실패 시 에러 처리
+                print("실패: \(error?.localizedDescription ?? "error")")
+                return
+            }
+
+            // 달력
+            for (key, value) in self.calendarItems {
+                if let questionId = self.findQuestionId(forQuestion: key, in: checkListResponse) {
+                    // Date를 String으로 변환
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "yyyyMMdd"
+                    let dateString = dateFormatter.string(from: value.inputDate)
+                    
+                    let parameter = ["questionId": questionId, "answer": dateString]
+                    parameters.append(parameter)
                 }
             }
+
+            // 점수형
+            for (key, value) in self.scoreItems {
+                if let questionId = self.findQuestionId(forQuestion: key, in: checkListResponse) {
+                    let parameter = ["questionId": questionId, "answer": value.score]
+                    parameters.append(parameter)
+                }
+            }
+
+            // 입력형
+            for (key, value) in self.inputItems {
+                if let questionId = self.findQuestionId(forQuestion: key, in: checkListResponse) {
+                    let parameter = ["questionId": questionId, "answer": value.inputAnswer]
+                    parameters.append(parameter)
+                }
+            }
+
+            // 선택형
+            for (key, value) in self.selectionItems {
+                if let questionId = self.findQuestionId(forQuestion: key, in: checkListResponse) {
+                    let parameter = ["questionId": questionId, "answer": value.option]
+                    parameters.append(parameter)
+                }
+            }
+            
+            print(parameters)
+
+            JuinjangAPIManager.shared.postCheckListItem(type: BaseResponse<ResultDto>.self, api: .saveChecklist(imjangId: imjangId), parameters: parameters) { response, error in
+                if error == nil {
+                    guard let response = response else { return }
+                    print(response)
+                } else {
+                    guard let error = error else { return }
+                    print(error)
+                    print("API 응답 디코딩 실패: \(error.localizedDescription)")
+                    self.handleNetworkError(error)
+                }
+            }
+        }
+    }
+    
+    func findQuestionId(forQuestion question: String, in checkListResponse: BaseResponse<[CheckListResponseDto]>) -> Int? {
+        guard let result = checkListResponse.result else {
+            return nil
+        }
+        
+        for category in result {
+            for questionDto in category.questionDtos {
+                if questionDto.question == question {
+                    return questionDto.questionId
+                }
+            }
+        }
+        return nil
+    }
+    
+    func handleNetworkError(_ error: NetworkError) {
+        switch error {
+        case .failedRequest:
+            print("failedRequest")
+        case .noData:
+            print("noData")
+        case .invalidResponse:
+            print("invalidResponse")
+        case .invalidData:
+            print("invalidData")
         }
     }
 }

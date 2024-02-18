@@ -10,9 +10,11 @@ import SnapKit
 import Then
 import Kingfisher
 
-class ImjangNoteViewController: UIViewController, CheckListViewControllerDelegate {
+class ImjangNoteViewController: UIViewController{
+    
     var version: VersionInfo?
     var isEditMode: Bool = false // 수정 모드 여부
+    
     // 스크롤뷰
     let scrollView = UIScrollView().then {
         $0.backgroundColor = .white
@@ -104,12 +106,6 @@ class ImjangNoteViewController: UIViewController, CheckListViewControllerDelegat
         $0.addTarget(self, action: #selector(editButtonTapped(_:)), for: .touchUpInside)
     }
     
-    func didToggleEditMode(_ isEditMode: Bool) {
-        self.isEditMode = isEditMode
-        print("수정 모드 진입")
-        print(isEditMode)
-    }
-    
     let recordingSegmentedVC = RecordingSegmentedViewController()
     let checkListVC = CheckListViewController()
     
@@ -149,7 +145,6 @@ class ImjangNoteViewController: UIViewController, CheckListViewControllerDelegat
                 recordingRoomVC.imjangId = imjangId
             }
         }
-        checkListVC.delegate = self
     }
     
     func callRequest() {
@@ -743,14 +738,16 @@ class ImjangNoteViewController: UIViewController, CheckListViewControllerDelegat
     // 수정 버튼 클릭
     @objc func editButtonTapped(_ sender: UIButton) {
         sender.isSelected.toggle()
+        isEditMode.toggle()
         if sender.isSelected {
             editButton.setImage(UIImage(named: "completed-button"), for: .normal)
         } else {
             editButton.setImage(UIImage(named: "edit-button"), for: .normal)
+            NotificationCenter.default.post(name: NSNotification.Name("EditButtonTapped"), object: nil)
             let reportVC = ReportViewController()
             self.navigationController?.pushViewController(reportVC, animated: true)
         }
-        didToggleEditMode(sender.isSelected)
+        NotificationCenter.default.post(name: Notification.Name("EditModeChanged"), object: nil, userInfo: ["isEditMode": isEditMode])
     }
 }
 
@@ -784,4 +781,3 @@ extension ImjangNoteViewController: UIScrollViewDelegate {
         }
     }
 }
-

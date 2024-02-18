@@ -246,7 +246,7 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
         var optionValues: [OptionItem] = []
 
         // 지하철 노선도 항목에 대한 이미지 추가
-        if questionDto.questionId == 62 {
+        if questionDto.questionId == 4 || questionDto.questionId == 62 {
             let specialImages: [UIImage?] = [
                 nil, // "선택 안함"
                 UIImage(named: "line1"),               // 1호선

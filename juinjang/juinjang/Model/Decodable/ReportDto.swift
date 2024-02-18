@@ -7,18 +7,28 @@
 
 import Foundation
 
-struct ContainerReportDto: Decodable {
-    let reportDTO: [ReportDto]
-    let limjangDto: [DetailDto]
+struct ResultDto: Codable {
+    let answerDtoList: [AnswerDto]
+    let reportDto: ReportDto
+    let limjangDto: DetailDto
 }
 
-struct ReportDto: Decodable {
+struct AnswerDto: Codable {
+    let answerId: Int
+    let questionId: Int
+    let category: String
+    let limjangId: Int
+    let answer: String
+    let answerType: String
+}
+
+struct ReportDto: Codable {
     let reportId: Int
     let indoorKeyword: String
     let publicSpaceKeyWord: String
-    let locationCoditionWord: String
+    let locationConditionsWord: String
     let indoorRate: Float
     let publicSpaceRate: Float
-    let locationCoditionsRate: Float
+    let locationConditionsRate: Float
     let totalRate: Float
 }
