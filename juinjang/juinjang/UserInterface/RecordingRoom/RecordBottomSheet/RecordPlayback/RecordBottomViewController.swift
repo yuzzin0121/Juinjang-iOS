@@ -9,9 +9,16 @@ import UIKit
 import SnapKit
 import AVFoundation
 
-class RecordBottomViewController: UIViewController, UITextFieldDelegate {
+var recordTime : String!
+
+class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudioPlayerDelegate {
     
     weak var topViewController: RecordTopViewController?
+    
+    var audioFile : URL! // 재생할 오디오의 파일명 변수
+    var audioPlayer : AVAudioPlayer! //avaudioplayer인스턴스 변수
+    var progressTimer : Timer! //타이머를 위한 변수
+    
 
     lazy var titleTextField = UITextField().then {
         $0.text = "녹음_001"
@@ -20,8 +27,8 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate {
         $0.font = UIFont(name: "Pretendard-Bold", size: 24)
     }
     
-    lazy var recordStartTimeLabel = UILabel().then {
-        $0.text = "오후 4:00" // - TODO: 녹음 파일 추가할 때의 시간 반영
+    var recordStartTimeLabel = UILabel().then {
+        $0.text = "\(recordTime ?? "오후 4:00")" // - TODO: 녹음 파일 추가할 때의 시간 반영
         $0.textColor = UIColor(named: "gray1")
         $0.font = UIFont(name: "Pretendard-Regular", size: 16)
     }
@@ -32,10 +39,11 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate {
         $0.text = "0:41"
     }
     
-    lazy var recordingSlider = UISlider().then {
+    var recordingSlider = UISlider().then {
         $0.setThumbImage(UIImage(named: "slider-thumb"), for: .normal)
         $0.tintColor = UIColor(named: "mainOrange")
         $0.addTarget(self, action: #selector(dragedSlider), for: .valueChanged)
+        $0.isUserInteractionEnabled = true
     }
     
     lazy var remainingTimeLabel = UILabel().then {
@@ -78,7 +86,59 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate {
         addSubViews()
         setupLayout()
         titleTextField.delegate = self
+        
+        playSet()
+        audioPlayer.stop()
+        audioPlayer.play()
+        progressTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(updatePlayTime), userInfo: nil, repeats: true)
     }
+    
+    func playSet() {
+        let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        audioFile = documentDirectory.appendingPathComponent("recordFile.m4a")
+        //audioFile = Bundle.main.url(forResource: "Cruel Summer", withExtension: "mp3")
+        initPlay()
+    }
+    
+    func initPlay(){
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: audioFile)
+        } catch let error as NSError {
+            print("Error-iniPlay : \(error)")
+        }
+        
+        recordingSlider.value = 0
+        
+        audioPlayer.delegate = self
+        audioPlayer.prepareToPlay()
+        
+        remainingTimeLabel.text = convertNSTimeInterval2String(audioPlayer.duration)
+        elapsedTimeLabel.text = convertNSTimeInterval2String(0)
+    }
+    
+    // 00:00 형태의 문자열로 변환
+    func convertNSTimeInterval2String(_ time:TimeInterval) -> String {
+        let min = Int(time/60)
+        let sec = Int(time.truncatingRemainder(dividingBy: 60))
+        let strTime = String(format: "%02d:%02d", min, sec)
+        return strTime
+    }
+    
+    //0.1초마다 호출되어 재생 시간 표시
+    @objc func updatePlayTime() {
+        elapsedTimeLabel.text = convertNSTimeInterval2String(audioPlayer.currentTime)
+        //pvProgressPlay.progress = Float(audioPlayer.currentTime/audioPlayer.duration)
+        recordingSlider.value = Float(audioPlayer.currentTime / audioPlayer.duration)
+    }
+    
+    //정지 버튼 클릭 시 음악 재생 종료
+    @objc func btnStopAudio(_ sender: UIButton) {
+        audioPlayer.stop()
+        audioPlayer.currentTime = 0
+        elapsedTimeLabel.text = convertNSTimeInterval2String(0)
+        progressTimer.invalidate()
+    }
+    
     
     func addSubViews() {
         [titleTextField,
@@ -155,15 +215,19 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate {
     
     @objc func startRecordPressed(_ sender: UIButton) {
         if recordButton.isSelected {
-//            player.pause()
-            recordButton.setImage(UIImage(named: "record-button"), for: .normal)
-        } else {
-//            player.play()
+            audioPlayer.play()
+            progressTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(updatePlayTime), userInfo: nil, repeats: true)
             recordButton.setImage(UIImage(named: "being-recorded-button"), for: .normal)
+        } else {
+            audioPlayer.pause()
+            recordButton.setImage(UIImage(named: "record-button"), for: .normal)
         }
         recordButton.isSelected.toggle()
     }
     
     @objc private func dragedSlider() {
+        //audioPlayer.currentTime = TimeInterval(recordingSlider.value)
+        let newTime = TimeInterval(recordingSlider.value) * audioPlayer.duration
+        audioPlayer.currentTime = newTime
     }
 }

@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import AVFoundation
 
 class BottomSheetViewController: UIViewController {
     
@@ -83,7 +84,7 @@ class BottomSheetViewController: UIViewController {
         addChild(viewController)
         view.addSubview(viewController.view)
         viewController.didMove(toParent: self)
-
+        
         // 현재 뷰 컨트롤러 갱신
         currentViewController = viewController
     }
