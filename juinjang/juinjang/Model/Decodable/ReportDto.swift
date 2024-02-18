@@ -32,3 +32,5 @@ struct ReportDto: Codable {
     let locationConditionsRate: Float
     let totalRate: Float
 }
+
+
