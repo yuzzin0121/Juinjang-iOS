@@ -145,6 +145,10 @@ class ExpandedTextFieldTableViewCell: UITableViewCell {
             saveInputAnswer()
         }
     }
+    
+    func configure(with questionDto: QuestionDto) {
+        contentLabel.text = questionDto.question
+    }
 }
 
 extension ExpandedTextFieldTableViewCell: UITextFieldDelegate {

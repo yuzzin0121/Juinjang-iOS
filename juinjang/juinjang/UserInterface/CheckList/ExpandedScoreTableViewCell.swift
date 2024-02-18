@@ -239,4 +239,8 @@ class ExpandedScoreTableViewCell: UITableViewCell {
             saveSelectedScore()
         }
     }
+    
+    func configure(with questionDto: QuestionDto) {
+        contentLabel.text = questionDto.question
+    }
 }

@@ -275,6 +275,10 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
 //            saveSelectedDate()
         }
     }
+    
+    func configure(with questionDto: QuestionDto) {
+        contentLabel.text = questionDto.question
+    }
 }
 
 

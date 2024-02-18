@@ -24,7 +24,7 @@ struct QuestionDto: Codable {
     let subCategory: String
     let question: String
     let version: Int
-    let answerType: Int
+    let answerType: Int // 0: 점수형 1: 선택형 2: 입력형 3: 달력
     let options: [OptionDto]
     let answer: String?
 }
@@ -33,4 +33,13 @@ struct OptionDto: Codable {
     let indexNum: Int
     let questionId: Int
     let optionValue: String
+}
+
+extension CheckListResponseDto {
+    func filterCategoryZero(isEditMode: Bool) -> CheckListResponseDto? {
+        if isEditMode || category != 0 {
+            return self
+        }
+        return nil
+    }
 }

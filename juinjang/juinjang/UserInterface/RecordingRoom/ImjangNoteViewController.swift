@@ -134,18 +134,16 @@ class ImjangNoteViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(didStoppedChildScroll), name: NSNotification.Name("didStoppedChildScroll"), object: nil)
         recordingSegmentedVC.imjangNoteViewController = self
         if let imjangId = imjangId {
-            if let recordingRoomVC = recordingSegmentedVC.viewControllers[1] as? RecordingRoomViewController {
+            if let notEnteredCheckListVC = recordingSegmentedVC.viewControllers[0] as?
+                NotEnteredCheckListViewController {
+                notEnteredCheckListVC.imjangId = imjangId
+            } else if let checkListVC = recordingSegmentedVC.viewControllers[0] as?
+                CheckListViewController {
+                    checkListVC.imjangId = imjangId
+            } else if let recordingRoomVC = recordingSegmentedVC.viewControllers[1] as? RecordingRoomViewController {
                 recordingRoomVC.imjangId = imjangId
             }
         }
-        passImjangId()
-    }
-    
-    func passImjangId() {
-        let notEnteredCheckListVC = NotEnteredCheckListViewController()
-        let checkListVC = CheckListViewController()
-        notEnteredCheckListVC.imjangId = imjangId
-        checkListVC.imjangId = imjangId
     }
     
     func callRequest() {
