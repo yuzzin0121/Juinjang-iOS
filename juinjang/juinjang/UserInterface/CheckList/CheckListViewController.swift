@@ -25,7 +25,7 @@ class CheckListViewController: UIViewController {
     
     var imjangId: Int? {
         didSet {
-            print("입력 전 체크리스트 \(imjangId)")
+            print("체크리스트 \(imjangId)")
             responseQuestion { [weak self] updatedCategories in
                 DispatchQueue.main.async {
                     self?.categories = updatedCategories
@@ -134,7 +134,9 @@ class CheckListViewController: UIViewController {
         print("saveAnswer 함수 호출")
         guard let imjangId = imjangId else { return }
         var parameters: [[String: Any]] = []
-
+        
+        print("토큰값 \(UserDefaultManager.shared.accessToken)")
+        
         JuinjangAPIManager.shared.fetchData(type: BaseResponse<[CheckListResponseDto]>.self, api: .showChecklist(imjangId: imjangId)) { response, error in
             guard let checkListResponse = response else {
                 // 실패 시 에러 처리
@@ -456,7 +458,7 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
         case 1: // SelectionItem
             return 114
         case 3: // CalendarItem
-            return 443
+            return 450
         default:
             return UITableView.automaticDimension
         }
