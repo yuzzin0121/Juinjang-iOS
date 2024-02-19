@@ -9,8 +9,7 @@ import Foundation
 
 struct ResultDto: Codable {
     let answerDtoList: [AnswerDto]
-    let reportDto: ReportDto
-    let limjangDto: DetailDto
+    let reportDto: reportDto
 }
 
 struct AnswerDto: Codable {
@@ -22,7 +21,12 @@ struct AnswerDto: Codable {
     let answerType: String
 }
 
-struct ReportDto: Codable {
+struct reportDto: Codable {
+    let reportDTO: ReportDTO
+    let limjangDto: DetailDto
+}
+
+struct ReportDTO: Codable {
     let reportId: Int
     let indoorKeyword: String
     let publicSpaceKeyWord: String

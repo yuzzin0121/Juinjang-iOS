@@ -20,7 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
 
-        let mainViewController = BottomSheetViewController()
+        let mainViewController = SplashViewController()
 //        let navigationController = UINavigationController(rootViewController: mainViewController)
 //        navigationController.navigationBar.scrollEdgeAppearance?.backgroundColor = .white
         window?.rootViewController = mainViewController
