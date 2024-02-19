@@ -50,7 +50,7 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudio
     lazy var remainingTimeLabel = UILabel().then {
         $0.textColor = UIColor(named: "gray1")
         $0.font = UIFont(name: "Pretendard-Regular", size: 13)
-        $0.text = "-4:10"
+        $0.text = "4:10"
     }
     
     // 임의로 넣어둠 -TODO: 음성 녹음 파일 연결 필요
@@ -223,6 +223,7 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudio
         if let title = newTitle {
             print("녹음 파일 제목: \(title)")
             titleTextField.text = title
+            RecordingFileViewCell().recordingFileNameLabel.text = title
         }
     }
     

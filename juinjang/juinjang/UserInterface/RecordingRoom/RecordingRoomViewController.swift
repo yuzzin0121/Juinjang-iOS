@@ -325,7 +325,7 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
         var rowHeight = 0.13
         print("file \(fileURLs.count)개")
         switch fileURLs.count {
-        case 0: rowHeight = 0
+        case 0: rowHeight = 1
             tableBackgroundView.isHidden = false
         case 1: rowHeight = 1
         case 2: rowHeight = 2
@@ -432,8 +432,10 @@ extension RecordingRoomViewController: UITableViewDataSource, UITableViewDelegat
             return UITableViewCell()
         }
         cell.selectionStyle = .none
+        let playVC = PlayRecordViewController()
+        playVC.bottomViewController.audioFile = fileURLs[indexPath.row]
         //cell.setData(fileItem: fileItems[indexPath.row])
-        cell.setData(fileText: fileURLs[indexPath.row].lastPathComponent)
+        cell.setData(fileTitle: "\(playVC.bottomViewController.titleTextField.text ?? "녹음 001")", time: "\(playVC.bottomViewController.remainingTimeLabel.text ?? "0:00")")
         return cell
     }
     

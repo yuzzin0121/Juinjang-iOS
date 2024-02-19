@@ -74,8 +74,9 @@ class RecordingFilesViewController: UIViewController {
     }
     
     @objc func back(_ sender: Any) {
-        let vc = ImjangNoteViewController()
-        navigationController?.pushViewController(vc, animated: true)
+//        let vc = ImjangNoteViewController()
+//        navigationController?.pushViewController(vc, animated: true)
+        navigationController?.popViewController(animated: true)
     }
     
     @objc func startRecording(_ sender: Any) {
@@ -189,10 +190,11 @@ extension RecordingFilesViewController: UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: RecordingFileViewCell.identifier, for: indexPath) as? RecordingFileViewCell else { return UITableViewCell() }
         let recordingURL = fileURLs[indexPath.row]
-        
+        let playVC = PlayRecordViewController()
+        playVC.bottomViewController.audioFile = fileURLs[indexPath.row]
         cell.selectionStyle = .none
         //cell.setData(fileItem: fileItems[indexPath.row])
-        cell.setData(fileText: recordingURL.lastPathComponent)
+        cell.setData(fileTitle: "\(playVC.bottomViewController.titleTextField.text ?? "녹음 001")", time: "\(playVC.bottomViewController.remainingTimeLabel.text ?? "0:00")")
         //cell.playButton.addTarget(self, action: #selector(playButtonTapped(_:)), for: .touchUpInside)
         return cell
     }

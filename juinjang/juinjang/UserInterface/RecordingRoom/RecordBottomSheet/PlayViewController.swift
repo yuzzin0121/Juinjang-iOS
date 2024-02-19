@@ -18,7 +18,7 @@ class PlayViewController: UIViewController, UITextFieldDelegate, AVAudioPlayerDe
     var progressTimer : Timer! //타이머를 위한 변수
     
 
-    lazy var titleTextField = UITextField().then {
+    var titleTextField = UITextField().then {
         $0.text = "녹음_001"
         $0.textAlignment = .center
         $0.textColor = UIColor(named: "lightGray")
@@ -189,6 +189,8 @@ class PlayViewController: UIViewController, UITextFieldDelegate, AVAudioPlayerDe
         if let title = newTitle {
             print("녹음 파일 제목: \(title)")
             titleTextField.text = title
+            RecordingFileViewCell().setData(fileTitle: title, time: remainingTimeLabel.text)
+            RecordingFileViewCell().recordingFileNameLabel.text = title
         }
     }
     
