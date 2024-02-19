@@ -6,6 +6,9 @@
 //
 
 import UIKit
+import AVFoundation
+
+
 
 class RecordingFilesViewController: UIViewController {
     
@@ -28,6 +31,7 @@ class RecordingFilesViewController: UIViewController {
         $0.register(RecordingFileViewCell.self, forCellReuseIdentifier: RecordingFileViewCell.identifier)
     }
     
+    var fileURLs : [URL] = []
     var fileItems: [RecordingFileItem] = []
 
     override func viewDidLoad() {
@@ -37,7 +41,9 @@ class RecordingFilesViewController: UIViewController {
         setConstraints()
         designNavigationBar()
         setDelegate()
-        setItemData()
+        //setItemData()
+        
+        loadRecordings()
     }
     
     func setDelegate() {
@@ -68,7 +74,8 @@ class RecordingFilesViewController: UIViewController {
     }
     
     @objc func back(_ sender: Any) {
-        self.navigationController?.popViewController(animated: true)
+        let vc = ImjangNoteViewController()
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     @objc func startRecording(_ sender: Any) {
@@ -81,7 +88,7 @@ class RecordingFilesViewController: UIViewController {
     
     func setItemData() {
         fileItems.append(contentsOf: [
-            .init(name: "녹음_001", recordedDate: Date(), recordedTime: "1:57"),
+            .init(name: "녹음_001", recordedDate: Date(), recordedTime: "1:22"),
             .init(name: "녹음_002", recordedDate: Date(), recordedTime: "2:12"),
             .init(name: "녹음_003", recordedDate: Date(), recordedTime: "2:43"),
             .init(name: "녹음_004", recordedDate: Date(), recordedTime: "3:11"),
@@ -100,6 +107,21 @@ class RecordingFilesViewController: UIViewController {
         
         recordingFileTableView.reloadData()
     }
+    
+    func loadRecordings() {
+           let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+           do {
+               // 문서 디렉토리에서 녹음 파일들을 가져옴
+               let recordingURLs = try FileManager.default.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil, options: [])
+               // 녹음 파일 목록에 추가
+               fileURLs = recordingURLs.filter { $0.pathExtension == "m4a" } // .m4a 확장자를 가진 파일만 필터링
+           } catch {
+               print("Failed to load recordings: \(error)")
+           }
+
+           // UITableView 새로고침
+           recordingFileTableView.reloadData()
+       }
     
     func addSubViews() {
         view.addSubview(scrollView)
@@ -131,28 +153,60 @@ class RecordingFilesViewController: UIViewController {
     func showDeletePopup(indexPath: IndexPath) {
         let deletePopupVC = DeletePopupViewController()
         deletePopupVC.fileIndexPath = indexPath
-        deletePopupVC.fileName = fileItems[indexPath.row].name
+        //deletePopupVC.fileName = fileItems[indexPath.row].name
+        
+        let fileURL = self.fileURLs[indexPath.row]
+        do {
+            try FileManager.default.removeItem(at: fileURL)
+        } catch {
+            print("Error deleting file: \(error)")
+        }
+        deletePopupVC.fileName = fileURLs[indexPath.row].lastPathComponent
         deletePopupVC.completionHandler = { [weak self] indexPath in
-            self?.fileItems.remove(at: indexPath.row)
+            self?.fileURLs.remove(at: indexPath.row)
             self?.recordingFileTableView.deleteRows(at: [indexPath], with: .fade)
         }
         deletePopupVC.modalPresentationStyle = .overCurrentContext
         present(deletePopupVC, animated: true)
     }
+    @objc func playButtonTapped(_ sender: UIButton) {
+        // 버튼 이미지 변경
+        print("버튼 눌림")
+        sender.setImage(UIImage(named: "star"), for: .normal)
+        
+        // 녹음 파일을 재생하는 코드
+        
+    }
 }
 
 extension RecordingFilesViewController: UITableViewDelegate, UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return fileItems.count
+        //return fileItems.count
+        return fileURLs.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: RecordingFileViewCell.identifier, for: indexPath) as? RecordingFileViewCell else { return UITableViewCell() }
+        let recordingURL = fileURLs[indexPath.row]
         
         cell.selectionStyle = .none
-        cell.setData(fileItem: fileItems[indexPath.row])
-        
+        //cell.setData(fileItem: fileItems[indexPath.row])
+        cell.setData(fileText: recordingURL.lastPathComponent)
+        //cell.playButton.addTarget(self, action: #selector(playButtonTapped(_:)), for: .touchUpInside)
         return cell
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // 새로운 뷰 컨트롤러를 생성하고 데이터를 전달합니다.
+        let vc = BottomSheetViewController()
+        vc.modalPresentationStyle = .custom
+        
+        let playVC = PlayRecordViewController()
+        playVC.bottomViewController.audioFile = fileURLs[indexPath.row]
+        vc.transitionToViewController(playVC)
+        
+        // 새로운 뷰 컨트롤러를 present 합니다.
+        present(vc, animated: true, completion: nil)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
