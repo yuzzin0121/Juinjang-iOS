@@ -10,8 +10,11 @@ import SnapKit
 import Then
 import Kingfisher
 
-class ImjangNoteViewController: UIViewController {
+class ImjangNoteViewController: UIViewController{
+    
     var version: VersionInfo?
+    var isEditMode: Bool = false // 수정 모드 여부
+    
     // 스크롤뷰
     let scrollView = UIScrollView().then {
         $0.backgroundColor = .white
@@ -104,6 +107,7 @@ class ImjangNoteViewController: UIViewController {
     }
     
     let recordingSegmentedVC = RecordingSegmentedViewController()
+    let checkListVC = CheckListViewController()
     
     var roomName: String = "판교푸르지오월드마크"
     var roomPriceString: String = "30억 1천만원"
@@ -134,7 +138,10 @@ class ImjangNoteViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(didStoppedChildScroll), name: NSNotification.Name("didStoppedChildScroll"), object: nil)
         recordingSegmentedVC.imjangNoteViewController = self
         if let imjangId = imjangId {
-            if let recordingRoomVC = recordingSegmentedVC.viewControllers[1] as? RecordingRoomViewController {
+            if let checkListVC = recordingSegmentedVC.viewControllers[0] as?
+                CheckListViewController {
+                    checkListVC.imjangId = imjangId
+            } else if let recordingRoomVC = recordingSegmentedVC.viewControllers[1] as? RecordingRoomViewController {
                 recordingRoomVC.imjangId = imjangId
             }
         }
@@ -214,16 +221,23 @@ class ImjangNoteViewController: UIViewController {
     
     @objc func showReportVC() {
         // 현재 ViewController를 검사해서 미입력 상태라면
-        if let currentVC = recordingSegmentedVC.currentViewController,
-           currentVC.isKind(of: NotEnteredCheckListViewController.self) {
-            // 팝업창이 뜸
-            let reportPopupVC = ReportPopupViewController()
-            reportPopupVC.modalPresentationStyle = .overCurrentContext
-            present(reportPopupVC, animated: false, completion: nil)
-        } else {
-            // 아니라면 ReportViewController로 이동
-            let reportVC = ReportViewController()
-            navigationController?.pushViewController(reportVC, animated: true)
+        if let currentVC = recordingSegmentedVC.currentViewController as? CheckListViewController {
+            // 모든 문항이 값이 null인지 확인
+            let allItemsAreNull = currentVC.categories.allSatisfy { category in
+                return category.questionDtos.allSatisfy { questionDto in
+                    return questionDto.answer == nil
+                }
+            }
+            if allItemsAreNull {
+                // 팝업창이 뜸
+                let reportPopupVC = ReportPopupViewController()
+                reportPopupVC.modalPresentationStyle = .overCurrentContext
+                present(reportPopupVC, animated: false, completion: nil)
+            } else {
+                // 아니라면 ReportViewController로 이동
+                let reportVC = ReportViewController()
+                navigationController?.pushViewController(reportVC, animated: true)
+            }
         }
     }
     
@@ -724,15 +738,16 @@ class ImjangNoteViewController: UIViewController {
     // 수정 버튼 클릭
     @objc func editButtonTapped(_ sender: UIButton) {
         sender.isSelected.toggle()
+        isEditMode.toggle()
         if sender.isSelected {
             editButton.setImage(UIImage(named: "completed-button"), for: .normal)
-            NotificationCenter.default.post(name: NSNotification.Name("EditButtonToggled"), object: sender.isSelected)
         } else {
             editButton.setImage(UIImage(named: "edit-button"), for: .normal)
-            NotificationCenter.default.post(name: NSNotification.Name("EditButtonToggled"), object: sender.isSelected)
+            NotificationCenter.default.post(name: NSNotification.Name("EditButtonTapped"), object: nil)
             let reportVC = ReportViewController()
             self.navigationController?.pushViewController(reportVC, animated: true)
         }
+        NotificationCenter.default.post(name: Notification.Name("EditModeChanged"), object: nil, userInfo: ["isEditMode": isEditMode])
     }
 }
 
@@ -766,4 +781,3 @@ extension ImjangNoteViewController: UIScrollViewDelegate {
         }
     }
 }
-

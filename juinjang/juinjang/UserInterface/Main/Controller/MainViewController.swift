@@ -57,7 +57,7 @@ class MainViewController: UIViewController {
             if error == nil {
                 guard let response = response else { return }
                 guard let result = response.result else { return }
-                print(response)
+//                print(response)
                 self.mainImjangList = result.recentUpdatedList
                 self.tableView.reloadData()
             } else {
