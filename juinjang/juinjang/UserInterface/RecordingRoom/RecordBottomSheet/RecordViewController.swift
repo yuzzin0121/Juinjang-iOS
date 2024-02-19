@@ -9,9 +9,12 @@ import UIKit
 import SnapKit
 import AVFoundation
 
+
+
 class RecordViewController: UIViewController, AVAudioRecorderDelegate {
     
     weak var bottomSheetViewController: BottomSheetViewController?
+    var fileURLs : [URL] = []
     
     var audioFile : URL! // 재생할 오디오의 파일명 변수
     var audioRecorder : AVAudioRecorder!
@@ -90,6 +93,7 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
         bottomSheetView.backgroundColor = UIColor(named: "textBlack")
         addSubViews()
         setupLayout()
+        loadRecordings()
         recordSet()
     }
     override func viewDidAppear(_ animated: Bool) {
@@ -104,11 +108,21 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
         progressTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(updateRecordTime), userInfo: nil, repeats: true)
             
     }
-    
+    func loadRecordings() {
+       let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+       do {
+           // 문서 디렉토리에서 녹음 파일들을 가져옴
+           let recordingURLs = try FileManager.default.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil, options: [])
+           // 녹음 파일 목록에 추가
+           fileURLs = recordingURLs.filter { $0.pathExtension == "m4a" } // .m4a 확장자를 가진 파일만 필터링
+       } catch {
+           print("Failed to load recordings: \(error)")
+       }
+   }
     func recordSet() {
         let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        audioFile = documentDirectory.appendingPathComponent("recordFile.m4a")
-        
+        audioFile = documentDirectory.appendingPathComponent("recordfile\(fileURLs.count).m4a")
+        print("number: \(fileURLs.count)")
         initRecord()
     }
     
@@ -178,6 +192,7 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
         } else {
             print("Recording failed")
         }
+        
     }
     
     func updateEndTimeLabel() {
@@ -278,6 +293,7 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
     
     @objc func completedButtonPressed(_ sender: UIButton) {
         audioRecorder.stop()
+        RecordingFilesViewController().recordingFileTableView.reloadData()
         endTime = Date() // 녹음 종료 시간 기록
         updateEndTimeLabel()
         let loadingVC = STTLoadingViewController()

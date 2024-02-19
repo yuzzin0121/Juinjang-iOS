@@ -133,11 +133,11 @@ class MainViewController: UIViewController {
             switch response.result {
             case .success(let value):
                 if let httpResponse = response.response {
-//                    print("Status code: \(httpResponse.statusCode)")
+                    print("Status code: \(httpResponse.statusCode)")
                 }
                 // 응답 데이터 출력
                 if let responseString = String(data: value, encoding: .utf8) {
-//                    print("Response data: \(responseString)")
+                    print("Response data: \(responseString)")
                 }
                 do {
                     let decoder = JSONDecoder()
@@ -187,6 +187,8 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource{
                 return UITableViewCell()
             }
             cell.selectionStyle = .none
+            cell.backgroundColor = .clear
+        
             cell.newImjangButton.addTarget(self, action: #selector(newImjangBtnTap), for: .touchUpInside)
             cell.myNoteButton.addTarget(self, action: #selector(myImjangBtnTap), for: .touchUpInside)
             return cell
@@ -198,6 +200,7 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource{
             }
             print("임장 개수: \(mainImjangList.count)")
             cell.selectionStyle = .none
+            cell.backgroundColor = .clear
             cell.collectionView.delegate = self
             cell.collectionView.dataSource = self
             cell.isHidden(mainImjangList.isEmpty)

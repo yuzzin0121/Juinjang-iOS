@@ -53,7 +53,6 @@
 		0AB34CC12B4F11B000150A15 /* OpenNewPage2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB34CBE2B4F11B000150A15 /* OpenNewPage2ViewController.swift */; };
 		0AB34CC32B4F11B000150A15 /* OpenNewPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB34CC02B4F11B000150A15 /* OpenNewPageViewController.swift */; };
 		0AC6ED672B7E917F00263487 /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = 0AC6ED662B7E917F00263487 /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json */; };
-		0AC6ED692B7E91A500263487 /* splash.mp4.lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = 0AC6ED682B7E91A500263487 /* splash.mp4.lottie.json */; };
 		0AD529D62B729B6500FE7D9E /* CheckListPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD529D52B729B6500FE7D9E /* CheckListPopUpViewController.swift */; };
 		0AE388892B5986BC0041A979 /* CategoryItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE388882B5986BC0041A979 /* CategoryItemTableViewCell.swift */; };
 		0AE3888B2B5992870041A979 /* CheckListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE3888A2B5992870041A979 /* CheckListItem.swift */; };
@@ -98,11 +97,11 @@
 		346CF6AE2B70B46B00C70C7A /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346CF6AD2B70B46B00C70C7A /* SplashViewController.swift */; };
 		346CF6B32B70B54B00C70C7A /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 346CF6B22B70B54B00C70C7A /* Lottie */; };
 		3485CD692B73D3A700E8B9D6 /* SignUpWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3485CD682B73D3A700E8B9D6 /* SignUpWebViewController.swift */; };
-		34AA14D92B7C948400CF10FC /* 1_ezgif.com_crop.json in Resources */ = {isa = PBXBuildFile; fileRef = 34AA14D82B7C948400CF10FC /* 1_ezgif.com_crop.json */; };
 		34AA14E92B7DA04200CF10FC /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = 34AA14E82B7DA04200CF10FC /* Toast */; };
 		34AA14EB2B7DA5C700CF10FC /* Animation - 1707961785957.json in Resources */ = {isa = PBXBuildFile; fileRef = 34AA14EA2B7DA5C600CF10FC /* Animation - 1707961785957.json */; };
 		34AA14F12B8218EF00CF10FC /* Cruel Summer.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 34AA14F02B8218EE00CF10FC /* Cruel Summer.mp3 */; };
-		34AA14F32B821AB000CF10FC /* PlayAndRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AA14F22B821AB000CF10FC /* PlayAndRecordViewController.swift */; };
+		34AA14F52B82E46300CF10FC /* PlayRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AA14F42B82E46300CF10FC /* PlayRecordViewController.swift */; };
+		34AA14F72B82E98C00CF10FC /* PlayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AA14F62B82E98C00CF10FC /* PlayViewController.swift */; };
 		6108CFDF2B761AA300EF302F /* JuinjangAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6108CFDE2B761AA300EF302F /* JuinjangAPI.swift */; };
 		6108CFE12B761B3A00EF302F /* BaseResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6108CFE02B761B3A00EF302F /* BaseResponse.swift */; };
 		6108CFE62B761D0000EF302F /* LoginResponseDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6108CFE52B761D0000EF302F /* LoginResponseDto.swift */; };
@@ -222,7 +221,6 @@
 		0AB34CBE2B4F11B000150A15 /* OpenNewPage2ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenNewPage2ViewController.swift; sourceTree = "<group>"; };
 		0AB34CC02B4F11B000150A15 /* OpenNewPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenNewPageViewController.swift; sourceTree = "<group>"; };
 		0AC6ED662B7E917F00263487 /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json"; sourceTree = "<group>"; };
-		0AC6ED682B7E91A500263487 /* splash.mp4.lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = splash.mp4.lottie.json; sourceTree = "<group>"; };
 		0AD529D52B729B6500FE7D9E /* CheckListPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckListPopUpViewController.swift; sourceTree = "<group>"; };
 		0AE388882B5986BC0041A979 /* CategoryItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryItemTableViewCell.swift; sourceTree = "<group>"; };
 		0AE3888A2B5992870041A979 /* CheckListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckListItem.swift; sourceTree = "<group>"; };
@@ -253,12 +251,10 @@
 		345855DA2B6B8D5000432C06 /* CompareSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompareSearchViewController.swift; sourceTree = "<group>"; };
 		346CF6AD2B70B46B00C70C7A /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; wrapsLines = 0; };
 		3485CD682B73D3A700E8B9D6 /* SignUpWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpWebViewController.swift; sourceTree = "<group>"; };
-		34AA14D62B7C911300CF10FC /* splash.mp4.lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = splash.mp4.lottie.json; sourceTree = "<group>"; };
-		34AA14D82B7C948400CF10FC /* 1_ezgif.com_crop.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = 1_ezgif.com_crop.json; sourceTree = "<group>"; };
-		34AA14DA2B7CA45B00CF10FC /* 1-ezgif.com-gif-to-mp4-converter.mp4.lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "1-ezgif.com-gif-to-mp4-converter.mp4.lottie.json"; sourceTree = "<group>"; };
 		34AA14EA2B7DA5C600CF10FC /* Animation - 1707961785957.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Animation - 1707961785957.json"; sourceTree = "<group>"; };
 		34AA14F02B8218EE00CF10FC /* Cruel Summer.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Cruel Summer.mp3"; sourceTree = "<group>"; };
-		34AA14F22B821AB000CF10FC /* PlayAndRecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayAndRecordViewController.swift; sourceTree = "<group>"; };
+		34AA14F42B82E46300CF10FC /* PlayRecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayRecordViewController.swift; sourceTree = "<group>"; };
+		34AA14F62B82E98C00CF10FC /* PlayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayViewController.swift; sourceTree = "<group>"; };
 		6108CFDE2B761AA300EF302F /* JuinjangAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JuinjangAPI.swift; sourceTree = "<group>"; };
 		6108CFE02B761B3A00EF302F /* BaseResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseResponse.swift; sourceTree = "<group>"; };
 		6108CFE52B761D0000EF302F /* LoginResponseDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginResponseDto.swift; sourceTree = "<group>"; };
@@ -463,12 +459,13 @@
 			children = (
 				0A3D5D622B4D707300574686 /* BottomSheetViewController.swift */,
 				0A554CE32B5420F20023BB49 /* WarningMessageViewController.swift */,
-				34AA14F02B8218EE00CF10FC /* Cruel Summer.mp3 */,
 				0A554CDF2B52DB100023BB49 /* RecordViewController.swift */,
-				34AA14F22B821AB000CF10FC /* PlayAndRecordViewController.swift */,
-				34AA14EA2B7DA5C600CF10FC /* Animation - 1707961785957.json */,
 				0A2DED192B55198D00A96BAA /* STTLoadingViewController.swift */,
 				0A2DED1B2B551CB100A96BAA /* RecordPlaybackViewController.swift */,
+				34AA14F42B82E46300CF10FC /* PlayRecordViewController.swift */,
+				34AA14F62B82E98C00CF10FC /* PlayViewController.swift */,
+				34AA14EA2B7DA5C600CF10FC /* Animation - 1707961785957.json */,
+				34AA14F02B8218EE00CF10FC /* Cruel Summer.mp3 */,
 				0A2DED212B55433900A96BAA /* RecordPlayback */,
 			);
 			path = RecordBottomSheet;
@@ -625,10 +622,6 @@
 		346CF6AC2B70B41F00C70C7A /* Splash */ = {
 			isa = PBXGroup;
 			children = (
-				34AA14D82B7C948400CF10FC /* 1_ezgif.com_crop.json */,
-				34AA14D62B7C911300CF10FC /* splash.mp4.lottie.json */,
-				34AA14DA2B7CA45B00CF10FC /* 1-ezgif.com-gif-to-mp4-converter.mp4.lottie.json */,
-				0AC6ED682B7E91A500263487 /* splash.mp4.lottie.json */,
 				0AC6ED662B7E917F00263487 /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json */,
 				346CF6AD2B70B46B00C70C7A /* SplashViewController.swift */,
 			);
@@ -941,7 +934,6 @@
 			files = (
 				61A7B92D2B4C4EC300795B49 /* Pretendard-Bold.otf in Resources */,
 				0A9E0AA92B3DD4D20094595A /* .gitignore in Resources */,
-				0AC6ED692B7E91A500263487 /* splash.mp4.lottie.json in Resources */,
 				34AA14EB2B7DA5C700CF10FC /* Animation - 1707961785957.json in Resources */,
 				0A1C8F312B7A0DF1006B6B2B /* omyu pretty.ttf in Resources */,
 				61A7B92E2B4C4EC300795B49 /* Pretendard-ExtraBold.otf in Resources */,
@@ -955,7 +947,6 @@
 				61A7B9282B4C4EC300795B49 /* Pretendard-SemiBold.otf in Resources */,
 				0A9E0A532B3DCAB90094595A /* LaunchScreen.storyboard in Resources */,
 				611757382B67D5E60043E958 /* Assets.xcassets in Resources */,
-				34AA14D92B7C948400CF10FC /* 1_ezgif.com_crop.json in Resources */,
 				61A7B92B2B4C4EC300795B49 /* Pretendard-Light.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1005,6 +996,7 @@
 				345855A32B69504500432C06 /* SelectMaemullViewController.swift in Sources */,
 				0A603A682B7DD2640060B90D /* CheckListRequestDto.swift in Sources */,
 				3458558E2B689E2D00432C06 /* AccountDeleteViewController.swift in Sources */,
+				34AA14F72B82E98C00CF10FC /* PlayViewController.swift in Sources */,
 				6108CFE82B761E5900EF302F /* TotalListDto.swift in Sources */,
 				61B0C9D92B6C1B9600BE86D2 /* EnlargePhotoViewController.swift in Sources */,
 				61864BEA2B6003520073C175 /* UIButton+Extension.swift in Sources */,
@@ -1030,6 +1022,7 @@
 				611F145E2B471ECA00B983F1 /* CALayer+Extension.swift in Sources */,
 				0AF89DA32B74C5D500C9AD81 /* ContentWrappingTableView.swift in Sources */,
 				3458559D2B69479D00432C06 /* NoMaemullPopupViewController.swift in Sources */,
+				34AA14F52B82E46300CF10FC /* PlayRecordViewController.swift in Sources */,
 				61864BEF2B600E920073C175 /* ImjangNote.swift in Sources */,
 				0A73E60D2B5855CD00EF1C89 /* UserInfo.swift in Sources */,
 				345855802B689D4C00432C06 /* LogoutPopupView.swift in Sources */,
@@ -1080,7 +1073,6 @@
 				619269F42B67747F00D4DD3E /* ImjangNoteTableViewCell.swift in Sources */,
 				345855722B689A5300432C06 /* MainViewController.swift in Sources */,
 				6108CFFA2B76395B00EF302F /* JuinjangAPIManager.swift in Sources */,
-				34AA14F32B821AB000CF10FC /* PlayAndRecordViewController.swift in Sources */,
 				61AD50A92B58039B00314673 /* DeletePopupViewController.swift in Sources */,
 				345855902B689E3B00432C06 /* DimmedViewController.swift in Sources */,
 				6108CFE12B761B3A00EF302F /* BaseResponse.swift in Sources */,
