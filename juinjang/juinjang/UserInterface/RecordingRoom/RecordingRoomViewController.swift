@@ -205,21 +205,21 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
         view.endEditing(true)
     }
     
-    /*func setItemData() {
-        fileItems.append(contentsOf: [
-            .init(name: "보일러 관련", recordedDate: Date(), recordedTime: "1:30"),
-            .init(name: "녹음_002", recordedDate: Date(), recordedTime: "2:12"),
+    func setItemData() {
+        fileURLs.append(contentsOf: [
+//            .init(name: "보일러 관련", recordedDate: Date(), recordedTime: "1:30"),
+//            .init(name: "녹음_002", recordedDate: Date(), recordedTime: "2:12"),
 //            .init(name: "녹음_001", recordedDate: Date(), recordedTime: "1:57"),
 //            .init(name: "으아앙", recordedDate: Date(), recordedTime: "3:10")
         ])
         
-        if fileItems.isEmpty {
+        if fileURLs.isEmpty {
             tableBackgroundView.isHidden = false
         } else {
             tableBackgroundView.isHidden = true
         }
         recordingFileTableView.reloadData()
-    }*/
+    }
     
     func setDelegate() {
         recordingFileTableView.dataSource = self
@@ -312,7 +312,7 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
         tableBackgroundView.snp.makeConstraints {
             $0.top.equalTo(recordingHeaderStackView.snp.bottom).offset(12)
             $0.leading.trailing.equalTo(contentView)
-            $0.height.equalTo(view).multipliedBy(0.13)
+            $0.height.equalTo(0)
         }
         contentView.bringSubviewToFront(tableBackgroundView)
         

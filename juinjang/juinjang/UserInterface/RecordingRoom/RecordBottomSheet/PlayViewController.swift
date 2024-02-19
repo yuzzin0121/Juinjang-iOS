@@ -47,7 +47,7 @@ class PlayViewController: UIViewController, UITextFieldDelegate, AVAudioPlayerDe
     lazy var remainingTimeLabel = UILabel().then {
         $0.textColor = UIColor(named: "gray1")
         $0.font = UIFont(name: "Pretendard-Regular", size: 13)
-        $0.text = "-4:10"
+        $0.text = "4:10"
     }
     
     lazy var rewindButton = UIButton().then {
@@ -189,10 +189,11 @@ class PlayViewController: UIViewController, UITextFieldDelegate, AVAudioPlayerDe
         if let title = newTitle {
             print("녹음 파일 제목: \(title)")
             titleTextField.text = title
-            RecordingFileViewCell().setData(fileTitle: title, time: remainingTimeLabel.text)
-            RecordingFileViewCell().recordingFileNameLabel.text = title
+//            RecordingFileViewCell().setData(fileTitle: title, time: remainingTimeLabel.text)
+            
         }
     }
+    
     
     @objc func startRecordPressed(_ sender: UIButton) {
         if recordButton.isSelected {

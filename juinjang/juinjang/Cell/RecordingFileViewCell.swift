@@ -66,12 +66,12 @@ class RecordingFileViewCell: UITableViewCell {
     }
     
     // 데이터 넣기
-   /* func setData(fileItem: RecordingFileItem?) {
-        guard let fileItem = fileItem else { return }
-        recordingFileNameLabel.text = fileItem.name
-        recordedDateLabel.text = fileItem.recordedDateString
-        recordedTimeLabel.text = fileItem.recordedTime
-    }*/
+//    func setData(fileItem: RecordingFileItem?) {
+//        guard let fileItem = fileItem else { return }
+//        recordingFileNameLabel.text = fileItem.name
+//        recordedDateLabel.text = fileItem.recordedDateString
+//        recordedTimeLabel.text = fileItem.recordedTime
+//    }
 
     func setData(fileTitle: String?, time : String!) {
         recordingFileNameLabel.text = fileTitle

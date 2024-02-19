@@ -125,7 +125,11 @@ class ReportImjangListTableViewCell: UITableViewCell {
         contentView.layer.cornerRadius = 10
         contentView.layer.borderWidth = 1.5
         contentView.layer.borderColor = ColorStyle.strokeGray.cgColor
-        roomThumbnailImageView.design(contentMode: .scaleAspectFill, cornerRadius: 5)
+//        roomThumbnailImageView.design(contentMode: .scaleAspectFill, cornerRadius: 5)
+        DispatchQueue.main.async {
+            self.roomThumbnailImageView.layer.cornerRadius = 5
+            self.roomThumbnailImageView.clipsToBounds = true
+        }
     }
     
     func designView() {
@@ -139,7 +143,7 @@ class ReportImjangListTableViewCell: UITableViewCell {
         starStackView.alignment = .center
         starStackView.distribution = .fill
 
-        
+        roomThumbnailImageView.contentMode = .scaleAspectFill
         roomIcon.design(image: ImageStyle.house, contentMode: .scaleAspectFit)
         roomNameLabel.design(text:"", font: .pretendard(size: 16, weight: .bold))
         priceLabel.design(text:"", font: .pretendard(size: 16, weight: .semiBold))
