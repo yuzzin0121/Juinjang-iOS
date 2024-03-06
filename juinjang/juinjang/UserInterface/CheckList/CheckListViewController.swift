@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Alamofire
 
 class CheckListViewController: UIViewController {
     
@@ -133,7 +134,7 @@ class CheckListViewController: UIViewController {
     func saveAnswer() {
         print("saveAnswer 함수 호출")
         guard let imjangId = imjangId else { return }
-        var parameters: [[String: Any]] = []
+        var checkListItems: [CheckListRequestDto] = []
         
         print("토큰값 \(UserDefaultManager.shared.accessToken)")
         
@@ -152,48 +153,82 @@ class CheckListViewController: UIViewController {
                     dateFormatter.dateFormat = "yyyyMMdd"
                     let dateString = dateFormatter.string(from: value.inputDate)
                     
-                    let parameter = ["questionId": questionId, "answer": dateString]
-                    parameters.append(parameter)
+                    let parameter = CheckListRequestDto(questionId: questionId, answer: dateString)
+                    checkListItems.append(parameter)
                 }
             }
 
             // 점수형
             for (key, value) in self.scoreItems {
                 if let questionId = self.findQuestionId(forQuestion: key, in: checkListResponse) {
-                    let parameter = ["questionId": questionId, "answer": value.score]
-                    parameters.append(parameter)
+                    let parameter = CheckListRequestDto(questionId: questionId, answer: value.score)
+                    checkListItems.append(parameter)
                 }
             }
 
             // 입력형
             for (key, value) in self.inputItems {
                 if let questionId = self.findQuestionId(forQuestion: key, in: checkListResponse) {
-                    let parameter = ["questionId": questionId, "answer": value.inputAnswer]
-                    parameters.append(parameter)
+                    let parameter = CheckListRequestDto(questionId: questionId, answer: value.inputAnswer)
+                    checkListItems.append(parameter)
                 }
             }
 
             // 선택형
             for (key, value) in self.selectionItems {
                 if let questionId = self.findQuestionId(forQuestion: key, in: checkListResponse) {
-                    let parameter = ["questionId": questionId, "answer": value.option]
-                    parameters.append(parameter)
+                    let parameter = CheckListRequestDto(questionId: questionId, answer: value.option)
+                    checkListItems.append(parameter)
                 }
             }
             
-            print(parameters)
-
-            JuinjangAPIManager.shared.postCheckListItem(type: BaseResponse<ResultDto>.self, api: .saveChecklist(imjangId: imjangId), parameters: parameters) { response, error in
-                if error == nil {
-                    guard let response = response else { return }
-                    print(response)
-                } else {
-                    guard let error = error else { return }
-                    print(error)
-                    print("API 응답 디코딩 실패: \(error.localizedDescription)")
-                    self.handleNetworkError(error)
+            let parameters: [[String: Any?]] = checkListItems.map {
+                var answer: Any? = $0.answer
+                // NaN 값 nil로 설정
+                if let answerAsDouble = Double($0.answer), answerAsDouble.isNaN {
+                    answer = nil
                 }
+                return ["questionId": $0.questionId, "answer": answer]
             }
+
+            do {
+                let jsonData = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
+
+                if let jsonString = String(data: jsonData, encoding: .utf8) {
+                    print("JSON 데이터:")
+                    print(jsonString)
+
+                    let headers: HTTPHeaders = ["Content-Type": "application/json"]
+                    let url = JuinjangAPI.saveChecklist(imjangId: imjangId).endpoint
+                                
+                    var request = URLRequest(url: url)
+                    request.httpMethod = HTTPMethod.post.rawValue
+                    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                    request.httpBody = jsonData
+                                
+                    AF.request(request)
+                        .responseJSON { response in
+                            print("체크리스트 저장 plz")
+                            print(response)
+                        }
+                }
+            } catch {
+                print("encoding 에러: \(error)")
+            }
+
+                
+//            JuinjangAPIManager.shared.postCheckListItem(type: BaseResponse<ResultDto>.self, api: .saveChecklist(imjangId: imjangId), parameter: parameterDictionary) { response, error in
+//                if error == nil {
+//                    guard let resultDto = response?.result else { return }
+//                    print(resultDto)
+//                } else {
+//                    guard let error = error else { return }
+//                    print(error)
+//                    print(parameterDictionary)
+//                    print("API 응답 디코딩 실패: \(error.localizedDescription)")
+//                    self.handleNetworkError(error)
+//                }
+//            }
         }
     }
     
@@ -458,7 +493,7 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
         case 1: // SelectionItem
             return 114
         case 3: // CalendarItem
-            return 450
+            return 480
         default:
             return UITableView.automaticDimension
         }
