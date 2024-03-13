@@ -139,11 +139,11 @@ class SignUpWebViewController: UIViewController {
                         UserDefaultManager.shared.email = email
                         print("Email: \(UserDefaultManager.shared.email)")
                         print("Nickname : \(nickname ?? "")")
-                        if nickname == nil {
+//                        if nickname == nil {
                             noToken()
-                        } else {
-                            self.hasToken()
-                        }
+//                        } else {
+//                            self.hasToken()
+//                        }
                     } catch {
                         print("Error parsing JSON: \(error)")
                     }
