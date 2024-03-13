@@ -124,6 +124,7 @@ class ToSViewController: UIViewController {
         // 약관 모두 동의 Button
         checkButton.snp.makeConstraints {
             $0.height.equalTo(20)
+            $0.width.equalTo(148)
             $0.leading.equalToSuperview().offset(27)
             $0.top.equalToSuperview().offset(20)
         }

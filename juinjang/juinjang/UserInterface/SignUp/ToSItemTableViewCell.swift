@@ -62,7 +62,11 @@ class ToSItemTableViewCell: UITableViewCell {
         checkButton.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(26)
             $0.top.equalToSuperview().offset(22)
+            $0.width.equalTo(235)
         }
+
+        // 제목의 최대 너비 설정
+        checkButton.titleLabel?.preferredMaxLayoutWidth = 235
         
         // 파일 열기 Button
         openContentButton.snp.makeConstraints {
