@@ -79,7 +79,7 @@ class RecordTopViewController: UIViewController {
         }
         
         titleLabel.snp.makeConstraints {
-            $0.trailing.equalTo(cancelButton.snp.leading).offset(-125)
+            $0.centerX.equalTo(view.snp.centerX)
             $0.top.equalTo(view.snp.top).offset(24)
         }
         
