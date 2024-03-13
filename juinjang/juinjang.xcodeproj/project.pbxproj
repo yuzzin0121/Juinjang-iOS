@@ -499,10 +499,10 @@
 				0A9E0A462B3DCAB90094595A /* AppDelegate.swift */,
 				0A9E0A482B3DCAB90094595A /* SceneDelegate.swift */,
 				0A9E0A512B3DCAB90094595A /* LaunchScreen.storyboard */,
+				0A7A444B2BA1DC87008142BB /* Assets.xcassets */,
 				0A9E0A542B3DCAB90094595A /* Info.plist */,
 				616408ED2B407E4400EC3B5E /* Resources */,
 				0A9E0AA82B3DD4D20094595A /* .gitignore */,
-				0A7A444B2BA1DC87008142BB /* Assets.xcassets */,
 			);
 			path = juinjang;
 			sourceTree = "<group>";

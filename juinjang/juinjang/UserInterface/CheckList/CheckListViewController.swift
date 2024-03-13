@@ -458,7 +458,7 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
         case 1: // SelectionItem
             return 114
         case 3: // CalendarItem
-            return 450
+            return 480
         default:
             return UITableView.automaticDimension
         }
