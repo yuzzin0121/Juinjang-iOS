@@ -41,6 +41,7 @@
 		0A603A682B7DD2640060B90D /* CheckListRequestDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A603A672B7DD2640060B90D /* CheckListRequestDto.swift */; };
 		0A603A6A2B7DD36E0060B90D /* CheckListResponseDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A603A692B7DD36E0060B90D /* CheckListResponseDto.swift */; };
 		0A73E60D2B5855CD00EF1C89 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A73E60C2B5855CD00EF1C89 /* UserInfo.swift */; };
+		0A7A444C2BA1DC87008142BB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0A7A444B2BA1DC87008142BB /* Assets.xcassets */; };
 		0A7AC0F12B6412760032C9DF /* KakaoZipCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7AC0F02B6412760032C9DF /* KakaoZipCodeViewController.swift */; };
 		0A95D72F2B682013000A9C06 /* ToSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A95D72E2B682013000A9C06 /* ToSViewController.swift */; };
 		0A95D7312B682FB4000A9C06 /* ToSItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A95D7302B682FB4000A9C06 /* ToSItemTableViewCell.swift */; };
@@ -119,7 +120,6 @@
 		6108D00D2B78C45300EF302F /* DGCharts in Frameworks */ = {isa = PBXBuildFile; productRef = 6108D00C2B78C45300EF302F /* DGCharts */; };
 		6108D0102B78C4FE00EF302F /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6108D00F2B78C4FE00EF302F /* SnapKit */; };
 		6108D0122B78CFFA00EF302F /* PreviousVCType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6108D0112B78CFFA00EF302F /* PreviousVCType.swift */; };
-		611757382B67D5E60043E958 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 611757372B67D5E60043E958 /* Assets.xcassets */; };
 		611AA7B62B81E187005DAC3B /* ScrapTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611AA7B52B81E187005DAC3B /* ScrapTableViewCell.swift */; };
 		611AA7B92B8253BC005DAC3B /* ImjangNoteCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611AA7B82B8253BC005DAC3B /* ImjangNoteCollectionViewCell.swift */; };
 		611F14552B47070B00B983F1 /* RecordingSegmentedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F14542B47070B00B983F1 /* RecordingSegmentedViewController.swift */; };
@@ -206,6 +206,7 @@
 		0A603A672B7DD2640060B90D /* CheckListRequestDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckListRequestDto.swift; sourceTree = "<group>"; };
 		0A603A692B7DD36E0060B90D /* CheckListResponseDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckListResponseDto.swift; sourceTree = "<group>"; };
 		0A73E60C2B5855CD00EF1C89 /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
+		0A7A444B2BA1DC87008142BB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0A7AC0F02B6412760032C9DF /* KakaoZipCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoZipCodeViewController.swift; sourceTree = "<group>"; };
 		0A95D72E2B682013000A9C06 /* ToSViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToSViewController.swift; sourceTree = "<group>"; };
 		0A95D7302B682FB4000A9C06 /* ToSItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToSItemTableViewCell.swift; sourceTree = "<group>"; };
@@ -267,7 +268,6 @@
 		6108CFF92B76395B00EF302F /* JuinjangAPIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JuinjangAPIManager.swift; sourceTree = "<group>"; };
 		6108D0002B78A83B00EF302F /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		6108D0112B78CFFA00EF302F /* PreviousVCType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousVCType.swift; sourceTree = "<group>"; };
-		611757372B67D5E60043E958 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		611AA7B52B81E187005DAC3B /* ScrapTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrapTableViewCell.swift; sourceTree = "<group>"; };
 		611AA7B82B8253BC005DAC3B /* ImjangNoteCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImjangNoteCollectionViewCell.swift; sourceTree = "<group>"; };
 		611F14542B47070B00B983F1 /* RecordingSegmentedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingSegmentedViewController.swift; sourceTree = "<group>"; };
@@ -499,9 +499,9 @@
 				0A9E0A462B3DCAB90094595A /* AppDelegate.swift */,
 				0A9E0A482B3DCAB90094595A /* SceneDelegate.swift */,
 				0A9E0A512B3DCAB90094595A /* LaunchScreen.storyboard */,
+				0A7A444B2BA1DC87008142BB /* Assets.xcassets */,
 				0A9E0A542B3DCAB90094595A /* Info.plist */,
 				616408ED2B407E4400EC3B5E /* Resources */,
-				611757372B67D5E60043E958 /* Assets.xcassets */,
 				0A9E0AA82B3DD4D20094595A /* .gitignore */,
 			);
 			path = juinjang;
@@ -943,7 +943,7 @@
 				0AC6ED672B7E917F00263487 /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json in Resources */,
 				61A7B9282B4C4EC300795B49 /* Pretendard-SemiBold.otf in Resources */,
 				0A9E0A532B3DCAB90094595A /* LaunchScreen.storyboard in Resources */,
-				611757382B67D5E60043E958 /* Assets.xcassets in Resources */,
+				0A7A444C2BA1DC87008142BB /* Assets.xcassets in Resources */,
 				61A7B92B2B4C4EC300795B49 /* Pretendard-Light.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1224,7 +1224,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = T2Q8P9627P;
+				DEVELOPMENT_TEAM = 7LVZCMHQG6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = juinjang/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "카메라 접근 권한이 필요합니다.";
@@ -1260,7 +1260,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = T2Q8P9627P;
+				DEVELOPMENT_TEAM = 7LVZCMHQG6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = juinjang/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "카메라 접근 권한이 필요합니다.";
