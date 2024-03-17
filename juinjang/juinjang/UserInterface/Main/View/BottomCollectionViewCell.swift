@@ -34,6 +34,7 @@ class BottomCollectionViewCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        recentImjangImageView.image = nil
         configureCell(listDto: nil)
     }
     
