@@ -22,7 +22,7 @@ class CheckListViewController: UIViewController {
         $0.isScrollEnabled = false
     }
 
-    var isEditMode: Bool = true // 수정 모드 여부
+    var isEditMode: Bool = false // 수정 모드 여부
     
     var imjangId: Int? {
         didSet {
@@ -56,9 +56,9 @@ class CheckListViewController: UIViewController {
     }
     
     @objc func handleEditModeChange(_ notification: Notification) {
-        if let userInfo = notification.userInfo, let isEditMode = userInfo["isEditMode"] as? Bool {
-            tableView.reloadData()
+        if let isEditMode = notification.object as? Bool {
             print("isEditMode 상태: \(isEditMode)")
+            self.isEditMode = isEditMode
             tableView.reloadData()
         }
     }
@@ -282,7 +282,7 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
-            return isEditMode ? 0 : 1 // 수정 모드일 때 기한 카테고리 섹션은 없음
+            return 1 // 수정 모드일 때 기한 카테고리 섹션은 없음
         } else {
             if categories[section - 1].isExpanded! {
                 return 1 + categories[section - 1].questionDtos.count
@@ -293,8 +293,6 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        print("어디일까요 \(indexPath)")
-        
         if isEditMode {
             if indexPath.row == 0 {
                 let cell: CategoryItemTableViewCell = tableView.dequeueReusableCell(withIdentifier: CategoryItemTableViewCell.identifier, for: indexPath) as! CategoryItemTableViewCell
@@ -410,8 +408,7 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                     cell.expandButton.setImage(arrowImage, for: .normal)
                     
                     return cell
-                }
-                else {
+                } else {
                     let category = categories[indexPath.section - 1]
                     let questionDto = category.questionDtos[indexPath.row - 1]
                     
@@ -434,19 +431,19 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                         let cell: ExpandedDropdownTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedDropdownTableViewCell.identifier, for: indexPath) as! ExpandedDropdownTableViewCell
                         cell.configure(with: questionDto, at: indexPath)
                         // 보기 모드인 경우, 선택 상태에 따라 배경색 설정
-                                            cell.backgroundColor = UIColor(named: "gray0")
-                                            cell.contentLabel.textColor = UIColor(named: "lightGray")
-                                            cell.itemButton.isUserInteractionEnabled = false
+                        cell.backgroundColor = UIColor(named: "gray0")
+                        cell.contentLabel.textColor = UIColor(named: "lightGray")
+                        cell.itemButton.isUserInteractionEnabled = false
                         return cell
                     case 2:
                         // InputItem
                         let cell: ExpandedTextFieldTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedTextFieldTableViewCell.identifier, for: indexPath) as! ExpandedTextFieldTableViewCell
                         cell.configure(with: questionDto, at: indexPath)
                         // 보기 모드인 경우, 선택 상태에 따라 배경색 설정
-                                            cell.backgroundColor = UIColor(named: "gray0")
-                                            cell.contentLabel.textColor = UIColor(named: "lightGray")
-                                            cell.answerTextField.backgroundColor = UIColor(named: "shadowGray")
-                                            cell.answerTextField.isEnabled = false
+                        cell.backgroundColor = UIColor(named: "gray0")
+                        cell.contentLabel.textColor = UIColor(named: "lightGray")
+                        cell.answerTextField.backgroundColor = UIColor(named: "shadowGray")
+                        cell.answerTextField.isEnabled = false
                         return cell
                     case 3:
                         // CalendarItem
@@ -493,7 +490,7 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
         case 1: // SelectionItem
             return 114
         case 3: // CalendarItem
-            return 480
+            return isEditMode ? 480 : 0
         default:
             return UITableView.automaticDimension
         }

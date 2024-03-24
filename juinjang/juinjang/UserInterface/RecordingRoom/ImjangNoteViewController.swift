@@ -747,7 +747,7 @@ class ImjangNoteViewController: UIViewController{
             let reportVC = ReportViewController()
             self.navigationController?.pushViewController(reportVC, animated: true)
         }
-        NotificationCenter.default.post(name: Notification.Name("EditModeChanged"), object: nil, userInfo: ["isEditMode": isEditMode])
+        NotificationCenter.default.post(name: Notification.Name("EditModeChanged"), object: true)
     }
 }
 
