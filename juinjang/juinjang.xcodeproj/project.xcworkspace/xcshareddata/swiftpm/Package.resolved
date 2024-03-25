@@ -1,4 +1,5 @@
 {
+  "originHash" : "487daaa682342368ad29a9d4d35e587ec4603ae12dffd1383ba457d9c7d92ea6",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -12,7 +13,7 @@
     {
       "identity" : "charts",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/danielgindi/Charts",
+      "location" : "https://github.com/danielgindi/Charts.git",
       "state" : {
         "revision" : "0a229f8c914b0ec93798cee058cf75b339297513",
         "version" : "5.0.0"
@@ -73,6 +74,24 @@
       }
     },
     {
+      "identity" : "realm-core",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/realm/realm-core.git",
+      "state" : {
+        "revision" : "374dd672af357732dccc135fecc905406fec3223",
+        "version" : "14.4.1"
+      }
+    },
+    {
+      "identity" : "realm-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/realm/realm-swift",
+      "state" : {
+        "branch" : "master",
+        "revision" : "4de5a714ab44bf158afc3f5b7a4436f8bb8e7ddd"
+      }
+    },
+    {
       "identity" : "snapkit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SnapKit/SnapKit",
@@ -109,5 +128,5 @@
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

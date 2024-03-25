@@ -27,7 +27,7 @@ class CheckListViewController: UIViewController {
     var imjangId: Int? {
         didSet {
             print("체크리스트 \(imjangId)")
-            responseQuestion { [weak self] updatedCategories in
+            responseQuestion(isEditMode: isEditMode) { [weak self] updatedCategories in
                 DispatchQueue.main.async {
                     self?.categories = updatedCategories
                     print("api 요청 후 카테고리 개수: \(self?.categories.count)")
@@ -59,9 +59,14 @@ class CheckListViewController: UIViewController {
         if let isEditMode = notification.object as? Bool {
             print("isEditMode 상태: \(isEditMode)")
             self.isEditMode = isEditMode
-            tableView.reloadData()
+            // 수정 모드가 변경되었으므로 새로운 데이터를 가져옵니다.
+            responseQuestion(isEditMode: isEditMode) { [weak self] checkListResponseDto in
+                // 데이터를 가져온 후에 테이블 뷰를 리로드합니다.
+                self?.tableView.reloadData()
+            }
         }
     }
+
     
     @objc func handleEditButtonTappedNotification() {
         print("체크리스트 저장 좀 하고 싶다")
@@ -109,15 +114,15 @@ class CheckListViewController: UIViewController {
     }
     
     // -MARK: API 요청
-    func responseQuestion(completion: @escaping ([CheckListResponseDto]) -> Void) {
+    func responseQuestion(isEditMode: Bool, completion: @escaping ([CheckListResponseDto]) -> Void) {
         guard let imjangId = imjangId else { return }
         
         JuinjangAPIManager.shared.fetchData(type: BaseResponse<[CheckListResponseDto]>.self, api: .showChecklist(imjangId: imjangId)) { response, error in
             if error == nil {
                 print(response)
-                // 수정 모드가 아닌 경우 category가 0인 것은 필터링
+                // 수정 모드에 따라 카테고리 필터링
                 guard let checkListResponseDto = response?.result?.compactMap({
-                    $0.filterCategoryZero(isEditMode: self.isEditMode)
+                    $0.filterCategoryZero(isEditMode: isEditMode)
                 }) else {
                     return
                 }
@@ -282,7 +287,7 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
-            return 1 // 수정 모드일 때 기한 카테고리 섹션은 없음
+            return isEditMode ? 0 : 1 // -TODO: CategoryItemTableViewCell index 문제로 임의로 지정
         } else {
             if categories[section - 1].isExpanded! {
                 return 1 + categories[section - 1].questionDtos.count
@@ -325,6 +330,10 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                         self?.scoreItems.updateValue((score, true), forKey: contentKey)
                     }
                     cell.scoreItems = scoreItems
+                    for button in [cell.answerButton1, cell.answerButton2, cell.answerButton3, cell.answerButton4, cell.answerButton5] {
+                        button.isEnabled = true
+                        button.setImage(UIImage(named: "answer\(button.tag)"), for: .normal)
+                    }
                     print("scoreItems 데이터", cell.scoreItems)
 
                     return cell
@@ -344,6 +353,7 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                         self?.selectionItems.updateValue((selectedOption, true), forKey: contentKey)
                     }
                     cell.selectionItems = selectionItems
+                    cell.itemButton.isUserInteractionEnabled = true
                     print("selectionItems 데이터", cell.selectionItems)
                     
                     return cell
@@ -364,6 +374,7 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                     }
                     
                     cell.inputItems = inputItems
+                    cell.answerTextField.isEnabled = true
                     print("inputItems 데이터", cell.inputItems)
                     
                     return cell
