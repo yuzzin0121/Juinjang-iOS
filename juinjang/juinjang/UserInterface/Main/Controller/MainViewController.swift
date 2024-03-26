@@ -109,8 +109,7 @@ class MainViewController: UIViewController {
         navigationController?.pushViewController(imjangNoteVC, animated: true)
     }
     @objc func newImjangBtnTap() {
-        //let vc = OpenNewPageViewController()
-        let vc = ImjangNoteViewController()
+        let vc = OpenNewPageViewController()
         self.navigationController?.pushViewController(vc, animated: true)
     }
     @objc func myImjangBtnTap() {

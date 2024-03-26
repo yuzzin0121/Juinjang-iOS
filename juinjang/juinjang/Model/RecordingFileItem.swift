@@ -8,7 +8,6 @@
 import Foundation
 
 struct RecordingFileItem {
-    //let url: URL
     let name: String
     let recordedDate: Date
     var recordedDateString: String {

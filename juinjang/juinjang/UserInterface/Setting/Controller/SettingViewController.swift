@@ -10,17 +10,14 @@ import Then
 import SnapKit
 import Alamofire
 
-class SettingViewController : UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+
+class SettingViewController : UIViewController {
     
     static let id = "SettingViewController"
     
     //MARK: - 프로필 사진, 닉네임
     var profileImageView = UIImageView().then {
         $0.image = UIImage(named:"프로필사진")
-        $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.contentMode = .scaleAspectFill
-        $0.layer.cornerRadius = 33
-        $0.clipsToBounds = true
     }
     var editButton = UIButton().then {
         $0.translatesAutoresizingMaskIntoConstraints = false
@@ -150,7 +147,6 @@ class SettingViewController : UIViewController, UIImagePickerControllerDelegate,
     
     //MARK: - 함수
     func addTarget() {
-        editButton.addTarget(self, action: #selector(edit), for: .touchUpInside)
         nicknameTextField.addTarget(self, action: #selector(SettingViewController.textFieldDidChange(_:)), for: .editingChanged)
         saveButton.addTarget(self, action: #selector(tapChangeButton), for: .touchUpInside)
         useButton.addTarget(self, action: #selector(click1), for: .touchUpInside)
@@ -158,17 +154,6 @@ class SettingViewController : UIViewController, UIImagePickerControllerDelegate,
         logoutButton.addTarget(self, action: #selector(logoutButtonTap), for: .touchUpInside)
         accountDeleteButton.addTarget(self, action: #selector(click4), for: .touchUpInside)
     }
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            profileImageView.image = pickedImage
-        }
-        picker.dismiss(animated: true, completion: nil)
-    }
-        
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        picker.dismiss(animated: true, completion: nil)
-    }
-    
     func logout() {
         // 로그아웃 API의 URL
         let urlString = "http://juinjang1227.com:8080/api/auth/logout"
@@ -208,15 +193,9 @@ class SettingViewController : UIViewController, UIImagePickerControllerDelegate,
         }
         UserDefaultManager.shared.userStatus = false
     }
-    @objc func edit() {
-        let imagePicker = UIImagePickerController()
-        imagePicker.delegate = self
-        imagePicker.sourceType = .photoLibrary
-        present(imagePicker, animated: true, completion: nil)
-    }
     
     @objc func click1(_ sender: Any) {
-        let vc = UseSelectViewController()
+        let vc = UseViewController()
         self.navigationController?.pushViewController(vc, animated: false)
     }
     
@@ -427,7 +406,6 @@ class SettingViewController : UIViewController, UIImagePickerControllerDelegate,
         designNavigationBar()
         view.addSubview(profileImageView)
         view.addSubview(editButton)
-        
         view.addSubview(nicknameLabel)
         view.addSubview(nickname)
         view.addSubview(saveButton)
