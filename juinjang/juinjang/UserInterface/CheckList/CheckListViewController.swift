@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import Alamofire
+import RealmSwift
 
 class CheckListViewController: UIViewController {
     
@@ -38,10 +39,11 @@ class CheckListViewController: UIViewController {
             }
         }
     }
-
+    
     var categories: [CheckListResponseDto] = []
     
     override func viewDidLoad() {
+        addCheckListModel()
         super.viewDidLoad()
         view.backgroundColor = .white
         tableView.delegate = self
@@ -59,9 +61,7 @@ class CheckListViewController: UIViewController {
         if let isEditMode = notification.object as? Bool {
             print("isEditMode 상태: \(isEditMode)")
             self.isEditMode = isEditMode
-            // 수정 모드가 변경되었으므로 새로운 데이터를 가져옵니다.
             responseQuestion(isEditMode: isEditMode) { [weak self] checkListResponseDto in
-                // 데이터를 가져온 후에 테이블 뷰를 리로드합니다.
                 self?.tableView.reloadData()
             }
         }
@@ -113,26 +113,35 @@ class CheckListViewController: UIViewController {
         tableView.register(ExpandedDropdownTableViewCell.self, forCellReuseIdentifier: ExpandedDropdownTableViewCell.identifier)
     }
     
-    // -MARK: API 요청
-    func responseQuestion(isEditMode: Bool, completion: @escaping ([CheckListResponseDto]) -> Void) {
-        guard let imjangId = imjangId else { return }
-        
-        JuinjangAPIManager.shared.fetchData(type: BaseResponse<[CheckListResponseDto]>.self, api: .showChecklist(imjangId: imjangId)) { response, error in
-            if error == nil {
-                print(response)
-                // 수정 모드에 따라 카테고리 필터링
-                guard let checkListResponseDto = response?.result?.compactMap({
-                    $0.filterCategoryZero(isEditMode: isEditMode)
-                }) else {
-                    return
-                }
-                
-                print("조회한 카테고리 개수 \(checkListResponseDto.count)")
-                completion(checkListResponseDto)
-            } else {
-                guard let error = error else { return }
-                self.handleNetworkError(error)
+    // -MARK: DB 관리
+    func addCheckListModel() {
+        // Realm 데이터베이스에 데이터 추가
+        do {
+            let realm = try Realm()
+            try realm.write {
+                realm.add(items)
+                realm.add(oneRoomItems)
+                addOptionData()
+                print("체크리스트 DB 추가")
+                print(Realm.Configuration.defaultConfiguration.fileURL!)
             }
+        } catch let error as NSError {
+            print("DB 추가 실패: \(error.localizedDescription)")
+            print("에러: \(error)")
+        }
+    }
+    
+    func filterCategory(isEditMode: Bool) -> Results<CheckListItem>? {
+        do {
+            let realm = try! Realm()
+            var result = realm.objects(CheckListItem.self)
+            if !isEditMode {
+                result = result.filter("category != '기한'")
+            }
+            return result
+        } catch {
+            print("Realm 데이터베이스에 접근할 수 없습니다: \(error)")
+            return nil
         }
     }
     
