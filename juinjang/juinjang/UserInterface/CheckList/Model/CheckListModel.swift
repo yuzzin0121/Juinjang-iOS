@@ -9,6 +9,18 @@ import Foundation
 import UIKit
 import RealmSwift
 
+struct CheckListCategory {
+    let category: String
+    let checkListitem: [CheckListItem]
+    var isExpanded: Bool = false
+    
+    init(category: String, checkListitem: [CheckListItem], isExpanded: Bool) {
+        self.category = category
+        self.checkListitem = checkListitem
+        self.isExpanded = isExpanded
+    }
+}
+
 class CheckListItem: Object {
     @Persisted(primaryKey: true) var questionId: Int
     @Persisted var category: String
@@ -30,11 +42,15 @@ class CheckListItem: Object {
 class Option: Object {
     @Persisted(primaryKey: true) var id: ObjectId
     @Persisted var option: String
+    @Persisted var image: Data
     @Persisted(originProperty: "options") var checkListItem: LinkingObjects<CheckListItem>
     
-    convenience init(option: String) {
+    convenience init(option: String, image: Data? = nil) {
         self.init()
         self.option = option
+        if let imageData = image {
+            self.image = imageData
+        }
     }
 }
 
@@ -152,21 +168,21 @@ var items: [CheckListItem] = [
 ]
 
 var options1: [Option] = [
-    Option(option: "선택안함"),
-     Option(option: "1호선"),
-     Option(option: "2호선"),
-     Option(option: "3호선"),
-     Option(option: "4호선"),
-     Option(option: "5호선"),
-     Option(option: "6호선"),
-     Option(option: "7호선"),
-     Option(option: "8호선"),
-     Option(option: "9호선"),
-     Option(option: "수인분당"),
-     Option(option: "경의중앙"),
-     Option(option: "신분당"),
-     Option(option: "공항철도"),
-     Option(option: "경춘선")
+    Option(option: "선택안함", image: nil),
+     Option(option: "1호선", image: UIImage(named: "line1")?.pngData()),
+     Option(option: "2호선", image: UIImage(named: "line2")?.pngData()),
+     Option(option: "3호선", image: UIImage(named: "line3")?.pngData()),
+     Option(option: "4호선", image: UIImage(named: "line4")?.pngData()),
+     Option(option: "5호선", image: UIImage(named: "line5")?.pngData()),
+     Option(option: "6호선", image: UIImage(named: "line6")?.pngData()),
+     Option(option: "7호선", image: UIImage(named: "line7")?.pngData()),
+     Option(option: "8호선", image: UIImage(named: "line8")?.pngData()),
+     Option(option: "9호선", image: UIImage(named: "line9")?.pngData()),
+     Option(option: "수인분당", image: UIImage(named: "SuinBundangLine")?.pngData()),
+     Option(option: "경의중앙", image: UIImage(named: "GyeonguiJungangLine")?.pngData()),
+     Option(option: "신분당", image: UIImage(named: "ShinbundangLine")?.pngData()),
+     Option(option: "공항철도", image: UIImage(named: "AirportRailroadLine")?.pngData()),
+     Option(option: "경춘선", image: UIImage(named: "GyeongchunLine")?.pngData()),
 ]
 
 var options2: [Option] = [

@@ -226,7 +226,7 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
         }
     }
     
-    func configure(with questionDto: QuestionDto, at indexPath: IndexPath) {
+    func configure(with questionDto: CheckListItem, at indexPath: IndexPath) {
         let content = questionDto.question
         contentLabel.text = content
 
@@ -242,40 +242,6 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
             // 선택된 옵션이 없으면 표시 초기화
             selectedOption = nil
         }
-
-        var optionValues: [OptionItem] = []
-
-        // 지하철 노선도 항목에 대한 이미지 추가
-        if questionDto.questionId == 4 || questionDto.questionId == 62 {
-            let specialImages: [UIImage?] = [
-                nil, // "선택 안함"
-                UIImage(named: "line1"),               // 1호선
-                UIImage(named: "line2"),               // 2호선
-                UIImage(named: "line3"),               // 3호선
-                UIImage(named: "line4"),               // 4호선
-                UIImage(named: "line5"),               // 5호선
-                UIImage(named: "line6"),               // 6호선
-                UIImage(named: "line7"),               // 7호선
-                UIImage(named: "line8"),               // 8호선
-                UIImage(named: "line9"),               // 9호선
-                UIImage(named: "SuinBundangLine"),     // 수인분당
-                UIImage(named: "GyeonguiJungangLine"), // 경의중앙
-                UIImage(named: "ShinbundangLine"),     // 신분당
-                UIImage(named: "AirportRailroadLine"), // 공항철도
-                UIImage(named: "GyeongchunLine")       // 경춘선
-            ]
-
-            optionValues = zip(questionDto.options, specialImages).map { (optionItem, image) in
-                return OptionItem(image: image, option: optionItem.optionValue)
-            }
-        } else {
-            // 기본값은 nil로 설정
-            optionValues = questionDto.options.map { optionItem in
-                return OptionItem(image: nil, option: optionItem.optionValue)
-            }
-        }
-        
-        options = optionValues
     }
 }
 

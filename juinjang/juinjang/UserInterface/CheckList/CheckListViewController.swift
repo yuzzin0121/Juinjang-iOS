@@ -4,7 +4,7 @@
 //
 //  Created by 임수진 on 2/19/24.
 //
-
+// TODO: 지금 카테고리 별로 분류는 되는데 version이 분류가 안되어있음
 import UIKit
 import SnapKit
 import Alamofire
@@ -28,10 +28,19 @@ class CheckListViewController: UIViewController {
     var imjangId: Int? {
         didSet {
             print("체크리스트 \(imjangId)")
-            responseQuestion(isEditMode: isEditMode) { [weak self] updatedCategories in
+            filterCategory(isEditMode: isEditMode) { [weak self] categories in
+                // 중복되지 않는 카테고리들의 집합을 생성
+                let uniqueCategories = Set(categories.map { $0.category })
+                for category in uniqueCategories {
+                    // 해당 카테고리에 해당하는 항목들을 필터링하여 가져옴
+                    let categoryItems = categories.filter { $0.category == category }
+                    // 카테고리에 해당하는 항목들을 checkListCategories에 추가
+                    self?.checkListCategories.append(CheckListCategory(category: category, checkListitem: categoryItems, isExpanded: false))
+                }
+
                 DispatchQueue.main.async {
-                    self?.categories = updatedCategories
-                    print("api 요청 후 카테고리 개수: \(self?.categories.count)")
+                    print("카테고리 개수: \(self?.checkListCategories.count)")
+                    print(self?.checkListCategories)
                     self?.tableView.delegate = self
                     self?.tableView.dataSource = self
                     self?.tableView.reloadData()
@@ -41,6 +50,8 @@ class CheckListViewController: UIViewController {
     }
     
     var categories: [CheckListResponseDto] = []
+    var checkListItems: [CheckListItem] = []
+    var checkListCategories: [CheckListCategory] = []
     
     override func viewDidLoad() {
         addCheckListModel()
@@ -61,7 +72,11 @@ class CheckListViewController: UIViewController {
         if let isEditMode = notification.object as? Bool {
             print("isEditMode 상태: \(isEditMode)")
             self.isEditMode = isEditMode
-            responseQuestion(isEditMode: isEditMode) { [weak self] checkListResponseDto in
+            filterCategory(isEditMode: isEditMode) { [weak self] result in
+                let categories = Set(result.map { $0.category })
+                // 중복되지 않는 카테고리의 개수를 가져옴
+                let categoryCount = categories.count
+                print("isEditMode 상태에 따른 카테고리 개수: \(result)")
                 self?.tableView.reloadData()
             }
         }
@@ -118,30 +133,37 @@ class CheckListViewController: UIViewController {
         // Realm 데이터베이스에 데이터 추가
         do {
             let realm = try Realm()
-            try realm.write {
-                realm.add(items)
-                realm.add(oneRoomItems)
-                addOptionData()
-                print("체크리스트 DB 추가")
-                print(Realm.Configuration.defaultConfiguration.fileURL!)
+            
+            // CheckListItem가 존재하지 않을 때만 모델 추가
+            if realm.objects(CheckListItem.self).isEmpty {
+                try realm.write {
+                    realm.add(items)
+                    realm.add(oneRoomItems)
+                    print("CheckListItem 데이터 추가")
+                }
+            } else {
+                print("CheckListItem 데이터베이스에 이미 데이터가 존재합니다.")
             }
+            
+            print(Realm.Configuration.defaultConfiguration.fileURL!)
         } catch let error as NSError {
             print("DB 추가 실패: \(error.localizedDescription)")
             print("에러: \(error)")
         }
     }
+
     
-    func filterCategory(isEditMode: Bool) -> Results<CheckListItem>? {
+    func filterCategory(isEditMode: Bool, completion: @escaping ([CheckListItem]) -> Void) {
         do {
-            let realm = try! Realm()
+            let realm = try Realm()
             var result = realm.objects(CheckListItem.self)
             if !isEditMode {
                 result = result.filter("category != '기한'")
             }
-            return result
+            completion(Array(result))
         } catch {
-            print("Realm 데이터베이스에 접근할 수 없습니다: \(error)")
-            return nil
+            print("Realm 데이터베이스 접근할 수 없음: \(error)")
+            completion([])
         }
     }
     
@@ -291,15 +313,21 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return categories.count + 1
+        var uniqueCategoryCount = 0
+        filterCategory(isEditMode: isEditMode) { items in
+            // 클로저 내용
+            let categories = Set(items.map { $0.category }) // 중복되지 않는 category들의 집합을 생성
+            uniqueCategoryCount = categories.count // 중복되지 않는 category의 개수를 가져옴
+        }
+        return uniqueCategoryCount + 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
-            return isEditMode ? 0 : 1 // -TODO: CategoryItemTableViewCell index 문제로 임의로 지정
+            return 1 // -TODO: CategoryItemTableViewCell index 문제로 임의로 지정
         } else {
-            if categories[section - 1].isExpanded! {
-                return 1 + categories[section - 1].questionDtos.count
+            if checkListCategories[section - 1].isExpanded {
+                return 1 + checkListCategories[section - 1].checkListitem.count
             } else {
                 return 1
             }
@@ -311,16 +339,16 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
             if indexPath.row == 0 {
                 let cell: CategoryItemTableViewCell = tableView.dequeueReusableCell(withIdentifier: CategoryItemTableViewCell.identifier, for: indexPath) as! CategoryItemTableViewCell
                 
-                let category = categories[indexPath.section - 1]
-                cell.configure(checkListResponseDto: category)
-                let arrowImage = category.isExpanded! ? UIImage(named: "contraction-items") : UIImage(named: "expand-items")
+                let category = checkListCategories[indexPath.section - 1]
+                cell.configure(checkListCategories: category)
+                let arrowImage = category.isExpanded ? UIImage(named: "contraction-items") : UIImage(named: "expand-items")
                 cell.expandButton.setImage(arrowImage, for: .normal)
                 
                 return cell
             }
             else {
-                let category = categories[indexPath.section - 1]
-                let questionDto = category.questionDtos[indexPath.row - 1]
+                let category = checkListCategories[indexPath.section - 1]
+                let questionDto = category.checkListitem[indexPath.row - 1]
                 
                 switch questionDto.answerType {
                 case 0:
@@ -330,7 +358,7 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                     cell.categories = categories
                     
                     // 데이터 모델에서 저장된 값으로 셀 구성
-                    let contentKey = category.questionDtos[indexPath.row - 1].question
+                    let contentKey = category.checkListitem[indexPath.row - 1].question
                     cell.backgroundColor = cell.scoreItems[contentKey]?.isSelected ?? false ? UIColor(named: "lightOrange") : UIColor.white // 상태에 따라 배경색 설정
 
                     // 셀이 선택된 경우 클로저 호출
@@ -353,7 +381,7 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                     cell.categories = categories
                     
                     // 데이터 모델에서 저장된 값으로 셀 구성
-                    let contentKey = category.questionDtos[indexPath.row - 1].question
+                    let contentKey = category.checkListitem[indexPath.row - 1].question
                     cell.backgroundColor = cell.selectionItems[contentKey]?.isSelected ?? false ? UIColor(named: "lightOrange") : UIColor.white // 상태에 따라 배경색 설정
 
                     // 셀이 선택된 경우 클로저 호출
@@ -373,7 +401,7 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                     cell.categories = categories
                     
                     // 데이터 모델에서 저장된 값으로 셀 구성
-                    let contentKey = category.questionDtos[indexPath.row - 1].question
+                    let contentKey = category.checkListitem[indexPath.row - 1].question
                     cell.backgroundColor = cell.inputItems[contentKey]?.isSelected ?? false ? UIColor(named: "lightOrange") : UIColor.white // 상태에 따라 배경색 설정
 
                     // 셀이 선택된 경우 클로저 호출
@@ -394,7 +422,7 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                     cell.categories = categories
                     
                     // 데이터 모델에서 저장된 값으로 셀 구성
-                    let contentKey = category.questionDtos[indexPath.row - 1].question
+                    let contentKey = category.checkListitem[indexPath.row - 1].question
                     cell.backgroundColor = cell.calendarItems[contentKey]?.isSelected ?? false ? UIColor(named: "lightOrange") : UIColor.white // 상태에 따라 배경색 설정
 
                     // 셀이 선택된 경우 클로저 호출
@@ -421,16 +449,16 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                 if indexPath.row == 0 {
                     let cell: CategoryItemTableViewCell = tableView.dequeueReusableCell(withIdentifier: CategoryItemTableViewCell.identifier, for: indexPath) as! CategoryItemTableViewCell
                     
-                    let category = categories[indexPath.section - 1]
-                    cell.configure(checkListResponseDto: category)
+                    let category = checkListCategories[indexPath.section - 1]
+                    cell.configure(checkListCategories: category)
                     
-                    let arrowImage = category.isExpanded! ? UIImage(named: "contraction-items") : UIImage(named: "expand-items")
+                    let arrowImage = category.isExpanded ? UIImage(named: "contraction-items") : UIImage(named: "expand-items")
                     cell.expandButton.setImage(arrowImage, for: .normal)
                     
                     return cell
                 } else {
-                    let category = categories[indexPath.section - 1]
-                    let questionDto = category.questionDtos[indexPath.row - 1]
+                    let category = checkListCategories[indexPath.section - 1]
+                    let questionDto = category.checkListitem[indexPath.row - 1]
                     
                     switch questionDto.answerType {
                     case 0:
@@ -484,10 +512,10 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
         if let cell = tableView.cellForRow(at: indexPath) as? CategoryItemTableViewCell {
             // 카테고리 셀을 눌렀을 때
             if indexPath.row == 0 {
-                if categories[indexPath.section - 1].isExpanded == true {
-                    categories[indexPath.section - 1].isExpanded = false
+                if checkListCategories[indexPath.section - 1].isExpanded == true {
+                    checkListCategories[indexPath.section - 1].isExpanded = false
                 } else {
-                    categories[indexPath.section - 1].isExpanded = true
+                    checkListCategories[indexPath.section - 1].isExpanded = true
                 }
                 let section = IndexSet.init(integer: indexPath.section)
                 tableView.reloadSections(section, with: .fade)
@@ -501,8 +529,8 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
             return 63
         }
         
-        let category = categories[indexPath.section - 1]
-        let questionDto = category.questionDtos[indexPath.row - 1]
+        let category = checkListCategories[indexPath.section - 1]
+        let questionDto = category.checkListitem[indexPath.row - 1]
         
         switch questionDto.answerType {
         case 0, 2: // ScoreItem, InputItem

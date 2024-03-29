@@ -215,7 +215,7 @@ class ExpandedScoreTableViewCell: UITableViewCell {
         }
     }
     
-    func configure(with questionDto: QuestionDto, at indexPath: IndexPath) {
+    func configure(with questionDto: CheckListItem, at indexPath: IndexPath) {
         let content = questionDto.question
         contentLabel.text = content
         
