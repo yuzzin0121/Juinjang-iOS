@@ -455,7 +455,7 @@ extension RecordingRoomViewController: UITableViewDataSource, UITableViewDelegat
         playVC.bottomViewController.initPlay1()
        // playVC.bottomViewController.audioFile = fileItems[indexPath.row].url
         //cell.setData(fileItem: fileItems[indexPath.row])
-        cell.setData(fileTitle: "\(fileURLs[indexPath.row].lastPathComponent)", time: "\(playVC.bottomViewController.remainingTimeLabel.text ?? "0:00")")
+        cell.setData(fileTitle: "\(fileURLs[indexPath.row].lastPathComponent)", time: "\(playVC.bottomViewController.remainingTimeLabel.text ?? "0:00")", date: recordTime)
         return cell
     }
     

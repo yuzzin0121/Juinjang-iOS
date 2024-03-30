@@ -187,7 +187,7 @@ extension RecordingFilesViewController: UITableViewDelegate, UITableViewDataSour
         playVC.bottomViewController.initPlay1()
         cell.selectionStyle = .none
         //cell.setData(fileItem: fileURLs[indexPath.row])
-        cell.setData(fileTitle: "\(fileURLs[indexPath.row].lastPathComponent)", time: "\(playVC.bottomViewController.remainingTimeLabel.text ?? "0:00")")
+        cell.setData(fileTitle: "\(fileURLs[indexPath.row].lastPathComponent)", time: "\(playVC.bottomViewController.remainingTimeLabel.text ?? "0:00")", date: recordTime)
         //cell.recordingFileNameLabel.text = fileURLs[indexPath.row].lastPathComponent
         return cell
     }

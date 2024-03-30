@@ -73,10 +73,12 @@ class RecordingFileViewCell: UITableViewCell {
 //        recordedTimeLabel.text = fileItem.recordedTime
 //    }
 
-    func setData(fileTitle: String?, time : String!) {
+    func setData(fileTitle: String?, time : String!, date: String?) {
         recordingFileNameLabel.text = fileTitle
         recordedTimeLabel.text = time
+        recordedDateLabel.text = date
     }
+    
     
     func setConstraints() {
         recordingFileNameLabel.snp.makeConstraints {

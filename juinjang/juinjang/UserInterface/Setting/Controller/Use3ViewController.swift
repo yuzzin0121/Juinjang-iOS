@@ -108,7 +108,7 @@ class Use3ViewController : UIViewController {
         _ = self.navigationController?.popViewController(animated: false)
     }
     @objc func use1() {
-        let vc = Use1ViewController()
+        let vc = MarketingUseViewController()
         self.navigationController?.pushViewController(vc, animated: false)
     }
     

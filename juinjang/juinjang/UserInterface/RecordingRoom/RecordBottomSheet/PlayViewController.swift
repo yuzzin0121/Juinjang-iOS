@@ -192,7 +192,8 @@ class PlayViewController: UIViewController, UITextFieldDelegate, AVAudioPlayerDe
         if let title = newTitle {
             print("녹음 파일 제목: \(title)")
             titleTextField.text = title
-            RecordingFileViewCell().setData(fileTitle: title, time: remainingTimeLabel.text)
+            RecordingFileViewCell().setData(fileTitle: title, time: remainingTimeLabel.text, date: recordTime)
+            RecordingFileViewCell().recordingFileNameLabel.text = title
             
         }
     }

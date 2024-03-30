@@ -46,7 +46,7 @@ class UseSelectViewController : UIViewController {
         $0.textColor = UIColor(named: "500")
     }
     var use2Label = UILabel().then {
-        $0.text = "주인장 개인정보처리방침"
+        $0.text = "주인장 개인정보 처리방침"
         $0.font = UIFont(name: "Pretendard-SemiBold", size: 16)
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.textColor = UIColor(named: "500")
@@ -165,7 +165,7 @@ class UseSelectViewController : UIViewController {
         self.navigationController?.pushViewController(vc, animated: false)
     }
     @objc func use2() {
-        let vc = Use1ViewController()
+        let vc = Use2ViewController()
         self.navigationController?.pushViewController(vc, animated: false)
     }
     @objc func use3() {

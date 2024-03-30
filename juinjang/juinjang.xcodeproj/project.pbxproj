@@ -99,6 +99,8 @@
 		3485CD692B73D3A700E8B9D6 /* SignUpWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3485CD682B73D3A700E8B9D6 /* SignUpWebViewController.swift */; };
 		349E30182BAD5E3F00B59D35 /* UseSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 349E30172BAD5E3F00B59D35 /* UseSelectViewController.swift */; };
 		349E301A2BAEBCD900B59D35 /* Use3ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 349E30192BAEBCD900B59D35 /* Use3ViewController.swift */; };
+		349E30202BB7DC3900B59D35 /* MarketingUseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 349E301F2BB7DC3900B59D35 /* MarketingUseViewController.swift */; };
+		349E30222BB7E07700B59D35 /* Use2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 349E30212BB7E07700B59D35 /* Use2ViewController.swift */; };
 		34AA14E92B7DA04200CF10FC /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = 34AA14E82B7DA04200CF10FC /* Toast */; };
 		34AA14EB2B7DA5C700CF10FC /* Animation - 1707961785957.json in Resources */ = {isa = PBXBuildFile; fileRef = 34AA14EA2B7DA5C600CF10FC /* Animation - 1707961785957.json */; };
 		34AA14F52B82E46300CF10FC /* PlayRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AA14F42B82E46300CF10FC /* PlayRecordViewController.swift */; };
@@ -253,6 +255,8 @@
 		3485CD682B73D3A700E8B9D6 /* SignUpWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpWebViewController.swift; sourceTree = "<group>"; };
 		349E30172BAD5E3F00B59D35 /* UseSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseSelectViewController.swift; sourceTree = "<group>"; };
 		349E30192BAEBCD900B59D35 /* Use3ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Use3ViewController.swift; sourceTree = "<group>"; };
+		349E301F2BB7DC3900B59D35 /* MarketingUseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketingUseViewController.swift; sourceTree = "<group>"; };
+		349E30212BB7E07700B59D35 /* Use2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Use2ViewController.swift; sourceTree = "<group>"; };
 		34AA14EA2B7DA5C600CF10FC /* Animation - 1707961785957.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Animation - 1707961785957.json"; sourceTree = "<group>"; };
 		34AA14F42B82E46300CF10FC /* PlayRecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayRecordViewController.swift; sourceTree = "<group>"; };
 		34AA14F62B82E98C00CF10FC /* PlayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayViewController.swift; sourceTree = "<group>"; };
@@ -569,7 +573,9 @@
 				345855852B689DEC00432C06 /* SettingViewController.swift */,
 				349E30172BAD5E3F00B59D35 /* UseSelectViewController.swift */,
 				345855872B689E0100432C06 /* Use1ViewController.swift */,
+				349E30212BB7E07700B59D35 /* Use2ViewController.swift */,
 				349E30192BAEBCD900B59D35 /* Use3ViewController.swift */,
+				349E301F2BB7DC3900B59D35 /* MarketingUseViewController.swift */,
 				345855892B689E0D00432C06 /* QnAViewController.swift */,
 				3458558B2B689E1E00432C06 /* LogoutPopupViewController.swift */,
 				3458558D2B689E2D00432C06 /* AccountDeleteViewController.swift */,
@@ -957,6 +963,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				349E30222BB7E07700B59D35 /* Use2ViewController.swift in Sources */,
 				0A14E36F2B569A840008FD28 /* SignUpViewController.swift in Sources */,
 				345855782B689AC900432C06 /* BottomTableViewCell.swift in Sources */,
 				61B0C9D22B6C0B0000BE86D2 /* ImjangImageListViewController.swift in Sources */,
@@ -971,6 +978,7 @@
 				619269EA2B67745900D4DD3E /* ColorStyle.swift in Sources */,
 				61D9250A2B49506D002A16B4 /* RecordingFilesViewController.swift in Sources */,
 				345855762B689AAE00432C06 /* TopTableViewCell.swift in Sources */,
+				349E30202BB7DC3900B59D35 /* MarketingUseViewController.swift in Sources */,
 				619269D72B6773FE00D4DD3E /* ImjangSearchResultViewController.swift in Sources */,
 				345855742B689A7E00432C06 /* BottomCollectionViewCell.swift in Sources */,
 				611AA7B62B81E187005DAC3B /* ScrapTableViewCell.swift in Sources */,
@@ -1228,7 +1236,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7LVZCMHQG6;
+				DEVELOPMENT_TEAM = DNJ2FDQWSL;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = juinjang/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "카메라 접근 권한이 필요합니다.";
@@ -1246,7 +1254,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = juinjang.ios.juinjang;
+				PRODUCT_BUNDLE_IDENTIFIER = juinjang.ios.juinjan;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -1264,7 +1272,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7LVZCMHQG6;
+				DEVELOPMENT_TEAM = DNJ2FDQWSL;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = juinjang/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "카메라 접근 권한이 필요합니다.";
@@ -1282,7 +1290,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = juinjang.ios.juinjang;
+				PRODUCT_BUNDLE_IDENTIFIER = juinjang.ios.juinjan;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
