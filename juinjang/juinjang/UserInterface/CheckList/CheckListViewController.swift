@@ -167,6 +167,18 @@ class CheckListViewController: UIViewController {
         }
     }
     
+    func filterVersion(completion: @escaping ([CheckListItem]) -> Void) {
+        do {
+            let realm = try Realm()
+            var result = realm.objects(CheckListItem.self)
+            result = result.filter("version == 0")
+            completion(Array(result))
+        } catch {
+            print("Realm 데이터베이스 접근할 수 없음: \(error)")
+            completion([])
+        }
+    }
+    
     func saveAnswer() {
         print("saveAnswer 함수 호출")
         guard let imjangId = imjangId else { return }
