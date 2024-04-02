@@ -26,11 +26,11 @@ class ImjangNoteViewController: UIViewController{
     
     // 하우스 이미지뷰
     let noImageBackgroundView = UIView().then {
-        $0.backgroundColor = UIColor(named: "backgroundGray")
+        $0.backgroundColor = ColorStyle.emptyGray
         $0.layer.cornerRadius = 5
     }
     let noImageIcon = UIImageView().then {
-        $0.image = UIImage(named: "gallery-add")
+        $0.image = ImageStyle.galleryAdd
         $0.contentMode = .scaleAspectFit
     }
     
@@ -95,7 +95,7 @@ class ImjangNoteViewController: UIViewController{
     }
     
     let upButton = UIButton().then {
-        $0.setImage(UIImage(named: "floating"), for: .normal)
+        $0.setImage(ImageStyle.floating, for: .normal)
     }
     
     let editButton = UIButton().then {

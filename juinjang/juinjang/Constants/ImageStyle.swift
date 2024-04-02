@@ -23,7 +23,6 @@ enum ImageStyle {
     static let x = UIImage(named: "X")!
     static let star = UIImage(named: "star")!
     static let starEmpty = UIImage(named: "starEmpty")!
-    static let emptyImage = UIImage(named: "emptyImage")!
     
     static let addOrange = UIImage(named: "addOrange")!
     static let arrowLeft = UIImage(named: "arrow-left")!
@@ -34,4 +33,5 @@ enum ImageStyle {
     static let maximize = UIImage(named: "maximize")!
     static let play = UIImage(named: "play")!
     static let report = UIImage(named: "report")!
+    static let galleryAdd = UIImage(named: "galleryAdd")
 }
