@@ -66,7 +66,7 @@ class DeleteImjangNoteTableViewCell: UITableViewCell {
         guard let imjangNote else { return }
         let images = imjangNote.images
         if images.isEmpty {
-            roomThumbnailImageView.image = ImageStyle.gallery
+            roomThumbnailImageView.image = ImageStyle.emptyImage
         } else {
             if let url = URL(string: images[0]) {
                 roomThumbnailImageView.kf.setImage(with: url, placeholder: UIImage(named: "1"))

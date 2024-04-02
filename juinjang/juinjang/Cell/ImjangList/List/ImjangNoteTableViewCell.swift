@@ -85,7 +85,7 @@ class ImjangNoteTableViewCell: UITableViewCell {
         
         let images = imjangNote.images
         if images.isEmpty {
-            let image = ImageStyle.gallery
+            let image = ImageStyle.emptyImage
             DispatchQueue.main.async {
                 self.roomThumbnailImageView.image = image
             }
