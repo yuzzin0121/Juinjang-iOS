@@ -39,7 +39,7 @@ class SignUpViewController: UIViewController {
         $0.text = "소셜 계정을 통해\n로그인 또는 회원가입을 진행해 주세요."
         $0.numberOfLines = 2
         $0.textAlignment = .center
-        $0.textColor = UIColor(named: "darkGray")
+        $0.textColor = ColorStyle.darkGray
         $0.font = UIFont(name: "Pretendard-Regular", size: 14)
     }
     

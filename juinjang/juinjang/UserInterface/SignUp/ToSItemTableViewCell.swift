@@ -16,7 +16,7 @@ class ToSItemTableViewCell: UITableViewCell {
         $0.addTarget(self, action: #selector(checkButtonPressed(_:)), for: .touchUpInside)
         $0.adjustsImageWhenHighlighted = false // 버튼이 눌릴 때 색상 변경 방지
 
-        $0.setImage(UIImage(named: "record-check-off"), for: .normal)
+        $0.setImage(UIImage(named: "check-off"), for: .normal)
         $0.imageView?.contentMode = .scaleAspectFill
     }
     
@@ -147,7 +147,7 @@ class ToSItemTableViewCell: UITableViewCell {
 
         itemLabel.attributedText = attributedString
         checkButton.isSelected = isChecked
-        let imageName = isChecked ? "record-check-on" : "record-check-off"
+        let imageName = isChecked ? "check-on" : "check-off"
         checkButton.setImage(UIImage(named: imageName), for: .normal)
         openContentButton.tag = toSItem.tag
     }
