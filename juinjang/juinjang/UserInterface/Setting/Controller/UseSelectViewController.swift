@@ -11,19 +11,19 @@ import SnapKit
 class UseSelectViewController : UIViewController {
     //요소
     var use1ImageView = UIImageView().then {
-        $0.image = UIImage(named:"이용약관")
+        $0.image = UIImage(named:"document-text")
     }
     var arrow1ImageView = UIImageView().then {
         $0.image = UIImage(named:"Vector")
     }
     var use2ImageView = UIImageView().then {
-        $0.image = UIImage(named:"이용약관")
+        $0.image = UIImage(named:"document-text")
     }
     var arrow2ImageView = UIImageView().then {
         $0.image = UIImage(named:"Vector")
     }
     var use3ImageView = UIImageView().then {
-        $0.image = UIImage(named:"이용약관")
+        $0.image = UIImage(named:"document-text")
     }
     var arrow3ImageView = UIImageView().then {
         $0.image = UIImage(named:"Vector")
