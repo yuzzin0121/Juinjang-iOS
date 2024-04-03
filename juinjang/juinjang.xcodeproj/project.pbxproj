@@ -317,6 +317,7 @@
 		61B0C9D32B6C10CC00BE86D2 /* UIStackView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Extension.swift"; sourceTree = "<group>"; };
 		61B0C9D62B6C16BD00BE86D2 /* ImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		61B0C9D82B6C1B9600BE86D2 /* EnlargePhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnlargePhotoViewController.swift; sourceTree = "<group>"; };
+        
 		61B0C9DE2B6C8D9400BE86D2 /* PhotoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewCell.swift; sourceTree = "<group>"; };
 		61B0C9E42B6CDA0300BE86D2 /* PaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingLabel.swift; sourceTree = "<group>"; };
 		61B0C9E62B6F5AD300BE86D2 /* DeleteImjangImagePopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteImjangImagePopupView.swift; sourceTree = "<group>"; };
