@@ -28,7 +28,7 @@ class ScrapCollectionViewCell: UICollectionViewCell {
         $0.backgroundColor = ColorStyle.emptyGray
     }
     let emptyImage = UIImageView().then {
-        $0.image = ImageStyle.gallery
+        $0.image = ImageStyle.emptyImage
         $0.contentMode = .scaleAspectFit
     }
     

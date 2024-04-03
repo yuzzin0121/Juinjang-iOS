@@ -33,7 +33,7 @@ class CompareSearchViewController: UIViewController {
     }
     
     var applyBtn = UIButton().then{
-        $0.backgroundColor = UIColor(named: "null")
+        $0.backgroundColor = ColorStyle.null
         $0.layer.cornerRadius = 10
         $0.setTitle("적용하기", for: .normal)
         $0.titleLabel?.font = UIFont(name: "Pretendard-SemiBold", size: 16)
@@ -153,7 +153,7 @@ extension CompareSearchViewController: UITableViewDelegate, UITableViewDataSourc
         if cell.isSelect == false {
             cell.isSelect = true
             cell.contentView.backgroundColor = UIColor(named: "main100")
-            cell.contentView.layer.borderColor = UIColor(named: "juinjang")?.cgColor
+            cell.contentView.layer.borderColor = ColorStyle.mainOrange.cgColor
             applyBtn.backgroundColor = UIColor(named: "500")
             applyBtn.addTarget(self, action: #selector(applyBtnTap), for: .touchUpInside)
         }
@@ -161,7 +161,7 @@ extension CompareSearchViewController: UITableViewDelegate, UITableViewDataSourc
             cell.isSelect = false
             cell.contentView.backgroundColor = .white
             cell.contentView.layer.borderColor = ColorStyle.strokeGray.cgColor
-            applyBtn.backgroundColor = UIColor(named: "null")
+            applyBtn.backgroundColor = ColorStyle.null
             applyBtn.removeTarget(self, action: #selector(applyBtnTap), for: .touchUpInside)
         }
     }

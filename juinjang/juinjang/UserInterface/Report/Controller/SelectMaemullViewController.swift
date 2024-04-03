@@ -174,7 +174,7 @@ extension SelectMaemullViewController: UITableViewDelegate, UITableViewDataSourc
         if cell.isSelect == false {
             cell.isSelect = true
             cell.contentView.backgroundColor = UIColor(named: "main100")
-            cell.contentView.layer.borderColor = UIColor(named: "juinjang")?.cgColor
+            cell.contentView.layer.borderColor = ColorStyle.mainOrange.cgColor
             applyBtn.backgroundColor = UIColor(named: "500")
             applyBtn.addTarget(self, action: #selector(applyBtnTap), for: .touchUpInside)
         }
