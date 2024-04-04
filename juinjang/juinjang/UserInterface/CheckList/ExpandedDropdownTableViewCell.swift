@@ -258,7 +258,7 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
                 UIImage(named: "line7"),               // 7호선
                 UIImage(named: "line8"),               // 8호선
                 UIImage(named: "line9"),               // 9호선
-                UIImage(named: "SuinBundangLine"),     // 수인분당
+                UIImage(named: "SuinbundangLine"),     // 수인분당
                 UIImage(named: "GyeonguiJungangLine"), // 경의중앙
                 UIImage(named: "ShinbundangLine"),     // 신분당
                 UIImage(named: "AirportRailroadLine"), // 공항철도

@@ -11,6 +11,11 @@ import SnapKit
 
 import Alamofire
 
+import KakaoSDKCommon
+import KakaoSDKAuth
+import KakaoSDKUser
+
+
 class SignUpViewController: UIViewController {
 
     lazy var juinjangLogoImage = UIImageView().then {
@@ -96,7 +101,61 @@ class SignUpViewController: UIViewController {
     }
     
     @objc func loginButtonTapped(_ sender: UIButton) {
-        let vc = SignUpWebViewController()
-        present(vc, animated: true)
+//        let vc = SignUpWebViewController()
+//        present(vc, animated: true)
+        if UserApi.isKakaoTalkLoginAvailable() {
+            // 카카오톡 로그인. api 호출 결과를 클로저로 전달.
+            loginWithApp()
+        } else {
+            // 만약, 카카오톡이 깔려있지 않을 경우에는 웹 브라우저로 카카오 로그인함.
+            loginWithWeb()
+        }
+            
+    }
+}
+
+extension SignUpViewController {
+
+    // 카카오톡 앱으로 로그인
+    func loginWithApp() {
+        UserApi.shared.loginWithKakaoTalk {(_, error) in
+            if let error = error {
+                print(error)
+            } else {
+                print("loginWithKakaoTalk() success.")
+
+                UserApi.shared.me {(user, error) in
+                    if let error = error {
+                        print(error)
+                    } else {
+                        self.presentToMain()
+                    }
+                }
+            }
+        }
+    }
+
+    // 카카오톡 웹으로 로그인
+    func loginWithWeb() {
+        UserApi.shared.loginWithKakaoAccount {(_, error) in
+            if let error = error {
+                print(error)
+            } else {
+                print("loginWithKakaoAccount() success.")
+
+                UserApi.shared.me {(user, error) in
+                    if let error = error {
+                        print(error)
+                    } else {
+                        self.presentToMain()
+                    }
+                }
+            }
+        }
+    }
+    
+    func presentToMain() {
+        let nextVC = ToSViewController()
+        self.navigationController?.pushViewController(nextVC, animated: true)
     }
 }

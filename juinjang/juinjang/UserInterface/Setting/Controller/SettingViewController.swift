@@ -16,7 +16,7 @@ class SettingViewController : UIViewController, UIImagePickerControllerDelegate,
     
     //MARK: - 프로필 사진, 닉네임
     var profileImageView = UIImageView().then {
-        $0.image = UIImage(named:"프로필사진")
+        $0.image = UIImage(named:"profileImage")
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.contentMode = .scaleAspectFill
         $0.layer.cornerRadius = 33
@@ -101,7 +101,7 @@ class SettingViewController : UIViewController, UIImagePickerControllerDelegate,
     }
     
     var useImageView = UIImageView().then {
-        $0.image = UIImage(named:"이용약관")
+        $0.image = UIImage(named:"document-text")
     }
     var useLabel = UILabel().then {
         $0.text = "이용약관"
