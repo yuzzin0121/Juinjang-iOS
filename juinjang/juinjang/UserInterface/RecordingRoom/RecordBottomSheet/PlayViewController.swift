@@ -19,14 +19,14 @@ class PlayViewController: UIViewController, UITextFieldDelegate, AVAudioPlayerDe
     
 
     var titleTextField = UITextField().then {
-        $0.text = "\(RecordingFileViewCell().recordingFileNameLabel.text ?? "녹음파일_001")"
+        $0.text = "녹음파일_001"
         $0.textAlignment = .center
         $0.textColor = UIColor(named: "lightGray")
         $0.font = UIFont(name: "Pretendard-Bold", size: 24)
     }
     
     var recordStartTimeLabel = UILabel().then {
-        $0.text = "오후 4:00" // - TODO: 녹음 파일 추가할 때의 시간 반영
+        $0.text = "\(recordTime)" // - TODO: 녹음 파일 추가할 때의 시간 반영
         $0.textColor = UIColor(named: "gray1")
         $0.font = UIFont(name: "Pretendard-Regular", size: 16)
     }
@@ -91,6 +91,7 @@ class PlayViewController: UIViewController, UITextFieldDelegate, AVAudioPlayerDe
         
         audioPlayer.delegate = self
         audioPlayer.prepareToPlay()
+        
         
         remainingTimeLabel.text = convertNSTimeInterval2String(audioPlayer.duration)
         elapsedTimeLabel.text = convertNSTimeInterval2String(0)
@@ -192,8 +193,8 @@ class PlayViewController: UIViewController, UITextFieldDelegate, AVAudioPlayerDe
         if let title = newTitle {
             print("녹음 파일 제목: \(title)")
             titleTextField.text = title
-            RecordingFileViewCell().setData(fileTitle: title, time: remainingTimeLabel.text, date: recordTime)
-            RecordingFileViewCell().recordingFileNameLabel.text = title
+           // RecordingFileViewCell().setData(fileTitle: title, time: remainingTimeLabel.text, date: recordTime)
+           // RecordingFileViewCell().recordingFileNameLabel.text = title
             
         }
     }

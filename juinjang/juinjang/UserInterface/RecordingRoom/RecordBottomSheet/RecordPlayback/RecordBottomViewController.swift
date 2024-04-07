@@ -9,10 +9,15 @@ import UIKit
 import SnapKit
 import AVFoundation
 
+protocol RecordBottomViewControllerDelegate: AnyObject {
+    func didChangeRecordingFileName(newName: String)
+}
+
 var recordTime : String!
 
 class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudioPlayerDelegate {
     
+    weak var delegate: RecordBottomViewControllerDelegate?
     weak var topViewController: RecordTopViewController?
     var fileURLs : [URL] = []
     
@@ -22,7 +27,7 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudio
     
 
     lazy var titleTextField = UITextField().then {
-        $0.text = "\(RecordingFileViewCell().recordingFileNameLabel.text ?? "녹음파일_001")"
+        $0.text = "녹음파일_001"
         $0.textAlignment = .center
         $0.textColor = UIColor(named: "lightGray")
         $0.font = UIFont(name: "Pretendard-Bold", size: 24)
@@ -220,6 +225,7 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudio
         // 텍스트 필드가 수정되면 title을 수정
         updateTitle(textField.text)
         topViewController?.updateTitle(textField.text)
+        delegate?.didChangeRecordingFileName(newName: textField.text ?? "")
     }
 
     func updateTitle(_ newTitle: String?) {

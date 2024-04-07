@@ -135,15 +135,16 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
         }
     }
     func loadRecordings() {
-           let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-           do {
-               // 문서 디렉토리에서 녹음 파일들을 가져옴
-               let recordingURLs = try FileManager.default.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil, options: [])
-               // 녹음 파일 목록에 추가
-               fileURLs = recordingURLs.filter { $0.pathExtension == "m4a" } // .m4a 확장자를 가진 파일만 필터링
-           } catch {
-               print("Failed to load recordings: \(error)")
-           }
+        //clearRecordingDirectory()
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        do {
+           // 문서 디렉토리에서 녹음 파일들을 가져옴
+           let recordingURLs = try FileManager.default.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil, options: [])
+           // 녹음 파일 목록에 추가
+           fileURLs = recordingURLs.filter { $0.pathExtension == "m4a" }.sorted(by: { $0.absoluteString > $1.absoluteString }) // .m4a 확장자를 가진 파일만 필터링
+        } catch {
+           print("Failed to load recordings: \(error)")
+        }
         if fileURLs.isEmpty {
             tableBackgroundView.isHidden = false
         } else {
@@ -154,7 +155,19 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
            // UITableView 새로고침
            recordingFileTableView.reloadData()
     }
-    
+    func clearRecordingDirectory() {
+        let fileManager = FileManager.default
+        let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        do {
+            let fileURLsInDirectory = try fileManager.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil, options: [])
+            for fileURL in fileURLsInDirectory {
+                try fileManager.removeItem(at: fileURL)
+            }
+            print("Recording directory cleared successfully.")
+        } catch {
+            print("Failed to clear recording directory: \(error)")
+        }
+    }
     func setMemo(memo: String?) {
         guard let memo = memo else { return }
         memoTextView.text = memo
@@ -212,21 +225,21 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
         view.endEditing(true)
     }
     
-//    func setItemData() {
-//        fileItems.append(contentsOf: [
+    func setItemData() {
+        fileURLs.append(contentsOf: [
 //            .init(name: "보일러 관련", recordedDate: Date(), recordedTime: "1:30"),
 //            .init(name: "녹음_002", recordedDate: Date(), recordedTime: "2:12"),
 //            .init(name: "녹음_001", recordedDate: Date(), recordedTime: "1:57"),
 //            .init(name: "으아앙", recordedDate: Date(), recordedTime: "3:10")
-//        ])
-//        
-//        if fileItems.isEmpty {
-//            tableBackgroundView.isHidden = false
-//        } else {
-//            tableBackgroundView.isHidden = true
-//        }
-//        recordingFileTableView.reloadData()
-//    }
+        ])
+        
+        if fileURLs.isEmpty {
+            tableBackgroundView.isHidden = false
+        } else {
+            tableBackgroundView.isHidden = true
+        }
+        recordingFileTableView.reloadData()
+    }
     
     func setDelegate() {
         recordingFileTableView.dataSource = self
@@ -433,17 +446,6 @@ extension RecordingRoomViewController: UITableViewDataSource, UITableViewDelegat
             return 3
         }
     }
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        if fileURLs.isEmpty {
-//            return 0
-//        } else if fileURLs.count == 1{
-//            return 1
-//        } else if fileURLs.count == 2{
-//            return 2
-//        } else {
-//            return 3
-//        }
-//    }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: RecordingFileViewCell.identifier, for: indexPath) as? RecordingFileViewCell else {
