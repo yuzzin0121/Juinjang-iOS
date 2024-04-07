@@ -35,12 +35,12 @@ class BottomTableViewCell: UITableViewCell{
     
     //최근 본 임장이 없을 때
     var noImjangImageView = UIImageView().then {
-        $0.image = UIImage(named: "투명로고")
+        $0.image = UIImage(named: "logo")
         $0.contentMode = .scaleAspectFill
     }
     var noImjangLabel = UILabel().then {
         $0.text = "아직 등록된 집이 없어요"
-        $0.textColor = UIColor(named: "450")
+        $0.textColor = ColorStyle.textGray
         $0.font = .pretendard(size: 16, weight: .semiBold)
     }
     

@@ -16,7 +16,7 @@ class SetNickNameViewController: UIViewController {
         $0.text = "당신을 위한 노트를 준비했어요"
         $0.numberOfLines = 2
         $0.textAlignment = .center
-        $0.textColor = UIColor(named: "normalText")
+        $0.textColor = ColorStyle.normalText
         $0.font = UIFont(name: "Pretendard-Bold", size: 24)
     }
     
@@ -24,9 +24,9 @@ class SetNickNameViewController: UIViewController {
         $0.text = "임장 노트에\n이름을 적어볼까요?"
         $0.numberOfLines = 2
         $0.textAlignment = .left
-        $0.textColor = UIColor(named: "normalText")
+        $0.textColor = ColorStyle.normalText
         $0.font = UIFont(name: "Pretendard-Bold", size: 24)
-        $0.asColor(targetString: "임장 노트", color: UIColor(named: "mainOrange"))
+        $0.asColor(targetString: "임장 노트", color: ColorStyle.mainOrange)
     }
 
     lazy var imjangNoteImage = UIImageView().then {
@@ -42,14 +42,14 @@ class SetNickNameViewController: UIViewController {
     lazy var nickNameTextField = UITextField().then {
         $0.layer.cornerRadius = 3
         $0.layer.borderWidth = 1
-        $0.layer.borderColor = UIColor(named: "mainOrange")?.cgColor
+        $0.layer.borderColor = ColorStyle.mainOrange.cgColor
         $0.textAlignment = .center
-        $0.textColor = UIColor(named: "normalText")
+        $0.textColor = ColorStyle.normalText
         $0.font = UIFont(name: "omyu pretty", size: 20)
         $0.attributedPlaceholder = NSAttributedString(
             string: "8자 이내",
             attributes: [
-                .foregroundColor: UIColor(named: "gray1") as Any,
+                .foregroundColor: ColorStyle.gray0 as Any,
                 .font: UIFont(name: "Pretendard-Regular", size: 20) ?? UIFont.systemFont(ofSize: 20)
             ]
         )
@@ -57,8 +57,8 @@ class SetNickNameViewController: UIViewController {
     
     lazy var nextButton = UIButton().then {
         $0.setTitle("입력 완료!", for: .normal)
-        $0.setTitleColor(UIColor(named: "textWhite"), for: .normal)
-        $0.backgroundColor = UIColor(named: "lightGray")
+        $0.setTitleColor(ColorStyle.textWhite, for: .normal)
+        $0.backgroundColor = ColorStyle.lightGray
         $0.layer.cornerRadius = 8
         $0.isEnabled = false
         $0.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
@@ -83,7 +83,7 @@ class SetNickNameViewController: UIViewController {
         self.navigationItem.title = "닉네임 정하기"
         self.navigationController?.navigationBar.tintColor = .black
         self.navigationItem.hidesBackButton = true
-        let backButtonImage = UIImage(named: "arrow-left")
+        let backButtonImage = ImageStyle.arrowLeft
         let backButton = UIBarButtonItem(image: backButtonImage, style: .plain,target: self, action: #selector(backButtonTapped))
         navigationItem.leftBarButtonItem = backButton
     }
@@ -192,7 +192,7 @@ class SetNickNameViewController: UIViewController {
     
     func checkNextButtonActivation() {
         nextButton.isEnabled = true
-        nextButton.backgroundColor = UIColor(named: "textBlack")
+        nextButton.backgroundColor = ColorStyle.textBlack
     }
 }
 

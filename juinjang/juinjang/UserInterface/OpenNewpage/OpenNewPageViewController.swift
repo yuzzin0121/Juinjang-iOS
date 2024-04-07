@@ -126,7 +126,7 @@ class OpenNewPageViewController: UIViewController {
     }
     
     lazy var realestateInvestmentButton = UIButton().then {
-        configureButton($0, normalImage: UIImage(named: "realestate-investment-button"), selectedImage: UIImage(named: "realstate-investment-selected-button"), action: #selector(buttonPressed))
+        configureButton($0, normalImage: UIImage(named: "realestate-investment-button"), selectedImage: UIImage(named: "realestate-investment-selected-button"), action: #selector(buttonPressed))
     }
     
     lazy var moveInDirectlyButton = UIButton().then {

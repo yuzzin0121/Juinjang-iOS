@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -41,7 +41,6 @@
 		0A603A682B7DD2640060B90D /* CheckListRequestDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A603A672B7DD2640060B90D /* CheckListRequestDto.swift */; };
 		0A603A6A2B7DD36E0060B90D /* CheckListResponseDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A603A692B7DD36E0060B90D /* CheckListResponseDto.swift */; };
 		0A73E60D2B5855CD00EF1C89 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A73E60C2B5855CD00EF1C89 /* UserInfo.swift */; };
-		0A7A444C2BA1DC87008142BB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0A7A444B2BA1DC87008142BB /* Assets.xcassets */; };
 		0A7AC0F12B6412760032C9DF /* KakaoZipCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7AC0F02B6412760032C9DF /* KakaoZipCodeViewController.swift */; };
 		0A95D72F2B682013000A9C06 /* ToSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A95D72E2B682013000A9C06 /* ToSViewController.swift */; };
 		0A95D7312B682FB4000A9C06 /* ToSItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A95D7302B682FB4000A9C06 /* ToSItemTableViewCell.swift */; };
@@ -57,6 +56,7 @@
 		0AE388892B5986BC0041A979 /* CategoryItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE388882B5986BC0041A979 /* CategoryItemTableViewCell.swift */; };
 		0AE3888B2B5992870041A979 /* CheckListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE3888A2B5992870041A979 /* CheckListItem.swift */; };
 		0AF89DA32B74C5D500C9AD81 /* ContentWrappingTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF89DA22B74C5D500C9AD81 /* ContentWrappingTableView.swift */; };
+		0AF9C28C2BB9D779009926E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 61C667BB2BB9A06A007F65E9 /* Assets.xcassets */; };
 		345855722B689A5300432C06 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345855712B689A5300432C06 /* MainViewController.swift */; };
 		345855742B689A7E00432C06 /* BottomCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345855732B689A7E00432C06 /* BottomCollectionViewCell.swift */; };
 		345855762B689AAE00432C06 /* TopTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345855752B689AAE00432C06 /* TopTableViewCell.swift */; };
@@ -169,6 +169,7 @@
 		61B0C9DF2B6C8D9400BE86D2 /* PhotoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0C9DE2B6C8D9400BE86D2 /* PhotoCollectionViewCell.swift */; };
 		61B0C9E52B6CDA0300BE86D2 /* PaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0C9E42B6CDA0300BE86D2 /* PaddingLabel.swift */; };
 		61B0C9E72B6F5AD300BE86D2 /* DeleteImjangImagePopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0C9E62B6F5AD300BE86D2 /* DeleteImjangImagePopupView.swift */; };
+		61C667BE2BB9A079007F65E9 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 61C667BD2BB9A079007F65E9 /* Colors.xcassets */; };
 		61D925052B486508002A16B4 /* RecordingFileViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D925042B486508002A16B4 /* RecordingFileViewCell.swift */; };
 		61D925082B486706002A16B4 /* RecordingFileItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D925072B486706002A16B4 /* RecordingFileItem.swift */; };
 		61D9250A2B49506D002A16B4 /* RecordingFilesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D925092B49506D002A16B4 /* RecordingFilesViewController.swift */; };
@@ -209,7 +210,6 @@
 		0A603A672B7DD2640060B90D /* CheckListRequestDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckListRequestDto.swift; sourceTree = "<group>"; };
 		0A603A692B7DD36E0060B90D /* CheckListResponseDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckListResponseDto.swift; sourceTree = "<group>"; };
 		0A73E60C2B5855CD00EF1C89 /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
-		0A7A444B2BA1DC87008142BB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0A7AC0F02B6412760032C9DF /* KakaoZipCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoZipCodeViewController.swift; sourceTree = "<group>"; };
 		0A95D72E2B682013000A9C06 /* ToSViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToSViewController.swift; sourceTree = "<group>"; };
 		0A95D7302B682FB4000A9C06 /* ToSItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToSItemTableViewCell.swift; sourceTree = "<group>"; };
@@ -320,6 +320,8 @@
 		61B0C9DE2B6C8D9400BE86D2 /* PhotoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewCell.swift; sourceTree = "<group>"; };
 		61B0C9E42B6CDA0300BE86D2 /* PaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingLabel.swift; sourceTree = "<group>"; };
 		61B0C9E62B6F5AD300BE86D2 /* DeleteImjangImagePopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteImjangImagePopupView.swift; sourceTree = "<group>"; };
+		61C667BB2BB9A06A007F65E9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		61C667BD2BB9A079007F65E9 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		61D925042B486508002A16B4 /* RecordingFileViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingFileViewCell.swift; sourceTree = "<group>"; };
 		61D925072B486706002A16B4 /* RecordingFileItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingFileItem.swift; sourceTree = "<group>"; };
 		61D925092B49506D002A16B4 /* RecordingFilesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingFilesViewController.swift; sourceTree = "<group>"; };
@@ -504,7 +506,6 @@
 				0A9E0A462B3DCAB90094595A /* AppDelegate.swift */,
 				0A9E0A482B3DCAB90094595A /* SceneDelegate.swift */,
 				0A9E0A512B3DCAB90094595A /* LaunchScreen.storyboard */,
-				0A7A444B2BA1DC87008142BB /* Assets.xcassets */,
 				0A9E0A542B3DCAB90094595A /* Info.plist */,
 				616408ED2B407E4400EC3B5E /* Resources */,
 				0A9E0AA82B3DD4D20094595A /* .gitignore */,
@@ -717,6 +718,8 @@
 		616408ED2B407E4400EC3B5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				61C667BD2BB9A079007F65E9 /* Colors.xcassets */,
+				61C667BB2BB9A06A007F65E9 /* Assets.xcassets */,
 				616408EE2B407E6300EC3B5E /* Fonts */,
 			);
 			path = Resources;
@@ -903,7 +906,7 @@
 				};
 			};
 			buildConfigurationList = 0A9E0A3E2B3DCAB90094595A /* Build configuration list for PBXProject "juinjang" */;
-			compatibilityVersion = "Xcode 14.0";
+			compatibilityVersion = "Xcode 15.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -950,8 +953,9 @@
 				61A7B9272B4C4EC300795B49 /* Pretendard-ExtraLight.otf in Resources */,
 				0AC6ED672B7E917F00263487 /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json in Resources */,
 				61A7B9282B4C4EC300795B49 /* Pretendard-SemiBold.otf in Resources */,
+				61C667BE2BB9A079007F65E9 /* Colors.xcassets in Resources */,
 				0A9E0A532B3DCAB90094595A /* LaunchScreen.storyboard in Resources */,
-				0A7A444C2BA1DC87008142BB /* Assets.xcassets in Resources */,
+				0AF9C28C2BB9D779009926E4 /* Assets.xcassets in Resources */,
 				61A7B92B2B4C4EC300795B49 /* Pretendard-Light.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1236,11 +1240,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = DNJ2FDQWSL;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = juinjang/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "카메라 접근 권한이 필요합니다.";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "녹음하겠습니다.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "마이크 접근 권한을 허용하는 경우에만 녹음을 통한 노트 생성 및 음성 인식 서비스 이용이 가능합니다. (필수 권한)";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "사질 앨범에 접근하려면 허용이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -1276,7 +1280,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = juinjang/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "카메라 접근 권한이 필요합니다.";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "녹음하겠습니다.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "마이크 접근 권한을 허용하는 경우에만 녹음을 통한 노트 생성 및 음성 인식 서비스 이용이 가능합니다. (필수 권한)";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "사질 앨범에 접근하려면 허용이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;

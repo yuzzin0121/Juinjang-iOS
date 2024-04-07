@@ -49,7 +49,7 @@ class ReportImjangListTableViewCell: UITableViewCell {
         guard let imjangNote else { return }
         if let images = imjangNote.images {
             if images.isEmpty {
-                roomThumbnailImageView.image = ImageStyle.emptyImage
+                roomThumbnailImageView.image = ImageStyle.gallery
             } else {
                 roomThumbnailImageView.image = UIImage(named: "1")  // 임시
             }

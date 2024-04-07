@@ -21,7 +21,7 @@ class ToSViewController: UIViewController {
     lazy var guideDetailLabel = UILabel().then {
         $0.text = "원활한 서비스 이용을 위해 약관 동의가 필요해요."
         $0.textAlignment = .center
-        $0.textColor = UIColor(named: "textGray")
+        $0.textColor =  ColorStyle.textGray
         $0.font = .pretendard(size: 16, weight: .medium)
     }
     
@@ -40,7 +40,7 @@ class ToSViewController: UIViewController {
     
     lazy var allAgreeLabel = UILabel().then {
         $0.text = "약관 모두 동의하기"
-        $0.textColor = UIColor(named: "textBlack")
+        $0.textColor = ColorStyle.textBlack
         $0.font = .pretendard(size: 16, weight: .semiBold)
         $0.isUserInteractionEnabled = true // 터치 이벤트 활성화
     }
@@ -95,7 +95,7 @@ class ToSViewController: UIViewController {
     func setNavigationBar() {
         self.navigationController?.navigationBar.tintColor = .black
         self.navigationItem.hidesBackButton = true
-        let backButtonImage = UIImage(named: "arrow-left")
+        let backButtonImage = ImageStyle.arrowLeft
         let backButton = UIBarButtonItem(image: backButtonImage, style: .plain,target: self, action: #selector(backButtonTapped))
         navigationItem.leftBarButtonItem = backButton
     }
@@ -180,11 +180,11 @@ class ToSViewController: UIViewController {
     func updateCheckButtonImages() {
         if isChecked {
             checkButton.setImage(UIImage(named: "check-on"), for: .normal)
-            nextButton.backgroundColor = UIColor(named: "textBlack")
+            nextButton.backgroundColor =  ColorStyle.textBlack
             nextButton.isEnabled = true
         } else {
             checkButton.setImage(UIImage(named: "check-off"), for: .normal)
-            nextButton.backgroundColor = UIColor(named: "lightGray")
+            nextButton.backgroundColor =  ColorStyle.lightGray
             nextButton.isEnabled = false
         }
     }
@@ -228,7 +228,7 @@ class ToSViewController: UIViewController {
     func areNotAllTermsChecked() {
         // cell 버튼 개별 동작 시 전체 동의 버튼, 다음으로 버튼 개별 처리
         checkButton.setImage(UIImage(named: "check-off"), for: .normal)
-        nextButton.backgroundColor = UIColor(named: "lightGray")
+        nextButton.backgroundColor = ColorStyle.lightGray
         nextButton.isEnabled = false
     }
     
@@ -249,10 +249,10 @@ class ToSViewController: UIViewController {
         }
 
         if isFirstTermChecked && isSecondTermChecked {
-            nextButton.backgroundColor = UIColor(named: "textBlack")
+            nextButton.backgroundColor = ColorStyle.textBlack
             nextButton.isEnabled = true
         } else {
-            nextButton.backgroundColor = UIColor(named: "lightGray")
+            nextButton.backgroundColor = ColorStyle.lightGray
             nextButton.isEnabled = false
         }
     }

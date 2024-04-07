@@ -34,4 +34,5 @@ enum ImageStyle {
     static let maximize = UIImage(named: "maximize")!
     static let play = UIImage(named: "play")!
     static let report = UIImage(named: "report")!
+    static let galleryAdd = UIImage(named: "galleryAdd")
 }
