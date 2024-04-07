@@ -8,7 +8,6 @@
 import UIKit
 import Then
 import SnapKit
-
 import Alamofire
 
 import KakaoSDKCommon
@@ -121,77 +120,90 @@ extension SignUpViewController {
                 print(error)
             } else {
                 print("loginWithKakaoTalk() success.")
-
-                UserApi.shared.me {(user, error) in
-                    if let error = error {
-                        print(error)
-                    } else {
-                        self.presentToMain()
-                    }
-                }
+                self.getUserInfo()
+                self.sendPostRequest(email: UserDefaultManager.shared.email, nickname: UserDefaultManager.shared.nickname)
             }
         }
     }
 
     // 카카오톡 웹으로 로그인
     func loginWithWeb() {
-        UserApi.shared.loginWithKakaoAccount {(oauthToken, error) in
+        UserApi.shared.loginWithKakaoAccount {(_, error) in
             if let error = error {
                 print(error)
             } else {
                 print("loginWithKakaoAccount() success.")
-                if let token = oauthToken {
-                    print("Kakao access token : \(token.accessToken)")
-                    UserDefaultManager.shared.accessToken = token.accessToken
-                    UserDefaultManager.shared.refreshToken = token.refreshToken
-                }
-                UserApi.shared.me {(user, error) in
-                    if let error = error {
-                        print(error)
-                    } else {
-                        if let kakaoUser = user {
-                            if let email = kakaoUser.kakaoAccount?.email {
-                                UserDefaultManager.shared.email = email
-                            } else {
-                                print("사용자가 이메일 제공에 동의하지 않았습니다.")
-                            }
-                        }
-                        self.presentToMain()
-                    }
-                }
+                self.getUserInfo()
+                self.sendPostRequest(email: UserDefaultManager.shared.email, nickname: UserDefaultManager.shared.nickname)
             }
         }
     }
-    
+    func getUserInfo() {
+        UserApi.shared.me {(user, error) in
+            if let error = error {
+                print(error)
+            } else {
+                if let kakaoUser = user {
+                    if let email = kakaoUser.kakaoAccount?.email {
+                        print("사용자 이메일 : \(email)")
+                        UserDefaultManager.shared.email = email
+                    } else {
+                        print("사용자가 이메일 제공에 동의하지 않았습니다.")
+                    }
+                }
+                
+            }
+        }
+    }
     func presentToMain() {
-        sendAPIRequest(with: UserDefaultManager.shared.accessToken)
+        print("present to Main")
+        
+//        let nextVC = MainViewController()
+//        self.navigationController?.pushViewController(nextVC, animated: true)
+        //let nextVC = ToSViewController()
+       // self.navigationController?.pushViewController(nextVC, animated: true)
+       // sendAPIRequest(with: UserDefaultManager.shared.accessToken)
+    }
+    struct RequestBody: Encodable {
+        let email: String
+        let nickname: String?
     }
     
-    func sendAPIRequest(with accessToken: String) {
-        // API 엔드포인트 URL
-        let apiUrl = "http://juinjang1227.com:8080/auth/validate-token"
+    func sendPostRequest(email: String, nickname: String?) {
+        let url = "http://juinjang1227.com:8080/api/auth/kakao"
         
-        // 요청 헤더
-        let headers: HTTPHeaders = [
-            "Authorization": "Bearer \(accessToken)",
-            "Content-Type": "application/json"
-        ]
-        
-        // 요청 본문 데이터
-        let parameters: [String: String] = ["webToken": "a911595368a98257e6d265a6822e9d8f71260e18"]
-        
-        // Alamofire를 사용하여 API 요청 보내기
-        AF.request(apiUrl, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseJSON { response in
-            switch response.result {
-            case .success(let value):
-                print("Response: \(value)")
-                let nextVC = MainViewController()
-                self.navigationController?.pushViewController(nextVC, animated: true)
-            case .failure(let error):
-                print("Error: \(error)")
-                let nextVC = ToSViewController()
-                self.navigationController?.pushViewController(nextVC, animated: true)
-            }
+        let requestBody = RequestBody(email: email, nickname: nickname)
+            
+        AF.request(url, method: .post, parameters: requestBody, encoder: JSONParameterEncoder.default)
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    print("Success: \(value)")
+                    print("닉네임 : \(nickname!)")
+                    if let json = value as? [String: Any],
+                       let result = json["result"] as? [String: Any],
+                       let accessToken = result["accessToken"] as? String,
+                       let refreshToken = result["refreshToken"] as? String {
+                        print("Success: \(accessToken)")
+                        UserDefaultManager.shared.accessToken = accessToken
+                        print("Success: \(refreshToken)")
+                        UserDefaultManager.shared.refreshToken = refreshToken
+                        // accessToken을 사용하여 적절한 처리를 수행합니다.
+                    } else {
+                        print("Failed to parse accessToken")
+                        // accessToken을 파싱하는 데 실패한 경우에 대한 처리를 수행합니다.
+                    }
+                    if nickname == nil {
+                        let nextVC = ToSViewController()
+                        self.navigationController?.pushViewController(nextVC, animated: true)
+                    } else {
+                        let nextVC = MainViewController()
+                        self.navigationController?.pushViewController(nextVC, animated: true)
+                    }
+                case .failure(let error):
+                    print("Error: \(error)")
+                    // 요청이 실패한 경우 여기에 적절한 처리를 추가하세요.
+                }
         }
     }
 }

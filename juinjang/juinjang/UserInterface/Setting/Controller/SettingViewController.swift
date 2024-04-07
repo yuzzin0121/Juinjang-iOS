@@ -242,7 +242,7 @@ class SettingViewController : UIViewController, UIImagePickerControllerDelegate,
         case "변경":
             nicknameTextField.text = nickname.text
             saveButton.setTitle("저장", for: .normal)
-            saveButton.backgroundColor = UIColor(named: "juinjang")
+            saveButton.backgroundColor = UIColor(named: "mainOrange")
             view.addSubview(nicknameTextField)
             nicknameTextField.delegate = self
             view.addSubview(line1)
@@ -285,7 +285,7 @@ class SettingViewController : UIViewController, UIImagePickerControllerDelegate,
             }
             else {
                 saveButton.setTitle("저장", for: .normal)
-                saveButton.backgroundColor = UIColor(named: "juinjang")
+                saveButton.backgroundColor = UIColor(named: "mainOrange")
             }
         }
         if nicknameTextField.text == "dodo" {

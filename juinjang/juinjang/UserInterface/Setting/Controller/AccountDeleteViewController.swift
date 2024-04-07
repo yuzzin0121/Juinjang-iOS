@@ -15,7 +15,7 @@ class AccountDeleteViewController : DimmedViewController {
         $0.layer.cornerRadius = 30
     }
     var logoImageView = UIImageView().then {
-        $0.image = UIImage(named:"로고")
+        $0.image = UIImage(named:"deleteLogo")
     }
     var qLabel = UILabel().then {
         $0.text = "\(UserDefaultManager.shared.nickname)님, \n정말 계정을 삭제하시겠어요?"
