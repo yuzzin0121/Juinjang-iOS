@@ -11,6 +11,7 @@ import AVFoundation
 
 
 class RecordingFilesViewController: UIViewController {
+   
     
     // 스크롤뷰
     let scrollView = UIScrollView().then {
@@ -102,20 +103,35 @@ class RecordingFilesViewController: UIViewController {
 //    }
     
     func loadRecordings() {
-           let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-           do {
-               // 문서 디렉토리에서 녹음 파일들을 가져옴
-               let recordingURLs = try FileManager.default.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil, options: [])
-               // 녹음 파일 목록에 추가
-               fileURLs = recordingURLs.filter { $0.pathExtension == "m4a" } // .m4a 확장자를 가진 파일만 필터링
-           } catch {
-               print("Failed to load recordings: \(error)")
-           }
+        //clearRecordingDirectory()
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        do {
+           // 문서 디렉토리에서 녹음 파일들을 가져옴
+            let recordingURLs = try FileManager.default.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil, options: [])
+           
+           // 녹음 파일 목록에 추가
+            fileURLs = recordingURLs.filter { $0.pathExtension == "m4a" }.sorted(by: { $0.absoluteString > $1.absoluteString }) // .m4a 확장자를 가진 파일만 필터링
+           
+        } catch {
+            print("Failed to load recordings: \(error)")
+        }
 
-           // UITableView 새로고침
-           recordingFileTableView.reloadData()
-       }
-    
+       // UITableView 새로고침
+        recordingFileTableView.reloadData()
+   }
+    func clearRecordingDirectory() {
+        let fileManager = FileManager.default
+        let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        do {
+            let fileURLsInDirectory = try fileManager.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil, options: [])
+            for fileURL in fileURLsInDirectory {
+                try fileManager.removeItem(at: fileURL)
+            }
+            print("Recording directory cleared successfully.")
+        } catch {
+            print("Failed to clear recording directory: \(error)")
+        }
+    }
     func addSubViews() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)

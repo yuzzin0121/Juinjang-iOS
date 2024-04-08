@@ -124,6 +124,7 @@ class MainViewController: UIViewController {
     
 //MARK: - 함수 선언
     func refreshToken() {
+        print("refreshToken")
         let url = "http://juinjang1227.com:8080/api/auth/regenerate-token"
         let headers : HTTPHeaders = [
             "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)", // 현재 Access Token
@@ -138,6 +139,8 @@ class MainViewController: UIViewController {
                 }
                 // 응답 데이터 출력
                 if let responseString = String(data: value, encoding: .utf8) {
+                    print("access:\(UserDefaultManager.shared.accessToken)")
+                    print("refresh:\(UserDefaultManager.shared.refreshToken)")
                     print("Response data: \(responseString)")
                 }
                 do {

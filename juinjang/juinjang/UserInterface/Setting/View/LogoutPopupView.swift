@@ -19,7 +19,7 @@ class LogoutPopupView: UIView {
         $0.spacing = 8
     }
     private let nameLabel = UILabel().then {
-        $0.textColor = UIColor(named: "juinjang")
+        $0.textColor = UIColor(named: "mainOrange")
         $0.font = UIFont(name: "Pretendard-Medium", size: 18)
         $0.numberOfLines = 0
     }
@@ -35,7 +35,7 @@ class LogoutPopupView: UIView {
     }
     private let leftButton = UIButton().then {
         $0.setTitleColor(UIColor(named: "500"), for: .normal)
-        $0.backgroundColor = UIColor(named: "ECECEC")
+        $0.backgroundColor = UIColor(named: "gray3")
         $0.layer.cornerRadius = 10
         $0.addTarget(self, action: #selector(LogoutPopupViewController.no(_:)), for: .touchUpInside)
     }

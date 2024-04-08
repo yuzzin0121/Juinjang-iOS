@@ -57,7 +57,7 @@ class DeleteImjangPopupViewController: UIViewController {
     }
     
     func designViews() {
-        designButton(cancelButton, title: "아니요", backgroundColor: UIColor(named: "buttonGray")!)
+        designButton(cancelButton, title: "아니요", backgroundColor: UIColor(named: "gray3")!)
         designButton(confirmButton, title: "삭제하기", backgroundColor: UIColor(named: "textBlack")!, textColor: .white)
         messageLabel.setLineSpacing(spacing: 4)
         messageLabel.font = .pretendard(size: 16, weight: .medium)

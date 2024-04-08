@@ -144,6 +144,7 @@ class SetNickNameViewController: UIViewController {
     }
     
     func sendNickName() {
+        print("sendNickName")
         
         // 요청 URL 설정
         let headers: HTTPHeaders = [

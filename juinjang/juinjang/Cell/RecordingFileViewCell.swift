@@ -10,9 +10,14 @@ import SnapKit
 import Then
 import AVFoundation
 
+protocol RecordingTableViewCellDelegate: AnyObject{
+    func updateRecordingFileName(_ newName: String)
+}
+
 class RecordingFileViewCell: UITableViewCell {
     
     var audioPlayer: AVAudioPlayer?
+    var recordingURL: URL?
     
     let recordingFileNameLabel = UILabel().then {
         $0.font = .pretendard(size: 18, weight: .semiBold)
@@ -62,6 +67,7 @@ class RecordingFileViewCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        //self.setData(fileTitle: nil, time: nil, date: nil)
         //self.setData(fileItem: nil)
     }
     

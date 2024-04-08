@@ -15,6 +15,7 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
     
     weak var bottomSheetViewController: BottomSheetViewController?
     var fileURLs : [URL] = []
+    var fileName : [String] = []
     
     var audioFile : URL! // 재생할 오디오의 파일명 변수
     var audioRecorder : AVAudioRecorder!
@@ -295,8 +296,8 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
     
     @objc func completedButtonPressed(_ sender: UIButton) {
         audioRecorder.stop()
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "HH:mm"
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateFormat = "HH:mm"
        
         //RecordingFilesViewController().recordingFileTableView.reloadData()
         endTime = Date() // 녹음 종료 시간 기록
@@ -310,7 +311,6 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [self] in
             let recordPlaybackVC = RecordPlaybackViewController()
             recordPlaybackVC.bottomSheetViewController = bottomSheetViewController
-            
             bottomSheetViewController?.transitionToViewController(recordPlaybackVC)
         }
         
