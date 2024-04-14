@@ -218,6 +218,7 @@ class ExpandedScoreTableViewCell: UITableViewCell {
     func configure(with questionDto: CheckListItem, at indexPath: IndexPath) {
         let content = questionDto.question
         contentLabel.text = content
+        contentLabel.textColor = UIColor(named: "500")
         
         // 선택된 날짜가 있으면 표시
         if let storedData = scoreItems[content] {

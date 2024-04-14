@@ -131,6 +131,7 @@ class ExpandedTextFieldTableViewCell: UITableViewCell {
     func configure(with questionDto: CheckListItem, at indexPath: IndexPath) {
         let content = questionDto.question
         contentLabel.text = content
+        contentLabel.textColor = UIColor(named: "500")
 
         // 입력한 내용이 있으면 표시
         if let storedData = inputItems[content] {

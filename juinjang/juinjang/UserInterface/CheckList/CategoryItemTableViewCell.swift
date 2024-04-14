@@ -75,15 +75,12 @@ class CategoryItemTableViewCell: UITableViewCell {
         }
     }
     
-    func configure(checkListCategories: CheckListCategory) {
-        let categoryString = checkListCategories.category
+    func configure(category: CheckListCategory) {
+        let categoryString = category.category
         if let category = CategoryItem(rawValue: categoryString) {
             categoryImage.image = category.image
             categoryLabel.text = category.title
-        } else {
-            // Handle invalid category
         }
-
     }
 }
 
