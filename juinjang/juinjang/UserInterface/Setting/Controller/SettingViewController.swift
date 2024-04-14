@@ -263,21 +263,23 @@ class SettingViewController : UIViewController, UIImagePickerControllerDelegate,
             nicknameTextField.removeFromSuperview()
             line1.removeFromSuperview()
         default:
-            saveButton.setTitle("변경", for: .normal)
-            saveButton.backgroundColor = UIColor(named: "300")
-            nicknameTextField.removeFromSuperview()
-            line1.removeFromSuperview()
-            nicknameWarnLabel.removeFromSuperview()
-            nicknameWarnImageView.removeFromSuperview()
-            nickname.text = nicknameTextField.text
-            UserDefaultManager.shared.nickname = nickname.text!
-            SetNickNameViewController().sendNickName()
+//            saveButton.setTitle("변경", for: .normal)
+//            saveButton.backgroundColor = UIColor(named: "300")
+//            nicknameTextField.removeFromSuperview()
+//            line1.removeFromSuperview()
+//            nicknameWarnLabel.removeFromSuperview()
+//            nicknameWarnImageView.removeFromSuperview()
+//            nickname.text = nicknameTextField.text
+            UserDefaultManager.shared.nickname = nicknameTextField.text!
+            sendNickName()
         }
     }
     
     @objc func textFieldDidChange(_ sender: Any?) {
         if nicknameTextField.text!.count < 8 {
             nicknameWarnLabel.removeFromSuperview()
+            nicknameWarnImageView.removeFromSuperview()
+            nicknameSameWarnLabel.removeFromSuperview()
             nicknameWarnImageView.removeFromSuperview()
             if nicknameTextField.text?.count == 0 {
                 saveButton.setTitle("취소", for: .normal)
@@ -287,28 +289,92 @@ class SettingViewController : UIViewController, UIImagePickerControllerDelegate,
                 saveButton.setTitle("저장", for: .normal)
                 saveButton.backgroundColor = UIColor(named: "mainOrange")
             }
+    
+//            if nicknameLabel.text == "NICKNAME4002" {
+//                self.view.addSubview(self.nicknameWarnImageView)
+//                self.view.addSubview(self.nicknameSameWarnLabel)
+//                self.nicknameWarnImageView.snp.makeConstraints{
+//                    $0.top.equalTo(self.line1.snp.bottom).offset(9)
+//                    $0.left.equalToSuperview().offset(24)
+//                    $0.height.equalTo(16)
+//                }
+//                self.nicknameSameWarnLabel.snp.makeConstraints{
+//                    $0.top.equalTo(self.line1.snp.bottom).offset(9)
+//                    $0.left.equalTo(self.nicknameWarnImageView.snp.right).offset(3)
+//                }
+//            } else {
+//                self.nicknameSameWarnLabel.removeFromSuperview()
+//                self.nicknameWarnImageView.removeFromSuperview()
+//            }
         }
-        if nicknameTextField.text == "dodo" {
-            view.addSubview(nicknameWarnImageView)
-            view.addSubview(nicknameSameWarnLabel)
-            nicknameWarnImageView.snp.makeConstraints{
-                $0.top.equalTo(line1.snp.bottom).offset(9)
-                $0.left.equalToSuperview().offset(24)
-                $0.height.equalTo(16)
-            }
-            nicknameSameWarnLabel.snp.makeConstraints{
-                $0.top.equalTo(line1.snp.bottom).offset(9)
-                $0.left.equalTo(nicknameWarnImageView.snp.right).offset(3)
-            }
-        } else {
-            nicknameSameWarnLabel.removeFromSuperview()
-            nicknameWarnImageView.removeFromSuperview()
-        }
+        
     }
     
     @objc func backBtnTap() {
         let mainVC = MainViewController()
         self.navigationController?.pushViewController(mainVC, animated: true)
+    }
+    
+    func sendNickName() {
+        print("sendNickName : \(UserDefaultManager.shared.nickname)")
+        
+        // 요청 URL 설정
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)", // 예시: 인증 토큰
+            "Content-Type": "application/json"
+        ]
+
+        let parameters: [String: Any] = [
+            "nickname": UserDefaultManager.shared.nickname
+        ]
+
+        let urlString = "http://juinjang1227.com:8080/api/nickname"
+
+        AF.request(urlString, method: .patch, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+            .responseString(encoding: .utf8) { response in
+                switch response.result {
+                case .success(let value):
+                    print("Success: \(value)")
+                    if let data = value.data(using: .utf8),
+                       let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                       let code = json["code"] as? String {
+                        print("Success: \(code)")
+                        if code == "NICKNAME4002" {
+                            self.view.addSubview(self.nicknameWarnImageView)
+                            self.view.addSubview(self.nicknameSameWarnLabel)
+                            self.nicknameWarnImageView.snp.makeConstraints{
+                                $0.top.equalTo(self.line1.snp.bottom).offset(9)
+                                $0.left.equalToSuperview().offset(24)
+                                $0.height.equalTo(16)
+                            }
+                            self.nicknameSameWarnLabel.snp.makeConstraints{
+                                $0.top.equalTo(self.line1.snp.bottom).offset(9)
+                                $0.left.equalTo(self.nicknameWarnImageView.snp.right).offset(3)
+                            }
+                        } else if code == "COMMON200" {
+                            self.saveButton.setTitle("변경", for: .normal)
+                            self.saveButton.backgroundColor = UIColor(named: "300")
+                            self.nicknameTextField.removeFromSuperview()
+                            self.line1.removeFromSuperview()
+                            self.nicknameWarnLabel.removeFromSuperview()
+                            self.nicknameWarnImageView.removeFromSuperview()
+                            self.nickname.text = self.nicknameTextField.text
+                            UserDefaultManager.shared.nickname = self.nickname.text!
+                            self.nicknameSameWarnLabel.removeFromSuperview()
+                            self.nicknameWarnImageView.removeFromSuperview()
+                        } else {
+                            self.nicknameSameWarnLabel.removeFromSuperview()
+                            self.nicknameWarnImageView.removeFromSuperview()
+                        }
+                    } else {
+                        print("Failed to extract code from response value.")
+                    }
+                    
+                case .failure(let error):
+                    print("Error: \(error)")
+                }
+            }
+        MainViewController().refreshToken()
     }
     
     func designNavigationBar() {

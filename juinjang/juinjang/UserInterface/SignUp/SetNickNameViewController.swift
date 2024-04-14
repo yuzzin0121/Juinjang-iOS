@@ -163,6 +163,15 @@ class SetNickNameViewController: UIViewController {
                 switch response.result {
                 case .success(let value):
                     print("Success: \(value)")
+                    if let data = value.data(using: .utf8),
+                       let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                       let code = json["code"] as? String {
+                        print("Success: \(code)")
+                        //SettingViewController().textFieldDidChange(code)
+                    } else {
+                        print("Failed to extract code from response value.")
+                    }
+                    
                 case .failure(let error):
                     print("Error: \(error)")
                 }
