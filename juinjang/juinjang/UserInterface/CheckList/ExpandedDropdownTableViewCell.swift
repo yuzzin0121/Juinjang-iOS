@@ -249,9 +249,17 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
          // 지하철 노선도 항목에 대한 이미지 추가
          if questionDto.questionId == 4 || questionDto.questionId == 62 {
              optionValues = questionDto.options.map { optionItem in
-                 let imageView = UIImage(data: optionItem.image)
-                 
-                 return OptionItem(image: imageView, option: optionItem.option)
+                 let originalImage = UIImage(data: optionItem.image)
+                 // 이미지가 리사이즈하여 새로운 이미지로 생성
+                 if let originalImage = originalImage {
+                     let newSize = CGSize(width: 16, height: 16)
+                     let resizedImage = UIGraphicsImageRenderer(size: newSize).image { _ in
+                         originalImage.draw(in: CGRect(origin: .zero, size: newSize))
+                     }
+                     return OptionItem(image: resizedImage, option: optionItem.option)
+                 } else {
+                     return OptionItem(image: nil, option: optionItem.option)
+                 }
              }
          } else {
              // 기본값은 nil로 설정
