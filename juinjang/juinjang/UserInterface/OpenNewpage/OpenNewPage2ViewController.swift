@@ -70,7 +70,7 @@ class OpenNewPage2ViewController: UIViewController, WarningMessageDelegate {
 //                }
 //            case .failure(let error):
 //                print("Error: \(error)")
-//                
+//
 //            }
 //        }
     }

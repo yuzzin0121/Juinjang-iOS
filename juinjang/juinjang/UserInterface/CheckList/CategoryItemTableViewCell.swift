@@ -75,18 +75,20 @@ class CategoryItemTableViewCell: UITableViewCell {
         }
     }
     
-    func configure(checkListResponseDto: CheckListResponseDto) {
-        let categoryId = checkListResponseDto.category
-        categoryImage.image = categoryItemList[categoryId].image
-        categoryLabel.text = categoryItemList[categoryId].title
+    func configure(category: CheckListCategory) {
+        let categoryString = category.category
+        if let category = CategoryItem(rawValue: categoryString) {
+            categoryImage.image = category.image
+            categoryLabel.text = category.title
+        }
     }
 }
 
-enum CategoryItem: Int, CaseIterable {
-    case deadline           // 기한
-    case locationConditions // 입지여건
-    case commonSpace        // 공용공간
-    case indoor             // 실내
+enum CategoryItem: String, CaseIterable {
+    case deadline = "기한"
+    case locationConditions = "입지여건"
+    case commonSpace = "공용공간"
+    case indoor = "실내"
     
     var title: String {
         switch self {

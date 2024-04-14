@@ -226,9 +226,10 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
         }
     }
     
-    func configure(with questionDto: QuestionDto, at indexPath: IndexPath) {
+    func configure(with questionDto: CheckListItem, at indexPath: IndexPath) {
         let content = questionDto.question
         contentLabel.text = content
+        contentLabel.textColor = UIColor(named: "500")
 
         // 선택된 옵션이 있으면 표시
         if let storedData = selectionItems[content] as? SelectionItem {
@@ -243,39 +244,23 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
             selectedOption = nil
         }
 
-        var optionValues: [OptionItem] = []
+         var optionValues: [OptionItem] = []
 
-        // 지하철 노선도 항목에 대한 이미지 추가
-        if questionDto.questionId == 4 || questionDto.questionId == 62 {
-            let specialImages: [UIImage?] = [
-                nil, // "선택 안함"
-                UIImage(named: "line1"),               // 1호선
-                UIImage(named: "line2"),               // 2호선
-                UIImage(named: "line3"),               // 3호선
-                UIImage(named: "line4"),               // 4호선
-                UIImage(named: "line5"),               // 5호선
-                UIImage(named: "line6"),               // 6호선
-                UIImage(named: "line7"),               // 7호선
-                UIImage(named: "line8"),               // 8호선
-                UIImage(named: "line9"),               // 9호선
-                UIImage(named: "SuinbundangLine"),     // 수인분당
-                UIImage(named: "GyeonguiJungangLine"), // 경의중앙
-                UIImage(named: "ShinbundangLine"),     // 신분당
-                UIImage(named: "AirportRailroadLine"), // 공항철도
-                UIImage(named: "GyeongchunLine")       // 경춘선
-            ]
-
-            optionValues = zip(questionDto.options, specialImages).map { (optionItem, image) in
-                return OptionItem(image: image, option: optionItem.optionValue)
-            }
-        } else {
-            // 기본값은 nil로 설정
-            optionValues = questionDto.options.map { optionItem in
-                return OptionItem(image: nil, option: optionItem.optionValue)
-            }
-        }
+         // 지하철 노선도 항목에 대한 이미지 추가
+         if questionDto.questionId == 4 || questionDto.questionId == 62 {
+             optionValues = questionDto.options.map { optionItem in
+                 let imageView = UIImage(data: optionItem.image)
+                 
+                 return OptionItem(image: imageView, option: optionItem.option)
+             }
+         } else {
+             // 기본값은 nil로 설정
+             optionValues = questionDto.options.map { optionItem in
+                 return OptionItem(image: nil, option: optionItem.option)
+             }
+         }
         
-        options = optionValues
+         options = optionValues
     }
 }
 
@@ -309,7 +294,7 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
         selectedButton.setTitle(selectedOption.option, for: .normal)
         selectedButton.backgroundColor = .white
         selectedButton.setTitleColor(UIColor(named: "darkGray"), for: .normal)
-        selectedButton.setImage(selectedOption.image, for: .normal)
+        selectedButton.setImage((selectedOption.image), for: .normal)
         selectedButton.semanticContentAttribute = .forceLeftToRight
         setSelectedInset()
 
@@ -361,10 +346,16 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
         label.textColor = UIColor.black
         label.textAlignment = .left
 
-        if let image = option.image {
+        if var image = option.image {
+            let selectionImageView = UIImageView()
+            selectionImageView.image = image
+            selectionImageView.snp.makeConstraints {
+                $0.height.equalTo(16)
+                $0.width.equalTo(16)
+            }
             // 이미지가 있으면 이미지와 텍스트 같이 표시
             let imageAttachment = NSTextAttachment()
-            imageAttachment.image = image
+            imageAttachment.image = selectionImageView.image
 
             // 이미지의 bounds를 설정하여 위치 조정
             let yOffset = (label.font.capHeight - image.size.height) / 2
@@ -498,5 +489,22 @@ extension ExpandedDropdownTableViewCell: UITextFieldDelegate {
                     $0.trailing.equalToSuperview().offset(-24) // 오른쪽으로 24만큼 이동
             }
         }
+    }
+}
+
+extension UIImage {
+    func resized(withPercentage percentage: CGFloat) -> UIImage? {
+        let canvasSize = CGSize(width: size.width * percentage, height: size.height * percentage)
+        UIGraphicsBeginImageContextWithOptions(canvasSize, false, scale)
+        defer { UIGraphicsEndImageContext() }
+        draw(in: CGRect(origin: .zero, size: canvasSize))
+        return UIGraphicsGetImageFromCurrentImageContext()
+    }
+    func resized(toWidth width: CGFloat) -> UIImage? {
+        let canvasSize = CGSize(width: width, height: CGFloat(ceil(width/size.width * size.height)))
+        UIGraphicsBeginImageContextWithOptions(canvasSize, false, scale)
+        defer { UIGraphicsEndImageContext() }
+        draw(in: CGRect(origin: .zero, size: canvasSize))
+        return UIGraphicsGetImageFromCurrentImageContext()
     }
 }
