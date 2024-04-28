@@ -25,7 +25,7 @@ class Use3ViewController : UIViewController {
     }
     
     var useImageView = UIImageView().then {
-        $0.image = UIImage(named:"이용약관")
+        $0.image = UIImage(named:"document-text")
     }
     var arrowImageView = UIImageView().then {
         $0.image = UIImage(named:"Vector")
