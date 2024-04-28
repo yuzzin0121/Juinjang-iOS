@@ -208,7 +208,7 @@ class OpenNewPageViewController: UIViewController {
     }()
     
     
-    lazy var threeDisitPriceField = UITextField().then {
+    lazy var threeDigitPriceField = UITextField().then {
         $0.layer.backgroundColor = UIColor(red: 0.933, green: 0.933, blue: 0.933, alpha: 1).cgColor
         $0.layer.cornerRadius = 15
         
@@ -232,7 +232,7 @@ class OpenNewPageViewController: UIViewController {
         $0.translatesAutoresizingMaskIntoConstraints = false
     }
     
-    lazy var fourDisitPriceField = UITextField().then {
+    lazy var fourDigitPriceField = UITextField().then {
         $0.layer.backgroundColor = UIColor(red: 0.933, green: 0.933, blue: 0.933, alpha: 1).cgColor
         $0.layer.cornerRadius = 15
         $0.attributedPlaceholder = NSAttributedString(
@@ -255,7 +255,7 @@ class OpenNewPageViewController: UIViewController {
         $0.translatesAutoresizingMaskIntoConstraints = false
     }
     
-    lazy var fourDisitMonthlyRentField = UITextField().then {
+    lazy var fourDigitMonthlyRentField = UITextField().then {
         $0.layer.backgroundColor = UIColor(red: 0.933, green: 0.933, blue: 0.933, alpha: 1).cgColor
         $0.layer.cornerRadius = 15
         $0.attributedPlaceholder = NSAttributedString(
@@ -316,9 +316,9 @@ class OpenNewPageViewController: UIViewController {
             setupScrollView()
             scrollView.isScrollEnabled = false
         }
-        threeDisitPriceField.delegate = self
-        fourDisitPriceField.delegate = self
-        fourDisitMonthlyRentField.delegate = self
+        threeDigitPriceField.delegate = self
+        fourDigitPriceField.delegate = self
+        fourDigitMonthlyRentField.delegate = self
         checkNextButtonActivation()
         nextButton.isEnabled = false
     }
@@ -516,9 +516,9 @@ class OpenNewPageViewController: UIViewController {
         // 가격 입력칸 Stack View
         inputPriceStackView = UIStackView(
             arrangedSubviews:
-                [threeDisitPriceField,
+                [threeDigitPriceField,
                  priceDetailLabels[4],
-                 fourDisitPriceField,
+                 fourDigitPriceField,
                  priceDetailLabels[6]])
 
         inputPriceStackView.translatesAutoresizingMaskIntoConstraints = false
@@ -553,12 +553,12 @@ class OpenNewPageViewController: UIViewController {
         inputMonthlyRentStackView.spacing = 5
     
         // 가격 입력 받는 TextField
-        threeDisitPriceField.snp.makeConstraints {
+        threeDigitPriceField.snp.makeConstraints {
             $0.top.equalTo(priceView.snp.top).offset(4)
             $0.centerY.equalTo(priceView.snp.centerY)
         }
 
-        fourDisitPriceField.snp.makeConstraints {
+        fourDigitPriceField.snp.makeConstraints {
             $0.top.equalTo(priceView.snp.top).offset(4)
             $0.centerY.equalTo(priceView.snp.centerY)
         }
@@ -710,9 +710,9 @@ class OpenNewPageViewController: UIViewController {
         // 가격 입력칸 Stack View
         inputPriceStackView = UIStackView(
             arrangedSubviews:
-                [threeDisitPriceField,
+                [threeDigitPriceField,
                  priceDetailLabels[4],
-                 fourDisitPriceField,
+                 fourDigitPriceField,
                  priceDetailLabels[6]])
 
         inputPriceStackView.translatesAutoresizingMaskIntoConstraints = false
@@ -747,12 +747,12 @@ class OpenNewPageViewController: UIViewController {
         inputMonthlyRentStackView.spacing = 5
     
         // 가격 입력 받는 TextField
-        threeDisitPriceField.snp.makeConstraints {
+        threeDigitPriceField.snp.makeConstraints {
             $0.top.equalTo(priceView.snp.top).offset(4)
             $0.centerY.equalTo(priceView.snp.centerY)
         }
 
-        fourDisitPriceField.snp.makeConstraints {
+        fourDigitPriceField.snp.makeConstraints {
             $0.top.equalTo(priceView.snp.top).offset(4)
             $0.centerY.equalTo(priceView.snp.centerY)
         }
@@ -862,39 +862,39 @@ class OpenNewPageViewController: UIViewController {
                 selectedButton.isSelected = false
             }
             
-            threeDisitPriceField.placeholder = "000"
-            fourDisitPriceField.placeholder = "0000"
-            fourDisitMonthlyRentField.placeholder = "0000"
+            threeDigitPriceField.placeholder = "000"
+            fourDigitPriceField.placeholder = "0000"
+            fourDigitMonthlyRentField.placeholder = "0000"
             
             // 버튼에 따라 가격 View 표시
             if sender == saleButton {
                 selectedPriceType = 0
-                threeDisitPriceField.text = ""
-                fourDisitPriceField.text = ""
+                threeDigitPriceField.text = ""
+                fourDigitPriceField.text = ""
                 priceView2.isHidden = true
                 priceDetailLabel?.removeFromSuperview()
                 priceDetailLabel = priceDetailLabels[1]
                 checkPriceDetailLabel()
             } else if sender == jeonseButton {
                 selectedPriceType = 1
-                threeDisitPriceField.text = ""
-                fourDisitPriceField.text = ""
+                threeDigitPriceField.text = ""
+                fourDigitPriceField.text = ""
                 priceView2.isHidden = true
                 priceDetailLabel?.removeFromSuperview()
                 priceDetailLabel = priceDetailLabels[3]
                 checkPriceDetailLabel()
             } else if sender == monthlyRentButton {
                 selectedPriceType = 2
-                threeDisitPriceField.text = ""
-                fourDisitPriceField.text = ""
-                fourDisitMonthlyRentField.text = ""
+                threeDigitPriceField.text = ""
+                fourDigitPriceField.text = ""
+                fourDigitMonthlyRentField.text = ""
                 priceDetailLabel?.removeFromSuperview()
                 priceView2.isHidden = false
                 priceDetailLabel = priceDetailLabels[2]
                 checkPriceDetailLabel()
                 priceView2.addSubview(inputMonthlyRentStackView)
                 priceDetailLabel2 = priceDetailLabels[5]
-                inputMonthlyRentStackView.addArrangedSubview(fourDisitMonthlyRentField)
+                inputMonthlyRentStackView.addArrangedSubview(fourDigitMonthlyRentField)
                 inputMonthlyRentStackView.addArrangedSubview(priceDetailLabels[7])
                 if let priceDetailLabel2 = priceDetailLabel2 {
                     priceView2.addSubview(priceDetailLabel2)
@@ -909,7 +909,7 @@ class OpenNewPageViewController: UIViewController {
                         $0.height.lessThanOrEqualTo(view.snp.height).multipliedBy(0.1)
                         $0.top.equalTo(priceView2.snp.top).offset(8)
                     }
-                    fourDisitMonthlyRentField.snp.makeConstraints {
+                    fourDigitMonthlyRentField.snp.makeConstraints {
                         $0.top.equalTo(priceView2.snp.top).offset(4)
                         $0.centerY.equalTo(priceView2.snp.centerY)
                     }
@@ -1026,12 +1026,19 @@ class OpenNewPageViewController: UIViewController {
                 let isPropertyTypeSelected = propertyTypeButtons.contains { $0.isSelected }
                 
                 // 필드의 상태를 확인
-                let threeDisitPriceFieldEmpty = threeDisitPriceField.text?.isEmpty ?? true
-                let fourDisitPriceFieldEmpty = fourDisitPriceField.text?.isEmpty ?? true
+                let threeDigitPriceFieldEmpty = threeDigitPriceField.text?.isEmpty ?? true
+                let fourDigitPriceFieldEmpty = fourDigitPriceField.text?.isEmpty ?? true
+                
+                // 가격이 0으로 시작하지 않는지 확인
+                let threeDigitPriceDoesNotStartWithZero = threeDigitPriceField.text?.first != "0"
+                let fourDigitPriceDoesNotStartWithZero = fourDigitPriceField.text?.first != "0"
+                
+                let threeDigitPriceFieldState = !threeDigitPriceFieldEmpty && threeDigitPriceDoesNotStartWithZero
+                let fourDigitPriceFieldState = !fourDigitPriceFieldEmpty && fourDigitPriceDoesNotStartWithZero
                 
                 // 각 버튼 선택 여부와 텍스트 필드 입력 여부에 따라 다음으로 버튼 활성화 여부 결정
                 let allCategoriesSelected = isPropertyTypeSelected
-                let allTextFieldsFilled = !threeDisitPriceFieldEmpty || !fourDisitPriceFieldEmpty
+                let allTextFieldsFilled = threeDigitPriceFieldState || fourDigitPriceFieldState
                 
                 // 모든 조건이 충족되었을 때 다음으로 버튼 활성화
                 if allCategoriesSelected && allTextFieldsFilled {
@@ -1048,12 +1055,19 @@ class OpenNewPageViewController: UIViewController {
                     let isMoveTypeSelected = moveTypeButtons.contains { $0.isSelected }
                     
                     // 필드가 비어있는지 확인
-                    let threeDisitPriceFieldEmpty = threeDisitPriceField.text?.isEmpty ?? true
-                    let fourDisitPriceFieldEmpty = fourDisitPriceField.text?.isEmpty ?? true
+                    let threeDigitPriceFieldEmpty = threeDigitPriceField.text?.isEmpty ?? true
+                    let fourDigitPriceFieldEmpty = fourDigitPriceField.text?.isEmpty ?? true
+                    
+                    // 가격이 0으로 시작하지 않는지 확인
+                    let threeDigitPriceDoesNotStartWithZero = threeDigitPriceField.text?.first != "0"
+                    let fourDigitPriceDoesNotStartWithZero = fourDigitPriceField.text?.first != "0"
+                    
+                    let threeDigitPriceFieldState = !threeDigitPriceFieldEmpty && threeDigitPriceDoesNotStartWithZero
+                    let fourDigitPriceFieldState = !fourDigitPriceFieldEmpty && fourDigitPriceDoesNotStartWithZero
                     
                     // 각 버튼 선택 여부와 텍스트 필드 입력 여부에 따라 다음으로 버튼 활성화 여부 결정
                     let allCategoriesSelected = isPropertyTypeSelected && isMoveTypeSelected
-                    let allTextFieldsFilled = !threeDisitPriceFieldEmpty || !fourDisitPriceFieldEmpty
+                    let allTextFieldsFilled = threeDigitPriceFieldState || fourDigitPriceFieldState
                     
                     // 모든 조건이 충족되었을 때 다음으로 버튼 활성화
                     if allCategoriesSelected && allTextFieldsFilled {
@@ -1069,13 +1083,22 @@ class OpenNewPageViewController: UIViewController {
                     let isMoveTypeSelected = moveTypeButtons.contains { $0.isSelected }
                     
                     // 필드가 비어있는지 확인
-                    let threeDisitPriceFieldEmpty = threeDisitPriceField.text?.isEmpty ?? true
-                    let fourDisitPriceFieldEmpty = fourDisitPriceField.text?.isEmpty ?? true
-                    let fourDisitMonthlyRentFieldEmpty = fourDisitMonthlyRentField.text?.isEmpty ?? true
+                    let threeDigitPriceFieldEmpty = threeDigitPriceField.text?.isEmpty ?? true
+                    let fourDigitPriceFieldEmpty = fourDigitPriceField.text?.isEmpty ?? true
+                    let fourDigitMonthlyRentFieldEmpty = fourDigitMonthlyRentField.text?.isEmpty ?? true
+                    
+                    // 가격이 0으로 시작하지 않는지 확인
+                    let threeDigitPriceDoesNotStartWithZero = threeDigitPriceField.text?.first != "0"
+                    let fourDigitPriceDoesNotStartWithZero = fourDigitPriceField.text?.first != "0"
+                    let fourDigitMonthlyRentDoesNotStartWithZero = fourDigitMonthlyRentField.text?.first != "0"
+                    
+                    let threeDigitPriceFieldState = !threeDigitPriceFieldEmpty && threeDigitPriceDoesNotStartWithZero
+                    let fourDigitPriceFieldState = !fourDigitPriceFieldEmpty && fourDigitPriceDoesNotStartWithZero
+                    let fourDigitMonthlyRentFieldState = !fourDigitMonthlyRentFieldEmpty && fourDigitMonthlyRentDoesNotStartWithZero
                     
                     // 각 버튼 선택 여부와 텍스트 필드 입력 여부에 따라 다음으로 버튼 활성화 여부 결정
                     let allCategoriesSelected = isPropertyTypeSelected && isMoveTypeSelected
-                    let allTextFieldsFilled = (!threeDisitPriceFieldEmpty || !fourDisitPriceFieldEmpty) && !fourDisitMonthlyRentFieldEmpty
+                    let allTextFieldsFilled = (threeDigitPriceFieldState || fourDigitPriceFieldState) && fourDigitMonthlyRentFieldState
                     
                     // 모든 조건이 충족되었을 때 다음으로 버튼 활성화
                     if allCategoriesSelected && allTextFieldsFilled {
@@ -1096,13 +1119,13 @@ class OpenNewPageViewController: UIViewController {
         // 데이터 전달
         newPageViewController.transactionModel = transactionModel
         newPageViewController.versionInfo = versionInfo
-        // threeDisitPriceField와 fourDisitPriceField의 값을 합쳐서 selectedPrice에 저장
-        let threeDisitPrice = Int(threeDisitPriceField.text ?? "") ?? 0
-        let fourDisitPrice = Int(fourDisitPriceField.text ?? "") ?? 0
-        selectedPrice = [String(threeDisitPrice * 100000000 + fourDisitPrice * 10000)]
+        // threeDigitPriceField와 fourDigitPriceField의 값을 합쳐서 selectedPrice에 저장
+        let threeDigitPrice = Int(threeDigitPriceField.text ?? "") ?? 0
+        let fourDigitPrice = Int(fourDigitPriceField.text ?? "") ?? 0
+        selectedPrice = [String(threeDigitPrice * 100000000 + fourDigitPrice * 10000)]
 
-        // fourDisitMonthlyRentField의 값이 있다면 추가
-        if let monthlyRentValue = fourDisitMonthlyRentField.text, !monthlyRentValue.isEmpty {
+        // fourDigitMonthlyRentField의 값이 있다면 추가
+        if let monthlyRentValue = fourDigitMonthlyRentField.text, !monthlyRentValue.isEmpty {
             if let monthlyRent = Int(monthlyRentValue) {
                 selectedPrice.append(String(monthlyRent * 10000))
             }
@@ -1154,7 +1177,7 @@ extension OpenNewPageViewController: UITextFieldDelegate {
         let minimumWidth: CGFloat = 30 // 최소 너비
         var maximumWidth: CGFloat = 74 // 네 자릿수 텍스트 필드의 최대 너비
 
-        if textField == threeDisitPriceField {
+        if textField == threeDigitPriceField {
             maximumWidth = 60 // 세 자릿수 텍스트 필드의 최대 너비
         }
         
@@ -1178,7 +1201,7 @@ extension OpenNewPageViewController: UITextFieldDelegate {
         }
         // 숫자만 허용, textField에 따라 글자 수 제한
         guard Int(string) != nil || string == "" else { return false }
-        if textField == threeDisitPriceField {
+        if textField == threeDigitPriceField {
             guard textField.text!.count < 3 else { return false }
         } else {
             guard textField.text!.count < 4 else { return false }
@@ -1193,7 +1216,7 @@ extension OpenNewPageViewController: UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         guard textField.text?.isEmpty ?? true else { return }
-        if textField == threeDisitPriceField {
+        if textField == threeDigitPriceField {
             textField.placeholder = "000"
             updateTextFieldWidthConstraint(for: textField, constant: 60) // 기존 너비로 복원
         } else {
