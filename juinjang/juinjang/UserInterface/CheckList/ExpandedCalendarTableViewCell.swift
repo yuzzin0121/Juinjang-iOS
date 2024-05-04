@@ -266,8 +266,6 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
                 selectedCell.layer.cornerRadius = 9.97
                 selectedCell.layer.borderWidth = 1.5
                 selectedCell.layer.borderColor = UIColor(named: "mainOrange")?.cgColor
-            } else {
-                selectedDate = nil
             }
         } else {
             // 선택된 날짜가 없으면 표시 초기화

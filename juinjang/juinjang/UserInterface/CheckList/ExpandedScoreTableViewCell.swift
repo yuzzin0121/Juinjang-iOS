@@ -32,6 +32,8 @@ class ExpandedScoreTableViewCell: UITableViewCell {
         $0.textColor = UIColor(named: "textBlack")
     }
     
+    var scoreButtonStackView = UIStackView()
+    
     lazy var answerButton1 = UIButton().then {
         $0.setImage(UIImage(named: "answer1"), for: .normal)
         $0.contentMode = .scaleAspectFit
@@ -105,19 +107,7 @@ class ExpandedScoreTableViewCell: UITableViewCell {
         }
         
         // 점수 버튼 Stack View
-        let scoreButtonStackView = UIStackView(arrangedSubviews: [answerButton1, answerButton2, answerButton3, answerButton4, answerButton5])
-        
-        scoreButtonStackView.translatesAutoresizingMaskIntoConstraints = false
-        scoreButtonStackView.axis = .horizontal
-        scoreButtonStackView.spacing = 20
-        
-        addSubview(scoreButtonStackView)
-        
-        scoreButtonStackView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(51)
-//            $0.height.lessThanOrEqualTo(view.snp.height).multipliedBy(0.08)
-            $0.trailing.equalToSuperview().offset(-24)
-        }
+        setupStackView()
     }
     
     @objc func buttonPressed(_ sender: UIButton) {
@@ -193,13 +183,48 @@ class ExpandedScoreTableViewCell: UITableViewCell {
         // 버튼 초기화
         score = nil
         
-        for button in [answerButton1, answerButton2, answerButton3, answerButton4, answerButton5] {
-                button.isSelected = false
-                button.setImage(UIImage(named: "answer\(button.tag)"), for: .normal)
-        }
+//        for button in [answerButton1, answerButton2, answerButton3, answerButton4, answerButton5] {
+//                button.isSelected = false
+//                button.setImage(UIImage(named: "answer\(button.tag)"), for: .normal)
+//        }
+        // 기존 스택 뷰 제거
+        scoreButtonStackView.removeFromSuperview()
+        
+        // 새로운 스택 뷰 생성 및 설정
+        scoreButtonStackView = UIStackView()
+        setupStackView()
         
         // 배경색 초기화
         backgroundColor = .white
+    }
+    
+    func setupStackView() {
+        scoreButtonStackView.translatesAutoresizingMaskIntoConstraints = false
+        scoreButtonStackView.axis = .horizontal
+        scoreButtonStackView.spacing = 20
+        
+        [answerButton1,
+         answerButton2,
+         answerButton3,
+         answerButton4,
+         answerButton5].forEach( { scoreButtonStackView.addArrangedSubview($0) } )
+        
+        addSubview(scoreButtonStackView)
+        
+        scoreButtonStackView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(51)
+//            $0.height.lessThanOrEqualTo(view.snp.height).multipliedBy(0.08)
+            $0.trailing.equalToSuperview().offset(-24)
+        }
+        
+//        // 버튼 추가
+//        for index in 1...5 {
+//            let button = UIButton()
+//            button.tag = index
+//            button.setImage(UIImage(named: "answer\(index)"), for: .normal)
+//            button.addTarget(self, action: #selector(answerButtonTapped(_:)), for: .touchUpInside)
+//            stackView.addArrangedSubview(button)
+//        }
     }
     
     private func updateScoreItem(withContent content: String, score: String) {

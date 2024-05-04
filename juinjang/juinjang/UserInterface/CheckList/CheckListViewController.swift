@@ -169,14 +169,6 @@ class CheckListViewController: UIViewController {
                 self.checkListCategories.append(CheckListCategory(category: category, checkListitem: categoryItems, isExpanded: false))
             }
             
-//            for category in allCategory {
-//                // 해당 카테고리에 해당하는 항목들을 필터링하여
-//                if category != "기한" {
-//                    let filteredcategoryItems = checkListItems.filter { $0.category != "기한" }
-//                    // checkListCategories에 추가
-//                    self.filteredcheckListCategories.append(CheckListCategory(category: category, checkListitem: filteredcategoryItems, isExpanded: false))
-//                }
-//            }
             completion(checkListItems)
         } catch {
             print("Realm 데이터베이스 접근할 수 없음: \(error)")
@@ -261,7 +253,7 @@ class CheckListViewController: UIViewController {
                                 
                     AF.request(request)
                         .responseJSON { response in
-                            print("체크리스트 저장 plz")
+                            print("체크리스트 저장 처리")
                             print(response)
                         }
                 }
