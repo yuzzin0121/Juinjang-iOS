@@ -291,10 +291,10 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
         let selectedOption = options[row]
         print("Selected option: \(selectedOption)")
         
-        // 외부로 선택된 점수 전달
+        // -TODO: 인덱스 번호로 넘겨주어야 함
         selectionHandler?(selectedOption.option)
         
-        // 선택된 점수를 해당 ScoreItem에 저장
+        // 선택된 옵션을 해당 SelectionItem에 저장
         updateSelectionItem(withContent: contentLabel.text ?? "", option: selectedOption.option)
         
         // 선택한 옵션으로 selectedButton 설정
@@ -494,7 +494,7 @@ extension ExpandedDropdownTableViewCell: UITextFieldDelegate {
             }
         } else {
             textField.snp.makeConstraints {
-                    $0.trailing.equalToSuperview().offset(-24) // 오른쪽으로 24만큼 이동
+                    $0.trailing.equalToSuperview().offset(-24)
             }
         }
     }

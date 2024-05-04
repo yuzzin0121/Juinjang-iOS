@@ -216,15 +216,6 @@ class ExpandedScoreTableViewCell: UITableViewCell {
 //            $0.height.lessThanOrEqualTo(view.snp.height).multipliedBy(0.08)
             $0.trailing.equalToSuperview().offset(-24)
         }
-        
-//        // 버튼 추가
-//        for index in 1...5 {
-//            let button = UIButton()
-//            button.tag = index
-//            button.setImage(UIImage(named: "answer\(index)"), for: .normal)
-//            button.addTarget(self, action: #selector(answerButtonTapped(_:)), for: .touchUpInside)
-//            stackView.addArrangedSubview(button)
-//        }
     }
     
     private func updateScoreItem(withContent content: String, score: String) {
@@ -246,21 +237,22 @@ class ExpandedScoreTableViewCell: UITableViewCell {
         contentLabel.textColor = UIColor(named: "500")
         
         // 선택된 날짜가 있으면 표시
-        if let storedData = scoreItems[content] {
-            score = storedData.score
-
+        if let storedData = scoreItems[content], let score = storedData.score {
             for button in [answerButton1, answerButton2, answerButton3, answerButton4, answerButton5] {
                 if String(button.tag) == score {
                     button.isSelected = true
-                    button.setImage(UIImage(named: "checked-button"), for: .normal)
+                    button.setImage(UIImage(named: "checked-button"), for: .selected)
                 } else {
-                    button.isSelected = false
-                    button.setImage(UIImage(named: "checklist-completed-button"), for: .normal)
+                    button.isSelected = true
+                    button.setImage(UIImage(named: "checklist-completed-button"), for: .selected)
                 }
             }
         } else {
             // 선택된 날짜가 없으면 표시 초기화
-            score = nil
+            for button in [answerButton1, answerButton2, answerButton3, answerButton4, answerButton5] {
+                    button.isSelected = false
+                    button.setImage(UIImage(named: "checklist-completed-button"), for: .normal)
+                }
         }
     }
 }
