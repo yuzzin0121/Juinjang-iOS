@@ -14,12 +14,12 @@ protocol DropdownDelegate: AnyObject {
 
 class ExpandedDropdownTableViewCell: UITableViewCell {
     var selectedOption: String?
-    var selectionItems: [String: (option: String?, isSelected: Bool)] = [:]
+    var selectionItems: [String: (option: Int?, isSelected: Bool)] = [:]
     weak var delegate: DropdownDelegate?
     var categories: [CheckListResponseDto]!
     
     // 선택된 점수를 외부로 전달하는 콜백 클로저
-    var selectionHandler: ((String) -> Void)?
+    var selectionHandler: ((Int) -> Void)?
     
     lazy var questionImage = UIImageView().then {
         $0.contentMode = .scaleAspectFit
@@ -213,7 +213,7 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
         return UserDefaults.standard.value(forKey: "SelectedOptionKey") as? String
     }
     
-    private func updateSelectionItem(withContent content: String, option: String) {
+    private func updateSelectionItem(withContent content: String, option: Int) {
         // 찾으려는 content와 일치하는 ScoreItem을 찾음
         if let index = selectionItems.index(forKey: content) {
             selectionItems.updateValue((option, true), forKey: content)
@@ -241,7 +241,8 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
             }
         } else {
             // 선택된 옵션이 없으면 표시 초기화
-            selectedOption = nil
+            let defaultSelectedRow = 0 // 기본 선택값을 설정하세요 (예: 첫 번째 행)
+            itemPickerView.selectRow(defaultSelectedRow, inComponent: 0, animated: false)
         }
 
          var optionValues: [OptionItem] = []
@@ -289,13 +290,13 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
 
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         let selectedOption = options[row]
-        print("Selected option: \(selectedOption)")
+        print("Selected option: (row, \(selectedOption))")
         
         // -TODO: 인덱스 번호로 넘겨주어야 함
-        selectionHandler?(selectedOption.option)
+        selectionHandler?(row)
         
         // 선택된 옵션을 해당 SelectionItem에 저장
-        updateSelectionItem(withContent: contentLabel.text ?? "", option: selectedOption.option)
+        updateSelectionItem(withContent: contentLabel.text ?? "", option: row)
         
         // 선택한 옵션으로 selectedButton 설정
         setSelectedInset()

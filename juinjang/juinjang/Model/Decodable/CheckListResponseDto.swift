@@ -25,7 +25,7 @@ struct QuestionDto: Codable {
     let question: String
     let version: Int
     let answerType: Int // 0: 점수형 1: 선택형 2: 입력형 3: 달력
-    let options: [OptionDto]
+    let options: [OptionDto]?
     let answer: String?
 }
 

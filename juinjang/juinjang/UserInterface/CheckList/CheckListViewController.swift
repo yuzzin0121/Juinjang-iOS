@@ -15,7 +15,7 @@ class CheckListViewController: UIViewController {
     var calendarItems: [String: (inputDate: Date, isSelected: Bool)] = [:]
     var scoreItems: [String: (score: String, isSelected: Bool)] = [:]
     var inputItems: [String: (inputAnswer: String, isSelected: Bool)] = [:]
-    var selectionItems: [String: (option: String, isSelected: Bool)] = [:]
+    var selectionItems: [String: (option: Int, isSelected: Bool)] = [:]
     
     lazy var tableView = UITableView().then {
         $0.separatorStyle = .none
@@ -30,9 +30,6 @@ class CheckListViewController: UIViewController {
             print("체크리스트 \(imjangId)")
             filterVersionAndCategory(isEditMode: isEditMode) { [weak self] categories in
                     print("검사하기")
-//                    print(categories)
-                
-
                 DispatchQueue.main.async {
                     print("카테고리 개수: \(self?.checkListCategories.count)")
                     print(self?.checkListCategories)
@@ -75,7 +72,6 @@ class CheckListViewController: UIViewController {
             }
         }
     }
-
     
     @objc func handleEditButtonTappedNotification() {
         print("체크리스트 저장 좀 하고 싶다")
@@ -183,12 +179,15 @@ class CheckListViewController: UIViewController {
         
         print("토큰값 \(UserDefaultManager.shared.accessToken)")
         
+        // 저장된 체크리스트 불러오기
         JuinjangAPIManager.shared.fetchData(type: BaseResponse<[CheckListResponseDto]>.self, api: .showChecklist(imjangId: imjangId)) { response, error in
             guard let checkListResponse = response else {
                 // 실패 시 에러 처리
                 print("실패: \(error?.localizedDescription ?? "error")")
                 return
             }
+            
+            
 
             // 달력
             for (key, value) in self.calendarItems {
@@ -222,7 +221,7 @@ class CheckListViewController: UIViewController {
             // 선택형
             for (key, value) in self.selectionItems {
                 if let questionId = self.findQuestionId(forQuestion: key, in: checkListResponse) {
-                    let parameter = CheckListRequestDto(questionId: questionId, answer: value.option)
+                    let parameter = CheckListRequestDto(questionId: questionId, answer: String(value.option))
                     checkListItems.append(parameter)
                 }
             }
