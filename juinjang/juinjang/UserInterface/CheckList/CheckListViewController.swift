@@ -12,8 +12,8 @@ import RealmSwift
 
 class CheckListViewController: UIViewController {
     
-    var calendarItems: [String: (inputDate: Date, isSelected: Bool)] = [:]
-    var scoreItems: [String: (score: String, isSelected: Bool)] = [:]
+    var calendarItems: [String: (inputDate: String, isSelected: Bool)] = [:]
+    var scoreItems: [String: (score: String?, isSelected: Bool)] = [:]
     var inputItems: [String: (inputAnswer: String, isSelected: Bool)] = [:]
     var selectionItems: [String: (option: Int, isSelected: Bool)] = [:]
     
@@ -67,7 +67,6 @@ class CheckListViewController: UIViewController {
             print("isEditMode 상태: \(isEditMode)")
             self.isEditMode = isEditMode
             filterVersionAndCategory(isEditMode: isEditMode) { [weak self] result in
-                print("isEditMode 상태에 따른 카테고리 개수: \(result.count)")
                 self?.tableView.reloadData()
             }
         }
@@ -192,12 +191,7 @@ class CheckListViewController: UIViewController {
             // 달력
             for (key, value) in self.calendarItems {
                 if let questionId = self.findQuestionId(forQuestion: key, in: checkListResponse) {
-                    // Date를 String으로 변환
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "yyyyMMdd"
-                    let dateString = dateFormatter.string(from: value.inputDate)
-                    
-                    let parameter = CheckListRequestDto(questionId: questionId, answer: dateString)
+                    let parameter = CheckListRequestDto(questionId: questionId, answer: value.inputDate ?? "")
                     checkListItems.append(parameter)
                 }
             }
@@ -205,7 +199,7 @@ class CheckListViewController: UIViewController {
             // 점수형
             for (key, value) in self.scoreItems {
                 if let questionId = self.findQuestionId(forQuestion: key, in: checkListResponse) {
-                    let parameter = CheckListRequestDto(questionId: questionId, answer: value.score)
+                    let parameter = CheckListRequestDto(questionId: questionId, answer: value.score ?? "")
                     checkListItems.append(parameter)
                 }
             }
@@ -213,7 +207,7 @@ class CheckListViewController: UIViewController {
             // 입력형
             for (key, value) in self.inputItems {
                 if let questionId = self.findQuestionId(forQuestion: key, in: checkListResponse) {
-                    let parameter = CheckListRequestDto(questionId: questionId, answer: value.inputAnswer)
+                    let parameter = CheckListRequestDto(questionId: questionId, answer: value.inputAnswer ?? "")
                     checkListItems.append(parameter)
                 }
             }
@@ -221,16 +215,16 @@ class CheckListViewController: UIViewController {
             // 선택형
             for (key, value) in self.selectionItems {
                 if let questionId = self.findQuestionId(forQuestion: key, in: checkListResponse) {
-                    let parameter = CheckListRequestDto(questionId: questionId, answer: String(value.option))
+                    let parameter = CheckListRequestDto(questionId: questionId, answer: String(value.option ?? 0))
                     checkListItems.append(parameter)
                 }
             }
             
             let parameters: [[String: Any?]] = checkListItems.map {
-                var answer: Any? = $0.answer
+                var answer: String! = $0.answer
                 // NaN 값 nil로 설정
-                if let answerAsDouble = Double($0.answer), answerAsDouble.isNaN {
-                    answer = nil
+                if !answer.isEmpty {
+                    answer = answer
                 }
                 return ["questionId": $0.questionId, "answer": answer]
             }
@@ -404,7 +398,6 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                     // InputItem
                     let cell: ExpandedTextFieldTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedTextFieldTableViewCell.identifier, for: indexPath) as! ExpandedTextFieldTableViewCell
                     cell.configure(with: questionDto, at: indexPath)
-                    cell.categories = categories
                     
                     // 데이터 모델에서 저장된 값으로 셀 구성
                     let contentKey = category.checkListitem[indexPath.row - 1].question
@@ -425,16 +418,16 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                     // CalendarItem
                     let cell: ExpandedCalendarTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedCalendarTableViewCell.identifier, for: indexPath) as! ExpandedCalendarTableViewCell
                     cell.configure(with: questionDto, at: indexPath)
-                    cell.categories = categories
-                    
-                    // 데이터 모델에서 저장된 값으로 셀 구성
+                    cell.calendarItems = calendarItems
                     let contentKey = category.checkListitem[indexPath.row - 1].question
-                    cell.backgroundColor = cell.calendarItems[contentKey]?.isSelected ?? false ? UIColor(named: "lightOrange") : UIColor.white // 상태에 따라 배경색 설정
-
-                    // 셀이 선택된 경우 클로저 호출
                     cell.selectionHandler = { [weak self, weak cell] selectedDate in
                         print("Selected Date in TableView:", selectedDate)
-                        self?.calendarItems.updateValue((selectedDate, true), forKey: contentKey)
+                        
+                        let dateFormatter = DateFormatter()
+                        dateFormatter.dateFormat = "yyyyMMdd"
+                        print(dateFormatter.string(from: selectedDate))
+                        
+                        self?.calendarItems.updateValue((dateFormatter.string(from: selectedDate), true), forKey: contentKey)
                     }
                     
                     cell.calendarItems = calendarItems

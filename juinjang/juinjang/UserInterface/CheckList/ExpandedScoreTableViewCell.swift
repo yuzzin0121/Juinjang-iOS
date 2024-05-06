@@ -122,22 +122,23 @@ class ExpandedScoreTableViewCell: UITableViewCell {
         }
 
         if sender.isSelected {
-            
-            // 현재 눌린 버튼을 선택된 상태로 변경
             sender.setImage(UIImage(named: "checked-button"), for: .normal)
-            // 셀의 배경색을 변경
             backgroundColor = UIColor(named: "lightOrange")
             questionImage.image = UIImage(named: "question-selected-image")
+            
             for button in [answerButton1, answerButton2, answerButton3, answerButton4, answerButton5] {
                 if button != sender {
                     button.isSelected = false
                     button.setImage(UIImage(named: "checklist-completed-button"), for: .normal)
                 }
             }
+            
+            updateScoreItem(withContent: contentLabel.text ?? "", score: String(sender.tag))
         } else {
             sender.setImage(UIImage(named: "answer\(sender.tag)"), for: .normal)
             backgroundColor = .white
             questionImage.image = UIImage(named: "question-image")
+            removeScoreItem(withContent: contentLabel.text!)
         }
         
         // 선택된 버튼의 정보를 저장
@@ -151,9 +152,13 @@ class ExpandedScoreTableViewCell: UITableViewCell {
         
         // 외부로 선택된 점수 전달
         selectionHandler?(score ?? String())
-        
-        // 선택된 점수를 해당 ScoreItem에 저장
-        updateScoreItem(withContent: contentLabel.text ?? "", score: String(sender.tag))
+    }
+    
+    func removeScoreItem(withContent content: String) {
+        // 선택한 질문에 해당하는 스코어 아이템을 찾아서 삭제
+        if let index = scoreItems.index(forKey: content) {
+            scoreItems.remove(at: index)
+        }
     }
     
     func saveSelectedScore() {
@@ -196,6 +201,7 @@ class ExpandedScoreTableViewCell: UITableViewCell {
         
         // 배경색 초기화
         backgroundColor = .white
+        questionImage.image = UIImage(named: "question-image")
     }
     
     func setupStackView() {
@@ -238,6 +244,8 @@ class ExpandedScoreTableViewCell: UITableViewCell {
         
         // 선택된 날짜가 있으면 표시
         if let storedData = scoreItems[content], let score = storedData.score {
+            backgroundColor = UIColor(named: "lightOrange")
+            questionImage.image = UIImage(named: "question-selected-image")
             for button in [answerButton1, answerButton2, answerButton3, answerButton4, answerButton5] {
                 if String(button.tag) == score {
                     button.isSelected = true

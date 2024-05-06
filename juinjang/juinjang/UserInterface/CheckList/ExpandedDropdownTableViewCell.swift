@@ -14,7 +14,7 @@ protocol DropdownDelegate: AnyObject {
 
 class ExpandedDropdownTableViewCell: UITableViewCell {
     var selectedOption: String?
-    var selectionItems: [String: (option: Int?, isSelected: Bool)] = [:]
+    var selectionItems: [String: (option: Int, isSelected: Bool)] = [:]
     weak var delegate: DropdownDelegate?
     var categories: [CheckListResponseDto]!
     
@@ -112,6 +112,7 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
         
         // 배경색 초기화
         backgroundColor = .white
+        questionImage.image = UIImage(named: "question-image")
     }
     
     func setupLayout() {
@@ -233,6 +234,9 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
 
         // 선택된 옵션이 있으면 표시
         if let storedData = selectionItems[content] as? SelectionItem {
+            backgroundColor = UIColor(named: "lightOrange")
+            questionImage.image = UIImage(named: "question-selected-image")
+            
             selectedOption = storedData.selectAnswer
 
             // selectedOption이 몇 번째 행에 해당하는지 찾기

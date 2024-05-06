@@ -8,16 +8,15 @@
 import UIKit
 import SnapKit
 
-protocol TextFieldDelegate: AnyObject {
-    func didEnterText(_ text: String)
-}
+//protocol TextFieldDelegate: AnyObject {
+//    func didEnterText(_ text: String)
+//}
 
 class ExpandedTextFieldTableViewCell: UITableViewCell {
     
     var inputAnswer: String?
-    var inputItems: [String: (inputAnswer: String?, isSelected: Bool)] = [:]
-    weak var delegate: TextFieldDelegate?
-    var categories: [CheckListResponseDto]!
+    var inputItems: [String: (inputAnswer: String, isSelected: Bool)] = [:]
+//    weak var delegate: TextFieldDelegate?
     
     // 입력한 답변을 외부로 전달하는 콜백 클로저
     var inputHandler: ((String) -> Void)?
@@ -75,6 +74,7 @@ class ExpandedTextFieldTableViewCell: UITableViewCell {
         
         // 배경색 초기화
         backgroundColor = .white
+        questionImage.image = UIImage(named: "question-image")
     }
     
     func setupLayout() {
@@ -135,8 +135,10 @@ class ExpandedTextFieldTableViewCell: UITableViewCell {
 
         // 입력한 내용이 있으면 표시
         if let storedData = inputItems[content] {
-            inputAnswer = storedData.inputAnswer
+            backgroundColor = UIColor(named: "lightOrange")
+            questionImage.image = UIImage(named: "question-selected-image")
             
+            inputAnswer = storedData.inputAnswer
             answerTextField.text = inputAnswer
 
         } else {
@@ -144,6 +146,14 @@ class ExpandedTextFieldTableViewCell: UITableViewCell {
             inputAnswer = nil
         }
     }
+    
+    func removeInputItem(withContent content: String) {
+        // 선택한 질문에 해당하는 스코어 아이템을 찾아서 삭제
+        if let index = inputItems.index(forKey: content) {
+            inputItems.remove(at: index)
+        }
+    }
+
 }
 
 extension ExpandedTextFieldTableViewCell: UITextFieldDelegate {
@@ -182,7 +192,7 @@ extension ExpandedTextFieldTableViewCell: UITextFieldDelegate {
             let calculatedWidth = calculateTextFieldWidth(for: text, maxCharacterCount: 20)
             let leftPadding = (342 - calculatedWidth) / 2
             
-            delegate?.didEnterText(textField.text ?? "")
+//            delegate?.didEnterText(textField.text ?? "")
 
             // 텍스트 필드의 너비 및 위치 업데이트
             updateTextFieldWidthConstraint(for: textField, constant: calculatedWidth, shouldRemoveLeadingConstraint: true)
@@ -200,6 +210,7 @@ extension ExpandedTextFieldTableViewCell: UITextFieldDelegate {
             questionImage.image = UIImage(named: "question-image")
             textField.backgroundColor = UIColor(named: "lightBackgroundOrange")
             updateTextFieldWidthConstraint(for: textField, constant: 342, shouldRemoveLeadingConstraint: false)
+            removeInputItem(withContent: contentLabel.text!)
         }
     }
 
