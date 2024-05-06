@@ -97,7 +97,7 @@ class ReportViewController : UIViewController {
     }
     @objc func backBtnTap() {
         //self.navigationController?.popViewController(animated: true)
-        let mainVC = RecordingRoomViewController()
+        let mainVC = ImjangNoteViewController()
         navigationController?.pushViewController(mainVC, animated: true)
     }
     @objc func shareBtnTap() {
