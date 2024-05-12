@@ -57,6 +57,8 @@
 		0AE388892B5986BC0041A979 /* CategoryItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE388882B5986BC0041A979 /* CategoryItemTableViewCell.swift */; };
 		0AE3888B2B5992870041A979 /* CheckListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE3888A2B5992870041A979 /* CheckListItem.swift */; };
 		0AEE17F42BB0632B00D86DEE /* CheckListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEE17F32BB0632B00D86DEE /* CheckListModel.swift */; };
+		0AF0ECBE2BEFE1AD00413778 /* AnswerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF0ECBD2BEFE1AD00413778 /* AnswerModel.swift */; };
+		0AF0ECC02BEFE32600413778 /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF0ECBF2BEFE32600413778 /* RealmManager.swift */; };
 		0AF89DA32B74C5D500C9AD81 /* ContentWrappingTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF89DA22B74C5D500C9AD81 /* ContentWrappingTableView.swift */; };
 		0AF9C28C2BB9D779009926E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 61C667BB2BB9A06A007F65E9 /* Assets.xcassets */; };
 		345855722B689A5300432C06 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345855712B689A5300432C06 /* MainViewController.swift */; };
@@ -228,6 +230,8 @@
 		0AE388882B5986BC0041A979 /* CategoryItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryItemTableViewCell.swift; sourceTree = "<group>"; };
 		0AE3888A2B5992870041A979 /* CheckListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckListItem.swift; sourceTree = "<group>"; };
 		0AEE17F32BB0632B00D86DEE /* CheckListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckListModel.swift; sourceTree = "<group>"; };
+		0AF0ECBD2BEFE1AD00413778 /* AnswerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerModel.swift; sourceTree = "<group>"; };
+		0AF0ECBF2BEFE32600413778 /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
 		0AF89DA22B74C5D500C9AD81 /* ContentWrappingTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentWrappingTableView.swift; sourceTree = "<group>"; };
 		345855712B689A5300432C06 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		345855732B689A7E00432C06 /* BottomCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -371,6 +375,8 @@
 			isa = PBXGroup;
 			children = (
 				0AEE17F32BB0632B00D86DEE /* CheckListModel.swift */,
+				0AF0ECBD2BEFE1AD00413778 /* AnswerModel.swift */,
+				0AF0ECBF2BEFE32600413778 /* RealmManager.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1042,7 +1048,9 @@
 				3458559D2B69479D00432C06 /* NoMaemullPopupViewController.swift in Sources */,
 				34AA14F52B82E46300CF10FC /* PlayRecordViewController.swift in Sources */,
 				61864BEF2B600E920073C175 /* ImjangNote.swift in Sources */,
+				0AF0ECC02BEFE32600413778 /* RealmManager.swift in Sources */,
 				0A73E60D2B5855CD00EF1C89 /* UserInfo.swift in Sources */,
+				0AF0ECBE2BEFE1AD00413778 /* AnswerModel.swift in Sources */,
 				345855802B689D4C00432C06 /* LogoutPopupView.swift in Sources */,
 				349E301A2BAEBCD900B59D35 /* Use3ViewController.swift in Sources */,
 				349E30182BAD5E3F00B59D35 /* UseSelectViewController.swift in Sources */,

@@ -8,18 +8,10 @@
 import UIKit
 import SnapKit
 
-//protocol TextFieldDelegate: AnyObject {
-//    func didEnterText(_ text: String)
-//}
-
 class ExpandedTextFieldTableViewCell: UITableViewCell {
     
     var inputAnswer: String?
     var inputItems: [String: (inputAnswer: String, isSelected: Bool)] = [:]
-//    weak var delegate: TextFieldDelegate?
-    
-    // 입력한 답변을 외부로 전달하는 콜백 클로저
-    var inputHandler: ((String) -> Void)?
     
     lazy var questionImage = UIImageView().then {
         $0.contentMode = .scaleAspectFit
@@ -147,11 +139,27 @@ class ExpandedTextFieldTableViewCell: UITableViewCell {
         }
     }
     
+    func savedConfigure(with questionDto: CheckListItem, at indexPath: IndexPath) {
+        let content = questionDto.question
+        contentLabel.text = content
+        
+        // 보기 모드 설정
+        backgroundColor = UIColor(named: "gray0")
+        contentLabel.textColor = UIColor(named: "lightGray")
+        answerTextField.backgroundColor = UIColor(named: "shadowGray")
+        answerTextField.isEnabled = false
+    }
+    
     func removeInputItem(withContent content: String) {
         // 선택한 질문에 해당하는 스코어 아이템을 찾아서 삭제
         if let index = inputItems.index(forKey: content) {
             inputItems.remove(at: index)
         }
+    }
+    
+    func handleTextSelection(_ text: String) {
+        inputAnswer = text
+        // 셀 UI 업데이트 등의 작업 수행
     }
 
 }
@@ -198,9 +206,6 @@ extension ExpandedTextFieldTableViewCell: UITextFieldDelegate {
             updateTextFieldWidthConstraint(for: textField, constant: calculatedWidth, shouldRemoveLeadingConstraint: true)
             textField.layoutIfNeeded()
             textField.contentHorizontalAlignment = .left
-        
-            // 외부로 답변 전달
-            inputHandler?(inputAnswer ?? String())
             
             // 답변 해당 InputItem에 저장
             updateInputItem(withContent: contentLabel.text ?? "", inputAnswer: inputAnswer ?? "")

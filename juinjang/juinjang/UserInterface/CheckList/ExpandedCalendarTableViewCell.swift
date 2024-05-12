@@ -9,13 +9,8 @@ import UIKit
 import SnapKit
 import FSCalendar
 
-protocol DatePickerDelegate: AnyObject {
-    func didSelectDate(_ date: Date, inCell cell: ExpandedCalendarTableViewCell, at: IndexPath)
-}
-
 class ExpandedCalendarTableViewCell: UITableViewCell {
     
-    weak var delegate: DatePickerDelegate?
     var calendarItems: [String: (inputDate: String?, isSelected: Bool)] = [:]
     var isExpanded: Bool = true
     var selectedDate: Date?
@@ -297,8 +292,12 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
             print("No stored date for content:", content)
             selectedDate = nil
         }
-
-
+    }
+    
+    func handleDateSelection(_ date: Date) {
+        
+        selectedDate = date
+        // 셀 UI 업데이트 등의 작업 수행
     }
 }
 

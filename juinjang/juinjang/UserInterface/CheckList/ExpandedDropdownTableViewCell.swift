@@ -8,18 +8,10 @@
 import UIKit
 import SnapKit
 
-protocol DropdownDelegate: AnyObject {
-    func didSelectOption(_ option: String)
-}
-
 class ExpandedDropdownTableViewCell: UITableViewCell {
     var selectedOption: String?
-    var selectionItems: [String: (option: Int, isSelected: Bool)] = [:]
-    weak var delegate: DropdownDelegate?
+    var selectionItems: [String: (option: String, isSelected: Bool)] = [:]
     var categories: [CheckListResponseDto]!
-    
-    // 선택된 점수를 외부로 전달하는 콜백 클로저
-    var selectionHandler: ((Int) -> Void)?
     
     lazy var questionImage = UIImageView().then {
         $0.contentMode = .scaleAspectFit
@@ -217,7 +209,7 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
     private func updateSelectionItem(withContent content: String, option: Int) {
         // 찾으려는 content와 일치하는 ScoreItem을 찾음
         if let index = selectionItems.index(forKey: content) {
-            selectionItems.updateValue((option, true), forKey: content)
+            selectionItems.updateValue((String(option), true), forKey: content)
             
             // 딕셔너리 확인
             for (content, option) in selectionItems {
@@ -272,8 +264,22 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
                  return OptionItem(image: nil, option: optionItem.option)
              }
          }
-        
          options = optionValues
+    }
+    
+    func savedConfigure(with questionDto: CheckListItem, at indexPath: IndexPath) {
+        let content = questionDto.question
+        contentLabel.text = content
+        
+        // 보기 모드 설정
+        backgroundColor = UIColor(named: "gray0")
+        itemButton.isUserInteractionEnabled = false
+        contentLabel.textColor = UIColor(named: "lightGray")
+    }
+    
+    func handleOptionSelection(_ optionIndex: String) {
+        selectedOption = optionIndex
+        // 셀 UI 업데이트 등의 작업 수행
     }
 }
 

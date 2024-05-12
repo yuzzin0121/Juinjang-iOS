@@ -8,19 +8,13 @@
 import UIKit
 import SnapKit
 
-protocol ExpandedScoreCellDelegate: AnyObject {
-    func buttonTapped(at index: Int)
-}
-
 class ExpandedScoreTableViewCell: UITableViewCell {
     
-    var score: String? // 선택된 버튼의 값을 저장할 변수
+    var selectedScore: String? // 선택된 버튼의 값을 저장할 변수
     var scoreItems: [String: (score: String?, isSelected: Bool)] = [:]
-    weak var delegate: ExpandedScoreCellDelegate?
     var categories: [CheckListResponseDto]!
-    
-    // 선택된 점수를 외부로 전달하는 콜백 클로저
-    var selectionHandler: ((String) -> Void)?
+    var question: CheckListItem?
+    var imjangId: Int?
     
     lazy var questionImage = UIImageView().then {
         $0.contentMode = .scaleAspectFit
@@ -110,6 +104,11 @@ class ExpandedScoreTableViewCell: UITableViewCell {
         setupStackView()
     }
     
+    func handleScoreSelection(_ score: String) {
+        selectedScore = score
+        // 셀 UI 업데이트 등의 작업 수행
+    }
+    
     @objc func buttonPressed(_ sender: UIButton) {
         sender.isSelected.toggle()
         
@@ -118,6 +117,7 @@ class ExpandedScoreTableViewCell: UITableViewCell {
             if button != sender {
                 button.isSelected = false
                 button.setImage(UIImage(named: "answer\(button.tag)"), for: .normal)
+                RealmManager.shared.saveChecklistItem(imjangId: imjangId!, questionId: question!.questionId, answer: "", isSelected: false)
             }
         }
 
@@ -132,8 +132,7 @@ class ExpandedScoreTableViewCell: UITableViewCell {
                     button.setImage(UIImage(named: "checklist-completed-button"), for: .normal)
                 }
             }
-            
-            updateScoreItem(withContent: contentLabel.text ?? "", score: String(sender.tag))
+            RealmManager.shared.saveChecklistItem(imjangId: imjangId!, questionId: question!.questionId, answer: String(sender.tag), isSelected: true)
         } else {
             sender.setImage(UIImage(named: "answer\(sender.tag)"), for: .normal)
             backgroundColor = .white
@@ -142,16 +141,13 @@ class ExpandedScoreTableViewCell: UITableViewCell {
         }
         
         // 선택된 버튼의 정보를 저장
-        score = String(sender.tag)
+        selectedScore = String(sender.tag)
         
-        if let score = score {
+        if let score = selectedScore {
             print("Button Pressed: \(score)")
         } else {
             print("Button Pressed: No answer")
         }
-        
-        // 외부로 선택된 점수 전달
-        selectionHandler?(score ?? String())
     }
     
     func removeScoreItem(withContent content: String) {
@@ -162,8 +158,8 @@ class ExpandedScoreTableViewCell: UITableViewCell {
     }
     
     func saveSelectedScore() {
-        print("score:", score)
-        if let score = score {
+        print("score:", selectedScore)
+        if let score = selectedScore {
             UserDefaults.standard.set(score, forKey: "SelectedScoreKey")
             print("저장 성공")
         } else {
@@ -186,7 +182,7 @@ class ExpandedScoreTableViewCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         // 버튼 초기화
-        score = nil
+        selectedScore = nil
         
 //        for button in [answerButton1, answerButton2, answerButton3, answerButton4, answerButton5] {
 //                button.isSelected = false
@@ -237,7 +233,10 @@ class ExpandedScoreTableViewCell: UITableViewCell {
         }
     }
     
-    func configure(with questionDto: CheckListItem, at indexPath: IndexPath) {
+    func configure(with questionDto: CheckListItem, with imjangId: Int, at indexPath: IndexPath) {
+        self.question = questionDto
+        self.imjangId = imjangId
+        
         let content = questionDto.question
         contentLabel.text = content
         contentLabel.textColor = UIColor(named: "500")
@@ -258,9 +257,23 @@ class ExpandedScoreTableViewCell: UITableViewCell {
         } else {
             // 선택된 날짜가 없으면 표시 초기화
             for button in [answerButton1, answerButton2, answerButton3, answerButton4, answerButton5] {
-                    button.isSelected = false
-                    button.setImage(UIImage(named: "checklist-completed-button"), for: .normal)
-                }
+                button.isSelected = false
+                button.setImage(UIImage(named: "checklist-completed-button"), for: .normal)
+            }
         }
+    }
+    
+    func savedConfigure(with questionDto: CheckListItem, at indexPath: IndexPath) {
+        
+        let content = questionDto.question
+        contentLabel.text = content
+        
+        // 보기 모드 설정
+        for button in [answerButton1, answerButton2, answerButton3, answerButton4, answerButton5] {
+            button.isEnabled = false
+            button.setImage(UIImage(named: "enabled-answer\(button.tag)"), for: .normal)
+        }
+        backgroundColor = UIColor(named: "gray0")
+        contentLabel.textColor = UIColor(named: "lightGray")
     }
 }
