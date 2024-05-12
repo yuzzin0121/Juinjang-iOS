@@ -57,8 +57,8 @@ class DeletePopupViewController: UIViewController {
     }
     
     func designViews() {
-        designButton(cancelButton, title: "아니요", backgroundColor: UIColor(named: "buttonGray")!)
-        designButton(confirmButton, title: "예", backgroundColor: UIColor(named: "textBlack")!, textColor: .white)
+        designButton(cancelButton, title: "아니요", backgroundColor: .white)
+        designButton(confirmButton, title: "예", backgroundColor: .black, textColor: .white)
         if let fileName {
             messageLabel.text = "\(fileName).mp3\n녹음 파일을 정말 삭제할까요?"
             messageLabel.font = .pretendard(size: 16, weight: .regular)
@@ -106,7 +106,7 @@ class DeletePopupViewController: UIViewController {
         dismiss(animated: false, completion: nil)
     }
     
-    func designButton(_ button: UIButton, title: String = "확인", backgroundColor: UIColor = .white, textColor: UIColor = UIColor(named: "textBlack")!) {
+    func designButton(_ button: UIButton, title: String = "확인", backgroundColor: UIColor = .white, textColor: UIColor = .black) {
         button.setTitle(title, for: .normal)
         button.setTitleColor(textColor, for: .normal)
         

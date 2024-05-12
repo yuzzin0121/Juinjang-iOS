@@ -9,13 +9,16 @@ import UIKit
 import SnapKit
 import AVFoundation
 
-
+struct Recording {
+    var title: String
+    var fileURL: URL
+}
 
 class RecordViewController: UIViewController, AVAudioRecorderDelegate {
     
     weak var bottomSheetViewController: BottomSheetViewController?
-    var fileURLs : [URL] = []
-    var fileName : [String] = []
+    //var fileURLs : [URL] = []
+    var recordings: [Recording] = []
     
     var audioFile : URL! // 재생할 오디오의 파일명 변수
     var audioRecorder : AVAudioRecorder!
@@ -115,7 +118,7 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
            // 문서 디렉토리에서 녹음 파일들을 가져옴
            let recordingURLs = try FileManager.default.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil, options: [])
            // 녹음 파일 목록에 추가
-           fileURLs = recordingURLs.filter { $0.pathExtension == "m4a" } // .m4a 확장자를 가진 파일만 필터링
+           recordings = recordingURLs.filter { $0.pathExtension == "m4a" }.map {Recording(title: $0.lastPathComponent, fileURL: $0)} // .m4a 확장자를 가진 파일만 필터링
            //RecordingRoomViewController().recordingFileTableView.reloadData()
        } catch {
            print("Failed to load recordings: \(error)")
@@ -123,8 +126,8 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
    }
     func recordSet() {
         let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        audioFile = documentDirectory.appendingPathComponent("recordfile\(fileURLs.count).m4a")
-        print("number: \(fileURLs.count)")
+        audioFile = documentDirectory.appendingPathComponent("recordfile\(recordings.count).m4a")
+        print("number: \(recordings.count)")
         initRecord()
     }
     

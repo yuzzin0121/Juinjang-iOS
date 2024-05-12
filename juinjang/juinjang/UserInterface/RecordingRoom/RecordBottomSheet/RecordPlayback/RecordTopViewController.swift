@@ -20,7 +20,7 @@ class RecordTopViewController: UIViewController {
     }
     
     var titleLabel = UILabel().then {
-        $0.text = "녹음_001"
+        $0.text = RecordBottomViewController().titleTextField.text
         $0.textAlignment = .center
         $0.textColor = UIColor(named: "textWhite")
         $0.font = UIFont(name: "Pretendard-SemiBold", size: 18)

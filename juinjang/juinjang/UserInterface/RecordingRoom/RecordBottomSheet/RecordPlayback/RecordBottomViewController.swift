@@ -9,17 +9,13 @@ import UIKit
 import SnapKit
 import AVFoundation
 
-protocol RecordBottomViewControllerDelegate: AnyObject {
-    func didChangeRecordingFileName(newName: String)
-}
-
 var recordTime : String!
 
 class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudioPlayerDelegate {
     
-    weak var delegate: RecordBottomViewControllerDelegate?
     weak var topViewController: RecordTopViewController?
-    var fileURLs : [URL] = []
+   // var fileURLs : [URL] = []
+    var recordings : [Recording] = []
     
     var audioFile : URL! // 재생할 오디오의 파일명 변수
     var audioPlayer : AVAudioPlayer! //avaudioplayer인스턴스 변수
@@ -58,15 +54,6 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudio
         $0.text = "4:10"
     }
     
-    // 임의로 넣어둠 -TODO: 음성 녹음 파일 연결 필요
-//    var player: AVPlayer = {
-//        guard let url = URL(string: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3") else { fatalError() }
-//        let player = AVPlayer()
-//        let playerItem = AVPlayerItem(url: url)
-//        player.replaceCurrentItem(with: playerItem) // AVPlayer는 한번에 하나씩만 다룰 수 있음
-//        return player
-//    }()
-    
     lazy var rewindButton = UIButton().then {
         $0.setImage(UIImage(named: "rewind"), for: .normal)
         $0.imageView?.contentMode = .scaleAspectFill
@@ -92,7 +79,7 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudio
         addSubViews()
         setupLayout()
         titleTextField.delegate = self
-        
+
         loadRecordings()
         playSet()
         audioPlayer.stop()
@@ -106,14 +93,15 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudio
            // 문서 디렉토리에서 녹음 파일들을 가져옴
            let recordingURLs = try FileManager.default.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil, options: [])
            // 녹음 파일 목록에 추가
-           fileURLs = recordingURLs.filter { $0.pathExtension == "m4a" } // .m4a 확장자를 가진 파일만 필터링
+           recordings = recordingURLs.filter { $0.pathExtension == "m4a" }.map {Recording(title: $0.lastPathComponent, fileURL: $0)}  // .m4a 확장자를 가진 파일만 필터링
        } catch {
            print("Failed to load recordings: \(error)")
        }
    }
     func playSet() {
         let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        audioFile = documentDirectory.appendingPathComponent("recordfile\(fileURLs.count-1).m4a")
+        audioFile = documentDirectory.appendingPathComponent("recordfile\(recordings.count-1).m4a")
+        titleTextField.text = "recordfile\(recordings.count-1).m4a"
         //audioFile = Bundle.main.url(forResource: "Cruel Summer", withExtension: "mp3")
         initPlay()
     }
@@ -225,7 +213,8 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudio
         // 텍스트 필드가 수정되면 title을 수정
         updateTitle(textField.text)
         topViewController?.updateTitle(textField.text)
-        delegate?.didChangeRecordingFileName(newName: textField.text ?? "")
+        
+       // onTextFieldEdit?(textField.text ?? "")
     }
 
     func updateTitle(_ newTitle: String?) {

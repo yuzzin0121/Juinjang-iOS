@@ -161,6 +161,7 @@ class SettingViewController : UIViewController, UIImagePickerControllerDelegate,
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             profileImageView.image = pickedImage
+            uploadImage(pickedImage)
         }
         picker.dismiss(animated: true, completion: nil)
     }
@@ -168,6 +169,29 @@ class SettingViewController : UIViewController, UIImagePickerControllerDelegate,
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
     }
+    
+    func uploadImage(_ image: UIImage) {
+            guard let imageData = image.jpegData(compressionQuality: 1.0) else {
+                print("Could not get JPEG representation of image")
+                return
+            }
+            
+            let headers: HTTPHeaders = [
+                "Authorization": "Bearer\(UserDefaultManager.shared.accessToken)"
+            ]
+            
+            AF.upload(multipartFormData: { multipartFormData in
+                multipartFormData.append(imageData, withName: "multipartFile", fileName: "image.jpg", mimeType: "image/jpeg")
+            }, to: "http://juinjang1227.com:8080/api/profile/image", method: .patch, headers: headers)
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    print("Response: \(value)")
+                case .failure(let error):
+                    print("Error: \(error)")
+                }
+            }
+        }
     
     func logout() {
         // 로그아웃 API의 URL

@@ -67,7 +67,8 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
     let memoTextViewPlaceholder = "눌러서 메모를 추가해보세요!"
 
     //var fileItems: [RecordingFileItem] = []
-    var fileURLs : [URL] = []
+    //var fileURLs : [URL] = []
+    var recordings : [Recording] = []
     
     var imjangId: Int? = nil {
         didSet {
@@ -141,11 +142,11 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
            // 문서 디렉토리에서 녹음 파일들을 가져옴
            let recordingURLs = try FileManager.default.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil, options: [])
            // 녹음 파일 목록에 추가
-           fileURLs = recordingURLs.filter { $0.pathExtension == "m4a" }.sorted(by: { $0.absoluteString > $1.absoluteString }) // .m4a 확장자를 가진 파일만 필터링
+            recordings = recordingURLs.filter { $0.pathExtension == "m4a" }.map {Recording(title: $0.lastPathComponent, fileURL: $0)} //.sorted(by: { $0.absoluteString > $1.absoluteString }) // .m4a 확장자를 가진 파일만 필터링
         } catch {
            print("Failed to load recordings: \(error)")
         }
-        if fileURLs.isEmpty {
+        if recordings.isEmpty {
             tableBackgroundView.isHidden = false
         } else {
             tableBackgroundView.isHidden = true
@@ -226,14 +227,14 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
     }
     
     func setItemData() {
-        fileURLs.append(contentsOf: [
+ //       fileURLs.append(contentsOf: [
 //            .init(name: "보일러 관련", recordedDate: Date(), recordedTime: "1:30"),
 //            .init(name: "녹음_002", recordedDate: Date(), recordedTime: "2:12"),
 //            .init(name: "녹음_001", recordedDate: Date(), recordedTime: "1:57"),
 //            .init(name: "으아앙", recordedDate: Date(), recordedTime: "3:10")
-        ])
+//        ])
         
-        if fileURLs.isEmpty {
+        if recordings.isEmpty {
             tableBackgroundView.isHidden = false
         } else {
             tableBackgroundView.isHidden = true
@@ -323,7 +324,7 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
         }
         
         var topView: UIView? = nil
-        if fileURLs.isEmpty {
+        if recordings.isEmpty {
             topView = tableBackgroundView
         } else {
             topView = recordingFileTableView
@@ -343,8 +344,8 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
         }
         
         var rowHeight = 0.13
-        print("file \(fileURLs.count)개")
-        switch fileURLs.count {
+        print("file \(recordings.count)개")
+        switch recordings.count {
         case 0: rowHeight = 1
             tableBackgroundView.isHidden = false
         case 1: rowHeight = 1
@@ -373,7 +374,7 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
     }
     
     func isEmptyRecordingFile(_ isEmpty: Bool) {
-        if fileURLs.isEmpty {
+        if recordings.isEmpty {
             recordingFileTableView.isHidden = true
         }
     }
@@ -436,11 +437,11 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
 extension RecordingRoomViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if fileURLs.isEmpty {
+        if recordings.isEmpty {
             return 0
-        } else if fileURLs.count == 1{
+        } else if recordings.count == 1{
             return 1
-        } else if fileURLs.count == 2{
+        } else if recordings.count == 2{
             return 2
         } else {
             return 3
@@ -453,11 +454,11 @@ extension RecordingRoomViewController: UITableViewDataSource, UITableViewDelegat
         }
         cell.selectionStyle = .none
         let playVC = PlayRecordViewController()
-        playVC.bottomViewController.audioFile = fileURLs[indexPath.row]
+        playVC.bottomViewController.audioFile = recordings[indexPath.row].fileURL
         playVC.bottomViewController.initPlay1()
        // playVC.bottomViewController.audioFile = fileItems[indexPath.row].url
         //cell.setData(fileItem: fileItems[indexPath.row])
-        cell.setData(fileTitle: "\(fileURLs[indexPath.row].lastPathComponent)", time: "\(playVC.bottomViewController.remainingTimeLabel.text ?? "0:00")", date: recordTime)
+        cell.setData(fileTitle: "\(recordings[indexPath.row].title)", time: "\(playVC.bottomViewController.remainingTimeLabel.text ?? "0:00")", date: recordTime)
         return cell
     }
     
