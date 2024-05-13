@@ -94,7 +94,16 @@ class ExpandedTextFieldTableViewCell: UITableViewCell {
             $0.height.equalTo(31)
         }
     }
-
+    
+    func savedConfigure(with imjangId: Int, with answer: String, at indexPath: IndexPath) {
+        questionImage.image = UIImage(named: "question-selected-image")
+        contentLabel.textColor = UIColor(named: "500")
+        backgroundColor = .white
+        
+        answerTextField.text = answer
+        answerTextField.backgroundColor = UIColor(named: "lightOrange")
+    }
+    
     // 보기 모드
     func viewModeConfigure(with questionDto: CheckListItem, with imjangId: Int, at indexPath: IndexPath) {
         self.question = questionDto
@@ -109,28 +118,39 @@ class ExpandedTextFieldTableViewCell: UITableViewCell {
     }
       
     // 수정 모드
-    func editModeConfigure(with questionDto: CheckListItem, with imjangId: Int, with answer: String, at indexPath: IndexPath) {
-        // 입력한 내용이 있으면 표시
-        if inputAnswer != "" {
-            backgroundColor = UIColor(named: "lightOrange")
-            questionImage.image = UIImage(named: "question-selected-image")
-            
-            self.inputAnswer = answer
-            answerTextField.text = inputAnswer
-
-        } else {
-            // 선택된 날짜가 없으면 표시 초기화
-            self.inputAnswer = nil
-        }
+    func editModeConfigure(with questionDto: CheckListItem, with imjangId: Int, at indexPath: IndexPath) {
+        self.question = questionDto
+        self.imjangId = imjangId
+        contentLabel.text = questionDto.question
+        contentLabel.textColor = UIColor(named: "500")
+        backgroundColor = .white
+        
+        inputAnswer = nil
     }
     
-    func savedConfigure(with imjangId: Int, with answer: String, at indexPath: IndexPath) {
+    // 보기 모드일 때 저장된 값이 있는 경우
+    func savedViewModeConfigure(with imjangId: Int, with answer: String, at indexPath: IndexPath) {
         questionImage.image = UIImage(named: "question-selected-image")
         contentLabel.textColor = UIColor(named: "500")
         backgroundColor = .white
         
         answerTextField.text = answer
-        answerTextField.backgroundColor = UIColor(named: "lightOrange")
+        answerTextField.backgroundColor = UIColor(named: "lightBackgroundOrange")
+        
+        // -TODO: 너비 설정 필요
+    }
+    
+    // 수정 모드일 때 저장된 값이 있는 경우
+    func savedEditModeConfigure(with imjangId: Int, with answer: String, at indexPath: IndexPath) {
+        questionImage.image = UIImage(named: "question-selected-image")
+        contentLabel.textColor = UIColor(named: "500")
+        backgroundColor = UIColor(named: "lightOrange")
+        
+        // 답변 TextField 설정
+        answerTextField.text = answer
+        answerTextField.backgroundColor = .white
+        
+        // -TODO: 너비 설정 필요
     }
     
     func handleTextSelection(_ text: String) {
@@ -156,7 +176,6 @@ extension ExpandedTextFieldTableViewCell: UITextFieldDelegate {
         textField.becomeFirstResponder()
         backgroundColor = UIColor(named: "lightOrange")
         questionImage.image = UIImage(named: "question-selected-image")
-        textField.backgroundColor = UIColor(named: "lightBackgroundOrange")
         updateTextFieldWidthConstraint(for: textField, constant: 342, shouldRemoveLeadingConstraint: false)
     
         return true
@@ -173,8 +192,6 @@ extension ExpandedTextFieldTableViewCell: UITextFieldDelegate {
             // 입력된 텍스트에 따라 동적으로 너비 조절
             let calculatedWidth = calculateTextFieldWidth(for: text, maxCharacterCount: 20)
             let leftPadding = (342 - calculatedWidth) / 2
-            
-//            delegate?.didEnterText(textField.text ?? "")
 
             // 텍스트 필드의 너비 및 위치 업데이트
             updateTextFieldWidthConstraint(for: textField, constant: calculatedWidth, shouldRemoveLeadingConstraint: true)

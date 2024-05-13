@@ -424,11 +424,12 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                     // InputItem
                     let cell: ExpandedTextFieldTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedTextFieldTableViewCell.identifier, for: indexPath) as! ExpandedTextFieldTableViewCell
                     
-                    // 데이터 모델에서 저장된 값으로 셀 구성
+                    cell.editModeConfigure(with: questionDto, with: imjangId ?? 0, at: indexPath)
+                    
                     let questionId = category.checkListitem[indexPath.row - 1].questionId
                     for saveItem in savedCheckListItems {
                         if questionId == saveItem.questionId {
-                            cell.editModeConfigure(with: questionDto, with: imjangId ?? 0, with: saveItem.answer, at: indexPath)
+                            cell.savedEditModeConfigure(with: saveItem.imjangId, with: saveItem.answer, at: indexPath)
                         }
                     }
                     
@@ -517,16 +518,9 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                         let questionId = category.checkListitem[indexPath.row - 1].questionId
                         for saveItem in savedCheckListItems {
                             if questionId == saveItem.questionId {
-                                cell.savedConfigure(with: saveItem.imjangId, with: saveItem.answer, at: indexPath)
+                                cell.savedViewModeConfigure(with: saveItem.imjangId, with: saveItem.answer, at: indexPath)
                             }
                         }
-//                        for item in savedInputItems {
-//                            if item.key == questionDto.question {
-//                                cell.backgroundColor = .white
-//                                cell.contentLabel.textColor = UIColor(named: "500")
-//                                cell.answerTextField.text = item.value.inputAnswer
-//                            }
-//                        }
                         return cell
                     case 3:
                         // CalendarItem
