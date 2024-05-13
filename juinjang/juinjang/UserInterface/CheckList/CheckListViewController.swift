@@ -18,6 +18,7 @@ class CheckListViewController: UIViewController, ChecklistItemCellDelegate {
     
     var allCategory: [String] = [] // 카테고리
     var checkListCategories: [CheckListCategory] = [] // 카테고리별 질문
+    var savedCheckListItems: [CheckListAnswer] = [] // 저장된 체크리스트 항목
     
     lazy var tableView = UITableView().then {
         $0.separatorStyle = .none
@@ -147,8 +148,8 @@ class CheckListViewController: UIViewController, ChecklistItemCellDelegate {
             if error == nil {
                 guard let response = response else { return }
                 print("------저장된 체크리스트 조회------")
-                let savedCheckListItems = RealmManager.shared.getAllChecklistItems(for: imjangId)
-                for item in savedCheckListItems {
+                self.savedCheckListItems = RealmManager.shared.getAllChecklistItems(for: imjangId)
+                for item in self.savedCheckListItems {
                     print("questionId: \(item.questionId), answer: \(item.answer)")
                 }
 
@@ -388,14 +389,15 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                 case 0:
                     // ScoreItem
                     let cell: ExpandedScoreTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedScoreTableViewCell.identifier, for: indexPath) as! ExpandedScoreTableViewCell
-                    cell.configure(with: questionDto, with: imjangId ?? 2, at: indexPath)
-                    cell.delegate = self
-                    cell.cellType = .score
                     
+                    cell.editModeConfigure(with: questionDto, with: imjangId ?? 0, at: indexPath)
                     
                     let questionId = category.checkListitem[indexPath.row - 1].questionId
-
-//                    cell.backgroundColor = cell.scoreItems[contentKey]?.isSelected ?? false ? UIColor(named: "lightOrange") : UIColor.white // 상태에 따라 배경색 설정
+                    for saveItem in savedCheckListItems {
+                        if questionId == saveItem.questionId {
+                            cell.savedEditModeConfigure(with: saveItem.imjangId, with: saveItem.answer, at: indexPath)
+                        }
+                    }
 
                     for button in [cell.answerButton1, cell.answerButton2, cell.answerButton3, cell.answerButton4, cell.answerButton5] {
                         button.isEnabled = true
@@ -406,13 +408,14 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                 case 1:
                     // SelectionItem
                     let cell: ExpandedDropdownTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedDropdownTableViewCell.identifier, for: indexPath) as! ExpandedDropdownTableViewCell
-                    cell.configure(with: questionDto, at: indexPath)
-                    cell.delegate = self
-                    cell.cellType = .dropdown
-                    
+
                     // 데이터 모델에서 저장된 값으로 셀 구성
-                    let contentKey = category.checkListitem[indexPath.row - 1].question
-                    cell.backgroundColor = cell.selectionItems[contentKey]?.isSelected ?? false ? UIColor(named: "lightOrange") : UIColor.white // 상태에 따라 배경색 설정
+                    let questionId = category.checkListitem[indexPath.row - 1].questionId
+                    for saveItem in savedCheckListItems {
+                        if questionId == saveItem.questionId {
+                            cell.configure(with: questionDto, with: imjangId ?? 0, selectedOption: saveItem.answer, at: indexPath)
+                        }
+                    }
 
                     cell.itemButton.isUserInteractionEnabled = true
                     
@@ -420,13 +423,14 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                 case 2:
                     // InputItem
                     let cell: ExpandedTextFieldTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedTextFieldTableViewCell.identifier, for: indexPath) as! ExpandedTextFieldTableViewCell
-                    cell.configure(with: questionDto, at: indexPath)
-                    cell.delegate = self
-                    cell.cellType = .textField
                     
                     // 데이터 모델에서 저장된 값으로 셀 구성
-                    let contentKey = category.checkListitem[indexPath.row - 1].question
-                    cell.backgroundColor = cell.inputItems[contentKey]?.isSelected ?? false ? UIColor(named: "lightOrange") : UIColor.white // 상태에 따라 배경색 설정
+                    let questionId = category.checkListitem[indexPath.row - 1].questionId
+                    for saveItem in savedCheckListItems {
+                        if questionId == saveItem.questionId {
+                            cell.editModeConfigure(with: questionDto, with: imjangId ?? 0, with: saveItem.answer, at: indexPath)
+                        }
+                    }
                     
                     cell.answerTextField.isEnabled = true
                     
@@ -434,11 +438,13 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                 case 3:
                     // CalendarItem
                     let cell: ExpandedCalendarTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedCalendarTableViewCell.identifier, for: indexPath) as! ExpandedCalendarTableViewCell
-                    cell.configure(with: questionDto, at: indexPath)
-                    cell.delegate = self
-                    cell.cellType = .calendar
-                    
-                    let contentKey = category.checkListitem[indexPath.row - 1].question
+
+                    let questionId = category.checkListitem[indexPath.row - 1].questionId
+                    for saveItem in savedCheckListItems {
+                        if questionId == saveItem.questionId {
+                            cell.configure(with: questionDto, with: imjangId ?? 0, date: saveItem.answer, at: indexPath)
+                        }
+                    }
                     
                     return cell
                 default:
@@ -459,8 +465,7 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                     let cell: CategoryItemTableViewCell = tableView.dequeueReusableCell(withIdentifier: CategoryItemTableViewCell.identifier, for: indexPath) as! CategoryItemTableViewCell
     
                     cell.configure(category: category)
-
-                    
+                
                     let arrowImage = category.isExpanded ? UIImage(named: "contraction-items") : UIImage(named: "expand-items")
                     cell.expandButton.setImage(arrowImage, for: .normal)
                     
@@ -473,29 +478,27 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                     case 0:
                         // ScoreItem
                         let cell: ExpandedScoreTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedScoreTableViewCell.identifier, for: indexPath) as! ExpandedScoreTableViewCell
-                        cell.savedConfigure(with: questionDto, at: indexPath)
-                        let savedItems = RealmManager.shared.getChecklistItem(imjangId: imjangId!, questionId: questionDto.questionId)
                         
-                        print("didid")
-                        print(savedItems)
-//                        for item in savedItems {
-//                            if item.key == questionDto.question {
-//                                cell.backgroundColor = .white
-//                                cell.contentLabel.textColor = UIColor(named: "500")
-//                                for button in [cell.answerButton1, cell.answerButton2, cell.answerButton3, cell.answerButton4, cell.answerButton5] {
-//                                    if Int(item.value.score ?? "") == button.tag {
-//                                        button.setImage(UIImage(named: "checked-button"), for: .normal)
-//                                    } else {
-//                                        button.setImage(UIImage(named: "saved-button"), for: .normal)
-//                                    }
-//                                }
-//                            }
-//                        }
+                        cell.viewModeConfigure(with: questionDto, with: imjangId ?? 0, at: indexPath)
+                        
+                        let questionId = category.checkListitem[indexPath.row - 1].questionId
+                        for saveItem in savedCheckListItems {
+                            if questionId == saveItem.questionId {
+                                cell.savedViewModeConfigure(with: saveItem.imjangId, with: saveItem.answer, at: indexPath)
+                            }
+                        }
                         return cell
                     case 1:
                         // SelectionItem
                         let cell: ExpandedDropdownTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedDropdownTableViewCell.identifier, for: indexPath) as! ExpandedDropdownTableViewCell
-                        cell.savedConfigure(with: questionDto, at: indexPath)
+                        
+                        let questionId = category.checkListitem[indexPath.row - 1].questionId
+                        for saveItem in savedCheckListItems {
+                            if questionId == saveItem.questionId {
+                                cell.savedConfigure(with: questionDto, with: saveItem.imjangId, with: saveItem.answer, at: indexPath)
+                                cell.itemPickerView.isUserInteractionEnabled = false
+                            }
+                        }
                         
 //                        for item in savedSelectionItems {
 //                            if item.key == questionDto.question {
@@ -508,7 +511,15 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                     case 2:
                         // InputItem
                         let cell: ExpandedTextFieldTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedTextFieldTableViewCell.identifier, for: indexPath) as! ExpandedTextFieldTableViewCell
-                        cell.savedConfigure(with: questionDto, at: indexPath)
+
+                        cell.viewModeConfigure(with: questionDto, with: imjangId ?? 0, at: indexPath)
+                        
+                        let questionId = category.checkListitem[indexPath.row - 1].questionId
+                        for saveItem in savedCheckListItems {
+                            if questionId == saveItem.questionId {
+                                cell.savedConfigure(with: saveItem.imjangId, with: saveItem.answer, at: indexPath)
+                            }
+                        }
 //                        for item in savedInputItems {
 //                            if item.key == questionDto.question {
 //                                cell.backgroundColor = .white

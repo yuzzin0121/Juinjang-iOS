@@ -10,8 +10,9 @@ import SnapKit
 
 class ExpandedDropdownTableViewCell: UITableViewCell {
     var selectedOption: String?
-    var selectionItems: [String: (option: String, isSelected: Bool)] = [:]
     var categories: [CheckListResponseDto]!
+    var question: CheckListItem?
+    var imjangId: Int?
     
     lazy var questionImage = UIImageView().then {
         $0.contentMode = .scaleAspectFit
@@ -193,51 +194,27 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
         addTransparentView(frames: sender.frame)
     }
     
-    func saveSelectedOption() {
-        if let option = selectedOption {
-            UserDefaults.standard.set(option, forKey: "SelectedOptionKey")
-        } else {
-            // 선택된 버튼이 nil인 경우 UserDefaults에서 해당 키의 값을 제거
-            UserDefaults.standard.removeObject(forKey: "SelectedOptionKey")
-        }
-    }
-    
-    func loadSelectedOption() -> String? {
-        return UserDefaults.standard.value(forKey: "SelectedOptionKey") as? String
-    }
-    
-    private func updateSelectionItem(withContent content: String, option: Int) {
-        // 찾으려는 content와 일치하는 ScoreItem을 찾음
-        if let index = selectionItems.index(forKey: content) {
-            selectionItems.updateValue((String(option), true), forKey: content)
-            
-            // 딕셔너리 확인
-            for (content, option) in selectionItems {
-                print("\(content): \(option)")
-            }
-            saveSelectedOption()
-        }
-    }
-    
-    func configure(with questionDto: CheckListItem, at indexPath: IndexPath) {
+    func configure(with questionDto: CheckListItem, with imjangId: Int, selectedOption: String, at indexPath: IndexPath) {
+        self.question = questionDto
+        self.imjangId = imjangId
+        
         let content = questionDto.question
         contentLabel.text = content
         contentLabel.textColor = UIColor(named: "500")
 
         // 선택된 옵션이 있으면 표시
-        if let storedData = selectionItems[content] as? SelectionItem {
+        if selectedOption != "" {
             backgroundColor = UIColor(named: "lightOrange")
             questionImage.image = UIImage(named: "question-selected-image")
             
-            selectedOption = storedData.selectAnswer
+            self.selectedOption = selectedOption
 
             // selectedOption이 몇 번째 행에 해당하는지 찾기
-            if let row = storedData.options.firstIndex(where: { $0.option == selectedOption }) {
-                itemPickerView.selectRow(row, inComponent: 0, animated: false)
-            }
+//                itemPickerView.selectRow(row, inComponent: 0, animated: false)
+            
         } else {
             // 선택된 옵션이 없으면 표시 초기화
-            let defaultSelectedRow = 0 // 기본 선택값을 설정하세요 (예: 첫 번째 행)
+            let defaultSelectedRow = 0
             itemPickerView.selectRow(defaultSelectedRow, inComponent: 0, animated: false)
         }
 
@@ -267,7 +244,7 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
          options = optionValues
     }
     
-    func savedConfigure(with questionDto: CheckListItem, at indexPath: IndexPath) {
+    func savedConfigure(with questionDto: CheckListItem, with imjangId: Int, with answer: String, at indexPath: IndexPath) {
         let content = questionDto.question
         contentLabel.text = content
         
@@ -279,7 +256,6 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
     
     func handleOptionSelection(_ optionIndex: String) {
         selectedOption = optionIndex
-        // 셀 UI 업데이트 등의 작업 수행
     }
 }
 
@@ -303,10 +279,8 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
         print("Selected option: (row, \(selectedOption))")
         
         // -TODO: 인덱스 번호로 넘겨주어야 함
-        selectionHandler?(row)
+//        selectionHandler?(row)
         
-        // 선택된 옵션을 해당 SelectionItem에 저장
-        updateSelectionItem(withContent: contentLabel.text ?? "", option: row)
         
         // 선택한 옵션으로 selectedButton 설정
         setSelectedInset()
@@ -333,20 +307,21 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
             questionImage.image = UIImage(named: "question-image")
             itemButton.layer.backgroundColor = UIColor(named: "shadowGray")?.cgColor
             setBasicInset()
+            RealmManager.shared.deleteChecklistItem(imjangId: imjangId!, questionId: question!.questionId)
         } else {
             backgroundColor = UIColor(named: "lightOrange")
             questionImage.image = UIImage(named: "question-selected-image")
+            RealmManager.shared.saveChecklistItem(imjangId: imjangId!, questionId: question!.questionId, answer: String(row), isSelected: true)
         }
         
         if options[row].option == "기타" {
             backgroundColor = .white
             questionImage.image = UIImage(named: "question-image")
+            RealmManager.shared.saveChecklistItem(imjangId: imjangId!, questionId: question!.questionId, answer: String(etcTextField.text ?? ""), isSelected: true)
         }
     }
     
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
-        
-        
     
         let fontSize: CGFloat = 16
         let leftPadding: CGFloat = 12

@@ -11,7 +11,8 @@ import SnapKit
 class ExpandedTextFieldTableViewCell: UITableViewCell {
     
     var inputAnswer: String?
-    var inputItems: [String: (inputAnswer: String, isSelected: Bool)] = [:]
+    var question: CheckListItem?
+    var imjangId: Int?
     
     lazy var questionImage = UIImageView().then {
         $0.contentMode = .scaleAspectFit
@@ -93,75 +94,48 @@ class ExpandedTextFieldTableViewCell: UITableViewCell {
             $0.height.equalTo(31)
         }
     }
-    
-    func saveInputAnswer() {
-        if let inputAnswer = inputAnswer {
-            UserDefaults.standard.set(inputAnswer, forKey: "AnswerKey")
-        } else {
-            // 선택된 버튼이 nil인 경우 UserDefaults에서 해당 키의 값을 제거
-            UserDefaults.standard.removeObject(forKey: "AnswerKey")
-        }
-    }
-    
-    func loadInputAnswer() -> String? {
-        return UserDefaults.standard.value(forKey: "AnswerKey") as? String
-    }
-    
-    private func updateInputItem(withContent content: String, inputAnswer: String) {
-        // 찾으려는 content와 일치하는 inputItem을 찾음
-        if let index = inputItems.index(forKey: content) {
-            inputItems.updateValue((inputAnswer, true), forKey: content)
-            
-            // 딕셔너리 확인
-            for (content, inputAnswer) in inputItems {
-                print("\(content): \(inputAnswer)")
-            }
-            saveInputAnswer()
-        }
-    }
-    
-    func configure(with questionDto: CheckListItem, at indexPath: IndexPath) {
-        let content = questionDto.question
-        contentLabel.text = content
-        contentLabel.textColor = UIColor(named: "500")
 
+    // 보기 모드
+    func viewModeConfigure(with questionDto: CheckListItem, with imjangId: Int, at indexPath: IndexPath) {
+        self.question = questionDto
+        self.imjangId = imjangId
+        contentLabel.text = questionDto.question
+        contentLabel.textColor = UIColor(named: "lightGray")
+        backgroundColor = UIColor(named: "gray0")
+        
+        // 보기 모드 설정
+        answerTextField.backgroundColor = UIColor(named: "shadowGray")
+        answerTextField.isEnabled = false
+    }
+      
+    // 수정 모드
+    func editModeConfigure(with questionDto: CheckListItem, with imjangId: Int, with answer: String, at indexPath: IndexPath) {
         // 입력한 내용이 있으면 표시
-        if let storedData = inputItems[content] {
+        if inputAnswer != "" {
             backgroundColor = UIColor(named: "lightOrange")
             questionImage.image = UIImage(named: "question-selected-image")
             
-            inputAnswer = storedData.inputAnswer
+            self.inputAnswer = answer
             answerTextField.text = inputAnswer
 
         } else {
             // 선택된 날짜가 없으면 표시 초기화
-            inputAnswer = nil
+            self.inputAnswer = nil
         }
     }
     
-    func savedConfigure(with questionDto: CheckListItem, at indexPath: IndexPath) {
-        let content = questionDto.question
-        contentLabel.text = content
+    func savedConfigure(with imjangId: Int, with answer: String, at indexPath: IndexPath) {
+        questionImage.image = UIImage(named: "question-selected-image")
+        contentLabel.textColor = UIColor(named: "500")
+        backgroundColor = .white
         
-        // 보기 모드 설정
-        backgroundColor = UIColor(named: "gray0")
-        contentLabel.textColor = UIColor(named: "lightGray")
-        answerTextField.backgroundColor = UIColor(named: "shadowGray")
-        answerTextField.isEnabled = false
-    }
-    
-    func removeInputItem(withContent content: String) {
-        // 선택한 질문에 해당하는 스코어 아이템을 찾아서 삭제
-        if let index = inputItems.index(forKey: content) {
-            inputItems.remove(at: index)
-        }
+        answerTextField.text = answer
+        answerTextField.backgroundColor = UIColor(named: "lightOrange")
     }
     
     func handleTextSelection(_ text: String) {
         inputAnswer = text
-        // 셀 UI 업데이트 등의 작업 수행
     }
-
 }
 
 extension ExpandedTextFieldTableViewCell: UITextFieldDelegate {
@@ -206,16 +180,14 @@ extension ExpandedTextFieldTableViewCell: UITextFieldDelegate {
             updateTextFieldWidthConstraint(for: textField, constant: calculatedWidth, shouldRemoveLeadingConstraint: true)
             textField.layoutIfNeeded()
             textField.contentHorizontalAlignment = .left
-            
-            // 답변 해당 InputItem에 저장
-            updateInputItem(withContent: contentLabel.text ?? "", inputAnswer: inputAnswer ?? "")
+            RealmManager.shared.saveChecklistItem(imjangId: imjangId!, questionId: question!.questionId, answer: inputAnswer ?? "", isSelected: true)
         } else {
             // 비어있는 경우 기존 너비로
             backgroundColor = .white
             questionImage.image = UIImage(named: "question-image")
             textField.backgroundColor = UIColor(named: "lightBackgroundOrange")
             updateTextFieldWidthConstraint(for: textField, constant: 342, shouldRemoveLeadingConstraint: false)
-            removeInputItem(withContent: contentLabel.text!)
+            RealmManager.shared.deleteChecklistItem(imjangId: imjangId!, questionId: question!.questionId)
         }
     }
 

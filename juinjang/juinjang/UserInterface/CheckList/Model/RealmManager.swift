@@ -64,8 +64,28 @@ class RealmManager {
     }
 
     // 특정 임장 ID에 대한 모든 체크리스트 항목의 답변값 조회
-    func getAllChecklistItems(for imjangId: Int) -> Results<CheckListAnswer> {
-        return realm.objects(CheckListAnswer.self)
+    func getAllChecklistItems(for imjangId: Int) -> [CheckListAnswer] {
+        let results = realm.objects(CheckListAnswer.self)
                     .filter("imjangId == %@", imjangId)
+        let array: [CheckListAnswer] = results.map { $0 }
+        return array
+    }
+    
+    // 체크리스트 항목의 답변값 삭제
+    func deleteChecklistItem(imjangId: Int, questionId: Int) {
+        if let itemToDelete = realm.objects(CheckListAnswer.self)
+                                  .filter("imjangId == %@ AND questionId == %@", imjangId, questionId)
+                                  .first {
+            do {
+                try realm.write {
+                    realm.delete(itemToDelete)
+                    print("삭제")
+                }
+            } catch {
+                print("Failed to delete checklist item: \(error.localizedDescription)")
+            }
+        } else {
+            print("Checklist item not found for deletion")
+        }
     }
 }
