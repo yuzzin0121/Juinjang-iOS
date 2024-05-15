@@ -102,6 +102,7 @@ class CheckListViewController: UIViewController, ChecklistItemCellDelegate {
             } else {
                 print("CheckListItem이 이미 존재합니다.")
             }
+            mappingOption()
             print(Realm.Configuration.defaultConfiguration.fileURL!)
         } catch let error as NSError {
             print("DB 추가 실패: \(error.localizedDescription)")
@@ -221,6 +222,8 @@ class CheckListViewController: UIViewController, ChecklistItemCellDelegate {
 //                    checkListItems.append(parameter)
 //                }
 //            }
+            
+            let checkListItems = RealmManager.shared.getAllChecklistItems(for: imjangId)
             
             print("----- 체크리스트 저장할 항목 -----")
             print(checkListItems)
@@ -409,15 +412,21 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                     // SelectionItem
                     let cell: ExpandedDropdownTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedDropdownTableViewCell.identifier, for: indexPath) as! ExpandedDropdownTableViewCell
 
-                    // 데이터 모델에서 저장된 값으로 셀 구성
+                    cell.editModeConfigure(with: questionDto, with: imjangId ?? 0, at: indexPath)
+                    
                     let questionId = category.checkListitem[indexPath.row - 1].questionId
                     for saveItem in savedCheckListItems {
                         if questionId == saveItem.questionId {
-                            cell.configure(with: questionDto, with: imjangId ?? 0, selectedOption: saveItem.answer, at: indexPath)
+                            if let optionsForQuestion = questionOptions[questionId] {
+                                cell.savedViewModeConfigure(with: saveItem.imjangId, with: saveItem.answer, with: optionsForQuestion, at: indexPath)
+                            } else {
+                                print("해당 질문에 대한 옵션이 없습니다.")
+                            }
                         }
                     }
 
                     cell.itemButton.isUserInteractionEnabled = true
+                    cell.itemPickerView.isUserInteractionEnabled = true
                     
                     return cell
                 case 2:
@@ -440,10 +449,12 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                     // CalendarItem
                     let cell: ExpandedCalendarTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedCalendarTableViewCell.identifier, for: indexPath) as! ExpandedCalendarTableViewCell
 
+                    cell.editModeConfigure(with: questionDto, with: imjangId ?? 0, at: indexPath)
+                    
                     let questionId = category.checkListitem[indexPath.row - 1].questionId
                     for saveItem in savedCheckListItems {
                         if questionId == saveItem.questionId {
-                            cell.configure(with: questionDto, with: imjangId ?? 0, date: saveItem.answer, at: indexPath)
+                            cell.savedEditModeConfigure(with: saveItem.imjangId, with: saveItem.answer, at: indexPath)
                         }
                     }
                     
@@ -456,6 +467,30 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
             if indexPath.section == 0 && !isEditMode {
                 // 기한 카테고리 섹션 셀 (NotEnteredCalendarTableViewCell)
                 let cell: NotEnteredCalendarTableViewCell = tableView.dequeueReusableCell(withIdentifier: NotEnteredCalendarTableViewCell.identifier, for: indexPath) as! NotEnteredCalendarTableViewCell
+                
+                cell.viewModeConfigure(at: indexPath)
+                if version == 0 {
+                    for saveItem in savedCheckListItems {
+                        var date: [(Int, String)] = [(1, ""), (2, "")]
+                        if saveItem.questionId == 1 {
+                            date[0].1 = saveItem.answer
+                        } else if saveItem.questionId == 2 {
+                            date[1].1 = saveItem.answer
+                        }
+                        cell.savedViewModeConfigure(with: saveItem.imjangId, with: date, at: indexPath)
+                    }
+                } else if version == 1 {
+                    for saveItem in savedCheckListItems {
+                        var date: [(Int, String)] = [(59, ""), (60, "")]
+                        if saveItem.questionId == 59 {
+                            date[0].1 = saveItem.answer
+                        } else if saveItem.questionId == 60 {
+                            date[1].1 = saveItem.answer
+                        }
+                        cell.savedViewModeConfigure(with: saveItem.imjangId, with: date, at: indexPath)
+                    }
+                }
+                
                 return cell
             } else {
                 // 나머지 섹션 셀
@@ -472,7 +507,6 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                     
                     return cell
                 } else {
-//                    let category = checkListCategories[indexPath.section - 1]
                     let questionDto = category.checkListitem[indexPath.row - 1]
                     
                     switch questionDto.answerType {
@@ -493,21 +527,20 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                         // SelectionItem
                         let cell: ExpandedDropdownTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedDropdownTableViewCell.identifier, for: indexPath) as! ExpandedDropdownTableViewCell
                         
+                        cell.viewModeConfigure(with: questionDto, with: imjangId ?? 0, at: indexPath)
+                        
                         let questionId = category.checkListitem[indexPath.row - 1].questionId
                         for saveItem in savedCheckListItems {
                             if questionId == saveItem.questionId {
-                                cell.savedConfigure(with: questionDto, with: saveItem.imjangId, with: saveItem.answer, at: indexPath)
-                                cell.itemPickerView.isUserInteractionEnabled = false
+                                if let optionsForQuestion = questionOptions[questionId] {
+                                    // 해당 질문에 대한 옵션을 사용하여 작업 수행
+                                    cell.savedViewModeConfigure(with: saveItem.imjangId, with: saveItem.answer, with: optionsForQuestion, at: indexPath)
+                                } else {
+                                    // 해당 질문에 대한 옵션이 없을 경우 처리
+                                    print("해당 질문에 대한 옵션이 없습니다.")
+                                }
                             }
                         }
-                        
-//                        for item in savedSelectionItems {
-//                            if item.key == questionDto.question {
-//                                cell.backgroundColor = .white
-//                                cell.contentLabel.textColor = UIColor(named: "500")
-//                                cell.itemPickerView.selectRow(Int(item.value.option) ?? 0, inComponent: 0, animated: true)
-//                            }
-//                        }
                         return cell
                     case 2:
                         // InputItem
@@ -525,6 +558,7 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                     case 3:
                         // CalendarItem
                         let cell: ExpandedCalendarTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedCalendarTableViewCell.identifier, for: indexPath) as! ExpandedCalendarTableViewCell
+                        
                         return cell
                     default:
                         fatalError("찾을 수 없는 답변 형태: \(questionDto.answerType)")

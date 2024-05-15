@@ -37,9 +37,6 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
         questionImage.image = UIImage(named: "question-image")
     }
     
-    // 선택된 날짜를 외부로 전달하는 콜백 클로저
-    var selectionHandler: ((Date) -> Void)?
-    
     lazy var questionImage = UIImageView().then {
         $0.contentMode = .scaleAspectFit
         $0.image = UIImage(named: "question-image")
@@ -203,57 +200,42 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
         currentPage = calendarCurrent.date(byAdding: dateComponents, to: currentPage ?? today)
         calendar.setCurrentPage(currentPage!, animated: true)
     }
-    
-    func configure(with questionDto: CheckListItem, with imjangId: Int, date: String, at indexPath: IndexPath) {
+      
+    // 수정 모드
+    func editModeConfigure(with questionDto: CheckListItem, with imjangId: Int, at indexPath: IndexPath) {
         self.question = questionDto
         self.imjangId = imjangId
-        
-        let content = questionDto.question
-        contentLabel.text = content
+        contentLabel.text = questionDto.question
         contentLabel.textColor = UIColor(named: "500")
-
-        // 선택된 날짜가 있으면 표시
-        if date != "" {
-            // 저장된 날짜 문자열이 존재할 때만 실행
-            backgroundColor = UIColor(named: "lightOrange")
-            questionImage.image = UIImage(named: "question-selected-image")
-            
-            // 현재 indexPath에 해당하는 질문 데이터 가져오기
-            let cellContent = questionDto.question
-            
-            if content == cellContent {
-                // 날짜 포맷에 맞는 DateFormatter 생성
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyyMMdd" // 저장된 날짜 문자열의 포맷에 맞게 설정
-                dateFormatter.timeZone = TimeZone(abbreviation: "UTC") // UTC TimeZone 설정
-                
-                // 날짜 문자열을 Date로 변환
-                if let date = dateFormatter.date(from: date) {
-                    print("Date from stored date string:", date)
-                    selectedDate = date
-                    
-                    // 변환된 날짜를 사용하여 셀 업데이트
-                    if let position = monthPosition, let selectedCell = calendar.cell(for: date, at: position) {
-                        selectedCell.layer.cornerRadius = 9.97
-                        selectedCell.layer.borderWidth = 1.5
-                        selectedCell.layer.borderColor = UIColor(named: "mainOrange")?.cgColor
-                    } else {
-                        selectedDate = nil
-                    }
-                } else {
-                    // 날짜 포맷이 맞지 않는 경우
-                    print("Invalid date format for stored date string:", date)
-                    selectedDate = nil
-                }
+        backgroundColor = .white
+        
+        selectedDate = nil
+    }
+    
+    // 수정 모드일 때 저장된 값이 있는 경우
+    func savedEditModeConfigure(with imjangId: Int, with answer: String, at indexPath: IndexPath) {
+        questionImage.image = UIImage(named: "question-selected-image")
+        contentLabel.textColor = UIColor(named: "500")
+        backgroundColor = UIColor(named: "lightOrange")
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyyMMdd" // 저장된 날짜 문자열의 포맷에 맞게 설정
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC") // UTC TimeZone 설정
+        
+        // 날짜 문자열을 Date로 변환
+        if let date = dateFormatter.date(from: answer) {
+            print("Date from stored date string:", date)
+            selectedDate = date
+            calendar.select(date)
+            // 변환된 날짜 적용
+            if let selectedCell = calendar.cell(for: date, at: .current) {
+                print("도ㅑ?")
+                selectedCell.layer.cornerRadius = 9.97
+                selectedCell.layer.borderWidth = 1.5
+                selectedCell.layer.borderColor = UIColor(named: "mainOrange")?.cgColor
             } else {
-                // content와 셀의 데이터가 일치하지 않는 경우
-                print("Content does not match cell data.")
                 selectedDate = nil
             }
-        } else {
-            // 저장된 날짜가 없는 경우
-            print("No stored date for content:", content)
-            selectedDate = nil
         }
     }
     
