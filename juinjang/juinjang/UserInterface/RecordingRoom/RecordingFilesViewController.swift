@@ -7,11 +7,9 @@
 
 import UIKit
 import AVFoundation
+var recordings: [Recording] = []
 
 class RecordingFilesViewController: UIViewController {
-   
-    var recordings: [Recording] = []
-    
     // 스크롤뷰
     let scrollView = UIScrollView().then {
         $0.backgroundColor = .white
@@ -73,9 +71,9 @@ class RecordingFilesViewController: UIViewController {
     }
     
     @objc func back(_ sender: Any) {
-        let vc = ImjangNoteViewController()
-        navigationController?.pushViewController(vc, animated: true)
-       // navigationController?.popViewController(animated: true)
+//        let vc = ImjangNoteViewController()
+//        navigationController?.pushViewController(vc, animated: true)
+        navigationController?.popViewController(animated: true)
     }
     
     @objc func startRecording(_ sender: Any) {
@@ -169,7 +167,7 @@ class RecordingFilesViewController: UIViewController {
         }
         deletePopupVC.fileName = recordings[indexPath.row].title
         deletePopupVC.completionHandler = { [weak self] indexPath in
-            self?.recordings.remove(at: indexPath.row)
+            recordings.remove(at: indexPath.row)
             self?.recordingFileTableView.deleteRows(at: [indexPath], with: .fade)
         }
         present(deletePopupVC, animated: true)
@@ -186,7 +184,7 @@ class RecordingFilesViewController: UIViewController {
     }
 }
 
-extension RecordingFilesViewController: UITableViewDelegate, UITableViewDataSource {
+extension RecordingFilesViewController: UITableViewDelegate, UITableViewDataSource, PlayRecordViewControllerDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         //return fileItems.count
@@ -200,9 +198,7 @@ extension RecordingFilesViewController: UITableViewDelegate, UITableViewDataSour
         playVC.bottomViewController.audioFile = recording.fileURL
         playVC.bottomViewController.initPlay1()
         cell.selectionStyle = .none
-        //cell.setData(fileItem: fileURLs[indexPath.row])
         cell.setData(fileTitle: "\(recording.title)", time: "\(playVC.bottomViewController.remainingTimeLabel.text ?? "0:00")", date: recordTime)
-        //cell.recordingFileNameLabel.text = fileURLs[indexPath.row].lastPathComponent
         return cell
     }
     
@@ -214,7 +210,7 @@ extension RecordingFilesViewController: UITableViewDelegate, UITableViewDataSour
         let playVC = PlayRecordViewController()
         playVC.bottomViewController.audioFile = recordings[indexPath.row].fileURL
         playVC.bottomViewController.titleTextField.text = recordings[indexPath.row].title
-        
+        playVC.bottomViewController.recordingIndexPath = indexPath
         vc.transitionToViewController(playVC)
         
         // 새로운 뷰 컨트롤러를 present 합니다.
@@ -235,5 +231,8 @@ extension RecordingFilesViewController: UITableViewDelegate, UITableViewDataSour
         deleteAction.backgroundColor = UIColor(named: "mainOrange")
         let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
         return configuration
+    }
+    func playRecordViewControllerDidDismiss(_ controller: PlayRecordViewController) {
+        recordingFileTableView.reloadData()
     }
 }

@@ -68,7 +68,7 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
 
     //var fileItems: [RecordingFileItem] = []
     //var fileURLs : [URL] = []
-    var recordings : [Recording] = []
+    //var recordings : [Recording] = []
     
     var imjangId: Int? = nil {
         didSet {

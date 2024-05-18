@@ -32,7 +32,7 @@ class OpenNewPage2ViewController: UIViewController, WarningMessageDelegate {
         ]
         
         print(parameters)
-        print("토큰값: \(userAccessToken)")
+        print("토큰값: \(UserDefaultManager.shared.accessToken)")
         
         let header : HTTPHeaders = ["Content-Type": "application/json", "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"]
         AF.request(url,
@@ -93,9 +93,9 @@ class OpenNewPage2ViewController: UIViewController, WarningMessageDelegate {
         ]
         
         print(parameters)
-        print("토큰값: \(userAccessToken)")
+        print("토큰값: \(UserDefaultManager.shared.accessToken)")
         
-        let header : HTTPHeaders = ["Content-Type": "application/json", "Authorization": "Bearer \(userAccessToken)"]
+        let header : HTTPHeaders = ["Content-Type": "application/json", "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"]
         let dataRequest = AF.request(url,
                                      method: .post,
                                      parameters: parameters,
@@ -116,7 +116,7 @@ class OpenNewPage2ViewController: UIViewController, WarningMessageDelegate {
                     print("Response data: \(responseString)")
                 }
             case .failure(let error):
-                print("Error: \(error)")
+                print("error: \(error)")
                 
             }
         }

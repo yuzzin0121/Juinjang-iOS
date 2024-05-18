@@ -18,7 +18,7 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
     
     weak var bottomSheetViewController: BottomSheetViewController?
     //var fileURLs : [URL] = []
-    var recordings: [Recording] = []
+    //var recordings: [Recording] = []
     
     var audioFile : URL! // 재생할 오디오의 파일명 변수
     var audioRecorder : AVAudioRecorder!

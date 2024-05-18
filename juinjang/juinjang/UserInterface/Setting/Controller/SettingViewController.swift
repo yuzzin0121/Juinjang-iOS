@@ -10,6 +10,20 @@ import Then
 import SnapKit
 import Alamofire
 
+struct YourResponseModel: Codable {
+    let isSuccess: Bool
+    let code: String
+    let message: String
+    let result: ResultModel?
+}
+
+struct ResultModel: Codable {
+    let nickname: String
+    let email: String
+    let provider: String
+    let image: String
+}
+
 class SettingViewController : UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     static let id = "SettingViewController"
@@ -161,7 +175,7 @@ class SettingViewController : UIViewController, UIImagePickerControllerDelegate,
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             profileImageView.image = pickedImage
-            uploadImage(pickedImage)
+            uploadImage(profileImageView.image!)
         }
         picker.dismiss(animated: true, completion: nil)
     }
