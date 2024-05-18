@@ -11,6 +11,8 @@ import FSCalendar
 
 class ExpandedCalendarTableViewCell: UITableViewCell {
     
+    var dateSelectionHandler: ((String) -> Void)?
+    
     var selectedDate: Date?
     var monthPosition: FSCalendarMonthPosition?
     var question: CheckListItem?
@@ -227,9 +229,7 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
             print("Date from stored date string:", date)
             selectedDate = date
             calendar.select(date)
-            // 변환된 날짜 적용
             if let selectedCell = calendar.cell(for: date, at: .current) {
-                print("도ㅑ?")
                 selectedCell.layer.cornerRadius = 9.97
                 selectedCell.layer.borderWidth = 1.5
                 selectedCell.layer.borderColor = UIColor(named: "mainOrange")?.cgColor
@@ -239,8 +239,8 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
         }
     }
     
-    func handleDateSelection(_ date: Date) {
-        selectedDate = date
+    func handleDateSelection(_ date: String) {
+        dateSelectionHandler?(date)
     }
 }
 
@@ -255,8 +255,6 @@ extension ExpandedCalendarTableViewCell: FSCalendarDelegate, FSCalendarDataSourc
         if let currentSelectedDate = selectedDate, currentSelectedDate == date {
             calendar.deselect(date)
             selectedDate = nil
-            RealmManager.shared.deleteChecklistItem(imjangId: imjangId!, questionId: question!.questionId)
-            
             // 선택 해제할 경우 테두리 제거
             if let selectedCell = calendar.cell(for: date, at: monthPosition) as? FSCalendarCell {
                 selectedCell.layer.borderWidth = 0.0
@@ -300,17 +298,9 @@ extension ExpandedCalendarTableViewCell: FSCalendarDelegate, FSCalendarDataSourc
         if let selectedDateNoon = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: date)?.addingTimeInterval(TimeInterval(NSTimeZone.system.secondsFromGMT())) {
             print("Selected Date (after adjustment): \(selectedDateNoon)")
             
-            // 현재 선택된 날짜 업데이트
-            selectedDate = selectedDateNoon
-            
-            // 선택된 날짜를 해당 CalendarItem에 저장
-            RealmManager.shared.saveChecklistItem(imjangId: imjangId!, questionId: question!.questionId, answer: dateFormatter.string(from: date), isSelected: true)
+            handleDateSelection(dateFormatter.string(from: date))
         }
-        // 현재 선택된 날짜 업데이트
         selectedDate = date
-        
-        // delegate에게 선택된 날짜를 전달
-//        delegate?.didSelectDate(date, inCell: self, at: indexPath)
     }
     
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {

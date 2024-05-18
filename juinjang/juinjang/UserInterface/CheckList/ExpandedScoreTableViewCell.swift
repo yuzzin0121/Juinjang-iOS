@@ -10,6 +10,8 @@ import SnapKit
 
 class ExpandedScoreTableViewCell: UITableViewCell {
     
+    var scoreSelectionHandler: ((String) -> Void)?
+    
     var selectedScore: String?
     var question: CheckListItem?
     var imjangId: Int?
@@ -103,7 +105,7 @@ class ExpandedScoreTableViewCell: UITableViewCell {
     }
     
     func handleScoreSelection(_ score: String) {
-        selectedScore = score
+        scoreSelectionHandler?(score)
     }
     
     @objc func buttonPressed(_ sender: UIButton) {
@@ -114,7 +116,7 @@ class ExpandedScoreTableViewCell: UITableViewCell {
             if button != sender {
                 button.isSelected = false
                 button.setImage(UIImage(named: "answer\(button.tag)"), for: .normal)
-                RealmManager.shared.deleteChecklistItem(imjangId: imjangId!, questionId: question!.questionId)
+                handleScoreSelection(String(sender.tag))
             }
         }
 
@@ -129,12 +131,12 @@ class ExpandedScoreTableViewCell: UITableViewCell {
                     button.setImage(UIImage(named: "checklist-completed-button"), for: .normal)
                 }
             }
-            RealmManager.shared.saveChecklistItem(imjangId: imjangId!, questionId: question!.questionId, answer: String(sender.tag), isSelected: true)
+            handleScoreSelection(String(sender.tag))
         } else {
             sender.setImage(UIImage(named: "answer\(sender.tag)"), for: .normal)
             backgroundColor = .white
             questionImage.image = UIImage(named: "question-image")
-            RealmManager.shared.deleteChecklistItem(imjangId: imjangId!, questionId: question!.questionId)
+            handleScoreSelection(String(sender.tag))
         }
         
         // 선택된 버튼의 정보를 저장

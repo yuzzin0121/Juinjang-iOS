@@ -10,6 +10,8 @@ import SnapKit
 
 class ExpandedTextFieldTableViewCell: UITableViewCell {
     
+    var textSelectionHandler: ((String) -> Void)?
+    
     var inputAnswer: String?
     var question: CheckListItem?
     var imjangId: Int?
@@ -154,7 +156,7 @@ class ExpandedTextFieldTableViewCell: UITableViewCell {
     }
     
     func handleTextSelection(_ text: String) {
-        inputAnswer = text
+        textSelectionHandler?(text)
     }
 }
 
@@ -197,14 +199,14 @@ extension ExpandedTextFieldTableViewCell: UITextFieldDelegate {
             updateTextFieldWidthConstraint(for: textField, constant: calculatedWidth, shouldRemoveLeadingConstraint: true)
             textField.layoutIfNeeded()
             textField.contentHorizontalAlignment = .left
-            RealmManager.shared.saveChecklistItem(imjangId: imjangId!, questionId: question!.questionId, answer: inputAnswer ?? "", isSelected: true)
+            handleTextSelection(inputAnswer ?? "")
         } else {
             // 비어있는 경우 기존 너비로
             backgroundColor = .white
             questionImage.image = UIImage(named: "question-image")
             textField.backgroundColor = UIColor(named: "lightBackgroundOrange")
             updateTextFieldWidthConstraint(for: textField, constant: 342, shouldRemoveLeadingConstraint: false)
-            RealmManager.shared.deleteChecklistItem(imjangId: imjangId!, questionId: question!.questionId)
+            handleTextSelection(inputAnswer ?? "")
         }
     }
 

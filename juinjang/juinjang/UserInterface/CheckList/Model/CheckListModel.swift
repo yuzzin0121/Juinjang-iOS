@@ -54,13 +54,6 @@ class Option: Object {
     }
 }
 
-enum ChecklistItemType {
-    case calendar
-    case textField
-    case dropdown
-    case score
-}
-
 func addOptionData() {
     for item in items {
         if item.questionId == 4 {

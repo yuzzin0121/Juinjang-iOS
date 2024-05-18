@@ -9,6 +9,9 @@ import UIKit
 import SnapKit
 
 class ExpandedDropdownTableViewCell: UITableViewCell {
+    
+    var optionSelectionHandler: ((String) -> Void)?
+    
     var selectedOption: String?
     var categories: [CheckListResponseDto]!
     var question: CheckListItem?
@@ -304,7 +307,7 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
     }
     
     func handleOptionSelection(_ optionIndex: String) {
-        selectedOption = optionIndex
+        optionSelectionHandler?(optionIndex)
     }
 }
 
@@ -356,17 +359,18 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
             questionImage.image = UIImage(named: "question-image")
             itemButton.layer.backgroundColor = UIColor(named: "shadowGray")?.cgColor
             setBasicInset()
-            RealmManager.shared.deleteChecklistItem(imjangId: imjangId!, questionId: question!.questionId)
+            handleOptionSelection(String(row))
         } else {
             backgroundColor = UIColor(named: "lightOrange")
             questionImage.image = UIImage(named: "question-selected-image")
-            RealmManager.shared.saveChecklistItem(imjangId: imjangId!, questionId: question!.questionId, answer: String(row), isSelected: true)
+            
+            handleOptionSelection(String(row))
         }
         
         if options[row].option == "기타" {
             backgroundColor = .white
             questionImage.image = UIImage(named: "question-image")
-            RealmManager.shared.saveChecklistItem(imjangId: imjangId!, questionId: question!.questionId, answer: String(etcTextField.text ?? ""), isSelected: true)
+            handleOptionSelection(String(etcTextField.text ?? ""))
         }
     }
     
