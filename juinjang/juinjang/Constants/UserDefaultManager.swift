@@ -5,6 +5,7 @@
 //  Created by 조유진 on 1/27/24.
 //
 import Foundation
+import UIKit
 
 class UserDefaultManager {
     static let shared = UserDefaultManager()
@@ -18,6 +19,7 @@ class UserDefaultManager {
         case nickname
         case userStatus
         case email
+        case profileImage
     }
     
     let ud = UserDefaults.standard
@@ -50,6 +52,22 @@ class UserDefaultManager {
     var email: String {
         get { ud.string(forKey: UDKey.email.rawValue) ?? "" }
         set { ud.set(newValue, forKey: UDKey.email.rawValue) }
+    }
+    
+    var profileImage: UIImage? {
+        get {
+            if let imageData = ud.data(forKey: UDKey.profileImage.rawValue) {
+                return UIImage(data: imageData)
+            }
+            return nil
+        }
+        set {
+            if let image = newValue, let imageData = image.pngData() {
+                ud.set(imageData, forKey: UDKey.profileImage.rawValue)
+            } else {
+                ud.removeObject(forKey: UDKey.profileImage.rawValue)
+            }
+        }
     }
 }
 

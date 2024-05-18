@@ -18,7 +18,7 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
     
     weak var bottomSheetViewController: BottomSheetViewController?
     //var fileURLs : [URL] = []
-    //var recordings: [Recording] = []
+    //var recording: [Recording] = []
     
     var audioFile : URL! // 재생할 오디오의 파일명 변수
     var audioRecorder : AVAudioRecorder!
@@ -114,12 +114,23 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
     }
     func loadRecordings() {
        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+//        let existingRecordingsDict = Dictionary(uniqueKeysWithValues: recordings.map { ($0.fileURL, $0.title) })
+//
+//            do {
+//                let recordingURLs = try FileManager.default.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil, options: [])
+//                recordings = recordingURLs.filter { $0.pathExtension == "m4a" }.map { url in
+//                    let title = existingRecordingsDict[url] ?? url.lastPathComponent
+//                    return Recording(title: title, fileURL: url)
+//                    print("load success")
+//                }
+//            } catch {
+//                print("Error loading recordings: \(error)")
+//            }
        do {
            // 문서 디렉토리에서 녹음 파일들을 가져옴
            let recordingURLs = try FileManager.default.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil, options: [])
            // 녹음 파일 목록에 추가
            recordings = recordingURLs.filter { $0.pathExtension == "m4a" }.map {Recording(title: $0.lastPathComponent, fileURL: $0)} // .m4a 확장자를 가진 파일만 필터링
-           //RecordingRoomViewController().recordingFileTableView.reloadData()
        } catch {
            print("Failed to load recordings: \(error)")
        }
@@ -138,11 +149,11 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
             AVEncoderBitRateKey : 320000,
             AVNumberOfChannelsKey : 2,
             AVSampleRateKey : 44100.0] as [String : Any]
-            do {
-                audioRecorder = try AVAudioRecorder(url: audioFile, settings: recordSettings)
-            } catch let error as NSError {
-                print("Error-initRecord : \(error)")
-            }
+        do {
+            audioRecorder = try AVAudioRecorder(url: audioFile, settings: recordSettings)
+        } catch let error as NSError {
+            print("Error-initRecord : \(error)")
+        }
         
         audioRecorder.delegate = self
         audioRecorder.isMeteringEnabled = true
@@ -197,8 +208,6 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
         } else {
             print("Recording failed")
         }
-        
-        
     }
     
     func updateEndTimeLabel() {
