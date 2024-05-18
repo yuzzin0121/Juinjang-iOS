@@ -77,7 +77,7 @@ class CompareViewController : UIViewController {
     
     var insideRateLabel1 = UILabel().then {
         let text1 = NSTextAttachment()
-        text1.image = UIImage(named: "compareStar")
+        text1.image = UIImage(named: "grayStar")
         let text2 = " " + "4.5"
         let text3 = NSMutableAttributedString(string: "")
         text3.append(NSAttributedString(attachment: text1))
@@ -89,7 +89,7 @@ class CompareViewController : UIViewController {
     }
     var insideRateLabel2 = UILabel().then {
         let text1 = NSTextAttachment()
-        text1.image = UIImage(named: "compareStar")
+        text1.image = UIImage(named: "grayStar")
         let text2 = " " + "4.5"
         let text3 = NSMutableAttributedString(string: "")
         text3.append(NSAttributedString(attachment: text1))
@@ -114,7 +114,7 @@ class CompareViewController : UIViewController {
     }
     var publicSpaceRateLabel1 = UILabel().then {
         let text1 = NSTextAttachment()
-        text1.image = UIImage(named: "compareStar")
+        text1.image = UIImage(named: "grayStar")
         let text2 = " " + "4.5"
         let text3 = NSMutableAttributedString(string: "")
         text3.append(NSAttributedString(attachment: text1))
@@ -126,7 +126,7 @@ class CompareViewController : UIViewController {
     }
     var publicSpaceRateLabel2 = UILabel().then {
         let text1 = NSTextAttachment()
-        text1.image = UIImage(named: "compareStar")
+        text1.image = UIImage(named: "grayStar")
         let text2 = " " + "4.5"
         let text3 = NSMutableAttributedString(string: "")
         text3.append(NSAttributedString(attachment: text1))
@@ -145,7 +145,7 @@ class CompareViewController : UIViewController {
     }
     var locationConditionRateLabel1 = UILabel().then {
         let text1 = NSTextAttachment()
-        text1.image = UIImage(named: "compareStar")
+        text1.image = UIImage(named: "grayStar")
         let text2 = " " + "4.5"
         let text3 = NSMutableAttributedString(string: "")
         text3.append(NSAttributedString(attachment: text1))
@@ -163,7 +163,7 @@ class CompareViewController : UIViewController {
     }
     var locationConditionRateLabel2 = UILabel().then {
         let text1 = NSTextAttachment()
-        text1.image = UIImage(named: "compareStar")
+        text1.image = UIImage(named: "grayStar")
         let text2 = " " + "4.5"
         let text3 = NSMutableAttributedString(string: "")
         text3.append(NSAttributedString(attachment: text1))
@@ -182,7 +182,7 @@ class CompareViewController : UIViewController {
     }
     var totalRateLabel1 = UILabel().then {
         let text1 = NSTextAttachment()
-        text1.image = UIImage(named: "compareStarColor")
+        text1.image = UIImage(named: "star")
         let text2 = " " + "4.5"
         let text3 = NSMutableAttributedString(string: "")
         text3.append(NSAttributedString(attachment: text1))
@@ -200,7 +200,7 @@ class CompareViewController : UIViewController {
     }
     var totalRateLabel2 = UILabel().then {
         let text1 = NSTextAttachment()
-        text1.image = UIImage(named: "compareStarColor")
+        text1.image = UIImage(named: "star")
         let text2 = " " + "4.5"
         let text3 = NSMutableAttributedString(string: "")
         text3.append(NSAttributedString(attachment: text1))
@@ -212,7 +212,7 @@ class CompareViewController : UIViewController {
     }
     
     var compareViewEmpty = UIButton().then {
-        $0.setBackgroundImage(UIImage(named: "비교매물"), for: .normal)
+        $0.setBackgroundImage(UIImage(named: "compare-empty"), for: .normal)
         $0.layer.cornerRadius = 10
         $0.translatesAutoresizingMaskIntoConstraints = false
     }

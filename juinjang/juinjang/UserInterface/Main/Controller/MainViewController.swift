@@ -4,6 +4,7 @@ import Then
 import Lottie
 import Alamofire
 struct RefreshTokenResponse: Decodable {
+    let isSuccess: Bool
     let code: String
     // 다른 필요한 속성들도 추가할 수 있습니다.
 }
@@ -146,13 +147,18 @@ class MainViewController: UIViewController {
                 do {
                     let decoder = JSONDecoder()
                     let refreshTokenResponse = try decoder.decode(RefreshTokenResponse.self, from: value)
-                    if refreshTokenResponse.code == "TOKEN402" {
-                        // "code"가 "TOKEN402"인 경우 로그아웃 함수 호출
-                        let settingViewController = SettingViewController()
-                        settingViewController.logout()
-                    }
+                    //if refreshTokenResponse.isSuccess == false {
+                        if refreshTokenResponse.code == "TOKEN402" || refreshTokenResponse.code == "COMMON500" || refreshTokenResponse.code == "TOKEN401"{
+                            // "code"가 "TOKEN402"인 경우 로그아웃 함수 호출
+                            let settingViewController = SettingViewController()
+                            settingViewController.logout()
+                        }
+//                        // isSuccess가 "false'인 경우
+//                        let vc = SignUpViewController()
+//                        self.navigationController?.pushViewController(vc, animated: false)
+//                    }
                 } catch {
-//                    print("Error decoding JSON: \(error)")
+                    print("Error decoding JSON: \(error)")
                 }
             case .failure(let error):
                 print("Error: \(error)")

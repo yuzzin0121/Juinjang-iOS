@@ -8,10 +8,9 @@
 import UIKit
 import AVFoundation
 
-
-
 class RecordingFilesViewController: UIViewController {
    
+    var recordings: [Recording] = []
     
     // 스크롤뷰
     let scrollView = UIScrollView().then {
@@ -32,7 +31,7 @@ class RecordingFilesViewController: UIViewController {
         $0.register(RecordingFileViewCell.self, forCellReuseIdentifier: RecordingFileViewCell.identifier)
     }
     
-    var fileURLs : [URL] = []
+    //var fileURLs : [URL] = []
     //var fileItems: [RecordingFileItem] = []
 
     override func viewDidLoad() {
@@ -84,7 +83,6 @@ class RecordingFilesViewController: UIViewController {
         bottomSheetViewController.modalPresentationStyle = .custom
 //        bottomSheetViewController.transitioningDelegate = self
         self.present(bottomSheetViewController, animated: false, completion: nil)
-        // TODO: - 녹음 파일 추가
     }
     
 //    func setItemData() {
@@ -110,8 +108,7 @@ class RecordingFilesViewController: UIViewController {
             let recordingURLs = try FileManager.default.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil, options: [])
            
            // 녹음 파일 목록에 추가
-            fileURLs = recordingURLs.filter { $0.pathExtension == "m4a" }.sorted(by: { $0.absoluteString > $1.absoluteString }) // .m4a 확장자를 가진 파일만 필터링
-           
+            recordings = recordingURLs.filter { $0.pathExtension == "m4a" }.map {Recording(title: $0.lastPathComponent, fileURL: $0)} //.sorted(by: { $0.absoluteString > $1.absoluteString }) // .m4a 확장자를 가진 파일만 필터링
         } catch {
             print("Failed to load recordings: \(error)")
         }
@@ -164,19 +161,20 @@ class RecordingFilesViewController: UIViewController {
         deletePopupVC.fileIndexPath = indexPath
         //deletePopupVC.fileName = fileItems[indexPath.row].name
         
-        let fileURL = self.fileURLs[indexPath.row]
+        let fileURL = recordings[indexPath.row].fileURL
         do {
             try FileManager.default.removeItem(at: fileURL)
         } catch {
             print("Error deleting file: \(error)")
         }
-        deletePopupVC.fileName = fileURLs[indexPath.row].lastPathComponent
+        deletePopupVC.fileName = recordings[indexPath.row].title
         deletePopupVC.completionHandler = { [weak self] indexPath in
-            self?.fileURLs.remove(at: indexPath.row)
+            self?.recordings.remove(at: indexPath.row)
             self?.recordingFileTableView.deleteRows(at: [indexPath], with: .fade)
         }
-        deletePopupVC.modalPresentationStyle = .overCurrentContext
         present(deletePopupVC, animated: true)
+        deletePopupVC.modalPresentationStyle = .overCurrentContext
+        
     }
     @objc func playButtonTapped(_ sender: UIButton) {
         // 버튼 이미지 변경
@@ -192,18 +190,18 @@ extension RecordingFilesViewController: UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         //return fileItems.count
-        return fileURLs.count
+        return recordings.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: RecordingFileViewCell.identifier, for: indexPath) as? RecordingFileViewCell else { return UITableViewCell() }
-        let recordingURL = fileURLs[indexPath.row]
+        let recording = recordings[indexPath.row]
         let playVC = PlayRecordViewController()
-        playVC.bottomViewController.audioFile = fileURLs[indexPath.row]
+        playVC.bottomViewController.audioFile = recording.fileURL
         playVC.bottomViewController.initPlay1()
         cell.selectionStyle = .none
         //cell.setData(fileItem: fileURLs[indexPath.row])
-        cell.setData(fileTitle: "\(fileURLs[indexPath.row].lastPathComponent)", time: "\(playVC.bottomViewController.remainingTimeLabel.text ?? "0:00")", date: recordTime)
+        cell.setData(fileTitle: "\(recording.title)", time: "\(playVC.bottomViewController.remainingTimeLabel.text ?? "0:00")", date: recordTime)
         //cell.recordingFileNameLabel.text = fileURLs[indexPath.row].lastPathComponent
         return cell
     }
@@ -214,8 +212,8 @@ extension RecordingFilesViewController: UITableViewDelegate, UITableViewDataSour
         vc.modalPresentationStyle = .custom
         
         let playVC = PlayRecordViewController()
-        playVC.bottomViewController.audioFile = fileURLs[indexPath.row]
-        playVC.bottomViewController.titleTextField.text = fileURLs[indexPath.row].lastPathComponent
+        playVC.bottomViewController.audioFile = recordings[indexPath.row].fileURL
+        playVC.bottomViewController.titleTextField.text = recordings[indexPath.row].title
         
         vc.transitionToViewController(playVC)
         

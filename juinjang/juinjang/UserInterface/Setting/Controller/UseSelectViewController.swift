@@ -14,19 +14,19 @@ class UseSelectViewController : UIViewController {
         $0.image = UIImage(named:"document-text")
     }
     var arrow1ImageView = UIImageView().then {
-        $0.image = UIImage(named:"Vector")
+        $0.image = UIImage(named:"arrow-right")
     }
     var use2ImageView = UIImageView().then {
         $0.image = UIImage(named:"document-text")
     }
     var arrow2ImageView = UIImageView().then {
-        $0.image = UIImage(named:"Vector")
+        $0.image = UIImage(named:"arrow-right")
     }
     var use3ImageView = UIImageView().then {
         $0.image = UIImage(named:"document-text")
     }
     var arrow3ImageView = UIImageView().then {
-        $0.image = UIImage(named:"Vector")
+        $0.image = UIImage(named:"arrow-right")
     }
     
     var use1Button = UIButton().then {

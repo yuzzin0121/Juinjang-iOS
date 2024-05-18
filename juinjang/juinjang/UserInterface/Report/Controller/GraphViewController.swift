@@ -23,7 +23,7 @@ class GraphViewController : UIViewController {
     }
     
     var noteImageView = UIImageView().then {
-        $0.image = UIImage(named:"노트점선")
+        $0.image = UIImage(named:"noteline")
     }
     
     var houseimageView = UIImageView().then {
@@ -37,7 +37,7 @@ class GraphViewController : UIViewController {
     }
     var rateLabel1 = UILabel().then {
         let text1 = NSTextAttachment()
-        text1.image = UIImage(named: "reportStar")
+        text1.image = UIImage(named: "grayStar")
         let text2 = " " + "4.5"
         let text3 = NSMutableAttributedString(string: "")
         text3.append(NSAttributedString(attachment: text1))
@@ -59,7 +59,7 @@ class GraphViewController : UIViewController {
     }
     var rateLabel2 = UILabel().then {
         let text1 = NSTextAttachment()
-        text1.image = UIImage(named: "reportStar")
+        text1.image = UIImage(named: "grayStar")
         let text2 = " " + "4.5"
         let text3 = NSMutableAttributedString(string: "")
         text3.append(NSAttributedString(attachment: text1))
@@ -81,7 +81,7 @@ class GraphViewController : UIViewController {
     }
     var rateLabel3 = UILabel().then {
         let text1 = NSTextAttachment()
-        text1.image = UIImage(named: "reportStar")
+        text1.image = UIImage(named: "grayStar")
         let text2 = " " + "4.5"
         let text3 = NSMutableAttributedString(string: "")
         text3.append(NSAttributedString(attachment: text1))

@@ -25,10 +25,10 @@ class Use3ViewController : UIViewController {
     }
     
     var useImageView = UIImageView().then {
-        $0.image = UIImage(named:"이용약관")
+        $0.image = UIImage(named:"document-text")
     }
     var arrowImageView = UIImageView().then {
-        $0.image = UIImage(named:"Vector")
+        $0.image = UIImage(named:"arrow-right")
     }
     var useButton = UIButton().then {
         $0.translatesAutoresizingMaskIntoConstraints = false

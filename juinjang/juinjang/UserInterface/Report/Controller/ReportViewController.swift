@@ -83,7 +83,7 @@ class ReportViewController : UIViewController {
         navigationItem.title = "주인장 리포트"
         
         //let shareButtonItem = UIBarButtonItem(image: UIImage(named: "share"), style: .plain, target: self, action: #selector(shareBtnTap))
-        let backButtonItem = UIBarButtonItem(image: UIImage(named:"leftArrow"), style: .plain, target: self, action: #selector(backBtnTap))
+        let backButtonItem = UIBarButtonItem(image: UIImage(named:"arrow-left"), style: .plain, target: self, action: #selector(backBtnTap))
         backButtonItem.tintColor = UIColor(named: "300")
         backButtonItem.imageInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
         
@@ -96,7 +96,8 @@ class ReportViewController : UIViewController {
         self.navigationItem.rightBarButtonItem = .none
     }
     @objc func backBtnTap() {
-        let mainVC = MainViewController()
+        //self.navigationController?.popViewController(animated: true)
+        let mainVC = ImjangNoteViewController()
         navigationController?.pushViewController(mainVC, animated: true)
     }
     @objc func shareBtnTap() {

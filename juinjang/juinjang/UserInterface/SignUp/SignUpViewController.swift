@@ -189,20 +189,26 @@ extension SignUpViewController {
                         print("Success: \(refreshToken)")
                         UserDefaultManager.shared.refreshToken = refreshToken
                         // accessToken을 사용하여 적절한 처리를 수행합니다.
-                    } else {
-                        print("Failed to parse accessToken")
-                        // accessToken을 파싱하는 데 실패한 경우에 대한 처리를 수행합니다.
-                    }
-                    if nickname == nil {
-                        let nextVC = ToSViewController()
-                        self.navigationController?.pushViewController(nextVC, animated: true)
-                    } else {
                         let nextVC = MainViewController()
                         self.navigationController?.pushViewController(nextVC, animated: true)
+                    } else {
+                        print("회원가입")
+                        if let json = value as? [String: Any],
+                           let code = json["code"] as? String, code == "MEMBER4001" {
+                            // MEMBER4001 에러 코드일 때 다른 화면으로 전환
+                            let nextVC = ToSViewController()
+                            self.navigationController?.pushViewController(nextVC, animated: true)
+                        } 
                     }
+//                    if nickname == nil {
+//                        let nextVC = ToSViewController()
+//                        self.navigationController?.pushViewController(nextVC, animated: true)
+//                    } else {
+//                        let nextVC = MainViewController()
+//                        self.navigationController?.pushViewController(nextVC, animated: true)
+//                    }
                 case .failure(let error):
                     print("Error: \(error)")
-                    // 요청이 실패한 경우 여기에 적절한 처리를 추가하세요.
                 }
         }
     }
