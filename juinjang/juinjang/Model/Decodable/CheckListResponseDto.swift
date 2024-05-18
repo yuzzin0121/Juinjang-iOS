@@ -9,13 +9,6 @@ struct CheckListResponseDto: Codable {
     let category: Int
     let questionDtos: [QuestionDto]
     var isExpanded: Bool?
-    
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.category = try container.decode(Int.self, forKey: .category)
-        self.questionDtos = try container.decode([QuestionDto].self, forKey: .questionDtos)
-        self.isExpanded = false
-    }
 }
 
 struct QuestionDto: Codable {
@@ -25,7 +18,7 @@ struct QuestionDto: Codable {
     let question: String
     let version: Int
     let answerType: Int // 0: 점수형 1: 선택형 2: 입력형 3: 달력
-    let options: [OptionDto]
+    let options: [OptionDto]?
     let answer: String?
 }
 

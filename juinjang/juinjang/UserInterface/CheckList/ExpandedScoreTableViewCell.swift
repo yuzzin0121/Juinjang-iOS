@@ -8,19 +8,10 @@
 import UIKit
 import SnapKit
 
-protocol ExpandedScoreCellDelegate: AnyObject {
-    func buttonTapped(at index: Int)
-}
-
 class ExpandedScoreTableViewCell: UITableViewCell {
     
-    var score: String? // 선택된 버튼의 값을 저장할 변수
-    var scoreItems: [String: (score: String?, isSelected: Bool)] = [:]
-    weak var delegate: ExpandedScoreCellDelegate?
-    var categories: [CheckListResponseDto]!
-    
-    // 선택된 점수를 외부로 전달하는 콜백 클로저
-    var selectionHandler: ((String) -> Void)?
+    var scoreSelectionHandler: ((String) -> Void)?
+    var selectedScore: String?
     
     lazy var questionImage = UIImageView().then {
         $0.contentMode = .scaleAspectFit
@@ -31,6 +22,8 @@ class ExpandedScoreTableViewCell: UITableViewCell {
         $0.font = .pretendard(size: 16, weight: .regular)
         $0.textColor = UIColor(named: "textBlack")
     }
+    
+    var scoreButtonStackView = UIStackView()
     
     lazy var answerButton1 = UIButton().then {
         $0.setImage(UIImage(named: "answer1"), for: .normal)
@@ -105,19 +98,11 @@ class ExpandedScoreTableViewCell: UITableViewCell {
         }
         
         // 점수 버튼 Stack View
-        let scoreButtonStackView = UIStackView(arrangedSubviews: [answerButton1, answerButton2, answerButton3, answerButton4, answerButton5])
-        
-        scoreButtonStackView.translatesAutoresizingMaskIntoConstraints = false
-        scoreButtonStackView.axis = .horizontal
-        scoreButtonStackView.spacing = 20
-        
-        addSubview(scoreButtonStackView)
-        
-        scoreButtonStackView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(51)
-//            $0.height.lessThanOrEqualTo(view.snp.height).multipliedBy(0.08)
-            $0.trailing.equalToSuperview().offset(-24)
-        }
+        setupStackView()
+    }
+    
+    func handleScoreSelection(_ score: String) {
+        scoreSelectionHandler?(score)
     }
     
     @objc func buttonPressed(_ sender: UIButton) {
@@ -128,114 +113,129 @@ class ExpandedScoreTableViewCell: UITableViewCell {
             if button != sender {
                 button.isSelected = false
                 button.setImage(UIImage(named: "answer\(button.tag)"), for: .normal)
+                handleScoreSelection(String(sender.tag))
             }
         }
 
         if sender.isSelected {
-            
-            // 현재 눌린 버튼을 선택된 상태로 변경
             sender.setImage(UIImage(named: "checked-button"), for: .normal)
-            // 셀의 배경색을 변경
             backgroundColor = UIColor(named: "lightOrange")
             questionImage.image = UIImage(named: "question-selected-image")
+            
             for button in [answerButton1, answerButton2, answerButton3, answerButton4, answerButton5] {
                 if button != sender {
                     button.isSelected = false
                     button.setImage(UIImage(named: "checklist-completed-button"), for: .normal)
                 }
             }
+            handleScoreSelection(String(sender.tag))
         } else {
             sender.setImage(UIImage(named: "answer\(sender.tag)"), for: .normal)
             backgroundColor = .white
             questionImage.image = UIImage(named: "question-image")
+            handleScoreSelection(String(sender.tag))
         }
         
         // 선택된 버튼의 정보를 저장
-        score = String(sender.tag)
+        selectedScore = String(sender.tag)
         
-        if let score = score {
+        if let score = selectedScore {
             print("Button Pressed: \(score)")
         } else {
             print("Button Pressed: No answer")
-        }
-        
-        // 외부로 선택된 점수 전달
-        selectionHandler?(score ?? String())
-        
-        // 선택된 점수를 해당 ScoreItem에 저장
-        updateScoreItem(withContent: contentLabel.text ?? "", score: String(sender.tag))
-    }
-    
-    func saveSelectedScore() {
-        print("score:", score)
-        if let score = score {
-            UserDefaults.standard.set(score, forKey: "SelectedScoreKey")
-            print("저장 성공")
-        } else {
-            // 선택된 버튼이 nil인 경우 UserDefaults에서 해당 키의 값을 제거
-            UserDefaults.standard.removeObject(forKey: "SelectedScoreKey")
-            print("저장 실패")
-        }
-    }
-    
-    func loadSelectedScore() -> String? {
-        print("loadSelectedScore 함수 호출")
-        if let selectedScore = UserDefaults.standard.value(forKey: "SelectedScoreKey") as? String {
-            print("값:", selectedScore)
-            return selectedScore
-        } else {
-            return nil
         }
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
         // 버튼 초기화
-        score = nil
+        selectedScore = nil
         
-        for button in [answerButton1, answerButton2, answerButton3, answerButton4, answerButton5] {
-                button.isSelected = false
-                button.setImage(UIImage(named: "answer\(button.tag)"), for: .normal)
-        }
+        // 기존 스택 뷰 제거
+        scoreButtonStackView.removeFromSuperview()
+        
+        // 새로운 스택 뷰 생성 및 설정
+        scoreButtonStackView = UIStackView()
+        setupStackView()
         
         // 배경색 초기화
         backgroundColor = .white
+        questionImage.image = UIImage(named: "question-image")
     }
     
-    private func updateScoreItem(withContent content: String, score: String) {
-        // 찾으려는 content와 일치하는 ScoreItem을 찾음
-        if let index = scoreItems.index(forKey: content) {
-            scoreItems.updateValue((score, true), forKey: content)
-            
-            // 딕셔너리 확인
-            for (content, score) in scoreItems {
-                print("\(content): \(score)")
-            }
-            saveSelectedScore()
+    func setupStackView() {
+        scoreButtonStackView.translatesAutoresizingMaskIntoConstraints = false
+        scoreButtonStackView.axis = .horizontal
+        scoreButtonStackView.spacing = 20
+        
+        [answerButton1,
+         answerButton2,
+         answerButton3,
+         answerButton4,
+         answerButton5].forEach( { scoreButtonStackView.addArrangedSubview($0) } )
+        
+        addSubview(scoreButtonStackView)
+        
+        scoreButtonStackView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(51)
+//            $0.height.lessThanOrEqualTo(view.snp.height).multipliedBy(0.08)
+            $0.trailing.equalToSuperview().offset(-24)
+        }
+    }
+
+    // 보기 모드
+    func viewModeConfigure(with questionDto: CheckListItem, at indexPath: IndexPath) {
+        contentLabel.text = questionDto.question
+        contentLabel.textColor = UIColor(named: "lightGray")
+        backgroundColor = UIColor(named: "gray0")
+        
+        // 보기 모드 설정
+        for button in [answerButton1, answerButton2, answerButton3, answerButton4, answerButton5] {
+            button.isEnabled = false
+            button.setImage(UIImage(named: "saved-button2"), for: .normal)
+        }
+    }
+      
+    // 수정 모드
+    func editModeConfigure(with questionDto: CheckListItem, at indexPath: IndexPath) {
+        contentLabel.text = questionDto.question
+        contentLabel.textColor = UIColor(named: "500")
+        backgroundColor = .white
+        
+        for button in [answerButton1, answerButton2, answerButton3, answerButton4, answerButton5] {
+            button.isSelected = false
+            button.setImage(UIImage(named: "checklist-completed-button"), for: .normal)
         }
     }
     
-    func configure(with questionDto: CheckListItem, at indexPath: IndexPath) {
-        let content = questionDto.question
-        contentLabel.text = content
+    // 보기 모드일 때 저장된 값이 있는 경우
+    func savedViewModeConfigure(with score: String, at indexPath: IndexPath) {
+        questionImage.image = UIImage(named: "question-selected-image")
         contentLabel.textColor = UIColor(named: "500")
+        backgroundColor = .white
         
-        // 선택된 날짜가 있으면 표시
-        if let storedData = scoreItems[content] {
-            score = storedData.score
-
-            for button in [answerButton1, answerButton2, answerButton3, answerButton4, answerButton5] {
-                if String(button.tag) == score {
-                    button.isSelected = true
-                    button.setImage(UIImage(named: "checked-button"), for: .normal)
-                } else {
-                    button.isSelected = false
-                    button.setImage(UIImage(named: "checklist-completed-button"), for: .normal)
-                }
+        for button in [answerButton1, answerButton2, answerButton3, answerButton4, answerButton5] {
+            if String(button.tag) == score {
+                button.setImage(UIImage(named: "checked-button"), for: .normal)
+            } else {
+                button.setImage(UIImage(named: "saved-button"), for: .normal)
             }
-        } else {
-            // 선택된 날짜가 없으면 표시 초기화
-            score = nil
+        }
+    }
+    
+    // 수정 모드일 때 저장된 값이 있는 경우
+    func savedEditModeConfigure(with score: String, at indexPath: IndexPath) {
+        questionImage.image = UIImage(named: "question-selected-image")
+        contentLabel.textColor = UIColor(named: "500")
+        backgroundColor = UIColor(named: "lightOrange")
+        
+        for button in [answerButton1, answerButton2, answerButton3, answerButton4, answerButton5] {
+            if String(button.tag) == score {
+                button.setImage(UIImage(named: "checked-button"), for: .selected)
+            } else {
+                button.setImage(UIImage(named: "checklist-completed-button"), for: .selected)
+            }
+            button.isSelected = true
         }
     }
 }

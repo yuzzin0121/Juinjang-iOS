@@ -8,19 +8,10 @@
 import UIKit
 import SnapKit
 
-protocol TextFieldDelegate: AnyObject {
-    func didEnterText(_ text: String)
-}
-
 class ExpandedTextFieldTableViewCell: UITableViewCell {
     
+    var textSelectionHandler: ((String) -> Void)?
     var inputAnswer: String?
-    var inputItems: [String: (inputAnswer: String?, isSelected: Bool)] = [:]
-    weak var delegate: TextFieldDelegate?
-    var categories: [CheckListResponseDto]!
-    
-    // 입력한 답변을 외부로 전달하는 콜백 클로저
-    var inputHandler: ((String) -> Void)?
     
     lazy var questionImage = UIImageView().then {
         $0.contentMode = .scaleAspectFit
@@ -75,6 +66,7 @@ class ExpandedTextFieldTableViewCell: UITableViewCell {
         
         // 배경색 초기화
         backgroundColor = .white
+        questionImage.image = UIImage(named: "question-image")
     }
     
     func setupLayout() {
@@ -102,47 +94,62 @@ class ExpandedTextFieldTableViewCell: UITableViewCell {
         }
     }
     
-    func saveInputAnswer() {
-        if let inputAnswer = inputAnswer {
-            UserDefaults.standard.set(inputAnswer, forKey: "AnswerKey")
-        } else {
-            // 선택된 버튼이 nil인 경우 UserDefaults에서 해당 키의 값을 제거
-            UserDefaults.standard.removeObject(forKey: "AnswerKey")
-        }
-    }
-    
-    func loadInputAnswer() -> String? {
-        return UserDefaults.standard.value(forKey: "AnswerKey") as? String
-    }
-    
-    private func updateInputItem(withContent content: String, inputAnswer: String) {
-        // 찾으려는 content와 일치하는 inputItem을 찾음
-        if let index = inputItems.index(forKey: content) {
-            inputItems.updateValue((inputAnswer, true), forKey: content)
-            
-            // 딕셔너리 확인
-            for (content, inputAnswer) in inputItems {
-                print("\(content): \(inputAnswer)")
-            }
-            saveInputAnswer()
-        }
-    }
-    
-    func configure(with questionDto: CheckListItem, at indexPath: IndexPath) {
-        let content = questionDto.question
-        contentLabel.text = content
+    func savedConfigure(with imjangId: Int, with answer: String, at indexPath: IndexPath) {
+        questionImage.image = UIImage(named: "question-selected-image")
         contentLabel.textColor = UIColor(named: "500")
-
-        // 입력한 내용이 있으면 표시
-        if let storedData = inputItems[content] {
-            inputAnswer = storedData.inputAnswer
-            
-            answerTextField.text = inputAnswer
-
-        } else {
-            // 선택된 날짜가 없으면 표시 초기화
-            inputAnswer = nil
-        }
+        backgroundColor = .white
+        
+        answerTextField.text = answer
+        answerTextField.backgroundColor = UIColor(named: "lightOrange")
+    }
+    
+    // 보기 모드
+    func viewModeConfigure(with questionDto: CheckListItem, at indexPath: IndexPath) {
+        contentLabel.text = questionDto.question
+        contentLabel.textColor = UIColor(named: "lightGray")
+        backgroundColor = UIColor(named: "gray0")
+        
+        // 보기 모드 설정
+        answerTextField.backgroundColor = UIColor(named: "shadowGray")
+        answerTextField.isEnabled = false
+    }
+      
+    // 수정 모드
+    func editModeConfigure(with questionDto: CheckListItem, at indexPath: IndexPath) {
+        contentLabel.text = questionDto.question
+        contentLabel.textColor = UIColor(named: "500")
+        backgroundColor = .white
+        
+        inputAnswer = nil
+    }
+    
+    // 보기 모드일 때 저장된 값이 있는 경우
+    func savedViewModeConfigure(with answer: String, at indexPath: IndexPath) {
+        questionImage.image = UIImage(named: "question-selected-image")
+        contentLabel.textColor = UIColor(named: "500")
+        backgroundColor = .white
+        
+        answerTextField.text = answer
+        answerTextField.backgroundColor = UIColor(named: "lightBackgroundOrange")
+        
+        // -TODO: 너비 설정 필요
+    }
+    
+    // 수정 모드일 때 저장된 값이 있는 경우
+    func savedEditModeConfigure(with answer: String, at indexPath: IndexPath) {
+        questionImage.image = UIImage(named: "question-selected-image")
+        contentLabel.textColor = UIColor(named: "500")
+        backgroundColor = UIColor(named: "lightOrange")
+        
+        // 답변 TextField 설정
+        answerTextField.text = answer
+        answerTextField.backgroundColor = .white
+        
+        // -TODO: 너비 설정 필요
+    }
+    
+    func handleTextSelection(_ text: String) {
+        textSelectionHandler?(text)
     }
 }
 
@@ -164,7 +171,6 @@ extension ExpandedTextFieldTableViewCell: UITextFieldDelegate {
         textField.becomeFirstResponder()
         backgroundColor = UIColor(named: "lightOrange")
         questionImage.image = UIImage(named: "question-selected-image")
-        textField.backgroundColor = UIColor(named: "lightBackgroundOrange")
         updateTextFieldWidthConstraint(for: textField, constant: 342, shouldRemoveLeadingConstraint: false)
     
         return true
@@ -181,25 +187,19 @@ extension ExpandedTextFieldTableViewCell: UITextFieldDelegate {
             // 입력된 텍스트에 따라 동적으로 너비 조절
             let calculatedWidth = calculateTextFieldWidth(for: text, maxCharacterCount: 20)
             let leftPadding = (342 - calculatedWidth) / 2
-            
-            delegate?.didEnterText(textField.text ?? "")
 
             // 텍스트 필드의 너비 및 위치 업데이트
             updateTextFieldWidthConstraint(for: textField, constant: calculatedWidth, shouldRemoveLeadingConstraint: true)
             textField.layoutIfNeeded()
             textField.contentHorizontalAlignment = .left
-        
-            // 외부로 답변 전달
-            inputHandler?(inputAnswer ?? String())
-            
-            // 답변 해당 InputItem에 저장
-            updateInputItem(withContent: contentLabel.text ?? "", inputAnswer: inputAnswer ?? "")
+            handleTextSelection(inputAnswer ?? "")
         } else {
             // 비어있는 경우 기존 너비로
             backgroundColor = .white
             questionImage.image = UIImage(named: "question-image")
             textField.backgroundColor = UIColor(named: "lightBackgroundOrange")
             updateTextFieldWidthConstraint(for: textField, constant: 342, shouldRemoveLeadingConstraint: false)
+            handleTextSelection(inputAnswer ?? "")
         }
     }
 

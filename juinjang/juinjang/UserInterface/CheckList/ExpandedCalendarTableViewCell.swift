@@ -9,18 +9,11 @@ import UIKit
 import SnapKit
 import FSCalendar
 
-protocol DatePickerDelegate: AnyObject {
-    func didSelectDate(_ date: Date, inCell cell: ExpandedCalendarTableViewCell, at: IndexPath)
-}
-
 class ExpandedCalendarTableViewCell: UITableViewCell {
     
-    weak var delegate: DatePickerDelegate?
-    var calendarItems: [String: (inputDate: Date?, isSelected: Bool)] = [:]
-    var isExpanded: Bool = true
+    var dateSelectionHandler: ((String) -> Void)?
     var selectedDate: Date?
     var monthPosition: FSCalendarMonthPosition?
-    var categories: [CheckListResponseDto]!
     
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -40,15 +33,8 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
 
         // 배경색 초기화
         backgroundColor = .white
+        questionImage.image = UIImage(named: "question-image")
     }
-    
-    // 셀이 확장되거나 접힐 때
-    func setExpanded(_ expanded: Bool) {
-        isExpanded = expanded
-    }
-    
-    // 선택된 날짜를 외부로 전달하는 콜백 클로저
-    var selectionHandler: ((Date) -> Void)?
     
     lazy var questionImage = UIImageView().then {
         $0.contentMode = .scaleAspectFit
@@ -144,7 +130,6 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
     }
     
     func calendarStyle() {
-        
         // 언어를 한국어로 변경
         calendar.locale = Locale(identifier: "ko_KR")
         
@@ -214,68 +199,45 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
         currentPage = calendarCurrent.date(byAdding: dateComponents, to: currentPage ?? today)
         calendar.setCurrentPage(currentPage!, animated: true)
     }
-    
-//    func saveSelectedDate() {
-//        // 선택된 날짜의 시간 성분을 12:00 PM으로 설정 (UTC로 변환)
-//        if let selectedDate = selectedDate {
-//            let noonDate = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: selectedDate)?.addingTimeInterval(TimeInterval(NSTimeZone.system.secondsFromGMT()))
-//            UserDefaults.standard.set(noonDate, forKey: "SelectedDateKey")
-//            print("저장 성공")
-//        } else {
-//            print("저장 실패")
-//        }
-//    }
-//    
-//    func loadSelectedDate() -> Date? {
-//        if let storedDate = UserDefaults.standard.value(forKey: "SelectedDateKey") as? Date {
-//            // 현재 사용자의 타임존으로 변환
-//            let userTimeZone = TimeZone.current
-//            let convertedDate = storedDate.addingTimeInterval(TimeInterval(userTimeZone.secondsFromGMT()))
-//            print("저장된 값 로드", convertedDate)
-//            return convertedDate
-//        }
-//        return nil
-//    }
-    
-    private func updateCalendarItem(withContent content: String, selectedDate: Date) {
-        // 찾으려는 content와 일치하는 CalendarItem을 찾음
-        if let index = calendarItems.index(forKey: content) {
-            // 찾은 CalendarItem의 inputDate를 새로 선택된 날짜로 변경
-            // 여기서 12:00 PM으로 설정
-            let noonDate = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: selectedDate)?.addingTimeInterval(TimeInterval(NSTimeZone.system.secondsFromGMT()))
-            calendarItems.updateValue((noonDate, true), forKey: content)
-            
-            // 딕셔너리 확인
-            for (content, data) in calendarItems {
-                print("\(content): \(data)")
-            }
-//            saveSelectedDate()
-        }
+      
+    // 수정 모드
+    func editModeConfigure(with questionDto: CheckListItem, at indexPath: IndexPath) {
+        contentLabel.text = questionDto.question
+        contentLabel.textColor = UIColor(named: "500")
+        backgroundColor = .white
+        
+        selectedDate = nil
     }
     
-    func configure(with questionDto: CheckListItem, at indexPath: IndexPath) {
-        let content = questionDto.question
-        contentLabel.text = content
+    // 수정 모드일 때 저장된 값이 있는 경우
+    func savedEditModeConfigure(with answer: String, at indexPath: IndexPath) {
+        questionImage.image = UIImage(named: "question-selected-image")
         contentLabel.textColor = UIColor(named: "500")
-
-        // 선택된 날짜가 있으면 표시
-        if let storedData = calendarItems[content] {
-            selectedDate = storedData.inputDate
-
-            if let position = monthPosition, let selectedCell = calendar.cell(for: storedData.inputDate!, at: position) {
+        backgroundColor = UIColor(named: "lightOrange")
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyyMMdd" // 저장된 날짜 문자열의 포맷에 맞게 설정
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC") // UTC TimeZone 설정
+        
+        // 날짜 문자열을 Date로 변환
+        if let date = dateFormatter.date(from: answer) {
+            print("Date from stored date string:", date)
+            selectedDate = date
+            calendar.select(date)
+            if let selectedCell = calendar.cell(for: date, at: .current) {
                 selectedCell.layer.cornerRadius = 9.97
                 selectedCell.layer.borderWidth = 1.5
                 selectedCell.layer.borderColor = UIColor(named: "mainOrange")?.cgColor
             } else {
                 selectedDate = nil
             }
-        } else {
-            // 선택된 날짜가 없으면 표시 초기화
-            selectedDate = nil
         }
     }
+    
+    func handleDateSelection(_ date: String) {
+        dateSelectionHandler?(date)
+    }
 }
-
 
 extension ExpandedCalendarTableViewCell: FSCalendarDelegate, FSCalendarDataSource, FSCalendarDelegateAppearance {
     // 날짜를 선택했을 때
@@ -288,7 +250,6 @@ extension ExpandedCalendarTableViewCell: FSCalendarDelegate, FSCalendarDataSourc
         if let currentSelectedDate = selectedDate, currentSelectedDate == date {
             calendar.deselect(date)
             selectedDate = nil
-            
             // 선택 해제할 경우 테두리 제거
             if let selectedCell = calendar.cell(for: date, at: monthPosition) as? FSCalendarCell {
                 selectedCell.layer.borderWidth = 0.0
@@ -325,27 +286,16 @@ extension ExpandedCalendarTableViewCell: FSCalendarDelegate, FSCalendarDataSourc
         }
         
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy년 MM월 dd일"
+        dateFormatter.dateFormat = "yyyyMMdd"
         print("Selected Date: \(dateFormatter.string(from: date))")
 
         // 선택된 날짜의 시간 성분을 12:00 PM으로 설정 (UTC로 변환)
         if let selectedDateNoon = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: date)?.addingTimeInterval(TimeInterval(NSTimeZone.system.secondsFromGMT())) {
             print("Selected Date (after adjustment): \(selectedDateNoon)")
             
-            // 현재 선택된 날짜 업데이트
-            selectedDate = selectedDateNoon
-            
-            // 선택된 날짜를 해당 CalendarItem에 저장
-            updateCalendarItem(withContent: contentLabel.text ?? "", selectedDate: selectedDateNoon)
-            
-            // 외부로 선택된 날짜 전달
-            selectionHandler?(selectedDate ?? Date())
+            handleDateSelection(dateFormatter.string(from: date))
         }
-        // 현재 선택된 날짜 업데이트
         selectedDate = date
-        
-        // delegate에게 선택된 날짜를 전달
-//        delegate?.didSelectDate(date, inCell: self, at: indexPath)
     }
     
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {

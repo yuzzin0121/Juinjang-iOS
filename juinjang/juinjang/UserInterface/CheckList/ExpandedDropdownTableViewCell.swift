@@ -8,18 +8,10 @@
 import UIKit
 import SnapKit
 
-protocol DropdownDelegate: AnyObject {
-    func didSelectOption(_ option: String)
-}
-
 class ExpandedDropdownTableViewCell: UITableViewCell {
-    var selectedOption: String?
-    var selectionItems: [String: (option: String?, isSelected: Bool)] = [:]
-    weak var delegate: DropdownDelegate?
-    var categories: [CheckListResponseDto]!
     
-    // 선택된 점수를 외부로 전달하는 콜백 클로저
-    var selectionHandler: ((String) -> Void)?
+    var optionSelectionHandler: ((String) -> Void)?
+    var selectedOption: String?
     
     lazy var questionImage = UIImageView().then {
         $0.contentMode = .scaleAspectFit
@@ -108,10 +100,23 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
         super.prepareForReuse()
 
         // 셀 내용 초기화
-        selectedOption = nil
+        itemPickerView.selectRow(0, inComponent: 0, animated: true)
+        itemButton.backgroundColor = UIColor(named: "shadowGray")
+        itemButton.setTitle("선택안함", for: .normal)
+        itemButton.setTitleColor(UIColor(named: "darkGray"), for: .normal)
+        let buttonImage = UIImage(named: "item-arrow-down")
+        itemButton.setImage(buttonImage, for: .normal)
+        itemButton.semanticContentAttribute = .forceRightToLeft
+        // 여백 설정
+        let titleInset: CGFloat = 12.0
+        let imageInset: CGFloat = 8.0
+        itemButton.sizeToFit()
+        itemButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: titleInset, bottom: 0, right: -imageInset)
+        itemButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: itemButton.bounds.width - 35, bottom: 0, right: -imageInset)
         
         // 배경색 초기화
         backgroundColor = .white
+        questionImage.image = UIImage(named: "question-image")
     }
     
     func setupLayout() {
@@ -200,75 +205,106 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
         addTransparentView(frames: sender.frame)
     }
     
-    func saveSelectedOption() {
-        if let option = selectedOption {
-            UserDefaults.standard.set(option, forKey: "SelectedOptionKey")
-        } else {
-            // 선택된 버튼이 nil인 경우 UserDefaults에서 해당 키의 값을 제거
-            UserDefaults.standard.removeObject(forKey: "SelectedOptionKey")
-        }
-    }
-    
-    func loadSelectedOption() -> String? {
-        return UserDefaults.standard.value(forKey: "SelectedOptionKey") as? String
-    }
-    
-    private func updateSelectionItem(withContent content: String, option: String) {
-        // 찾으려는 content와 일치하는 ScoreItem을 찾음
-        if let index = selectionItems.index(forKey: content) {
-            selectionItems.updateValue((option, true), forKey: content)
-            
-            // 딕셔너리 확인
-            for (content, option) in selectionItems {
-                print("\(content): \(option)")
-            }
-            saveSelectedOption()
-        }
-    }
-    
-    func configure(with questionDto: CheckListItem, at indexPath: IndexPath) {
-        let content = questionDto.question
-        contentLabel.text = content
-        contentLabel.textColor = UIColor(named: "500")
-
-        // 선택된 옵션이 있으면 표시
-        if let storedData = selectionItems[content] as? SelectionItem {
-            selectedOption = storedData.selectAnswer
-
-            // selectedOption이 몇 번째 행에 해당하는지 찾기
-            if let row = storedData.options.firstIndex(where: { $0.option == selectedOption }) {
-                itemPickerView.selectRow(row, inComponent: 0, animated: false)
-            }
-        } else {
-            // 선택된 옵션이 없으면 표시 초기화
-            selectedOption = nil
-        }
-
-         var optionValues: [OptionItem] = []
-
-         // 지하철 노선도 항목에 대한 이미지 추가
-         if questionDto.questionId == 4 || questionDto.questionId == 62 {
-             optionValues = questionDto.options.map { optionItem in
-                 let originalImage = UIImage(data: optionItem.image)
-                 // 이미지가 리사이즈하여 새로운 이미지로 생성
-                 if let originalImage = originalImage {
-                     let newSize = CGSize(width: 16, height: 16)
-                     let resizedImage = UIGraphicsImageRenderer(size: newSize).image { _ in
-                         originalImage.draw(in: CGRect(origin: .zero, size: newSize))
-                     }
-                     return OptionItem(image: resizedImage, option: optionItem.option)
-                 } else {
-                     return OptionItem(image: nil, option: optionItem.option)
-                 }
-             }
-         } else {
-             // 기본값은 nil로 설정
-             optionValues = questionDto.options.map { optionItem in
-                 return OptionItem(image: nil, option: optionItem.option)
-             }
-         }
+    // 보기 모드
+    func viewModeConfigure(with questionDto: CheckListItem, at indexPath: IndexPath) {
+        contentLabel.text = questionDto.question
+        contentLabel.textColor = UIColor(named: "lightGray")
+        backgroundColor = UIColor(named: "gray0")
         
-         options = optionValues
+        // 보기 모드 설정
+        itemButton.isUserInteractionEnabled = false
+        itemPickerView.isUserInteractionEnabled = false
+    }
+      
+    // 수정 모드
+    func editModeConfigure(with questionDto: CheckListItem, at indexPath: IndexPath) {
+        contentLabel.text = questionDto.question
+        contentLabel.textColor = UIColor(named: "500")
+        backgroundColor = .white
+        
+        var optionValues: [OptionItem] = []
+
+        // 지하철 노선도 항목에 대한 이미지 추가
+        if questionDto.questionId == 4 || questionDto.questionId == 62 {
+            optionValues = questionDto.options.map { optionItem in
+                let originalImage = UIImage(data: optionItem.image)
+                // 이미지가 리사이즈하여 새로운 이미지로 생성
+                if let originalImage = originalImage {
+                    let newSize = CGSize(width: 16, height: 16)
+                    let resizedImage = UIGraphicsImageRenderer(size: newSize).image { _ in
+                        originalImage.draw(in: CGRect(origin: .zero, size: newSize))
+                    }
+                    return OptionItem(image: resizedImage, option: optionItem.option)
+                } else {
+                    return OptionItem(image: nil, option: optionItem.option)
+                }
+            }
+        } else {
+            // 기본값은 nil로 설정
+            optionValues = questionDto.options.map { optionItem in
+                return OptionItem(image: nil, option: optionItem.option)
+            }
+        }
+        options = optionValues
+    }
+    
+    // 보기 모드일 때 저장된 값이 있는 경우
+    func savedViewModeConfigure(with answer: String, with options: [Option], at indexPath: IndexPath) {
+        if answer != "0" {
+            itemPickerView.selectRow(Int(answer) ?? 0, inComponent: 0, animated: true)
+            questionImage.image = UIImage(named: "question-selected-image")
+            contentLabel.textColor = UIColor(named: "500")
+            backgroundColor = .white
+            
+            itemButton.setTitle(options[Int(answer) ?? 0].option, for: .normal)
+            itemButton.backgroundColor = .white
+            itemButton.setTitleColor(UIColor(named: "darkGray"), for: .normal)
+            let originalImage = UIImage(data: options[Int(answer) ?? 0].image)
+            // 이미지가 리사이즈하여 새로운 이미지로 생성
+            if let originalImage = originalImage {
+                let newSize = CGSize(width: 16, height: 16)
+                let resizedImage = UIGraphicsImageRenderer(size: newSize).image { _ in
+                    originalImage.draw(in: CGRect(origin: .zero, size: newSize))
+                }
+                itemButton.setImage(resizedImage, for: .normal)
+            }
+            itemButton.semanticContentAttribute = .forceLeftToRight
+            setSavedInset()
+        }
+        selectedOption = answer
+        selectedButton.backgroundColor = .white
+    }
+    
+    // 수정 모드일 때 저장된 값이 있는 경우
+    func savedEditModeConfigure(with answer: String, with options: [Option], at indexPath: IndexPath) {
+        print("선택형 답변 Index: \(answer)")
+        if answer != "0" {
+            itemPickerView.selectRow(Int(answer) ?? 0, inComponent: 0, animated: true)
+            questionImage.image = UIImage(named: "question-selected-image")
+            contentLabel.textColor = UIColor(named: "500")
+            backgroundColor = UIColor(named: "lightOrange")
+            
+            itemButton.setTitle(options[Int(answer) ?? 0].option, for: .normal)
+            itemButton.backgroundColor = .white
+            itemButton.setTitleColor(UIColor(named: "darkGray"), for: .normal)
+            let originalImage = UIImage(data: options[Int(answer) ?? 0].image)
+            // 이미지가 리사이즈하여 새로운 이미지로 생성
+            if let originalImage = originalImage {
+                let newSize = CGSize(width: 16, height: 16)
+                let resizedImage = UIGraphicsImageRenderer(size: newSize).image { _ in
+                    originalImage.draw(in: CGRect(origin: .zero, size: newSize))
+                }
+                itemButton.setImage(resizedImage, for: .normal)
+            }
+            itemButton.semanticContentAttribute = .forceLeftToRight
+            setSavedInset()
+        }
+        selectedOption = answer
+        selectedButton.backgroundColor = .white
+    }
+    
+    func handleOptionSelection(_ optionIndex: String) {
+        optionSelectionHandler?(optionIndex)
     }
 }
 
@@ -289,16 +325,13 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
 
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         let selectedOption = options[row]
-        print("Selected option: \(selectedOption)")
+        print("Selected option: (row, \(selectedOption))")
         
-        // 외부로 선택된 점수 전달
-        selectionHandler?(selectedOption.option)
+        // -TODO: 인덱스 번호로 넘겨주어야 함
+//        selectionHandler?(row)
         
-        // 선택된 점수를 해당 ScoreItem에 저장
-        updateSelectionItem(withContent: contentLabel.text ?? "", option: selectedOption.option)
         
         // 선택한 옵션으로 selectedButton 설정
-        setSelectedInset()
         selectedButton.setTitle(selectedOption.option, for: .normal)
         selectedButton.backgroundColor = .white
         selectedButton.setTitleColor(UIColor(named: "darkGray"), for: .normal)
@@ -322,20 +355,22 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
             questionImage.image = UIImage(named: "question-image")
             itemButton.layer.backgroundColor = UIColor(named: "shadowGray")?.cgColor
             setBasicInset()
+            handleOptionSelection(String(row))
         } else {
             backgroundColor = UIColor(named: "lightOrange")
             questionImage.image = UIImage(named: "question-selected-image")
+            
+            handleOptionSelection(String(row))
         }
         
         if options[row].option == "기타" {
             backgroundColor = .white
             questionImage.image = UIImage(named: "question-image")
+            handleOptionSelection(String(etcTextField.text ?? ""))
         }
     }
     
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
-        
-        
     
         let fontSize: CGFloat = 16
         let leftPadding: CGFloat = 12
@@ -403,6 +438,23 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
             // 이미지가 없는 경우
             selectedButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             selectedButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: imageInset, bottom: 0, right: 0)
+        }
+    }
+    
+    func setSavedInset() {
+        let imageInset: CGFloat = 12.0
+        let titleInset: CGFloat = 17.0
+        
+        itemButton.sizeToFit()
+        
+        if let image = itemButton.image(for: .normal) {
+            // 이미지가 있는 경우
+            itemButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: imageInset, bottom: 0, right: titleInset)
+            itemButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: titleInset, bottom: 0, right: 0)
+        } else {
+            // 이미지가 없는 경우
+            itemButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            itemButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: imageInset, bottom: 0, right: 0)
         }
     }
 
@@ -494,7 +546,7 @@ extension ExpandedDropdownTableViewCell: UITextFieldDelegate {
             }
         } else {
             textField.snp.makeConstraints {
-                    $0.trailing.equalToSuperview().offset(-24) // 오른쪽으로 24만큼 이동
+                    $0.trailing.equalToSuperview().offset(-24)
             }
         }
     }
