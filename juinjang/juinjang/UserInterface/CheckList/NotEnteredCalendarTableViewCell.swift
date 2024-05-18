@@ -9,8 +9,8 @@ import UIKit
 
 class NotEnteredCalendarTableViewCell: UITableViewCell {
     
-    var calendarItem: CalendarItem?
-    var calendarItems: [Item] = []
+    var date: String?
+    var question: CheckListItem?
     
     lazy var moveInDateImage = UIImageView().then {
         $0.contentMode = .scaleAspectFit
@@ -123,11 +123,52 @@ class NotEnteredCalendarTableViewCell: UITableViewCell {
             $0.centerY.equalToSuperview()
             $0.height.equalTo(20)
         }
+        
         // 잔금 기한 날짜 상세 Label
         balanceDueContentLabel.snp.makeConstraints {
             $0.trailing.equalToSuperview().offset(-49)
             $0.centerY.equalToSuperview()
             $0.height.equalTo(20)
+        }
+    }
+    
+    // 보기 모드
+    func viewModeConfigure(at indexPath: IndexPath) {
+        moveInDateLabel.textColor = UIColor(named: "gray5")
+        moveInDateContentLabel.textColor = UIColor(named: "textGray")
+        balanceDueLabel.textColor = UIColor(named: "gray5")
+        balanceDueContentLabel.textColor = UIColor(named: "textGray")
+        backgroundColor = UIColor(named: "gray0")
+    }
+    
+    // 보기 모드일 때 저장된 값이 있는 경우
+    func savedViewModeConfigure(with imjangId: Int, with answer: [(Int, String)], at indexPath: IndexPath) {
+        if answer[0].1 != "" {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyyMMdd"
+            if let date = dateFormatter.date(from: answer[0].1) {
+                dateFormatter.dateFormat = "yyyy.MM.dd"
+                moveInDateContentLabel.text = dateFormatter.string(from: date)
+            }
+            moveInDateLabel.textColor = UIColor(named: "mainOrange")
+            moveInDateContentLabel.textColor = UIColor(named: "300")
+            moveInDateImage.image = UIImage(named: "deadline-item")
+            backgroundColor = UIColor(named: "lightBackgroundOrange")
+        } else if answer[1].1 != "" {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyyMMdd"
+            if let date = dateFormatter.date(from: answer[1].1) {
+                dateFormatter.dateFormat = "yyyy.MM.dd"
+                balanceDueContentLabel.text = dateFormatter.string(from: date)
+            }
+            balanceDueLabel.textColor = UIColor(named: "mainOrange")
+            balanceDueContentLabel.textColor = UIColor(named: "300")
+            balanceDueImage.image = UIImage(named: "wallet-item")
+            backgroundColor = UIColor(named: "lightBackgroundOrange")
+            // 잔금 기한 날짜 상세 Label
+            balanceDueContentLabel.snp.updateConstraints {
+                $0.trailing.equalToSuperview().offset(-24)
+            }
         }
     }
 }

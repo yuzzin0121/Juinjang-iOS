@@ -4,7 +4,7 @@
 //
 //  Created by 임수진 on 2/19/24.
 //
-// TODO: 지금 카테고리 별로 분류는 되는데 version이 분류가 안되어있음
+// TODO: 버전, 셀 저장, 셀 값 해제 문제
 import UIKit
 import SnapKit
 import Alamofire
@@ -12,10 +12,10 @@ import RealmSwift
 
 class CheckListViewController: UIViewController {
     
-    var calendarItems: [String: (inputDate: Date, isSelected: Bool)] = [:]
-    var scoreItems: [String: (score: String, isSelected: Bool)] = [:]
-    var inputItems: [String: (inputAnswer: String, isSelected: Bool)] = [:]
-    var selectionItems: [String: (option: String, isSelected: Bool)] = [:]
+    var allCategory: [String] = [] // 카테고리
+    var checkListCategories: [CheckListCategory] = [] // 카테고리별 질문
+    var checkListItems: [CheckListAnswer] = [] // 임시로 저장된 체크리스트 항목
+    var savedCheckListItems: [CheckListAnswer] = [] // 실제로 저장된 체크리스트 항목
     
     lazy var tableView = UITableView().then {
         $0.separatorStyle = .none
@@ -24,18 +24,14 @@ class CheckListViewController: UIViewController {
     }
 
     var isEditMode: Bool = false // 수정 모드 여부
+    var version: Int = 0
     
     var imjangId: Int? {
         didSet {
             print("체크리스트 \(imjangId)")
-            filterVersionAndCategory(isEditMode: isEditMode) { [weak self] categories in
-                    print("검사하기")
-//                    print(categories)
-                
-
+            filterVersionAndCategory(isEditMode: isEditMode, version: version) { [weak self] categories in
+                self?.showCheckList()
                 DispatchQueue.main.async {
-                    print("카테고리 개수: \(self?.checkListCategories.count)")
-                    print(self?.checkListCategories)
                     self?.tableView.delegate = self
                     self?.tableView.dataSource = self
                     self?.tableView.reloadData()
@@ -44,76 +40,39 @@ class CheckListViewController: UIViewController {
         }
     }
     
-    var categories: [CheckListResponseDto] = []
-    var checkListItems: [CheckListItem] = []
-    var checkListCategories: [CheckListCategory] = []
-//    var filteredcheckListCategories: [CheckListCategory] = []
-    var allCategory: [String] = []
-    
     override func viewDidLoad() {
         addCheckListModel()
         super.viewDidLoad()
         view.backgroundColor = .white
-        tableView.delegate = self
-        tableView.dataSource = self
+        setTableView()
         addSubViews()
         setupLayout()
         registerCell()
+//        selectedAnswers = ChecklistDataManager.shared.loadChecklistAnswers()
         NotificationCenter.default.addObserver(self, selector: #selector(didStoppedParentScroll), name: NSNotification.Name("didStoppedParentScroll"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleEditModeChange(_:)), name: Notification.Name("EditModeChanged"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleEditButtonTappedNotification), name: NSNotification.Name("EditButtonTapped"), object: nil)
         
     }
     
-    @objc func handleEditModeChange(_ notification: Notification) {
-        if let isEditMode = notification.object as? Bool {
-            print("isEditMode 상태: \(isEditMode)")
-            self.isEditMode = isEditMode
-            filterVersionAndCategory(isEditMode: isEditMode) { [weak self] result in
-                print("isEditMode 상태에 따른 카테고리 개수: \(result.count)")
-                self?.tableView.reloadData()
-            }
-        }
-    }
-
-    
-    @objc func handleEditButtonTappedNotification() {
-        print("체크리스트 저장 좀 하고 싶다")
-        saveAnswer()
-    }
-    
-    @objc func didStoppedParentScroll() {
-        DispatchQueue.main.async {
-            self.tableView.isScrollEnabled = true
-        }
-    }
-
-    // 키보드 내리기
-    func hideKeyboardWhenTappedArround() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        tapGesture.cancelsTouchesInView = false
-        view.addGestureRecognizer(tapGesture)
-    }
-    
-    @objc func dismissKeyboard() {
-        view.endEditing(true)
+    func setTableView() {
+        tableView.delegate = self
+        tableView.dataSource = self
     }
     
     func addSubViews() {
-        view.addSubview(tableView)
-    }
-    
+            view.addSubview(tableView)
+        }
+        
     func setupLayout() {
-        // 테이블 뷰
         tableView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(48)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(698)
-//            $0.bottom.equalToSuperview()
         }
     }
     
-    private func registerCell() {
+    func registerCell() {
         tableView.register(NotEnteredCalendarTableViewCell.self, forCellReuseIdentifier: NotEnteredCalendarTableViewCell.identifier)
         tableView.register(CategoryItemTableViewCell.self, forCellReuseIdentifier: CategoryItemTableViewCell.identifier)
         tableView.register(ExpandedScoreTableViewCell.self, forCellReuseIdentifier: ExpandedScoreTableViewCell.identifier)
@@ -124,22 +83,22 @@ class CheckListViewController: UIViewController {
     
     // -MARK: DB 관리
     func addCheckListModel() {
-        // Realm 데이터베이스에 데이터 추가
+        // Realm 데이터베이스 추가
         do {
             let realm = try Realm()
             
-            // CheckListItem가 존재하지 않을 때만 모델 추가
+            // CheckListItem가 존재하지 않을 때만 추가
             if realm.objects(CheckListItem.self).isEmpty {
                 try realm.write {
                     realm.add(items)
                     realm.add(oneRoomItems)
                     addOptionData()
-                    print("CheckListItem 데이터 추가")
+                    print("CheckListItem이 성공적으로 생성되었습니다.")
                 }
             } else {
-                print("CheckListItem 데이터베이스에 이미 데이터가 존재합니다.")
+                print("CheckListItem이 이미 존재합니다.")
             }
-            
+            mappingOption()
             print(Realm.Configuration.defaultConfiguration.fileURL!)
         } catch let error as NSError {
             print("DB 추가 실패: \(error.localizedDescription)")
@@ -147,11 +106,14 @@ class CheckListViewController: UIViewController {
         }
     }
     
-    func filterVersionAndCategory(isEditMode: Bool, completion: @escaping ([CheckListItem]) -> Void) {
+    // -MARK: 버전 조회
+    func filterVersionAndCategory(isEditMode: Bool, version: Int, completion: @escaping ([CheckListItem]) -> Void) {
         do {
             let realm = try Realm()
             var result = realm.objects(CheckListItem.self)
-            result = result.filter("version == 0")
+            
+            print("체크리스트 버전: \(version)")
+            result = result.filter("version == \(version)")
             
             let checkListItems = Array(result)
             
@@ -168,120 +130,161 @@ class CheckListViewController: UIViewController {
                 // checkListCategories에 추가
                 self.checkListCategories.append(CheckListCategory(category: category, checkListitem: categoryItems, isExpanded: false))
             }
-            
-//            for category in allCategory {
-//                // 해당 카테고리에 해당하는 항목들을 필터링하여
-//                if category != "기한" {
-//                    let filteredcategoryItems = checkListItems.filter { $0.category != "기한" }
-//                    // checkListCategories에 추가
-//                    self.filteredcheckListCategories.append(CheckListCategory(category: category, checkListitem: filteredcategoryItems, isExpanded: false))
-//                }
-//            }
             completion(checkListItems)
         } catch {
-            print("Realm 데이터베이스 접근할 수 없음: \(error)")
+            print("Realm 데이터베이스에 접근할 수 없음: \(error)")
             completion([])
         }
     }
     
+    // -MARK: API 요청(체크리스트 조회)
+    func showCheckList() {
+        guard let imjangId = imjangId else { return }
+        JuinjangAPIManager.shared.fetchData(type: BaseResponse<[CheckListResponseDto]>.self, api: .showChecklist(imjangId: imjangId)) { response, error in
+            if error == nil {
+                guard let response = response else { return }
+                print("------저장된 체크리스트 조회------")
+                if let categoryItem = response.result {
+                    for Item in categoryItem {
+                        for questionDto in Item.questionDtos {
+                            if let answer = questionDto.answer {
+                                self.savedCheckListItems.append(CheckListAnswer(imjangId: imjangId, questionId: questionDto.questionId, answer: answer, isSelected: true))
+                            }
+                        }
+                    }
+                }
+                print(self.savedCheckListItems)
+                if let firstCheckList = response.result?.first,
+                   let version = firstCheckList.questionDtos.first?.version {
+                    self.version = version
+                    print("체크리스트 버전: \(version)")
+                }
+            } else {
+                guard let error = error else { return }
+                switch error {
+                case .failedRequest:
+                    print("failedRequest")
+                case .noData:
+                    print("noData")
+                case .invalidResponse:
+                    print("invalidResponse")
+                case .invalidData:
+                    print("invalidData")
+                }
+            }
+        }
+    }
+    
+    func sendChecklistData(_ items: [CheckListRequestDto]) {
+        guard let imjangId = imjangId else { return }
+        
+        let encoder = JSONEncoder()
+        
+        let dictItems: [[String: Any]] = items.map { item in
+            return ["questionId": item.questionId, "answer": item.answer]
+        }
+        
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: dictItems, options: [])
+            
+            if let jsonString = String(data: jsonData, encoding: .utf8) {
+                print("JSON Data: \(jsonString)")
+            }
+            
+            let headers: HTTPHeaders = ["Content-Type": "application/json"]
+            let url = JuinjangAPI.saveChecklist(imjangId: imjangId).endpoint
+            
+            var request = URLRequest(url: url)
+            request.httpMethod = HTTPMethod.post.rawValue
+            request.headers = headers
+            request.httpBody = jsonData
+            
+            AF.request(request)
+                .responseJSON { response in
+                    switch response.result {
+                    case .success(let value):
+                        print("체크리스트 저장 처리 성공")
+                        print(value)
+                    case .failure(let error):
+                        print("체크리스트 저장 처리 실패")
+                        print(error)
+                    }
+                }
+        } catch {
+            print("encoding 에러: \(error)")
+        }
+    }
+
+    
+    // -MARK: API 요청(체크리스트 저장)
     func saveAnswer() {
         print("saveAnswer 함수 호출")
         guard let imjangId = imjangId else { return }
-        var checkListItems: [CheckListRequestDto] = []
+//        var checkListItems: [CheckListRequestDto] = []
         
         print("토큰값 \(UserDefaultManager.shared.accessToken)")
         
+        // 저장된 체크리스트 불러오기
         JuinjangAPIManager.shared.fetchData(type: BaseResponse<[CheckListResponseDto]>.self, api: .showChecklist(imjangId: imjangId)) { response, error in
             guard let checkListResponse = response else {
                 // 실패 시 에러 처리
                 print("실패: \(error?.localizedDescription ?? "error")")
                 return
             }
-
-            // 달력
-            for (key, value) in self.calendarItems {
-                if let questionId = self.findQuestionId(forQuestion: key, in: checkListResponse) {
-                    // Date를 String으로 변환
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "yyyyMMdd"
-                    let dateString = dateFormatter.string(from: value.inputDate)
-                    
-                    let parameter = CheckListRequestDto(questionId: questionId, answer: dateString)
-                    checkListItems.append(parameter)
-                }
-            }
-
-            // 점수형
-            for (key, value) in self.scoreItems {
-                if let questionId = self.findQuestionId(forQuestion: key, in: checkListResponse) {
-                    let parameter = CheckListRequestDto(questionId: questionId, answer: value.score)
-                    checkListItems.append(parameter)
-                }
-            }
-
-            // 입력형
-            for (key, value) in self.inputItems {
-                if let questionId = self.findQuestionId(forQuestion: key, in: checkListResponse) {
-                    let parameter = CheckListRequestDto(questionId: questionId, answer: value.inputAnswer)
-                    checkListItems.append(parameter)
-                }
-            }
-
-            // 선택형
-            for (key, value) in self.selectionItems {
-                if let questionId = self.findQuestionId(forQuestion: key, in: checkListResponse) {
-                    let parameter = CheckListRequestDto(questionId: questionId, answer: value.option)
-                    checkListItems.append(parameter)
+            
+            print("----- 체크리스트 저장할 항목 -----")
+            let checkListItems = self.checkListItems
+            print(checkListItems)
+            
+            // 유효한 값만 필터링
+            let validCheckListItems = checkListItems.filter { item in
+                if let answer = item.answer as? String {
+                    return !answer.isEmpty && answer != "NaN"
+                } else {
+                    return false
                 }
             }
             
-            let parameters: [[String: Any?]] = checkListItems.map {
-                var answer: Any? = $0.answer
-                // NaN 값 nil로 설정
-                if let answerAsDouble = Double($0.answer), answerAsDouble.isNaN {
-                    answer = nil
-                }
-                return ["questionId": $0.questionId, "answer": answer]
+            var parameters: [CheckListRequestDto] = []
+            for item in validCheckListItems {
+                parameters.append(CheckListRequestDto(questionId: item.questionId, answer: item.answer))
             }
-
+            
+            let encoder = JSONEncoder()
+            
+            let dictItems: [[String: Any]] = parameters.map { item in
+                return ["questionId": item.questionId, "answer": item.answer]
+            }
+            
             do {
-                let jsonData = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
-
+                let jsonData = try JSONSerialization.data(withJSONObject: dictItems, options: [])
+                
                 if let jsonString = String(data: jsonData, encoding: .utf8) {
-                    print("JSON 데이터:")
-                    print(jsonString)
-
-                    let headers: HTTPHeaders = ["Content-Type": "application/json"]
-                    let url = JuinjangAPI.saveChecklist(imjangId: imjangId).endpoint
-                                
-                    var request = URLRequest(url: url)
-                    request.httpMethod = HTTPMethod.post.rawValue
-                    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-                    request.httpBody = jsonData
-                                
-                    AF.request(request)
-                        .responseJSON { response in
-                            print("체크리스트 저장 plz")
-                            print(response)
-                        }
+                    print("JSON Data: \(jsonString)")
                 }
+                
+                let headers: HTTPHeaders = ["Content-Type": "application/json"]
+                let url = JuinjangAPI.saveChecklist(imjangId: imjangId).endpoint
+                
+                var request = URLRequest(url: url)
+                request.httpMethod = HTTPMethod.post.rawValue
+                request.headers = headers
+                request.httpBody = jsonData
+                
+                AF.request(request)
+                    .responseJSON { response in
+                        switch response.result {
+                        case .success(let value):
+                            print("체크리스트 저장 처리 성공")
+                            print(value)
+                        case .failure(let error):
+                            print("체크리스트 저장 처리 실패")
+                            print(error)
+                        }
+                    }
             } catch {
                 print("encoding 에러: \(error)")
             }
-
-                
-//            JuinjangAPIManager.shared.postCheckListItem(type: BaseResponse<ResultDto>.self, api: .saveChecklist(imjangId: imjangId), parameter: parameterDictionary) { response, error in
-//                if error == nil {
-//                    guard let resultDto = response?.result else { return }
-//                    print(resultDto)
-//                } else {
-//                    guard let error = error else { return }
-//                    print(error)
-//                    print(parameterDictionary)
-//                    print("API 응답 디코딩 실패: \(error.localizedDescription)")
-//                    self.handleNetworkError(error)
-//                }
-//            }
         }
     }
     
@@ -300,16 +303,35 @@ class CheckListViewController: UIViewController {
         return nil
     }
     
-    func handleNetworkError(_ error: NetworkError) {
-        switch error {
-        case .failedRequest:
-            print("failedRequest")
-        case .noData:
-            print("noData")
-        case .invalidResponse:
-            print("invalidResponse")
-        case .invalidData:
-            print("invalidData")
+    // 키보드 내리기
+    func hideKeyboardWhenTappedArround() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
+    @objc func handleEditModeChange(_ notification: Notification) {
+        if let isEditMode = notification.object as? Bool {
+            print("isEditMode 상태: \(isEditMode)")
+            self.isEditMode = isEditMode
+            version = 1
+            filterVersionAndCategory(isEditMode: isEditMode, version: version) { [weak self] result in
+                self?.tableView.reloadData()
+            }
+        }
+    }
+    
+    @objc func handleEditButtonTappedNotification() {
+        saveAnswer()
+    }
+    
+    @objc func didStoppedParentScroll() {
+        DispatchQueue.main.async {
+            self.tableView.isScrollEnabled = true
         }
     }
 }
@@ -364,90 +386,214 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
             } else {
                 let category = checkListCategories[indexPath.section - 1]
                 let questionDto = category.checkListitem[indexPath.row - 1]
+                let questionId = questionDto.questionId
                 
                 switch questionDto.answerType {
                 case 0:
                     // ScoreItem
                     let cell: ExpandedScoreTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedScoreTableViewCell.identifier, for: indexPath) as! ExpandedScoreTableViewCell
-                    cell.configure(with: questionDto, at: indexPath)
-//                    cell.categories = categories
                     
-                    // 데이터 모델에서 저장된 값으로 셀 구성
-                    let contentKey = category.checkListitem[indexPath.row - 1].question
-                    cell.backgroundColor = cell.scoreItems[contentKey]?.isSelected ?? false ? UIColor(named: "lightOrange") : UIColor.white // 상태에 따라 배경색 설정
-
-                    // 셀이 선택된 경우 클로저 호출
-                    cell.selectionHandler = { [weak self, weak cell] score in
-                        print("Selected button in TableView:", score)
-                        self?.scoreItems.updateValue((score, true), forKey: contentKey)
+                    cell.editModeConfigure(with: questionDto, at: indexPath)
+                    
+                    // 이미 저장한 값
+                    for saveItem in savedCheckListItems {
+                        if questionId == saveItem.questionId {
+                            cell.savedEditModeConfigure(with: saveItem.answer, at: indexPath)
+                        }
                     }
-                    cell.scoreItems = scoreItems
+                    
+                    // 임시로 저장한 값
+                    for saveItem in checkListItems {
+                        if questionId == saveItem.questionId {
+                            cell.savedEditModeConfigure(with: saveItem.answer, at: indexPath)
+                        }
+                    }
+                    
+                    cell.scoreSelectionHandler = { [weak self] score in
+                        if let self = self {
+                            print("Selected Score: \(score)")
+                            
+                            // 현재 questionId에 대한 기존 답변이 있는지 확인
+                            if let index = self.checkListItems.firstIndex(where: { $0.questionId == questionId }) {
+                                let existingAnswer = self.checkListItems[index]
+                                if existingAnswer.answer == score {
+                                    // 선택 취소하는 경우
+                                    self.checkListItems.remove(at: index)
+                                    print("\(questionId)번에 해당하는 답변 삭제")
+                                } else {
+                                    // 선택 수정하는 경우
+                                    let updatedAnswer = CheckListAnswer(imjangId: existingAnswer.imjangId, questionId: existingAnswer.questionId, answer: score, isSelected: true)
+                                    self.checkListItems[index] = updatedAnswer
+                                    print("\(questionId)번에 해당하는 답변 수정")
+                                }
+                            } else {
+                                // 기존 답변이 없는 경우 답변을 생성하여 배열에 추가
+                                let answerItem = CheckListAnswer(imjangId: self.imjangId!, questionId: questionId, answer: score, isSelected: true)
+                                self.checkListItems.append(answerItem)
+                                print("\(questionId)번에 해당하는 답변 생성")
+                            }
+                            print(checkListItems)
+                        }
+                    }
+
                     for button in [cell.answerButton1, cell.answerButton2, cell.answerButton3, cell.answerButton4, cell.answerButton5] {
                         button.isEnabled = true
                         button.setImage(UIImage(named: "answer\(button.tag)"), for: .normal)
                     }
-                    print("scoreItems 데이터", cell.scoreItems)
 
                     return cell
                 case 1:
                     // SelectionItem
                     let cell: ExpandedDropdownTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedDropdownTableViewCell.identifier, for: indexPath) as! ExpandedDropdownTableViewCell
-                    cell.configure(with: questionDto, at: indexPath)
-                    cell.categories = categories
-                    
-                    // 데이터 모델에서 저장된 값으로 셀 구성
-                    let contentKey = category.checkListitem[indexPath.row - 1].question
-                    cell.backgroundColor = cell.selectionItems[contentKey]?.isSelected ?? false ? UIColor(named: "lightOrange") : UIColor.white // 상태에 따라 배경색 설정
 
-                    // 셀이 선택된 경우 클로저 호출
-                    cell.selectionHandler = { [weak self, weak cell] selectedOption in
-                        print("selected Option in TableView:", selectedOption)
-                        self?.selectionItems.updateValue((selectedOption, true), forKey: contentKey)
+                    cell.editModeConfigure(with: questionDto, at: indexPath)
+                    
+                    // 이미 저장한 값
+                    for saveItem in savedCheckListItems {
+                        if questionId == saveItem.questionId {
+                            if let optionsForQuestion = questionOptions[questionId] {
+                                cell.savedEditModeConfigure(with: saveItem.answer, with: optionsForQuestion, at: indexPath)
+                            }
+                        }
                     }
-                    cell.selectionItems = selectionItems
+                    
+                    // 임시로 저장한 값
+                    for saveItem in checkListItems {
+                        if questionId == saveItem.questionId {
+                            if let optionsForQuestion = questionOptions[questionId] {
+                                cell.savedEditModeConfigure(with: saveItem.answer, with: optionsForQuestion, at: indexPath)
+                            }
+                        }
+                    }
+                                
+                    cell.optionSelectionHandler = { [weak self] option in
+                        if let self = self {
+                            print("Selected Option: \(option)")
+                            
+                            // 현재 questionId에 대한 기존 답변이 있는지 확인
+                            if let index = self.checkListItems.firstIndex(where: { $0.questionId == questionId }) {
+                                let existingAnswer = self.checkListItems[index]
+                                if option == "0" {
+                                    // 선택 취소하는 경우
+                                    self.checkListItems.remove(at: index)
+                                    print("\(questionId)번에 해당하는 답변 삭제")
+                                } else if existingAnswer.answer != option {
+                                    // 선택 수정하는 경우
+                                    let updatedAnswer = CheckListAnswer(imjangId: existingAnswer.imjangId, questionId: existingAnswer.questionId, answer: option, isSelected: true)
+                                    self.checkListItems[index] = updatedAnswer
+                                    print("\(questionId)번에 해당하는 답변 수정")
+                                }
+                            } else {
+                                // 기존 답변이 없는 경우 답변을 생성하여 배열에 추가
+                                let answerItem = CheckListAnswer(imjangId: self.imjangId!, questionId: questionId, answer: option, isSelected: true)
+                                self.checkListItems.append(answerItem)
+                                print("\(questionId)번에 해당하는 답변 생성")
+                            }
+                            print(checkListItems)
+                        }
+                    }
+
                     cell.itemButton.isUserInteractionEnabled = true
-                    print("selectionItems 데이터", cell.selectionItems)
+                    cell.itemPickerView.isUserInteractionEnabled = true
                     
                     return cell
                 case 2:
                     // InputItem
                     let cell: ExpandedTextFieldTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedTextFieldTableViewCell.identifier, for: indexPath) as! ExpandedTextFieldTableViewCell
-                    cell.configure(with: questionDto, at: indexPath)
-                    cell.categories = categories
                     
-                    // 데이터 모델에서 저장된 값으로 셀 구성
-                    let contentKey = category.checkListitem[indexPath.row - 1].question
-                    cell.backgroundColor = cell.inputItems[contentKey]?.isSelected ?? false ? UIColor(named: "lightOrange") : UIColor.white // 상태에 따라 배경색 설정
-
-                    // 셀이 선택된 경우 클로저 호출
-                    cell.inputHandler = { [weak self, weak cell] inputAnswer in
-                        print("Inputed answer in TableView:", inputAnswer)
-                        self?.inputItems.updateValue((inputAnswer, true), forKey: contentKey)
+                    cell.editModeConfigure(with: questionDto, at: indexPath)
+                    
+                    // 이미 저장한 값
+                    for saveItem in savedCheckListItems {
+                        if questionId == saveItem.questionId {
+                            cell.savedEditModeConfigure(with: saveItem.answer, at: indexPath)
+                        }
                     }
                     
-                    cell.inputItems = inputItems
+                    // 임시로 저장한 값
+                    for saveItem in checkListItems {
+                        if questionId == saveItem.questionId {
+                            cell.savedEditModeConfigure(with: saveItem.answer, at: indexPath)
+                        }
+                    }
+                    
+                    cell.textSelectionHandler = { [weak self] text in
+                        if let self = self {
+                            print("Selected text: \(text)")
+                            
+                            // 현재 questionId에 대한 기존 답변이 있는지 확인
+                            if let index = self.checkListItems.firstIndex(where: { $0.questionId == questionId }) {
+                                let existingAnswer = self.checkListItems[index]
+                                if text == "" {
+                                    // 답변 삭제하는 경우
+                                    self.checkListItems.remove(at: index)
+                                    print("\(questionId)번에 해당하는 답변 삭제")
+                                } else if existingAnswer.answer != text {
+                                    // 답변 수정하는 경우
+                                    let updatedAnswer = CheckListAnswer(imjangId: existingAnswer.imjangId, questionId: existingAnswer.questionId, answer: text, isSelected: true)
+                                    self.checkListItems[index] = updatedAnswer
+                                    print("\(questionId)번에 해당하는 답변 수정")
+                                }
+                            } else {
+                                // 기존 답변이 없는 경우 답변을 생성하여 배열에 추가
+                                let answerItem = CheckListAnswer(imjangId: self.imjangId!, questionId: questionId, answer: text, isSelected: true)
+                                self.checkListItems.append(answerItem)
+                                print("\(questionId)번에 해당하는 답변 생성")
+                            }
+                            print(checkListItems)
+                        }
+                    }
+
                     cell.answerTextField.isEnabled = true
-                    print("inputItems 데이터", cell.inputItems)
                     
                     return cell
                 case 3:
                     // CalendarItem
                     let cell: ExpandedCalendarTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedCalendarTableViewCell.identifier, for: indexPath) as! ExpandedCalendarTableViewCell
-                    cell.configure(with: questionDto, at: indexPath)
-                    cell.categories = categories
-                    
-                    // 데이터 모델에서 저장된 값으로 셀 구성
-                    let contentKey = category.checkListitem[indexPath.row - 1].question
-                    cell.backgroundColor = cell.calendarItems[contentKey]?.isSelected ?? false ? UIColor(named: "lightOrange") : UIColor.white // 상태에 따라 배경색 설정
 
-                    // 셀이 선택된 경우 클로저 호출
-                    cell.selectionHandler = { [weak self, weak cell] selectedDate in
-                        print("Selected Date in TableView:", selectedDate)
-                        self?.calendarItems.updateValue((selectedDate, true), forKey: contentKey)
+                    cell.editModeConfigure(with: questionDto,  at: indexPath)
+                    
+                    // 이미 저장한 값
+                    for saveItem in savedCheckListItems {
+                        if questionId == saveItem.questionId {
+                            cell.savedEditModeConfigure(with: saveItem.answer, at: indexPath)
+                        }
                     }
                     
-                    cell.calendarItems = calendarItems
-                    print("calendarItems 데이터", calendarItems)
+                    // 임시로 저장한 값
+                    for saveItem in checkListItems {
+                        if questionId == saveItem.questionId {
+                            cell.savedEditModeConfigure(with: saveItem.answer, at: indexPath)
+                        }
+                    }
+                    
+                    cell.dateSelectionHandler = { [weak self] date in
+                        if let self = self {
+                            print("Selected Date: \(date)")
+                            
+                            // 현재 questionId에 대한 기존 답변이 있는지 확인
+                            if let index = self.checkListItems.firstIndex(where: { $0.questionId == questionId }) {
+                                let existingAnswer = self.checkListItems[index]
+                                
+                                if existingAnswer.answer == date {
+                                    // 선택 취소하는 경우
+                                    self.checkListItems.remove(at: index)
+                                    print("\(questionId)번에 해당하는 답변 삭제")
+                                } else {
+                                    // 선택 수정하는 경우
+                                    let updatedAnswer = CheckListAnswer(imjangId: existingAnswer.imjangId, questionId: existingAnswer.questionId, answer: date, isSelected: true)
+                                    self.checkListItems[index] = updatedAnswer
+                                    print("\(questionId)번에 해당하는 답변 수정")
+                                }
+                            } else {
+                                // 기존 답변이 없는 경우 답변을 생성하여 배열에 추가
+                                let answerItem = CheckListAnswer(imjangId: self.imjangId!, questionId: questionId, answer: date, isSelected: true)
+                                self.checkListItems.append(answerItem)
+                                print("\(questionId)번에 해당하는 답변 생성")
+                            }
+                            print(checkListItems)
+                        }
+                    }
                     
                     return cell
                 default:
@@ -458,6 +604,30 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
             if indexPath.section == 0 && !isEditMode {
                 // 기한 카테고리 섹션 셀 (NotEnteredCalendarTableViewCell)
                 let cell: NotEnteredCalendarTableViewCell = tableView.dequeueReusableCell(withIdentifier: NotEnteredCalendarTableViewCell.identifier, for: indexPath) as! NotEnteredCalendarTableViewCell
+                
+                cell.viewModeConfigure(at: indexPath)
+                if version == 0 {
+                    for saveItem in savedCheckListItems {
+                        var date: [(Int, String)] = [(1, ""), (2, "")]
+                        if saveItem.questionId == 1 {
+                            date[0].1 = saveItem.answer
+                        } else if saveItem.questionId == 2 {
+                            date[1].1 = saveItem.answer
+                        }
+                        cell.savedViewModeConfigure(with: saveItem.imjangId, with: date, at: indexPath)
+                    }
+                } else if version == 1 {
+                    for saveItem in savedCheckListItems {
+                        var date: [(Int, String)] = [(59, ""), (60, "")]
+                        if saveItem.questionId == 59 {
+                            date[0].1 = saveItem.answer
+                        } else if saveItem.questionId == 60 {
+                            date[1].1 = saveItem.answer
+                        }
+                        cell.savedViewModeConfigure(with: saveItem.imjangId, with: date, at: indexPath)
+                    }
+                }
+                
                 return cell
             } else {
                 // 나머지 섹션 셀
@@ -468,54 +638,62 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                     let cell: CategoryItemTableViewCell = tableView.dequeueReusableCell(withIdentifier: CategoryItemTableViewCell.identifier, for: indexPath) as! CategoryItemTableViewCell
     
                     cell.configure(category: category)
-
-                    
+                
                     let arrowImage = category.isExpanded ? UIImage(named: "contraction-items") : UIImage(named: "expand-items")
                     cell.expandButton.setImage(arrowImage, for: .normal)
                     
                     return cell
                 } else {
-//                    let category = checkListCategories[indexPath.section - 1]
                     let questionDto = category.checkListitem[indexPath.row - 1]
+                    let questionId = questionDto.questionId
                     
                     switch questionDto.answerType {
                     case 0:
                         // ScoreItem
                         let cell: ExpandedScoreTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedScoreTableViewCell.identifier, for: indexPath) as! ExpandedScoreTableViewCell
-                        cell.configure(with: questionDto, at: indexPath)
-                        // 보기 모드인 경우, 선택 상태에 따라 배경색 설정
-                        cell.backgroundColor = UIColor(named: "gray0")
-                        cell.contentLabel.textColor = UIColor(named: "lightGray")
-                        for button in [cell.answerButton1, cell.answerButton2, cell.answerButton3, cell.answerButton4, cell.answerButton5] {
-                            button.isEnabled = false
-                            button.setImage(UIImage(named: "enabled-answer\(button.tag)"), for: .normal)
-                        }
                         
+                        cell.viewModeConfigure(with: questionDto, at: indexPath)
+                        
+                        for saveItem in savedCheckListItems {
+                            if questionId == saveItem.questionId {
+                                cell.savedViewModeConfigure(with: saveItem.answer, at: indexPath)
+                            }
+                        }
                         return cell
                     case 1:
                         // SelectionItem
                         let cell: ExpandedDropdownTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedDropdownTableViewCell.identifier, for: indexPath) as! ExpandedDropdownTableViewCell
-                        cell.configure(with: questionDto, at: indexPath)
-                        // 보기 모드인 경우, 선택 상태에 따라 배경색 설정
-                        cell.backgroundColor = UIColor(named: "gray0")
-                        cell.contentLabel.textColor = UIColor(named: "lightGray")
-                        cell.itemButton.isUserInteractionEnabled = false
+                        
+                        cell.viewModeConfigure(with: questionDto, at: indexPath)
+                        
+                        for saveItem in savedCheckListItems {
+                            if questionId == saveItem.questionId {
+                                if let optionsForQuestion = questionOptions[questionId] {
+                                    // 해당 질문에 대한 옵션을 사용하여 작업 수행
+                                    cell.savedViewModeConfigure(with: saveItem.answer, with: optionsForQuestion, at: indexPath)
+                                } else {
+                                    // 해당 질문에 대한 옵션이 없을 경우 처리
+                                    print("해당 질문에 대한 옵션이 없습니다.")
+                                }
+                            }
+                        }
                         return cell
                     case 2:
                         // InputItem
                         let cell: ExpandedTextFieldTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedTextFieldTableViewCell.identifier, for: indexPath) as! ExpandedTextFieldTableViewCell
-                        cell.configure(with: questionDto, at: indexPath)
-                        // 보기 모드인 경우, 선택 상태에 따라 배경색 설정
-                        cell.backgroundColor = UIColor(named: "gray0")
-                        cell.contentLabel.textColor = UIColor(named: "lightGray")
-                        cell.answerTextField.backgroundColor = UIColor(named: "shadowGray")
-                        cell.answerTextField.isEnabled = false
+
+                        cell.viewModeConfigure(with: questionDto, at: indexPath)
+                        
+                        for saveItem in savedCheckListItems {
+                            if questionId == saveItem.questionId {
+                                cell.savedViewModeConfigure(with: saveItem.answer, at: indexPath)
+                            }
+                        }
                         return cell
                     case 3:
                         // CalendarItem
                         let cell: ExpandedCalendarTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedCalendarTableViewCell.identifier, for: indexPath) as! ExpandedCalendarTableViewCell
-                        cell.configure(with: questionDto, at: indexPath)
-                        // 보기 모드인 경우, 선택 상태에 따라 배경색 설정
+                        
                         return cell
                     default:
                         fatalError("찾을 수 없는 답변 형태: \(questionDto.answerType)")
@@ -563,5 +741,4 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
             return UITableView.automaticDimension
         }
     }
-
 }
