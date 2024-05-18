@@ -9,13 +9,6 @@ struct CheckListResponseDto: Codable {
     let category: Int
     let questionDtos: [QuestionDto]
     var isExpanded: Bool?
-    
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.category = try container.decode(Int.self, forKey: .category)
-        self.questionDtos = try container.decode([QuestionDto].self, forKey: .questionDtos)
-        self.isExpanded = false
-    }
 }
 
 struct QuestionDto: Codable {

@@ -136,7 +136,7 @@ class ExpandedTextFieldTableViewCell: UITableViewCell {
     }
     
     // 수정 모드일 때 저장된 값이 있는 경우
-    func savedEditModeConfigure(with imjangId: Int, with answer: String, at indexPath: IndexPath) {
+    func savedEditModeConfigure(with answer: String, at indexPath: IndexPath) {
         questionImage.image = UIImage(named: "question-selected-image")
         contentLabel.textColor = UIColor(named: "500")
         backgroundColor = UIColor(named: "lightOrange")
