@@ -12,11 +12,8 @@ import FSCalendar
 class ExpandedCalendarTableViewCell: UITableViewCell {
     
     var dateSelectionHandler: ((String) -> Void)?
-    
     var selectedDate: Date?
     var monthPosition: FSCalendarMonthPosition?
-    var question: CheckListItem?
-    var imjangId: Int?
     
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -204,9 +201,7 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
     }
       
     // 수정 모드
-    func editModeConfigure(with questionDto: CheckListItem, with imjangId: Int, at indexPath: IndexPath) {
-        self.question = questionDto
-        self.imjangId = imjangId
+    func editModeConfigure(with questionDto: CheckListItem, at indexPath: IndexPath) {
         contentLabel.text = questionDto.question
         contentLabel.textColor = UIColor(named: "500")
         backgroundColor = .white
@@ -215,7 +210,7 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
     }
     
     // 수정 모드일 때 저장된 값이 있는 경우
-    func savedEditModeConfigure(with imjangId: Int, with answer: String, at indexPath: IndexPath) {
+    func savedEditModeConfigure(with answer: String, at indexPath: IndexPath) {
         questionImage.image = UIImage(named: "question-selected-image")
         contentLabel.textColor = UIColor(named: "500")
         backgroundColor = UIColor(named: "lightOrange")

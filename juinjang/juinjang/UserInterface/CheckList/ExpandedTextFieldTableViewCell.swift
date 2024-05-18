@@ -11,10 +11,7 @@ import SnapKit
 class ExpandedTextFieldTableViewCell: UITableViewCell {
     
     var textSelectionHandler: ((String) -> Void)?
-    
     var inputAnswer: String?
-    var question: CheckListItem?
-    var imjangId: Int?
     
     lazy var questionImage = UIImageView().then {
         $0.contentMode = .scaleAspectFit
@@ -107,9 +104,7 @@ class ExpandedTextFieldTableViewCell: UITableViewCell {
     }
     
     // 보기 모드
-    func viewModeConfigure(with questionDto: CheckListItem, with imjangId: Int, at indexPath: IndexPath) {
-        self.question = questionDto
-        self.imjangId = imjangId
+    func viewModeConfigure(with questionDto: CheckListItem, at indexPath: IndexPath) {
         contentLabel.text = questionDto.question
         contentLabel.textColor = UIColor(named: "lightGray")
         backgroundColor = UIColor(named: "gray0")
@@ -120,9 +115,7 @@ class ExpandedTextFieldTableViewCell: UITableViewCell {
     }
       
     // 수정 모드
-    func editModeConfigure(with questionDto: CheckListItem, with imjangId: Int, at indexPath: IndexPath) {
-        self.question = questionDto
-        self.imjangId = imjangId
+    func editModeConfigure(with questionDto: CheckListItem, at indexPath: IndexPath) {
         contentLabel.text = questionDto.question
         contentLabel.textColor = UIColor(named: "500")
         backgroundColor = .white
@@ -131,7 +124,7 @@ class ExpandedTextFieldTableViewCell: UITableViewCell {
     }
     
     // 보기 모드일 때 저장된 값이 있는 경우
-    func savedViewModeConfigure(with imjangId: Int, with answer: String, at indexPath: IndexPath) {
+    func savedViewModeConfigure(with answer: String, at indexPath: IndexPath) {
         questionImage.image = UIImage(named: "question-selected-image")
         contentLabel.textColor = UIColor(named: "500")
         backgroundColor = .white

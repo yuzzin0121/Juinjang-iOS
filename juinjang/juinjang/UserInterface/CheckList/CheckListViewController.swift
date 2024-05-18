@@ -345,11 +345,11 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                     // ScoreItem
                     let cell: ExpandedScoreTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedScoreTableViewCell.identifier, for: indexPath) as! ExpandedScoreTableViewCell
                     
-                    cell.editModeConfigure(with: questionDto, with: imjangId ?? 0, at: indexPath)
+                    cell.editModeConfigure(with: questionDto, at: indexPath)
                     
                     for saveItem in checkListItems {
                         if questionId == saveItem.questionId {
-                            cell.savedEditModeConfigure(with: saveItem.imjangId, with: saveItem.answer, at: indexPath)
+                            cell.savedEditModeConfigure(with: saveItem.answer, at: indexPath)
                         }
                     }
                     
@@ -390,12 +390,12 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                     // SelectionItem
                     let cell: ExpandedDropdownTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedDropdownTableViewCell.identifier, for: indexPath) as! ExpandedDropdownTableViewCell
 
-                    cell.editModeConfigure(with: questionDto, with: imjangId ?? 0, at: indexPath)
+                    cell.editModeConfigure(with: questionDto, at: indexPath)
                     
                     for saveItem in checkListItems {
                         if questionId == saveItem.questionId {
                             if let optionsForQuestion = questionOptions[questionId] {
-                                cell.savedViewModeConfigure(with: saveItem.imjangId, with: saveItem.answer, with: optionsForQuestion, at: indexPath)
+                                cell.savedEditModeConfigure(with: saveItem.answer, with: optionsForQuestion, at: indexPath)
                             }
                         }
                     }
@@ -407,11 +407,11 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                             // 현재 questionId에 대한 기존 답변이 있는지 확인
                             if let index = self.checkListItems.firstIndex(where: { $0.questionId == questionId }) {
                                 let existingAnswer = self.checkListItems[index]
-                                if existingAnswer.answer == option {
+                                if option == "0" {
                                     // 선택 취소하는 경우
                                     self.checkListItems.remove(at: index)
                                     print("\(questionId)번에 해당하는 답변 삭제")
-                                } else {
+                                } else if existingAnswer.answer != option {
                                     // 선택 수정하는 경우
                                     let updatedAnswer = CheckListAnswer(imjangId: existingAnswer.imjangId, questionId: existingAnswer.questionId, answer: option, isSelected: true)
                                     self.checkListItems[index] = updatedAnswer
@@ -435,7 +435,7 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                     // InputItem
                     let cell: ExpandedTextFieldTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedTextFieldTableViewCell.identifier, for: indexPath) as! ExpandedTextFieldTableViewCell
                     
-                    cell.editModeConfigure(with: questionDto, with: imjangId ?? 0, at: indexPath)
+                    cell.editModeConfigure(with: questionDto, at: indexPath)
                     
                     for saveItem in checkListItems {
                         if questionId == saveItem.questionId {
@@ -450,12 +450,12 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                             // 현재 questionId에 대한 기존 답변이 있는지 확인
                             if let index = self.checkListItems.firstIndex(where: { $0.questionId == questionId }) {
                                 let existingAnswer = self.checkListItems[index]
-                                if existingAnswer.answer == text {
-                                    // 선택 취소하는 경우
+                                if text == "" {
+                                    // 답변 삭제하는 경우
                                     self.checkListItems.remove(at: index)
                                     print("\(questionId)번에 해당하는 답변 삭제")
-                                } else {
-                                    // 선택 수정하는 경우
+                                } else if existingAnswer.answer != text {
+                                    // 답변 수정하는 경우
                                     let updatedAnswer = CheckListAnswer(imjangId: existingAnswer.imjangId, questionId: existingAnswer.questionId, answer: text, isSelected: true)
                                     self.checkListItems[index] = updatedAnswer
                                     print("\(questionId)번에 해당하는 답변 수정")
@@ -477,11 +477,11 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                     // CalendarItem
                     let cell: ExpandedCalendarTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedCalendarTableViewCell.identifier, for: indexPath) as! ExpandedCalendarTableViewCell
 
-                    cell.editModeConfigure(with: questionDto, with: imjangId ?? 0, at: indexPath)
+                    cell.editModeConfigure(with: questionDto,  at: indexPath)
                     
                     for saveItem in checkListItems {
                         if questionId == saveItem.questionId {
-                            cell.savedEditModeConfigure(with: saveItem.imjangId, with: saveItem.answer, at: indexPath)
+                            cell.savedEditModeConfigure(with: saveItem.answer, at: indexPath)
                         }
                     }
                     
@@ -570,11 +570,11 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                         // ScoreItem
                         let cell: ExpandedScoreTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedScoreTableViewCell.identifier, for: indexPath) as! ExpandedScoreTableViewCell
                         
-                        cell.viewModeConfigure(with: questionDto, with: imjangId ?? 0, at: indexPath)
+                        cell.viewModeConfigure(with: questionDto, at: indexPath)
                         
                         for saveItem in checkListItems {
                             if questionId == saveItem.questionId {
-                                cell.savedViewModeConfigure(with: saveItem.imjangId, with: saveItem.answer, at: indexPath)
+                                cell.savedViewModeConfigure(with: saveItem.answer, at: indexPath)
                             }
                         }
                         return cell
@@ -582,13 +582,13 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                         // SelectionItem
                         let cell: ExpandedDropdownTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedDropdownTableViewCell.identifier, for: indexPath) as! ExpandedDropdownTableViewCell
                         
-                        cell.viewModeConfigure(with: questionDto, with: imjangId ?? 0, at: indexPath)
+                        cell.viewModeConfigure(with: questionDto, at: indexPath)
                         
                         for saveItem in checkListItems {
                             if questionId == saveItem.questionId {
                                 if let optionsForQuestion = questionOptions[questionId] {
                                     // 해당 질문에 대한 옵션을 사용하여 작업 수행
-                                    cell.savedViewModeConfigure(with: saveItem.imjangId, with: saveItem.answer, with: optionsForQuestion, at: indexPath)
+                                    cell.savedViewModeConfigure(with: saveItem.answer, with: optionsForQuestion, at: indexPath)
                                 } else {
                                     // 해당 질문에 대한 옵션이 없을 경우 처리
                                     print("해당 질문에 대한 옵션이 없습니다.")
@@ -600,11 +600,11 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                         // InputItem
                         let cell: ExpandedTextFieldTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedTextFieldTableViewCell.identifier, for: indexPath) as! ExpandedTextFieldTableViewCell
 
-                        cell.viewModeConfigure(with: questionDto, with: imjangId ?? 0, at: indexPath)
+                        cell.viewModeConfigure(with: questionDto, at: indexPath)
                         
                         for saveItem in checkListItems {
                             if questionId == saveItem.questionId {
-                                cell.savedViewModeConfigure(with: saveItem.imjangId, with: saveItem.answer, at: indexPath)
+                                cell.savedViewModeConfigure(with: saveItem.answer, at: indexPath)
                             }
                         }
                         return cell

@@ -11,11 +11,7 @@ import SnapKit
 class ExpandedDropdownTableViewCell: UITableViewCell {
     
     var optionSelectionHandler: ((String) -> Void)?
-    
     var selectedOption: String?
-    var categories: [CheckListResponseDto]!
-    var question: CheckListItem?
-    var imjangId: Int?
     
     lazy var questionImage = UIImageView().then {
         $0.contentMode = .scaleAspectFit
@@ -104,7 +100,19 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
         super.prepareForReuse()
 
         // 셀 내용 초기화
-        selectedOption = nil
+        itemPickerView.selectRow(0, inComponent: 0, animated: true)
+        itemButton.backgroundColor = UIColor(named: "shadowGray")
+        itemButton.setTitle("선택안함", for: .normal)
+        itemButton.setTitleColor(UIColor(named: "darkGray"), for: .normal)
+        let buttonImage = UIImage(named: "item-arrow-down")
+        itemButton.setImage(buttonImage, for: .normal)
+        itemButton.semanticContentAttribute = .forceRightToLeft
+        // 여백 설정
+        let titleInset: CGFloat = 12.0
+        let imageInset: CGFloat = 8.0
+        itemButton.sizeToFit()
+        itemButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: titleInset, bottom: 0, right: -imageInset)
+        itemButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: itemButton.bounds.width - 35, bottom: 0, right: -imageInset)
         
         // 배경색 초기화
         backgroundColor = .white
@@ -198,9 +206,7 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
     }
     
     // 보기 모드
-    func viewModeConfigure(with questionDto: CheckListItem, with imjangId: Int, at indexPath: IndexPath) {
-        self.question = questionDto
-        self.imjangId = imjangId
+    func viewModeConfigure(with questionDto: CheckListItem, at indexPath: IndexPath) {
         contentLabel.text = questionDto.question
         contentLabel.textColor = UIColor(named: "lightGray")
         backgroundColor = UIColor(named: "gray0")
@@ -211,16 +217,10 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
     }
       
     // 수정 모드
-    func editModeConfigure(with questionDto: CheckListItem, with imjangId: Int, at indexPath: IndexPath) {
-        self.question = questionDto
-        self.imjangId = imjangId
+    func editModeConfigure(with questionDto: CheckListItem, at indexPath: IndexPath) {
         contentLabel.text = questionDto.question
         contentLabel.textColor = UIColor(named: "500")
         backgroundColor = .white
-        
-//        selectedOption = nil
-//        let defaultSelectedRow = 0
-//        itemPickerView.selectRow(defaultSelectedRow, inComponent: 0, animated: false)
         
         var optionValues: [OptionItem] = []
 
@@ -249,9 +249,7 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
     }
     
     // 보기 모드일 때 저장된 값이 있는 경우
-    func savedViewModeConfigure(with imjangId: Int, with answer: String, with options: [Option], at indexPath: IndexPath) {
-        print("저장된 값?")
-        print(answer)
+    func savedViewModeConfigure(with answer: String, with options: [Option], at indexPath: IndexPath) {
         if answer != "0" {
             itemPickerView.selectRow(Int(answer) ?? 0, inComponent: 0, animated: true)
             questionImage.image = UIImage(named: "question-selected-image")
@@ -278,9 +276,8 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
     }
     
     // 수정 모드일 때 저장된 값이 있는 경우
-    func savedEditModeConfigure(with imjangId: Int, with answer: String, with options: [Option], at indexPath: IndexPath) {
-        print("저장된 값?")
-        print(answer)
+    func savedEditModeConfigure(with answer: String, with options: [Option], at indexPath: IndexPath) {
+        print("선택형 답변 Index: \(answer)")
         if answer != "0" {
             itemPickerView.selectRow(Int(answer) ?? 0, inComponent: 0, animated: true)
             questionImage.image = UIImage(named: "question-selected-image")
@@ -335,7 +332,6 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
         
         
         // 선택한 옵션으로 selectedButton 설정
-        setSelectedInset()
         selectedButton.setTitle(selectedOption.option, for: .normal)
         selectedButton.backgroundColor = .white
         selectedButton.setTitleColor(UIColor(named: "darkGray"), for: .normal)
