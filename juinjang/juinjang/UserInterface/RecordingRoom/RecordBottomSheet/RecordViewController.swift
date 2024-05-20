@@ -126,13 +126,6 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
         print(#function, "녹음 시작")
         AudioRecorderManager.shared.startRecording()
         progressTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateRecordTime), userInfo: nil, repeats: true)
-
-    func startRecording() {
-            // 녹음을 시작하는 코드
-        audioRecorder.stop()
-        audioRecorder.record()
-        progressTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(updateRecordTime), userInfo: nil, repeats: true)
-            
     }
     
     // 00:00 형태의 문자열로 변환

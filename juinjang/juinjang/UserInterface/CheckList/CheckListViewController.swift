@@ -26,18 +26,15 @@ class CheckListViewController: UIViewController {
     var isEditMode: Bool = false // 수정 모드 여부
     var version: Int = 0
     
-    var imjangId: Int? {
-        didSet {
-            print("체크리스트 \(imjangId)")
-            filterVersionAndCategory(isEditMode: isEditMode, version: version) { [weak self] categories in
-                self?.showCheckList()
-                DispatchQueue.main.async {
-                    self?.tableView.delegate = self
-                    self?.tableView.dataSource = self
-                    self?.tableView.reloadData()
-                }
-            }
-        }
+    var imjangId: Int
+    
+    init(imjangId: Int) {
+        self.imjangId = imjangId
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func viewDidLoad() {
@@ -48,11 +45,24 @@ class CheckListViewController: UIViewController {
         addSubViews()
         setupLayout()
         registerCell()
+        setCheckInfo()
 //        selectedAnswers = ChecklistDataManager.shared.loadChecklistAnswers()
         NotificationCenter.default.addObserver(self, selector: #selector(didStoppedParentScroll), name: NSNotification.Name("didStoppedParentScroll"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleEditModeChange(_:)), name: Notification.Name("EditModeChanged"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleEditButtonTappedNotification), name: NSNotification.Name("EditButtonTapped"), object: nil)
         
+    }
+    
+    
+    private func setCheckInfo() {
+        filterVersionAndCategory(isEditMode: isEditMode, version: version) { [weak self] categories in
+            self?.showCheckList()
+            DispatchQueue.main.async {
+                self?.tableView.delegate = self
+                self?.tableView.dataSource = self
+                self?.tableView.reloadData()
+            }
+        }
     }
     
     func setTableView() {
@@ -139,8 +149,8 @@ class CheckListViewController: UIViewController {
     
     // -MARK: API 요청(체크리스트 조회)
     func showCheckList() {
-        guard let imjangId = imjangId else { return }
-        JuinjangAPIManager.shared.fetchData(type: BaseResponse<[CheckListResponseDto]>.self, api: .showChecklist(imjangId: imjangId)) { response, error in
+        JuinjangAPIManager.shared.fetchData(type: BaseResponse<[CheckListResponseDto]>.self, api: .showChecklist(imjangId: imjangId)) { [weak self] response, error in
+            guard let self else { return }
             if error == nil {
                 guard let response = response else { return }
                 print("------저장된 체크리스트 조회------")
@@ -148,7 +158,7 @@ class CheckListViewController: UIViewController {
                     for Item in categoryItem {
                         for questionDto in Item.questionDtos {
                             if let answer = questionDto.answer {
-                                self.savedCheckListItems.append(CheckListAnswer(imjangId: imjangId, questionId: questionDto.questionId, answer: answer, isSelected: true))
+                                savedCheckListItems.append(CheckListAnswer(imjangId: imjangId, questionId: questionDto.questionId, answer: answer, isSelected: true))
                             }
                         }
                     }
@@ -176,8 +186,6 @@ class CheckListViewController: UIViewController {
     }
     
     func sendChecklistData(_ items: [CheckListRequestDto]) {
-        guard let imjangId = imjangId else { return }
-        
         let encoder = JSONEncoder()
         
         let dictItems: [[String: Any]] = items.map { item in
@@ -219,7 +227,6 @@ class CheckListViewController: UIViewController {
     // -MARK: API 요청(체크리스트 저장)
     func saveAnswer() {
         print("saveAnswer 함수 호출")
-        guard let imjangId = imjangId else { return }
 //        var checkListItems: [CheckListRequestDto] = []
         
         print("토큰값 \(UserDefaultManager.shared.accessToken)")
@@ -264,7 +271,7 @@ class CheckListViewController: UIViewController {
                 }
                 
                 let headers: HTTPHeaders = ["Content-Type": "application/json"]
-                let url = JuinjangAPI.saveChecklist(imjangId: imjangId).endpoint
+                let url = JuinjangAPI.saveChecklist(imjangId: self.imjangId).endpoint
                 
                 var request = URLRequest(url: url)
                 request.httpMethod = HTTPMethod.post.rawValue
@@ -428,7 +435,7 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                                 }
                             } else {
                                 // 기존 답변이 없는 경우 답변을 생성하여 배열에 추가
-                                let answerItem = CheckListAnswer(imjangId: self.imjangId!, questionId: questionId, answer: score, isSelected: true)
+                                let answerItem = CheckListAnswer(imjangId: self.imjangId, questionId: questionId, answer: score, isSelected: true)
                                 self.checkListItems.append(answerItem)
                                 print("\(questionId)번에 해당하는 답변 생성")
                             }
@@ -485,7 +492,7 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                                 }
                             } else {
                                 // 기존 답변이 없는 경우 답변을 생성하여 배열에 추가
-                                let answerItem = CheckListAnswer(imjangId: self.imjangId!, questionId: questionId, answer: option, isSelected: true)
+                                let answerItem = CheckListAnswer(imjangId: self.imjangId, questionId: questionId, answer: option, isSelected: true)
                                 self.checkListItems.append(answerItem)
                                 print("\(questionId)번에 해당하는 답변 생성")
                             }
@@ -536,7 +543,7 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                                 }
                             } else {
                                 // 기존 답변이 없는 경우 답변을 생성하여 배열에 추가
-                                let answerItem = CheckListAnswer(imjangId: self.imjangId!, questionId: questionId, answer: text, isSelected: true)
+                                let answerItem = CheckListAnswer(imjangId: imjangId, questionId: questionId, answer: text, isSelected: true)
                                 self.checkListItems.append(answerItem)
                                 print("\(questionId)번에 해당하는 답변 생성")
                             }
@@ -587,7 +594,7 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                                 }
                             } else {
                                 // 기존 답변이 없는 경우 답변을 생성하여 배열에 추가
-                                let answerItem = CheckListAnswer(imjangId: self.imjangId!, questionId: questionId, answer: date, isSelected: true)
+                                let answerItem = CheckListAnswer(imjangId: imjangId, questionId: questionId, answer: date, isSelected: true)
                                 self.checkListItems.append(answerItem)
                                 print("\(questionId)번에 해당하는 답변 생성")
                             }

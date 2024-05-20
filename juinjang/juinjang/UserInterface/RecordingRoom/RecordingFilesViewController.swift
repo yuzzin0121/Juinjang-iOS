@@ -191,8 +191,9 @@ class RecordingFilesViewController: UIViewController {
         }
         deletePopupVC.fileName = recordings[indexPath.row].title
         deletePopupVC.completionHandler = { [weak self] indexPath in
+            guard let self else { return }
             recordings.remove(at: indexPath.row)
-            self?.recordingFileTableView.deleteRows(at: [indexPath], with: .fade)
+            recordingFileTableView.deleteRows(at: [indexPath], with: .fade)
         }
         present(deletePopupVC, animated: true)
         deletePopupVC.modalPresentationStyle = .overCurrentContext
@@ -227,7 +228,7 @@ extension RecordingFilesViewController: UITableViewDelegate, UITableViewDataSour
 //        cell.setData(fileTitle: "\(recording.title)", time: "\(playVC.bottomViewController.remainingTimeLabel.text ?? "0:00")", date: recordTime)
         //cell.recordingFileNameLabel.text = fileURLs[indexPath.row].lastPathComponent
 
-        cell.setData(fileTitle: "\(recording.title)", time: "\(playVC.bottomViewController.remainingTimeLabel.text ?? "0:00")", date: recordTime)
+//        cell.setData(fileTitle: "\(recording.title)", time: "\(playVC.bottomViewController.remainingTimeLabel.text ?? "0:00")", date: recordTime)
 
         return cell
     }
