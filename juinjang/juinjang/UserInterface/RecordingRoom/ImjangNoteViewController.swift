@@ -107,7 +107,6 @@ class ImjangNoteViewController: UIViewController{
     }
     
     lazy var recordingSegmentedVC = RecordingSegmentedViewController(imjangId: imjangId)
-    let checkListVC = CheckListViewController()
     
     var roomName: String = "판교푸르지오월드마크"
     var roomPriceString: String = "30억 1천만원"
@@ -115,7 +114,6 @@ class ImjangNoteViewController: UIViewController{
     var mDateString: String = "23.12.01"
     var completionHandler: (() -> Void)?
     
-//    lazy var images: [UIImage?] = [UIImage(named: "1"), UIImage(named: "2"), UIImage(named: "3")]
     lazy var images: [String] = []
     var imjangId: Int
     var detailDto: DetailDto? = nil

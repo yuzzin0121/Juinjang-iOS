@@ -53,7 +53,7 @@ class RecordingSegmentedViewController: TabmanViewController, MoveWarningMessage
     }
     
     func addViewControllers() {
-        let checkListVC = CheckListViewController()
+        let checkListVC = CheckListViewController(imjangId: imjangId)
         let recordingRoomVC = RecordingRoomViewController(imjangId: imjangId)
         recordingRoomVC.imjangId = imjangId
         viewControllers.append(contentsOf: [checkListVC, recordingRoomVC])
