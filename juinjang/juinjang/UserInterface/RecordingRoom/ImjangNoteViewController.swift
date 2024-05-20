@@ -106,7 +106,7 @@ class ImjangNoteViewController: UIViewController{
         $0.addTarget(self, action: #selector(editButtonTapped(_:)), for: .touchUpInside)
     }
     
-    let recordingSegmentedVC = RecordingSegmentedViewController()
+    lazy var recordingSegmentedVC = RecordingSegmentedViewController(imjangId: imjangId)
     let checkListVC = CheckListViewController()
     
     var roomName: String = "판교푸르지오월드마크"
@@ -117,10 +117,19 @@ class ImjangNoteViewController: UIViewController{
     
 //    lazy var images: [UIImage?] = [UIImage(named: "1"), UIImage(named: "2"), UIImage(named: "3")]
     lazy var images: [String] = []
-    var imjangId: Int? = nil
+    var imjangId: Int
     var detailDto: DetailDto? = nil
     var previousVCType: PreviousVCType = .createImjangVC
-
+    
+    init(imjangId: Int) {
+        self.imjangId = imjangId
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -137,18 +146,24 @@ class ImjangNoteViewController: UIViewController{
 //        setImageStackViewClick()
         NotificationCenter.default.addObserver(self, selector: #selector(didStoppedChildScroll), name: NSNotification.Name("didStoppedChildScroll"), object: nil)
         recordingSegmentedVC.imjangNoteViewController = self
-        if let imjangId = imjangId {
-            if let checkListVC = recordingSegmentedVC.viewControllers[0] as?
-                CheckListViewController {
-                    checkListVC.imjangId = imjangId
-            } else if let recordingRoomVC = recordingSegmentedVC.viewControllers[1] as? RecordingRoomViewController {
-                recordingRoomVC.imjangId = imjangId
-            }
-        }
+//        if let imjangId = imjangId {
+//            if let checkListVC = recordingSegmentedVC.viewControllers[0] as?
+//                CheckListViewController {
+//                    checkListVC.imjangId = imjangId
+//            } else if let recordingRoomVC = recordingSegmentedVC.viewControllers[1] as? RecordingRoomViewController {
+//                recordingRoomVC.imjangId = imjangId
+//            }
+//        }
+//        if let checkListVC = recordingSegmentedVC.viewControllers[0] as?
+//            CheckListViewController {
+//                checkListVC.imjangId = imjangId
+//        } else if let recordingRoomVC = recordingSegmentedVC.viewControllers[1] as? RecordingRoomViewController {
+//            recordingRoomVC.imjangId = imjangId
+//        }
     }
     
     func callRequest() {
-        guard let imjangId = imjangId else { return }
+//        guard let imjangId = imjangId else { return }
         JuinjangAPIManager.shared.fetchData(type: BaseResponse<DetailDto>.self, api: .detailImjang(imjangId: imjangId)) { detailDto, error in
             if error == nil {
                 guard let result = detailDto else { return }
@@ -262,7 +277,7 @@ class ImjangNoteViewController: UIViewController{
     
     // 이미지 리스트 화면으로 이동
     @objc func showImjangImageListVC() {
-        guard let imjangId = imjangId else { return }
+//        guard let imjangId = imjangId else { return }
         let imjangImageListVC = ImjangImageListViewController()
         imjangImageListVC.imjangId = imjangId
         imjangImageListVC.completionHandler = { imageStrings in

@@ -7,10 +7,9 @@
 
 import UIKit
 import Lottie
+import Speech
 
 class STTLoadingViewController: UIViewController {
-
-    weak var bottomSheetViewController: BottomSheetViewController?
     
     lazy var bottomSheetView = UIView().then {
         $0.backgroundColor = .white
@@ -42,12 +41,75 @@ class STTLoadingViewController: UIViewController {
         $0.contentMode = .scaleAspectFit
         $0.loopMode = .loop
     }
-
+    
+    weak var bottomSheetViewController: BottomSheetViewController?
+    var imjangId: Int
+    var fileURL: URL
+    
+    init(imjangId: Int, fileURL: URL) {
+        self.imjangId = imjangId
+        self.fileURL = fileURL
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         bottomSheetView.backgroundColor = UIColor(named: "textBlack")
         addSubViews()
         setupLayout()
+        startSTT()
+    }
+    
+    // 재생 화면으로 전환
+    func showPlaybackVC(transcript: String) {
+        let recordPlaybackVC = RecordPlaybackViewController()
+        recordPlaybackVC.bottomSheetViewController = bottomSheetViewController
+        bottomSheetViewController?.transitionToViewController(recordPlaybackVC)
+    }
+    
+    func startSTT() {
+        transcribeAudio() { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case .success(let script):
+                print("STT 성공")
+                print(UserDefaultManager.shared.accessToken)
+//                showPlaybackVC(transcript: script)
+            case .failure(let failure):
+                bottomSheetViewController?.transitionToViewController(self)
+            }
+        }
+    }
+    
+    // 음성 파일에 대해 Speech To Text
+    private func transcribeAudio(completionHandler: @escaping (Result<String, STTError>) -> Void) {
+        print("STT 시작")
+        // 음성 인식 권한 확인
+        guard let recognizer = SFSpeechRecognizer(locale: Locale(identifier: "ko-KR")), recognizer.isAvailable else {
+            print("Speech recognizer is not available")
+            completionHandler(.failure(STTError.isNotAvailable))
+            return
+        }
+        
+        // url통해 음성 파일에 대한 음성 인식 요청 객체 생성
+        let request = SFSpeechURLRecognitionRequest(url: fileURL)
+        recognizer.recognitionTask(with: request) { result, error in
+            guard let result, error == nil else {
+                print("There was an error: \(error!.localizedDescription)")
+                completionHandler(.failure(STTError.resultError))
+                return
+            }
+
+            if result.isFinal {
+                print("Transcription: \(result.bestTranscription.formattedString)")
+                completionHandler(.success(result.bestTranscription.formattedString))
+            }
+        }
+        completionHandler(.failure(STTError.resultError))
     }
     
     func addSubViews() {

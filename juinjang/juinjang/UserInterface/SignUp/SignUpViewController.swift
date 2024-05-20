@@ -144,9 +144,10 @@ extension SignUpViewController {
                 print(error)
             } else {
                 if let kakaoUser = user {
-                    if let email = kakaoUser.kakaoAccount?.email {
+                    if let email = kakaoUser.kakaoAccount?.email, let nickname = kakaoUser.kakaoAccount?.profile?.nickname {
                         print("사용자 이메일 : \(email)")
                         UserDefaultManager.shared.email = email
+                        UserDefaultManager.shared.nickname = nickname
                     } else {
                         print("사용자가 이메일 제공에 동의하지 않았습니다.")
                     }

@@ -101,7 +101,7 @@ class MainViewController: UIViewController {
     
     func showImjangNoteVC(imjangId: Int?) {
         guard let imjangId = imjangId else { return }
-        let imjangNoteVC = ImjangNoteViewController()
+        let imjangNoteVC = ImjangNoteViewController(imjangId: imjangId)
         imjangNoteVC.imjangId = imjangId
         imjangNoteVC.previousVCType = .main
         imjangNoteVC.completionHandler = {

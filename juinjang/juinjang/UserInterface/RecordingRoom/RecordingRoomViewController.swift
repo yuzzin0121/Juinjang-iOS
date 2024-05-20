@@ -70,12 +70,17 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
     //var fileURLs : [URL] = []
     //var recordings : [Recording] = []
     
-    var imjangId: Int? = nil {
-        didSet {
-            print("임장룸\(imjangId)")
-        }
+    var imjangId: Int
+    
+    init(imjangId: Int) {
+        self.imjangId = imjangId
+        super.init(nibName: nil, bundle: nil)
     }
-
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -95,7 +100,6 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
     
     @objc
     func didStoppedParentScroll() {
-        print("얍")
         DispatchQueue.main.async {
             self.scrollView.isScrollEnabled = true
         }
@@ -113,7 +117,7 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
     
     // 녹음 3개까지, 메모 조회
     func callFetchRequest() {
-        guard let imjangId = imjangId else { return }
+        print(#function, "RecordingRoom 임장 아이디 있나?", imjangId)
         JuinjangAPIManager.shared.fetchData(type: BaseResponse<RecordMemoDto>.self, api: .fetchRecordingRoom(imjangId: imjangId)) { recordMemoDto, error in
             if error == nil {
                 guard let recordMemoDto = recordMemoDto else { return }
@@ -189,7 +193,6 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
     // 메모장 생성/수정 요청
     func callMemoRequest() {
         print(#function)
-        guard let imjangId = imjangId else { return }
         guard let memo = memoTextView.text else { return }
         let parameter = [
             "memo": memo
@@ -216,12 +219,13 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
     
     @objc
     func showRecordingFilesVC() {
-        let RecordingFilesVC = RecordingFilesViewController()
+        print(#function)
+        let RecordingFilesVC = RecordingFilesViewController(imjangId: imjangId)
         self.navigationController?.pushViewController(RecordingFilesVC, animated: true)
     }
     @objc
     func addRecordingFilesVC() {
-        let bottomSheetViewController = BottomSheetViewController()
+        let bottomSheetViewController = BottomSheetViewController(imjangId: imjangId)
         bottomSheetViewController.modalPresentationStyle = .custom
         self.present(bottomSheetViewController, animated: false, completion: nil)
     }
@@ -464,12 +468,12 @@ extension RecordingRoomViewController: UITableViewDataSource, UITableViewDelegat
             return UITableViewCell()
         }
         cell.selectionStyle = .none
-        let playVC = PlayRecordViewController()
-        playVC.bottomViewController.audioFile = recordings[indexPath.row].fileURL
-        playVC.bottomViewController.initPlay1()
+//        let playVC = PlayRecordViewController()
+//        playVC.bottomViewController.audioFile = recordings[indexPath.row].fileURL
+//        playVC.bottomViewController.initPlay1()
        // playVC.bottomViewController.audioFile = fileItems[indexPath.row].url
         //cell.setData(fileItem: fileItems[indexPath.row])
-        cell.setData(fileTitle: "\(recordings[indexPath.row].title)", time: "\(playVC.bottomViewController.remainingTimeLabel.text ?? "0:00")", date: recordTime)
+//        cell.setData(fileTitle: "\(recordings[indexPath.row].title)", time: "\(playVC.bottomViewController.remainingTimeLabel.text ?? "0:00")", date: recordTime)
         return cell
     }
     

@@ -1,4 +1,5 @@
 {
+  "originHash" : "5bea19d60204d0d5803b13bdd7d6e4f15fad3f8ad9aeb67e92297c9cfa685622",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -127,5 +128,5 @@
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }
