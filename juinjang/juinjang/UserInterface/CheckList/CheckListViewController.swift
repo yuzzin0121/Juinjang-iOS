@@ -56,11 +56,10 @@ class CheckListViewController: UIViewController {
     
     private func setCheckInfo() {
         filterVersionAndCategory(isEditMode: isEditMode, version: version) { [weak self] categories in
-            self?.showCheckList()
+            guard let self else { return }
+            showCheckList()
             DispatchQueue.main.async {
-                self?.tableView.delegate = self
-                self?.tableView.dataSource = self
-                self?.tableView.reloadData()
+                self.tableView.reloadData()
             }
         }
     }

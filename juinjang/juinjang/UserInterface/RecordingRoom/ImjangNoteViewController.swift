@@ -138,30 +138,13 @@ class ImjangNoteViewController: UIViewController{
         setConstraints()
         designViews()
         callRequest()
-//        setUpImageUI()
         upButton.addTarget(self, action: #selector(upToTop), for: .touchUpInside)
         setReportStackViewClick()
-//        setImageStackViewClick()
         NotificationCenter.default.addObserver(self, selector: #selector(didStoppedChildScroll), name: NSNotification.Name("didStoppedChildScroll"), object: nil)
         recordingSegmentedVC.imjangNoteViewController = self
-//        if let imjangId = imjangId {
-//            if let checkListVC = recordingSegmentedVC.viewControllers[0] as?
-//                CheckListViewController {
-//                    checkListVC.imjangId = imjangId
-//            } else if let recordingRoomVC = recordingSegmentedVC.viewControllers[1] as? RecordingRoomViewController {
-//                recordingRoomVC.imjangId = imjangId
-//            }
-//        }
-//        if let checkListVC = recordingSegmentedVC.viewControllers[0] as?
-//            CheckListViewController {
-//                checkListVC.imjangId = imjangId
-//        } else if let recordingRoomVC = recordingSegmentedVC.viewControllers[1] as? RecordingRoomViewController {
-//            recordingRoomVC.imjangId = imjangId
-//        }
     }
     
     func callRequest() {
-//        guard let imjangId = imjangId else { return }
         JuinjangAPIManager.shared.fetchData(type: BaseResponse<DetailDto>.self, api: .detailImjang(imjangId: imjangId)) { detailDto, error in
             if error == nil {
                 guard let result = detailDto else { return }
