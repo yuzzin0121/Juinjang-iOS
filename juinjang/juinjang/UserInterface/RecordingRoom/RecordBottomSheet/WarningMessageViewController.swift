@@ -10,10 +10,6 @@ import SnapKit
 
 class WarningMessageViewController: UIViewController {
     
-    weak var bottomSheetViewController: BottomSheetViewController?
-    
-    private var currentChildViewController: UIViewController?
-    
     lazy var bottomSheetView = UIView().then {
         $0.backgroundColor = .white
         $0.layer.cornerRadius = 30
@@ -80,7 +76,21 @@ class WarningMessageViewController: UIViewController {
         $0.titleLabel?.minimumScaleFactor = 0.5
         $0.titleLabel?.lineBreakMode = .byTruncatingTail
     }
-
+    
+    weak var bottomSheetViewController: BottomSheetViewController?
+    
+    private var currentChildViewController: UIViewController?
+    var imjangId: Int
+    
+    init(imjangId: Int) {
+        self.imjangId = imjangId
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         addSubViews()
@@ -161,7 +171,7 @@ class WarningMessageViewController: UIViewController {
     }
     
     @objc func confirmButtonPressed(_ sender: UIButton) {
-        let recordVC = RecordViewController()
+        let recordVC = RecordViewController(imjangId: imjangId)
         recordVC.bottomSheetViewController = bottomSheetViewController
         
         bottomSheetViewController?.transitionToViewController(recordVC)

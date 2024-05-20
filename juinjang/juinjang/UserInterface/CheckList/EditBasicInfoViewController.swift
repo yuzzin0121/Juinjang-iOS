@@ -542,10 +542,12 @@ class EditBasicInfoViewController: UIViewController {
     }
     
     @objc func nextButtonTapped(_ sender: UIButton) {
-        modifyImjang { error in
+        modifyImjang { [weak self] error in
+            guard let self else { return }
             if error == nil {
-                let imjangNoteVC = ImjangNoteViewController()
-                imjangNoteVC.imjangId = self.imjangId
+                guard let imjangId else { return }
+                let imjangNoteVC = ImjangNoteViewController(imjangId: imjangId)
+//                imjangNoteVC.imjangId = self.imjangId
                 imjangNoteVC.version = self.versionInfo
                 self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
                 self.navigationController?.pushViewController(imjangNoteVC, animated: true)

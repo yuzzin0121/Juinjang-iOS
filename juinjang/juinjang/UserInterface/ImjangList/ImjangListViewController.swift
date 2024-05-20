@@ -230,7 +230,7 @@ class ImjangListViewController: UIViewController {
     
     func showImjangNoteVC(imjangId: Int?) {
         guard let imjangId = imjangId else { return }
-        let imjangNoteVC = ImjangNoteViewController()
+        let imjangNoteVC = ImjangNoteViewController(imjangId: imjangId)
         imjangNoteVC.imjangId = imjangId
         imjangNoteVC.previousVCType = .imjangList
         imjangNoteVC.completionHandler = {

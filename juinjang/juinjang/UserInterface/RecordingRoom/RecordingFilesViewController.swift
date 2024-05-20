@@ -9,8 +9,6 @@ import UIKit
 import AVFoundation
 
 class RecordingFilesViewController: UIViewController {
-   
-    var recordings: [Recording] = []
     
     // 스크롤뷰
     let scrollView = UIScrollView().then {
@@ -23,7 +21,6 @@ class RecordingFilesViewController: UIViewController {
     // 스크롤할 컨텐트뷰
     let contentView = UIView()
     
-    
     let recordingFileTableView = UITableView().then {
         $0.isScrollEnabled = false
         $0.separatorStyle = .none
@@ -31,9 +28,22 @@ class RecordingFilesViewController: UIViewController {
         $0.register(RecordingFileViewCell.self, forCellReuseIdentifier: RecordingFileViewCell.identifier)
     }
     
+    var recordings: [Recording] = []
     //var fileURLs : [URL] = []
     //var fileItems: [RecordingFileItem] = []
-
+    
+    var imjangId: Int
+    
+    init(imjangId: Int) {
+        self.imjangId = imjangId
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -73,13 +83,13 @@ class RecordingFilesViewController: UIViewController {
     }
     
     @objc func back(_ sender: Any) {
-        let vc = ImjangNoteViewController()
-        navigationController?.pushViewController(vc, animated: true)
-       // navigationController?.popViewController(animated: true)
+//        let vc = ImjangNoteViewController()
+//        navigationController?.pushViewController(vc, animated: true)
+        navigationController?.popViewController(animated: true)
     }
     
     @objc func startRecording(_ sender: Any) {
-        let bottomSheetViewController = BottomSheetViewController()
+        let bottomSheetViewController = BottomSheetViewController(imjangId: imjangId)
         bottomSheetViewController.modalPresentationStyle = .custom
 //        bottomSheetViewController.transitioningDelegate = self
         self.present(bottomSheetViewController, animated: false, completion: nil)
@@ -196,19 +206,19 @@ extension RecordingFilesViewController: UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: RecordingFileViewCell.identifier, for: indexPath) as? RecordingFileViewCell else { return UITableViewCell() }
         let recording = recordings[indexPath.row]
-        let playVC = PlayRecordViewController()
-        playVC.bottomViewController.audioFile = recording.fileURL
-        playVC.bottomViewController.initPlay1()
+//        let playVC = PlayRecordViewController()
+//        playVC.bottomViewController.audioFile = recording.fileURL
+//        playVC.bottomViewController.initPlay1()
         cell.selectionStyle = .none
         //cell.setData(fileItem: fileURLs[indexPath.row])
-        cell.setData(fileTitle: "\(recording.title)", time: "\(playVC.bottomViewController.remainingTimeLabel.text ?? "0:00")", date: recordTime)
+//        cell.setData(fileTitle: "\(recording.title)", time: "\(playVC.bottomViewController.remainingTimeLabel.text ?? "0:00")", date: recordTime)
         //cell.recordingFileNameLabel.text = fileURLs[indexPath.row].lastPathComponent
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // 새로운 뷰 컨트롤러를 생성하고 데이터를 전달합니다.
-        let vc = BottomSheetViewController()
+        let vc = BottomSheetViewController(imjangId: imjangId)
         vc.modalPresentationStyle = .custom
         
         let playVC = PlayRecordViewController()

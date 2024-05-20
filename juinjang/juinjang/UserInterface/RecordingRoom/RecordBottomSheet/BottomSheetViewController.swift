@@ -11,10 +11,21 @@ import AVFoundation
 
 class BottomSheetViewController: UIViewController {
     
-    var currentViewController: UIViewController?
+    weak var currentViewController: UIViewController?
     
     let dimmedView = UIView().then {
         $0.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
+    }
+    
+    var imjangId: Int
+    
+    init(imjangId: Int) {
+        self.imjangId = imjangId
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     // MARK: Life Cycle
@@ -25,7 +36,7 @@ class BottomSheetViewController: UIViewController {
         
         dimmedView.alpha = 0.0
         
-        let warningMessageVC = WarningMessageViewController()
+        let warningMessageVC = WarningMessageViewController(imjangId: imjangId)
         warningMessageVC.bottomSheetViewController = self
         addContentViewController(warningMessageVC)
     }
@@ -68,10 +79,11 @@ class BottomSheetViewController: UIViewController {
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseIn, animations: {
             self.dimmedView.alpha = 0.0
             self.view.layoutIfNeeded()
-        }) { _ in
+        }) { [weak self] _ in
+            guard let self else { return }
             if self.presentingViewController != nil {
                // self.dismiss(animated: false, completion: nil)
-                let recordListViewController = RecordingFilesViewController()
+                let recordListViewController = RecordingFilesViewController(imjangId: imjangId)
                 // 현재 내비게이션 컨트롤러가 nil인지 확인
                 if let navigationController = self.navigationController {
                     // 내비게이션 컨트롤러 스택에 MainViewController를 push
