@@ -8,6 +8,7 @@
 import UIKit
 import Then
 import SnapKit
+import Alamofire
 
 class WelcomeViewController: UIViewController {
     
@@ -186,9 +187,46 @@ class WelcomeViewController: UIViewController {
     
     @objc func buttonTapped(_ sender: UIButton) {
         //UserDefaultManager.shared.userStatus = true
-        let RecordingRightsVC = RecordingRightsViewController()
-        RecordingRightsVC.modalPresentationStyle = .fullScreen
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        self.navigationController?.pushViewController(RecordingRightsVC, animated: true)
+        signupRequest(email: UserDefaultManager.shared.email, kakaoNickname: UserDefaultManager.shared.nickname, nickname: UserDefaultManager.shared.nickname)
+//        let RecordingRightsVC = RecordingRightsViewController()
+//        RecordingRightsVC.modalPresentationStyle = .fullScreen
+//        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+//        self.navigationController?.pushViewController(RecordingRightsVC, animated: true)
     }
+    func signupRequest(email: String, kakaoNickname: String?, nickname: String) {
+            let parameters: [String: Any] = [
+                "email": email,
+                "kakaoNickname": kakaoNickname ?? NSNull(),
+                "nickname": nickname
+            ]
+
+            AF.request("http://juinjang1227.com:8080/api/auth/kakao/signup", method: .post, parameters: parameters, encoding: JSONEncoding.default)
+                .responseJSON { response in
+                    switch response.result {
+                    case .success(let value):
+                        print(value) // 서버에서 받은 응답을 출력하거나 필요한 처리를 진행합니다.
+                        if let json = value as? [String: Any],
+                           let isSuccess = json["isSuccess"] as? Bool,
+                           let result = json["result"] as? [String: Any],
+                           let accessToken = result["accessToken"] as? String,
+                           let refreshToken = result["refreshToken"] as? String,
+                           isSuccess {
+                            // 응답이 성공이라면 다음 ViewController로 이동합니다.
+                                print("Success: \(accessToken)")
+                                UserDefaultManager.shared.accessToken = accessToken
+                                print("Success: \(refreshToken)")
+                                UserDefaultManager.shared.refreshToken = refreshToken
+                            let RecordingRightsVC = RecordingRightsViewController()
+                            RecordingRightsVC.modalPresentationStyle = .fullScreen
+                            self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+                            self.navigationController?.pushViewController(RecordingRightsVC, animated: true)
+                        } else {
+                            // 실패 처리 로직을 추가할 수 있습니다.
+                        }
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                        // 실패 처리 로직을 추가할 수 있습니다.
+                    }
+                }
+        }
 }

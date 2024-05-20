@@ -68,7 +68,7 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
 
     //var fileItems: [RecordingFileItem] = []
     //var fileURLs : [URL] = []
-    var recordings : [Recording] = []
+    //var recordings : [Recording] = []
     
     var imjangId: Int
     
@@ -140,16 +140,27 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
         }
     }
     func loadRecordings() {
-        //clearRecordingDirectory()
+        clearRecordingDirectory()
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        do {
-           // 문서 디렉토리에서 녹음 파일들을 가져옴
-           let recordingURLs = try FileManager.default.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil, options: [])
-           // 녹음 파일 목록에 추가
-            recordings = recordingURLs.filter { $0.pathExtension == "m4a" }.map {Recording(title: $0.lastPathComponent, fileURL: $0)} //.sorted(by: { $0.absoluteString > $1.absoluteString }) // .m4a 확장자를 가진 파일만 필터링
-        } catch {
-           print("Failed to load recordings: \(error)")
-        }
+        let existingRecordingsDict = Dictionary(uniqueKeysWithValues: recordings.map { ($0.fileURL, $0.title) })
+
+                do {
+                    let recordingURLs = try FileManager.default.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil, options: [])
+                    recordings = recordingURLs.filter { $0.pathExtension == "m4a" }.map { url in
+                        let title = existingRecordingsDict[url] ?? url.lastPathComponent
+                        return Recording(title: title, fileURL: url)
+                    }
+                } catch {
+                    print("Error loading recordings: \(error)")
+                }
+//        do {
+//           // 문서 디렉토리에서 녹음 파일들을 가져옴
+//           let recordingURLs = try FileManager.default.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil, options: [])
+//           // 녹음 파일 목록에 추가
+//            recordings = recordingURLs.filter { $0.pathExtension == "m4a" }.map {Recording(title: $0.lastPathComponent, fileURL: $0)} //.sorted(by: { $0.absoluteString > $1.absoluteString }) // .m4a 확장자를 가진 파일만 필터링
+//        } catch {
+//           print("Failed to load recordings: \(error)")
+//        }
         if recordings.isEmpty {
             tableBackgroundView.isHidden = false
         } else {

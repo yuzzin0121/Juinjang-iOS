@@ -12,6 +12,7 @@ import AVFoundation
 class PlayViewController: UIViewController, UITextFieldDelegate, AVAudioPlayerDelegate {
     
     weak var topViewController: RecordTopViewController?
+    var recordingIndexPath: IndexPath?
     
     var audioFile : URL! // 재생할 오디오의 파일명 변수
     var audioPlayer : AVAudioPlayer! //avaudioplayer인스턴스 변수
@@ -186,16 +187,23 @@ class PlayViewController: UIViewController, UITextFieldDelegate, AVAudioPlayerDe
     func textFieldDidEndEditing(_ textField: UITextField) {
         // 텍스트 필드가 수정되면 title을 수정
         updateTitle(textField.text)
+        updateRecordingTitle(textField.text)
         topViewController?.updateTitle(textField.text)
+    }
+    
+    func updateRecordingTitle(_ newTitle: String?) {
+        guard let indexPath = recordingIndexPath else { return }
+        print(indexPath)
+        print(indexPath.row)
+        print(recordings)
+        recordings[indexPath.row].title = newTitle!
+        print("실행 됨\(recordings)")
     }
 
     func updateTitle(_ newTitle: String?) {
         if let title = newTitle {
             print("녹음 파일 제목: \(title)")
             titleTextField.text = title
-           // RecordingFileViewCell().setData(fileTitle: title, time: remainingTimeLabel.text, date: recordTime)
-           // RecordingFileViewCell().recordingFileNameLabel.text = title
-            
         }
     }
     

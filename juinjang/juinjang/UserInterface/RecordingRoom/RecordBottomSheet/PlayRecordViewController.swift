@@ -8,7 +8,13 @@
 import UIKit
 import SnapKit
 
-class PlayRecordViewController: UIViewController {
+protocol PlayRecordViewControllerDelegate: AnyObject {
+    func playRecordViewControllerDidDismiss(_ controller: PlayRecordViewController)
+}
+
+class PlayRecordViewController: UIViewController, UITextFieldDelegate{
+    
+    weak var delegate : PlayRecordViewControllerDelegate?
 
     weak var bottomSheetViewController: BottomSheetViewController?
     
@@ -20,6 +26,7 @@ class PlayRecordViewController: UIViewController {
     }
     
     let bottomViewController = PlayViewController()
+    
     
     lazy var bottomSheetTotalHeight: CGFloat = UIScreen.main.bounds.height * (392 / 844)
 
@@ -36,19 +43,20 @@ class PlayRecordViewController: UIViewController {
     
     @objc func cancelButtonTapped(_ sender: UIButton) {
         print("닫기")
-        dismiss(animated: true, completion: nil)
+        dismiss(animated: true) {
+            self.delegate?.playRecordViewControllerDidDismiss(self)
+        }
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
     
+        bottomViewController.titleTextField.delegate = self
         bottomSheetView.backgroundColor = UIColor(named: "textBlack")
         addSubViews()
         setupLayout()
         print("bottomSheetTotalHeight: \(bottomSheetTotalHeight)")
-        //print("bottomHeight: \(bottomHeight)")
     }
-    
     
     func addSubViews() {
         view.addSubview(bottomSheetView)

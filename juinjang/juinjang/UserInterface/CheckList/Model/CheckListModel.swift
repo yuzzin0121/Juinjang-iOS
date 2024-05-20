@@ -104,6 +104,20 @@ func addOptionData() {
     }
 }
 
+// 각 질문에 해당하는 옵션 추가
+var questionOptions: [Int: [Option]] = [:]
+
+func mappingOption() {
+    questionOptions[4] = options1
+    questionOptions[13] = options2
+    questionOptions[14] = options3
+    questionOptions[30] = options4
+    questionOptions[33] = options5
+    questionOptions[61] = options6
+    questionOptions[62] = options1
+    questionOptions[89] = options7
+}
+
 // answerType - 0: 점수형 1: 선택형 2: 입력형 3: 달력
 // version - 0: 임장용 1: 원룸용
 var items: [CheckListItem] = [

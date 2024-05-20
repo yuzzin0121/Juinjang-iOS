@@ -10,6 +10,20 @@ import Then
 import SnapKit
 import Alamofire
 
+struct YourResponseModel: Codable {
+    let isSuccess: Bool
+    let code: String
+    let message: String
+    let result: ResultModel?
+}
+
+struct ResultModel: Codable {
+    let nickname: String
+    let email: String
+    let provider: String
+    let image: String
+}
+
 class SettingViewController : UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     static let id = "SettingViewController"
@@ -161,7 +175,8 @@ class SettingViewController : UIViewController, UIImagePickerControllerDelegate,
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             profileImageView.image = pickedImage
-            uploadImage(pickedImage)
+            saveProfileImage(pickedImage)
+            uploadImage(profileImageView.image!)
         }
         picker.dismiss(animated: true, completion: nil)
     }
@@ -177,7 +192,7 @@ class SettingViewController : UIViewController, UIImagePickerControllerDelegate,
             }
             
             let headers: HTTPHeaders = [
-                "Authorization": "Bearer\(UserDefaultManager.shared.accessToken)"
+                "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"
             ]
             
             AF.upload(multipartFormData: { multipartFormData in
@@ -192,6 +207,14 @@ class SettingViewController : UIViewController, UIImagePickerControllerDelegate,
                 }
             }
         }
+    func loadProfileImage() {
+        if let savedImage = UserDefaultManager.shared.profileImage {
+            profileImageView.image = savedImage
+        }
+    }
+    func saveProfileImage(_ image: UIImage) {
+        UserDefaultManager.shared.profileImage = image
+    }
     
     func logout() {
         // 로그아웃 API의 URL
@@ -514,6 +537,7 @@ class SettingViewController : UIViewController, UIImagePickerControllerDelegate,
     override func viewDidLoad() {
         super.viewDidLoad()
         //getUserInfo()
+        loadProfileImage()
         designNavigationBar()
         view.addSubview(profileImageView)
         view.addSubview(editButton)

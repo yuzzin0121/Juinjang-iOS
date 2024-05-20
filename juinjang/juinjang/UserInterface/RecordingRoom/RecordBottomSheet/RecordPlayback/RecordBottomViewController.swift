@@ -15,7 +15,7 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudio
     
     weak var topViewController: RecordTopViewController?
    // var fileURLs : [URL] = []
-    var recordings : [Recording] = []
+    //var recordings : [Recording] = []
     
     var audioFile : URL! // 재생할 오디오의 파일명 변수
     var audioPlayer : AVAudioPlayer! //avaudioplayer인스턴스 변수
