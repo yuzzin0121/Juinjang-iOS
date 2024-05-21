@@ -139,7 +139,6 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
         clearRecordingDirectory()
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let existingRecordingsDict = Dictionary(uniqueKeysWithValues: recordings.map { ($0.fileURL, $0.title) })
-
                 do {
                     let recordingURLs = try FileManager.default.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil, options: [])
                     recordings = recordingURLs.filter { $0.pathExtension == "m4a" }.map { url in

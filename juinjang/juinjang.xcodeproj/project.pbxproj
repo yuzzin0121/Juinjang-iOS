@@ -108,6 +108,7 @@
 		34AA14EB2B7DA5C700CF10FC /* Animation - 1707961785957.json in Resources */ = {isa = PBXBuildFile; fileRef = 34AA14EA2B7DA5C600CF10FC /* Animation - 1707961785957.json */; };
 		34AA14F52B82E46300CF10FC /* PlayRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AA14F42B82E46300CF10FC /* PlayRecordViewController.swift */; };
 		34AA14F72B82E98C00CF10FC /* PlayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AA14F62B82E98C00CF10FC /* PlayViewController.swift */; };
+		34E01F602BFBBE410071DE4B /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34E01F5F2BFBBE410071DE4B /* AudioRecorder.swift */; };
 		6108CFDF2B761AA300EF302F /* JuinjangAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6108CFDE2B761AA300EF302F /* JuinjangAPI.swift */; };
 		6108CFE12B761B3A00EF302F /* BaseResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6108CFE02B761B3A00EF302F /* BaseResponse.swift */; };
 		6108CFE62B761D0000EF302F /* LoginResponseDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6108CFE52B761D0000EF302F /* LoginResponseDto.swift */; };
@@ -264,6 +265,7 @@
 		34AA14EA2B7DA5C600CF10FC /* Animation - 1707961785957.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Animation - 1707961785957.json"; sourceTree = "<group>"; };
 		34AA14F42B82E46300CF10FC /* PlayRecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayRecordViewController.swift; sourceTree = "<group>"; };
 		34AA14F62B82E98C00CF10FC /* PlayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayViewController.swift; sourceTree = "<group>"; };
+		34E01F5F2BFBBE410071DE4B /* AudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorder.swift; sourceTree = "<group>"; };
 		6108CFDE2B761AA300EF302F /* JuinjangAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JuinjangAPI.swift; sourceTree = "<group>"; };
 		6108CFE02B761B3A00EF302F /* BaseResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseResponse.swift; sourceTree = "<group>"; };
 		6108CFE52B761D0000EF302F /* LoginResponseDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginResponseDto.swift; sourceTree = "<group>"; };
@@ -478,6 +480,7 @@
 				34AA14F62B82E98C00CF10FC /* PlayViewController.swift */,
 				34AA14EA2B7DA5C600CF10FC /* Animation - 1707961785957.json */,
 				0A2DED212B55433900A96BAA /* RecordPlayback */,
+				34E01F5F2BFBBE410071DE4B /* AudioRecorder.swift */,
 			);
 			path = RecordBottomSheet;
 			sourceTree = "<group>";
@@ -1055,6 +1058,7 @@
 				61D925052B486508002A16B4 /* RecordingFileViewCell.swift in Sources */,
 				611F14552B47070B00B983F1 /* RecordingSegmentedViewController.swift in Sources */,
 				0A4EBE3B2B5EF2BC00909B7A /* ExpandedDropdownTableViewCell.swift in Sources */,
+				34E01F602BFBBE410071DE4B /* AudioRecorder.swift in Sources */,
 				6108CFF82B76308F00EF302F /* RecordRequestDto.swift in Sources */,
 				6108CFF02B76285B00EF302F /* DetailDto.swift in Sources */,
 				611AA7B92B8253BC005DAC3B /* ImjangNoteCollectionViewCell.swift in Sources */,

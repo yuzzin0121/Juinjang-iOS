@@ -8,22 +8,45 @@
 import UIKit
 import SnapKit
 import AVFoundation
+import Alamofire
 
 struct Recording {
     var title: String
     var fileURL: URL
 }
+struct RecordResponse: Codable {
+    let isSuccess: Bool
+    let code: String
+    let message: String
+    let result: RecordResult
+}
+
+struct RecordResult: Codable {
+    let recordName: String
+    let createdAt: String
+    let updatedAt: String
+    let recordScript: String
+    let recordTime: Int
+    let recordUrl: String
+    let recordId: Int
+    let limjangId: Int
+}
 
 class RecordViewController: UIViewController, AVAudioRecorderDelegate {
     
     weak var bottomSheetViewController: BottomSheetViewController?
-    //var fileURLs : [URL] = []
     //var recording: [Recording] = []
     
     var audioFile : URL! // 재생할 오디오의 파일명 변수
     var audioRecorder : AVAudioRecorder!
     var progressTimer : Timer! //타이머를 위한 변수
     var endTime: Date?
+    
+    var accessToken: String = UserDefaultManager.shared.accessToken
+    var limjangId: Int = 1 // Replace with your actual limjangId
+    var recordName: String = "recordName" // Replace with your actual record name
+    var recordScript: String = "recordScript" // Replace with your actual record script
+
     
     lazy var bottomSheetView = UIView().then {
         $0.backgroundColor = .white
@@ -310,13 +333,13 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
         audioRecorder.stop()
 //        let dateFormatter = DateFormatter()
 //        dateFormatter.dateFormat = "HH:mm"
-       
-        //RecordingFilesViewController().recordingFileTableView.reloadData()
+
         endTime = Date() // 녹음 종료 시간 기록
         updateEndTimeLabel()
+        sendRecordingToServer()
+        
         let loadingVC = STTLoadingViewController()
         loadingVC.bottomSheetViewController = bottomSheetViewController
-        
         bottomSheetViewController?.transitionToViewController(loadingVC)
         
         // 임의로 2초 후 recordPlaybackVC로 이동
@@ -325,8 +348,47 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
             recordPlaybackVC.bottomSheetViewController = bottomSheetViewController
             bottomSheetViewController?.transitionToViewController(recordPlaybackVC)
         }
+    }
+    func sendRecordingToServer() {
+        guard let audioFileURL = audioFile else { return }
         
+        let url = "http://juinjang1227.com:8080/api/record"
+        
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(accessToken)",
+            "Content-Type": "multipart/form-data"
+        ]
+        
+        let recordRequestDTO: [String: Any] = [
+            "limjangId": limjangId,
+            "recordTime": getFormattedRecordTime(),
+            "recordName": recordName,
+            "recordScript": recordScript
+        ]
+        
+        AF.upload(multipartFormData: { multipartFormData in
+            multipartFormData.append(audioFileURL, withName: "file")
+            
+            if let jsonData = try? JSONSerialization.data(withJSONObject: recordRequestDTO, options: .prettyPrinted) {
+                multipartFormData.append(jsonData, withName: "recordRequestDTO")
+            }
+        }, to: url, headers: headers)
+        .responseJSON { response in
+            print("결과 : \(response)")
+            
+            switch response.result {
+            case .success(let value):
+                print("Response: \(value)")
+            case .failure(let error):
+                print("Error: \(error.localizedDescription)")
+            }
+        }
     }
     
+    func getFormattedRecordTime() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HHmm"
+        return formatter.string(from: endTime ?? Date())
+    }
     
 }
