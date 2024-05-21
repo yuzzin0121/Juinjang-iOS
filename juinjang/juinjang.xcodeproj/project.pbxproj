@@ -134,6 +134,10 @@
 		616408E12B405B7200EC3B5E /* ImjangNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616408E02B405B7200EC3B5E /* ImjangNoteViewController.swift */; };
 		616408EC2B407A2D00EC3B5E /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616408EB2B407A2D00EC3B5E /* UIView+Extension.swift */; };
 		616409022B407FB300EC3B5E /* UIFont+Pretendard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616409012B407FB300EC3B5E /* UIFont+Pretendard.swift */; };
+		616D48182BFBA52B0073029A /* DateFormatterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D48172BFBA52B0073029A /* DateFormatterManager.swift */; };
+		616D481A2BFBAF660073029A /* Int+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D48192BFBAF660073029A /* Int+Extension.swift */; };
+		616D481F2BFC8CF40073029A /* RecordRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D481E2BFC8CF40073029A /* RecordRequestDTO.swift */; };
+		616D48212BFC8D0F0073029A /* RecordResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D48202BFC8D0F0073029A /* RecordResponseDTO.swift */; };
 		61864BE22B5FFA890073C175 /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61864BE12B5FFA890073C175 /* UIImageView+Extension.swift */; };
 		61864BEA2B6003520073C175 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61864BE92B6003520073C175 /* UIButton+Extension.swift */; };
 		61864BEF2B600E920073C175 /* ImjangNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61864BEE2B600E920073C175 /* ImjangNote.swift */; };
@@ -288,6 +292,10 @@
 		616408E02B405B7200EC3B5E /* ImjangNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImjangNoteViewController.swift; sourceTree = "<group>"; };
 		616408EB2B407A2D00EC3B5E /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		616409012B407FB300EC3B5E /* UIFont+Pretendard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Pretendard.swift"; sourceTree = "<group>"; };
+		616D48172BFBA52B0073029A /* DateFormatterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatterManager.swift; sourceTree = "<group>"; };
+		616D48192BFBAF660073029A /* Int+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extension.swift"; sourceTree = "<group>"; };
+		616D481E2BFC8CF40073029A /* RecordRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordRequestDTO.swift; sourceTree = "<group>"; };
+		616D48202BFC8D0F0073029A /* RecordResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordResponseDTO.swift; sourceTree = "<group>"; };
 		61864BE12B5FFA890073C175 /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
 		61864BE92B6003520073C175 /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
 		61864BEE2B600E920073C175 /* ImjangNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImjangNote.swift; sourceTree = "<group>"; };
@@ -668,6 +676,7 @@
 				6108CFF32B762AA400EF302F /* ReportDto.swift */,
 				6108CFF52B762CA600EF302F /* ProfileDto.swift */,
 				0A603A692B7DD36E0060B90D /* CheckListResponseDto.swift */,
+				616D48202BFC8D0F0073029A /* RecordResponseDTO.swift */,
 			);
 			path = Decodable;
 			sourceTree = "<group>";
@@ -724,6 +733,7 @@
 				61864C4C2B653E140073C175 /* UIViewController+Extension.swift */,
 				61B0C9D32B6C10CC00BE86D2 /* UIStackView+Extension.swift */,
 				6108D0002B78A83B00EF302F /* String+Extension.swift */,
+				616D48192BFBAF660073029A /* Int+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -758,6 +768,7 @@
 		616D48162BFB423C0073029A /* Query */ = {
 			isa = PBXGroup;
 			children = (
+				616D481E2BFC8CF40073029A /* RecordRequestDTO.swift */,
 			);
 			path = Query;
 			sourceTree = "<group>";
@@ -870,6 +881,7 @@
 			isa = PBXGroup;
 			children = (
 				61DEFEDC2BFA2FB40069A820 /* AudioRecorderManager.swift */,
+				616D48172BFBA52B0073029A /* DateFormatterManager.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -1030,6 +1042,7 @@
 				619269E92B67745900D4DD3E /* UserDefaultManager.swift in Sources */,
 				619269F52B67747F00D4DD3E /* ScrapCollectionViewCell.swift in Sources */,
 				3458557E2B689D2A00432C06 /* ExpandableTableViewCell.swift in Sources */,
+				616D481A2BFBAF660073029A /* Int+Extension.swift in Sources */,
 				616408E12B405B7200EC3B5E /* ImjangNoteViewController.swift in Sources */,
 				0A24711D2B69147200A7382B /* ToSDetailViewController.swift in Sources */,
 				0A7AC0F12B6412760032C9DF /* KakaoZipCodeViewController.swift in Sources */,
@@ -1053,6 +1066,7 @@
 				6108CFE82B761E5900EF302F /* TotalListDto.swift in Sources */,
 				61B0C9D92B6C1B9600BE86D2 /* EnlargePhotoViewController.swift in Sources */,
 				61864BEA2B6003520073C175 /* UIButton+Extension.swift in Sources */,
+				616D48182BFBA52B0073029A /* DateFormatterManager.swift in Sources */,
 				0A2DED1A2B55198D00A96BAA /* STTLoadingViewController.swift in Sources */,
 				619269DA2B6773FE00D4DD3E /* DeleteImjangViewController.swift in Sources */,
 				619269E82B67745900D4DD3E /* ImageStyle.swift in Sources */,
@@ -1091,6 +1105,7 @@
 				611AA7B92B8253BC005DAC3B /* ImjangNoteCollectionViewCell.swift in Sources */,
 				0A95D7312B682FB4000A9C06 /* ToSItemTableViewCell.swift in Sources */,
 				61B0C9E52B6CDA0300BE86D2 /* PaddingLabel.swift in Sources */,
+				616D481F2BFC8CF40073029A /* RecordRequestDTO.swift in Sources */,
 				0A3EBEBE2B654E71004D8DCE /* OpenNewPagePopupViewController.swift in Sources */,
 				0A2471192B68CAAF00A7382B /* ToSItem.swift in Sources */,
 				6108CFE62B761D0000EF302F /* LoginResponseDto.swift in Sources */,
@@ -1125,6 +1140,7 @@
 				0A9E0A492B3DCAB90094595A /* SceneDelegate.swift in Sources */,
 				3458559B2B692E0C00432C06 /* CompareViewController.swift in Sources */,
 				6108CFF42B762AA400EF302F /* ReportDto.swift in Sources */,
+				616D48212BFC8D0F0073029A /* RecordResponseDTO.swift in Sources */,
 				619269F42B67747F00D4DD3E /* ImjangNoteTableViewCell.swift in Sources */,
 				345855722B689A5300432C06 /* MainViewController.swift in Sources */,
 				6108CFFA2B76395B00EF302F /* JuinjangAPIManager.swift in Sources */,
