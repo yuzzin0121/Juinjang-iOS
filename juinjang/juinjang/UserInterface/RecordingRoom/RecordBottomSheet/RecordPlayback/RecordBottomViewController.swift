@@ -9,8 +9,6 @@ import UIKit
 import SnapKit
 import AVFoundation
 
-var recordTime : String!
-
 class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudioPlayerDelegate {
     
     weak var topViewController: RecordTopViewController?
@@ -20,7 +18,7 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudio
     var audioFile : URL! // 재생할 오디오의 파일명 변수
     var audioPlayer : AVAudioPlayer! //avaudioplayer인스턴스 변수
     var progressTimer : Timer! //타이머를 위한 변수
-    
+    var recordTime : String = ""
 
     lazy var titleTextField = UITextField().then {
         $0.text = "녹음파일_001"
@@ -30,7 +28,7 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudio
     }
     
     var recordStartTimeLabel = UILabel().then {
-        $0.text = "\(recordTime ?? "오후 4:00")" // - TODO: 녹음 파일 추가할 때의 시간 반영
+//        $0.text = "\(recordTime ?? "오후 4:00")" // - TODO: 녹음 파일 추가할 때의 시간 반영
         $0.textColor = UIColor(named: "gray1")
         $0.font = UIFont(name: "Pretendard-Regular", size: 16)
     }
@@ -84,7 +82,7 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudio
         playSet()
         audioPlayer.stop()
         audioPlayer.play()
-        progressTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(updatePlayTime), userInfo: nil, repeats: true)
+        progressTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updatePlayTime), userInfo: nil, repeats: true)
     }
     
     func loadRecordings() {

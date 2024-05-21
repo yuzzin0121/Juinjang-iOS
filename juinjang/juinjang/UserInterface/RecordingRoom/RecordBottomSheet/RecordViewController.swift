@@ -90,7 +90,6 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
 //    var audioFile : URL! // 재생할 오디오의 파일명 변수
 //    var audioRecorder : AVAudioRecorder!
     var progressTimer : Timer? //타이머를 위한 변수
-    var endTime: Date?
     
     var imjangId: Int
     
@@ -161,14 +160,6 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
         timeLabel.text = convertNSTimeInterval2String(audioRecorder.currentTime)
     }
     
-    func updateEndTimeLabel() {
-        guard let endTime = endTime else { return }
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "HH:mm"
-        let endTimeString = dateFormatter.string(from: endTime)
-        recordTime = "\(endTimeString)"
-    }
-    
     @objc func cancelButtonTapped(_ sender: UIButton) {
         bottomSheetViewController?.hideBottomSheetAndGoBack()
     }
@@ -180,25 +171,21 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
         progressTimer?.invalidate()
         progressTimer = nil
        
-        endTime = Date() // 녹음 종료 시간 기록
-        updateEndTimeLabel()
         
         guard let recordUrl = AudioRecorderManager.shared.getRecordURL() else { return }
+        guard let recordTime = getRecordTime() else { return }
         
-        let loadingVC = STTLoadingViewController(imjangId: imjangId, fileURL: recordUrl)
+        let loadingVC = STTLoadingViewController(imjangId: imjangId, fileURL: recordUrl, recordTime: recordTime)
         loadingVC.bottomSheetViewController = bottomSheetViewController
         
         bottomSheetViewController?.transitionToViewController(loadingVC)
-        
-        // 음성 파일에 대해 STT 진행
+    }
     
-        
-        // 임의로 2초 후 recordPlaybackVC로 이동
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [self] in
-//            let recordPlaybackVC = RecordPlaybackViewController()
-//            recordPlaybackVC.bottomSheetViewController = bottomSheetViewController
-//            bottomSheetViewController?.transitionToViewController(recordPlaybackVC)
-//        }
+    private func getRecordTime() -> Int? {
+        guard let audioRecorder = AudioRecorderManager.shared.audioRecorder else {
+            return nil
+        }
+        return Int.convertTimeToInt(time: audioRecorder.currentTime)
     }
     
     // 음성 인식 권한 확인
