@@ -25,7 +25,6 @@ class CheckListViewController: UIViewController {
 
     var isEditMode: Bool = false // 수정 모드 여부
     var version: Int = 0
-    
     var imjangId: Int
     
     init(imjangId: Int) {
@@ -46,13 +45,11 @@ class CheckListViewController: UIViewController {
         setupLayout()
         registerCell()
         setCheckInfo()
-//        selectedAnswers = ChecklistDataManager.shared.loadChecklistAnswers()
         NotificationCenter.default.addObserver(self, selector: #selector(didStoppedParentScroll), name: NSNotification.Name("didStoppedParentScroll"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleEditModeChange(_:)), name: Notification.Name("EditModeChanged"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleEditButtonTappedNotification), name: NSNotification.Name("EditButtonTapped"), object: nil)
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(ReloadTableView), name: NSNotification.Name("ReloadTableView"), object: nil)
     }
-    
     
     private func setCheckInfo() {
         filterVersionAndCategory(isEditMode: isEditMode, version: version) { [weak self] categories in
@@ -184,52 +181,11 @@ class CheckListViewController: UIViewController {
         }
     }
     
-    func sendChecklistData(_ items: [CheckListRequestDto]) {
-        let encoder = JSONEncoder()
-        
-        let dictItems: [[String: Any]] = items.map { item in
-            return ["questionId": item.questionId, "answer": item.answer]
-        }
-        
-        do {
-            let jsonData = try JSONSerialization.data(withJSONObject: dictItems, options: [])
-            
-            if let jsonString = String(data: jsonData, encoding: .utf8) {
-                print("JSON Data: \(jsonString)")
-            }
-            
-            let headers: HTTPHeaders = ["Content-Type": "application/json"]
-            let url = JuinjangAPI.saveChecklist(imjangId: imjangId).endpoint
-            
-            var request = URLRequest(url: url)
-            request.httpMethod = HTTPMethod.post.rawValue
-            request.headers = headers
-            request.httpBody = jsonData
-            
-            AF.request(request)
-                .responseJSON { response in
-                    switch response.result {
-                    case .success(let value):
-                        print("체크리스트 저장 처리 성공")
-                        print(value)
-                    case .failure(let error):
-                        print("체크리스트 저장 처리 실패")
-                        print(error)
-                    }
-                }
-        } catch {
-            print("encoding 에러: \(error)")
-        }
-    }
-
-    
     // -MARK: API 요청(체크리스트 저장)
     func saveAnswer() {
         print("saveAnswer 함수 호출")
-//        var checkListItems: [CheckListRequestDto] = []
-        
         print("토큰값 \(UserDefaultManager.shared.accessToken)")
-        
+
         // 저장된 체크리스트 불러오기
         JuinjangAPIManager.shared.fetchData(type: BaseResponse<[CheckListResponseDto]>.self, api: .showChecklist(imjangId: imjangId)) { response, error in
             guard let checkListResponse = response else {
@@ -238,45 +194,58 @@ class CheckListViewController: UIViewController {
                 return
             }
             
+            if let categoryItem = checkListResponse.result {
+                for Item in categoryItem {
+                    for questionDto in Item.questionDtos {
+                        if let answer = questionDto.answer {
+                            self.checkListItems.append(CheckListAnswer(imjangId: self.imjangId, questionId: questionDto.questionId, answer: answer, isSelected: true))
+                        }
+                    }
+                }
+            }
+
             print("----- 체크리스트 저장할 항목 -----")
             let checkListItems = self.checkListItems
             print(checkListItems)
-            
+
             // 유효한 값만 필터링
             let validCheckListItems = checkListItems.filter { item in
                 if let answer = item.answer as? String {
-                    return !answer.isEmpty && answer != "NaN"
+                    return !answer.isEmpty
                 } else {
-                    return false
+                    return true
                 }
             }
-            
-            var parameters: [CheckListRequestDto] = []
+
+            print("유효한 체크리스트 항목: \(validCheckListItems)")
+
+            var parameters: [[String: Any?]] = []
             for item in validCheckListItems {
-                parameters.append(CheckListRequestDto(questionId: item.questionId, answer: item.answer))
+                var answerValue: Any? = item.answer
+                if let answer = item.answer as? String, answer == "NaN" || answer.isEmpty {
+                    answerValue = NSNull()
+                }
+                parameters.append([
+                    "questionId": item.questionId,
+                    "answer": answerValue
+                ])
             }
-            
-            let encoder = JSONEncoder()
-            
-            let dictItems: [[String: Any]] = parameters.map { item in
-                return ["questionId": item.questionId, "answer": item.answer]
-            }
-            
+
             do {
-                let jsonData = try JSONSerialization.data(withJSONObject: dictItems, options: [])
-                
+                let jsonData = try JSONSerialization.data(withJSONObject: parameters, options: [])
+
                 if let jsonString = String(data: jsonData, encoding: .utf8) {
                     print("JSON Data: \(jsonString)")
                 }
-                
+
                 let headers: HTTPHeaders = ["Content-Type": "application/json"]
                 let url = JuinjangAPI.saveChecklist(imjangId: self.imjangId).endpoint
-                
+
                 var request = URLRequest(url: url)
                 request.httpMethod = HTTPMethod.post.rawValue
                 request.headers = headers
                 request.httpBody = jsonData
-                
+
                 AF.request(request)
                     .responseJSON { response in
                         switch response.result {
@@ -285,7 +254,12 @@ class CheckListViewController: UIViewController {
                             print(value)
                         case .failure(let error):
                             print("체크리스트 저장 처리 실패")
-                            print(error)
+                            if let data = response.data,
+                               let errorMessage = String(data: data, encoding: .utf8) {
+                                print("서버 응답 에러 메시지: \(errorMessage)")
+                            } else {
+                                print("에러: \(error.localizedDescription)")
+                            }
                         }
                     }
             } catch {
@@ -293,6 +267,7 @@ class CheckListViewController: UIViewController {
             }
         }
     }
+
     
     func findQuestionId(forQuestion question: String, in checkListResponse: BaseResponse<[CheckListResponseDto]>) -> Int? {
         guard let result = checkListResponse.result else {
@@ -339,6 +314,23 @@ class CheckListViewController: UIViewController {
         DispatchQueue.main.async {
             self.tableView.isScrollEnabled = true
         }
+    }
+    
+    @objc func ReloadTableView() {
+        isEditMode = false
+        // 확장 셀 닫기
+        for i in 0..<checkListCategories.count {
+            checkListCategories[i].isExpanded = false
+        }
+        tableView.reloadData()
+        // 스크롤의 제일 위로 이동
+         if tableView.numberOfSections > 0, tableView.numberOfRows(inSection: 0) > 0 {
+             tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+         }
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 }
 

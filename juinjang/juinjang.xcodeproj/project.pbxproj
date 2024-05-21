@@ -650,7 +650,6 @@
 		6108CFDD2B761A8A00EF302F /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				616D48162BFB423C0073029A /* Query */,
 				6108CFDE2B761AA300EF302F /* JuinjangAPI.swift */,
 				6108CFF92B76395B00EF302F /* JuinjangAPIManager.swift */,
 			);
@@ -753,13 +752,6 @@
 				61A7B9202B4C4EC200795B49 /* Pretendard-Thin.otf */,
 			);
 			path = Fonts;
-			sourceTree = "<group>";
-		};
-		616D48162BFB423C0073029A /* Query */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Query;
 			sourceTree = "<group>";
 		};
 		619269D22B6773FE00D4DD3E /* ImjangList */ = {

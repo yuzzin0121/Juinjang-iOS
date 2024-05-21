@@ -20,6 +20,7 @@ import SafariServices
 class ReportViewController : UIViewController {
     let templateId = 103560
     var safariViewController : SFSafariViewController?
+    var checkListViewController: CheckListViewController?
     //MARK: - 총 평점 멘트, 가격, 주소
     var totalGradeLabel = UILabel().then {
         $0.textColor = UIColor(named: "600")
@@ -96,6 +97,7 @@ class ReportViewController : UIViewController {
         self.navigationItem.rightBarButtonItem = .none
     }
     @objc func backBtnTap() {
+        NotificationCenter.default.post(name: NSNotification.Name("ReloadTableView"), object: nil)
         self.navigationController?.popViewController(animated: true)
 //        let mainVC = ImjangNoteViewController()
 //        navigationController?.pushViewController(mainVC, animated: true)

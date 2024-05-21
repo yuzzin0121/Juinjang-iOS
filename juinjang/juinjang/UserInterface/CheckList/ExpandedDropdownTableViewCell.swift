@@ -327,10 +327,6 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
         let selectedOption = options[row]
         print("Selected option: (row, \(selectedOption))")
         
-        // -TODO: 인덱스 번호로 넘겨주어야 함
-//        selectionHandler?(row)
-        
-        
         // 선택한 옵션으로 selectedButton 설정
         selectedButton.setTitle(selectedOption.option, for: .normal)
         selectedButton.backgroundColor = .white
@@ -366,7 +362,6 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
         if options[row].option == "기타" {
             backgroundColor = .white
             questionImage.image = UIImage(named: "question-image")
-            handleOptionSelection(String(etcTextField.text ?? ""))
         }
     }
     
@@ -511,12 +506,14 @@ extension ExpandedDropdownTableViewCell: UITextFieldDelegate {
             updateTextFieldWidthConstraint(for: textField, constant: calculatedWidth, shouldRemoveLeadingConstraint: true)
             textField.layoutIfNeeded()
             textField.contentHorizontalAlignment = .left
+            handleOptionSelection(text)
         } else {
             // 비어있는 경우 기존 너비로
             backgroundColor = .white
             questionImage.image = UIImage(named: "question-image")
             textField.backgroundColor = UIColor(named: "lightBackgroundOrange")
             updateTextFieldWidthConstraint(for: textField, constant: 218, shouldRemoveLeadingConstraint: false)
+            handleOptionSelection("")
         }
     }
 
