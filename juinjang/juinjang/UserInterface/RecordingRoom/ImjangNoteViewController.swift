@@ -142,6 +142,7 @@ class ImjangNoteViewController: UIViewController{
         setReportStackViewClick()
         NotificationCenter.default.addObserver(self, selector: #selector(didStoppedChildScroll), name: NSNotification.Name("didStoppedChildScroll"), object: nil)
         recordingSegmentedVC.imjangNoteViewController = self
+        NotificationCenter.default.addObserver(self, selector: #selector(scrollToTop), name: NSNotification.Name("ScrollToTop"), object: nil)
     }
     
     func callRequest() {
@@ -744,6 +745,11 @@ class ImjangNoteViewController: UIViewController{
             self.navigationController?.pushViewController(reportVC, animated: true)
         }
         NotificationCenter.default.post(name: Notification.Name("EditModeChanged"), object: true)
+    }
+    
+    // 스크롤 가장 위로 가게
+    @objc func scrollToTop() {
+        scrollView.setContentOffset(CGPoint.zero, animated: true)
     }
 }
 

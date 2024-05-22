@@ -327,6 +327,7 @@ class CheckListViewController: UIViewController {
          if tableView.numberOfSections > 0, tableView.numberOfRows(inSection: 0) > 0 {
              tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
          }
+        NotificationCenter.default.post(name: NSNotification.Name("ScrollToTop"), object: nil)
     }
     
     deinit {
@@ -336,18 +337,23 @@ class CheckListViewController: UIViewController {
 
 extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView == self.tableView {
-            let offset = scrollView.contentOffset.y
-            
-            // 스크롤이 맨 위에 있을 때만 tableView의 스크롤을 비활성화
-            if offset <= 0 {
+        guard scrollView == self.tableView else { return }
+        
+        let offset = scrollView.contentOffset.y
+        
+        // 스크롤이 맨 위에 있을 때만 tableView의 스크롤을 비활성화
+        if offset <= 0 {
+            if tableView.isScrollEnabled {
                 tableView.isScrollEnabled = false
                 NotificationCenter.default.post(name: NSNotification.Name("didStoppedChildScroll"), object: nil)
-            } else {
+            }
+        } else {
+            if !tableView.isScrollEnabled {
                 tableView.isScrollEnabled = true
             }
         }
     }
+
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return isEditMode ? allCategory.count + 1 : allCategory.count

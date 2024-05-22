@@ -108,12 +108,13 @@ class ExpandedScoreTableViewCell: UITableViewCell {
     @objc func buttonPressed(_ sender: UIButton) {
         sender.isSelected.toggle()
         
+        let buttons = [answerButton1, answerButton2, answerButton3, answerButton4, answerButton5]
+    
         // 선택한 버튼이 아닌 경우 선택 해제
-        for button in [answerButton1, answerButton2, answerButton3, answerButton4, answerButton5] {
+        for button in buttons {
             if button != sender {
                 button.isSelected = false
                 button.setImage(UIImage(named: "answer\(button.tag)"), for: .normal)
-                handleScoreSelection(String(sender.tag))
             }
         }
 
@@ -122,22 +123,22 @@ class ExpandedScoreTableViewCell: UITableViewCell {
             backgroundColor = UIColor(named: "lightOrange")
             questionImage.image = UIImage(named: "question-selected-image")
             
-            for button in [answerButton1, answerButton2, answerButton3, answerButton4, answerButton5] {
+            for button in buttons {
                 if button != sender {
                     button.isSelected = false
                     button.setImage(UIImage(named: "checklist-completed-button"), for: .normal)
                 }
             }
-            handleScoreSelection(String(sender.tag))
         } else {
             sender.setImage(UIImage(named: "answer\(sender.tag)"), for: .normal)
             backgroundColor = .white
             questionImage.image = UIImage(named: "question-image")
-            handleScoreSelection(String(sender.tag))
         }
         
         // 선택된 버튼의 정보를 저장
-        selectedScore = String(sender.tag)
+        selectedScore = sender.isSelected ? String(sender.tag) : nil
+        
+        handleScoreSelection(String(sender.tag))
         
         if let score = selectedScore {
             print("Button Pressed: \(score)")
@@ -204,7 +205,7 @@ class ExpandedScoreTableViewCell: UITableViewCell {
         
         for button in [answerButton1, answerButton2, answerButton3, answerButton4, answerButton5] {
             button.isSelected = false
-            button.setImage(UIImage(named: "checklist-completed-button"), for: .normal)
+            button.setImage(UIImage(named: "answer\(button.tag)"), for: .normal)
         }
     }
     
@@ -229,13 +230,20 @@ class ExpandedScoreTableViewCell: UITableViewCell {
         contentLabel.textColor = UIColor(named: "500")
         backgroundColor = UIColor(named: "lightOrange")
         
-        for button in [answerButton1, answerButton2, answerButton3, answerButton4, answerButton5] {
-            if String(button.tag) == score {
-                button.setImage(UIImage(named: "checked-button"), for: .selected)
-            } else {
-                button.setImage(UIImage(named: "checklist-completed-button"), for: .selected)
+        let buttons = [answerButton1, answerButton2, answerButton3, answerButton4, answerButton5]
+        
+        DispatchQueue.main.async {
+            for button in buttons {
+                if String(button.tag) == score {
+                    button.isSelected = true
+                    button.setImage(UIImage(named: "checked-button"), for: .normal)
+                    print("Button \(button.tag) set to checked-button")
+                } else {
+                    button.isSelected = false
+                    button.setImage(UIImage(named: "checklist-completed-button"), for: .normal)
+                    print("Button \(button.tag) set to checklist-completed-button")
+                }
             }
-            button.isSelected = true
         }
     }
 }

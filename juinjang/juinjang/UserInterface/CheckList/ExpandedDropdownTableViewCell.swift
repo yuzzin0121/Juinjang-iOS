@@ -256,6 +256,7 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
             contentLabel.textColor = UIColor(named: "500")
             backgroundColor = .white
             
+            // 물어보아야할 것 -> 만약에 기타의 값을 처리 안하고 인덱스 에러가 난다.
             itemButton.setTitle(options[Int(answer) ?? 0].option, for: .normal)
             itemButton.backgroundColor = .white
             itemButton.setTitleColor(UIColor(named: "darkGray"), for: .normal)
@@ -299,6 +300,7 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
             itemButton.semanticContentAttribute = .forceLeftToRight
             setSavedInset()
         }
+        itemButton.setTitle(options[Int(answer) ?? 0].option, for: .normal)
         selectedOption = answer
         selectedButton.backgroundColor = .white
     }
@@ -467,6 +469,11 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
         selectedButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: titleInset, bottom: 0, right: -imageInset)
         selectedButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: selectedButton.bounds.width - 35, bottom: 0, right: -imageInset)
     }
+    
+    func showAlert() {
+        let alert = UIAlertController(title: "경고", message: "최소 2글자 이상 입력해야 합니다.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
+    }
 }
 
 extension ExpandedDropdownTableViewCell: UITextFieldDelegate {
@@ -499,6 +506,13 @@ extension ExpandedDropdownTableViewCell: UITextFieldDelegate {
             backgroundColor = UIColor(named: "lightOrange")
             questionImage.image = UIImage(named: "question-selected-image")
             textField.backgroundColor = .white
+            
+            // 2글자 미만인 경우
+            if text.count < 2 {
+                showAlert()
+                return
+            }
+            
             // 입력된 텍스트에 따라 동적으로 너비 조절
             let calculatedWidth = calculateTextFieldWidth(for: text, maxCharacterCount: 8)
 
