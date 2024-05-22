@@ -87,8 +87,8 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
     //var fileURLs : [URL] = []
     var recordings: [Recording] = []
     
-//    var audioFile : URL! // 재생할 오디오의 파일명 변수
-//    var audioRecorder : AVAudioRecorder!
+    //    var audioFile : URL! // 재생할 오디오의 파일명 변수
+    //    var audioRecorder : AVAudioRecorder!
     var progressTimer : Timer? //타이머를 위한 변수
     
     var imjangId: Int
@@ -115,7 +115,7 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
         super.viewDidAppear(animated)
         startRecording()
     }
-
+    
     
     func setRecord() {
         AudioRecorderManager.shared.setupRecorder()
@@ -170,7 +170,7 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
         AudioRecorderManager.shared.stopRecording() // 녹음 중지
         progressTimer?.invalidate()
         progressTimer = nil
-       
+        
         
         guard let recordUrl = AudioRecorderManager.shared.getRecordURL() else { return }
         guard let recordTime = getRecordTime() else { return }

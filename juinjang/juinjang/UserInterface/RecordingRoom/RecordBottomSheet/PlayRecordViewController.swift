@@ -8,25 +8,14 @@
 import UIKit
 import SnapKit
 
-protocol PlayRecordViewControllerDelegate: AnyObject {
-    func playRecordViewControllerDidDismiss(_ controller: PlayRecordViewController)
-}
-
 class PlayRecordViewController: UIViewController, UITextFieldDelegate{
-    
-    weak var delegate : PlayRecordViewControllerDelegate?
 
-    weak var bottomSheetViewController: BottomSheetViewController?
-    
     lazy var bottomSheetView = UIView().then {
         $0.backgroundColor = .white
         $0.layer.cornerRadius = 30
         $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         $0.clipsToBounds = true
     }
-    
-    let bottomViewController = PlayViewController()
-    
     
     lazy var bottomSheetTotalHeight: CGFloat = UIScreen.main.bounds.height * (392 / 844)
 
@@ -40,14 +29,20 @@ class PlayRecordViewController: UIViewController, UITextFieldDelegate{
         $0.contentMode = .scaleAspectFill
         $0.addTarget(self, action: #selector(cancelButtonTapped(_:)), for: .touchUpInside)
     }
-    
-    @objc func cancelButtonTapped(_ sender: UIButton) {
-        print("닫기")
-        dismiss(animated: true) {
-            self.delegate?.playRecordViewControllerDidDismiss(self)
-        }
-    }
 
+    weak var bottomSheetViewController: BottomSheetViewController?
+    lazy var bottomViewController = PlayViewController()
+    var recordResponse: RecordResponse
+    
+    init(recordResponse: RecordResponse) {
+        self.recordResponse = recordResponse
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     
@@ -56,6 +51,11 @@ class PlayRecordViewController: UIViewController, UITextFieldDelegate{
         addSubViews()
         setupLayout()
         print("bottomSheetTotalHeight: \(bottomSheetTotalHeight)")
+    }
+    
+    @objc func cancelButtonTapped(_ sender: UIButton) {
+        print("닫기")
+        dismiss(animated: true) 
     }
     
     func addSubViews() {

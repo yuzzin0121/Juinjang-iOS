@@ -115,13 +115,12 @@ extension SignUpViewController {
 
     // 카카오톡 앱으로 로그인
     func loginWithApp() {
-        UserApi.shared.loginWithKakaoTalk {(_, error) in
+        UserApi.shared.loginWithKakaoTalk {(oauthToken, error) in
             if let error = error {
-                print(error)
+                print("app\(error)")
             } else {
                 print("loginWithKakaoTalk() success.")
                 self.getUserInfo()
-                self.sendPostRequest(email: UserDefaultManager.shared.email, nickname: UserDefaultManager.shared.nickname)
             }
         }
     }
@@ -134,7 +133,7 @@ extension SignUpViewController {
             } else {
                 print("loginWithKakaoAccount() success.")
                 self.getUserInfo()
-                self.sendPostRequest(email: UserDefaultManager.shared.email, nickname: UserDefaultManager.shared.nickname)
+                
             }
         }
     }
@@ -145,26 +144,18 @@ extension SignUpViewController {
             } else {
                 if let kakaoUser = user {
                     if let email = kakaoUser.kakaoAccount?.email, let nickname = kakaoUser.kakaoAccount?.profile?.nickname {
-                        print("사용자 이메일 : \(email)")
+                        //print("사용자 이메일 : \(email)")
                         UserDefaultManager.shared.email = email
                         UserDefaultManager.shared.nickname = nickname
+                        self.sendPostRequest(email: UserDefaultManager.shared.email, nickname: UserDefaultManager.shared.nickname)
                     } else {
                         print("사용자가 이메일 제공에 동의하지 않았습니다.")
                     }
                 }
-                
             }
         }
     }
-    func presentToMain() {
-        print("present to Main")
-        
-//        let nextVC = MainViewController()
-//        self.navigationController?.pushViewController(nextVC, animated: true)
-        //let nextVC = ToSViewController()
-       // self.navigationController?.pushViewController(nextVC, animated: true)
-       // sendAPIRequest(with: UserDefaultManager.shared.accessToken)
-    }
+    
     struct RequestBody: Encodable {
         let email: String
         let nickname: String?
@@ -172,26 +163,23 @@ extension SignUpViewController {
     
     func sendPostRequest(email: String, nickname: String?) {
         let url = "http://juinjang1227.com:8080/api/auth/kakao/login"
-        
         let requestBody = RequestBody(email: email, nickname: nickname)
             
         AF.request(url, method: .post, parameters: requestBody, encoder: JSONParameterEncoder.default)
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    print("Success: \(value)")
-                    print("닉네임 : \(nickname!)")
+                    print("API Success: \(value)")
                     if let json = value as? [String: Any],
                        let result = json["result"] as? [String: Any],
                        let accessToken = result["accessToken"] as? String,
                        let refreshToken = result["refreshToken"] as? String {
-                        print("Success: \(accessToken)")
+                        //print("Success: \(accessToken)")
                         UserDefaultManager.shared.accessToken = accessToken
-                        print("Success: \(refreshToken)")
+                        //print("Success: \(refreshToken)")
                         UserDefaultManager.shared.refreshToken = refreshToken
-                        // accessToken을 사용하여 적절한 처리를 수행합니다.
-                        let nextVC = MainViewController()
-                        self.navigationController?.pushViewController(nextVC, animated: true)
+                        self.getUserNickname()
+                        
                     } else {
                         print("회원가입")
                         if let json = value as? [String: Any],
@@ -201,17 +189,70 @@ extension SignUpViewController {
                             self.navigationController?.pushViewController(nextVC, animated: true)
                         } 
                     }
-//                    if nickname == nil {
-//                        let nextVC = ToSViewController()
-//                        self.navigationController?.pushViewController(nextVC, animated: true)
-//                    } else {
-//                        let nextVC = MainViewController()
-//                        self.navigationController?.pushViewController(nextVC, animated: true)
-//                    }
                 case .failure(let error):
-                    print("Error: \(error)")
+                    print("APIError: \(error)")
                 }
         }
     }
+    func getUserNickname() {
+        let urlString = "http://juinjang1227.com:8080/api/profile"
+        
+        // HTTP 요청 보내기
+        AF.request(urlString, method: .get, headers: HTTPHeaders(["Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"])).responseData { [self] response in
+            switch response.result {
+            case .success(let data):
+                // 응답 확인
+                if let httpResponse = response.response {
+                    print("Status code: \(httpResponse.statusCode)")
+                    //print("Token: \(UserDefaultManager.shared.accessToken)")
+                }
+                // 응답 데이터 출력
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("Response data: \(responseString)")
+                }
+                // JSON 데이터 파싱
+                do {
+                    let userInfoResponse = try JSONDecoder().decode(UserInfoResponse.self, from: data)
+                    let nickname = userInfoResponse.result.nickname
+                    let profileImage = userInfoResponse.result.image
+                    if let imageUrl = URL(string: profileImage) {
+                        loadImage(from: imageUrl) { image in
+                            if let image = image {
+                                // 이미지 로드 성공
+                                print("이미지 로드 성공")
+                                UserDefaultManager.shared.profileImage = image
+                            } else {
+                                // 이미지 로드 실패
+                                print("imageLoad Fail")
+                            }
+                        }
+                    }
+                    let profileURL = URL(string: profileImage)
+                    //print("Nickname : \(nickname ?? "")")
+                    UserDefaultManager.shared.nickname = nickname!
+                    print("present to Main")
+                    let nextVC = MainViewController()
+                    self.navigationController?.pushViewController(nextVC, animated: true)
+                } catch {
+                    print("Error parsing JSON: \(error)")
+                }
+            case .failure(let error):
+                print("Error: \(error)")
+            }
+        }
+    }
+    func loadImage(from url: URL, completion: @escaping (UIImage?) -> Void) {
+        AF.request(url).responseData { response in
+            switch response.result {
+            case .success(let data):
+                if let image = UIImage(data: data) {
+                    completion(image)
+                } else {
+                    completion(nil)
+                }
+            case .failure(_):
+                completion(nil)
+            }
+        }
+    }
 }
-

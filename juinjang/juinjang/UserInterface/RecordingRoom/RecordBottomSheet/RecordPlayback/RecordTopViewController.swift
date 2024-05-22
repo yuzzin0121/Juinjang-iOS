@@ -20,7 +20,6 @@ class RecordTopViewController: UIViewController {
     }
     
     var titleLabel = UILabel().then {
-        $0.text = RecordBottomViewController().titleTextField.text
         $0.textAlignment = .center
         $0.textColor = UIColor(named: "textWhite")
         $0.font = UIFont(name: "Pretendard-SemiBold", size: 18)
@@ -53,11 +52,59 @@ class RecordTopViewController: UIViewController {
         $0.addTarget(self, action: #selector(editButtonTapped(_:)), for: .touchUpInside)
     }
     
+    var recordResponse: RecordResponse
+    
+    init(recordResponse: RecordResponse) {
+        self.recordResponse = recordResponse
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "normalText")
         addSubViews()
         setupLayout()
+        setRecordData()
+    }
+    
+    private func setRecordData() {
+        titleLabel.text = recordResponse.recordName
+        recordTextView.text = recordResponse.recordScript
+    }
+    
+    // X 버튼 클릭 시
+    @objc func cancelButtonTapped(_ sender: UIButton) {
+        bottomSheetViewController?.hideBottomSheetAndGoBack()
+    }
+    
+    // 복사버튼 클릭 시
+    @objc func copyButtonTapped(_ sender: UIButton) {
+        // recordTextView에 있는 문자열 복사
+        UIPasteboard.general.string = recordTextView.text
+        
+        let alertController = UIAlertController(title: "", message: "복사되었습니다", preferredStyle: .alert)
+        
+        let okAction = UIAlertAction(title: "확인", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    // 편집버튼 클릭 시
+    @objc func editButtonTapped(_ sender: UIButton) {
+        sender.isSelected.toggle()
+        
+        if sender.isSelected {
+            editButton.setImage(UIImage(named: "record-edit-activate"), for: .normal)
+            recordTextView.isEditable = true
+        } else {
+            editButton.setImage(UIImage(named: "record-edit"), for: .normal)
+            recordTextView.isEditable = false
+        }
     }
     
     func addSubViews() {
@@ -73,7 +120,6 @@ class RecordTopViewController: UIViewController {
         cancelButton.snp.makeConstraints {
             $0.height.equalTo(12)
             $0.width.equalTo(12)
-//            $0.leading.equalTo(bottomSheetView.snp.leading).offset(354)
             $0.trailing.equalTo(view.snp.trailing).offset(-24)
             $0.top.equalTo(view.snp.top).offset(30)
         }
@@ -102,41 +148,6 @@ class RecordTopViewController: UIViewController {
         editButton.snp.makeConstraints {
             $0.trailing.equalTo(view.snp.trailing).offset(-24)
             $0.bottom.equalTo(view.snp.bottom).offset(-24)
-        }
-    }
-    
-    @objc func cancelButtonTapped(_ sender: UIButton) {
-        bottomSheetViewController?.hideBottomSheetAndGoBack()
-    }
-    
-    @objc func copyButtonTapped(_ sender: UIButton) {
-        // recordTextView에 있는 문자열 복사
-        UIPasteboard.general.string = recordTextView.text
-        
-        let alertController = UIAlertController(title: "", message: "복사되었습니다", preferredStyle: .alert)
-        
-        let okAction = UIAlertAction(title: "확인", style: .default, handler: nil)
-        alertController.addAction(okAction)
-        
-        present(alertController, animated: true, completion: nil)
-    }
-    
-    @objc func editButtonTapped(_ sender: UIButton) {
-        sender.isSelected.toggle()
-        
-        if sender.isSelected {
-            editButton.setImage(UIImage(named: "record-edit-activate"), for: .normal)
-            recordTextView.isEditable = true
-        } else {
-            editButton.setImage(UIImage(named: "record-edit"), for: .normal)
-            recordTextView.isEditable = false
-        }
-    }
-    
-    func updateTitle(_ newTitle: String?) {
-        if let title = newTitle {
-            print("녹음 파일 제목: \(title)")
-            titleLabel.text = title
         }
     }
 }

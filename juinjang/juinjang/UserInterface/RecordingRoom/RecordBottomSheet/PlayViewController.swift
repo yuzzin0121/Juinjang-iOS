@@ -10,14 +10,6 @@ import SnapKit
 import AVFoundation
 
 class PlayViewController: UIViewController, UITextFieldDelegate, AVAudioPlayerDelegate {
-    
-    weak var topViewController: RecordTopViewController?
-    var recordingIndexPath: IndexPath?
-    
-    var audioFile : URL! // 재생할 오디오의 파일명 변수
-    var audioPlayer : AVAudioPlayer! //avaudioplayer인스턴스 변수
-    var progressTimer : Timer! //타이머를 위한 변수
-    var recordResponse: RecordResponse
 
     var titleTextField = UITextField().then {
         $0.text = "녹음파일_001"
@@ -70,14 +62,14 @@ class PlayViewController: UIViewController, UITextFieldDelegate, AVAudioPlayerDe
         $0.adjustsImageWhenHighlighted = false
     }
     
-    init(recordResponse: RecordResponse) {
-        self.recordResponse = recordResponse
-        super.init(nibName: nil, bundle: nil)
-    }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    weak var topViewController: RecordTopViewController?
+    var recordingIndexPath: IndexPath?
+    
+    var audioFile : URL! // 재생할 오디오의 파일명 변수
+    var audioPlayer : AVAudioPlayer! //avaudioplayer인스턴스 변수
+    var progressTimer : Timer! //타이머를 위한 변수
+    //var recordResponse: RecordResponse
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -194,16 +186,16 @@ class PlayViewController: UIViewController, UITextFieldDelegate, AVAudioPlayerDe
         // 텍스트 필드가 수정되면 title을 수정
         updateTitle(textField.text)
         updateRecordingTitle(textField.text)
-        topViewController?.updateTitle(textField.text)
+//        topViewController?.updateTitle(textField.text)
     }
     
     func updateRecordingTitle(_ newTitle: String?) {
         guard let indexPath = recordingIndexPath else { return }
         print(indexPath)
         print(indexPath.row)
-        print(recordings)
-        recordings[indexPath.row].title = newTitle!
-        print("실행 됨\(recordings)")
+//        print(recordings)
+//        recordings[indexPath.row].title = newTitle!
+//        print("실행 됨\(recordings)")
     }
 
     func updateTitle(_ newTitle: String?) {
