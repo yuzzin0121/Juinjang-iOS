@@ -155,6 +155,7 @@ class CheckListViewController: UIViewController {
                         for questionDto in Item.questionDtos {
                             if let answer = questionDto.answer {
                                 savedCheckListItems.append(CheckListAnswer(imjangId: imjangId, questionId: questionDto.questionId, answer: answer, isSelected: true))
+                                checkListItems.append(CheckListAnswer(imjangId: imjangId, questionId: questionDto.questionId, answer: answer, isSelected: true))
                             }
                         }
                     }
@@ -423,17 +424,20 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                                 if existingAnswer.answer == score {
                                     // 선택 취소하는 경우
                                     self.checkListItems.remove(at: index)
+                                    self.savedCheckListItems.remove(at: index)
                                     print("\(questionId)번에 해당하는 답변 삭제")
                                 } else {
                                     // 선택 수정하는 경우
                                     let updatedAnswer = CheckListAnswer(imjangId: existingAnswer.imjangId, questionId: existingAnswer.questionId, answer: score, isSelected: true)
                                     self.checkListItems[index] = updatedAnswer
+                                    self.savedCheckListItems[index] = updatedAnswer
                                     print("\(questionId)번에 해당하는 답변 수정")
                                 }
                             } else {
                                 // 기존 답변이 없는 경우 답변을 생성하여 배열에 추가
                                 let answerItem = CheckListAnswer(imjangId: self.imjangId, questionId: questionId, answer: score, isSelected: true)
                                 self.checkListItems.append(answerItem)
+                                self.savedCheckListItems.append(answerItem)
                                 print("\(questionId)번에 해당하는 답변 생성")
                             }
                             print(checkListItems)

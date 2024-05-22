@@ -137,7 +137,6 @@ class ExpandedScoreTableViewCell: UITableViewCell {
         
         // 선택된 버튼의 정보를 저장
         selectedScore = sender.isSelected ? String(sender.tag) : nil
-        
         handleScoreSelection(String(sender.tag))
         
         if let score = selectedScore {
@@ -237,11 +236,9 @@ class ExpandedScoreTableViewCell: UITableViewCell {
                 if String(button.tag) == score {
                     button.isSelected = true
                     button.setImage(UIImage(named: "checked-button"), for: .normal)
-                    print("Button \(button.tag) set to checked-button")
                 } else {
                     button.isSelected = false
                     button.setImage(UIImage(named: "checklist-completed-button"), for: .normal)
-                    print("Button \(button.tag) set to checklist-completed-button")
                 }
             }
         }

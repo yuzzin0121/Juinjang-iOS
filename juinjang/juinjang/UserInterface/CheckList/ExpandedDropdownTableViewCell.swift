@@ -285,6 +285,7 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
             contentLabel.textColor = UIColor(named: "500")
             backgroundColor = UIColor(named: "lightOrange")
             
+            // -TODO: 인덱스 어떻게 할 건지
             itemButton.setTitle(options[Int(answer) ?? 0].option, for: .normal)
             itemButton.backgroundColor = .white
             itemButton.setTitleColor(UIColor(named: "darkGray"), for: .normal)
