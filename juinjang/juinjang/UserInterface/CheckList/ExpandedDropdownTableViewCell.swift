@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-// -TODO: 인덱스 구분해서 기타 항목 처리 어떻게 해야할지
+// -TODO: 인덱스 구분해서 기타 항목 처리 어떻게 해야할지, 다시 처음부터 처리해야함
 class ExpandedDropdownTableViewCell: UITableViewCell {
     
     var optionSelectionHandler: ((String) -> Void)?
