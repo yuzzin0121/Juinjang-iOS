@@ -32,10 +32,6 @@ class STTLoadingViewController: UIViewController {
         $0.font = UIFont(name: "Pretendard-Medium", size: 16)
     }
     
-//    lazy var loadingImage = UIImageView().then {
-//        $0.image = UIImage(named: "record-loading")
-//        $0.contentMode = .scaleAspectFill
-//    }
     lazy var animationView = LottieAnimationView(name: "Animation - 1707961785957.json").then {
         $0.frame = CGRect(x: 156, y: 184, width: 73, height: 76)
         $0.contentMode = .scaleAspectFit
@@ -45,10 +41,12 @@ class STTLoadingViewController: UIViewController {
     weak var bottomSheetViewController: BottomSheetViewController?
     var imjangId: Int
     var fileURL: URL
+    var recordTime: Int
     
-    init(imjangId: Int, fileURL: URL) {
+    init(imjangId: Int, fileURL: URL, recordTime: Int) {
         self.imjangId = imjangId
         self.fileURL = fileURL
+        self.recordTime = recordTime
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -78,6 +76,17 @@ class STTLoadingViewController: UIViewController {
             case .success(let script):
                 print("STT 성공")
                 print(UserDefaultManager.shared.accessToken)
+                
+                let recordRequestDTO = getRecordRequestDTO(script: script)
+                
+                JuinjangAPIManager.shared.uploadRecordFile(api: .uploadRecordFile, fileURL: fileURL, dto: recordRequestDTO) { result in
+                    switch result {
+                    case .success(let recordResponse):
+                        print(recordResponse)
+                    case .failure(let failure):
+                        print("실패...>!!!!!")
+                    }
+                }
 //                showPlaybackVC(transcript: script)
             case .failure(let failure):
                 bottomSheetViewController?.transitionToViewController(self)
@@ -112,11 +121,14 @@ class STTLoadingViewController: UIViewController {
         completionHandler(.failure(STTError.resultError))
     }
     
+    private func getRecordRequestDTO(script: String) -> RecordRequestDTO {
+        return RecordRequestDTO(limjangId: imjangId, recordTime: recordTime, recordScript: script)
+    }
+    
     func addSubViews() {
         view.addSubview(bottomSheetView)
         animationView.play()
-        [sttConversionLabel/*,
-         loadingImage*/, animationView].forEach { bottomSheetView.addSubview($0) }
+        [sttConversionLabel, animationView].forEach { bottomSheetView.addSubview($0) }
     }
     
     func setupLayout() {
@@ -131,11 +143,5 @@ class STTLoadingViewController: UIViewController {
             $0.centerX.equalTo(bottomSheetView.snp.centerX)
             $0.top.equalTo(bottomSheetView.snp.top).offset(87)
         }
-        
-        // 로딩 ImageView
-//        loadingImage.snp.makeConstraints {
-//            $0.top.equalTo(sttConversionLabel.snp.bottom).offset(78)
-//            $0.centerX.equalTo(bottomSheetView.snp.centerX)
-//        }
     }
 }
