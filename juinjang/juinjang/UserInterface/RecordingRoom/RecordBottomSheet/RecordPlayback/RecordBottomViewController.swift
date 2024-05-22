@@ -10,15 +10,6 @@ import SnapKit
 import AVFoundation
 
 class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudioPlayerDelegate {
-    
-    weak var topViewController: RecordTopViewController?
-   // var fileURLs : [URL] = []
-    //var recordings : [Recording] = []
-    
-    var audioFile : URL! // 재생할 오디오의 파일명 변수
-    var audioPlayer : AVAudioPlayer! //avaudioplayer인스턴스 변수
-    var progressTimer : Timer! //타이머를 위한 변수
-    var recordTime : String = ""
 
     lazy var titleTextField = UITextField().then {
         $0.text = "녹음파일_001"
@@ -70,7 +61,23 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudio
         $0.imageView?.contentMode = .scaleAspectFill
         $0.adjustsImageWhenHighlighted = false
     }
-
+    
+    weak var topViewController: RecordTopViewController?
+    
+    var audioPlayer : AVAudioPlayer! //avaudioplayer인스턴스 변수
+    var progressTimer : Timer! //타이머를 위한 변수
+    var recordTime : String = ""
+    var recordResponse: RecordResponse
+    
+    init(recordResponse: RecordResponse) {
+        self.recordResponse = recordResponse
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "textBlack")
@@ -78,42 +85,28 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudio
         setupLayout()
         titleTextField.delegate = self
 
-        loadRecordings()
-        playSet()
-        audioPlayer.stop()
-        audioPlayer.play()
-        progressTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updatePlayTime), userInfo: nil, repeats: true)
+//        progressTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updatePlayTime), userInfo: nil, repeats: true)
+        
+        setRecordData()
     }
     
-    func loadRecordings() {
-       let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-       do {
-           // 문서 디렉토리에서 녹음 파일들을 가져옴
-           let recordingURLs = try FileManager.default.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil, options: [])
-           // 녹음 파일 목록에 추가
-           recordings = recordingURLs.filter { $0.pathExtension == "m4a" }.map {Recording(title: $0.lastPathComponent, fileURL: $0)}  // .m4a 확장자를 가진 파일만 필터링
-       } catch {
-           print("Failed to load recordings: \(error)")
-       }
-   }
-    func playSet() {
-        let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        audioFile = documentDirectory.appendingPathComponent("recordfile\(recordings.count-1).m4a")
-        titleTextField.text = "recordfile\(recordings.count-1).m4a"
-        //audioFile = Bundle.main.url(forResource: "Cruel Summer", withExtension: "mp3")
-        initPlay()
+    private func setRecordData() {
+        titleTextField.text = recordResponse.recordName
+        recordStartTimeLabel.text = recordResponse.createdAt
+
     }
     
     func initPlay(){
         do {
-            audioPlayer = try AVAudioPlayer(contentsOf: audioFile)
+            guard let recordUrl = URL(string: recordResponse.recordUrl) else { return }
+            audioPlayer = try AVAudioPlayer(contentsOf: recordUrl)
         } catch let error as NSError {
             print("Error-iniPlay : \(error)")
         }
         
         recordingSlider.value = 0
         
-        audioPlayer.delegate = self
+//        audioPlayer.delegate = self
         audioPlayer.prepareToPlay()
         
         remainingTimeLabel.text = convertNSTimeInterval2String(audioPlayer.duration)
@@ -146,6 +139,38 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudio
         progressTimer.invalidate()
     }
     
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        // 텍스트 필드가 수정되면 title을 수정
+        updateTitle(textField.text)
+//        topViewController?.updateTitle(textField.text)
+       // onTextFieldEdit?(textField.text ?? "")
+    }
+
+    func updateTitle(_ newTitle: String?) {
+        if let title = newTitle {
+            print("녹음 파일 제목: \(title)")
+            titleTextField.text = title
+            RecordingFileViewCell().recordingFileNameLabel.text = title
+        }
+    }
+    
+    @objc func startRecordPressed(_ sender: UIButton) {
+        if recordButton.isSelected {
+            audioPlayer.play()
+            progressTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(updatePlayTime), userInfo: nil, repeats: true)
+            recordButton.setImage(UIImage(named: "being-recorded-button"), for: .normal)
+        } else {
+            audioPlayer.pause()
+            recordButton.setImage(UIImage(named: "record-button"), for: .normal)
+        }
+        recordButton.isSelected.toggle()
+    }
+    
+    @objc private func dragedSlider() {
+        //audioPlayer.currentTime = TimeInterval(recordingSlider.value)
+        let newTime = TimeInterval(recordingSlider.value) * audioPlayer.duration
+        audioPlayer.currentTime = newTime
+    }
     
     func addSubViews() {
         [titleTextField,
@@ -183,9 +208,8 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudio
             $0.top.equalTo(recordingSlider.snp.bottom).offset(12)
             $0.right.equalTo(recordingSlider)
         }
-    
+        
         rewindButton.snp.makeConstraints {
-//            $0.top.equalTo(elapsedTimeLabel.snp.bottom).offset(68)
             $0.trailing.equalTo(recordButton.snp.leading).offset(-40)
             $0.height.equalTo(36)
             $0.width.equalTo(36)
@@ -194,50 +218,14 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudio
         
         recordButton.snp.makeConstraints {
             $0.centerX.equalTo(view.snp.centerX)
-//            $0.top.equalTo(elapsedTimeLabel.snp.bottom).offset(56)
             $0.bottom.equalTo(view.snp.bottom).offset(-76)
         }
         
         fastForwardButton.snp.makeConstraints {
             $0.leading.equalTo(recordButton.snp.trailing).offset(40)
-//            $0.top.equalTo(elapsedTimeLabel.snp.bottom).offset(68)
             $0.height.equalTo(36)
             $0.width.equalTo(36)
             $0.bottom.equalTo(view.snp.bottom).offset(-88)
         }
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        // 텍스트 필드가 수정되면 title을 수정
-        updateTitle(textField.text)
-        topViewController?.updateTitle(textField.text)
-        
-       // onTextFieldEdit?(textField.text ?? "")
-    }
-
-    func updateTitle(_ newTitle: String?) {
-        if let title = newTitle {
-            print("녹음 파일 제목: \(title)")
-            titleTextField.text = title
-            RecordingFileViewCell().recordingFileNameLabel.text = title
-        }
-    }
-    
-    @objc func startRecordPressed(_ sender: UIButton) {
-        if recordButton.isSelected {
-            audioPlayer.play()
-            progressTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(updatePlayTime), userInfo: nil, repeats: true)
-            recordButton.setImage(UIImage(named: "being-recorded-button"), for: .normal)
-        } else {
-            audioPlayer.pause()
-            recordButton.setImage(UIImage(named: "record-button"), for: .normal)
-        }
-        recordButton.isSelected.toggle()
-    }
-    
-    @objc private func dragedSlider() {
-        //audioPlayer.currentTime = TimeInterval(recordingSlider.value)
-        let newTime = TimeInterval(recordingSlider.value) * audioPlayer.duration
-        audioPlayer.currentTime = newTime
     }
 }
