@@ -12,9 +12,6 @@ import Kingfisher
 
 class ImjangNoteViewController: UIViewController{
     
-    var version: VersionInfo?
-    var isEditMode: Bool = false // 수정 모드 여부
-    
     // 스크롤뷰
     let scrollView = UIScrollView().then {
         $0.backgroundColor = .white
@@ -118,6 +115,8 @@ class ImjangNoteViewController: UIViewController{
     var imjangId: Int
     var detailDto: DetailDto? = nil
     var previousVCType: PreviousVCType = .createImjangVC
+    var version: VersionInfo?
+    var isEditMode: Bool = false // 수정 모드 여부
     
     init(imjangId: Int) {
         self.imjangId = imjangId
@@ -131,37 +130,23 @@ class ImjangNoteViewController: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        print("버전 확인: \(version)")
         setDelegate()
         designNavigationBar()
         addSubView()
         setConstraints()
         designViews()
         callRequest()
-//        setUpImageUI()
+        showCheckList {
+            print("버전 확인: \(self.version)")
+        }
         upButton.addTarget(self, action: #selector(upToTop), for: .touchUpInside)
         setReportStackViewClick()
-//        setImageStackViewClick()
         NotificationCenter.default.addObserver(self, selector: #selector(didStoppedChildScroll), name: NSNotification.Name("didStoppedChildScroll"), object: nil)
         recordingSegmentedVC.imjangNoteViewController = self
-//        if let imjangId = imjangId {
-//            if let checkListVC = recordingSegmentedVC.viewControllers[0] as?
-//                CheckListViewController {
-//                    checkListVC.imjangId = imjangId
-//            } else if let recordingRoomVC = recordingSegmentedVC.viewControllers[1] as? RecordingRoomViewController {
-//                recordingRoomVC.imjangId = imjangId
-//            }
-//        }
-//        if let checkListVC = recordingSegmentedVC.viewControllers[0] as?
-//            CheckListViewController {
-//                checkListVC.imjangId = imjangId
-//        } else if let recordingRoomVC = recordingSegmentedVC.viewControllers[1] as? RecordingRoomViewController {
-//            recordingRoomVC.imjangId = imjangId
-//        }
+        NotificationCenter.default.addObserver(self, selector: #selector(scrollToTop), name: NSNotification.Name("ScrollToTop"), object: nil)
     }
     
     func callRequest() {
-//        guard let imjangId = imjangId else { return }
         JuinjangAPIManager.shared.fetchData(type: BaseResponse<DetailDto>.self, api: .detailImjang(imjangId: imjangId)) { detailDto, error in
             if error == nil {
                 guard let result = detailDto else { return }
@@ -224,6 +209,35 @@ class ImjangNoteViewController: UIViewController{
             roomPriceLabel.text = "편집을 통해 가격을 설정해주세요."
         }
     }
+    
+    // -MARK: API 요청(버전 설정)
+    func showCheckList(completion: @escaping () -> Void) {
+        JuinjangAPIManager.shared.fetchData(type: BaseResponse<[CheckListResponseDto]>.self, api: .showChecklist(imjangId: imjangId)) { [weak self] response, error in
+            guard let self else { return }
+            if error == nil {
+                if let firstCheckList = response?.result?.first,
+                   let version = firstCheckList.questionDtos.first?.version {
+                    // 임의로 editCriteria를 0(실거래가)로 추가
+                    self.version = VersionInfo(version: version, editCriteria: 0)
+                    print("체크리스트 버전 설정: \(version)")
+                }
+            } else {
+                guard let error = error else { return }
+                switch error {
+                case .failedRequest:
+                    print("failedRequest")
+                case .noData:
+                    print("noData")
+                case .invalidResponse:
+                    print("invalidResponse")
+                case .invalidData:
+                    print("invalidData")
+                }
+            }
+            completion()
+        }
+    }
+
     
     // 리포트 보기 클릭 했을 때 - showReportVC 호출
     func setReportStackViewClick() {
@@ -761,6 +775,11 @@ class ImjangNoteViewController: UIViewController{
             self.navigationController?.pushViewController(reportVC, animated: true)
         }
         NotificationCenter.default.post(name: Notification.Name("EditModeChanged"), object: true)
+    }
+    
+    // 스크롤 가장 위로 가게
+    @objc func scrollToTop() {
+        scrollView.setContentOffset(CGPoint.zero, animated: true)
     }
 }
 
