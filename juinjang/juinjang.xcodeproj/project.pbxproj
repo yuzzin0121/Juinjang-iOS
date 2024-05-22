@@ -108,7 +108,6 @@
 		34AA14EB2B7DA5C700CF10FC /* Animation - 1707961785957.json in Resources */ = {isa = PBXBuildFile; fileRef = 34AA14EA2B7DA5C600CF10FC /* Animation - 1707961785957.json */; };
 		34AA14F52B82E46300CF10FC /* PlayRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AA14F42B82E46300CF10FC /* PlayRecordViewController.swift */; };
 		34AA14F72B82E98C00CF10FC /* PlayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AA14F62B82E98C00CF10FC /* PlayViewController.swift */; };
-		34E01F602BFBBE410071DE4B /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34E01F5F2BFBBE410071DE4B /* AudioRecorder.swift */; };
 		6108CFDF2B761AA300EF302F /* JuinjangAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6108CFDE2B761AA300EF302F /* JuinjangAPI.swift */; };
 		6108CFE12B761B3A00EF302F /* BaseResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6108CFE02B761B3A00EF302F /* BaseResponse.swift */; };
 		6108CFE62B761D0000EF302F /* LoginResponseDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6108CFE52B761D0000EF302F /* LoginResponseDto.swift */; };
@@ -135,6 +134,10 @@
 		616408E12B405B7200EC3B5E /* ImjangNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616408E02B405B7200EC3B5E /* ImjangNoteViewController.swift */; };
 		616408EC2B407A2D00EC3B5E /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616408EB2B407A2D00EC3B5E /* UIView+Extension.swift */; };
 		616409022B407FB300EC3B5E /* UIFont+Pretendard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616409012B407FB300EC3B5E /* UIFont+Pretendard.swift */; };
+		616D48182BFBA52B0073029A /* DateFormatterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D48172BFBA52B0073029A /* DateFormatterManager.swift */; };
+		616D481A2BFBAF660073029A /* Int+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D48192BFBAF660073029A /* Int+Extension.swift */; };
+		616D481F2BFC8CF40073029A /* RecordRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D481E2BFC8CF40073029A /* RecordRequestDTO.swift */; };
+		616D48212BFC8D0F0073029A /* RecordResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D48202BFC8D0F0073029A /* RecordResponseDTO.swift */; };
 		61864BE22B5FFA890073C175 /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61864BE12B5FFA890073C175 /* UIImageView+Extension.swift */; };
 		61864BEA2B6003520073C175 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61864BE92B6003520073C175 /* UIButton+Extension.swift */; };
 		61864BEF2B600E920073C175 /* ImjangNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61864BEE2B600E920073C175 /* ImjangNote.swift */; };
@@ -179,6 +182,8 @@
 		61D9250A2B49506D002A16B4 /* RecordingFilesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D925092B49506D002A16B4 /* RecordingFilesViewController.swift */; };
 		61D9250F2B4965D0002A16B4 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 61D9250E2B4965D0002A16B4 /* IQKeyboardManagerSwift */; };
 		61D925112B4983A1002A16B4 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D925102B4983A1002A16B4 /* UILabel+Extension.swift */; };
+		61DEFEDD2BFA2FB40069A820 /* AudioRecorderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DEFEDC2BFA2FB40069A820 /* AudioRecorderManager.swift */; };
+		61DEFEE02BFB39A90069A820 /* STTError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DEFEDF2BFB39A90069A820 /* STTError.swift */; };
 		61E8EC0C2B726C9100BEAFE5 /* DeleteImjangPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E8EC0B2B726C9100BEAFE5 /* DeleteImjangPopupViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -265,7 +270,6 @@
 		34AA14EA2B7DA5C600CF10FC /* Animation - 1707961785957.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Animation - 1707961785957.json"; sourceTree = "<group>"; };
 		34AA14F42B82E46300CF10FC /* PlayRecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayRecordViewController.swift; sourceTree = "<group>"; };
 		34AA14F62B82E98C00CF10FC /* PlayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayViewController.swift; sourceTree = "<group>"; };
-		34E01F5F2BFBBE410071DE4B /* AudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorder.swift; sourceTree = "<group>"; };
 		6108CFDE2B761AA300EF302F /* JuinjangAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JuinjangAPI.swift; sourceTree = "<group>"; };
 		6108CFE02B761B3A00EF302F /* BaseResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseResponse.swift; sourceTree = "<group>"; };
 		6108CFE52B761D0000EF302F /* LoginResponseDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginResponseDto.swift; sourceTree = "<group>"; };
@@ -288,6 +292,10 @@
 		616408E02B405B7200EC3B5E /* ImjangNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImjangNoteViewController.swift; sourceTree = "<group>"; };
 		616408EB2B407A2D00EC3B5E /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		616409012B407FB300EC3B5E /* UIFont+Pretendard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Pretendard.swift"; sourceTree = "<group>"; };
+		616D48172BFBA52B0073029A /* DateFormatterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatterManager.swift; sourceTree = "<group>"; };
+		616D48192BFBAF660073029A /* Int+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extension.swift"; sourceTree = "<group>"; };
+		616D481E2BFC8CF40073029A /* RecordRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordRequestDTO.swift; sourceTree = "<group>"; };
+		616D48202BFC8D0F0073029A /* RecordResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordResponseDTO.swift; sourceTree = "<group>"; };
 		61864BE12B5FFA890073C175 /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
 		61864BE92B6003520073C175 /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
 		61864BEE2B600E920073C175 /* ImjangNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImjangNote.swift; sourceTree = "<group>"; };
@@ -332,6 +340,8 @@
 		61D925072B486706002A16B4 /* RecordingFileItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingFileItem.swift; sourceTree = "<group>"; };
 		61D925092B49506D002A16B4 /* RecordingFilesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingFilesViewController.swift; sourceTree = "<group>"; };
 		61D925102B4983A1002A16B4 /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
+		61DEFEDC2BFA2FB40069A820 /* AudioRecorderManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorderManager.swift; sourceTree = "<group>"; };
+		61DEFEDF2BFB39A90069A820 /* STTError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STTError.swift; sourceTree = "<group>"; };
 		61E8EC0B2B726C9100BEAFE5 /* DeleteImjangPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteImjangPopupViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -480,7 +490,6 @@
 				34AA14F62B82E98C00CF10FC /* PlayViewController.swift */,
 				34AA14EA2B7DA5C600CF10FC /* Animation - 1707961785957.json */,
 				0A2DED212B55433900A96BAA /* RecordPlayback */,
-				34E01F5F2BFBBE410071DE4B /* AudioRecorder.swift */,
 			);
 			path = RecordBottomSheet;
 			sourceTree = "<group>";
@@ -504,6 +513,7 @@
 		0A9E0A452B3DCAB90094595A /* juinjang */ = {
 			isa = PBXGroup;
 			children = (
+				61DEFEDB2BFA2F990069A820 /* Manager */,
 				61B0C9E32B6CD9E200BE86D2 /* CustomView */,
 				619269E42B67745900D4DD3E /* Constants */,
 				619269E12B67743A00D4DD3E /* Protocol */,
@@ -648,6 +658,7 @@
 		6108CFDD2B761A8A00EF302F /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				616D48162BFB423C0073029A /* Query */,
 				6108CFDE2B761AA300EF302F /* JuinjangAPI.swift */,
 				6108CFF92B76395B00EF302F /* JuinjangAPIManager.swift */,
 			);
@@ -665,6 +676,7 @@
 				6108CFF32B762AA400EF302F /* ReportDto.swift */,
 				6108CFF52B762CA600EF302F /* ProfileDto.swift */,
 				0A603A692B7DD36E0060B90D /* CheckListResponseDto.swift */,
+				616D48202BFC8D0F0073029A /* RecordResponseDTO.swift */,
 			);
 			path = Decodable;
 			sourceTree = "<group>";
@@ -721,6 +733,7 @@
 				61864C4C2B653E140073C175 /* UIViewController+Extension.swift */,
 				61B0C9D32B6C10CC00BE86D2 /* UIStackView+Extension.swift */,
 				6108D0002B78A83B00EF302F /* String+Extension.swift */,
+				616D48192BFBAF660073029A /* Int+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -752,6 +765,14 @@
 			path = Fonts;
 			sourceTree = "<group>";
 		};
+		616D48162BFB423C0073029A /* Query */ = {
+			isa = PBXGroup;
+			children = (
+				616D481E2BFC8CF40073029A /* RecordRequestDTO.swift */,
+			);
+			path = Query;
+			sourceTree = "<group>";
+		};
 		619269D22B6773FE00D4DD3E /* ImjangList */ = {
 			isa = PBXGroup;
 			children = (
@@ -767,6 +788,7 @@
 		619269DE2B67742B00D4DD3E /* Enum */ = {
 			isa = PBXGroup;
 			children = (
+				61DEFEDE2BFB39980069A820 /* Error */,
 				619269DF2B67742B00D4DD3E /* Filter.swift */,
 				6108D0112B78CFFA00EF302F /* PreviousVCType.swift */,
 			);
@@ -853,6 +875,23 @@
 				0AA6E90E2B79292A000BDA1F /* VersionInfo.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		61DEFEDB2BFA2F990069A820 /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				61DEFEDC2BFA2FB40069A820 /* AudioRecorderManager.swift */,
+				616D48172BFBA52B0073029A /* DateFormatterManager.swift */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
+		61DEFEDE2BFB39980069A820 /* Error */ = {
+			isa = PBXGroup;
+			children = (
+				61DEFEDF2BFB39A90069A820 /* STTError.swift */,
+			);
+			path = Error;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -984,6 +1023,7 @@
 				0A14E36F2B569A840008FD28 /* SignUpViewController.swift in Sources */,
 				345855782B689AC900432C06 /* BottomTableViewCell.swift in Sources */,
 				61B0C9D22B6C0B0000BE86D2 /* ImjangImageListViewController.swift in Sources */,
+				61DEFEE02BFB39A90069A820 /* STTError.swift in Sources */,
 				345855842B689D9000432C06 /* QnAModel.swift in Sources */,
 				3458558A2B689E0D00432C06 /* QnAViewController.swift in Sources */,
 				345855882B689E0100432C06 /* Use1ViewController.swift in Sources */,
@@ -1002,6 +1042,7 @@
 				619269E92B67745900D4DD3E /* UserDefaultManager.swift in Sources */,
 				619269F52B67747F00D4DD3E /* ScrapCollectionViewCell.swift in Sources */,
 				3458557E2B689D2A00432C06 /* ExpandableTableViewCell.swift in Sources */,
+				616D481A2BFBAF660073029A /* Int+Extension.swift in Sources */,
 				616408E12B405B7200EC3B5E /* ImjangNoteViewController.swift in Sources */,
 				0A24711D2B69147200A7382B /* ToSDetailViewController.swift in Sources */,
 				0A7AC0F12B6412760032C9DF /* KakaoZipCodeViewController.swift in Sources */,
@@ -1025,6 +1066,7 @@
 				6108CFE82B761E5900EF302F /* TotalListDto.swift in Sources */,
 				61B0C9D92B6C1B9600BE86D2 /* EnlargePhotoViewController.swift in Sources */,
 				61864BEA2B6003520073C175 /* UIButton+Extension.swift in Sources */,
+				616D48182BFBA52B0073029A /* DateFormatterManager.swift in Sources */,
 				0A2DED1A2B55198D00A96BAA /* STTLoadingViewController.swift in Sources */,
 				619269DA2B6773FE00D4DD3E /* DeleteImjangViewController.swift in Sources */,
 				619269E82B67745900D4DD3E /* ImageStyle.swift in Sources */,
@@ -1058,12 +1100,12 @@
 				61D925052B486508002A16B4 /* RecordingFileViewCell.swift in Sources */,
 				611F14552B47070B00B983F1 /* RecordingSegmentedViewController.swift in Sources */,
 				0A4EBE3B2B5EF2BC00909B7A /* ExpandedDropdownTableViewCell.swift in Sources */,
-				34E01F602BFBBE410071DE4B /* AudioRecorder.swift in Sources */,
 				6108CFF82B76308F00EF302F /* RecordRequestDto.swift in Sources */,
 				6108CFF02B76285B00EF302F /* DetailDto.swift in Sources */,
 				611AA7B92B8253BC005DAC3B /* ImjangNoteCollectionViewCell.swift in Sources */,
 				0A95D7312B682FB4000A9C06 /* ToSItemTableViewCell.swift in Sources */,
 				61B0C9E52B6CDA0300BE86D2 /* PaddingLabel.swift in Sources */,
+				616D481F2BFC8CF40073029A /* RecordRequestDTO.swift in Sources */,
 				0A3EBEBE2B654E71004D8DCE /* OpenNewPagePopupViewController.swift in Sources */,
 				0A2471192B68CAAF00A7382B /* ToSItem.swift in Sources */,
 				6108CFE62B761D0000EF302F /* LoginResponseDto.swift in Sources */,
@@ -1098,6 +1140,7 @@
 				0A9E0A492B3DCAB90094595A /* SceneDelegate.swift in Sources */,
 				3458559B2B692E0C00432C06 /* CompareViewController.swift in Sources */,
 				6108CFF42B762AA400EF302F /* ReportDto.swift in Sources */,
+				616D48212BFC8D0F0073029A /* RecordResponseDTO.swift in Sources */,
 				619269F42B67747F00D4DD3E /* ImjangNoteTableViewCell.swift in Sources */,
 				345855722B689A5300432C06 /* MainViewController.swift in Sources */,
 				6108CFFA2B76395B00EF302F /* JuinjangAPIManager.swift in Sources */,
@@ -1106,6 +1149,7 @@
 				6108CFE12B761B3A00EF302F /* BaseResponse.swift in Sources */,
 				0A3D5D632B4D707300574686 /* BottomSheetViewController.swift in Sources */,
 				0AA6E90F2B79292A000BDA1F /* VersionInfo.swift in Sources */,
+				61DEFEDD2BFA2FB40069A820 /* AudioRecorderManager.swift in Sources */,
 				0A4EBE362B5EA27B00909B7A /* ExpandedScoreTableViewCell.swift in Sources */,
 				0A95D72F2B682013000A9C06 /* ToSViewController.swift in Sources */,
 				61B0C9D72B6C16BD00BE86D2 /* ImageCollectionViewCell.swift in Sources */,
@@ -1182,7 +1226,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1238,7 +1282,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -1261,6 +1305,7 @@
 				INFOPLIST_KEY_NSCameraUsageDescription = "카메라 접근 권한이 필요합니다.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "마이크 접근 권한을 허용하는 경우에만 녹음을 통한 노트 생성 및 음성 인식 서비스 이용이 가능합니다. (필수 권한)";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "사질 앨범에 접근하려면 허용이 필요합니다.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "임장 활동에 대한 녹음을 텍스트로 변환하기 위해 음성 인식 권한이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = "";
@@ -1273,7 +1318,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.juinjang;
+				PRODUCT_BUNDLE_IDENTIFIER = "com-juinjang";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -1297,6 +1342,7 @@
 				INFOPLIST_KEY_NSCameraUsageDescription = "카메라 접근 권한이 필요합니다.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "마이크 접근 권한을 허용하는 경우에만 녹음을 통한 노트 생성 및 음성 인식 서비스 이용이 가능합니다. (필수 권한)";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "사질 앨범에 접근하려면 허용이 필요합니다.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "임장 활동에 대한 녹음을 텍스트로 변환하기 위해 음성 인식 권한이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = "";
@@ -1309,7 +1355,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.juinjang;
+				PRODUCT_BUNDLE_IDENTIFIER = "com-juinjang";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;

@@ -336,23 +336,6 @@ class SettingViewController : UIViewController, UIImagePickerControllerDelegate,
                 saveButton.setTitle("저장", for: .normal)
                 saveButton.backgroundColor = UIColor(named: "mainOrange")
             }
-    
-//            if nicknameLabel.text == "NICKNAME4002" {
-//                self.view.addSubview(self.nicknameWarnImageView)
-//                self.view.addSubview(self.nicknameSameWarnLabel)
-//                self.nicknameWarnImageView.snp.makeConstraints{
-//                    $0.top.equalTo(self.line1.snp.bottom).offset(9)
-//                    $0.left.equalToSuperview().offset(24)
-//                    $0.height.equalTo(16)
-//                }
-//                self.nicknameSameWarnLabel.snp.makeConstraints{
-//                    $0.top.equalTo(self.line1.snp.bottom).offset(9)
-//                    $0.left.equalTo(self.nicknameWarnImageView.snp.right).offset(3)
-//                }
-//            } else {
-//                self.nicknameSameWarnLabel.removeFromSuperview()
-//                self.nicknameWarnImageView.removeFromSuperview()
-//            }
         }
         
     }

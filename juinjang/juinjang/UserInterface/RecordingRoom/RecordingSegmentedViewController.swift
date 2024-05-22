@@ -20,23 +20,29 @@ class RecordingSegmentedViewController: TabmanViewController, MoveWarningMessage
     }
     let border = UIView()
     
-    var viewControllers: Array<UIViewController> = [CheckListViewController(), RecordingRoomViewController()]
+//    var viewControllers: Array<UIViewController> = [CheckListViewController(), RecordingRoomViewController()]
+    var viewControllers: [UIViewController] = []
     let tabTitles = ["체크리스트", "기록룸"]
     
     var imjangNoteViewController: ImjangNoteViewController?
-    var imjangId: Int? = nil {
-        didSet {
-            print("히히\(imjangId)")
-        }
+    var imjangId: Int
+    
+    init(imjangId: Int) {
+        self.imjangId = imjangId
+        super.init(nibName: nil, bundle: nil)
     }
-
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         addSubView()
         addBottomBorder(with: ColorStyle.gray0, andWidth: 1)
         setConstraints()
-//        addViewControllers()
+        addViewControllers()
         setDelegate()
         createBar()
     }
@@ -47,8 +53,8 @@ class RecordingSegmentedViewController: TabmanViewController, MoveWarningMessage
     }
     
     func addViewControllers() {
-        let checkListVC = CheckListViewController()
-        let recordingRoomVC = RecordingRoomViewController()
+        let checkListVC = CheckListViewController(imjangId: imjangId)
+        let recordingRoomVC = RecordingRoomViewController(imjangId: imjangId)
         recordingRoomVC.imjangId = imjangId
         viewControllers.append(contentsOf: [checkListVC, recordingRoomVC])
     }
@@ -138,9 +144,9 @@ extension RecordingSegmentedViewController: PageboyViewControllerDataSource, TMB
             print("현재 ViewController", currentViewController)
             imjangNoteViewController?.editButton.isHidden = true
             imjangNoteViewController?.upButton.isHidden = false
-            if let imjangId {
-                imjangNoteViewController?.imjangId = imjangId
-            }
+//            if let imjangId {
+//                imjangNoteViewController?.imjangId = imjangId
+//            }
         }
         return viewControllers[index]
     }

@@ -35,6 +35,7 @@ enum JuinjangAPI {
     case fetchImage(imjangId: Int)
     case addImage
     case deleteImage
+    case uploadRecordFile
     
     var baseURL: String {
         return "http://juinjang1227.com:8080/api/"
@@ -88,6 +89,9 @@ enum JuinjangAPI {
             return URL(string: baseURL + "limjang/image")!
         case .deleteImage:
             return URL(string: baseURL + "limjang/image/delete")!
+            
+        case .uploadRecordFile:
+            return URL(string: baseURL + "record")!
         }
     }
     
@@ -96,7 +100,7 @@ enum JuinjangAPI {
         case .kakaoLogin, .regenerateToken, .showChecklist, .saveChecklist, .modifyImjang, .detailImjang, .totalImjang, .scrap, .searchImjang, .deleteImjangs, .memo, .fetchRecordingRoom, .fetchImage:
             return ["Content-Type": "application/json", "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"]
 
-        case .addImage:
+        case .addImage, .uploadRecordFile:
             return [
                 "Content-Type": "multipart/form-data",
                 "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"
@@ -108,7 +112,7 @@ enum JuinjangAPI {
     
     var method: HTTPMethod {
         switch self {
-        case .saveChecklist, .scrap, .createImjang, .regenerateToken, .logout, .deleteImjangs, .memo, .addImage,    .deleteImage:
+        case .saveChecklist, .scrap, .createImjang, .regenerateToken, .logout, .deleteImjangs, .memo, .addImage, .deleteImage, .uploadRecordFile:
             return .post
         case .showChecklist, .totalImjang, .searchImjang, .mainImjang, .detailImjang, .kakaoLogin, .kakaoLoginCallback, .profile, .fetchRecordingRoom, .fetchImage:
             return .get
@@ -116,16 +120,6 @@ enum JuinjangAPI {
             return .patch
         }
     }
-    
-//    var encoding: ParameterEncoding {
-//        switch self {
-//        case .deleteImjangs, .memo, .deleteImage:
-//            return JSONEncoding.default
-//        default:
-//            return URLEncoding(destination: .queryString)
-//        }
-//    }
-
     
     var parameter: [String: Any] {
         switch self {

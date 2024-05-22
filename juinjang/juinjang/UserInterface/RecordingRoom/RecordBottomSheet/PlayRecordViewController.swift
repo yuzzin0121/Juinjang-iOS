@@ -8,14 +8,8 @@
 import UIKit
 import SnapKit
 
-protocol PlayRecordViewControllerDelegate: AnyObject {
-    func playRecordViewControllerDidDismiss(_ controller: PlayRecordViewController)
-}
-
 class PlayRecordViewController: UIViewController, UITextFieldDelegate{
     
-    weak var delegate : PlayRecordViewControllerDelegate?
-
     weak var bottomSheetViewController: BottomSheetViewController?
     
     lazy var bottomSheetView = UIView().then {
@@ -43,9 +37,7 @@ class PlayRecordViewController: UIViewController, UITextFieldDelegate{
     
     @objc func cancelButtonTapped(_ sender: UIButton) {
         print("닫기")
-        dismiss(animated: true) {
-            self.delegate?.playRecordViewControllerDidDismiss(self)
-        }
+        dismiss(animated: true) 
     }
 
     override func viewDidLoad() {

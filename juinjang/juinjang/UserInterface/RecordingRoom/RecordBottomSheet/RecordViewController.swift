@@ -7,46 +7,14 @@
 
 import UIKit
 import SnapKit
-import AVFoundation
-import Alamofire
+import Speech
 
 struct Recording {
     var title: String
     var fileURL: URL
 }
-struct RecordResponse: Codable {
-    let isSuccess: Bool
-    let code: String
-    let message: String
-    let result: RecordResult
-}
-
-struct RecordResult: Codable {
-    let recordName: String
-    let createdAt: String
-    let updatedAt: String
-    let recordScript: String
-    let recordTime: Int
-    let recordUrl: String
-    let recordId: Int
-    let limjangId: Int
-}
 
 class RecordViewController: UIViewController, AVAudioRecorderDelegate {
-    
-    weak var bottomSheetViewController: BottomSheetViewController?
-    //var recording: [Recording] = []
-    
-    var audioFile : URL! // 재생할 오디오의 파일명 변수
-    var audioRecorder : AVAudioRecorder!
-    var progressTimer : Timer! //타이머를 위한 변수
-    var endTime: Date?
-    
-    var accessToken: String = UserDefaultManager.shared.accessToken
-    var limjangId: Int = 1 // Replace with your actual limjangId
-    var recordName: String = "recordName" // Replace with your actual record name
-    var recordScript: String = "recordScript" // Replace with your actual record script
-
     
     lazy var bottomSheetView = UIView().then {
         $0.backgroundColor = .white
@@ -115,85 +83,48 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
         $0.addTarget(self, action: #selector(completedButtonPressed(_:)), for: .touchUpInside)
     }
     
+    weak var bottomSheetViewController: BottomSheetViewController?
+    //var fileURLs : [URL] = []
+    var recordings: [Recording] = []
+    
+    //    var audioFile : URL! // 재생할 오디오의 파일명 변수
+    //    var audioRecorder : AVAudioRecorder!
+    var progressTimer : Timer? //타이머를 위한 변수
+    
+    var imjangId: Int
+    
+    init(imjangId: Int) {
+        self.imjangId = imjangId
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         bottomSheetView.backgroundColor = UIColor(named: "textBlack")
         addSubViews()
         setupLayout()
-        loadRecordings()
-        recordSet()
+        requestSpeechRecognitionAuthorization()
+        setRecord()
     }
     override func viewDidAppear(_ animated: Bool) {
+        print(#function)
         super.viewDidAppear(animated)
         startRecording()
-        
-    }
-    func startRecording() {
-            // 녹음을 시작하는 코드
-        audioRecorder.stop()
-        audioRecorder.record()
-        progressTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(updateRecordTime), userInfo: nil, repeats: true)
-            
-    }
-    func loadRecordings() {
-       let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-//        let existingRecordingsDict = Dictionary(uniqueKeysWithValues: recordings.map { ($0.fileURL, $0.title) })
-//
-//            do {
-//                let recordingURLs = try FileManager.default.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil, options: [])
-//                recordings = recordingURLs.filter { $0.pathExtension == "m4a" }.map { url in
-//                    let title = existingRecordingsDict[url] ?? url.lastPathComponent
-//                    return Recording(title: title, fileURL: url)
-//                    print("load success")
-//                }
-//            } catch {
-//                print("Error loading recordings: \(error)")
-//            }
-       do {
-           // 문서 디렉토리에서 녹음 파일들을 가져옴
-           let recordingURLs = try FileManager.default.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil, options: [])
-           // 녹음 파일 목록에 추가
-           recordings = recordingURLs.filter { $0.pathExtension == "m4a" }.map {Recording(title: $0.lastPathComponent, fileURL: $0)} // .m4a 확장자를 가진 파일만 필터링
-       } catch {
-           print("Failed to load recordings: \(error)")
-       }
-   }
-    func recordSet() {
-        let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        audioFile = documentDirectory.appendingPathComponent("recordfile\(recordings.count).m4a")
-        print("number: \(recordings.count)")
-        initRecord()
     }
     
-    func initRecord(){
-        let recordSettings = [
-            AVFormatIDKey : NSNumber(value: kAudioFormatAppleLossless as UInt32),
-            AVEncoderAudioQualityKey : AVAudioQuality.max.rawValue,
-            AVEncoderBitRateKey : 320000,
-            AVNumberOfChannelsKey : 2,
-            AVSampleRateKey : 44100.0] as [String : Any]
-        do {
-            audioRecorder = try AVAudioRecorder(url: audioFile, settings: recordSettings)
-        } catch let error as NSError {
-            print("Error-initRecord : \(error)")
-        }
-        
-        audioRecorder.delegate = self
-        audioRecorder.isMeteringEnabled = true
-        audioRecorder.prepareToRecord()
-        
-        let session = AVAudioSession.sharedInstance()
-        do {
-            try session.setCategory(.playAndRecord, mode: .default)
-            try session.setActive(true)
-        } catch let error as NSError {
-            print(" Error-setCategory : \(error)")
-        }
-        do {
-            try session.setActive(true)
-        } catch let error as NSError {
-            print(" Error-setActive : \(error)")
-        }
+    
+    func setRecord() {
+        AudioRecorderManager.shared.setupRecorder()
+    }
+    
+    func startRecording() {
+        print(#function, "녹음 시작")
+        AudioRecorderManager.shared.startRecording()
+        progressTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateRecordTime), userInfo: nil, repeats: true)
     }
     
     // 00:00 형태의 문자열로 변환
@@ -206,42 +137,76 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
     
     //녹음 모드일 때 호출되는 함수
     @objc func btnRecord(_ sender: UIButton) {
-        if recordButton.isSelected {
-            audioRecorder.record()
-            progressTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(updateRecordTime), userInfo: nil, repeats: true)
-            recordButton.setImage(UIImage(named: "being-recorded-button"), for: .normal)
-        } else {
-            audioRecorder.pause()
-            //progressTimer.invalidate()
-            //btnPlay.isEnabled = true
-            //initPlay()
-            recordButton.setImage(UIImage(named: "record-button"), for: .normal)
-        }
+        print(#function)
         recordButton.isSelected.toggle()
+        if recordButton.isSelected {
+            print("recordButtonTapped: 녹음 중지")
+            AudioRecorderManager.shared.pauseRecording()
+            progressTimer?.invalidate()
+            progressTimer = nil
+            recordButton.setImage(UIImage(named: "record-button"), for: .normal)
+        } else {
+            print("recordButtonTapped: 녹음 시작")
+            AudioRecorderManager.shared.startRecording()
+            progressTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateRecordTime), userInfo: nil, repeats: true)
+            recordButton.setImage(UIImage(named: "being-recorded-button"), for: .normal)
+        }
+        
     }
     
     //0.1초마다 호출되어 녹음 시간 표시
     @objc func updateRecordTime() {
+        guard let audioRecorder = AudioRecorderManager.shared.audioRecorder else { return }
         timeLabel.text = convertNSTimeInterval2String(audioRecorder.currentTime)
     }
-
-    func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
-        if flag {
-            print("Recording successful")
-        } else {
-            print("Recording failed")
+    
+    @objc func cancelButtonTapped(_ sender: UIButton) {
+        bottomSheetViewController?.hideBottomSheetAndGoBack()
+    }
+    
+    // 완료 버튼 클릭 시
+    @objc func completedButtonPressed(_ sender: UIButton) {
+        print("완료 버튼 클릭")
+        AudioRecorderManager.shared.stopRecording() // 녹음 중지
+        progressTimer?.invalidate()
+        progressTimer = nil
+        
+        
+        guard let recordUrl = AudioRecorderManager.shared.getRecordURL() else { return }
+        guard let recordTime = getRecordTime() else { return }
+        
+        let loadingVC = STTLoadingViewController(imjangId: imjangId, fileURL: recordUrl, recordTime: recordTime)
+        loadingVC.bottomSheetViewController = bottomSheetViewController
+        
+        bottomSheetViewController?.transitionToViewController(loadingVC)
+    }
+    
+    private func getRecordTime() -> Int? {
+        guard let audioRecorder = AudioRecorderManager.shared.audioRecorder else {
+            return nil
+        }
+        return Int.convertTimeToInt(time: audioRecorder.currentTime)
+    }
+    
+    // 음성 인식 권한 확인
+    func requestSpeechRecognitionAuthorization() {
+        SFSpeechRecognizer.requestAuthorization { authStatus in
+            DispatchQueue.main.async {
+                switch authStatus {
+                case .authorized:
+                    print("Speech recognition authorization granted")
+                case .denied:
+                    print("Speech recognition authorization denied")
+                case .restricted:
+                    print("Not allowed on this device")
+                case .notDetermined:
+                    print("Not determined")
+                @unknown default:
+                    print("Unknown authorization status")
+                }
+            }
         }
     }
-    
-    func updateEndTimeLabel() {
-        guard let endTime = endTime else { return }
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "HH:mm"
-        let endTimeString = dateFormatter.string(from: endTime)
-        let playVC = RecordBottomViewController()
-        recordTime = "\(endTimeString)"
-    }
-    
     
     func addSubViews() {
         view.addSubview(bottomSheetView)
@@ -266,7 +231,6 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
         cancelButton.snp.makeConstraints {
             $0.height.equalTo(12)
             $0.width.equalTo(12)
-            //            $0.leading.equalTo(bottomSheetView.snp.leading).offset(354)
             $0.trailing.equalTo(bottomSheetView.snp.trailing).offset(-24)
             $0.top.equalTo(bottomSheetView.snp.top).offset(29)
         }
@@ -275,7 +239,6 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
         recordLabel.snp.makeConstraints {
             $0.centerX.equalTo(bottomSheetView.snp.centerX)
             $0.top.equalTo(bottomSheetView.snp.top).offset(24)
-            //            $0.leading.equalTo(bottomSheetView.snp.leading).offset(164)
         }
         
         // 시간 Label
@@ -315,80 +278,4 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
             $0.height.equalTo(24)
         }
     }
-    
-    @objc func cancelButtonTapped(_ sender: UIButton) {
-        bottomSheetViewController?.hideBottomSheetAndGoBack()
-    }
-    
-    @objc func startRecordPressed(_ sender: UIButton) {
-        if recordButton.isSelected {
-            recordButton.setImage(UIImage(named: "being-recorded-button"), for: .normal)
-        } else {
-            recordButton.setImage(UIImage(named: "record-button"), for: .normal)
-        }
-        recordButton.isSelected.toggle()
-    }
-    
-    @objc func completedButtonPressed(_ sender: UIButton) {
-        audioRecorder.stop()
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateFormat = "HH:mm"
-
-        endTime = Date() // 녹음 종료 시간 기록
-        updateEndTimeLabel()
-        sendRecordingToServer()
-        
-        let loadingVC = STTLoadingViewController()
-        loadingVC.bottomSheetViewController = bottomSheetViewController
-        bottomSheetViewController?.transitionToViewController(loadingVC)
-        
-        // 임의로 2초 후 recordPlaybackVC로 이동
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [self] in
-            let recordPlaybackVC = RecordPlaybackViewController()
-            recordPlaybackVC.bottomSheetViewController = bottomSheetViewController
-            bottomSheetViewController?.transitionToViewController(recordPlaybackVC)
-        }
-    }
-    func sendRecordingToServer() {
-        guard let audioFileURL = audioFile else { return }
-        
-        let url = "http://juinjang1227.com:8080/api/record"
-        
-        let headers: HTTPHeaders = [
-            "Authorization": "Bearer \(accessToken)",
-            "Content-Type": "multipart/form-data"
-        ]
-        
-        let recordRequestDTO: [String: Any] = [
-            "limjangId": limjangId,
-            "recordTime": getFormattedRecordTime(),
-            "recordName": recordName,
-            "recordScript": recordScript
-        ]
-        
-        AF.upload(multipartFormData: { multipartFormData in
-            multipartFormData.append(audioFileURL, withName: "file")
-            
-            if let jsonData = try? JSONSerialization.data(withJSONObject: recordRequestDTO, options: .prettyPrinted) {
-                multipartFormData.append(jsonData, withName: "recordRequestDTO")
-            }
-        }, to: url, headers: headers)
-        .responseJSON { response in
-            print("결과 : \(response)")
-            
-            switch response.result {
-            case .success(let value):
-                print("Response: \(value)")
-            case .failure(let error):
-                print("Error: \(error.localizedDescription)")
-            }
-        }
-    }
-    
-    func getFormattedRecordTime() -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HHmm"
-        return formatter.string(from: endTime ?? Date())
-    }
-    
 }

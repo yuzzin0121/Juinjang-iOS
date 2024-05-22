@@ -555,7 +555,7 @@ class OpenNewPage2ViewController: UIViewController, WarningMessageDelegate {
         createImjang { imjangId, error in
             if error == nil {
                 guard let imjangId else { return }
-                let ImjangNoteVC = ImjangNoteViewController()
+                let ImjangNoteVC = ImjangNoteViewController(imjangId: imjangId)
                 ImjangNoteVC.previousVCType = .createImjangVC
                 ImjangNoteVC.imjangId = imjangId
                 ImjangNoteVC.version = self.versionInfo

@@ -24,6 +24,7 @@ struct UserInfoResult: Codable {
     let nickname: String?
     let email: String
     let provider: String
+    let image: String
 }
 
 class SignUpWebViewController: UIViewController {

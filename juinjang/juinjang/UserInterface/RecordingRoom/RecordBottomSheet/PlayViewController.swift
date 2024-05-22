@@ -27,7 +27,7 @@ class PlayViewController: UIViewController, UITextFieldDelegate, AVAudioPlayerDe
     }
     
     var recordStartTimeLabel = UILabel().then {
-        $0.text = "\(recordTime)" // - TODO: 녹음 파일 추가할 때의 시간 반영
+//        $0.text = "\(recordTime)" // - TODO: 녹음 파일 추가할 때의 시간 반영
         $0.textColor = UIColor(named: "gray1")
         $0.font = UIFont(name: "Pretendard-Regular", size: 16)
     }
@@ -162,7 +162,6 @@ class PlayViewController: UIViewController, UITextFieldDelegate, AVAudioPlayerDe
         }
     
         rewindButton.snp.makeConstraints {
-//            $0.top.equalTo(elapsedTimeLabel.snp.bottom).offset(68)
             $0.trailing.equalTo(recordButton.snp.leading).offset(-40)
             $0.height.equalTo(36)
             $0.width.equalTo(36)
@@ -171,13 +170,11 @@ class PlayViewController: UIViewController, UITextFieldDelegate, AVAudioPlayerDe
         
         recordButton.snp.makeConstraints {
             $0.centerX.equalTo(view.snp.centerX)
-//            $0.top.equalTo(elapsedTimeLabel.snp.bottom).offset(56)
             $0.bottom.equalTo(view.snp.bottom).offset(-76)
         }
         
         fastForwardButton.snp.makeConstraints {
             $0.leading.equalTo(recordButton.snp.trailing).offset(40)
-//            $0.top.equalTo(elapsedTimeLabel.snp.bottom).offset(68)
             $0.height.equalTo(36)
             $0.width.equalTo(36)
             $0.bottom.equalTo(view.snp.bottom).offset(-88)
@@ -221,7 +218,7 @@ class PlayViewController: UIViewController, UITextFieldDelegate, AVAudioPlayerDe
     }
     
     @objc private func dragedSlider() {
-        //audioPlayer.currentTime = TimeInterval(recordingSlider.value)
+        //audioPlayer.currentTime = TimeInterval(recordingSlider.v
         let newTime = TimeInterval(recordingSlider.value) * audioPlayer.duration
         audioPlayer.currentTime = newTime
     }
