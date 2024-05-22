@@ -7,7 +7,6 @@
 
 import UIKit
 import AVFoundation
-var recordings: [Recording] = []
 
 class RecordingFilesViewController: UIViewController {
 
@@ -238,11 +237,11 @@ extension RecordingFilesViewController: UITableViewDelegate, UITableViewDataSour
         let vc = BottomSheetViewController(imjangId: imjangId)
         vc.modalPresentationStyle = .custom
         
-        let playVC = PlayRecordViewController()
-        playVC.bottomViewController.audioFile = recordings[indexPath.row].fileURL
-        playVC.bottomViewController.titleTextField.text = recordings[indexPath.row].title
-        playVC.bottomViewController.recordingIndexPath = indexPath
-        vc.transitionToViewController(playVC)
+//        let playVC = PlayRecordViewController(recordResponse: <#RecordResponse#>)
+//        playVC.bottomViewController.audioFile = recordings[indexPath.row].fileURL
+//        playVC.bottomViewController.titleTextField.text = recordings[indexPath.row].title
+//        playVC.bottomViewController.recordingIndexPath = indexPath
+//        vc.transitionToViewController(playVC)
         
         // 새로운 뷰 컨트롤러를 present 합니다.
         present(vc, animated: true, completion: nil)

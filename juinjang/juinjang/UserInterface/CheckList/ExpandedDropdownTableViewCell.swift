@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 
+// -TODO: 인덱스 구분해서 기타 항목 처리 어떻게 해야할지
 class ExpandedDropdownTableViewCell: UITableViewCell {
     
     var optionSelectionHandler: ((String) -> Void)?
@@ -255,11 +256,18 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
             questionImage.image = UIImage(named: "question-selected-image")
             contentLabel.textColor = UIColor(named: "500")
             backgroundColor = .white
-            
-            itemButton.setTitle(options[Int(answer) ?? 0].option, for: .normal)
+            var originalImage: UIImage?
+            if answer.count < 2 {
+                itemButton.setTitle(options[Int(answer) ?? 0].option, for: .normal)
+            } else {
+                if let lastOption = options.last {
+                    itemButton.setTitle(lastOption.option, for: .normal)
+                    originalImage = UIImage(data: options[Int(answer) ?? 0].image)
+                }
+            }
             itemButton.backgroundColor = .white
             itemButton.setTitleColor(UIColor(named: "darkGray"), for: .normal)
-            let originalImage = UIImage(data: options[Int(answer) ?? 0].image)
+//            let originalImage = UIImage(data: options[Int(answer) ?? 0].image)
             // 이미지가 리사이즈하여 새로운 이미지로 생성
             if let originalImage = originalImage {
                 let newSize = CGSize(width: 16, height: 16)
@@ -283,11 +291,18 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
             questionImage.image = UIImage(named: "question-selected-image")
             contentLabel.textColor = UIColor(named: "500")
             backgroundColor = UIColor(named: "lightOrange")
-            
-            itemButton.setTitle(options[Int(answer) ?? 0].option, for: .normal)
+            var originalImage: UIImage?
+            // -TODO: 인덱스 어떻게 할 건지
+            if answer.count > 2 {
+                itemButton.setTitle(options[Int(answer) ?? 0].option, for: .normal)
+            } else {
+                if let lastOption = options.last {
+                    itemButton.setTitle(lastOption.option, for: .normal)
+                    originalImage = UIImage(data: options[Int(answer) ?? 0].image)
+                }
+            }
             itemButton.backgroundColor = .white
             itemButton.setTitleColor(UIColor(named: "darkGray"), for: .normal)
-            let originalImage = UIImage(data: options[Int(answer) ?? 0].image)
             // 이미지가 리사이즈하여 새로운 이미지로 생성
             if let originalImage = originalImage {
                 let newSize = CGSize(width: 16, height: 16)
@@ -327,10 +342,6 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
         let selectedOption = options[row]
         print("Selected option: (row, \(selectedOption))")
         
-        // -TODO: 인덱스 번호로 넘겨주어야 함
-//        selectionHandler?(row)
-        
-        
         // 선택한 옵션으로 selectedButton 설정
         selectedButton.setTitle(selectedOption.option, for: .normal)
         selectedButton.backgroundColor = .white
@@ -366,7 +377,6 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
         if options[row].option == "기타" {
             backgroundColor = .white
             questionImage.image = UIImage(named: "question-image")
-            handleOptionSelection(String(etcTextField.text ?? ""))
         }
     }
     
@@ -472,6 +482,11 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
         selectedButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: titleInset, bottom: 0, right: -imageInset)
         selectedButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: selectedButton.bounds.width - 35, bottom: 0, right: -imageInset)
     }
+    
+    func showAlert() {
+        let alert = UIAlertController(title: "경고", message: "최소 2글자 이상 입력해야 합니다.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
+    }
 }
 
 extension ExpandedDropdownTableViewCell: UITextFieldDelegate {
@@ -504,6 +519,13 @@ extension ExpandedDropdownTableViewCell: UITextFieldDelegate {
             backgroundColor = UIColor(named: "lightOrange")
             questionImage.image = UIImage(named: "question-selected-image")
             textField.backgroundColor = .white
+            
+            // 2글자 미만인 경우
+            if text.count < 2 {
+                showAlert()
+                return
+            }
+            
             // 입력된 텍스트에 따라 동적으로 너비 조절
             let calculatedWidth = calculateTextFieldWidth(for: text, maxCharacterCount: 8)
 
@@ -511,12 +533,14 @@ extension ExpandedDropdownTableViewCell: UITextFieldDelegate {
             updateTextFieldWidthConstraint(for: textField, constant: calculatedWidth, shouldRemoveLeadingConstraint: true)
             textField.layoutIfNeeded()
             textField.contentHorizontalAlignment = .left
+            handleOptionSelection(text)
         } else {
             // 비어있는 경우 기존 너비로
             backgroundColor = .white
             questionImage.image = UIImage(named: "question-image")
             textField.backgroundColor = UIColor(named: "lightBackgroundOrange")
             updateTextFieldWidthConstraint(for: textField, constant: 218, shouldRemoveLeadingConstraint: false)
+            handleOptionSelection("")
         }
     }
 

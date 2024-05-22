@@ -65,8 +65,8 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
     }
     
     let memoTextViewPlaceholder = "눌러서 메모를 추가해보세요!"
-
-    //var fileItems: [RecordingFileItem] = []
+    
+    var fileItems: [RecordResponse] = []
     //var fileURLs : [URL] = []
     //var recordings : [Recording] = []
     
@@ -87,7 +87,7 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
         print(Date())
         setDelegate()
         addSubView()
-       // setItemData()
+        // setItemData()
         loadRecordings()
         designViews()
         setConstraints()
@@ -117,7 +117,6 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
     
     // 녹음 3개까지, 메모 조회
     func callFetchRequest() {
-        print(#function, "RecordingRoom 임장 아이디 있나?", imjangId)
         JuinjangAPIManager.shared.fetchData(type: BaseResponse<RecordMemoDto>.self, api: .fetchRecordingRoom(imjangId: imjangId)) { recordMemoDto, error in
             if error == nil {
                 guard let recordMemoDto = recordMemoDto else { return }
@@ -140,49 +139,18 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
         }
     }
     func loadRecordings() {
-        clearRecordingDirectory()
-        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let existingRecordingsDict = Dictionary(uniqueKeysWithValues: recordings.map { ($0.fileURL, $0.title) })
-                do {
-                    let recordingURLs = try FileManager.default.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil, options: [])
-                    recordings = recordingURLs.filter { $0.pathExtension == "m4a" }.map { url in
-                        let title = existingRecordingsDict[url] ?? url.lastPathComponent
-                        return Recording(title: title, fileURL: url)
-                    }
-                } catch {
-                    print("Error loading recordings: \(error)")
-                }
-//        do {
-//           // 문서 디렉토리에서 녹음 파일들을 가져옴
-//           let recordingURLs = try FileManager.default.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil, options: [])
-//           // 녹음 파일 목록에 추가
-//            recordings = recordingURLs.filter { $0.pathExtension == "m4a" }.map {Recording(title: $0.lastPathComponent, fileURL: $0)} //.sorted(by: { $0.absoluteString > $1.absoluteString }) // .m4a 확장자를 가진 파일만 필터링
-//        } catch {
-//           print("Failed to load recordings: \(error)")
-//        }
-        if recordings.isEmpty {
+        
+        if fileItems.isEmpty {
             tableBackgroundView.isHidden = false
         } else {
             tableBackgroundView.isHidden = true
         }
         recordingFileTableView.reloadData()
-
-           // UITableView 새로고침
-           recordingFileTableView.reloadData()
+        
+        // UITableView 새로고침
+        recordingFileTableView.reloadData()
     }
-    func clearRecordingDirectory() {
-        let fileManager = FileManager.default
-        let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        do {
-            let fileURLsInDirectory = try fileManager.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil, options: [])
-            for fileURL in fileURLsInDirectory {
-                try fileManager.removeItem(at: fileURL)
-            }
-            print("Recording directory cleared successfully.")
-        } catch {
-            print("Failed to clear recording directory: \(error)")
-        }
-    }
+    
     func setMemo(memo: String?) {
         guard let memo = memo else { return }
         memoTextView.text = memo
@@ -241,14 +209,14 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
     }
     
     func setItemData() {
- //       fileURLs.append(contentsOf: [
-//            .init(name: "보일러 관련", recordedDate: Date(), recordedTime: "1:30"),
-//            .init(name: "녹음_002", recordedDate: Date(), recordedTime: "2:12"),
-//            .init(name: "녹음_001", recordedDate: Date(), recordedTime: "1:57"),
-//            .init(name: "으아앙", recordedDate: Date(), recordedTime: "3:10")
-//        ])
+        //       fileURLs.append(contentsOf: [
+        //            .init(name: "보일러 관련", recordedDate: Date(), recordedTime: "1:30"),
+        //            .init(name: "녹음_002", recordedDate: Date(), recordedTime: "2:12"),
+        //            .init(name: "녹음_001", recordedDate: Date(), recordedTime: "1:57"),
+        //            .init(name: "으아앙", recordedDate: Date(), recordedTime: "3:10")
+        //        ])
         
-        if recordings.isEmpty {
+        if fileItems.isEmpty {
             tableBackgroundView.isHidden = false
         } else {
             tableBackgroundView.isHidden = true
@@ -271,7 +239,7 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
         [recordingFileStackView, showTotalRecordingButton].forEach {
             recordingHeaderStackView.addArrangedSubview($0)
         }
-       
+        
         [recordingHeaderStackView, tableBackgroundView, recordingFileTableView, notePadLabel, memoTextView].forEach {
             contentView.addSubview($0)
         }
@@ -338,7 +306,7 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
         }
         
         var topView: UIView? = nil
-        if recordings.isEmpty {
+        if fileItems.isEmpty {
             topView = tableBackgroundView
         } else {
             topView = recordingFileTableView
@@ -358,8 +326,8 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
         }
         
         var rowHeight = 0.13
-        print("file \(recordings.count)개")
-        switch recordings.count {
+        print("file \(fileItems.count)개")
+        switch fileItems.count {
         case 0: rowHeight = 1
             tableBackgroundView.isHidden = false
         case 1: rowHeight = 1
@@ -388,7 +356,7 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
     }
     
     func isEmptyRecordingFile(_ isEmpty: Bool) {
-        if recordings.isEmpty {
+        if fileItems.isEmpty {
             recordingFileTableView.isHidden = true
         }
     }
@@ -447,15 +415,15 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
         }
     }
 }
-
+    
 extension RecordingRoomViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if recordings.isEmpty {
+        if fileItems.isEmpty {
             return 0
-        } else if recordings.count == 1{
+        } else if fileItems.count == 1{
             return 1
-        } else if recordings.count == 2{
+        } else if fileItems.count == 2{
             return 2
         } else {
             return 3
@@ -467,25 +435,23 @@ extension RecordingRoomViewController: UITableViewDataSource, UITableViewDelegat
             return UITableViewCell()
         }
         cell.selectionStyle = .none
-//        let playVC = PlayRecordViewController()
-//        playVC.bottomViewController.audioFile = recordings[indexPath.row].fileURL
-//        playVC.bottomViewController.initPlay1()
-       // playVC.bottomViewController.audioFile = fileItems[indexPath.row].url
+        //        let playVC = PlayRecordViewController()
+        //        playVC.bottomViewController.audioFile = recordings[indexPath.row].fileURL
+        //        playVC.bottomViewController.initPlay1()
+        // playVC.bottomViewController.audioFile = fileItems[indexPath.row].url
         //cell.setData(fileItem: fileItems[indexPath.row])
-//        cell.setData(fileTitle: "\(recordings[indexPath.row].title)", time: "\(playVC.bottomViewController.remainingTimeLabel.text ?? "0:00")", date: recordTime)
+        //        cell.setData(fileTitle: "\(recordings[indexPath.row].title)", time: "\(playVC.bottomViewController.remainingTimeLabel.text ?? "0:00")", date: recordTime)
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 56
     }
-    
-    
 }
 
 extension RecordingRoomViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        print("Child 스크롤 좌표 - \(scrollView.contentOffset.y)")
+        //        print("Child 스크롤 좌표 - \(scrollView.contentOffset.y)")
         
         // Child 스크롤 0 이하일 때
         if scrollView.contentOffset.y < -30 {
@@ -513,4 +479,5 @@ extension RecordingRoomViewController: UITextViewDelegate {
         }
     }
 }
+
 

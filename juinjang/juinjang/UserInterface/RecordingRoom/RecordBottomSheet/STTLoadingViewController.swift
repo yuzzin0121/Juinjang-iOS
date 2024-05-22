@@ -63,8 +63,8 @@ class STTLoadingViewController: UIViewController {
     }
     
     // 재생 화면으로 전환
-    func showPlaybackVC(transcript: String) {
-        let recordPlaybackVC = RecordPlaybackViewController()
+    func showPlaybackVC(recordResponse: RecordResponse) {
+        let recordPlaybackVC = RecordPlaybackViewController(recordResponse: recordResponse)
         recordPlaybackVC.bottomSheetViewController = bottomSheetViewController
         bottomSheetViewController?.transitionToViewController(recordPlaybackVC)
     }
@@ -79,15 +79,16 @@ class STTLoadingViewController: UIViewController {
                 
                 let recordRequestDTO = getRecordRequestDTO(script: script)
                 
-                JuinjangAPIManager.shared.uploadRecordFile(api: .uploadRecordFile, fileURL: fileURL, dto: recordRequestDTO) { result in
+                JuinjangAPIManager.shared.uploadRecordFile(api: .uploadRecordFile, fileURL: fileURL, dto: recordRequestDTO) { [weak self] result in
+                    guard let self else { return }
                     switch result {
                     case .success(let recordResponse):
                         print(recordResponse)
+                        showPlaybackVC(recordResponse: recordResponse)
                     case .failure(let failure):
                         print("실패...>!!!!!")
                     }
                 }
-//                showPlaybackVC(transcript: script)
             case .failure(let failure):
                 bottomSheetViewController?.transitionToViewController(self)
             }
