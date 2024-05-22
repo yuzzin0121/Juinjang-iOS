@@ -14,8 +14,7 @@ class CheckListViewController: UIViewController {
     
     var allCategory: [String] = [] // 카테고리
     var checkListCategories: [CheckListCategory] = [] // 카테고리별 질문
-    var checkListItems: [CheckListAnswer] = [] // 임시로 저장된 체크리스트 항목
-    var savedCheckListItems: [CheckListAnswer] = [] // 실제로 저장된 체크리스트 항목
+    var checkListItems: [CheckListAnswer] = [] // 저장된 체크리스트 항목
     
     lazy var tableView = UITableView().then {
         $0.separatorStyle = .none
@@ -25,7 +24,6 @@ class CheckListViewController: UIViewController {
 
     var isEditMode: Bool = false // 수정 모드 여부
     var version: Int = 0
-    
     var imjangId: Int
     
     init(imjangId: Int) {
@@ -46,20 +44,19 @@ class CheckListViewController: UIViewController {
         setupLayout()
         registerCell()
         setCheckInfo()
-//        selectedAnswers = ChecklistDataManager.shared.loadChecklistAnswers()
         NotificationCenter.default.addObserver(self, selector: #selector(didStoppedParentScroll), name: NSNotification.Name("didStoppedParentScroll"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleEditModeChange(_:)), name: Notification.Name("EditModeChanged"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleEditButtonTappedNotification), name: NSNotification.Name("EditButtonTapped"), object: nil)
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(ReloadTableView), name: NSNotification.Name("ReloadTableView"), object: nil)
     }
     
-    
     private func setCheckInfo() {
-        filterVersionAndCategory(isEditMode: isEditMode, version: version) { [weak self] categories in
-            guard let self else { return }
-            showCheckList()
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
+        showCheckList {
+            self.filterVersionAndCategory(isEditMode: self.isEditMode, version: self.version) { [weak self] categories in
+                guard let self = self else { return }
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
             }
         }
     }
@@ -121,7 +118,7 @@ class CheckListViewController: UIViewController {
             let realm = try Realm()
             var result = realm.objects(CheckListItem.self)
             
-            print("체크리스트 버전: \(version)")
+            print("조회한 체크리스트 버전: \(version)")
             result = result.filter("version == \(version)")
             
             let checkListItems = Array(result)
@@ -147,7 +144,7 @@ class CheckListViewController: UIViewController {
     }
     
     // -MARK: API 요청(체크리스트 조회)
-    func showCheckList() {
+    func showCheckList(completion: @escaping () -> Void) {
         JuinjangAPIManager.shared.fetchData(type: BaseResponse<[CheckListResponseDto]>.self, api: .showChecklist(imjangId: imjangId)) { [weak self] response, error in
             guard let self else { return }
             if error == nil {
@@ -157,17 +154,18 @@ class CheckListViewController: UIViewController {
                     for Item in categoryItem {
                         for questionDto in Item.questionDtos {
                             if let answer = questionDto.answer {
-                                savedCheckListItems.append(CheckListAnswer(imjangId: imjangId, questionId: questionDto.questionId, answer: answer, isSelected: true))
+                                checkListItems.append(CheckListAnswer(imjangId: imjangId, questionId: questionDto.questionId, answer: answer, isSelected: true))
                             }
                         }
                     }
                 }
-                print(self.savedCheckListItems)
+                print(self.checkListItems)
                 if let firstCheckList = response.result?.first,
                    let version = firstCheckList.questionDtos.first?.version {
                     self.version = version
                     print("체크리스트 버전: \(version)")
                 }
+                completion()
             } else {
                 guard let error = error else { return }
                 switch error {
@@ -184,52 +182,11 @@ class CheckListViewController: UIViewController {
         }
     }
     
-    func sendChecklistData(_ items: [CheckListRequestDto]) {
-        let encoder = JSONEncoder()
-        
-        let dictItems: [[String: Any]] = items.map { item in
-            return ["questionId": item.questionId, "answer": item.answer]
-        }
-        
-        do {
-            let jsonData = try JSONSerialization.data(withJSONObject: dictItems, options: [])
-            
-            if let jsonString = String(data: jsonData, encoding: .utf8) {
-                print("JSON Data: \(jsonString)")
-            }
-            
-            let headers: HTTPHeaders = ["Content-Type": "application/json"]
-            let url = JuinjangAPI.saveChecklist(imjangId: imjangId).endpoint
-            
-            var request = URLRequest(url: url)
-            request.httpMethod = HTTPMethod.post.rawValue
-            request.headers = headers
-            request.httpBody = jsonData
-            
-            AF.request(request)
-                .responseJSON { response in
-                    switch response.result {
-                    case .success(let value):
-                        print("체크리스트 저장 처리 성공")
-                        print(value)
-                    case .failure(let error):
-                        print("체크리스트 저장 처리 실패")
-                        print(error)
-                    }
-                }
-        } catch {
-            print("encoding 에러: \(error)")
-        }
-    }
-
-    
     // -MARK: API 요청(체크리스트 저장)
     func saveAnswer() {
         print("saveAnswer 함수 호출")
-//        var checkListItems: [CheckListRequestDto] = []
-        
         print("토큰값 \(UserDefaultManager.shared.accessToken)")
-        
+
         // 저장된 체크리스트 불러오기
         JuinjangAPIManager.shared.fetchData(type: BaseResponse<[CheckListResponseDto]>.self, api: .showChecklist(imjangId: imjangId)) { response, error in
             guard let checkListResponse = response else {
@@ -238,45 +195,58 @@ class CheckListViewController: UIViewController {
                 return
             }
             
+            if let categoryItem = checkListResponse.result {
+                for Item in categoryItem {
+                    for questionDto in Item.questionDtos {
+                        if let answer = questionDto.answer {
+                            self.checkListItems.append(CheckListAnswer(imjangId: self.imjangId, questionId: questionDto.questionId, answer: answer, isSelected: true))
+                        }
+                    }
+                }
+            }
+
             print("----- 체크리스트 저장할 항목 -----")
             let checkListItems = self.checkListItems
             print(checkListItems)
-            
+
             // 유효한 값만 필터링
             let validCheckListItems = checkListItems.filter { item in
                 if let answer = item.answer as? String {
-                    return !answer.isEmpty && answer != "NaN"
+                    return !answer.isEmpty
                 } else {
-                    return false
+                    return true
                 }
             }
-            
-            var parameters: [CheckListRequestDto] = []
+
+            print("유효한 체크리스트 항목: \(validCheckListItems)")
+
+            var parameters: [[String: Any?]] = []
             for item in validCheckListItems {
-                parameters.append(CheckListRequestDto(questionId: item.questionId, answer: item.answer))
+                var answerValue: Any? = item.answer
+                if let answer = item.answer as? String, answer == "NaN" || answer.isEmpty {
+                    answerValue = NSNull()
+                }
+                parameters.append([
+                    "questionId": item.questionId,
+                    "answer": answerValue
+                ])
             }
-            
-            let encoder = JSONEncoder()
-            
-            let dictItems: [[String: Any]] = parameters.map { item in
-                return ["questionId": item.questionId, "answer": item.answer]
-            }
-            
+
             do {
-                let jsonData = try JSONSerialization.data(withJSONObject: dictItems, options: [])
-                
+                let jsonData = try JSONSerialization.data(withJSONObject: parameters, options: [])
+
                 if let jsonString = String(data: jsonData, encoding: .utf8) {
                     print("JSON Data: \(jsonString)")
                 }
-                
+
                 let headers: HTTPHeaders = ["Content-Type": "application/json"]
                 let url = JuinjangAPI.saveChecklist(imjangId: self.imjangId).endpoint
-                
+
                 var request = URLRequest(url: url)
                 request.httpMethod = HTTPMethod.post.rawValue
                 request.headers = headers
                 request.httpBody = jsonData
-                
+
                 AF.request(request)
                     .responseJSON { response in
                         switch response.result {
@@ -285,7 +255,12 @@ class CheckListViewController: UIViewController {
                             print(value)
                         case .failure(let error):
                             print("체크리스트 저장 처리 실패")
-                            print(error)
+                            if let data = response.data,
+                               let errorMessage = String(data: data, encoding: .utf8) {
+                                print("서버 응답 에러 메시지: \(errorMessage)")
+                            } else {
+                                print("에러: \(error.localizedDescription)")
+                            }
                         }
                     }
             } catch {
@@ -293,6 +268,7 @@ class CheckListViewController: UIViewController {
             }
         }
     }
+
     
     func findQuestionId(forQuestion question: String, in checkListResponse: BaseResponse<[CheckListResponseDto]>) -> Int? {
         guard let result = checkListResponse.result else {
@@ -340,22 +316,45 @@ class CheckListViewController: UIViewController {
             self.tableView.isScrollEnabled = true
         }
     }
+    
+    @objc func ReloadTableView() {
+        isEditMode = false
+        // 확장 셀 닫기
+        for i in 0..<checkListCategories.count {
+            checkListCategories[i].isExpanded = false
+        }
+        tableView.reloadData()
+        // 스크롤의 제일 위로 이동
+         if tableView.numberOfSections > 0, tableView.numberOfRows(inSection: 0) > 0 {
+             tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+         }
+        NotificationCenter.default.post(name: NSNotification.Name("ScrollToTop"), object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 }
 
 extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView == self.tableView {
-            let offset = scrollView.contentOffset.y
-            
-            // 스크롤이 맨 위에 있을 때만 tableView의 스크롤을 비활성화
-            if offset <= 0 {
+        guard scrollView == self.tableView else { return }
+        
+        let offset = scrollView.contentOffset.y
+        
+        // 스크롤이 맨 위에 있을 때만 tableView의 스크롤을 비활성화
+        if offset <= 0 {
+            if tableView.isScrollEnabled {
                 tableView.isScrollEnabled = false
                 NotificationCenter.default.post(name: NSNotification.Name("didStoppedChildScroll"), object: nil)
-            } else {
+            }
+        } else {
+            if !tableView.isScrollEnabled {
                 tableView.isScrollEnabled = true
             }
         }
     }
+
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return isEditMode ? allCategory.count + 1 : allCategory.count
@@ -399,19 +398,13 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                     // ScoreItem
                     let cell: ExpandedScoreTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedScoreTableViewCell.identifier, for: indexPath) as! ExpandedScoreTableViewCell
                     
+                    // 수정모드 진입 시 셀 UI 설정
                     cell.editModeConfigure(with: questionDto, at: indexPath)
                     
-                    // 이미 저장한 값
-                    for saveItem in savedCheckListItems {
-                        if questionId == saveItem.questionId {
-                            cell.savedEditModeConfigure(with: saveItem.answer, at: indexPath)
-                        }
-                    }
-                    
-                    // 임시로 저장한 값
-                    for saveItem in checkListItems {
-                        if questionId == saveItem.questionId {
-                            cell.savedEditModeConfigure(with: saveItem.answer, at: indexPath)
+                    // 임시로 저장한 값에 대한 셀 UI 설정
+                    for item in checkListItems {
+                        if questionId == item.questionId {
+                            cell.savedEditModeConfigure(with: item.answer, at: indexPath)
                         }
                     }
                     
@@ -454,20 +447,11 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
 
                     cell.editModeConfigure(with: questionDto, at: indexPath)
                     
-                    // 이미 저장한 값
-                    for saveItem in savedCheckListItems {
-                        if questionId == saveItem.questionId {
-                            if let optionsForQuestion = questionOptions[questionId] {
-                                cell.savedEditModeConfigure(with: saveItem.answer, with: optionsForQuestion, at: indexPath)
-                            }
-                        }
-                    }
-                    
                     // 임시로 저장한 값
-                    for saveItem in checkListItems {
-                        if questionId == saveItem.questionId {
+                    for item in checkListItems {
+                        if questionId == item.questionId {
                             if let optionsForQuestion = questionOptions[questionId] {
-                                cell.savedEditModeConfigure(with: saveItem.answer, with: optionsForQuestion, at: indexPath)
+                                cell.savedEditModeConfigure(with: item.answer, with: optionsForQuestion, at: indexPath)
                             }
                         }
                     }
@@ -509,17 +493,10 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                     
                     cell.editModeConfigure(with: questionDto, at: indexPath)
                     
-                    // 이미 저장한 값
-                    for saveItem in savedCheckListItems {
-                        if questionId == saveItem.questionId {
-                            cell.savedEditModeConfigure(with: saveItem.answer, at: indexPath)
-                        }
-                    }
-                    
                     // 임시로 저장한 값
-                    for saveItem in checkListItems {
-                        if questionId == saveItem.questionId {
-                            cell.savedEditModeConfigure(with: saveItem.answer, at: indexPath)
+                    for item in checkListItems {
+                        if questionId == item.questionId {
+                            cell.savedEditModeConfigure(with: item.answer, at: indexPath)
                         }
                     }
                     
@@ -559,17 +536,10 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
 
                     cell.editModeConfigure(with: questionDto,  at: indexPath)
                     
-                    // 이미 저장한 값
-                    for saveItem in savedCheckListItems {
-                        if questionId == saveItem.questionId {
-                            cell.savedEditModeConfigure(with: saveItem.answer, at: indexPath)
-                        }
-                    }
-                    
                     // 임시로 저장한 값
-                    for saveItem in checkListItems {
-                        if questionId == saveItem.questionId {
-                            cell.savedEditModeConfigure(with: saveItem.answer, at: indexPath)
+                    for item in checkListItems {
+                        if questionId == item.questionId {
+                            cell.savedEditModeConfigure(with: item.answer, at: indexPath)
                         }
                     }
                     
@@ -613,24 +583,24 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                 
                 cell.viewModeConfigure(at: indexPath)
                 if version == 0 {
-                    for saveItem in savedCheckListItems {
+                    for item in checkListItems {
                         var date: [(Int, String)] = [(1, ""), (2, "")]
-                        if saveItem.questionId == 1 {
-                            date[0].1 = saveItem.answer
-                        } else if saveItem.questionId == 2 {
-                            date[1].1 = saveItem.answer
+                        if item.questionId == 1 {
+                            date[0].1 = item.answer
+                        } else if item.questionId == 2 {
+                            date[1].1 = item.answer
                         }
-                        cell.savedViewModeConfigure(with: saveItem.imjangId, with: date, at: indexPath)
+                        cell.savedViewModeConfigure(with: item.imjangId, with: date, at: indexPath)
                     }
                 } else if version == 1 {
-                    for saveItem in savedCheckListItems {
+                    for item in checkListItems {
                         var date: [(Int, String)] = [(59, ""), (60, "")]
-                        if saveItem.questionId == 59 {
-                            date[0].1 = saveItem.answer
-                        } else if saveItem.questionId == 60 {
-                            date[1].1 = saveItem.answer
+                        if item.questionId == 59 {
+                            date[0].1 = item.answer
+                        } else if item.questionId == 60 {
+                            date[1].1 = item.answer
                         }
-                        cell.savedViewModeConfigure(with: saveItem.imjangId, with: date, at: indexPath)
+                        cell.savedViewModeConfigure(with: item.imjangId, with: date, at: indexPath)
                     }
                 }
                 
@@ -660,7 +630,7 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                         
                         cell.viewModeConfigure(with: questionDto, at: indexPath)
                         
-                        for saveItem in savedCheckListItems {
+                        for saveItem in checkListItems {
                             if questionId == saveItem.questionId {
                                 cell.savedViewModeConfigure(with: saveItem.answer, at: indexPath)
                             }
@@ -672,11 +642,11 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                         
                         cell.viewModeConfigure(with: questionDto, at: indexPath)
                         
-                        for saveItem in savedCheckListItems {
-                            if questionId == saveItem.questionId {
+                        for item in checkListItems {
+                            if questionId == item.questionId {
                                 if let optionsForQuestion = questionOptions[questionId] {
                                     // 해당 질문에 대한 옵션을 사용하여 작업 수행
-                                    cell.savedViewModeConfigure(with: saveItem.answer, with: optionsForQuestion, at: indexPath)
+                                    cell.savedViewModeConfigure(with: item.answer, with: optionsForQuestion, at: indexPath)
                                 } else {
                                     // 해당 질문에 대한 옵션이 없을 경우 처리
                                     print("해당 질문에 대한 옵션이 없습니다.")
@@ -690,9 +660,9 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
 
                         cell.viewModeConfigure(with: questionDto, at: indexPath)
                         
-                        for saveItem in savedCheckListItems {
-                            if questionId == saveItem.questionId {
-                                cell.savedViewModeConfigure(with: saveItem.answer, at: indexPath)
+                        for item in checkListItems {
+                            if questionId == item.questionId {
+                                cell.savedViewModeConfigure(with: item.answer, at: indexPath)
                             }
                         }
                         return cell
