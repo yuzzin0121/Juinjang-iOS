@@ -51,11 +51,12 @@ class CheckListViewController: UIViewController {
     }
     
     private func setCheckInfo() {
-        filterVersionAndCategory(isEditMode: isEditMode, version: version) { [weak self] categories in
-            guard let self else { return }
-            showCheckList()
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
+        showCheckList {
+            self.filterVersionAndCategory(isEditMode: self.isEditMode, version: self.version) { [weak self] categories in
+                guard let self = self else { return }
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
             }
         }
     }
@@ -117,7 +118,7 @@ class CheckListViewController: UIViewController {
             let realm = try Realm()
             var result = realm.objects(CheckListItem.self)
             
-            print("체크리스트 버전: \(version)")
+            print("조회한 체크리스트 버전: \(version)")
             result = result.filter("version == \(version)")
             
             let checkListItems = Array(result)
@@ -143,7 +144,7 @@ class CheckListViewController: UIViewController {
     }
     
     // -MARK: API 요청(체크리스트 조회)
-    func showCheckList() {
+    func showCheckList(completion: @escaping () -> Void) {
         JuinjangAPIManager.shared.fetchData(type: BaseResponse<[CheckListResponseDto]>.self, api: .showChecklist(imjangId: imjangId)) { [weak self] response, error in
             guard let self else { return }
             if error == nil {
@@ -164,6 +165,7 @@ class CheckListViewController: UIViewController {
                     self.version = version
                     print("체크리스트 버전: \(version)")
                 }
+                completion()
             } else {
                 guard let error = error else { return }
                 switch error {
@@ -534,11 +536,10 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
 
                     cell.editModeConfigure(with: questionDto,  at: indexPath)
                     
-                    
                     // 임시로 저장한 값
-                    for saveItem in checkListItems {
-                        if questionId == saveItem.questionId {
-                            cell.savedEditModeConfigure(with: saveItem.answer, at: indexPath)
+                    for item in checkListItems {
+                        if questionId == item.questionId {
+                            cell.savedEditModeConfigure(with: item.answer, at: indexPath)
                         }
                     }
                     
@@ -582,12 +583,9 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                 
                 cell.viewModeConfigure(at: indexPath)
                 if version == 0 {
-                    for saveItem in savedCheckListItems {
+                    for item in checkListItems {
                         var date: [(Int, String)] = [(1, ""), (2, "")]
-                        if saveItem.questionId == 1 {
-                            date[0].1 = saveItem.answer
-                        } else if saveItem.questionId == 2 {
-                            date[1].1 = saveItem.answer
+                        if item.questionId == 1 {
                             date[0].1 = item.answer
                         } else if item.questionId == 2 {
                             date[1].1 = item.answer

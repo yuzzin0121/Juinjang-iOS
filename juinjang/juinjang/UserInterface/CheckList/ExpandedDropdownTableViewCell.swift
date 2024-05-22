@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 
+// -TODO: 인덱스 구분해서 기타 항목 처리 어떻게 해야할지
 class ExpandedDropdownTableViewCell: UITableViewCell {
     
     var optionSelectionHandler: ((String) -> Void)?
@@ -255,12 +256,18 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
             questionImage.image = UIImage(named: "question-selected-image")
             contentLabel.textColor = UIColor(named: "500")
             backgroundColor = .white
-            
-            // 물어보아야할 것 -> 만약에 기타의 값을 처리 안하고 인덱스 에러가 난다.
-            itemButton.setTitle(options[Int(answer) ?? 0].option, for: .normal)
+            var originalImage: UIImage?
+            if answer.count < 2 {
+                itemButton.setTitle(options[Int(answer) ?? 0].option, for: .normal)
+            } else {
+                if let lastOption = options.last {
+                    itemButton.setTitle(lastOption.option, for: .normal)
+                    originalImage = UIImage(data: options[Int(answer) ?? 0].image)
+                }
+            }
             itemButton.backgroundColor = .white
             itemButton.setTitleColor(UIColor(named: "darkGray"), for: .normal)
-            let originalImage = UIImage(data: options[Int(answer) ?? 0].image)
+//            let originalImage = UIImage(data: options[Int(answer) ?? 0].image)
             // 이미지가 리사이즈하여 새로운 이미지로 생성
             if let originalImage = originalImage {
                 let newSize = CGSize(width: 16, height: 16)
@@ -284,12 +291,18 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
             questionImage.image = UIImage(named: "question-selected-image")
             contentLabel.textColor = UIColor(named: "500")
             backgroundColor = UIColor(named: "lightOrange")
-            
+            var originalImage: UIImage?
             // -TODO: 인덱스 어떻게 할 건지
-            itemButton.setTitle(options[Int(answer) ?? 0].option, for: .normal)
+            if answer.count > 2 {
+                itemButton.setTitle(options[Int(answer) ?? 0].option, for: .normal)
+            } else {
+                if let lastOption = options.last {
+                    itemButton.setTitle(lastOption.option, for: .normal)
+                    originalImage = UIImage(data: options[Int(answer) ?? 0].image)
+                }
+            }
             itemButton.backgroundColor = .white
             itemButton.setTitleColor(UIColor(named: "darkGray"), for: .normal)
-            let originalImage = UIImage(data: options[Int(answer) ?? 0].image)
             // 이미지가 리사이즈하여 새로운 이미지로 생성
             if let originalImage = originalImage {
                 let newSize = CGSize(width: 16, height: 16)
@@ -301,7 +314,6 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
             itemButton.semanticContentAttribute = .forceLeftToRight
             setSavedInset()
         }
-        itemButton.setTitle(options[Int(answer) ?? 0].option, for: .normal)
         selectedOption = answer
         selectedButton.backgroundColor = .white
     }
