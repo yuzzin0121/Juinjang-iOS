@@ -19,8 +19,8 @@ class RecordPlaybackViewController: UIViewController {
         $0.clipsToBounds = true
     }
     
-    let topViewController = RecordTopViewController()
-    let bottomViewController = RecordBottomViewController()
+    lazy var topViewController = RecordTopViewController(recordResponse: recordResponse)
+    lazy var bottomViewController = RecordBottomViewController(recordResponse: recordResponse)
     
     lazy var bottomSheetTotalHeight: CGFloat = UIScreen.main.bounds.height * (801 / 844)
     lazy var topHeightRatio: CGFloat = 430 / 801
@@ -33,7 +33,18 @@ class RecordPlaybackViewController: UIViewController {
     var bottomHeight: CGFloat {
         return bottomHeightRatio * bottomSheetTotalHeight
     }
-
+    
+    var recordResponse: RecordResponse
+    
+    init(recordResponse: RecordResponse) {
+        self.recordResponse = recordResponse
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     

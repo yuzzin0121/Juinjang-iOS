@@ -185,6 +185,7 @@
 		61DEFEDD2BFA2FB40069A820 /* AudioRecorderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DEFEDC2BFA2FB40069A820 /* AudioRecorderManager.swift */; };
 		61DEFEE02BFB39A90069A820 /* STTError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DEFEDF2BFB39A90069A820 /* STTError.swift */; };
 		61E8EC0C2B726C9100BEAFE5 /* DeleteImjangPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E8EC0B2B726C9100BEAFE5 /* DeleteImjangPopupViewController.swift */; };
+		61FC596D2BFE324500D6F369 /* AudioPlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FC596C2BFE324500D6F369 /* AudioPlayerManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -343,6 +344,7 @@
 		61DEFEDC2BFA2FB40069A820 /* AudioRecorderManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorderManager.swift; sourceTree = "<group>"; };
 		61DEFEDF2BFB39A90069A820 /* STTError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STTError.swift; sourceTree = "<group>"; };
 		61E8EC0B2B726C9100BEAFE5 /* DeleteImjangPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteImjangPopupViewController.swift; sourceTree = "<group>"; };
+		61FC596C2BFE324500D6F369 /* AudioPlayerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -882,6 +884,7 @@
 			children = (
 				61DEFEDC2BFA2FB40069A820 /* AudioRecorderManager.swift */,
 				616D48172BFBA52B0073029A /* DateFormatterManager.swift */,
+				61FC596C2BFE324500D6F369 /* AudioPlayerManager.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -1152,6 +1155,7 @@
 				61DEFEDD2BFA2FB40069A820 /* AudioRecorderManager.swift in Sources */,
 				0A4EBE362B5EA27B00909B7A /* ExpandedScoreTableViewCell.swift in Sources */,
 				0A95D72F2B682013000A9C06 /* ToSViewController.swift in Sources */,
+				61FC596D2BFE324500D6F369 /* AudioPlayerManager.swift in Sources */,
 				61B0C9D72B6C16BD00BE86D2 /* ImageCollectionViewCell.swift in Sources */,
 				0A9E0A472B3DCAB90094595A /* AppDelegate.swift in Sources */,
 				0A603A6A2B7DD36E0060B90D /* CheckListResponseDto.swift in Sources */,
