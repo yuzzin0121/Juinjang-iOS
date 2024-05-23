@@ -37,6 +37,7 @@ enum JuinjangAPI {
     case deleteImage
     case uploadRecordFile
     case fetchRecordFiles(imjangId: Int)
+    case deleteRecordFile(recordId: Int)
     
     var baseURL: String {
         return "http://juinjang1227.com:8080/api/"
@@ -95,6 +96,8 @@ enum JuinjangAPI {
             return URL(string: baseURL + "record")!
         case .fetchRecordFiles(let imjangId):
             return URL(string: baseURL + "record/all/\(imjangId)")!
+        case .deleteRecordFile(let recordId):
+            return URL(string: baseURL + "record/\(recordId)")!
         }
     }
     
@@ -119,6 +122,8 @@ enum JuinjangAPI {
             return .get
         case .nickname, .modifyImjang, .modifyChecklist:
             return .patch
+        case .deleteRecordFile:
+            return .delete
         }
     }
     

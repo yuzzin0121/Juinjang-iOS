@@ -131,17 +131,43 @@ class RecordingFilesViewController: UIViewController {
         deletePopupVC.fileIndexPath = indexPath
         //deletePopupVC.fileName = fileItems[indexPath.row].name
         
-        let fileURL = fileItems[indexPath.row].recordUrl
-        deletePopupVC.fileName = fileItems[indexPath.row].recordName
+        let index = indexPath.row
+        let fileURL = fileItems[index].recordUrl
+        let fileName = fileItems[index].recordName
+        deletePopupVC.fileName = fileItems[index].recordName
         deletePopupVC.completionHandler = { [weak self] indexPath in
             guard let self else { return }
-            fileItems.remove(at: indexPath.row)
-            recordingFileTableView.deleteRows(at: [indexPath], with: .fade)
+            let index = indexPath.row
+            deleteRecordFile(recordId: fileItems[index].recordId)
+            fileItems.remove(at: index)
+            view.makeToast("\(fileName)이 삭제되었습니다.", duration: 1.0)
         }
-        present(deletePopupVC, animated: true)
         deletePopupVC.modalPresentationStyle = .overCurrentContext
-        
+        present(deletePopupVC, animated: false)
     }
+    
+    private func deleteRecordFile(recordId: Int) {
+        JuinjangAPIManager.shared.fetchData(type: BaseResponse<String>.self, api: .deleteRecordFile(recordId: recordId)) { [weak self] response, error in
+            guard let self else { return }
+            if error == nil {
+                guard let response, let result = response.result else { return }
+                print(result)
+            } else {
+                guard let error = error else { return }
+                switch error {
+                case .failedRequest:
+                    print("failedRequest")
+                case .noData:
+                    print("noData")
+                case .invalidResponse:
+                    print("invalidResponse")
+                case .invalidData:
+                    print("invalidData")
+                }
+            }
+        }
+    }
+    
     @objc func playButtonTapped(_ sender: UIButton) {
         // 버튼 이미지 변경
         print("버튼 눌림")
