@@ -167,13 +167,13 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
     // 완료 버튼 클릭 시
     @objc func completedButtonPressed(_ sender: UIButton) {
         print("완료 버튼 클릭")
+        guard let recordTime = getRecordTime() else { return }
         AudioRecorderManager.shared.stopRecording() // 녹음 중지
         progressTimer?.invalidate()
         progressTimer = nil
         
         
         guard let recordUrl = AudioRecorderManager.shared.getRecordURL() else { return }
-        guard let recordTime = getRecordTime() else { return }
         
         let loadingVC = STTLoadingViewController(imjangId: imjangId, fileURL: recordUrl, recordTime: recordTime)
         loadingVC.bottomSheetViewController = bottomSheetViewController
@@ -185,6 +185,7 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
         guard let audioRecorder = AudioRecorderManager.shared.audioRecorder else {
             return nil
         }
+        print("currentTime: \(audioRecorder.currentTime)")
         return Int.convertTimeToInt(time: audioRecorder.currentTime)
     }
     

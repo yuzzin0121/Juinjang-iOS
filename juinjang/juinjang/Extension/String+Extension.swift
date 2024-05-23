@@ -8,6 +8,13 @@
 import Foundation
 
 extension String {
+    
+    static func formatSeconds(_ seconds: Int) -> String {
+        let minutes = seconds / 60
+        let remainingSeconds = seconds % 60
+        return String(format: "%d:%02d", minutes, remainingSeconds)
+    }
+    
     // 숫자를 가격으로 바꾸기
     
     func formatToKoreanCurrencyWithZero() -> String {
