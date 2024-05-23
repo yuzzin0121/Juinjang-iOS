@@ -178,7 +178,10 @@ extension SignUpViewController {
                         UserDefaultManager.shared.accessToken = accessToken
                         //print("Success: \(refreshToken)")
                         UserDefaultManager.shared.refreshToken = refreshToken
-                        self.getUserNickname()
+                        print("present to Main")
+                        let nextVC = MainViewController()
+                        self.navigationController?.pushViewController(nextVC, animated: true)
+                        //self.getUserNickname()
                         
                     } else {
                         print("회원가입")
@@ -227,15 +230,13 @@ extension SignUpViewController {
                             }
                         }
                     }
-                    let profileURL = URL(string: profileImage)
-                    //print("Nickname : \(nickname ?? "")")
-                    UserDefaultManager.shared.nickname = nickname!
-                    print("present to Main")
-                    let nextVC = MainViewController()
-                    self.navigationController?.pushViewController(nextVC, animated: true)
+                    UserDefaultManager.shared.nickname = nickname ?? ""
                 } catch {
                     print("Error parsing JSON: \(error)")
                 }
+//                print("present to Main")
+//                let nextVC = MainViewController()
+//                self.navigationController?.pushViewController(nextVC, animated: true)
             case .failure(let error):
                 print("Error: \(error)")
             }
