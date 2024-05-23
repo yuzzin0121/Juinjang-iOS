@@ -177,7 +177,10 @@ extension SignUpViewController {
                         UserDefaultManager.shared.accessToken = accessToken
                         //print("Success: \(refreshToken)")
                         UserDefaultManager.shared.refreshToken = refreshToken
-                        self.getUserNickname()
+                        print("present to Main")
+                        let nextVC = MainViewController()
+                        self.navigationController?.pushViewController(nextVC, animated: true)
+                        //self.getUserNickname()
                         
                     } else {
                         print("회원가입")
@@ -230,11 +233,13 @@ extension SignUpViewController {
                     print("present to Main")
                     let nextVC = MainViewController()
                     self.navigationController?.pushViewController(nextVC, animated: true)
-                    
                 } catch {
                     print("Error parsing JSON: \(error)")
                                                                   
                 }
+//                print("present to Main")
+//                let nextVC = MainViewController()
+//                self.navigationController?.pushViewController(nextVC, animated: true)
             case .failure(let error):
                 print("Error: \(error)")
             }
