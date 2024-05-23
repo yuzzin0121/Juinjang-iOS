@@ -22,15 +22,17 @@ class RecordingFilesViewController: UIViewController {
     let contentView = UIView()
     
     let recordingFileTableView = UITableView().then {
-        $0.isScrollEnabled = false
+        $0.showsVerticalScrollIndicator = false
         $0.separatorStyle = .none
         $0.separatorInset = .init(top: 0, left: 0, bottom: 12, right: 0)
         $0.register(RecordingFileViewCell.self, forCellReuseIdentifier: RecordingFileViewCell.identifier)
     }
     
-    var recordings: [Recording] = []
-    //var fileURLs : [URL] = []
-    //var fileItems: [RecordingFileItem] = []
+    var fileItems: [RecordResponse] = [] {
+        didSet {
+            recordingFileTableView.reloadData()
+        }
+    }
     
     var imjangId: Int
     
@@ -51,8 +53,29 @@ class RecordingFilesViewController: UIViewController {
         setConstraints()
         designNavigationBar()
         setDelegate()
-        //setItemData()
-        loadRecordings()
+        fetchRecordFiles()
+    }
+    
+    private func fetchRecordFiles() {
+        JuinjangAPIManager.shared.fetchData(type: BaseResponse<[RecordResponse]?>.self, api: .fetchRecordFiles(imjangId: imjangId)) { [weak self] response, error in
+            guard let self else { return }
+            if error == nil {
+                guard let response, let result = response.result, let fileList = result else { return }
+                fileItems = fileList
+            } else {
+                guard let error = error else { return }
+                switch error {
+                case .failedRequest:
+                    print("failedRequest")
+                case .noData:
+                    print("noData")
+                case .invalidResponse:
+                    print("invalidResponse")
+                case .invalidData:
+                    print("invalidData")
+                }
+            }
+        }
     }
     
     func setDelegate() {
@@ -83,8 +106,6 @@ class RecordingFilesViewController: UIViewController {
     }
     
     @objc func back(_ sender: Any) {
-//        let vc = ImjangNoteViewController()
-//        navigationController?.pushViewController(vc, animated: true)
         navigationController?.popViewController(animated: true)
     }
     
@@ -94,86 +115,14 @@ class RecordingFilesViewController: UIViewController {
 //        bottomSheetViewController.transitioningDelegate = self
         self.present(bottomSheetViewController, animated: false, completion: nil)
     }
-    
-//    func setItemData() {
-//        fileItems.append(contentsOf: [
-//            .init(name: "보일러 관련", recordedDate: Date(), recordedTime: "1:30"),
-//            .init(name: "화장실 관련", recordedDate: Date(), recordedTime: "1:50"),
-//            .init(name: "인테리어 관련", recordedDate: Date(), recordedTime: "4:20"),
-//            .init(name: "계약 관련", recordedDate: Date(), recordedTime: "4:20"),
-//        ])
-//        
-//        if fileItems.isEmpty {
-//            recordingFileTableView.isHidden = true
-//        }
-//        
-//        recordingFileTableView.reloadData()
-//    }
-    
-    func loadRecordings() {
-        clearRecordingDirectory()
-        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let existingRecordingsDict = Dictionary(uniqueKeysWithValues: recordings.map { ($0.fileURL, $0.title) })
-
-                do {
-                    let recordingURLs = try FileManager.default.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil, options: [])
-                    recordings = recordingURLs.filter { $0.pathExtension == "m4a" }.map { url in
-                        let title = existingRecordingsDict[url] ?? url.lastPathComponent
-                        return Recording(title: title, fileURL: url)
-                    }
-                } catch {
-                    print("Error loading recordings: \(error)")
-                }
-//        do {
-//           // 문서 디렉토리에서 녹음 파일들을 가져옴
-//            let recordingURLs = try FileManager.default.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil, options: [])
-//           
-//           // 녹음 파일 목록에 추가
-//            recordings = recordingURLs.filter { $0.pathExtension == "m4a" }.map {Recording(title: $0.lastPathComponent, fileURL: $0)} //.sorted(by: { $0.absoluteString > $1.absoluteString }) // .m4a 확장자를 가진 파일만 필터링
-//        } catch {
-//            print("Failed to load recordings: \(error)")
-//        }
-
-       // UITableView 새로고침
-        recordingFileTableView.reloadData()
-   }
-    func clearRecordingDirectory() {
-        let fileManager = FileManager.default
-        let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        do {
-            let fileURLsInDirectory = try fileManager.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil, options: [])
-            for fileURL in fileURLsInDirectory {
-                try fileManager.removeItem(at: fileURL)
-            }
-            print("Recording directory cleared successfully.")
-        } catch {
-            print("Failed to clear recording directory: \(error)")
-        }
-    }
+ 
     func addSubViews() {
-        view.addSubview(scrollView)
-        scrollView.addSubview(contentView)
-        
-        contentView.addSubview(recordingFileTableView)
+        view.addSubview(recordingFileTableView)
     }
     
     func setConstraints() {
-        // 스크롤뷰
-        scrollView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(24)
-            $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalTo(view.safeAreaLayoutGuide)
-        }
-        
-        // 컨텐트뷰
-        contentView.snp.makeConstraints {
-            $0.edges.equalTo(scrollView.contentLayoutGuide)
-            $0.width.equalTo(scrollView.frameLayoutGuide)
-            $0.height.equalTo(view).multipliedBy(1.1)
-        }
-        
         recordingFileTableView.snp.makeConstraints {
-            $0.leading.trailing.top.bottom.equalTo(contentView)
+            $0.edges.equalTo(view.safeAreaLayoutGuide)
         }
     }
     
@@ -182,22 +131,43 @@ class RecordingFilesViewController: UIViewController {
         deletePopupVC.fileIndexPath = indexPath
         //deletePopupVC.fileName = fileItems[indexPath.row].name
         
-        let fileURL = recordings[indexPath.row].fileURL
-        do {
-            try FileManager.default.removeItem(at: fileURL)
-        } catch {
-            print("Error deleting file: \(error)")
-        }
-        deletePopupVC.fileName = recordings[indexPath.row].title
+        let index = indexPath.row
+        let fileURL = fileItems[index].recordUrl
+        let fileName = fileItems[index].recordName
+        deletePopupVC.fileName = fileItems[index].recordName
         deletePopupVC.completionHandler = { [weak self] indexPath in
             guard let self else { return }
-            recordings.remove(at: indexPath.row)
-            recordingFileTableView.deleteRows(at: [indexPath], with: .fade)
+            let index = indexPath.row
+            deleteRecordFile(recordId: fileItems[index].recordId)
+            fileItems.remove(at: index)
+            view.makeToast("\(fileName)이 삭제되었습니다.", duration: 1.0)
         }
-        present(deletePopupVC, animated: true)
         deletePopupVC.modalPresentationStyle = .overCurrentContext
-        
+        present(deletePopupVC, animated: false)
     }
+    
+    private func deleteRecordFile(recordId: Int) {
+        JuinjangAPIManager.shared.fetchData(type: BaseResponse<String>.self, api: .deleteRecordFile(recordId: recordId)) { [weak self] response, error in
+            guard let self else { return }
+            if error == nil {
+                guard let response, let result = response.result else { return }
+                print(result)
+            } else {
+                guard let error = error else { return }
+                switch error {
+                case .failedRequest:
+                    print("failedRequest")
+                case .noData:
+                    print("noData")
+                case .invalidResponse:
+                    print("invalidResponse")
+                case .invalidData:
+                    print("invalidData")
+                }
+            }
+        }
+    }
+    
     @objc func playButtonTapped(_ sender: UIButton) {
         // 버튼 이미지 변경
         print("버튼 눌림")
@@ -211,23 +181,15 @@ class RecordingFilesViewController: UIViewController {
 extension RecordingFilesViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        //return fileItems.count
-        return recordings.count
+        return fileItems.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: RecordingFileViewCell.identifier, for: indexPath) as? RecordingFileViewCell else { return UITableViewCell() }
-        let recording = recordings[indexPath.row]
-//        let playVC = PlayRecordViewController()
-//        playVC.bottomViewController.audioFile = recording.fileURL
-//        playVC.bottomViewController.initPlay1()
+
         cell.selectionStyle = .none
-
-        //cell.setData(fileItem: fileURLs[indexPath.row])
-//        cell.setData(fileTitle: "\(recording.title)", time: "\(playVC.bottomViewController.remainingTimeLabel.text ?? "0:00")", date: recordTime)
-        //cell.recordingFileNameLabel.text = fileURLs[indexPath.row].lastPathComponent
-
-//        cell.setData(fileTitle: "\(recording.title)", time: "\(playVC.bottomViewController.remainingTimeLabel.text ?? "0:00")", date: recordTime)
+        let fileItem = fileItems[indexPath.row]
+        cell.setData(fileItem: fileItem)
 
         return cell
     }
@@ -261,8 +223,5 @@ extension RecordingFilesViewController: UITableViewDelegate, UITableViewDataSour
         deleteAction.backgroundColor = UIColor(named: "mainOrange")
         let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
         return configuration
-    }
-    func playRecordViewControllerDidDismiss(_ controller: PlayRecordViewController) {
-        recordingFileTableView.reloadData()
     }
 }
