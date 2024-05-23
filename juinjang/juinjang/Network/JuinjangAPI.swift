@@ -36,6 +36,8 @@ enum JuinjangAPI {
     case addImage
     case deleteImage
     case uploadRecordFile
+    case fetchRecordFiles(imjangId: Int)
+    case deleteRecordFile(recordId: Int)
     
     var baseURL: String {
         return "http://juinjang1227.com:8080/api/"
@@ -92,21 +94,23 @@ enum JuinjangAPI {
             
         case .uploadRecordFile:
             return URL(string: baseURL + "record")!
+        case .fetchRecordFiles(let imjangId):
+            return URL(string: baseURL + "record/all/\(imjangId)")!
+        case .deleteRecordFile(let recordId):
+            return URL(string: baseURL + "record/\(recordId)")!
         }
     }
     
     var header: HTTPHeaders {
         switch self {
-        case .kakaoLogin, .regenerateToken, .showChecklist, .saveChecklist, .modifyImjang, .detailImjang, .totalImjang, .scrap, .searchImjang, .deleteImjangs, .memo, .fetchRecordingRoom, .fetchImage:
-            return ["Content-Type": "application/json", "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"]
-
         case .addImage, .uploadRecordFile:
             return [
                 "Content-Type": "multipart/form-data",
                 "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"
             ]
         default:
-            return ["Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"]
+            return ["Content-Type": "application/json",
+                    "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"]
         }
     }
     
@@ -114,10 +118,12 @@ enum JuinjangAPI {
         switch self {
         case .saveChecklist, .scrap, .createImjang, .regenerateToken, .logout, .deleteImjangs, .memo, .addImage, .deleteImage, .uploadRecordFile:
             return .post
-        case .showChecklist, .totalImjang, .searchImjang, .mainImjang, .detailImjang, .kakaoLogin, .kakaoLoginCallback, .profile, .fetchRecordingRoom, .fetchImage:
+        case .showChecklist, .totalImjang, .searchImjang, .mainImjang, .detailImjang, .kakaoLogin, .kakaoLoginCallback, .profile, .fetchRecordingRoom, .fetchImage, .fetchRecordFiles:
             return .get
         case .nickname, .modifyImjang, .modifyChecklist:
             return .patch
+        case .deleteRecordFile:
+            return .delete
         }
     }
     

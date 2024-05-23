@@ -133,7 +133,6 @@ extension SignUpViewController {
             } else {
                 print("loginWithKakaoAccount() success.")
                 self.getUserInfo()
-                
             }
         }
     }
@@ -181,6 +180,7 @@ extension SignUpViewController {
                         self.getUserNickname()
                         
                     } else {
+                        print(value)
                         print("회원가입")
                         if let json = value as? [String: Any],
                            let code = json["code"] as? String, code == "MEMBER4001" {
@@ -214,8 +214,7 @@ extension SignUpViewController {
                 do {
                     let userInfoResponse = try JSONDecoder().decode(UserInfoResponse.self, from: data)
                     let nickname = userInfoResponse.result.nickname
-                    let profileImage = userInfoResponse.result.image
-                    if let imageUrl = URL(string: profileImage) {
+                    if let profileImage = userInfoResponse.result.image, let imageUrl = URL(string: profileImage) {
                         loadImage(from: imageUrl) { image in
                             if let image = image {
                                 // 이미지 로드 성공
@@ -227,15 +226,18 @@ extension SignUpViewController {
                             }
                         }
                     }
-                    let profileURL = URL(string: profileImage)
                     //print("Nickname : \(nickname ?? "")")
-                    UserDefaultManager.shared.nickname = nickname!
+                    UserDefaultManager.shared.nickname = nickname ?? ""
                     print("present to Main")
                     let nextVC = MainViewController()
                     self.navigationController?.pushViewController(nextVC, animated: true)
                 } catch {
                     print("Error parsing JSON: \(error)")
+                                                                  
                 }
+                print("present to Main")
+                let nextVC = MainViewController()
+                self.navigationController?.pushViewController(nextVC, animated: true)
             case .failure(let error):
                 print("Error: \(error)")
             }
