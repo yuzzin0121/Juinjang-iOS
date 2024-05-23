@@ -24,7 +24,15 @@ struct UserInfoResult: Codable {
     let nickname: String?
     let email: String
     let provider: String
-    let image: String
+    let image: String?
+    
+    init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.nickname = try container.decodeIfPresent(String.self, forKey: .nickname) ?? ""
+        self.email = try container.decode(String.self, forKey: .email)
+        self.provider = try container.decode(String.self, forKey: .provider)
+        self.image = try container.decodeIfPresent(String.self, forKey: .image)
+    }
 }
 
 class SignUpWebViewController: UIViewController {

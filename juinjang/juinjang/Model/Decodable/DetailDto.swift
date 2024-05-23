@@ -25,17 +25,7 @@ struct RecordMemoDto: Codable {
     let memo: String
     let createdAt: String
     let updatedAt: String
-    let recordDto: [RecordDto]
-}
-
-struct RecordDto: Codable {
-    let limjangId: Int
-    let recordTime: Int
-    let recordScript: String
-    let recordUrl: String
-    let recordName: String
-    let createdAt: String
-    let updatedAt: String
+    let recordDto: [RecordResponse]
 }
 
 struct MemoDto: Codable {
