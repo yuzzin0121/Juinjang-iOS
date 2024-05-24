@@ -69,6 +69,11 @@ class RecordTopViewController: UIViewController {
         addSubViews()
         setupLayout()
         setRecordData()
+        setDelegate()
+    }
+    
+    private func setDelegate() {
+        recordTextView.delegate = self
     }
     
     private func setRecordData() {
@@ -107,8 +112,39 @@ class RecordTopViewController: UIViewController {
             editButton.setImage(UIImage(named: "record-edit-activate"), for: .normal)
             recordTextView.isEditable = true
         } else {
+            editRecordScript()
             editButton.setImage(UIImage(named: "record-edit"), for: .normal)
             recordTextView.isEditable = false
+        }
+    }
+    
+    private func editRecordScript() {
+        let content = recordTextView.text.trimmingCharacters(in: [" "])
+        if recordResponse.recordScript == content {
+            return
+        } else {
+            recordResponse.recordScript = content
+            editRecordScript(content)
+        }
+    }
+    
+    private func editRecordScript(_ editedRecordScript: String) {
+        let parameter = ["recordScript": editedRecordScript]
+        JuinjangAPIManager.shared.postData(type: BaseResponse<RecordResponse?>.self, api: .editRecordContent(recordId: recordResponse.recordId, content: editedRecordScript), parameter: parameter) { response, error in
+            if error == nil {
+            } else {
+                guard let error = error else { return }
+                switch error {
+                case .failedRequest:
+                    print("failedRequest")
+                case .noData:
+                    print("noData")
+                case .invalidResponse:
+                    print("invalidResponse")
+                case .invalidData:
+                    print("invalidData")
+                }
+            }
         }
     }
     
@@ -154,5 +190,11 @@ class RecordTopViewController: UIViewController {
             $0.trailing.equalTo(view.snp.trailing).offset(-24)
             $0.bottom.equalTo(view.snp.bottom).offset(-24)
         }
+    }
+}
+
+extension RecordTopViewController: UITextViewDelegate {
+    func textViewDidEndEditing(_ textView: UITextView) {
+        editRecordScript()
     }
 }
