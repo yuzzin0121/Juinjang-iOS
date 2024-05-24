@@ -9,23 +9,16 @@ import UIKit
 import AVFoundation
 
 class RecordingFilesViewController: UIViewController {
-
-    // 스크롤뷰
-    let scrollView = UIScrollView().then {
-        $0.backgroundColor = .white
-        $0.showsVerticalScrollIndicator = false
-        $0.isScrollEnabled = false
-        $0.bounces = false
-    }
     
-    // 스크롤할 컨텐트뷰
-    let contentView = UIView()
-    
-    let recordingFileTableView = UITableView().then {
+    private let recordingFileTableView = UITableView().then {
         $0.showsVerticalScrollIndicator = false
         $0.separatorStyle = .none
         $0.separatorInset = .init(top: 0, left: 0, bottom: 12, right: 0)
         $0.register(RecordingFileViewCell.self, forCellReuseIdentifier: RecordingFileViewCell.identifier)
+    }
+    
+    private let refreshControl = UIRefreshControl().then {
+        $0.backgroundColor = .clear
     }
     
     var fileItems: [RecordResponse] = [] {
@@ -51,8 +44,14 @@ class RecordingFilesViewController: UIViewController {
         view.backgroundColor = .white
         addSubViews()
         setConstraints()
+        configureView()
         designNavigationBar()
         setDelegate()
+        fetchRecordFiles()
+        refreshControl.addTarget(self, action: #selector(refreshFiles), for: .valueChanged)
+    }
+    
+    @objc private func refreshFiles() {
         fetchRecordFiles()
     }
     
@@ -62,6 +61,7 @@ class RecordingFilesViewController: UIViewController {
             if error == nil {
                 guard let response, let result = response.result, let fileList = result else { return }
                 fileItems = fileList
+                refreshControl.endRefreshing()
             } else {
                 guard let error = error else { return }
                 switch error {
@@ -126,13 +126,16 @@ class RecordingFilesViewController: UIViewController {
         }
     }
     
+    private func configureView() {
+        recordingFileTableView.refreshControl = refreshControl
+    }
+    
     func showDeletePopup(indexPath: IndexPath) {
         let deletePopupVC = DeletePopupViewController()
         deletePopupVC.fileIndexPath = indexPath
         //deletePopupVC.fileName = fileItems[indexPath.row].name
         
         let index = indexPath.row
-        let fileURL = fileItems[index].recordUrl
         let fileName = fileItems[index].recordName
         deletePopupVC.fileName = fileItems[index].recordName
         deletePopupVC.completionHandler = { [weak self] indexPath in
@@ -147,8 +150,7 @@ class RecordingFilesViewController: UIViewController {
     }
     
     private func deleteRecordFile(recordId: Int) {
-        JuinjangAPIManager.shared.fetchData(type: BaseResponse<String>.self, api: .deleteRecordFile(recordId: recordId)) { [weak self] response, error in
-            guard let self else { return }
+        JuinjangAPIManager.shared.fetchData(type: BaseResponse<String>.self, api: .deleteRecordFile(recordId: recordId)) { response, error in
             if error == nil {
                 guard let response, let result = response.result else { return }
                 print(result)
