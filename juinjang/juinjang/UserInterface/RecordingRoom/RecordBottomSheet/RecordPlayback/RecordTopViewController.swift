@@ -76,6 +76,11 @@ class RecordTopViewController: UIViewController {
         recordTextView.text = recordResponse.recordScript
     }
     
+    func editTitle(_ editedRecordName: String) {
+        recordResponse.recordName = editedRecordName
+        titleLabel.text = editedRecordName
+    }
+    
     // X 버튼 클릭 시
     @objc func cancelButtonTapped(_ sender: UIButton) {
         bottomSheetViewController?.hideBottomSheetAndGoBack()
