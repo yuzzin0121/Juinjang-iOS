@@ -39,6 +39,7 @@ enum JuinjangAPI {
     case fetchRecordFiles(imjangId: Int)
     case deleteRecordFile(recordId: Int)
     case editRecordName(recordId: Int, recordName: String)
+    case editRecordContent(recordId: Int, content: String)
     
     var baseURL: String {
         return "http://juinjang1227.com:8080/api/"
@@ -101,6 +102,8 @@ enum JuinjangAPI {
             return URL(string: baseURL + "record/\(recordId)")!
         case .editRecordName(let recordId, _):
             return URL(string: baseURL + "record/title/\(recordId)")!
+        case .editRecordContent(let recordId, _):
+            return URL(string: baseURL + "record/content/\(recordId)")!
         }
     }
     
@@ -123,7 +126,7 @@ enum JuinjangAPI {
             return .post
         case .showChecklist, .totalImjang, .searchImjang, .mainImjang, .detailImjang, .kakaoLogin, .kakaoLoginCallback, .profile, .fetchRecordingRoom, .fetchImage, .fetchRecordFiles:
             return .get
-        case .nickname, .modifyImjang, .modifyChecklist, .editRecordName:
+        case .nickname, .modifyImjang, .modifyChecklist, .editRecordName, .editRecordContent:
             return .patch
         case .deleteRecordFile:
             return .delete
@@ -138,6 +141,8 @@ enum JuinjangAPI {
             return  ["limjangIdList": imjangId]
         case .editRecordName(_, let recordName):
             return ["recordName": recordName]
+        case .editRecordContent(_, let content):
+            return ["recordScript": content]
         default:
             return [:]
         }

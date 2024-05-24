@@ -18,7 +18,7 @@ struct RecordResponse: Codable {
     var recordName: String
     let createdAt: String
     let updatedAt: String
-    let recordScript: String
+    var recordScript: String
     let recordTime: Int
     let recordUrl: String
     let recordId: Int
