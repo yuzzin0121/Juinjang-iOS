@@ -121,7 +121,6 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudio
         return strTime
     }
     
-    //0.1초마다 호출되어 재생 시간 표시
     @objc func updatePlayTime() {
         elapsedTimeLabel.text = convertNSTimeInterval2String(audioPlayer.currentTime)
         //pvProgressPlay.progress = Float(audioPlayer.currentTime/audioPlayer.duration)
@@ -139,18 +138,39 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudio
         progressTimer.invalidate()
     }
     
+    // 녹음 파일 이름 수정 시
     func textFieldDidEndEditing(_ textField: UITextField) {
-        // 텍스트 필드가 수정되면 title을 수정
-        updateTitle(textField.text)
-//        topViewController?.updateTitle(textField.text)
-       // onTextFieldEdit?(textField.text ?? "")
+        guard let editedRecordName = textField.text else {
+            return
+        }
+        let trimmedEditedReocrdName = editedRecordName.trimmingCharacters(in: [" "])
+        if trimmedEditedReocrdName.isEmpty {
+            textField.text = recordResponse.recordName
+        } else {
+            recordResponse.recordName = trimmedEditedReocrdName
+            editRecordName(trimmedEditedReocrdName)
+            topViewController?.editTitle(trimmedEditedReocrdName)
+        }
     }
-
-    func updateTitle(_ newTitle: String?) {
-        if let title = newTitle {
-            print("녹음 파일 제목: \(title)")
-            titleTextField.text = title
-            RecordingFileViewCell().recordingFileNameLabel.text = title
+    
+    private func editRecordName(_ editedRecordName: String) {
+        let parameter = ["recordName": editedRecordName]
+        JuinjangAPIManager.shared.postData(type: BaseResponse<RecordResponse?>.self, api: .editRecordName(recordId: recordResponse.recordId, recordName: editedRecordName), parameter: parameter) { response, error in
+            if error == nil {
+                print(response)
+            } else {
+                guard let error = error else { return }
+                switch error {
+                case .failedRequest:
+                    print("failedRequest")
+                case .noData:
+                    print("noData")
+                case .invalidResponse:
+                    print("invalidResponse")
+                case .invalidData:
+                    print("invalidData")
+                }
+            }
         }
     }
     
