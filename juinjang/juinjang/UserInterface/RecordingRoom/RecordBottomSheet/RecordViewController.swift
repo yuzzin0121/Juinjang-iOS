@@ -45,7 +45,7 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
     }
     
     lazy var timeLabel = UILabel().then {
-        $0.text = "00:18.79"
+        $0.text = "00:00"
         $0.textColor = UIColor(named: "lightGray")
         $0.font = UIFont(name: "Pretendard-Bold", size: 24)
     }

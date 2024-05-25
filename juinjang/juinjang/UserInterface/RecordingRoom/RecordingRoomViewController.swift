@@ -40,9 +40,6 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
         $0.distribution = .equalSpacing
     }
     
-    let tableBackgroundView = UIView().then {
-        $0.backgroundColor = .white
-    }
     let emptyMessageLabel = UILabel()
     
     let recordingFileTableView = UITableView().then {
@@ -52,7 +49,7 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
         $0.estimatedRowHeight = 56
         $0.separatorInset = .init(top: 0, left: 0, bottom: 12, right: 0)
     }
-    private var tableViewHeightConstraint: Constraint?
+//    private var tableViewHeightConstraint: Constraint?
     
     let notePadLabel = UILabel()
     lazy var memoTextView = UITextView().then {
@@ -89,10 +86,10 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        setDelegate()
         addSubView()
         setConstraints()
         designViews()
+        setDelegate()
         hideKeyboardWhenTappedArround()
         showTotalRecordingButton.addTarget(self, action: #selector(showRecordingFilesVC), for: .touchUpInside)
         addRecordingButton.addTarget(self, action: #selector(addRecordingFilesVC), for: .touchUpInside)
@@ -139,14 +136,10 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
         }
     }
     func loadRecordings() {
+        emptyMessageLabel.isHidden = fileItems.isEmpty ? false : true
         
-        if fileItems.isEmpty {
-            tableBackgroundView.isHidden = false
-        } else {
-            tableBackgroundView.isHidden = true
-        }
         recordingFileTableView.reloadData()
-        updateTableViewHeight()
+//        updateTableViewHeight()
     }
     
     func setMemo(memo: String?) {
@@ -221,15 +214,14 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
             recordingHeaderStackView.addArrangedSubview($0)
         }
         
-        [recordingHeaderStackView, tableBackgroundView, recordingFileTableView, notePadLabel, memoTextView].forEach {
+        [recordingHeaderStackView, recordingFileTableView, notePadLabel, memoTextView].forEach {
             contentView.addSubview($0)
         }
         
-        tableBackgroundView.addSubview(emptyMessageLabel)
+        recordingFileTableView.addSubview(emptyMessageLabel)
     }
     
     func designViews() {
-        tableBackgroundView.isHidden = true
         designLabel(recordingFileLabel,
                     text: "녹음 파일",
                     font: .pretendard(size: 20, weight: .bold),
@@ -249,6 +241,9 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
         designLabel(emptyMessageLabel, text: "아직 녹음 파일이 없어요", font: .pretendard(size: 16, weight: .medium), textColor: ColorStyle.gray0)
         
         designLabel(notePadLabel, text: "메모장", font: .pretendard(size: 20, weight: .bold), textColor: ColorStyle.textBlack)
+        
+        recordingFileTableView.rowHeight = UITableView.automaticDimension
+        recordingFileTableView.estimatedRowHeight = 100
     }
     
     func setConstraints() {
@@ -286,34 +281,18 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
             $0.top.equalTo(contentView).offset(24)
         }
         
-        var topView: UIView? = nil
-        if fileItems.isEmpty {
-            topView = tableBackgroundView
-        } else {
-            topView = recordingFileTableView
-        }
-        
-        tableBackgroundView.snp.makeConstraints {
-            $0.top.equalTo(recordingHeaderStackView.snp.bottom).offset(12)
-            $0.leading.trailing.equalTo(contentView)
-            $0.height.equalTo(0)
-        }
-        contentView.bringSubviewToFront(tableBackgroundView)
-        
         emptyMessageLabel.snp.makeConstraints {
-            $0.centerX.equalTo(tableBackgroundView)
-            $0.centerY.equalTo(tableBackgroundView)
+            $0.center.equalTo(recordingFileTableView)
             $0.height.equalTo(22)
         }
         
         recordingFileTableView.snp.makeConstraints {
             $0.top.equalTo(recordingHeaderStackView.snp.bottom).offset(12)
             $0.horizontalEdges.equalTo(contentView)
-            tableViewHeightConstraint = $0.height.equalTo(0).constraint
         }
         
         notePadLabel.snp.makeConstraints {
-            $0.top.equalTo(topView!.snp.bottom).offset(36)
+            $0.top.equalTo(recordingFileTableView.snp.bottom).offset(36)
             $0.leading.equalTo(contentView).offset(24)
         }
         
@@ -325,17 +304,6 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
         }
     }
     
-    func updateTableViewHeight() {
-        recordingFileTableView.layoutIfNeeded()
-        let height = recordingFileTableView.contentSize.height
-        tableViewHeightConstraint?.update(offset: height)
-    }
-    
-    func isEmptyRecordingFile(_ isEmpty: Bool) {
-        if fileItems.isEmpty {
-            recordingFileTableView.isHidden = true
-        }
-    }
     
     // MARK: - 디자인
     // 스택뷰 설정
