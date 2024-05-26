@@ -14,6 +14,8 @@ import KakaoSDKCommon
 import KakaoSDKAuth
 import KakaoSDKUser
 
+import AuthenticationServices
+
 class SignUpViewController: UIViewController {
 
     lazy var juinjangLogoImage = UIImageView().then {
@@ -35,7 +37,7 @@ class SignUpViewController: UIViewController {
     lazy var appleLoginButton = UIButton().then {
         $0.setBackgroundImage(UIImage(named: "apple-logo"), for: .normal)
         $0.contentMode = .scaleAspectFill
-        $0.addTarget(self, action: #selector(loginButtonTapped(_:)), for: .touchUpInside)
+        $0.addTarget(self, action: #selector(appleButtonTapped(_:)), for: .touchUpInside)
     }
     
     lazy var guideLabel = UILabel().then {
@@ -108,11 +110,24 @@ class SignUpViewController: UIViewController {
         }
             
     }
+    @objc func appleButtonTapped(_ sender: UIButton) {
+        let appleProvider = ASAuthorizationAppleIDProvider()
+        let request = appleProvider.createRequest()
+        request.requestedScopes = [.fullName, .email]
+        
+        let controller = ASAuthorizationController(authorizationRequests: [request])
+        controller.delegate = self
+        controller.presentationContextProvider = self
+        controller.performRequests()
+            
+    }
 }
 
-
-extension SignUpViewController {
-
+extension SignUpViewController: ASAuthorizationControllerDelegate,ASAuthorizationControllerPresentationContextProviding {
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        return self.view.window!
+    }
+    
     // 카카오톡 앱으로 로그인
     func loginWithApp() {
         UserApi.shared.loginWithKakaoTalk {(oauthToken, error) in
@@ -194,6 +209,44 @@ extension SignUpViewController {
                 }
         }
     }
+    
+    func authorizationController( controller: ASAuthorizationController,
+                didCompleteWithAuthorization authorization: ASAuthorization) {
+//        guard let credential = authorization.credential as? ASAuthorizationAppleIDCredential else {
+//            return
+//        }
+        switch authorization.credential {
+        case let appleIDCredential as ASAuthorizationAppleIDCredential:
+            // You can create an account in your system.
+            let userIdentifier = appleIDCredential.user
+            let fullName = appleIDCredential.fullName
+            let email = appleIDCredential.email
+            
+            if  let authorizationCode = appleIDCredential.authorizationCode,
+                let identityToken = appleIDCredential.identityToken,
+                let authCodeString = String(data: authorizationCode, encoding: .utf8),
+                let identifyTokenString = String(data: identityToken, encoding: .utf8) {
+                print("authorizationCode: \(authorizationCode)")
+                print("identityToken: \(identityToken)")
+                print("authCodeString: \(authCodeString)")
+                print("identifyTokenString: \(identifyTokenString)")
+            }
+            
+            print("useridentifier: \(userIdentifier)")
+            print("fullName: \(fullName)")
+            print("email: \(email)")
+            
+            //print(credential.user)
+            //print("애플 로그인 성공")
+        default:
+            break
+        }
+    }
+
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        print("애플 로그인 실패 \(error.localizedDescription)")
+    }
+    
     func getUserNickname() {
         let urlString = "http://juinjang1227.com:8080/api/profile"
         
@@ -228,9 +281,6 @@ extension SignUpViewController {
                     }
                     //print("Nickname : \(nickname ?? "")")
                     UserDefaultManager.shared.nickname = nickname ?? ""
-                    print("present to Main")
-                    let nextVC = MainViewController()
-                    self.navigationController?.pushViewController(nextVC, animated: true)
                 } catch {
                     print("Error parsing JSON: \(error)")
                                                                   

@@ -54,6 +54,7 @@ class MainViewController: UIViewController {
     }
     
     func callMainImjangRequest() {
+        //refreshToken()
         JuinjangAPIManager.shared.fetchData(type: BaseResponse<RecentUpdatedDto>.self, api: .mainImjang) { response, error in
             if error == nil {
                 guard let response = response else { return }
@@ -138,9 +139,6 @@ class MainViewController: UIViewController {
                 if let httpResponse = response.response {
                     print("Status code: \(httpResponse.statusCode)")
                 }
-                if let responseString = String(data: value, encoding: .utf8) {
-                    print("Response data: \(responseString)")
-                }
                 // 응답 데이터 출력
                 if let jsonObject = try? JSONSerialization.jsonObject(with: value, options: []),
                    let json = jsonObject as? [String: Any],
@@ -153,17 +151,14 @@ class MainViewController: UIViewController {
                     // UserDefaults에 새로운 토큰 저장
                     UserDefaultManager.shared.accessToken = accessToken
                     UserDefaultManager.shared.refreshToken = refreshToken
-                    
+                    //self.tableView.reloadData()
+                    self.callMainImjangRequest()
                     // 기타 필요한 작업 수행
                 } else {
-                    print("Failed to parse response data.")
                 }
                 do {
                     let decoder = JSONDecoder()
                     let refreshTokenResponse = try decoder.decode(RefreshTokenResponse.self, from: value)
-                    if let responseString = String(data: value, encoding: .utf8) {
-                        print("Response data: \(responseString)")
-                    }
                     if refreshTokenResponse.code == "TOKEN402" || refreshTokenResponse.code == "COMMON500" || refreshTokenResponse.code == "TOKEN401"{
                         // "code"가 "TOKEN402"인 경우 로그아웃 함수 호출
                         let settingViewController = SettingViewController()
@@ -172,6 +167,11 @@ class MainViewController: UIViewController {
                 } catch {
                     print("Error decoding JSON: \(error)")
                 }
+                if let responseString = String(data: value, encoding: .utf8) {
+                    print("Response data: \(responseString)")
+                    self.callMainImjangRequest()
+                }
+                
             case .failure(let error):
                 print("Error: \(error)")
             }
