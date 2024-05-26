@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-// -TODO: 인덱스 구분해서 기타 항목 처리 어떻게 해야할지
+// -TODO: 인덱스 구분해서 기타 항목 처리 어떻게 해야할지, 다시 처음부터 처리해야함
 class ExpandedDropdownTableViewCell: UITableViewCell {
     
     var optionSelectionHandler: ((String) -> Void)?
@@ -72,7 +72,7 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
     var selectedButton = UIButton()
     var dataSource = [String]()
     
-    var options: [OptionItem] = []
+    var options: [Option] = []
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -99,6 +99,8 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        
+        etcTextField.removeFromSuperview()
 
         // 셀 내용 초기화
         itemPickerView.selectRow(0, inComponent: 0, animated: true)
@@ -189,7 +191,7 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
             contentView.addSubview(etcTextField)
             
             etcTextField.snp.makeConstraints {
-                $0.trailing.equalToSuperview().offset(-24) // 오른쪽으로 24만큼 이동
+                $0.trailing.equalToSuperview().offset(-24)
                 $0.top.equalTo(contentLabel.snp.bottom).offset(20)
                 $0.height.equalTo(31)
                 $0.width.equalTo(218)
@@ -223,27 +225,26 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
         contentLabel.textColor = UIColor(named: "500")
         backgroundColor = .white
         
-        var optionValues: [OptionItem] = []
+        var optionValues: [Option] = []
 
         // 지하철 노선도 항목에 대한 이미지 추가
         if questionDto.questionId == 4 || questionDto.questionId == 62 {
             optionValues = questionDto.options.map { optionItem in
-                let originalImage = UIImage(data: optionItem.image)
-                // 이미지가 리사이즈하여 새로운 이미지로 생성
-                if let originalImage = originalImage {
+                if let originalImage = UIImage(data: optionItem.image ?? Data()) {
+                    // 이미지가 리사이즈하여 새로운 이미지로 생성
                     let newSize = CGSize(width: 16, height: 16)
                     let resizedImage = UIGraphicsImageRenderer(size: newSize).image { _ in
                         originalImage.draw(in: CGRect(origin: .zero, size: newSize))
                     }
-                    return OptionItem(image: resizedImage, option: optionItem.option)
+                    return Option(option: optionItem.option, image: resizedImage.pngData())
                 } else {
-                    return OptionItem(image: nil, option: optionItem.option)
+                    return Option(option: optionItem.option, image: nil)
                 }
             }
         } else {
             // 기본값은 nil로 설정
             optionValues = questionDto.options.map { optionItem in
-                return OptionItem(image: nil, option: optionItem.option)
+                return Option(option: optionItem.option, image: nil)
             }
         }
         options = optionValues
@@ -251,72 +252,68 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
     
     // 보기 모드일 때 저장된 값이 있는 경우
     func savedViewModeConfigure(with answer: String, with options: [Option], at indexPath: IndexPath) {
-        if answer != "0" {
-            itemPickerView.selectRow(Int(answer) ?? 0, inComponent: 0, animated: true)
+        // answer와 일치하는 옵션의 인덱스를 찾기
+        if let selectedIndex = options.firstIndex(where: { $0.option == answer }) {
+            itemPickerView.selectRow(selectedIndex, inComponent: 0, animated: true)
             questionImage.image = UIImage(named: "question-selected-image")
             contentLabel.textColor = UIColor(named: "500")
             backgroundColor = .white
-            var originalImage: UIImage?
-            if answer.count < 2 {
-                itemButton.setTitle(options[Int(answer) ?? 0].option, for: .normal)
-            } else {
-                if let lastOption = options.last {
-                    itemButton.setTitle(lastOption.option, for: .normal)
-                    originalImage = UIImage(data: options[Int(answer) ?? 0].image)
-                }
-            }
-            itemButton.backgroundColor = .white
-            itemButton.setTitleColor(UIColor(named: "darkGray"), for: .normal)
-//            let originalImage = UIImage(data: options[Int(answer) ?? 0].image)
-            // 이미지가 리사이즈하여 새로운 이미지로 생성
-            if let originalImage = originalImage {
+            
+            let selectedOption = options[selectedIndex]
+            itemButton.setTitle(selectedOption.option, for: .normal)
+            
+            // 이미지가 있는 경우 리사이즈하여 설정
+            if let originalImage = UIImage(data: selectedOption.image) {
                 let newSize = CGSize(width: 16, height: 16)
                 let resizedImage = UIGraphicsImageRenderer(size: newSize).image { _ in
                     originalImage.draw(in: CGRect(origin: .zero, size: newSize))
                 }
                 itemButton.setImage(resizedImage, for: .normal)
             }
+            
+            itemButton.backgroundColor = .white
+            itemButton.setTitleColor(UIColor(named: "darkGray"), for: .normal)
             itemButton.semanticContentAttribute = .forceLeftToRight
             setSavedInset()
         }
+        
         selectedOption = answer
         selectedButton.backgroundColor = .white
     }
-    
+
     // 수정 모드일 때 저장된 값이 있는 경우
     func savedEditModeConfigure(with answer: String, with options: [Option], at indexPath: IndexPath) {
         print("선택형 답변 Index: \(answer)")
-        if answer != "0" {
-            itemPickerView.selectRow(Int(answer) ?? 0, inComponent: 0, animated: true)
+        
+        // answer와 일치하는 옵션의 인덱스를 찾기
+        if let selectedIndex = options.firstIndex(where: { $0.option == answer }) {
+            itemPickerView.selectRow(selectedIndex, inComponent: 0, animated: true)
             questionImage.image = UIImage(named: "question-selected-image")
             contentLabel.textColor = UIColor(named: "500")
             backgroundColor = UIColor(named: "lightOrange")
-            var originalImage: UIImage?
-            // -TODO: 인덱스 어떻게 할 건지
-            if answer.count > 2 {
-                itemButton.setTitle(options[Int(answer) ?? 0].option, for: .normal)
-            } else {
-                if let lastOption = options.last {
-                    itemButton.setTitle(lastOption.option, for: .normal)
-                    originalImage = UIImage(data: options[Int(answer) ?? 0].image)
-                }
-            }
-            itemButton.backgroundColor = .white
-            itemButton.setTitleColor(UIColor(named: "darkGray"), for: .normal)
-            // 이미지가 리사이즈하여 새로운 이미지로 생성
-            if let originalImage = originalImage {
+            
+            let selectedOption = options[selectedIndex]
+            itemButton.setTitle(selectedOption.option, for: .normal)
+            
+            // 이미지가 있는 경우 리사이즈하여 설정
+            if let originalImage = UIImage(data: selectedOption.image) {
                 let newSize = CGSize(width: 16, height: 16)
                 let resizedImage = UIGraphicsImageRenderer(size: newSize).image { _ in
                     originalImage.draw(in: CGRect(origin: .zero, size: newSize))
                 }
                 itemButton.setImage(resizedImage, for: .normal)
             }
+            
+            itemButton.backgroundColor = .white
+            itemButton.setTitleColor(UIColor(named: "darkGray"), for: .normal)
             itemButton.semanticContentAttribute = .forceLeftToRight
             setSavedInset()
         }
+        
         selectedOption = answer
         selectedButton.backgroundColor = .white
     }
+
     
     func handleOptionSelection(_ optionIndex: String) {
         optionSelectionHandler?(optionIndex)
@@ -346,7 +343,11 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
         selectedButton.setTitle(selectedOption.option, for: .normal)
         selectedButton.backgroundColor = .white
         selectedButton.setTitleColor(UIColor(named: "darkGray"), for: .normal)
-        selectedButton.setImage((selectedOption.image), for: .normal)
+        if let image = UIImage(data: selectedOption.image) {
+            selectedButton.setImage(image, for: .normal)
+        } else {
+            selectedButton.setImage(nil, for: .normal)
+        }
         selectedButton.semanticContentAttribute = .forceLeftToRight
         setSelectedInset()
 
@@ -366,12 +367,12 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
             questionImage.image = UIImage(named: "question-image")
             itemButton.layer.backgroundColor = UIColor(named: "shadowGray")?.cgColor
             setBasicInset()
-            handleOptionSelection(String(row))
+            handleOptionSelection(selectedOption.option)
         } else {
             backgroundColor = UIColor(named: "lightOrange")
             questionImage.image = UIImage(named: "question-selected-image")
             
-            handleOptionSelection(String(row))
+            handleOptionSelection(selectedOption.option)
         }
         
         if options[row].option == "기타" {
@@ -381,52 +382,52 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
     }
     
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
-    
+        
         let fontSize: CGFloat = 16
         let leftPadding: CGFloat = 12
         
         pickerView.subviews[1].backgroundColor = .clear // 선택된 항목 회색 바탕으로 표시되지 않게 함
-
+        
         var label: UILabel
         if let reusedLabel = view as? UILabel {
             label = reusedLabel
         } else {
             label = UILabel()
         }
-
+        
         let option = options[row]
         label.font = UIFont.pretendard(size: fontSize, weight: .regular)
         label.textColor = UIColor.black
         label.textAlignment = .left
-
-        if var image = option.image {
-            let selectionImageView = UIImageView()
-            selectionImageView.image = image
-            selectionImageView.snp.makeConstraints {
-                $0.height.equalTo(16)
-                $0.width.equalTo(16)
-            }
-            // 이미지가 있으면 이미지와 텍스트 같이 표시
+        
+        if let originalImage = UIImage(data: option.image),
+           let resizedImage = originalImage.resized(toWidth: 16) { // 이미지 리사이징
+            
             let imageAttachment = NSTextAttachment()
-            imageAttachment.image = selectionImageView.image
-
-            // 이미지의 bounds를 설정하여 위치 조정
-            let yOffset = (label.font.capHeight - image.size.height) / 2
-            imageAttachment.bounds = CGRect(x: 0, y: yOffset, width: image.size.width, height: image.size.height)
-
+            imageAttachment.image = resizedImage
+            
+            // 이미지의 y축을 조정하여 텍스트와 수평으로 맞추기
+            let mid = (label.font.capHeight - resizedImage.size.height) / 2
+            imageAttachment.bounds = CGRect(x: 0, y: mid, width: resizedImage.size.width, height: resizedImage.size.height)
+            
             let imageString = NSAttributedString(attachment: imageAttachment)
-
-            let mutableAttributedString = NSMutableAttributedString()
-            mutableAttributedString.append(imageString)
-            mutableAttributedString.append(NSAttributedString(string: " \(option.option)"))
-
-            label.attributedText = mutableAttributedString
+            
+            let attributedString = NSMutableAttributedString()
+            attributedString.append(imageString)
+            
+            let textAttributes: [NSAttributedString.Key: Any] = [
+                .font: UIFont.pretendard(size: fontSize, weight: .regular),
+                .foregroundColor: UIColor.black
+            ]
+            let textAttributedString = NSAttributedString(string: " \(option.option)", attributes: textAttributes)
+            attributedString.append(textAttributedString)
+            
+            label.attributedText = attributedString
         } else {
-            // 이미지가 없으면 텍스트만 표시하고 왼쪽 패딩 적용
             label.text = option.option
             label.frame.origin.x = leftPadding
         }
-         return label
+        return label
     }
     
     func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
@@ -440,16 +441,22 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
         
         selectedButton.sizeToFit()
         
-        if let image = selectedButton.image(for: .normal) {
-            // 이미지가 있는 경우
-            selectedButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: imageInset, bottom: 0, right: titleInset)
-            selectedButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: titleInset, bottom: 0, right: 0)
+        if let originalImage = selectedButton.image(for: .normal) {
+            // 이미지를 리사이즈
+            if let resizedImage = originalImage.resized(toWidth: 16) {
+                selectedButton.setImage(resizedImage, for: .normal)
+                
+                // 이미지가 있는 경우
+                selectedButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: imageInset, bottom: 0, right: titleInset)
+                selectedButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: titleInset, bottom: 0, right: 0)
+            }
         } else {
             // 이미지가 없는 경우
             selectedButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             selectedButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: imageInset, bottom: 0, right: 0)
         }
     }
+
     
     func setSavedInset() {
         let imageInset: CGFloat = 12.0
@@ -586,9 +593,8 @@ extension UIImage {
     }
     func resized(toWidth width: CGFloat) -> UIImage? {
         let canvasSize = CGSize(width: width, height: CGFloat(ceil(width/size.width * size.height)))
-        UIGraphicsBeginImageContextWithOptions(canvasSize, false, scale)
-        defer { UIGraphicsEndImageContext() }
-        draw(in: CGRect(origin: .zero, size: canvasSize))
-        return UIGraphicsGetImageFromCurrentImageContext()
+        return UIGraphicsImageRenderer(size: canvasSize).image { _ in
+            self.draw(in: CGRect(origin: .zero, size: canvasSize))
+        }
     }
 }
