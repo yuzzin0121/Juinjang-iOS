@@ -116,6 +116,7 @@ class ImjangNoteViewController: UIViewController{
     var detailDto: DetailDto? = nil
     var previousVCType: PreviousVCType = .createImjangVC
     var version: VersionInfo?
+    var editCriteria: Int?
     var isEditMode: Bool = false // 수정 모드 여부
     
     init(imjangId: Int) {
@@ -176,6 +177,7 @@ class ImjangNoteViewController: UIViewController{
         roomAddressLabel.text = "\(detailDto.address) \(detailDto.addressDetail)"
         modifiedDateStringLabel.text = "최근 수정 날짜 \(String.dateToString(target: detailDto.updatedAt))"
         images = detailDto.images
+        version?.editCriteria = detailDto.purposeCode
         setUpImageUI()
         adjustLabelHeight()
     }
