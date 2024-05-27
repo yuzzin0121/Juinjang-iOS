@@ -198,11 +198,13 @@ class ImjangNoteViewController: UIViewController{
     
     // 방 가격 설정
     func setPriceLabel(priceList: [String]) {
+        print(priceList)
         switch priceList.count {
         case 1:
             let priceString = priceList[0]
             roomPriceLabel.text = priceString.formatToKoreanCurrencyWithZero()
         case 2:
+            print("2개")
             let priceString1 = priceList[0].formatToKoreanCurrencyWithZero()
             let priceString2 = priceList[1].formatToKoreanCurrencyWithZero()
             roomPriceLabel.text = "\(priceString1) • 월 \(priceString2)"

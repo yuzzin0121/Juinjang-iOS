@@ -183,6 +183,9 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
     @objc
     func addRecordingFilesVC() {
         let bottomSheetViewController = BottomSheetViewController(imjangId: imjangId)
+        let warningMessageVC = WarningMessageViewController(imjangId: imjangId)
+        warningMessageVC.bottomSheetViewController = bottomSheetViewController
+        bottomSheetViewController.addContentViewController(warningMessageVC)
         bottomSheetViewController.modalPresentationStyle = .custom
         self.present(bottomSheetViewController, animated: false, completion: nil)
     }
@@ -388,6 +391,17 @@ extension RecordingRoomViewController: UITableViewDataSource, UITableViewDelegat
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 56
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let recordResponse = fileItems[indexPath.row]
+        
+        let bottomSheetViewController = BottomSheetViewController(imjangId: imjangId)
+        let recordPlaybackVC = RecordPlaybackViewController(recordResponse: recordResponse)
+        recordPlaybackVC.bottomSheetViewController = bottomSheetViewController
+        bottomSheetViewController.addContentViewController(recordPlaybackVC)
+        bottomSheetViewController.modalPresentationStyle = .custom
+        self.present(bottomSheetViewController, animated: true, completion: nil)
     }
 }
 

@@ -111,8 +111,10 @@ class RecordingFilesViewController: UIViewController {
     
     @objc func startRecording(_ sender: Any) {
         let bottomSheetViewController = BottomSheetViewController(imjangId: imjangId)
+        let warningMessageVC = WarningMessageViewController(imjangId: imjangId)
+        warningMessageVC.bottomSheetViewController = bottomSheetViewController
+        bottomSheetViewController.addContentViewController(warningMessageVC)
         bottomSheetViewController.modalPresentationStyle = .custom
-//        bottomSheetViewController.transitioningDelegate = self
         self.present(bottomSheetViewController, animated: false, completion: nil)
     }
  
@@ -197,18 +199,14 @@ extension RecordingFilesViewController: UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // 새로운 뷰 컨트롤러를 생성하고 데이터를 전달합니다.
-        let vc = BottomSheetViewController(imjangId: imjangId)
-        vc.modalPresentationStyle = .custom
+        let recordResponse = fileItems[indexPath.row]
         
-//        let playVC = PlayRecordViewController(recordResponse: <#RecordResponse#>)
-//        playVC.bottomViewController.audioFile = recordings[indexPath.row].fileURL
-//        playVC.bottomViewController.titleTextField.text = recordings[indexPath.row].title
-//        playVC.bottomViewController.recordingIndexPath = indexPath
-//        vc.transitionToViewController(playVC)
-        
-        // 새로운 뷰 컨트롤러를 present 합니다.
-        present(vc, animated: true, completion: nil)
+        let bottomSheetViewController = BottomSheetViewController(imjangId: imjangId)
+        let recordPlaybackVC = RecordPlaybackViewController(recordResponse: recordResponse)
+        recordPlaybackVC.bottomSheetViewController = bottomSheetViewController
+        bottomSheetViewController.addContentViewController(recordPlaybackVC)
+        bottomSheetViewController.modalPresentationStyle = .custom
+        self.present(bottomSheetViewController, animated: true, completion: nil)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

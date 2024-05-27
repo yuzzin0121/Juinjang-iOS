@@ -78,6 +78,10 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudio
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        print(String(describing: self), "deinit")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "textBlack")

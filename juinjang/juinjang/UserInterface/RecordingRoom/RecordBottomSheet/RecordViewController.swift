@@ -102,6 +102,10 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        print(String(describing: self), "deinit")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         bottomSheetView.backgroundColor = UIColor(named: "textBlack")
