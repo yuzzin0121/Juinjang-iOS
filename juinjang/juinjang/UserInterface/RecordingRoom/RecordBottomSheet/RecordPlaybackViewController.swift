@@ -45,6 +45,10 @@ class RecordPlaybackViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        print(String(describing: self), "deinit")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     

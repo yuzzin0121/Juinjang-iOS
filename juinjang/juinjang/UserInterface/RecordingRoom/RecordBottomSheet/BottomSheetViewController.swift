@@ -28,6 +28,10 @@ class BottomSheetViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        print(String(describing: self), "deinit")
+    }
+    
     // MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,13 +39,9 @@ class BottomSheetViewController: UIViewController {
         setupLayout()
         
         dimmedView.alpha = 0.0
-        
-        let warningMessageVC = WarningMessageViewController(imjangId: imjangId)
-        warningMessageVC.bottomSheetViewController = self
-        addContentViewController(warningMessageVC)
     }
     
-    private func addContentViewController(_ viewController: UIViewController) {
+    func addContentViewController(_ viewController: UIViewController) {
         self.addChild(viewController)
         self.view.addSubview(viewController.view)
         viewController.didMove(toParent: self)
