@@ -27,7 +27,7 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudio
     lazy var elapsedTimeLabel = UILabel().then {
         $0.textColor = UIColor(named: "gray1")
         $0.font = UIFont(name: "Pretendard-Regular", size: 13)
-        $0.text = "0:41"
+        $0.text = "0:00"
     }
     
     var recordingSlider = UISlider().then {
@@ -40,17 +40,18 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudio
     lazy var remainingTimeLabel = UILabel().then {
         $0.textColor = UIColor(named: "gray1")
         $0.font = UIFont(name: "Pretendard-Regular", size: 13)
-        $0.text = "4:10"
+        $0.text = "0:00"
     }
     
     lazy var rewindButton = UIButton().then {
         $0.setImage(UIImage(named: "rewind"), for: .normal)
         $0.imageView?.contentMode = .scaleAspectFill
+        $0.addTarget(self, action: #selector(rewindButtonTapped), for: .touchUpInside)
         $0.adjustsImageWhenHighlighted = false
     }
     
-    lazy var recordButton = UIButton().then {
-        $0.setImage(UIImage(named: "being-recorded-button"), for: .normal)
+    lazy var playButton = UIButton().then {
+        $0.setImage(UIImage(named: "record-button"), for: .normal)
         $0.imageView?.contentMode = .scaleAspectFill
         $0.adjustsImageWhenHighlighted = false
         $0.addTarget(self, action: #selector(startRecordPressed(_:)), for: .touchUpInside)
@@ -59,13 +60,13 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudio
     lazy var fastForwardButton = UIButton().then {
         $0.setImage(UIImage(named: "fast-forward"), for: .normal)
         $0.imageView?.contentMode = .scaleAspectFill
+        $0.addTarget(self, action: #selector(fastForwardButtonTapped), for: .touchUpInside)
         $0.adjustsImageWhenHighlighted = false
     }
     
     weak var topViewController: RecordTopViewController?
     
-    var audioPlayer : AVAudioPlayer! //avaudioplayer인스턴스 변수
-    var progressTimer : Timer! //타이머를 위한 변수
+    var progressTimer : Timer? //타이머를 위한 변수
     var recordTime : String = ""
     var recordResponse: RecordResponse
     
@@ -89,57 +90,36 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudio
         setupLayout()
         titleTextField.delegate = self
 
-//        progressTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updatePlayTime), userInfo: nil, repeats: true)
-        
         setRecordData()
+        initPlay()
     }
     
     private func setRecordData() {
         titleTextField.text = recordResponse.recordName
-        recordStartTimeLabel.text = recordResponse.createdAt
-
+        recordStartTimeLabel.text = DateFormatterManager.shared.formattedUpdatedDate(recordResponse.createdAt)
+        remainingTimeLabel.text = String.formatSeconds(recordResponse.recordTime + 1)
     }
     
     func initPlay(){
-        do {
-            guard let recordUrl = URL(string: recordResponse.recordUrl) else { return }
-            audioPlayer = try AVAudioPlayer(contentsOf: recordUrl)
-        } catch let error as NSError {
-            print("Error-iniPlay : \(error)")
-        }
+        guard let recordUrl = URL(string: recordResponse.recordUrl) else { return }
+        AudioPlayerManager.shared.setPlayer(recordingURL: recordUrl)
         
         recordingSlider.value = 0
-        
-//        audioPlayer.delegate = self
-        audioPlayer.prepareToPlay()
-        
-        remainingTimeLabel.text = convertNSTimeInterval2String(audioPlayer.duration)
-        elapsedTimeLabel.text = convertNSTimeInterval2String(0)
-    }
-    
-    // 00:00 형태의 문자열로 변환
-    func convertNSTimeInterval2String(_ time:TimeInterval) -> String {
-        let min = Int(time/60)
-        let sec = Int(time.truncatingRemainder(dividingBy: 60))
-        let strTime = String(format: "%02d:%02d", min, sec)
-        return strTime
     }
     
     @objc func updatePlayTime() {
-        elapsedTimeLabel.text = convertNSTimeInterval2String(audioPlayer.currentTime)
-        //pvProgressPlay.progress = Float(audioPlayer.currentTime/audioPlayer.duration)
-        recordingSlider.value = Float(audioPlayer.currentTime / audioPlayer.duration)
-        if recordingSlider.value == 0 {
-            recordButton.setImage(UIImage(named: "record-button"), for: .normal)
+        guard let currentTime = AudioPlayerManager.shared.getCurrentTime(), let duration = AudioPlayerManager.shared.getDuration() else { return }
+        elapsedTimeLabel.text = String.formatSeconds(Int(currentTime))
+        recordingSlider.value = Float(currentTime / duration)
+        if currentTime == duration {
+            recordingSlider.value = 0
+            elapsedTimeLabel.text = String.formatSeconds(0)
+            AudioPlayerManager.shared.setCurrentTime(time: 0)
+            playButton.setImage(UIImage(named: "record-button"), for: .normal)
+            playButton.isSelected.toggle()
+            progressTimer?.invalidate()
+            progressTimer = nil
         }
-    }
-    
-    //정지 버튼 클릭 시 음악 재생 종료
-    @objc func btnStopAudio(_ sender: UIButton) {
-        audioPlayer.stop()
-        audioPlayer.currentTime = 0
-        elapsedTimeLabel.text = convertNSTimeInterval2String(0)
-        progressTimer.invalidate()
     }
     
     // 녹음 파일 이름 수정 시
@@ -179,21 +159,45 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudio
     }
     
     @objc func startRecordPressed(_ sender: UIButton) {
-        if recordButton.isSelected {
-            audioPlayer.play()
+        playButton.isSelected.toggle()
+        if playButton.isSelected {
+            AudioPlayerManager.shared.startPlaying()
             progressTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(updatePlayTime), userInfo: nil, repeats: true)
-            recordButton.setImage(UIImage(named: "being-recorded-button"), for: .normal)
+            playButton.setImage(UIImage(named: "being-recorded-button"), for: .normal)
         } else {
-            audioPlayer.pause()
-            recordButton.setImage(UIImage(named: "record-button"), for: .normal)
+            AudioPlayerManager.shared.pausePlaying()
+            progressTimer?.invalidate()
+            progressTimer = nil
+            playButton.setImage(UIImage(named: "record-button"), for: .normal)
         }
-        recordButton.isSelected.toggle()
     }
     
     @objc private func dragedSlider() {
-        //audioPlayer.currentTime = TimeInterval(recordingSlider.value)
-        let newTime = TimeInterval(recordingSlider.value) * audioPlayer.duration
-        audioPlayer.currentTime = newTime
+        guard let duration = AudioPlayerManager.shared.getDuration() else { return }
+        let newTime = TimeInterval(recordingSlider.value) * duration
+        AudioPlayerManager.shared.setCurrentTime(time: newTime)
+    }
+    
+    @objc private func rewindButtonTapped() {
+        guard let currentTime = AudioPlayerManager.shared.getCurrentTime(), let duration = AudioPlayerManager.shared.getDuration() else { return }
+        var rewindValue = currentTime - 10
+        if rewindValue < 0 {
+            rewindValue = 0
+        }
+        AudioPlayerManager.shared.setCurrentTime(time: rewindValue)
+        elapsedTimeLabel.text = String.formatSeconds(Int(rewindValue))
+        recordingSlider.value = Float(rewindValue / duration)
+    }
+    
+    @objc private func fastForwardButtonTapped() {
+        guard let currentTime = AudioPlayerManager.shared.getCurrentTime(), let duration = AudioPlayerManager.shared.getDuration() else { return }
+        var fastForwardValue = currentTime + 10
+        if fastForwardValue > duration {
+            fastForwardValue = duration
+        }
+        AudioPlayerManager.shared.setCurrentTime(time: fastForwardValue)
+        elapsedTimeLabel.text = String.formatSeconds(Int(fastForwardValue))
+        recordingSlider.value = Float(fastForwardValue / duration)
     }
     
     func addSubViews() {
@@ -203,7 +207,7 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudio
          elapsedTimeLabel,
          remainingTimeLabel,
          rewindButton,
-         recordButton,
+         playButton,
          fastForwardButton].forEach { view.addSubview($0) }
     }
     
@@ -234,19 +238,19 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudio
         }
         
         rewindButton.snp.makeConstraints {
-            $0.trailing.equalTo(recordButton.snp.leading).offset(-40)
+            $0.trailing.equalTo(playButton.snp.leading).offset(-40)
             $0.height.equalTo(36)
             $0.width.equalTo(36)
             $0.bottom.equalTo(view.snp.bottom).offset(-88)
         }
         
-        recordButton.snp.makeConstraints {
+        playButton.snp.makeConstraints {
             $0.centerX.equalTo(view.snp.centerX)
             $0.bottom.equalTo(view.snp.bottom).offset(-76)
         }
         
         fastForwardButton.snp.makeConstraints {
-            $0.leading.equalTo(recordButton.snp.trailing).offset(40)
+            $0.leading.equalTo(playButton.snp.trailing).offset(40)
             $0.height.equalTo(36)
             $0.width.equalTo(36)
             $0.bottom.equalTo(view.snp.bottom).offset(-88)

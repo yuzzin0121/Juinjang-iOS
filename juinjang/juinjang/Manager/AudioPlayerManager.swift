@@ -15,38 +15,57 @@ final class AudioPlayerManager: NSObject, AVAudioPlayerDelegate {
         super.init()
     }
     
-    var audioPlayer: AVAudioPlayer?     // 음성 재생 객체
+    var audioPlayer: AVPlayer?     // 음성 재생 객체
     var isPlaying = false
     var isPaused = false
     
     var recordedFiles = [URL]()
     
     // 재생 시작
-    func startPlaying(recordingURL: URL) {
-        do {
-            audioPlayer = try AVAudioPlayer(contentsOf: recordingURL)
-            audioPlayer?.delegate = self
-            audioPlayer?.play()
-            isPlaying = true
-            isPaused = false
-        } catch {
-            print("재생 중 오류 발생: \(error.localizedDescription)")
-        }
+    func setPlayer(recordingURL: URL) {
+        audioPlayer = AVPlayer(url: recordingURL)
+        audioPlayer?.actionAtItemEnd = .pause
     }
     
     func stopPlaying() {
-        audioPlayer?.stop()
-        isPlaying = false
+        audioPlayer?.pause()
+        audioPlayer?.seek(to: CMTime.zero)
     }
     
     func pausePlaying() {
         audioPlayer?.pause()
         isPaused = true
+        isPlaying = false
     }
     
-    func resumePlaying() {
+    func startPlaying() {
         audioPlayer?.play()
         isPaused = false
+        isPlaying = true
+    }
+    
+    func getCurrentTime() -> TimeInterval? {
+        guard let audioPlayer else { return nil }
+        let currentTime = audioPlayer.currentTime()
+        return CMTimeGetSeconds(currentTime)
+    }
+    
+    func getDuration() -> TimeInterval? {
+        guard let audioPlayer, let duration = audioPlayer.currentItem?.duration else { return nil }
+        print(#function, duration)
+        return CMTimeGetSeconds(duration)
+    }
+    
+    func setCurrentTime(time: TimeInterval) {
+        guard let audioPlayer else { return }
+        let cmTime = CMTimeMakeWithSeconds(time, preferredTimescale: 1)
+        audioPlayer.seek(to: cmTime) { completed in
+           if completed {
+               print("Successfully seeked to time: \(time) seconds")
+           } else {
+               print("Failed to seek to time: \(time) seconds")
+           }
+       }
     }
     
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
