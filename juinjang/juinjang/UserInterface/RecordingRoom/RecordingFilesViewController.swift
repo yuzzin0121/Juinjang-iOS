@@ -52,12 +52,24 @@ class RecordingFilesViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        NotificationCenter.default.addObserver(self, selector: #selector(editRecordName), name: .editRecordName, object: nil)
+        setAddObserver()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self)
+    }
+    
+    private func setAddObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(editRecordName), name: .editRecordName, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(editRecordScript), name: .editRecordScript, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(addRecordResponse), name: .addRecordResponse, object: nil)
+    }
+    
+    @objc private func addRecordResponse(_ notification: Notification) {
+        print(#function)
+        guard let recordResponse = notification.object as? RecordResponse else { return }
+        fileItems.insert(recordResponse, at: 0)
     }
     
     @objc private func editRecordName(_ notification: Notification) {
@@ -67,6 +79,17 @@ class RecordingFilesViewController: UIViewController {
         for index in fileItems.indices {
             if fileItems[index].recordId == recordResponse.recordId {
                 fileItems[index].recordName = recordResponse.recordName
+            }
+        }
+    }
+      
+    @objc private func editRecordScript(_ notification: Notification) {
+        print(#function)
+        guard let recordResponse = notification.object as? RecordResponse else { return }
+        
+        for index in fileItems.indices {
+            if fileItems[index].recordId == recordResponse.recordId {
+                fileItems[index].recordName = recordResponse.recordScript
             }
         }
     }
