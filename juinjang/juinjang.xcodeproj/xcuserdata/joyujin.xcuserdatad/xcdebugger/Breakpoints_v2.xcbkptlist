@@ -14,10 +14,10 @@
             filePath = "juinjang/UserInterface/RecordingRoom/ImjangNoteViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "244"
-            endingLineNumber = "244"
-            landmarkName = "ImjangNoteViewController"
-            landmarkType = "3">
+            startingLineNumber = "242"
+            endingLineNumber = "242"
+            landmarkName = "showCheckList(completion:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
