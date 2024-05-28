@@ -46,10 +46,8 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
         $0.isScrollEnabled = false
         $0.separatorStyle = .none
         $0.register(RecordingFileViewCell.self, forCellReuseIdentifier: RecordingFileViewCell.identifier)
-        $0.estimatedRowHeight = 56
         $0.separatorInset = .init(top: 0, left: 0, bottom: 12, right: 0)
     }
-//    private var tableViewHeightConstraint: Constraint?
     
     let notePadLabel = UILabel()
     lazy var memoTextView = UITextView().then {
@@ -64,13 +62,7 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
     
     let memoTextViewPlaceholder = "눌러서 메모를 추가해보세요!"
     
-    var fileItems: [RecordResponse] = [] {
-        didSet {
-            loadRecordings()
-        }
-    }
-    //var fileURLs : [URL] = []
-    //var recordings : [Recording] = []
+    var fileItems: [RecordResponse] = []
     
     var imjangId: Int
     
@@ -94,7 +86,16 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
         showTotalRecordingButton.addTarget(self, action: #selector(showRecordingFilesVC), for: .touchUpInside)
         addRecordingButton.addTarget(self, action: #selector(addRecordingFilesVC), for: .touchUpInside)
         callFetchRequest()
-        NotificationCenter.default.addObserver(self, selector: #selector(didStoppedParentScroll), name: NSNotification.Name("didStoppedParentScroll"), object: nil)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setAddObserver()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self)
     }
     
     @objc
@@ -104,10 +105,41 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
         }
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
+    private func setAddObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(didStoppedParentScroll), name: NSNotification.Name("didStoppedParentScroll"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(editRecordName), name: .editRecordName, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(editRecordScript), name: .editRecordScript, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(addRecordResponse), name: .addRecordResponse, object: nil)
+    }
+    
+    @objc private func addRecordResponse(_ notification: Notification) {
         print(#function)
-        callMemoRequest()
+        guard let recordResponse = notification.object as? RecordResponse else { return }
+        fileItems.insert(recordResponse, at: 0)
+        fileItems.removeLast()
+        loadRecordings()
+    }
+    
+    @objc private func editRecordName(_ notification: Notification) {
+        guard let recordResponse = notification.object as? RecordResponse else { return }
+        
+        for index in fileItems.indices {
+            if fileItems[index].recordId == recordResponse.recordId {
+                fileItems[index].recordName = recordResponse.recordName
+                recordingFileTableView.reloadData()
+            }
+        }
+    }
+    
+    @objc private func editRecordScript(_ notification: Notification) {
+        guard let recordResponse = notification.object as? RecordResponse else { return }
+        
+        for index in fileItems.indices {
+            if fileItems[index].recordId == recordResponse.recordId {
+                fileItems[index].recordName = recordResponse.recordScript
+                recordingFileTableView.reloadData()
+            }
+        }
     }
     
     // 녹음 3개까지, 메모 조회
@@ -117,9 +149,9 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
             if error == nil {
                 guard let recordMemoDto = recordMemoDto else { return }
                 guard let result = recordMemoDto.result else { return }
-                print(result)
                 self.setMemo(memo: result.memo)
                 fileItems = result.recordDto
+                loadRecordings()
             } else {
                 guard let error = error else { return }
                 switch error {
@@ -137,9 +169,25 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
     }
     func loadRecordings() {
         emptyMessageLabel.isHidden = fileItems.isEmpty ? false : true
-        
+        switch fileItems.count {
+        case 0:
+            updateTableViewHeight(multi: 3)
+        case 1:
+            updateTableViewHeight(multi: 1)
+        case 2:
+            updateTableViewHeight(multi: 2)
+        case 3...:
+            updateTableViewHeight(multi: 3)
+        default:
+            updateTableViewHeight(multi: 3)
+        }
         recordingFileTableView.reloadData()
-//        updateTableViewHeight()
+    }
+    
+    private func updateTableViewHeight(multi: Int) {
+        recordingFileTableView.snp.updateConstraints { make in
+            make.height.equalTo(56 * multi)
+        }
     }
     
     func setMemo(memo: String?) {
@@ -176,13 +224,16 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
     
     @objc
     func showRecordingFilesVC() {
-        print(#function)
         let RecordingFilesVC = RecordingFilesViewController(imjangId: imjangId)
         self.navigationController?.pushViewController(RecordingFilesVC, animated: true)
     }
+    
     @objc
     func addRecordingFilesVC() {
         let bottomSheetViewController = BottomSheetViewController(imjangId: imjangId)
+        let warningMessageVC = WarningMessageViewController(imjangId: imjangId)
+        warningMessageVC.bottomSheetViewController = bottomSheetViewController
+        bottomSheetViewController.addContentViewController(warningMessageVC)
         bottomSheetViewController.modalPresentationStyle = .custom
         self.present(bottomSheetViewController, animated: false, completion: nil)
     }
@@ -242,8 +293,6 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
         
         designLabel(notePadLabel, text: "메모장", font: .pretendard(size: 20, weight: .bold), textColor: ColorStyle.textBlack)
         
-        recordingFileTableView.rowHeight = UITableView.automaticDimension
-        recordingFileTableView.estimatedRowHeight = 100
     }
     
     func setConstraints() {
@@ -289,6 +338,7 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
         recordingFileTableView.snp.makeConstraints {
             $0.top.equalTo(recordingHeaderStackView.snp.bottom).offset(12)
             $0.horizontalEdges.equalTo(contentView)
+            $0.height.equalTo(56 * 3)
         }
         
         notePadLabel.snp.makeConstraints {
@@ -363,14 +413,13 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
 extension RecordingRoomViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if fileItems.isEmpty {
-            return 0
-        } else if fileItems.count == 1{
-            return 1
-        } else if fileItems.count == 2{
-            return 2
-        } else {
-            return 3
+        print(#function, fileItems.count)
+        switch fileItems.count {
+        case 0: return 0
+        case 1: return 1
+        case 2: return 2
+        case 3...: return 3
+        default: return 0
         }
     }
     
@@ -379,8 +428,8 @@ extension RecordingRoomViewController: UITableViewDataSource, UITableViewDelegat
             return UITableViewCell()
         }
         cell.selectionStyle = .none
-        
         let fileItem = fileItems[indexPath.row]
+        print(fileItem.recordId)
         cell.setData(fileItem: fileItem)
         
         return cell
@@ -388,6 +437,17 @@ extension RecordingRoomViewController: UITableViewDataSource, UITableViewDelegat
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 56
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let recordResponse = fileItems[indexPath.row]
+        
+        let bottomSheetViewController = BottomSheetViewController(imjangId: imjangId)
+        let recordPlaybackVC = RecordPlaybackViewController(recordResponse: recordResponse)
+        recordPlaybackVC.bottomSheetViewController = bottomSheetViewController
+        bottomSheetViewController.addContentViewController(recordPlaybackVC)
+        bottomSheetViewController.modalPresentationStyle = .custom
+        self.present(bottomSheetViewController, animated: true, completion: nil)
     }
 }
 
@@ -418,6 +478,8 @@ extension RecordingRoomViewController: UITextViewDelegate {
         if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             textView.text = memoTextViewPlaceholder
             textView.textColor = ColorStyle.placeholderOrange
+            
+            callMemoRequest()
         }
     }
 }

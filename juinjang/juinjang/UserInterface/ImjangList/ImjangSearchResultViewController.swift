@@ -42,17 +42,7 @@ class ImjangSearchResultViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        setData()
         searchRequest()
-    }
-    
-    func setData() {
-//        for item in totalImjangList {
-//            if item.roomName.contains(searchKeyword) || item.location.contains(searchKeyword) {
-//                searchedImjangList.append(item)
-//            }
-//        }
-        
     }
     
     func searchRequest() {
@@ -190,18 +180,8 @@ extension ImjangSearchResultViewController: UISearchBarDelegate {
             return
         }
         saveSearchKeyword(keyword: text)
-//        for list in self.totalImjangList {
-//            if list.nickname.contains(text.lowercased()) || list.address.contains(text.lowercased()) {
-//                print("있음")
-//                searchedImjangList.append(list)
-//            } else if list.nickname.contains(text.uppercased()) || list.address.contains(text.uppercased()) {
-//                print("있음")
-//                searchedImjangList.append(list)
-//            }
-//        }
         searchKeyword = text
         searchRequest()
-//        searchedTableView.reloadData()
     }
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.text = ""
