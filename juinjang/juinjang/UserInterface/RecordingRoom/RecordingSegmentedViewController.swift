@@ -55,7 +55,6 @@ class RecordingSegmentedViewController: TabmanViewController, MoveWarningMessage
     func addViewControllers() {
         let checkListVC = CheckListViewController(imjangId: imjangId)
         let recordingRoomVC = RecordingRoomViewController(imjangId: imjangId)
-        recordingRoomVC.imjangId = imjangId
         viewControllers.append(contentsOf: [checkListVC, recordingRoomVC])
     }
 
@@ -132,21 +131,13 @@ extension RecordingSegmentedViewController: PageboyViewControllerDataSource, TMB
     func viewController(for pageboyViewController: Pageboy.PageboyViewController, at index: Pageboy.PageboyViewController.PageIndex) -> UIViewController? {
         
         let currentViewController = self.viewControllers[index]
-       
-        print("Current View Controller: \(currentViewController)")
         
         if currentViewController == self.viewControllers[0] {
-            print("현재 ViewController", currentViewController)
             imjangNoteViewController?.editButton.isHidden = false
             imjangNoteViewController?.upButton.isHidden = true
-            
         } else {
-            print("현재 ViewController", currentViewController)
             imjangNoteViewController?.editButton.isHidden = true
             imjangNoteViewController?.upButton.isHidden = false
-//            if let imjangId {
-//                imjangNoteViewController?.imjangId = imjangId
-//            }
         }
         return viewControllers[index]
     }
