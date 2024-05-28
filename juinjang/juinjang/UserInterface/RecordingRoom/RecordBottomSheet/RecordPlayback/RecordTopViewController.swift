@@ -134,8 +134,10 @@ class RecordTopViewController: UIViewController {
     
     private func editRecordScript(_ editedRecordScript: String) {
         let parameter = ["recordScript": editedRecordScript]
-        JuinjangAPIManager.shared.postData(type: BaseResponse<RecordResponse?>.self, api: .editRecordContent(recordId: recordResponse.recordId, content: editedRecordScript), parameter: parameter) { response, error in
+        JuinjangAPIManager.shared.postData(type: BaseResponse<RecordResponse?>.self, api: .editRecordContent(recordId: recordResponse.recordId, content: editedRecordScript), parameter: parameter) { [weak self] response, error in
+            guard let self else { return }
             if error == nil {
+                NotificationCenter.default.post(name: .editRecordScript, object: recordResponse)
             } else {
                 guard let error = error else { return }
                 switch error {

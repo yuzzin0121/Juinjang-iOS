@@ -69,6 +69,8 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudio
     var progressTimer : Timer? //타이머를 위한 변수
     var recordTime : String = ""
     var recordResponse: RecordResponse
+    let playerManager = AudioPlayerManager()
+    
     
     init(recordResponse: RecordResponse) {
         self.recordResponse = recordResponse
@@ -81,6 +83,13 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudio
     
     deinit {
         print(String(describing: self), "deinit")
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        progressTimer?.invalidate()
+        progressTimer = nil
+        playerManager.stopPlaying()
     }
     
     override func viewDidLoad() {
@@ -102,19 +111,19 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudio
     
     func initPlay(){
         guard let recordUrl = URL(string: recordResponse.recordUrl) else { return }
-        AudioPlayerManager.shared.setPlayer(recordingURL: recordUrl)
+        playerManager.setPlayer(recordingURL: recordUrl)
         
         recordingSlider.value = 0
     }
     
     @objc func updatePlayTime() {
-        guard let currentTime = AudioPlayerManager.shared.getCurrentTime(), let duration = AudioPlayerManager.shared.getDuration() else { return }
+        guard let currentTime = playerManager.getCurrentTime(), let duration = playerManager.getDuration() else { return }
         elapsedTimeLabel.text = String.formatSeconds(Int(currentTime))
         recordingSlider.value = Float(currentTime / duration)
         if currentTime == duration {
             recordingSlider.value = 0
             elapsedTimeLabel.text = String.formatSeconds(0)
-            AudioPlayerManager.shared.setCurrentTime(time: 0)
+            playerManager.setCurrentTime(time: 0)
             playButton.setImage(UIImage(named: "record-button"), for: .normal)
             playButton.isSelected.toggle()
             progressTimer?.invalidate()
@@ -139,9 +148,11 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudio
     
     private func editRecordName(_ editedRecordName: String) {
         let parameter = ["recordName": editedRecordName]
-        JuinjangAPIManager.shared.postData(type: BaseResponse<RecordResponse?>.self, api: .editRecordName(recordId: recordResponse.recordId, recordName: editedRecordName), parameter: parameter) { response, error in
+        JuinjangAPIManager.shared.postData(type: BaseResponse<RecordResponse?>.self, api: .editRecordName(recordId: recordResponse.recordId, recordName: editedRecordName), parameter: parameter) { [weak self] response, error in
+            guard let self else { return }
             if error == nil {
-                print(response)
+                print("post editRecordName")
+                NotificationCenter.default.post(name: .editRecordName, object: recordResponse)
             } else {
                 guard let error = error else { return }
                 switch error {
@@ -161,11 +172,11 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudio
     @objc func startRecordPressed(_ sender: UIButton) {
         playButton.isSelected.toggle()
         if playButton.isSelected {
-            AudioPlayerManager.shared.startPlaying()
+            playerManager.startPlaying()
             progressTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(updatePlayTime), userInfo: nil, repeats: true)
             playButton.setImage(UIImage(named: "being-recorded-button"), for: .normal)
         } else {
-            AudioPlayerManager.shared.pausePlaying()
+            playerManager.pausePlaying()
             progressTimer?.invalidate()
             progressTimer = nil
             playButton.setImage(UIImage(named: "record-button"), for: .normal)
@@ -173,29 +184,29 @@ class RecordBottomViewController: UIViewController, UITextFieldDelegate, AVAudio
     }
     
     @objc private func dragedSlider() {
-        guard let duration = AudioPlayerManager.shared.getDuration() else { return }
+        guard let duration = playerManager.getDuration() else { return }
         let newTime = TimeInterval(recordingSlider.value) * duration
-        AudioPlayerManager.shared.setCurrentTime(time: newTime)
+        playerManager.setCurrentTime(time: newTime)
     }
     
     @objc private func rewindButtonTapped() {
-        guard let currentTime = AudioPlayerManager.shared.getCurrentTime(), let duration = AudioPlayerManager.shared.getDuration() else { return }
+        guard let currentTime = playerManager.getCurrentTime(), let duration = playerManager.getDuration() else { return }
         var rewindValue = currentTime - 10
         if rewindValue < 0 {
             rewindValue = 0
         }
-        AudioPlayerManager.shared.setCurrentTime(time: rewindValue)
+        playerManager.setCurrentTime(time: rewindValue)
         elapsedTimeLabel.text = String.formatSeconds(Int(rewindValue))
         recordingSlider.value = Float(rewindValue / duration)
     }
     
     @objc private func fastForwardButtonTapped() {
-        guard let currentTime = AudioPlayerManager.shared.getCurrentTime(), let duration = AudioPlayerManager.shared.getDuration() else { return }
+        guard let currentTime = playerManager.getCurrentTime(), let duration = playerManager.getDuration() else { return }
         var fastForwardValue = currentTime + 10
         if fastForwardValue > duration {
             fastForwardValue = duration
         }
-        AudioPlayerManager.shared.setCurrentTime(time: fastForwardValue)
+        playerManager.setCurrentTime(time: fastForwardValue)
         elapsedTimeLabel.text = String.formatSeconds(Int(fastForwardValue))
         recordingSlider.value = Float(fastForwardValue / duration)
     }

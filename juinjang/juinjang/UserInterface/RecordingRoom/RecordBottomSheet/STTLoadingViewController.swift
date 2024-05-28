@@ -84,6 +84,7 @@ class STTLoadingViewController: UIViewController {
                     switch result {
                     case .success(let recordResponse):
                         print(recordResponse)
+                        NotificationCenter.default.post(name: .addRecordResponse, object: recordResponse)
                         showPlaybackVC(recordResponse: recordResponse)
                     case .failure(let failure):
                         print("실패...>!!!!!")

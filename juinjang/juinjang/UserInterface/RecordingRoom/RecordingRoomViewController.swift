@@ -94,7 +94,16 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
         showTotalRecordingButton.addTarget(self, action: #selector(showRecordingFilesVC), for: .touchUpInside)
         addRecordingButton.addTarget(self, action: #selector(addRecordingFilesVC), for: .touchUpInside)
         callFetchRequest()
-        NotificationCenter.default.addObserver(self, selector: #selector(didStoppedParentScroll), name: NSNotification.Name("didStoppedParentScroll"), object: nil)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setAddObserver()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self)
     }
     
     @objc
@@ -108,6 +117,41 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
         super.viewDidDisappear(animated)
         print(#function)
         callMemoRequest()
+    }
+    
+    private func setAddObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(didStoppedParentScroll), name: NSNotification.Name("didStoppedParentScroll"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(editRecordName), name: .editRecordName, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(editRecordScript), name: .editRecordScript, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(addRecordResponse), name: .addRecordResponse, object: nil)
+    }
+    
+    @objc private func addRecordResponse(_ notification: Notification) {
+        print(#function)
+        guard let recordResponse = notification.object as? RecordResponse else { return }
+        fileItems.append(recordResponse)
+    }
+    
+    @objc private func editRecordName(_ notification: Notification) {
+        print(#function)
+        guard let recordResponse = notification.object as? RecordResponse else { return }
+        
+        for index in fileItems.indices {
+            if fileItems[index].recordId == recordResponse.recordId {
+                fileItems[index].recordName = recordResponse.recordName
+            }
+        }
+    }
+    
+    @objc private func editRecordScript(_ notification: Notification) {
+        print(#function)
+        guard let recordResponse = notification.object as? RecordResponse else { return }
+        
+        for index in fileItems.indices {
+            if fileItems[index].recordId == recordResponse.recordId {
+                fileItems[index].recordName = recordResponse.recordScript
+            }
+        }
     }
     
     // 녹음 3개까지, 메모 조회

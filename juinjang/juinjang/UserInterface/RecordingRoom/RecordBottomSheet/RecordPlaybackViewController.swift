@@ -55,22 +55,18 @@ class RecordPlaybackViewController: UIViewController {
         bottomSheetView.backgroundColor = UIColor(named: "textBlack")
         addSubViews()
         setupLayout()
-        print("bottomSheetTotalHeight: \(bottomSheetTotalHeight)")
-        print("topHeight: \(topHeight)")
-        print("bottomHeight: \(bottomHeight)")
     }
     
     
     func addSubViews() {
+        addChild(topViewController)
+        addChild(bottomViewController)
         view.addSubview(bottomSheetView)
         bottomSheetView.addSubview(topViewController.view)
         bottomSheetView.addSubview(bottomViewController.view)
         
         topViewController.bottomSheetViewController = bottomSheetViewController
         bottomViewController.topViewController = topViewController
-        
-        addChild(topViewController)
-        addChild(bottomViewController)
         
         topViewController.didMove(toParent: self)
         bottomViewController.didMove(toParent: self)
@@ -81,7 +77,6 @@ class RecordPlaybackViewController: UIViewController {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.bottom.equalTo(view.snp.bottom)
-//            $0.height.equalTo(bottomSheetTotalHeight)
         }
         
         // Top View Controller
