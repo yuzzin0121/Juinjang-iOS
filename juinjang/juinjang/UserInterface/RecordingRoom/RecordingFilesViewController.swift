@@ -38,7 +38,6 @@ class RecordingFilesViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -49,6 +48,27 @@ class RecordingFilesViewController: UIViewController {
         setDelegate()
         fetchRecordFiles()
         refreshControl.addTarget(self, action: #selector(refreshFiles), for: .valueChanged)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        NotificationCenter.default.addObserver(self, selector: #selector(editRecordName), name: .editRecordName, object: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc private func editRecordName(_ notification: Notification) {
+        print(#function)
+        guard let recordResponse = notification.object as? RecordResponse else { return }
+        
+        for index in fileItems.indices {
+            if fileItems[index].recordId == recordResponse.recordId {
+                fileItems[index].recordName = recordResponse.recordName
+            }
+        }
     }
     
     @objc private func refreshFiles() {

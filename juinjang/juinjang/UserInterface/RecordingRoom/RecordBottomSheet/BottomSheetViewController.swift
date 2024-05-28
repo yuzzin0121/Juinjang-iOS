@@ -42,8 +42,8 @@ class BottomSheetViewController: UIViewController {
     }
     
     func addContentViewController(_ viewController: UIViewController) {
-        self.addChild(viewController)
-        self.view.addSubview(viewController.view)
+        addChild(viewController)
+        view.addSubview(viewController.view)
         viewController.didMove(toParent: self)
         
         // Content View Controller의 레이아웃 설정

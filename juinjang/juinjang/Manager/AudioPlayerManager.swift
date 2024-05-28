@@ -8,23 +8,24 @@
 import Foundation
 import AVFoundation
 
-final class AudioPlayerManager: NSObject, AVAudioPlayerDelegate {
-    static let shared = AudioPlayerManager()
-    
-    private override init() { 
-        super.init()
-    }
+final class AudioPlayerManager: NSObject {
     
     var audioPlayer: AVPlayer?     // 음성 재생 객체
-    var isPlaying = false
-    var isPaused = false
     
-    var recordedFiles = [URL]()
+    deinit {
+        print(String(String(describing: self)), "deinit")
+        resetPlayer()
+    }
     
     // 재생 시작
     func setPlayer(recordingURL: URL) {
         audioPlayer = AVPlayer(url: recordingURL)
         audioPlayer?.actionAtItemEnd = .pause
+    }
+    
+    func resetPlayer() {
+        stopPlaying()
+        audioPlayer = nil
     }
     
     func stopPlaying() {
@@ -34,14 +35,10 @@ final class AudioPlayerManager: NSObject, AVAudioPlayerDelegate {
     
     func pausePlaying() {
         audioPlayer?.pause()
-        isPaused = true
-        isPlaying = false
     }
     
     func startPlaying() {
         audioPlayer?.play()
-        isPaused = false
-        isPlaying = true
     }
     
     func getCurrentTime() -> TimeInterval? {
@@ -66,10 +63,5 @@ final class AudioPlayerManager: NSObject, AVAudioPlayerDelegate {
                print("Failed to seek to time: \(time) seconds")
            }
        }
-    }
-    
-    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        isPlaying = false
-        isPaused = false
     }
 }

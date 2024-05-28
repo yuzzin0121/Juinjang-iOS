@@ -8,5 +8,5 @@
 import Foundation
 
 extension Notification.Name {
-    static let editRecordName: Notification.Name = .editRecordName
+    static let editRecordName: Notification.Name = Notification.Name("editRecordName")
 }
