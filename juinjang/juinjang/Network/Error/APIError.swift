@@ -8,7 +8,7 @@
 import Foundation
 
 enum APIError: Int, Error, LocalizedError {
-    case accessTokenExpired = 401
+    case accessTokenExpired = 419
     case refreshTokenExpired = 418
     
     var errorDescription: String? {
