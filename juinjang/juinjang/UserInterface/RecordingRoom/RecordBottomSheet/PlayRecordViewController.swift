@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class PlayRecordViewController: UIViewController, UITextFieldDelegate{
+class PlayRecordViewController: BaseViewController, UITextFieldDelegate{
 
     lazy var bottomSheetView = UIView().then {
         $0.backgroundColor = .white
@@ -36,7 +36,7 @@ class PlayRecordViewController: UIViewController, UITextFieldDelegate{
     
     init(recordResponse: RecordResponse) {
         self.recordResponse = recordResponse
-        super.init(nibName: nil, bundle: nil)
+        super.init()
     }
     
     required init?(coder: NSCoder) {

@@ -14,7 +14,7 @@ struct Recording {
     var fileURL: URL
 }
 
-class RecordViewController: UIViewController, AVAudioRecorderDelegate {
+class RecordViewController: BaseViewController, AVAudioRecorderDelegate {
     
     lazy var bottomSheetView = UIView().then {
         $0.backgroundColor = .white
@@ -95,11 +95,15 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
     
     init(imjangId: Int) {
         self.imjangId = imjangId
-        super.init(nibName: nil, bundle: nil)
+        super.init()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        print(String(describing: self), "deinit")
     }
     
     override func viewDidLoad() {

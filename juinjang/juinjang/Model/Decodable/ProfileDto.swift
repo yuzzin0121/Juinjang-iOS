@@ -12,3 +12,9 @@ struct ProfileDto {
     let email: String
     let provider: String
 }
+
+struct RefreshDto: Codable {
+    let accessToken: String
+    let refreshToken: String
+    let nickname: String
+}

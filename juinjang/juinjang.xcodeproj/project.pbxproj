@@ -138,6 +138,9 @@
 		616D481F2BFC8CF40073029A /* RecordRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D481E2BFC8CF40073029A /* RecordRequestDTO.swift */; };
 		616D48212BFC8D0F0073029A /* RecordResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D48202BFC8D0F0073029A /* RecordResponseDTO.swift */; };
 		616F1E4B2C00EAD40049461F /* NotificationName+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616F1E4A2C00EAD40049461F /* NotificationName+Extension.swift */; };
+		616F1E4D2C071F240049461F /* AuthInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616F1E4C2C071F240049461F /* AuthInterceptor.swift */; };
+		616F1E502C0724CD0049461F /* APIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616F1E4F2C0724CD0049461F /* APIError.swift */; };
+		616F1E532C07291D0049461F /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616F1E522C07291D0049461F /* BaseViewController.swift */; };
 		61864BE22B5FFA890073C175 /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61864BE12B5FFA890073C175 /* UIImageView+Extension.swift */; };
 		61864BEA2B6003520073C175 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61864BE92B6003520073C175 /* UIButton+Extension.swift */; };
 		61864BEF2B600E920073C175 /* ImjangNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61864BEE2B600E920073C175 /* ImjangNote.swift */; };
@@ -298,6 +301,9 @@
 		616D481E2BFC8CF40073029A /* RecordRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordRequestDTO.swift; sourceTree = "<group>"; };
 		616D48202BFC8D0F0073029A /* RecordResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordResponseDTO.swift; sourceTree = "<group>"; };
 		616F1E4A2C00EAD40049461F /* NotificationName+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationName+Extension.swift"; sourceTree = "<group>"; };
+		616F1E4C2C071F240049461F /* AuthInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthInterceptor.swift; sourceTree = "<group>"; };
+		616F1E4F2C0724CD0049461F /* APIError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIError.swift; sourceTree = "<group>"; };
+		616F1E522C07291D0049461F /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		61864BE12B5FFA890073C175 /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
 		61864BE92B6003520073C175 /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
 		61864BEE2B600E920073C175 /* ImjangNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImjangNote.swift; sourceTree = "<group>"; };
@@ -433,6 +439,7 @@
 		0A3D5D5D2B4D376C00574686 /* UserInterface */ = {
 			isa = PBXGroup;
 			children = (
+				616F1E512C0729140049461F /* Base */,
 				346CF6AC2B70B41F00C70C7A /* Splash */,
 				3458556E2B6899D300432C06 /* Main */,
 				619269D22B6773FE00D4DD3E /* ImjangList */,
@@ -661,9 +668,11 @@
 		6108CFDD2B761A8A00EF302F /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				616F1E4E2C0724C50049461F /* Error */,
 				616D48162BFB423C0073029A /* Query */,
 				6108CFDE2B761AA300EF302F /* JuinjangAPI.swift */,
 				6108CFF92B76395B00EF302F /* JuinjangAPIManager.swift */,
+				616F1E4C2C071F240049461F /* AuthInterceptor.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -775,6 +784,22 @@
 				616D481E2BFC8CF40073029A /* RecordRequestDTO.swift */,
 			);
 			path = Query;
+			sourceTree = "<group>";
+		};
+		616F1E4E2C0724C50049461F /* Error */ = {
+			isa = PBXGroup;
+			children = (
+				616F1E4F2C0724CD0049461F /* APIError.swift */,
+			);
+			path = Error;
+			sourceTree = "<group>";
+		};
+		616F1E512C0729140049461F /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				616F1E522C07291D0049461F /* BaseViewController.swift */,
+			);
+			path = Base;
 			sourceTree = "<group>";
 		};
 		619269D22B6773FE00D4DD3E /* ImjangList */ = {
@@ -1037,6 +1062,7 @@
 				6108D0012B78A83B00EF302F /* String+Extension.swift in Sources */,
 				346CF6AE2B70B46B00C70C7A /* SplashViewController.swift in Sources */,
 				3458558C2B689E1E00432C06 /* LogoutPopupViewController.swift in Sources */,
+				616F1E532C07291D0049461F /* BaseViewController.swift in Sources */,
 				619269EA2B67745900D4DD3E /* ColorStyle.swift in Sources */,
 				61D9250A2B49506D002A16B4 /* RecordingFilesViewController.swift in Sources */,
 				345855762B689AAE00432C06 /* TopTableViewCell.swift in Sources */,
@@ -1052,6 +1078,7 @@
 				0A24711D2B69147200A7382B /* ToSDetailViewController.swift in Sources */,
 				0A7AC0F12B6412760032C9DF /* KakaoZipCodeViewController.swift in Sources */,
 				0A4EBE382B5EDD6F00909B7A /* ExpandedTextFieldTableViewCell.swift in Sources */,
+				616F1E502C0724CD0049461F /* APIError.swift in Sources */,
 				345855A42B69E44D00432C06 /* NoMaemullPopupView.swift in Sources */,
 				0A554CE42B5420F20023BB49 /* WarningMessageViewController.swift in Sources */,
 				0A14E3712B56B31A0008FD28 /* SetNickNameViewController.swift in Sources */,
@@ -1119,6 +1146,7 @@
 				0A24711F2B6924BA00A7382B /* RecordingRightsViewController.swift in Sources */,
 				0AB34CC12B4F11B000150A15 /* OpenNewPage2ViewController.swift in Sources */,
 				0A1EC48E2B6AE1FF009248E4 /* NotEnteredCalendarTableViewCell.swift in Sources */,
+				616F1E4D2C071F240049461F /* AuthInterceptor.swift in Sources */,
 				0A24711B2B68FCF700A7382B /* SignupPopupViewController.swift in Sources */,
 				619269F62B67747F00D4DD3E /* SearchKeywordHeaderView.swift in Sources */,
 				616409022B407FB300EC3B5E /* UIFont+Pretendard.swift in Sources */,

@@ -8,7 +8,7 @@
 import UIKit
 import AVFoundation
 
-class RecordingFilesViewController: UIViewController {
+class RecordingFilesViewController: BaseViewController {
     
     private let recordingFileTableView = UITableView().then {
         $0.showsVerticalScrollIndicator = false
@@ -31,13 +31,12 @@ class RecordingFilesViewController: UIViewController {
     
     init(imjangId: Int) {
         self.imjangId = imjangId
-        super.init(nibName: nil, bundle: nil)
+        super.init()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,6 +48,50 @@ class RecordingFilesViewController: UIViewController {
         setDelegate()
         fetchRecordFiles()
         refreshControl.addTarget(self, action: #selector(refreshFiles), for: .valueChanged)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setAddObserver()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    private func setAddObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(editRecordName), name: .editRecordName, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(editRecordScript), name: .editRecordScript, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(addRecordResponse), name: .addRecordResponse, object: nil)
+    }
+    
+    @objc private func addRecordResponse(_ notification: Notification) {
+        print(#function)
+        guard let recordResponse = notification.object as? RecordResponse else { return }
+        fileItems.insert(recordResponse, at: 0)
+    }
+    
+    @objc private func editRecordName(_ notification: Notification) {
+        print(#function)
+        guard let recordResponse = notification.object as? RecordResponse else { return }
+        
+        for index in fileItems.indices {
+            if fileItems[index].recordId == recordResponse.recordId {
+                fileItems[index].recordName = recordResponse.recordName
+            }
+        }
+    }
+      
+    @objc private func editRecordScript(_ notification: Notification) {
+        print(#function)
+        guard let recordResponse = notification.object as? RecordResponse else { return }
+        
+        for index in fileItems.indices {
+            if fileItems[index].recordId == recordResponse.recordId {
+                fileItems[index].recordName = recordResponse.recordScript
+            }
+        }
     }
     
     @objc private func refreshFiles() {
@@ -111,8 +154,10 @@ class RecordingFilesViewController: UIViewController {
     
     @objc func startRecording(_ sender: Any) {
         let bottomSheetViewController = BottomSheetViewController(imjangId: imjangId)
+        let warningMessageVC = WarningMessageViewController(imjangId: imjangId)
+        warningMessageVC.bottomSheetViewController = bottomSheetViewController
+        bottomSheetViewController.addContentViewController(warningMessageVC)
         bottomSheetViewController.modalPresentationStyle = .custom
-//        bottomSheetViewController.transitioningDelegate = self
         self.present(bottomSheetViewController, animated: false, completion: nil)
     }
  
@@ -197,18 +242,14 @@ extension RecordingFilesViewController: UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // 새로운 뷰 컨트롤러를 생성하고 데이터를 전달합니다.
-        let vc = BottomSheetViewController(imjangId: imjangId)
-        vc.modalPresentationStyle = .custom
+        let recordResponse = fileItems[indexPath.row]
         
-//        let playVC = PlayRecordViewController(recordResponse: <#RecordResponse#>)
-//        playVC.bottomViewController.audioFile = recordings[indexPath.row].fileURL
-//        playVC.bottomViewController.titleTextField.text = recordings[indexPath.row].title
-//        playVC.bottomViewController.recordingIndexPath = indexPath
-//        vc.transitionToViewController(playVC)
-        
-        // 새로운 뷰 컨트롤러를 present 합니다.
-        present(vc, animated: true, completion: nil)
+        let bottomSheetViewController = BottomSheetViewController(imjangId: imjangId)
+        let recordPlaybackVC = RecordPlaybackViewController(recordResponse: recordResponse)
+        recordPlaybackVC.bottomSheetViewController = bottomSheetViewController
+        bottomSheetViewController.addContentViewController(recordPlaybackVC)
+        bottomSheetViewController.modalPresentationStyle = .custom
+        self.present(bottomSheetViewController, animated: true, completion: nil)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

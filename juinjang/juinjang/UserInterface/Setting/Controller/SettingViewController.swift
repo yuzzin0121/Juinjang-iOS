@@ -24,7 +24,7 @@ struct ResultModel: Codable {
     let image: String
 }
 
-class SettingViewController : UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class SettingViewController : BaseViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     static let id = "SettingViewController"
     
@@ -197,7 +197,7 @@ class SettingViewController : UIViewController, UIImagePickerControllerDelegate,
             
             AF.upload(multipartFormData: { multipartFormData in
                 multipartFormData.append(imageData, withName: "multipartFile", fileName: "image.jpg", mimeType: "image/jpeg")
-            }, to: "http://juinjang1227.com:8080/api/profile/image", method: .patch, headers: headers)
+            }, to: "http://juinjang1227.com:8080/api/profile/image", method: .patch, headers: headers, interceptor: AuthInterceptor())
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
@@ -221,7 +221,7 @@ class SettingViewController : UIViewController, UIImagePickerControllerDelegate,
         let urlString = "http://juinjang1227.com:8080/api/auth/logout"
         // Authorization 헤더에 포함할 토큰
         // HTTP 요청 보내기
-        AF.request(urlString, method: .post, headers: HTTPHeaders(["Authorization": "Bearer \(UserDefaultManager.shared.refreshToken)"])).responseData { response in
+        AF.request(urlString, method: .post, headers: HTTPHeaders(["Authorization": "Bearer \(UserDefaultManager.shared.refreshToken)"]), interceptor: AuthInterceptor()).responseData { response in
             switch response.result {
             case .success(let data):
                 // 응답 확인
@@ -360,7 +360,7 @@ class SettingViewController : UIViewController, UIImagePickerControllerDelegate,
 
         let urlString = "http://juinjang1227.com:8080/api/nickname"
 
-        AF.request(urlString, method: .patch, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+        AF.request(urlString, method: .patch, parameters: parameters, encoding: JSONEncoding.default, headers: headers, interceptor: AuthInterceptor())
             .responseString(encoding: .utf8) { response in
                 switch response.result {
                 case .success(let value):
@@ -404,7 +404,7 @@ class SettingViewController : UIViewController, UIImagePickerControllerDelegate,
                     print("Error: \(error)")
                 }
             }
-        MainViewController().refreshToken()
+//        MainViewController().refreshToken()
     }
     
     func designNavigationBar() {

@@ -9,7 +9,7 @@ import UIKit
 import Then
 import SnapKit
 
-class AccountDeleteFinalViewController: UIViewController {
+class AccountDeleteFinalViewController: BaseViewController {
     
     var accountDeleteFinalView = UIView().then {
         $0.backgroundColor = .white

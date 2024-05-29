@@ -14,7 +14,11 @@ enum Section: Int, CaseIterable {
     case list
 }
 
-class ImjangListViewController: UIViewController {
+protocol SendFilterItemDelegate: AnyObject {
+    func sendFilterItem(filter: Filter)
+}
+
+final class ImjangListViewController: BaseViewController {
     
     // 임장 노트가 존재하지 않을 때의 뷰
     let emptyBackgroundView = UIView()
@@ -27,15 +31,14 @@ class ImjangListViewController: UIViewController {
         
         var container = AttributeContainer()
         container.font = .pretendard(size: 14, weight: .semiBold)
-        container.foregroundColor = ColorStyle.darkGray
         configuration.attributedTitle = AttributedString(filterList[0].title, attributes: container)
-        configuration.imagePadding = 2
+        configuration.baseBackgroundColor = ColorStyle.textWhite
+        configuration.baseForegroundColor = ColorStyle.darkGray
+        configuration.image = ImageStyle.arrowDown
+        configuration.image?.withTintColor(ColorStyle.darkGray)
+        configuration.imagePlacement = .trailing
+        configuration.imagePadding = 6
         let button = UIButton(configuration: configuration, primaryAction: nil)
-        button.setTitleColor(ColorStyle.darkGray, for: .normal)
-        button.setImage(ImageStyle.arrowDown, for: .normal)
-        button.semanticContentAttribute = .forceRightToLeft
-        button.contentHorizontalAlignment = .leading
-        button.tintColor = .white
         return button
     }()
     
@@ -92,11 +95,11 @@ class ImjangListViewController: UIViewController {
         setFilterData()
 //        imjangTableView.reloadData()
         newPageButton.addTarget(self, action: #selector(showNewPageVC), for: .touchUpInside)
+        callRequest(setScrap: true)   // 서버 요청 (total Imjang List)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        callRequest()   // 서버 요청 (total Imjang List)
     }
     
     @objc func showNewPageVC() {
@@ -104,14 +107,15 @@ class ImjangListViewController: UIViewController {
         navigationController?.pushViewController(openNewPageVC, animated: true)
     }
     
-    func callRequest() {
-        
-        JuinjangAPIManager.shared.fetchData(type: BaseResponse<TotalListDto>.self, api: .totalImjang(sort: Filter.update.sortValue)) { response, error in
+    func callRequest(sort: Filter = .update, setScrap: Bool = false) {
+        JuinjangAPIManager.shared.fetchData(type: BaseResponse<TotalListDto>.self, api: .totalImjang(sort: sort.sortValue)) { response, error in
             if error == nil {
                 guard let response = response else { return }
                 guard let result = response.result else { return }
                 self.imjangList = result.limjangList
-                self.setData(scrapedList: result.limjangList)   // 스크랩된것들 scrapList에 추가
+                if setScrap {
+                    self.setData(scrapedList: result.limjangList)   // 스크랩된것들 scrapList에 추가
+                }
                 self.setEmptyUI(isEmpty: self.imjangList.isEmpty)
                 self.imjangTableView.reloadData()
             } else {
@@ -156,9 +160,11 @@ class ImjangListViewController: UIViewController {
     // MARK: - Set Data
     func setFilterData() {
         for filter in filterList {
-            menuChildren.append(UIAction(title: filter.title, state: .off,handler: {  (action: UIAction) in
+            menuChildren.append(UIAction(title: filter.title, state: .off,handler: { [weak self] (action: UIAction) in
+                guard let self else { return }
                 self.changefilterTitle(filter.title)
-                self.callRequestFiltered(sort: filter)
+                NotificationCenter.default.post(name: .imjangListFilterTapped, object: nil, userInfo: ["title":filter.title])
+                callRequest(sort: filter)
             }))
         }
         filterselectBtn.menu = UIMenu(options: .displayAsPalette, preferredElementSize: .small ,children: menuChildren)
@@ -167,17 +173,10 @@ class ImjangListViewController: UIViewController {
     }
     
     func changefilterTitle(_ title: String) {
-        var config = filterselectBtn.configuration
         var container = AttributeContainer()
         container.font = .pretendard(size: 14, weight: .semiBold)
-        container.foregroundColor = ColorStyle.darkGray
-        config?.attributedTitle = AttributedString(title, attributes: container)
-        config?.imagePadding = 2
-        filterselectBtn.configuration = config
-    }
-    
-    func callRequestFiltered(sort: Filter) {
-        
+        filterselectBtn.configuration?.title = title
+        filterselectBtn.configuration?.attributedTitle = AttributedString(title, attributes: container)
     }
     
     @objc func showDeleteImjangVC() {
@@ -247,7 +246,7 @@ extension ImjangListViewController: UITableViewDelegate, UITableViewDataSource {
         
         let filterY = scrapImjangList.isEmpty ? 132.0 : 280.0
         // 필터뷰의 시작 Y를 통해 sticky 타이밍을 계산
-        let shouldShowSticky = scrollView.contentOffset.y >= filterY
+        let shouldShowSticky = scrollView.contentOffset.y >= 268.0
         
         stickyfilterBackgroundView.isHidden = !shouldShowSticky
     }
@@ -275,6 +274,8 @@ extension ImjangListViewController: UITableViewDelegate, UITableViewDataSource {
             }
 
             imjangListHeaderView.deleteButton.addTarget(self, action: #selector(showDeleteImjangVC), for: .touchUpInside)
+            imjangListHeaderView.sendFilterItemDelegate = self
+            imjangListHeaderView.addFilterObserver()
 
             return imjangListHeaderView
         }
@@ -354,6 +355,14 @@ extension ImjangListViewController: UICollectionViewDelegate, UICollectionViewDa
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let item = scrapImjangList[indexPath.row]
         showImjangNoteVC(imjangId: item.limjangId)
+    }
+}
+
+extension ImjangListViewController: SendFilterItemDelegate {
+    func sendFilterItem(filter: Filter) {
+        print(#function)
+        changefilterTitle(filter.title)
+        callRequest(sort: filter)
     }
 }
 

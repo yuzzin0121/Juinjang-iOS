@@ -16,7 +16,7 @@ import KakaoSDKUser
 
 import AuthenticationServices
 
-class SignUpViewController: UIViewController {
+class SignUpViewController: BaseViewController {
 
     lazy var juinjangLogoImage = UIImageView().then {
         $0.image = UIImage(named: "juinjang-logo-image")
@@ -125,7 +125,7 @@ class SignUpViewController: UIViewController {
         let urlString = "http://juinjang1227.com:8080/api/profile"
         
         // HTTP 요청 보내기
-        AF.request(urlString, method: .get, headers: HTTPHeaders(["Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"])).responseData { [self] response in
+        AF.request(urlString, method: .get, headers: HTTPHeaders(["Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"]), interceptor: AuthInterceptor()).responseData { [self] response in
             switch response.result {
             case .success(let data):
                 // 응답 확인
@@ -235,7 +235,7 @@ extension SignUpViewController{
         let url = "http://juinjang1227.com:8080/api/auth/kakao/login"
         let requestBody = RequestBody(email: email, nickname: nickname)
             
-        AF.request(url, method: .post, parameters: requestBody, encoder: JSONParameterEncoder.default)
+        AF.request(url, method: .post, parameters: requestBody, encoder: JSONParameterEncoder.default, interceptor: AuthInterceptor())
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):

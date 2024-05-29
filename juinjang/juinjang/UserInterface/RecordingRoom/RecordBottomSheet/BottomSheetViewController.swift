@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import AVFoundation
 
-class BottomSheetViewController: UIViewController {
+class BottomSheetViewController: BaseViewController {
     
     weak var currentViewController: UIViewController?
     
@@ -21,11 +21,15 @@ class BottomSheetViewController: UIViewController {
     
     init(imjangId: Int) {
         self.imjangId = imjangId
-        super.init(nibName: nil, bundle: nil)
+        super.init()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        print(String(describing: self), "deinit")
     }
     
     // MARK: Life Cycle
@@ -35,15 +39,11 @@ class BottomSheetViewController: UIViewController {
         setupLayout()
         
         dimmedView.alpha = 0.0
-        
-        let warningMessageVC = WarningMessageViewController(imjangId: imjangId)
-        warningMessageVC.bottomSheetViewController = self
-        addContentViewController(warningMessageVC)
     }
     
-    private func addContentViewController(_ viewController: UIViewController) {
-        self.addChild(viewController)
-        self.view.addSubview(viewController.view)
+    func addContentViewController(_ viewController: UIViewController) {
+        addChild(viewController)
+        view.addSubview(viewController.view)
         viewController.didMove(toParent: self)
         
         // Content View Controller의 레이아웃 설정

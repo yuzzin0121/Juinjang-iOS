@@ -9,7 +9,7 @@ import UIKit
 import Then
 import SnapKit
 
-class ImjangSearchViewController: UIViewController {
+class ImjangSearchViewController: BaseViewController {
     let searchController = UISearchController(searchResultsController: nil)
     let searchBar: UISearchBar = {
         let searchBar = UISearchBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width * 0.82, height: 0))

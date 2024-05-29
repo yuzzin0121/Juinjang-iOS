@@ -8,7 +8,7 @@ import UIKit
 import Then
 import SnapKit
 
-class SelectMaemullViewController : UIViewController {
+class SelectMaemullViewController : BaseViewController {
     
     var contentView = UIView().then {
         $0.backgroundColor = .white

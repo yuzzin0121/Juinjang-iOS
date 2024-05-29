@@ -14,7 +14,7 @@ protocol WarningMessageDelegate: AnyObject {
     func navigateBack()
 }
 
-class OpenNewPagePopupViewController: UIViewController {
+class OpenNewPagePopupViewController: BaseViewController {
     
     weak var warningDelegate: WarningMessageDelegate?
     

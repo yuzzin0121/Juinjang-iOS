@@ -2,7 +2,7 @@
 import UIKit
 import Pageboy
 
-class CompareSearchViewController: UIViewController {
+class CompareSearchViewController: BaseViewController {
     var searchBar = UISearchBar().then{
         $0.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width * 0.82, height: 0)
         $0.placeholder = "집 별명이나 주소를 검색해보세요"
