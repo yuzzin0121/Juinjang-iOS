@@ -8,11 +8,11 @@
 import UIKit
 import SnapKit
 
-class DimmedViewController: UIViewController {
+class DimmedViewController: BaseViewController {
     private let dimmedView = UIView()
     
-    init() {
-        super.init(nibName: nil, bundle: nil)
+    override init() {
+        super.init()
         modalTransitionStyle = .coverVertical
         modalPresentationStyle = .overFullScreen
     }

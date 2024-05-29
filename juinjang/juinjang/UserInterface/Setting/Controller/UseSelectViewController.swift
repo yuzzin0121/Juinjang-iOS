@@ -8,7 +8,7 @@ import UIKit
 import Then
 import SnapKit
 
-class UseSelectViewController : UIViewController {
+class UseSelectViewController : BaseViewController {
     //요소
     var use1ImageView = UIImageView().then {
         $0.image = UIImage(named:"document-text")

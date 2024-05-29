@@ -10,7 +10,7 @@ import Then
 import SnapKit
 import Toast
 
-class DeleteImjangViewController: UIViewController {
+class DeleteImjangViewController: BaseViewController {
     let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width*0.6, height: 24)).then {
         $0.text = "삭제할 페이지를 선택해주세요"
         $0.font = .pretendard(size: 16, weight: .semiBold)

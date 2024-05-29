@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import AVFoundation
 
-class BottomSheetViewController: UIViewController {
+class BottomSheetViewController: BaseViewController {
     
     weak var currentViewController: UIViewController?
     
@@ -21,7 +21,7 @@ class BottomSheetViewController: UIViewController {
     
     init(imjangId: Int) {
         self.imjangId = imjangId
-        super.init(nibName: nil, bundle: nil)
+        super.init()
     }
     
     required init?(coder: NSCoder) {

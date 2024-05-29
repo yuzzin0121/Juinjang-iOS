@@ -8,7 +8,7 @@
 import UIKit
 import Alamofire
 
-class EditBasicInfoViewController: UIViewController {
+class EditBasicInfoViewController: BaseViewController {
     
     var transactionModel = TransactionModel()
     var imjangId: Int? = nil

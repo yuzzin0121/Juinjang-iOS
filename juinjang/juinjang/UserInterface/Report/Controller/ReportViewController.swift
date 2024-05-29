@@ -17,7 +17,7 @@ import KakaoSDKCommon
 import KakaoSDKShare
 import SafariServices
 
-class ReportViewController : UIViewController {
+class ReportViewController : BaseViewController {
     let templateId = 103560
     var safariViewController : SFSafariViewController?
     var checkListViewController: CheckListViewController?

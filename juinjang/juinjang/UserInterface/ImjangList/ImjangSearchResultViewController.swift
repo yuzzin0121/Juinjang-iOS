@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ImjangSearchResultViewController: UIViewController {
+class ImjangSearchResultViewController: BaseViewController {
     let searchBar: UISearchBar = {
         let searchBar = UISearchBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width * 0.82, height: 0))
         searchBar.placeholder = ""

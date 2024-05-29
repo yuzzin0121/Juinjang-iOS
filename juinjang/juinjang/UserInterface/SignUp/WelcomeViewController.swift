@@ -10,7 +10,7 @@ import Then
 import SnapKit
 import Alamofire
 
-class WelcomeViewController: UIViewController {
+class WelcomeViewController: BaseViewController {
     
     var userInfo: UserInfo?
     
@@ -200,7 +200,7 @@ class WelcomeViewController: UIViewController {
                 "nickname": nickname
             ]
 
-            AF.request("http://juinjang1227.com:8080/api/auth/kakao/signup", method: .post, parameters: parameters, encoding: JSONEncoding.default)
+            AF.request("http://juinjang1227.com:8080/api/auth/kakao/signup", method: .post, parameters: parameters, encoding: JSONEncoding.default, interceptor: AuthInterceptor())
                 .responseJSON { response in
                     switch response.result {
                     case .success(let value):

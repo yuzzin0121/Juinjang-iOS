@@ -8,7 +8,7 @@ import UIKit
 import SnapKit
 import Then
 
-class QnAViewController : UIViewController {
+class QnAViewController : BaseViewController {
     //MARK: - 본문
     var titleLabel = UILabel().then {
         $0.text = "자주 묻는 질문이란?"

@@ -8,7 +8,7 @@ import UIKit
 import Then
 import SnapKit
 
-class Use3ViewController : UIViewController {
+class Use3ViewController : BaseViewController {
     
     var textView = UIView().then {
         $0.backgroundColor = .clear

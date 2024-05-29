@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ToSViewController: UIViewController {
+class ToSViewController: BaseViewController {
     
     lazy var guideLabel = UILabel().then {
         $0.text = "주인장 서비스의\n이용 약관에 동의해 주세요"
