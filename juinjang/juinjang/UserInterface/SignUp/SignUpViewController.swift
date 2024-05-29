@@ -230,7 +230,26 @@ extension SignUpViewController{
         let email: String
         let nickname: String?
     }
-    
+    struct UserInfoResponse: Codable {
+        let isSuccess: Bool
+        let code: String
+        let message: String
+        let result: UserInfoResult
+    }
+    struct UserInfoResult: Codable {
+        let nickname: String?
+        let email: String
+        let provider: String
+        let image: String?
+        
+        init(from decoder: any Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            self.nickname = try container.decodeIfPresent(String.self, forKey: .nickname) ?? ""
+            self.email = try container.decode(String.self, forKey: .email)
+            self.provider = try container.decode(String.self, forKey: .provider)
+            self.image = try container.decodeIfPresent(String.self, forKey: .image)
+        }
+    }
     func sendPostRequest(email: String, nickname: String?) {
         let url = "http://juinjang1227.com:8080/api/auth/kakao/login"
         let requestBody = RequestBody(email: email, nickname: nickname)
