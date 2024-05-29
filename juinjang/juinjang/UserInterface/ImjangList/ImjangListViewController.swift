@@ -14,7 +14,7 @@ enum Section: Int, CaseIterable {
     case list
 }
 
-class ImjangListViewController: UIViewController {
+class ImjangListViewController: BaseViewController {
     
     // 임장 노트가 존재하지 않을 때의 뷰
     let emptyBackgroundView = UIView()

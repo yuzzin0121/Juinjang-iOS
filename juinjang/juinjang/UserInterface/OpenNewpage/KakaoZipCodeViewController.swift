@@ -8,7 +8,7 @@
 import UIKit
 import WebKit
 
-class KakaoZipCodeViewController: UIViewController {
+class KakaoZipCodeViewController: BaseViewController {
     
     var webView: WKWebView?
     let indicator = UIActivityIndicatorView(style: .medium)

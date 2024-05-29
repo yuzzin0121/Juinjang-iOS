@@ -10,7 +10,7 @@ import Then
 import SnapKit
 import Alamofire
 
-class OpenNewPage2ViewController: UIViewController, WarningMessageDelegate {
+class OpenNewPage2ViewController: BaseViewController, WarningMessageDelegate {
     var newImjang: PostDto?
     var versionInfo: VersionInfo?
     var imjangId: Int? = nil
@@ -39,7 +39,8 @@ class OpenNewPage2ViewController: UIViewController, WarningMessageDelegate {
                  method: .post,
                  parameters: parameters,
                  encoding: JSONEncoding.default,
-                 headers: header)
+                 headers: header, 
+                interceptor: AuthInterceptor())
         .validate(statusCode: 200..<300)
         .responseDecodable(of: BaseResponse<PostResponseDto>.self) { response in
             switch response.result {
@@ -100,7 +101,8 @@ class OpenNewPage2ViewController: UIViewController, WarningMessageDelegate {
                                      method: .post,
                                      parameters: parameters,
                                      encoding: JSONEncoding.default,
-                                     headers: header)
+                                     headers: header,
+                                     interceptor: AuthInterceptor())
         
         dataRequest
             .validate(statusCode: 200..<300)

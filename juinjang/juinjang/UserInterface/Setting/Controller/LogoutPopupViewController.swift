@@ -10,7 +10,7 @@ import SnapKit
 import Then
 import Alamofire
 
-class LogoutPopupViewController: UIViewController {
+class LogoutPopupViewController: BaseViewController {
     
     private let popupView: LogoutPopupView
     @objc func no(_ sender: UIButton) {
@@ -26,7 +26,7 @@ class LogoutPopupViewController: UIViewController {
     
     init(name: String, email: String, ment: String) {
         self.popupView = LogoutPopupView(name: name, email: email, ment: ment)
-        super.init(nibName: nil, bundle: nil)
+        super.init()
         self.view.backgroundColor = .clear
         self.view.addSubview(self.popupView)
         self.popupView.snp.makeConstraints {

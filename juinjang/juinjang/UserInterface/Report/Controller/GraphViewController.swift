@@ -9,7 +9,7 @@ import Then
 import DGCharts
 import Charts
 
-class GraphViewController : UIViewController {
+class GraphViewController : BaseViewController {
     
     var backgroundImageView = UIImageView().then {
         $0.image = UIImage(named:"PaperTexture")

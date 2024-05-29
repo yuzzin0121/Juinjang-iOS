@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import Then
 
-class NoMaemullPopupViewController: UIViewController {
+class NoMaemullPopupViewController: BaseViewController {
     private let popupView: NoMaemullPopupView
     @objc
     func btnTap(_ sender: UIButton) {
@@ -19,7 +19,7 @@ class NoMaemullPopupViewController: UIViewController {
   
     init(ment: String) {
         self.popupView = NoMaemullPopupView(ment: ment)
-        super.init(nibName: nil, bundle: nil)
+        super.init()
         self.view.backgroundColor = .clear
         self.view.addSubview(self.popupView)
         self.popupView.snp.makeConstraints {

@@ -12,7 +12,7 @@ protocol MoveWarningMessageDelegate: AnyObject {
     func getWarningMessage() -> String // 문자열을 반환
 }
 
-class CheckListPopUpViewController: UIViewController {
+class CheckListPopUpViewController: BaseViewController {
     
     weak var moveWarningDelegate: MoveWarningMessageDelegate?
 

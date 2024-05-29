@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class WarningMessageViewController: UIViewController {
+class WarningMessageViewController: BaseViewController {
     
     lazy var bottomSheetView = UIView().then {
         $0.backgroundColor = .white
@@ -84,7 +84,7 @@ class WarningMessageViewController: UIViewController {
     
     init(imjangId: Int) {
         self.imjangId = imjangId
-        super.init(nibName: nil, bundle: nil)
+        super.init()
     }
     
     required init?(coder: NSCoder) {

@@ -9,7 +9,7 @@ import UIKit
 import Then
 import SnapKit
 
-class Use2ViewController : UIViewController {
+class Use2ViewController : BaseViewController {
    private let scrollView = UIScrollView().then {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.isScrollEnabled = true

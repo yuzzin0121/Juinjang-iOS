@@ -9,7 +9,7 @@ import UIKit
 import Then
 import DGCharts
 
-class CompareViewController : UIViewController {
+class CompareViewController : BaseViewController {
     var isCompared :Bool = false
     
     var backgroundImageView = UIImageView().then {

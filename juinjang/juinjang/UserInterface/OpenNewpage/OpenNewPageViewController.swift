@@ -9,7 +9,7 @@ import UIKit
 import Then
 import SnapKit
 
-class OpenNewPageViewController: UIViewController {
+class OpenNewPageViewController: BaseViewController {
     
     var purposeButtons: [UIButton] = [] // "거래 목적"을 나타내는 선택지
     var propertyTypeButtons: [UIButton] = [] // "매물 유형"을 나타내는 선택지

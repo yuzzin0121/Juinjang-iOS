@@ -8,7 +8,7 @@ import UIKit
 import Then
 import SnapKit
 
-class MarketingUseViewController : UIViewController {
+class MarketingUseViewController : BaseViewController {
    private let scrollView = UIScrollView().then {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.isScrollEnabled = true

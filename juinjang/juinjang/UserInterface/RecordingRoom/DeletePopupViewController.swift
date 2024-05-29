@@ -9,7 +9,7 @@ import UIKit
 import Then
 import SnapKit
 
-class DeletePopupViewController: UIViewController {
+class DeletePopupViewController: BaseViewController {
     lazy var popupView = UIView().then { // 팝업창 뷰
         $0.backgroundColor = .white
         $0.layer.cornerRadius = 10

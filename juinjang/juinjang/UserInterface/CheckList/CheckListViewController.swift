@@ -10,7 +10,7 @@ import SnapKit
 import Alamofire
 import RealmSwift
 
-class CheckListViewController: UIViewController {
+class CheckListViewController: BaseViewController {
     
     var allCategory: [String] = [] // 카테고리
     var checkListCategories: [CheckListCategory] = [] // 카테고리별 질문
@@ -28,12 +28,13 @@ class CheckListViewController: UIViewController {
     
     init(imjangId: Int) {
         self.imjangId = imjangId
-        super.init(nibName: nil, bundle: nil)
+        super.init()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
     
     override func viewDidLoad() {
         addCheckListModel()
