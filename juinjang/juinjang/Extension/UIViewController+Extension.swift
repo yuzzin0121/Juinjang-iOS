@@ -21,7 +21,8 @@ extension UIViewController {
         guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return }
         let sceneDelegate = windowScene.delegate as? SceneDelegate
         let mainViewController = MainViewController()
-        sceneDelegate?.window?.rootViewController = mainViewController
+        let nav = UINavigationController(rootViewController: mainViewController)
+        sceneDelegate?.window?.rootViewController = nav
         sceneDelegate?.window?.makeKey()
     }
 //    func hideKeyboardWhenTappedAround() {

@@ -12,4 +12,5 @@ extension Notification.Name {
     static let editRecordScript: Notification.Name = Notification.Name("editRecordScript")
     static let addRecordResponse: Notification.Name = Notification.Name("addRecordResponse")
     static let refreshTokenExpired: Notification.Name = Notification.Name("refreshTokenExpired")
+    static let imjangListFilterTapped: Notification.Name = Notification.Name("imjangListFilterTapped")
 }

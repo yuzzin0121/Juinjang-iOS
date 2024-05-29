@@ -21,18 +21,19 @@ class ImjangListHeaderView: UITableViewHeaderFooterView {
         var container = AttributeContainer()
         container.font = .pretendard(size: 14, weight: .semiBold)
         configuration.attributedTitle = AttributedString(filterList[0].title, attributes: container)
-        configuration.imagePadding = 2
+        configuration.baseBackgroundColor = ColorStyle.textWhite
+        configuration.baseForegroundColor = ColorStyle.darkGray
+        configuration.image = ImageStyle.arrowDown
+        configuration.image?.withTintColor(ColorStyle.darkGray)
+        configuration.imagePlacement = .trailing
+        configuration.imagePadding = 6
         let button = UIButton(configuration: configuration, primaryAction: nil)
-        button.setTitleColor(ColorStyle.darkGray, for: .normal)
-        button.setImage(ImageStyle.arrowDown, for: .normal)
-        button.semanticContentAttribute = .forceRightToLeft
-        button.contentHorizontalAlignment = .leading
-        button.tintColor = .white
         return button
     }()
     let deleteButton = UIButton()
     var menuChildren: [UIMenuElement] = []
     let filterList = Filter.allCases
+    weak var sendFilterItemDelegate: SendFilterItemDelegate?
     
     // MARK: - init
     
@@ -44,6 +45,16 @@ class ImjangListHeaderView: UITableViewHeaderFooterView {
         setFilterData()
     }
     
+    func addFilterObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(setFilterButtonTitle), name: .imjangListFilterTapped, object: nil)
+    }
+    
+    @objc private func setFilterButtonTitle(_ notification: Notification) {
+        guard let titleDict = notification.userInfo as? [String: String], let title = titleDict["title"] else { return }
+        changefilterTitle(title)
+    }
+    
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -53,7 +64,7 @@ class ImjangListHeaderView: UITableViewHeaderFooterView {
         for filter in filterList {
             menuChildren.append(UIAction(title: filter.title, state: .off,handler: {  (action: UIAction) in
                 self.changefilterTitle(filter.title)
-                self.callRequestFiltered(sort: filter.title)
+                self.callRequestFiltered(filterItem: filter)
             }))
         }
         let menu = UIMenu(options: .displayAsPalette, children: menuChildren)
@@ -62,18 +73,15 @@ class ImjangListHeaderView: UITableViewHeaderFooterView {
         filterselectBtn.showsMenuAsPrimaryAction = true
     }
     
-    func callRequestFiltered(sort: String) {
-        
+    func callRequestFiltered(filterItem: Filter) {
+        sendFilterItemDelegate?.sendFilterItem(filter: filterItem)
     }
     
     func changefilterTitle(_ title: String) {
-        var config = filterselectBtn.configuration
         var container = AttributeContainer()
         container.font = .pretendard(size: 14, weight: .semiBold)
-        container.foregroundColor = ColorStyle.darkGray
-        config?.attributedTitle = AttributedString(title, attributes: container)
-        config?.imagePadding = 2
-        filterselectBtn.configuration = config
+        filterselectBtn.configuration?.title = title
+        filterselectBtn.configuration?.attributedTitle = AttributedString(title, attributes: container)
     }
     
     func configureHierarchy() {
