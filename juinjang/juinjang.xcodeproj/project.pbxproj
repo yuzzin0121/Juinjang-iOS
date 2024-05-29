@@ -99,7 +99,6 @@
 		346C7E582B753C6C00B4E044 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 346C7E572B753C6C00B4E044 /* SnapKit */; };
 		346CF6AE2B70B46B00C70C7A /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346CF6AD2B70B46B00C70C7A /* SplashViewController.swift */; };
 		346CF6B32B70B54B00C70C7A /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 346CF6B22B70B54B00C70C7A /* Lottie */; };
-		3485CD692B73D3A700E8B9D6 /* SignUpWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3485CD682B73D3A700E8B9D6 /* SignUpWebViewController.swift */; };
 		349E30182BAD5E3F00B59D35 /* UseSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 349E30172BAD5E3F00B59D35 /* UseSelectViewController.swift */; };
 		349E301A2BAEBCD900B59D35 /* Use3ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 349E30192BAEBCD900B59D35 /* Use3ViewController.swift */; };
 		349E30202BB7DC3900B59D35 /* MarketingUseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 349E301F2BB7DC3900B59D35 /* MarketingUseViewController.swift */; };
@@ -265,7 +264,6 @@
 		345855DA2B6B8D5000432C06 /* CompareSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompareSearchViewController.swift; sourceTree = "<group>"; };
 		346CF6AD2B70B46B00C70C7A /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; wrapsLines = 0; };
 		347D1CF62C00FCA5006C47CB /* juinjang.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = juinjang.entitlements; sourceTree = "<group>"; };
-		3485CD682B73D3A700E8B9D6 /* SignUpWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpWebViewController.swift; sourceTree = "<group>"; };
 		349E30172BAD5E3F00B59D35 /* UseSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseSelectViewController.swift; sourceTree = "<group>"; };
 		349E30192BAEBCD900B59D35 /* Use3ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Use3ViewController.swift; sourceTree = "<group>"; };
 		349E301F2BB7DC3900B59D35 /* MarketingUseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketingUseViewController.swift; sourceTree = "<group>"; };
@@ -399,7 +397,6 @@
 			isa = PBXGroup;
 			children = (
 				0A14E36E2B569A840008FD28 /* SignUpViewController.swift */,
-				3485CD682B73D3A700E8B9D6 /* SignUpWebViewController.swift */,
 				0A95D72E2B682013000A9C06 /* ToSViewController.swift */,
 				0A95D7302B682FB4000A9C06 /* ToSItemTableViewCell.swift */,
 				0A24711C2B69147200A7382B /* ToSDetailViewController.swift */,
@@ -1054,7 +1051,6 @@
 				616408E12B405B7200EC3B5E /* ImjangNoteViewController.swift in Sources */,
 				0A24711D2B69147200A7382B /* ToSDetailViewController.swift in Sources */,
 				0A7AC0F12B6412760032C9DF /* KakaoZipCodeViewController.swift in Sources */,
-				3485CD692B73D3A700E8B9D6 /* SignUpWebViewController.swift in Sources */,
 				0A4EBE382B5EDD6F00909B7A /* ExpandedTextFieldTableViewCell.swift in Sources */,
 				345855A42B69E44D00432C06 /* NoMaemullPopupView.swift in Sources */,
 				0A554CE42B5420F20023BB49 /* WarningMessageViewController.swift in Sources */,
@@ -1310,7 +1306,7 @@
 				CODE_SIGN_ENTITLEMENTS = juinjang/juinjang.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = DNJ2FDQWSL;
+				DEVELOPMENT_TEAM = T2Q8P9627P;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = juinjang/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "카메라 접근 권한이 필요합니다.";
@@ -1329,7 +1325,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.juinjang;
+				PRODUCT_BUNDLE_IDENTIFIER = com.juinjang.juinjang;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -1348,7 +1344,7 @@
 				CODE_SIGN_ENTITLEMENTS = juinjang/juinjang.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = DNJ2FDQWSL;
+				DEVELOPMENT_TEAM = T2Q8P9627P;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = juinjang/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "카메라 접근 권한이 필요합니다.";
@@ -1367,7 +1363,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.juinjang;
+				PRODUCT_BUNDLE_IDENTIFIER = com.juinjang.juinjang;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;

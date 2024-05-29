@@ -10,6 +10,24 @@ import Then
 import SnapKit
 import Alamofire
 
+struct SignupRequest: Codable {
+    let identityToken: String
+    let nickname: String
+}
+
+struct SignupResponse: Codable {
+    let isSuccess: Bool
+    let code: String
+    let message: String
+    let result: Result?
+
+    struct Result: Codable {
+        let accessToken: String
+        let refreshToken: String
+        let email: String
+    }
+}
+
 class WelcomeViewController: UIViewController {
     
     var userInfo: UserInfo?
@@ -194,39 +212,68 @@ class WelcomeViewController: UIViewController {
 //        self.navigationController?.pushViewController(RecordingRightsVC, animated: true)
     }
     func signupRequest(email: String, kakaoNickname: String?, nickname: String) {
-            let parameters: [String: Any] = [
-                "email": email,
-                "kakaoNickname": kakaoNickname ?? NSNull(),
-                "nickname": nickname
-            ]
+        let parameters: [String: Any] = [
+            "email": email,
+            "kakaoNickname": kakaoNickname ?? NSNull(),
+            "nickname": nickname
+        ]
 
-            AF.request("http://juinjang1227.com:8080/api/auth/kakao/signup", method: .post, parameters: parameters, encoding: JSONEncoding.default)
-                .responseJSON { response in
-                    switch response.result {
-                    case .success(let value):
-                        print(value) // 서버에서 받은 응답을 출력하거나 필요한 처리를 진행합니다.
-                        if let json = value as? [String: Any],
-                           let isSuccess = json["isSuccess"] as? Bool,
-                           let result = json["result"] as? [String: Any],
-                           let accessToken = result["accessToken"] as? String,
-                           let refreshToken = result["refreshToken"] as? String,
-                           isSuccess {
-                            // 응답이 성공이라면 다음 ViewController로 이동합니다.
-                                print("Success: \(accessToken)")
-                                UserDefaultManager.shared.accessToken = accessToken
-                                print("Success: \(refreshToken)")
-                                UserDefaultManager.shared.refreshToken = refreshToken
-                            let RecordingRightsVC = RecordingRightsViewController()
-                            RecordingRightsVC.modalPresentationStyle = .fullScreen
-                            self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-                            self.navigationController?.pushViewController(RecordingRightsVC, animated: true)
-                        } else {
-                            // 실패 처리 로직을 추가할 수 있습니다.
-                        }
-                    case .failure(let error):
-                        print(error.localizedDescription)
+        AF.request("http://juinjang1227.com:8080/api/auth/kakao/signup", method: .post, parameters: parameters, encoding: JSONEncoding.default)
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    print(value) // 서버에서 받은 응답을 출력하거나 필요한 처리를 진행합니다.
+                    if let json = value as? [String: Any],
+                       let isSuccess = json["isSuccess"] as? Bool,
+                       let result = json["result"] as? [String: Any],
+                       let accessToken = result["accessToken"] as? String,
+                       let refreshToken = result["refreshToken"] as? String,
+                       isSuccess {
+                        // 응답이 성공이라면 다음 ViewController로 이동합니다.
+                            print("Success: \(accessToken)")
+                            UserDefaultManager.shared.accessToken = accessToken
+                            print("Success: \(refreshToken)")
+                            UserDefaultManager.shared.refreshToken = refreshToken
+                        let RecordingRightsVC = RecordingRightsViewController()
+                        RecordingRightsVC.modalPresentationStyle = .fullScreen
+                        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+                        self.navigationController?.pushViewController(RecordingRightsVC, animated: true)
+                    } else {
                         // 실패 처리 로직을 추가할 수 있습니다.
                     }
+                case .failure(let error):
+                    print(error.localizedDescription)
+                    // 실패 처리 로직을 추가할 수 있습니다.
                 }
+            }
         }
+    func signupWithApple(identityToken: String, nickname: String) {
+        let url = "http://juinjang1227.com:8080/api/auth/apple/signup"
+        let parameters = SignupRequest(identityToken: identityToken, nickname: nickname)
+
+        AF.request(url, method: .post, parameters: parameters, encoder: JSONParameterEncoder.default)
+            .responseDecodable(of: SignupResponse.self) { response in
+            switch response.result {
+            case .success(let responseBody):
+                if responseBody.isSuccess {
+                    print("Signup Successful")
+                    if let result = responseBody.result {
+                        print("Access Token: \(result.accessToken)")
+                        UserDefaultManager.shared.accessToken = result.accessToken
+                        print("Refresh Token: \(result.refreshToken)")
+                        UserDefaultManager.shared.refreshToken = result.refreshToken
+                        print("Email: \(result.email)")
+                    }
+                    let RecordingRightsVC = RecordingRightsViewController()
+                    RecordingRightsVC.modalPresentationStyle = .fullScreen
+                    self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+                    self.navigationController?.pushViewController(RecordingRightsVC, animated: true)
+                } else {
+                    print("Signup Failed: \(responseBody.message)")
+                }
+            case .failure(let error):
+                print("Request Error: \(error)")
+            }
+        }
+    }
 }
