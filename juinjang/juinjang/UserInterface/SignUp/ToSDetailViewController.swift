@@ -9,7 +9,7 @@ import UIKit
 import Then
 import SnapKit
 
-class ToSDetailViewController: UIViewController {
+class ToSDetailViewController: BaseViewController {
     
     var toSItem: ToSItem?
     var indexPath: IndexPath?

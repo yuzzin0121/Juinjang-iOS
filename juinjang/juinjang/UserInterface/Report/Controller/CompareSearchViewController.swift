@@ -2,7 +2,7 @@
 import UIKit
 import Pageboy
 
-class CompareSearchViewController: UIViewController {
+class CompareSearchViewController: BaseViewController {
     var searchBar = UISearchBar().then{
         $0.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width * 0.82, height: 0)
         $0.placeholder = "집 별명이나 주소를 검색해보세요"
@@ -42,8 +42,8 @@ class CompareSearchViewController: UIViewController {
     }
     
     var searchKeyword  = ""
-    var searchedImjangList: [ImjangNote] = []
-    var totalImjangList = ImjangList.list
+    var searchedImjangList: [ListDto] = []
+    var imjangList: [ListDto] = []
     
     // 네비게이션 바 디자인
     func designNavigationBar() {
@@ -83,8 +83,8 @@ class CompareSearchViewController: UIViewController {
             searchedTableView.isHidden = true
             applyBtn.isHidden = true
             searchKeyword = searchBar.text!
-            for item in totalImjangList {
-                if item.roomName.contains(searchKeyword) || item.location.contains(searchKeyword) {
+            for item in imjangList {
+                if item.nickname.contains(searchKeyword) || item.address.contains(searchKeyword) {
                     searchedImjangList.append(item)
                     searchedTableView.isHidden = false
                     applyBtn.isHidden = false
@@ -92,6 +92,34 @@ class CompareSearchViewController: UIViewController {
             }
             searchedTableView.reloadData()
         }
+    }
+    
+    func callRequest(sort: Filter = .update, setScrap: Bool = false) {
+        JuinjangAPIManager.shared.fetchData(type: BaseResponse<TotalListDto>.self, api: .totalImjang(sort: sort.sortValue)) { response, error in
+            if error == nil {
+                guard let response = response else { return }
+                guard let result = response.result else { return }
+                self.imjangList = result.limjangList
+                self.setEmptyUI(isEmpty: self.imjangList.isEmpty)
+                self.searchedTableView.reloadData()
+            } else {
+                guard let error else { return }
+                switch error {
+                case .failedRequest:
+                    print("failedRequest")
+                case .noData:
+                    print("noData")
+                case .invalidResponse:
+                    print("invalidResponse")
+                case .invalidData:
+                    print("invalidData")
+                }
+            }
+        }
+    }
+    func setEmptyUI(isEmpty: Bool) {
+        //emptyBackgroundView.isHidden = isEmpty ? false : true
+        searchedTableView.isHidden = isEmpty ? true : false
     }
     
     func setupConstraints() {
@@ -116,7 +144,7 @@ class CompareSearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        callRequest(setScrap: true)
         designNavigationBar()
         
         view.backgroundColor = .white

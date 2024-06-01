@@ -9,7 +9,7 @@ import UIKit
 import Lottie
 import Speech
 
-class STTLoadingViewController: UIViewController {
+class STTLoadingViewController: BaseViewController {
     
     lazy var bottomSheetView = UIView().then {
         $0.backgroundColor = .white
@@ -47,7 +47,7 @@ class STTLoadingViewController: UIViewController {
         self.imjangId = imjangId
         self.fileURL = fileURL
         self.recordTime = recordTime
-        super.init(nibName: nil, bundle: nil)
+        super.init()
     }
     
     required init?(coder: NSCoder) {

@@ -10,7 +10,7 @@ import SnapKit
 import Then
 import Kingfisher
 
-class ImjangNoteViewController: UIViewController{
+class ImjangNoteViewController: BaseViewController{
     
     // 스크롤뷰
     let scrollView = UIScrollView().then {
@@ -122,7 +122,7 @@ class ImjangNoteViewController: UIViewController{
     
     init(imjangId: Int) {
         self.imjangId = imjangId
-        super.init(nibName: nil, bundle: nil)
+        super.init()
     }
     
     required init?(coder: NSCoder) {

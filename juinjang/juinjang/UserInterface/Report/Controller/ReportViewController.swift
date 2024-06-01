@@ -17,7 +17,7 @@ import KakaoSDKCommon
 import KakaoSDKShare
 import SafariServices
 
-class ReportViewController : UIViewController {
+class ReportViewController : BaseViewController {
     let templateId = 103560
     var safariViewController : SFSafariViewController?
     var checkListViewController: CheckListViewController?
@@ -42,6 +42,9 @@ class ReportViewController : UIViewController {
         paragraphStyle.lineSpacing = 8.0
         text3.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: text3.length))
         $0.attributedText = text3
+    }
+    var imjangLabel = UILabel().then {
+        $0.text = "판교푸르지오월드마크"
     }
     var priceLabel = UILabel().then {
         $0.text = "30억 1천만원"
@@ -93,9 +96,22 @@ class ReportViewController : UIViewController {
         self.navigationItem.leftBarButtonItem = backButtonItem
         //self.navigationItem.rightBarButtonItem = shareButtonItem
     }
+    
     func changeItem() {
         self.navigationItem.rightBarButtonItem = .none
     }
+    
+//    func setData(detailDto: DetailDto) {
+//        totalGradeLabel.imjangLabel.text = detailDto.nickname
+//        priceLabel.text = detailDto.priceList
+//        roomAddressLabel.text = "\(detailDto.address) \(detailDto.addressDetail)"
+//        modifiedDateStringLabel.text = "최근 수정 날짜 \(String.dateToString(target: detailDto.updatedAt))"
+//        images = detailDto.images
+//        version?.editCriteria = detailDto.purposeCode
+//        setUpImageUI()
+//        adjustLabelHeight()
+//    }
+    
     @objc func backBtnTap() {
         NotificationCenter.default.post(name: NSNotification.Name("ReloadTableView"), object: nil)
         self.navigationController?.popViewController(animated: true)

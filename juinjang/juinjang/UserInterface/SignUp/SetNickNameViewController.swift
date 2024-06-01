@@ -10,7 +10,7 @@ import Then
 import SnapKit
 import Alamofire
 
-class SetNickNameViewController: UIViewController {
+class SetNickNameViewController: BaseViewController {
     
     lazy var introLabel = UILabel().then {
         $0.text = "당신을 위한 노트를 준비했어요"
@@ -158,7 +158,7 @@ class SetNickNameViewController: UIViewController {
 
         let urlString = "http://juinjang1227.com:8080/api/nickname"
 
-        AF.request(urlString, method: .patch, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+        AF.request(urlString, method: .patch, parameters: parameters, encoding: JSONEncoding.default, headers: headers, interceptor: AuthInterceptor())
             .responseString(encoding: .utf8) { response in
                 switch response.result {
                 case .success(let value):
@@ -176,7 +176,6 @@ class SetNickNameViewController: UIViewController {
                     print("Error: \(error)")
                 }
             }
-        MainViewController().refreshToken()
     }
     
     @objc func backButtonTapped() {

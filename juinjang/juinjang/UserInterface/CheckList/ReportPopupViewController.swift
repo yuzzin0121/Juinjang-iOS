@@ -8,7 +8,7 @@
 import UIKit
 import Then
 
-class ReportPopupViewController: UIViewController {
+class ReportPopupViewController: BaseViewController {
     
     // 팝업 View
     lazy var popupView = UIView().then {

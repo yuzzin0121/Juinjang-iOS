@@ -13,7 +13,7 @@ protocol PassDataDelegate: AnyObject {
     func passData(id: Int)
 }
 
-class RecordingRoomViewController: UIViewController, PassDataDelegate {
+class RecordingRoomViewController: BaseViewController, PassDataDelegate {
     func passData(id: Int) {
         self.imjangId = id
     }
@@ -68,7 +68,7 @@ class RecordingRoomViewController: UIViewController, PassDataDelegate {
     
     init(imjangId: Int) {
         self.imjangId = imjangId
-        super.init(nibName: nil, bundle: nil)
+        super.init()
     }
     
     required init?(coder: NSCoder) {

@@ -8,7 +8,7 @@ import UIKit
 import Then
 import SnapKit
 
-class SelectMaemullViewController : UIViewController {
+class SelectMaemullViewController : BaseViewController {
     
     var contentView = UIView().then {
         $0.backgroundColor = .white
@@ -31,7 +31,7 @@ class SelectMaemullViewController : UIViewController {
     
     var menuChildren: [UIMenuElement] = []
     lazy var filterList = Filter.allCases
-    var imjangList: [ImjangNote] = ImjangList.list
+    var imjangList: [ListDto] = []
     
     let tableView = UITableView().then {
         $0.estimatedRowHeight = UITableView.automaticDimension
@@ -74,6 +74,44 @@ class SelectMaemullViewController : UIViewController {
         
     }
     
+    func callRequest(sort: Filter = .update, setScrap: Bool = false, excludingId: Int? = nil) {
+        JuinjangAPIManager.shared.fetchData(type: BaseResponse<TotalListDto>.self, api: .totalImjang(sort: sort.sortValue)) { response, error in
+            if error == nil {
+                guard let response = response else { return }
+                guard let result = response.result else { return }
+                
+                // 특정 limjangId를 제외한 리스트를 생성
+                let filteredList = result.limjangList.filter { item in
+                    if let excludingId = excludingId {
+                        return item.limjangId != excludingId
+                    }
+                    return true
+                }
+                self.imjangList = filteredList
+                print("나의 임장들 \(result)")
+                //self.imjangList = result.limjangList
+                self.setEmptyUI(isEmpty: self.imjangList.isEmpty)
+                self.tableView.reloadData()
+            } else {
+                guard let error else { return }
+                switch error {
+                case .failedRequest:
+                    print("failedRequest")
+                case .noData:
+                    print("noData")
+                case .invalidResponse:
+                    print("invalidResponse")
+                case .invalidData:
+                    print("invalidData")
+                }
+            }
+        }
+    }
+    func setEmptyUI(isEmpty: Bool) {
+        //emptyBackgroundView.isHidden = isEmpty ? false : true
+        tableView.isHidden = isEmpty ? true : false
+    }
+    
     func setConstraint() {
         btnBackGroundView.snp.makeConstraints{
             $0.bottom.equalToSuperview()
@@ -108,7 +146,7 @@ class SelectMaemullViewController : UIViewController {
         navigationItem.title = "비교할 매물 고르기"
 
         // UIBarButtonItem 생성 및 이미지 설정
-        let backButtonItem = UIBarButtonItem(image: UIImage(named: "leftArrow"), style: .plain, target: self, action: #selector(backBtnTap))
+        let backButtonItem = UIBarButtonItem(image: UIImage(named: "arrow-left"), style: .plain, target: self, action: #selector(backBtnTap))
         backButtonItem.tintColor = UIColor(named: "300")
         backButtonItem.imageInsets = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 0)
 
@@ -139,6 +177,7 @@ class SelectMaemullViewController : UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         designNavigationBar()
+        callRequest(setScrap: true, excludingId: 9)
         tableView.delegate = self
         tableView.dataSource = self
         view.backgroundColor = .white

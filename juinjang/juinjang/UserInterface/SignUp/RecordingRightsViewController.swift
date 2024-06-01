@@ -8,7 +8,7 @@
 import UIKit
 import AVFoundation
 
-class RecordingRightsViewController: UIViewController {
+class RecordingRightsViewController: BaseViewController {
     
     lazy var guideLabel = UILabel().then {
         $0.text = "주인장 앱에서\n필요한 권한을 알려드려요"
@@ -127,10 +127,10 @@ class RecordingRightsViewController: UIViewController {
     
     @objc func buttonTapped(_ sender: UIButton) {
         // 녹음 권한 팝업창 띄우기
-        requestMicrophonePermission { granted in
+        requestMicrophonePermission { [weak self] granted in
+            guard let self else { return }
             DispatchQueue.main.async {
-                let mainVC = MainViewController()
-                self.navigationController?.pushViewController(mainVC, animated: true)
+                self.changeHome()
             }
         }
     }

@@ -8,7 +8,7 @@
 import UIKit
 import AVFoundation
 
-class RecordingFilesViewController: UIViewController {
+class RecordingFilesViewController: BaseViewController {
     
     private let recordingFileTableView = UITableView().then {
         $0.showsVerticalScrollIndicator = false
@@ -31,7 +31,7 @@ class RecordingFilesViewController: UIViewController {
     
     init(imjangId: Int) {
         self.imjangId = imjangId
-        super.init(nibName: nil, bundle: nil)
+        super.init()
     }
     
     required init?(coder: NSCoder) {

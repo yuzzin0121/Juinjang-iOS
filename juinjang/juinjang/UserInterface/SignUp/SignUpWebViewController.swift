@@ -35,7 +35,7 @@ struct UserInfoResult: Codable {
     }
 }
 
-class SignUpWebViewController: UIViewController {
+class SignUpWebViewController: BaseViewController {
     var webView: WKWebView?
     let indicator = UIActivityIndicatorView(style: .medium)
     var completionHandler: ((Bool) -> Void)? = nil
@@ -122,13 +122,13 @@ class SignUpWebViewController: UIViewController {
         
     }
     func getUserInfo(userToken : String) {
-        MainViewController().refreshToken()
+//        MainViewController().refreshToken()
         if userToken.isEmpty == false {
             // 로그아웃 API의 URL
             let urlString = "http://juinjang1227.com:8080/api/profile"
             
             // HTTP 요청 보내기
-            AF.request(urlString, method: .get, headers: HTTPHeaders(["Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"])).responseData { [self] response in
+            AF.request(urlString, method: .get, headers: HTTPHeaders(["Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"]), interceptor: AuthInterceptor()).responseData { [self] response in
                 switch response.result {
                 case .success(let data):
                     // 응답 확인

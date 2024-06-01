@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import AVFoundation
 
-class PlayViewController: UIViewController, UITextFieldDelegate, AVAudioPlayerDelegate {
+class PlayViewController: BaseViewController, UITextFieldDelegate, AVAudioPlayerDelegate {
 
     var titleTextField = UITextField().then {
         $0.text = "녹음파일_001"
@@ -33,7 +33,6 @@ class PlayViewController: UIViewController, UITextFieldDelegate, AVAudioPlayerDe
     var recordingSlider = UISlider().then {
         $0.setThumbImage(UIImage(named: "slider-thumb"), for: .normal)
         $0.tintColor = UIColor(named: "mainOrange")
-        $0.addTarget(self, action: #selector(dragedSlider), for: .valueChanged)
         $0.isUserInteractionEnabled = true
     }
     
@@ -77,9 +76,13 @@ class PlayViewController: UIViewController, UITextFieldDelegate, AVAudioPlayerDe
         addSubViews()
         setupLayout()
         titleTextField.delegate = self
-        
+        addTarget()
         initPlay1()
         progressTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(updatePlayTime1), userInfo: nil, repeats: true)
+    }
+    
+    private func addTarget() {
+        recordingSlider.addTarget(self, action: #selector(dragedSlider), for: .valueChanged)
     }
     
     func initPlay1(){

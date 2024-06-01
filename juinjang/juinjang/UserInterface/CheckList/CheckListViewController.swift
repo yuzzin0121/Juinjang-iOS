@@ -10,7 +10,7 @@ import SnapKit
 import Alamofire
 import RealmSwift
 
-class CheckListViewController: UIViewController {
+class CheckListViewController: BaseViewController {
     
     // 체크리스트 정보
     var version: Int = 0
@@ -22,7 +22,7 @@ class CheckListViewController: UIViewController {
     
     init(imjangId: Int) {
         self.imjangId = imjangId
-        super.init(nibName: nil, bundle: nil)
+        super.init()
     }
     
     required init?(coder: NSCoder) {

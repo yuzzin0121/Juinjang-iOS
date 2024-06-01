@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class RecordPlaybackViewController: UIViewController {
+class RecordPlaybackViewController: BaseViewController {
 
     weak var bottomSheetViewController: BottomSheetViewController?
     
@@ -38,7 +38,7 @@ class RecordPlaybackViewController: UIViewController {
     
     init(recordResponse: RecordResponse) {
         self.recordResponse = recordResponse
-        super.init(nibName: nil, bundle: nil)
+        super.init()
     }
     
     required init?(coder: NSCoder) {

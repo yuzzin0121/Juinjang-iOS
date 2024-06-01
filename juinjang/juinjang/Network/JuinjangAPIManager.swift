@@ -38,16 +38,16 @@ final class JuinjangAPIManager {
         AF.request(api.endpoint,
                    method: api.method,
                    parameters: api.parameter,
-                   headers: api.header)
+                   headers: api.header,
+                   interceptor: AuthInterceptor())
         .responseDecodable(of: type) { response in
+            print("StatusCode: \(response.response?.statusCode)", UserDefaultManager.shared.accessToken)
             switch response.result {
             case .success(let success):
                 completionHandler(success, nil)
             case .failure(let failure):
                 print(failure)
-                completionHandler(nil, .failedRequest)
-                //               fatalError("네트워킹 오류")
-            }
+                completionHandler(nil, .failedRequest)            }
         }
     }
     
@@ -57,8 +57,10 @@ final class JuinjangAPIManager {
                    method: api.method,
                    parameters: parameter,
                    encoding: JSONEncoding.default,
-                   headers: api.header)
+                   headers: api.header,
+                   interceptor: AuthInterceptor())
         .responseDecodable(of: type) { response in
+            print("StatusCode: \(response.response?.statusCode)")
             switch response.result {
             case .success(let success):
                 completionHandler(success, nil)
@@ -83,9 +85,10 @@ final class JuinjangAPIManager {
                 // "imgUrl" 키에 대한 배열 형식으로 이미지 데이터를 전송
                 multipartFormData.append(imageData, withName: "images", fileName: "image\(index).jpeg", mimeType: "image/jpeg")
             }
-        }, to: api.endpoint, method: api.method, headers: api.header)
+        }, to: api.endpoint, method: api.method, headers: api.header, interceptor: AuthInterceptor())
         .validate()
         .response { response in
+            print("StatusCode: \(response.response?.statusCode)")
             switch response.result {
             case .success:
                 print(response)
@@ -107,12 +110,13 @@ final class JuinjangAPIManager {
                 print(dto)
                 multipartFormData.append(jsonData, withName: "recordRequestDTO", mimeType: "application/json")
             }
-        }, to: api.endpoint, method: api.method, headers: api.header).responseDecodable(of: RecordResponseDTO.self, completionHandler: { response in
+        }, to: api.endpoint, method: api.method, headers: api.header, interceptor: AuthInterceptor()).responseDecodable(of: RecordResponseDTO.self, completionHandler: { response in
+            print("StatusCode: \(response.response?.statusCode)")
             switch response.result {
             case .success(let responseData):
                 guard let recordResponse = responseData.result else {
                     completionHandler(.failure(NetworkError.noData))
-                    return 
+                    return
                 }
                 completionHandler(.success(recordResponse))
             case .failure(let error):
@@ -131,5 +135,25 @@ final class JuinjangAPIManager {
             print("Encoding error: \(error)")
             return nil
         }
+    }
+    
+    func refreshAccessToken(completionHandler: @escaping (Bool) -> Void) {
+        let api = JuinjangAPI.regenerateToken
+        AF.request(api.endpoint, method: api.method, headers: api.header)
+            .responseDecodable(of: BaseResponse<RefreshDto>.self) { response in
+                print(#function, "StatusCode: \(response.response?.statusCode)")
+                switch response.result {
+                case .success(let success):
+                    guard let result = success.result else {
+                        completionHandler(false)
+                        return
+                    }
+                    UserDefaultManager.shared.accessToken = result.accessToken
+                    UserDefaultManager.shared.refreshToken = result.refreshToken
+                    completionHandler(true)
+                case .failure(let failure):
+                    completionHandler(false)
+                }
+            }
     }
 }

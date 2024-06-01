@@ -8,7 +8,7 @@
 import UIKit
 import Then
 
-class SignupPopupViewController: UIViewController {
+class SignupPopupViewController: BaseViewController {
     
     // 팝업 View
     lazy var popupView = UIView().then {
