@@ -301,11 +301,12 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
                     originalImage.draw(in: CGRect(origin: .zero, size: newSize))
                 }
                 itemButton.setImage(resizedImage, for: .normal)
+                itemButton.semanticContentAttribute = .forceLeftToRight
+            } else {
+                itemButton.setImage(nil, for: .normal)
             }
-            
             itemButton.backgroundColor = .white
             itemButton.setTitleColor(UIColor(named: "darkGray"), for: .normal)
-            itemButton.semanticContentAttribute = .forceLeftToRight
             setSavedInset()
         }
         
@@ -489,10 +490,10 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
         selectedButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: selectedButton.bounds.width - 35, bottom: 0, right: -imageInset)
     }
     
-    func showAlert() {
-        let alert = UIAlertController(title: "경고", message: "최소 2글자 이상 입력해야 합니다.", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
-    }
+//    func showAlert() {
+//        let alert = UIAlertController(title: "경고", message: "최소 2글자 이상 입력해야 합니다.", preferredStyle: .alert)
+//        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
+//    }
 }
 
 extension ExpandedDropdownTableViewCell: UITextFieldDelegate {
@@ -527,10 +528,10 @@ extension ExpandedDropdownTableViewCell: UITextFieldDelegate {
             textField.backgroundColor = .white
             
             // 2글자 미만인 경우
-            if text.count < 2 {
-                showAlert()
-                return
-            }
+//            if text.count < 2 {
+//                showAlert()
+//                return
+//            }
             
             // 입력된 텍스트에 따라 동적으로 너비 조절
             let calculatedWidth = calculateTextFieldWidth(for: text, maxCharacterCount: 8)

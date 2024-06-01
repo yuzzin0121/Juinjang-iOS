@@ -116,6 +116,7 @@ class ImjangNoteViewController: UIViewController{
     var detailDto: DetailDto? = nil
     var previousVCType: PreviousVCType = .createImjangVC
     var version: VersionInfo?
+    var receivedVersion: Int?
     var editCriteria: Int?
     var isEditMode: Bool = false // 수정 모드 여부
     
@@ -137,9 +138,6 @@ class ImjangNoteViewController: UIViewController{
         setConstraints()
         designViews()
         callRequest()
-        showCheckList {
-            print("버전 확인: \(self.version)")
-        }
         upButton.addTarget(self, action: #selector(upToTop), for: .touchUpInside)
         setReportStackViewClick()
         NotificationCenter.default.addObserver(self, selector: #selector(didStoppedChildScroll), name: NSNotification.Name("didStoppedChildScroll"), object: nil)
@@ -177,6 +175,14 @@ class ImjangNoteViewController: UIViewController{
         roomAddressLabel.text = "\(detailDto.address) \(detailDto.addressDetail)"
         modifiedDateStringLabel.text = "최근 수정 날짜 \(String.dateToString(target: detailDto.updatedAt))"
         images = detailDto.images
+        
+        print("버전: \(receivedVersion)")
+        if detailDto.purposeCode == 0, let version = receivedVersion {
+            self.version = VersionInfo(version: version, editCriteria: 0)
+        } else if detailDto.purposeCode == 1, let version = receivedVersion {            
+            self.version = VersionInfo(version: version, editCriteria: 1)
+        }
+        print("체크리스트 버전 설정: \(version)")
         version?.editCriteria = detailDto.purposeCode
         setUpImageUI()
         adjustLabelHeight()
@@ -213,32 +219,32 @@ class ImjangNoteViewController: UIViewController{
     }
     
     // -MARK: API 요청(버전 설정)
-    func showCheckList(completion: @escaping () -> Void) {
-        JuinjangAPIManager.shared.fetchData(type: BaseResponse<[CheckListResponseDto]>.self, api: .showChecklist(imjangId: imjangId)) { [weak self] response, error in
-            guard let self else { return }
-            if error == nil {
-                if let firstCheckList = response?.result?.first,
-                   let version = firstCheckList.questionDtos.first?.version {
-                    // 임의로 editCriteria를 0(실거래가)로 추가
-                    self.version = VersionInfo(version: version, editCriteria: 0)
-                    print("체크리스트 버전 설정: \(version)")
-                }
-            } else {
-                guard let error = error else { return }
-                switch error {
-                case .failedRequest:
-                    print("failedRequest")
-                case .noData:
-                    print("noData")
-                case .invalidResponse:
-                    print("invalidResponse")
-                case .invalidData:
-                    print("invalidData")
-                }
-            }
-            completion()
-        }
-    }
+//    func showCheckList(completion: @escaping () -> Void) {
+//        JuinjangAPIManager.shared.fetchData(type: BaseResponse<[CheckListResponse]>.self, api: .showChecklist(imjangId: imjangId)) { [weak self] response, error in
+//            guard let self else { return }
+//            if error == nil {
+//                if let firstCheckList = response?.result?.first,
+//                   let version = firstCheckList..first?.version {
+//                    // 임의로 editCriteria를 0(실거래가)로 추가
+//                    self.version = VersionInfo(version: version, editCriteria: 0)
+//                    print("체크리스트 버전 설정: \(version)")
+//                }
+//            } else {
+//                guard let error = error else { return }
+//                switch error {
+//                case .failedRequest:
+//                    print("failedRequest")
+//                case .noData:
+//                    print("noData")
+//                case .invalidResponse:
+//                    print("invalidResponse")
+//                case .invalidData:
+//                    print("invalidData")
+//                }
+//            }
+//            completion()
+//        }
+//    }
 
     
     // 리포트 보기 클릭 했을 때 - showReportVC 호출

@@ -11,6 +11,15 @@ struct CheckListResponseDto: Codable {
     var isExpanded: Bool?
 }
 
+struct QuestionAnswerDto: Codable {
+    let answerId: Int
+    let questionId: Int
+    let category: String?
+    let limjangId: Int
+    let answer: String
+    let answerType: String?
+}
+
 struct QuestionDto: Codable {
     let questionId: Int
     let category: Int
