@@ -12,19 +12,13 @@ import RealmSwift
 
 class CheckListViewController: BaseViewController {
     
+    // 체크리스트 정보
+    var version: Int = 0
+    var imjangId: Int
+    var isEditMode: Bool = false // 수정 모드 여부
     var allCategory: [String] = [] // 카테고리
     var checkListCategories: [CheckListCategory] = [] // 카테고리별 질문
     var checkListItems: [CheckListAnswer] = [] // 저장된 체크리스트 항목
-    
-    lazy var tableView = UITableView().then {
-        $0.separatorStyle = .none
-        $0.showsVerticalScrollIndicator = false
-        $0.isScrollEnabled = false
-    }
-
-    var isEditMode: Bool = false // 수정 모드 여부
-    var version: Int = 0
-    var imjangId: Int
     
     init(imjangId: Int) {
         self.imjangId = imjangId
@@ -35,6 +29,11 @@ class CheckListViewController: BaseViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    lazy var tableView = UITableView().then {
+        $0.separatorStyle = .none
+        $0.showsVerticalScrollIndicator = false
+        $0.isScrollEnabled = false
+    }
     
     override func viewDidLoad() {
         addCheckListModel()
@@ -53,7 +52,7 @@ class CheckListViewController: BaseViewController {
     
     private func setCheckInfo() {
         showCheckList {
-            self.filterVersionAndCategory(isEditMode: self.isEditMode, version: self.version) { [weak self] categories in
+            self.filterVersionAndCategory() { [weak self] categories in
                 guard let self = self else { return }
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
@@ -68,8 +67,8 @@ class CheckListViewController: BaseViewController {
     }
     
     func addSubViews() {
-            view.addSubview(tableView)
-        }
+        view.addSubview(tableView)
+    }
         
     func setupLayout() {
         tableView.snp.makeConstraints {
@@ -114,10 +113,14 @@ class CheckListViewController: BaseViewController {
     }
     
     // -MARK: 버전 조회
-    func filterVersionAndCategory(isEditMode: Bool, version: Int, completion: @escaping ([CheckListItem]) -> Void) {
+    func filterVersionAndCategory(completion: @escaping ([CheckListItem]) -> Void) {
         do {
             let realm = try Realm()
             var result = realm.objects(CheckListItem.self)
+
+            // ImjangNoteViewController로 버전 전달
+            let imjangNoteViewController = ImjangNoteViewController(imjangId: imjangId)
+            imjangNoteViewController.receivedVersion = version
             
             print("조회한 체크리스트 버전: \(version)")
             result = result.filter("version == \(version)")
@@ -146,26 +149,17 @@ class CheckListViewController: BaseViewController {
     
     // -MARK: API 요청(체크리스트 조회)
     func showCheckList(completion: @escaping () -> Void) {
-        JuinjangAPIManager.shared.fetchData(type: BaseResponse<[CheckListResponseDto]>.self, api: .showChecklist(imjangId: imjangId)) { [weak self] response, error in
+        JuinjangAPIManager.shared.fetchData(type: BaseResponse<[QuestionAnswerDto]>.self, api: .showChecklist(imjangId: imjangId)) { [weak self] response, error in
             guard let self else { return }
             if error == nil {
                 guard let response = response else { return }
                 print("------저장된 체크리스트 조회------")
                 if let categoryItem = response.result {
-                    for Item in categoryItem {
-                        for questionDto in Item.questionDtos {
-                            if let answer = questionDto.answer {
-                                checkListItems.append(CheckListAnswer(imjangId: imjangId, questionId: questionDto.questionId, answer: answer, isSelected: true))
-                            }
-                        }
+                    for item in categoryItem {
+                        checkListItems.append(CheckListAnswer(imjangId: imjangId, questionId: item.questionId, answer: item.answer, isSelected: true))
                     }
                 }
                 print(self.checkListItems)
-                if let firstCheckList = response.result?.first,
-                   let version = firstCheckList.questionDtos.first?.version {
-                    self.version = version
-                    print("체크리스트 버전: \(version)")
-                }
                 completion()
             } else {
                 guard let error = error else { return }
@@ -189,20 +183,15 @@ class CheckListViewController: BaseViewController {
         print("토큰값 \(UserDefaultManager.shared.accessToken)")
 
         // 저장된 체크리스트 불러오기
-        JuinjangAPIManager.shared.fetchData(type: BaseResponse<[CheckListResponseDto]>.self, api: .showChecklist(imjangId: imjangId)) { response, error in
+        JuinjangAPIManager.shared.fetchData(type: BaseResponse<[QuestionAnswerDto]>.self, api: .showChecklist(imjangId: imjangId)) { response, error in
             guard let checkListResponse = response else {
-                // 실패 시 에러 처리
                 print("실패: \(error?.localizedDescription ?? "error")")
                 return
             }
             
-            if let categoryItem = checkListResponse.result {
-                for Item in categoryItem {
-                    for questionDto in Item.questionDtos {
-                        if let answer = questionDto.answer {
-                            self.checkListItems.append(CheckListAnswer(imjangId: self.imjangId, questionId: questionDto.questionId, answer: answer, isSelected: true))
-                        }
-                    }
+            if let categoryItem = response?.result {
+                for item in categoryItem {
+                    self.checkListItems.append(CheckListAnswer(imjangId: self.imjangId, questionId: item.questionId, answer: item.answer, isSelected: true))
                 }
             }
 
@@ -269,22 +258,6 @@ class CheckListViewController: BaseViewController {
             }
         }
     }
-
-    
-    func findQuestionId(forQuestion question: String, in checkListResponse: BaseResponse<[CheckListResponseDto]>) -> Int? {
-        guard let result = checkListResponse.result else {
-            return nil
-        }
-        
-        for category in result {
-            for questionDto in category.questionDtos {
-                if questionDto.question == question {
-                    return questionDto.questionId
-                }
-            }
-        }
-        return nil
-    }
     
     // 키보드 내리기
     func hideKeyboardWhenTappedArround() {
@@ -301,8 +274,7 @@ class CheckListViewController: BaseViewController {
         if let isEditMode = notification.object as? Bool {
             print("isEditMode 상태: \(isEditMode)")
             self.isEditMode = isEditMode
-            version = 1
-            filterVersionAndCategory(isEditMode: isEditMode, version: version) { [weak self] result in
+            filterVersionAndCategory() { [weak self] result in
                 self?.tableView.reloadData()
             }
         }
@@ -356,7 +328,6 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
         }
     }
 
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         return isEditMode ? allCategory.count + 1 : allCategory.count
     }
@@ -583,6 +554,7 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                 let cell: NotEnteredCalendarTableViewCell = tableView.dequeueReusableCell(withIdentifier: NotEnteredCalendarTableViewCell.identifier, for: indexPath) as! NotEnteredCalendarTableViewCell
                 
                 cell.viewModeConfigure(at: indexPath)
+                // 임장용일 때 달력형 질문에 대한 답변 표시
                 if version == 0 {
                     for item in checkListItems {
                         var date: [(Int, String)] = [(1, ""), (2, "")]
@@ -593,6 +565,7 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
                         }
                         cell.savedViewModeConfigure(with: item.imjangId, with: date, at: indexPath)
                     }
+                // 원룸용일 때 달력형 질문에 대한 답변 표시
                 } else if version == 1 {
                     for item in checkListItems {
                         var date: [(Int, String)] = [(59, ""), (60, "")]
