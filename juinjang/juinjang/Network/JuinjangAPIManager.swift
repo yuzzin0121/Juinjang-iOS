@@ -41,7 +41,6 @@ final class JuinjangAPIManager {
                    headers: api.header,
                    interceptor: AuthInterceptor())
         .responseDecodable(of: type) { response in
-            print("StatusCode: \(response.response?.statusCode)", UserDefaultManager.shared.accessToken)
             switch response.result {
             case .success(let success):
                 completionHandler(success, nil)

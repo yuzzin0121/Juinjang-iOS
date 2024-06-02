@@ -191,20 +191,67 @@ final class ImjangListViewController: BaseViewController {
     }
     
     @objc func bookMarkButtonClicked(sender: UIButton) {
-        var imjangNote = imjangList[sender.tag]
+        let imjangNote = imjangList[sender.tag]
+        let imjangId = imjangNote.limjangId
         if imjangNote.isScraped {   // 이미 스크랩 되어있으면 스크랩 취소
-            cancelScrapRequest(imjangId: imjangNote.limjangId)
+            cancelScrap(imjangId: imjangId)
+            cancelScrapRequest(imjangId: imjangId)
         } else {
-            scrapRequest(imjangId: imjangNote.limjangId)
+            setScrap(imjangId: imjangId)
+            scrapRequest(imjangId: imjangId)
         }
     }
     
-    func scrapRequest(imjangId: Int) {
+    @objc func scrapBookmarkButtonClicked(sender: UIButton) {
+        let imjangNote = scrapImjangList[sender.tag]
+        let imjangId = imjangNote.limjangId
+        if imjangNote.isScraped {   // 이미 스크랩 되어있으면 스크랩 취소
+            cancelScrap(imjangId: imjangId)
+            cancelScrapRequest(imjangId: imjangId)
+        } else {
+            setScrap(imjangId: imjangId)
+            scrapRequest(imjangId: imjangId)
+        }
+    }
+    
+    private func cancelScrap(imjangId: Int) {
+        if let index = scrapImjangList.firstIndex(where: { $0.limjangId == imjangId }) {
+            scrapImjangList.remove(at: index)
+        }
+        
+        setIsScrap(imjangId: imjangId, isScraped: false)
+        imjangTableView.reloadData()
+    }
+    
+    private func setScrap(imjangId: Int) {
+        setIsScrap(imjangId: imjangId, isScraped: true)
+        
+        guard let imjang = getImjang(imjangId: imjangId) else { return }
+        scrapImjangList.insert(imjang, at: 0)
+        imjangTableView.reloadData()
+    }
+    
+    private func getImjang(imjangId: Int) -> ListDto? {
+        if let index = imjangList.firstIndex(where: { $0.limjangId == imjangId }) {
+            var imjang = imjangList[index]
+            return imjang
+        }
+        return nil
+    }
+    
+    private func setIsScrap(imjangId: Int, isScraped: Bool) {
+        if let imjangIndex = imjangList.firstIndex(where: { $0.limjangId == imjangId }) {
+            var imjang = imjangList[imjangIndex]
+            imjang.isScraped = isScraped
+            imjangList[imjangIndex] = imjang
+        }
+    }
+    
+    private func scrapRequest(imjangId: Int) {
         JuinjangAPIManager.shared.fetchData(type: NoResultResponse.self, api: .scrap(imjangId: imjangId)) { response, error in
             if error == nil {
                 guard let response = response else { return }
                 print(response.message)
-                self.callRequest(setScrap: true)
             } else {
                 guard let error else { return }
                 switch error {
@@ -221,12 +268,11 @@ final class ImjangListViewController: BaseViewController {
         }
     }
     
-    func cancelScrapRequest(imjangId: Int) {
+    private func cancelScrapRequest(imjangId: Int) {
         JuinjangAPIManager.shared.fetchData(type: NoResultResponse.self, api: .cancelScrap(imjangId: imjangId)) { response, error in
             if error == nil {
                 guard let response = response else { return }
                 print(response.message)
-                self.callRequest(setScrap: true)
             } else {
                 guard let error else { return }
                 switch error {
@@ -368,7 +414,7 @@ extension ImjangListViewController: UICollectionViewDelegate, UICollectionViewDa
         
         cell.bookMarkButton.tag = indexPath.row
         cell.setData(imjangNote: scrapImjangList[indexPath.row])
-        cell.bookMarkButton.addTarget(self, action: #selector(bookMarkButtonClicked), for: .touchUpInside)
+        cell.bookMarkButton.addTarget(self, action: #selector(scrapBookmarkButtonClicked), for: .touchUpInside)
         
         return cell
     }
@@ -381,7 +427,6 @@ extension ImjangListViewController: UICollectionViewDelegate, UICollectionViewDa
 
 extension ImjangListViewController: SendFilterItemDelegate {
     func sendFilterItem(filter: Filter) {
-        print(#function)
         changefilterTitle(filter.title)
         callRequest(sort: filter)
     }
