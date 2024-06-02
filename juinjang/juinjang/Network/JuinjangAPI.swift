@@ -22,6 +22,7 @@ enum JuinjangAPI {
     case modifyChecklist(imjangId: Int)
     
     case scrap(imjangId: Int)
+    case cancelScrap(imjangId: Int)
     case totalImjang(sort: String)
     case createImjang
     case modifyImjang
@@ -68,8 +69,8 @@ enum JuinjangAPI {
         case .modifyChecklist(let imjangId):
             return URL(string: baseURL + "checklist/\(imjangId)")!
             
-        case .scrap(let imjangId):
-            return URL(string: baseURL + "scrap/\(imjangId)")!
+        case .scrap(let imjangId), .cancelScrap(let imjangId):
+            return URL(string: baseURL + "limjangs/scraps/\(imjangId)")!
         case .totalImjang, .createImjang, .modifyImjang:
             return URL(string: baseURL + "limjang")!
             
@@ -128,7 +129,7 @@ enum JuinjangAPI {
             return .get
         case .nickname, .modifyImjang, .modifyChecklist, .editRecordName, .editRecordContent:
             return .patch
-        case .deleteRecordFile:
+        case .deleteRecordFile, .cancelScrap:
             return .delete
         }
     }

@@ -192,12 +192,11 @@ final class ImjangListViewController: BaseViewController {
     
     @objc func bookMarkButtonClicked(sender: UIButton) {
         var imjangNote = imjangList[sender.tag]
-        scrapRequest(imjangId: imjangNote.limjangId)
-    }
-    
-    @objc func scrapBookMarkButtonClicked(sender: UIButton) {
-        var imjangNote = scrapImjangList[sender.tag]
-        scrapRequest(imjangId: imjangNote.limjangId)
+        if imjangNote.isScraped {   // 이미 스크랩 되어있으면 스크랩 취소
+            cancelScrapRequest(imjangId: imjangNote.limjangId)
+        } else {
+            scrapRequest(imjangId: imjangNote.limjangId)
+        }
     }
     
     func scrapRequest(imjangId: Int) {
@@ -205,7 +204,29 @@ final class ImjangListViewController: BaseViewController {
             if error == nil {
                 guard let response = response else { return }
                 print(response.message)
-                self.callRequest()
+                self.callRequest(setScrap: true)
+            } else {
+                guard let error else { return }
+                switch error {
+                case .failedRequest:
+                    print("failedRequest")
+                case .noData:
+                    print("noData")
+                case .invalidResponse:
+                    print("invalidResponse")
+                case .invalidData:
+                    print("invalidData")
+                }
+            }
+        }
+    }
+    
+    func cancelScrapRequest(imjangId: Int) {
+        JuinjangAPIManager.shared.fetchData(type: NoResultResponse.self, api: .cancelScrap(imjangId: imjangId)) { response, error in
+            if error == nil {
+                guard let response = response else { return }
+                print(response.message)
+                self.callRequest(setScrap: true)
             } else {
                 guard let error else { return }
                 switch error {
