@@ -100,11 +100,11 @@ class ScrapCollectionViewCell: UICollectionViewCell {
         [firstImageView, secondImageView].forEach { totalStackView.addArrangedSubview($0)}
         
         firstImageView.snp.remakeConstraints {
-            $0.height.equalTo(firstImageView.snp.width).multipliedBy(117.0 / 190.0)
+            $0.height.equalTo(firstImageView.snp.width).multipliedBy(117.0 / 170.0)
         }
         
         secondImageView.snp.remakeConstraints {
-            $0.height.equalTo(secondImageView.snp.width).multipliedBy(117.0 / 85.0)
+            $0.height.equalTo(secondImageView.snp.width).multipliedBy(117.0 / 95.0)
         }
         
         if let url1 = URL(string: images[0]) {
@@ -147,15 +147,15 @@ class ScrapCollectionViewCell: UICollectionViewCell {
         }
                
         firstImageView.snp.makeConstraints {
-            $0.height.equalTo(firstImageView.snp.width).multipliedBy(117.0 / 190.0)
+            $0.height.equalTo(firstImageView.snp.width).multipliedBy(117.0 / 170.0)
         }
         
         secondImageView.snp.remakeConstraints {
-            $0.height.equalTo(secondImageView.snp.width).multipliedBy(66.0 / 85.0)
+            $0.height.equalTo(secondImageView.snp.width).multipliedBy(96.0 / 130.0)
         }
         
         thirdImageView.snp.remakeConstraints {
-            $0.height.equalTo(thirdImageView.snp.width).multipliedBy(47.0 / 85.0)
+            $0.height.equalTo(thirdImageView.snp.width).multipliedBy(70.0 / 130.0)
         }
         
         if let url1 = URL(string: images[0]) {
