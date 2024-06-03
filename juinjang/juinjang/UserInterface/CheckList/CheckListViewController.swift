@@ -33,6 +33,7 @@ class CheckListViewController: BaseViewController {
         $0.separatorStyle = .none
         $0.showsVerticalScrollIndicator = false
         $0.isScrollEnabled = false
+        $0.frame.size.height = $0.contentSize.height
     }
     
     override func viewDidLoad() {
@@ -119,8 +120,8 @@ class CheckListViewController: BaseViewController {
             var result = realm.objects(CheckListItem.self)
 
             // ImjangNoteViewController로 버전 전달
-            let imjangNoteViewController = ImjangNoteViewController(imjangId: imjangId)
-            imjangNoteViewController.receivedVersion = version
+//            let imjangNoteViewController = ImjangNoteViewController(imjangId: imjangId)
+//            imjangNoteViewController.receivedVersion = version
             
             print("조회한 체크리스트 버전: \(version)")
             result = result.filter("version == \(version)")
@@ -159,7 +160,7 @@ class CheckListViewController: BaseViewController {
                         checkListItems.append(CheckListAnswer(imjangId: imjangId, questionId: item.questionId, answer: item.answer, isSelected: true))
                     }
                 }
-                print(self.checkListItems)
+//                print(self.checkListItems)
                 completion()
             } else {
                 guard let error = error else { return }
@@ -309,7 +310,7 @@ class CheckListViewController: BaseViewController {
     }
 }
 
-extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
+extension CheckListViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard scrollView == self.tableView else { return }
         
@@ -327,7 +328,9 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
             }
         }
     }
+}
 
+extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return isEditMode ? allCategory.count + 1 : allCategory.count
     }
