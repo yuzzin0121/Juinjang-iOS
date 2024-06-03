@@ -27,6 +27,7 @@ class RecordingFilesViewController: BaseViewController {
         }
     }
     
+    weak var removeRecordDelegate: RemoveRecordDelegate?
     var imjangId: Int
     
     init(imjangId: Int) {

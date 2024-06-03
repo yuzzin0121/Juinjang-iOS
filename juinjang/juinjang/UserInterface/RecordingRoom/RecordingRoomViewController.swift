@@ -9,13 +9,16 @@ import UIKit
 import SnapKit
 import Then
 
-protocol PassDataDelegate: AnyObject {
-    func passData(id: Int)
+protocol RemoveRecordDelegate: AnyObject {
+    func removeRecordResponse(recordId: Int)
 }
 
-class RecordingRoomViewController: BaseViewController, PassDataDelegate {
-    func passData(id: Int) {
-        self.imjangId = id
+class RecordingRoomViewController: BaseViewController, RemoveRecordDelegate {
+    func removeRecordResponse(recordId: Int) {
+        if let index = fileItems.firstIndex(where: { $0.recordId == recordId }) {
+            fileItems.remove(at: index)
+            loadRecordings()
+        }
     }
     
     // 스크롤뷰
@@ -225,6 +228,7 @@ class RecordingRoomViewController: BaseViewController, PassDataDelegate {
     @objc
     func showRecordingFilesVC() {
         let RecordingFilesVC = RecordingFilesViewController(imjangId: imjangId)
+        RecordingFilesVC.removeRecordDelegate = self
         self.navigationController?.pushViewController(RecordingFilesVC, animated: true)
     }
     
@@ -289,7 +293,7 @@ class RecordingRoomViewController: BaseViewController, PassDataDelegate {
         
         designButton(showTotalRecordingButton, title: "전체보기")
         
-        designLabel(emptyMessageLabel, text: "아직 녹음 파일이 없어요", font: .pretendard(size: 16, weight: .medium), textColor: ColorStyle.gray0)
+        designLabel(emptyMessageLabel, text: "아직 녹음 파일이 없어요", font: .pretendard(size: 16, weight: .medium), textColor: ColorStyle.gray1)
         
         designLabel(notePadLabel, text: "메모장", font: .pretendard(size: 20, weight: .bold), textColor: ColorStyle.textBlack)
         
