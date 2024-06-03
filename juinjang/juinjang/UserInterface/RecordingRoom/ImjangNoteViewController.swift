@@ -116,7 +116,7 @@ class ImjangNoteViewController: BaseViewController{
     var detailDto: DetailDto? = nil
     var previousVCType: PreviousVCType = .createImjangVC
     var version: VersionInfo?
-    var receivedVersion: Int?
+    var receivedVersion: Int? = 0
     var editCriteria: Int?
     var isEditMode: Bool = false // 수정 모드 여부
     
@@ -177,6 +177,8 @@ class ImjangNoteViewController: BaseViewController{
         images = detailDto.images
         
         print("버전: \(receivedVersion)")
+        // 임의로 버전 설정
+        receivedVersion = 0
         if detailDto.purposeCode == 0, let version = receivedVersion {
             self.version = VersionInfo(version: version, editCriteria: 0)
         } else if detailDto.purposeCode == 1, let version = receivedVersion {            
@@ -800,22 +802,37 @@ extension ImjangNoteViewController: UIScrollViewDelegate {
         let containerY = containerView.frame.origin.y
         
         // 0이상, && scrollView.contentOffset.y <= containerY
-        if (scrollView.contentOffset.y > 0) && (scrollView.contentOffset.y > containerY - 10){
-            DispatchQueue.main.async {
-                scrollView.isScrollEnabled = false
-                UIView.animate(withDuration: 0.05) {
-                    scrollView.contentOffset.y = containerY
-                }
-            }
+//        if (scrollView.contentOffset.y > 0) && (scrollView.contentOffset.y > containerY - 10){
+//            DispatchQueue.main.async {
+//                scrollView.isScrollEnabled = false
+//                UIView.animate(withDuration: 0.05) {
+//                    scrollView.contentOffset.y = containerY
+//                }
+//            }
+//            NotificationCenter.default.post(name: NSNotification.Name("didStoppedParentScroll"), object: nil)
+//        }
+//        
+//        if scrollView.contentOffset.y > 20 {
+//            UIView.animate(withDuration: 0.5, delay:0) {
+//                self.upButton.alpha = 1
+//            }
+//        } else {
+//            UIView.animate(withDuration: 0.5, delay:0) {
+//                self.upButton.alpha = 0
+//            }
+//        }
+        if scrollView.contentOffset.y > 0 && scrollView.contentOffset.y > containerY - 10 {
+            scrollView.isScrollEnabled = false
+            scrollView.contentOffset.y = containerY
             NotificationCenter.default.post(name: NSNotification.Name("didStoppedParentScroll"), object: nil)
         }
-        
+
         if scrollView.contentOffset.y > 20 {
-            UIView.animate(withDuration: 0.5, delay:0) {
+            UIView.animate(withDuration: 0.5) {
                 self.upButton.alpha = 1
             }
         } else {
-            UIView.animate(withDuration: 0.5, delay:0) {
+            UIView.animate(withDuration: 0.5) {
                 self.upButton.alpha = 0
             }
         }
