@@ -17,12 +17,6 @@ class ScrapCollectionViewCell: UICollectionViewCell {
         $0.spacing = 4
         $0.backgroundColor = ColorStyle.emptyGray
     }
-    var imageVStackView = UIStackView().then {
-        $0.axis = .vertical
-        $0.alignment = .fill
-        $0.distribution = .equalSpacing
-        $0.spacing = 4
-    }
     
     let emptyBackgroundView = UIView().then {
         $0.backgroundColor = ColorStyle.emptyGray
@@ -30,17 +24,6 @@ class ScrapCollectionViewCell: UICollectionViewCell {
     let emptyImage = UIImageView().then {
         $0.image = ImageStyle.gallery
         $0.contentMode = .scaleAspectFit
-    }
-    
-    // 하우스 이미지뷰
-    lazy var firstImage = UIImageView().then {
-        $0.design(contentMode: .scaleAspectFill, cornerRadius: 5)
-    }
-    lazy var secondImage = UIImageView().then {
-        $0.design(contentMode: .scaleAspectFill, cornerRadius: 5)
-    }
-    lazy var thirdImage = UIImageView().then {
-        $0.design(contentMode: .scaleAspectFill, cornerRadius: 5)
     }
     
     // 방 이름 레이블
@@ -68,6 +51,148 @@ class ScrapCollectionViewCell: UICollectionViewCell {
     let bookMarkButton = UIButton()
     
     
+    func setData(imjangNote: ListDto?) {
+        guard let imjangNote else { return }
+        roomNameLabel.text = imjangNote.nickname
+        setRate(totalAverage: imjangNote.totalAverage)
+        setPriceLabel(priceList: imjangNote.priceList)
+        roomAddressLabel.text = imjangNote.address
+        let bookmarkImage = imjangNote.isScraped ? ImageStyle.bookmarkSelected : ImageStyle.bookmark
+        bookMarkButton.setImage(bookmarkImage, for: .normal)
+        
+        let images = imjangNote.images
+        switch images.count {
+        case 0:
+            setStackViewBackground(isEmpty: true)
+        case 1:
+            setImage1(image: images[0])
+            setStackViewBackground(isEmpty: false)
+        case 2:
+            setImage2(images: images)
+            setStackViewBackground(isEmpty: false)
+        case 3...:
+            setImage3(images: images)
+            setStackViewBackground(isEmpty: false)
+        default:
+            print("알 수 없는 오류 발생")
+        }
+    }
+    
+    func setImage1(image: String) {
+        let firstImageView = ImjangImageView(frame: .zero)
+        totalStackView.addArrangedSubview(firstImageView)
+        if let url = URL(string: image) {
+            DispatchQueue.main.async {
+                firstImageView.kf.setImage(with: url, placeholder: UIImage(named: "1"))
+            }
+        }
+        
+        DispatchQueue.main.async {
+            firstImageView.layer.cornerRadius = 5
+            firstImageView.clipsToBounds = true
+        }
+    }
+    
+    func setImage2(images: [String]) {
+        let firstImageView = ImjangImageView(frame: .zero)
+        let secondImageView = ImjangImageView(frame: .zero)
+        
+        [firstImageView, secondImageView].forEach { totalStackView.addArrangedSubview($0)}
+        
+        firstImageView.snp.remakeConstraints {
+            $0.height.equalTo(firstImageView.snp.width).multipliedBy(117.0 / 190.0)
+        }
+        
+        secondImageView.snp.remakeConstraints {
+            $0.height.equalTo(secondImageView.snp.width).multipliedBy(117.0 / 85.0)
+        }
+        
+        if let url1 = URL(string: images[0]) {
+            DispatchQueue.main.async {
+                firstImageView.kf.setImage(with: url1, placeholder: UIImage(named: "1"))
+            }
+        }
+        if let url2 = URL(string: images[1]) {
+            DispatchQueue.main.async {
+                secondImageView.kf.setImage(with: url2, placeholder: UIImage(named: "2"))
+            }
+        }
+        
+        DispatchQueue.main.async {
+            firstImageView.layer.cornerRadius = 5
+            secondImageView.layer.cornerRadius = 5
+            firstImageView.clipsToBounds = true
+            secondImageView.clipsToBounds = true
+        }
+    }
+    
+    func setImage3(images: [String]) {
+        let firstImageView = ImjangImageView(frame: .zero)
+        let secondImageView = ImjangImageView(frame: .zero)
+        let thirdImageView = ImjangImageView(frame: .zero)
+        
+        var imageVStackView = UIStackView().then {
+            $0.axis = .vertical
+            $0.alignment = .fill
+            $0.distribution = .equalSpacing
+            $0.spacing = 4
+        }
+        
+        [firstImageView, imageVStackView].forEach {
+            totalStackView.addArrangedSubview($0)
+        }
+
+        [secondImageView, thirdImageView].forEach {
+            imageVStackView.addArrangedSubview($0)
+        }
+               
+        firstImageView.snp.makeConstraints {
+            $0.height.equalTo(firstImageView.snp.width).multipliedBy(117.0 / 190.0)
+        }
+        
+        secondImageView.snp.remakeConstraints {
+            $0.height.equalTo(secondImageView.snp.width).multipliedBy(66.0 / 85.0)
+        }
+        
+        thirdImageView.snp.remakeConstraints {
+            $0.height.equalTo(thirdImageView.snp.width).multipliedBy(47.0 / 85.0)
+        }
+        
+        if let url1 = URL(string: images[0]) {
+            DispatchQueue.main.async {
+                firstImageView.kf.setImage(with: url1, placeholder: UIImage(named: "1"))
+            }
+        }
+        if let url2 = URL(string: images[1]) {
+            DispatchQueue.main.async {
+                secondImageView.kf.setImage(with: url2, placeholder: UIImage(named: "2"))
+            }
+        }
+        if let url3 = URL(string: images[2]) {
+            DispatchQueue.main.async {
+                thirdImageView.kf.setImage(with: url3, placeholder: UIImage(named: "3"))
+            }
+        }
+        
+        DispatchQueue.main.async {
+            firstImageView.layer.cornerRadius = 5
+            secondImageView.layer.cornerRadius = 5
+            thirdImageView.layer.cornerRadius = 5
+            firstImageView.clipsToBounds = true
+            secondImageView.clipsToBounds = true
+            thirdImageView.clipsToBounds = true
+        }
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        totalStackView.subviews.forEach { subview in
+            subview.removeFromSuperview()
+        }
+        setData(imjangNote: nil)
+    }
+    
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureHierarchy()
@@ -76,97 +201,6 @@ class ScrapCollectionViewCell: UICollectionViewCell {
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    func setImage1(image: String) {
-        if let url = URL(string: image) {
-            DispatchQueue.main.async {
-                self.firstImage.kf.setImage(with: url, placeholder: UIImage(named: "1"))
-            }
-        }
-        totalStackView.spacing = 0
-        imageVStackView.spacing = 0
-//        totalStackView.addArrangedSubview(firstImage)
-    }
-    
-    func setImage2(images: [String]) {
-        if let url1 = URL(string: images[0]) {
-            DispatchQueue.main.async {
-                self.firstImage.kf.setImage(with: url1, placeholder: UIImage(named: "1"))
-            }
-        }
-        if let url2 = URL(string: images[1]) {
-            DispatchQueue.main.async {
-                self.secondImage.kf.setImage(with: url2, placeholder: UIImage(named: "2"))
-            }
-        }
-        totalStackView.spacing = 4
-        imageVStackView.spacing = 0
-//        [firstImage, secondImage].forEach { totalStackView.addArrangedSubview($0)}
-  
-        firstImage.snp.remakeConstraints {
-            $0.height.equalTo(firstImage.snp.width).multipliedBy(117.0 / 190.0)
-        }
-        
-        secondImage.snp.remakeConstraints {
-            $0.height.equalTo(secondImage.snp.width).multipliedBy(117.0 / 85.0)
-        }
-    }
-    
-    func setImage3(images: [String]) {
-        if let url1 = URL(string: images[0]) {
-            DispatchQueue.main.async {
-                self.firstImage.kf.setImage(with: url1, placeholder: UIImage(named: "1"))
-            }
-        }
-        if let url2 = URL(string: images[1]) {
-            DispatchQueue.main.async {
-                self.secondImage.kf.setImage(with: url2, placeholder: UIImage(named: "2"))
-            }
-        }
-        if let url3 = URL(string: images[2]) {
-            DispatchQueue.main.async {
-                self.thirdImage.kf.setImage(with: url3, placeholder: UIImage(named: "3"))
-            }
-        }
-        totalStackView.spacing = 4
-        imageVStackView.spacing = 4
-//        DispatchQueue.main.async {
-//            self.firstImage.image = UIImage(named: images[0])
-//            self.secondImage.image = UIImage(named: images[1])
-//            self.thirdImage.image = UIImage(named: images[2])
-//        }
-//        let imagesWidth = contentView.frame.width - (12 * 2)
-        
-//        [firstImage, imageVStackView].forEach {
-//            totalStackView.addArrangedSubview($0)
-//        }
-//        
-//        [secondImage, thirdImage].forEach {
-//            imageVStackView.addArrangedSubview($0)
-//        }
-       
-        firstImage.snp.remakeConstraints {
-            $0.height.equalTo(firstImage.snp.width).multipliedBy(117.0 / 190.0)
-        }
-//        let vstackHeight = firstImage.frame.height - 4
-        
-        secondImage.snp.remakeConstraints {
-            $0.height.equalTo(secondImage.snp.width).multipliedBy(66.0 / 85.0)
-        }
-        
-        thirdImage.snp.remakeConstraints {
-            $0.height.equalTo(thirdImage.snp.width).multipliedBy(47.0 / 85.0)
-        }
-        
-    }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        setData(imjangNote: nil)
-        firstImage.image = nil
-        secondImage.image = nil
-        thirdImage.image = nil
     }
     
     func setPriceLabel(priceList: [String]) {
@@ -198,36 +232,17 @@ class ScrapCollectionViewCell: UICollectionViewCell {
             scoreLabel.textColor = ColorStyle.null
         }
     }
-    
-    func setData(imjangNote: ListDto?) {
-        guard let imjangNote else { return }
-        roomNameLabel.text = imjangNote.nickname
-        setRate(totalAverage: imjangNote.totalAverage)
-        setPriceLabel(priceList: imjangNote.priceList)
-        roomAddressLabel.text = imjangNote.address
-        let bookmarkImage = imjangNote.isScraped ? ImageStyle.bookmarkSelected : ImageStyle.bookmark
-        bookMarkButton.setImage(bookmarkImage, for: .normal)
-        
-        let images = imjangNote.images
-        switch images.count {
-        case 0:
-            setStackViewBackground(isEmpty: true)
-        case 1:
-            setImage1(image: images[0])
-            setStackViewBackground(isEmpty: false)
-        case 2:
-            setImage2(images: images)
-            setStackViewBackground(isEmpty: false)
-        case 3...:
-            setImage3(images: images)
-            setStackViewBackground(isEmpty: false)
-        default:
-            print("알 수 없는 오류 발생")
-        }
-    }
+
     
     func setStackViewBackground(isEmpty: Bool) {
         emptyImage.isHidden = isEmpty ? false : true
+        if isEmpty {
+            totalStackView.addSubview(emptyImage)
+            emptyImage.snp.makeConstraints {
+                $0.center.equalTo(totalStackView)
+                $0.size.equalTo(50)
+            }
+        }
         totalStackView.backgroundColor = isEmpty ? ColorStyle.emptyGray : UIColor.white
     }
     
@@ -235,7 +250,6 @@ class ScrapCollectionViewCell: UICollectionViewCell {
         [totalStackView,roomNameStackView, starStackView, roomPriceLabel, roomAddressLabel, bookMarkButton].forEach {
             contentView.addSubview($0)
         }
-        totalStackView.addSubview(emptyImage)
         
         [roomNameLabel, roomIcon].forEach {
             roomNameStackView.addArrangedSubview($0)
@@ -244,21 +258,11 @@ class ScrapCollectionViewCell: UICollectionViewCell {
         [starIcon, scoreLabel].forEach {
             starStackView.addArrangedSubview($0)
         }
-        
-        [firstImage, imageVStackView].forEach {
-            totalStackView.addArrangedSubview($0)
-        }
-        
-        [secondImage, thirdImage].forEach {
-            imageVStackView.addArrangedSubview($0)
-        }
     }
     
     override func draw(_ rect: CGRect) {
         contentView.layer.cornerRadius = 10
-        DispatchQueue.main.async {
-            self.totalStackView.layer.cornerRadius = 5
-        }
+        totalStackView.layer.cornerRadius = 5
     }
     
     func configureView() {
@@ -282,11 +286,6 @@ class ScrapCollectionViewCell: UICollectionViewCell {
         totalStackView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview().inset(12)
             $0.height.equalTo(117)
-        }
-      
-        emptyImage.snp.makeConstraints {
-            $0.center.equalTo(totalStackView)
-            $0.size.equalTo(50)
         }
         
         roomNameStackView.snp.makeConstraints {
