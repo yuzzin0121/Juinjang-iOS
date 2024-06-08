@@ -103,7 +103,7 @@ class ImjangNoteViewController: BaseViewController{
         $0.addTarget(self, action: #selector(editButtonTapped(_:)), for: .touchUpInside)
     }
     
-    lazy var recordingSegmentedVC = RecordingSegmentedViewController(imjangId: imjangId)
+    lazy var recordingSegmentedVC = RecordingSegmentedViewController(imjangId: imjangId, version: versionDetail)
     
     var roomName: String = "판교푸르지오월드마크"
     var roomPriceString: String = "30억 1천만원"
@@ -115,13 +115,14 @@ class ImjangNoteViewController: BaseViewController{
     var imjangId: Int
     var detailDto: DetailDto? = nil
     var previousVCType: PreviousVCType = .createImjangVC
-    var version: VersionInfo?
-    var receivedVersion: Int? = 0
+    var versionInfo: VersionInfo?
+    var versionDetail: Int
     var editCriteria: Int?
     var isEditMode: Bool = false // 수정 모드 여부
     
-    init(imjangId: Int) {
+    init(imjangId: Int, version: Int) {
         self.imjangId = imjangId
+        self.versionDetail = version
         super.init()
     }
     
@@ -176,16 +177,21 @@ class ImjangNoteViewController: BaseViewController{
         modifiedDateStringLabel.text = "최근 수정 날짜 \(String.dateToString(target: detailDto.updatedAt))"
         images = detailDto.images
         
-        print("버전: \(receivedVersion)")
-        // 임의로 버전 설정
-        receivedVersion = 0
-        if detailDto.purposeCode == 0, let version = receivedVersion {
-            self.version = VersionInfo(version: version, editCriteria: 0)
-        } else if detailDto.purposeCode == 1, let version = receivedVersion {            
-            self.version = VersionInfo(version: version, editCriteria: 1)
+        // 버전 설정
+        let checkListVersion = detailDto.checkListVersion
+        // purposeCode (0: 부동산 투자, 1: 직접 입주)
+        if checkListVersion == "LIMJANG" {
+            versionDetail = 0
+        } else if checkListVersion == "NON_LIMJANG" {
+            versionDetail = 1
         }
-        print("체크리스트 버전 설정: \(version)")
-        version?.editCriteria = detailDto.purposeCode
+        if detailDto.purposeCode == 0 {
+            self.versionInfo = VersionInfo(version: versionDetail, editCriteria: 0)
+        } else if detailDto.purposeCode == 1 {
+                self.versionInfo = VersionInfo(version: versionDetail, editCriteria: 1)
+        }
+        print("체크리스트 버전 설정: \(versionInfo)")
+        versionInfo?.editCriteria = detailDto.purposeCode
         setUpImageUI()
         adjustLabelHeight()
     }
@@ -360,13 +366,13 @@ class ImjangNoteViewController: BaseViewController{
     @objc func editView() {
         let editVC = EditBasicInfoViewController()
         let editDetailVC = EditBasicInfoDetailViewController()
-        if version?.editCriteria == 0 {
+        if versionInfo?.editCriteria == 0 {
             editVC.imjangId = imjangId
-            editVC.versionInfo = version
+            editVC.versionInfo = versionInfo
             self.navigationController?.pushViewController(editVC, animated: true)
-        } else if version?.editCriteria == 1 {
+        } else if versionInfo?.editCriteria == 1 {
             editDetailVC.imjangId = imjangId
-            editDetailVC.versionInfo = version
+            editDetailVC.versionInfo = versionInfo
             self.navigationController?.pushViewController(editDetailVC, animated: true)
         }
     }

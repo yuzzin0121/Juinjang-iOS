@@ -252,13 +252,14 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
     
     // 보기 모드일 때 저장된 값이 있는 경우
     func savedViewModeConfigure(with answer: String, with options: [Option], at indexPath: IndexPath) {
-        if answer != "0" {
-            itemPickerView.selectRow(Int(answer) ?? 0, inComponent: 0, animated: true)
+        // answer와 일치하는 옵션의 인덱스를 찾기
+        if let selectedIndex = options.firstIndex(where: { $0.option == answer }) {
+            itemPickerView.selectRow(selectedIndex, inComponent: 0, animated: true)
             questionImage.image = UIImage(named: "question-selected-image")
             contentLabel.textColor = UIColor(named: "500")
             backgroundColor = .white
             
-            let selectedOption = options[Int(answer) ?? 0]
+            let selectedOption = options[selectedIndex]
             itemButton.setTitle(selectedOption.option, for: .normal)
             
             // 이미지가 있는 경우 리사이즈하여 설정
@@ -282,16 +283,16 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
 
     // 수정 모드일 때 저장된 값이 있는 경우
     func savedEditModeConfigure(with answer: String, with options: [Option], at indexPath: IndexPath) {
-        print("선택형 답변 Index: \(answer)")
+        print("선택형 답변: \(answer)")
         
         // answer와 일치하는 옵션의 인덱스를 찾기
-        if answer != "0" {
-            itemPickerView.selectRow(Int(answer) ?? 0, inComponent: 0, animated: true)
+        if let selectedIndex = options.firstIndex(where: { $0.option == answer }) {
+            itemPickerView.selectRow(selectedIndex, inComponent: 0, animated: true)
             questionImage.image = UIImage(named: "question-selected-image")
             contentLabel.textColor = UIColor(named: "500")
             backgroundColor = UIColor(named: "lightOrange")
             
-            let selectedOption = options[Int(answer) ?? 0]
+            let selectedOption = options[selectedIndex]
             itemButton.setTitle(selectedOption.option, for: .normal)
             
             // 이미지가 있는 경우 리사이즈하여 설정
@@ -315,8 +316,8 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
     }
 
     
-    func handleOptionSelection(_ optionIndex: String) {
-        optionSelectionHandler?(optionIndex)
+    func handleOptionSelection(_ option: String) {
+        optionSelectionHandler?(option)
     }
 }
 
@@ -362,6 +363,7 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
         etcTextField.removeFromSuperview()
         
         // 기본값 설정
+        // 기본값 설정
         if row == 0 {
             backgroundColor = .white
             questionImage.image = UIImage(named: "question-image")
@@ -372,12 +374,17 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
             backgroundColor = UIColor(named: "lightOrange")
             questionImage.image = UIImage(named: "question-selected-image")
             
-            handleOptionSelection(String(row))
-        }
-        
-        if options[row].option == "기타" {
-            backgroundColor = .white
-            questionImage.image = UIImage(named: "question-image")
+            if selectedOption.option == "기타" {
+                // 기타 선택했을 때 선택지 중에 있는지 확인
+                if let existingOption = options.first(where: { $0.option == etcTextField.text }) {
+                    handleOptionSelection(existingOption.option)
+                } else {
+                    // 선택지 중에 없는 경우 사용자 입력값으로 전달
+                    handleOptionSelection(etcTextField.text ?? "")
+                }
+            } else {
+                handleOptionSelection(selectedOption.option)
+            }
         }
     }
     

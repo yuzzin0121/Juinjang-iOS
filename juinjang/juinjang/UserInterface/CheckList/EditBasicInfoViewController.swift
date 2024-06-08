@@ -14,8 +14,6 @@ class EditBasicInfoViewController: BaseViewController {
     var imjangId: Int? = nil
     var versionInfo: VersionInfo? = nil
     
-    var moveTypeButtons: [UIButton] = [] // "입주 유형"을 나타내는 선택지
-    
     var moveTypeStackView: UIStackView!
     var inputPriceStackView: UIStackView!
     var inputMonthlyRentStackView: UIStackView!
@@ -545,10 +543,10 @@ class EditBasicInfoViewController: BaseViewController {
         modifyImjang { [weak self] error in
             guard let self else { return }
             if error == nil {
-                guard let imjangId else { return }
-                let imjangNoteVC = ImjangNoteViewController(imjangId: imjangId)
+                guard let imjangId, let version = versionInfo?.version else { return }
+                let imjangNoteVC = ImjangNoteViewController(imjangId: imjangId, version: version)
 //                imjangNoteVC.imjangId = self.imjangId
-                imjangNoteVC.version = self.versionInfo
+                imjangNoteVC.versionInfo = self.versionInfo
                 self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
                 self.navigationController?.pushViewController(imjangNoteVC, animated: true)
             } else {
