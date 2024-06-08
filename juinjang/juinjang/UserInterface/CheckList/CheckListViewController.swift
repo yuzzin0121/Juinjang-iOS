@@ -157,7 +157,7 @@ class CheckListViewController: BaseViewController {
                         checkListItems.append(CheckListAnswer(imjangId: imjangId, questionId: item.questionId, answer: item.answer, isSelected: true))
                     }
                 }
-//                print(self.checkListItems)
+                print(self.checkListItems)
                 completion()
             } else {
                 guard let error = error else { return }
@@ -185,12 +185,6 @@ class CheckListViewController: BaseViewController {
             guard let checkListResponse = response else {
                 print("실패: \(error?.localizedDescription ?? "error")")
                 return
-            }
-            
-            if let categoryItem = response?.result {
-                for item in categoryItem {
-                    self.checkListItems.append(CheckListAnswer(imjangId: self.imjangId, questionId: item.questionId, answer: item.answer, isSelected: true))
-                }
             }
 
             print("----- 체크리스트 저장할 항목 -----")
@@ -241,6 +235,7 @@ class CheckListViewController: BaseViewController {
                         case .success(let value):
                             print("체크리스트 저장 처리 성공")
                             print(value)
+                            self.showCheckList(completion: {})
                         case .failure(let error):
                             print("체크리스트 저장 처리 실패")
                             if let data = response.data,
