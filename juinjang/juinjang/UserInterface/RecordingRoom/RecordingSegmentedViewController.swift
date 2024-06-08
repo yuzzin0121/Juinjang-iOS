@@ -26,9 +26,11 @@ class RecordingSegmentedViewController: TabmanViewController, MoveWarningMessage
     
     var imjangNoteViewController: ImjangNoteViewController?
     var imjangId: Int
+    var version: Int
     
-    init(imjangId: Int) {
+    init(imjangId: Int, version: Int) {
         self.imjangId = imjangId
+        self.version = version
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -53,7 +55,7 @@ class RecordingSegmentedViewController: TabmanViewController, MoveWarningMessage
     }
     
     func addViewControllers() {
-        let checkListVC = CheckListViewController(imjangId: imjangId)
+        let checkListVC = CheckListViewController(imjangId: imjangId, version: version)
         let recordingRoomVC = RecordingRoomViewController(imjangId: imjangId)
         viewControllers.append(contentsOf: [checkListVC, recordingRoomVC])
     }

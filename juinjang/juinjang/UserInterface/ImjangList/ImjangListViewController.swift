@@ -134,6 +134,43 @@ final class ImjangListViewController: BaseViewController {
         }
     }
     
+    func callVersionRequest(imjangId: Int, completion: @escaping (Int?) -> Void) {
+        JuinjangAPIManager.shared.fetchData(type: BaseResponse<DetailDto>.self, api: .detailImjang(imjangId: imjangId)) { detailDto, error in
+            if error == nil {
+                guard let result = detailDto else {
+                    completion(nil)
+                    return
+                }
+                if let detailDto = result.result {
+                    let checkListVersion = detailDto.checkListVersion
+                    if checkListVersion == "LIMJANG" {
+                        completion(0)
+                    } else if checkListVersion == "NON_LIMJANG" {
+                        completion(1)
+                    } else {
+                        completion(nil)
+                    }
+                }
+            } else {
+                guard let error else {
+                    completion(nil)
+                    return
+                }
+                switch error {
+                case .failedRequest:
+                    print("failedRequest")
+                case .noData:
+                    print("noData")
+                case .invalidResponse:
+                    print("invalidResponse")
+                case .invalidData:
+                    print("invalidData")
+                }
+                completion(nil)
+            }
+        }
+    }
+    
     // 스크랩 리스트 설정
     func setData(scrapedList: [ListDto]) {
         scrapImjangList = []
@@ -294,9 +331,9 @@ final class ImjangListViewController: BaseViewController {
         self.navigationController?.pushViewController(openNewPageVC, animated: true)
     }
     
-    func showImjangNoteVC(imjangId: Int?) {
-        guard let imjangId = imjangId else { return }
-        let imjangNoteVC = ImjangNoteViewController(imjangId: imjangId)
+    func showImjangNoteVC(imjangId: Int?, version: Int?) {
+        guard let imjangId = imjangId, let version = version else { return }
+        let imjangNoteVC = ImjangNoteViewController(imjangId: imjangId, version: version)
         imjangNoteVC.imjangId = imjangId
         imjangNoteVC.previousVCType = .imjangList
         imjangNoteVC.completionHandler = {
@@ -401,7 +438,13 @@ extension ImjangListViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let imjangId = imjangList[indexPath.row].limjangId
-        showImjangNoteVC(imjangId: imjangId)
+        callVersionRequest(imjangId: imjangId) { version in
+            if let version = version {
+                self.showImjangNoteVC(imjangId: imjangId, version: version)
+            } else {
+                self.showImjangNoteVC(imjangId: imjangId, version: version)
+            }
+        }
     }
 }
 
@@ -421,7 +464,13 @@ extension ImjangListViewController: UICollectionViewDelegate, UICollectionViewDa
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let item = scrapImjangList[indexPath.row]
-        showImjangNoteVC(imjangId: item.limjangId)
+        callVersionRequest(imjangId: item.limjangId) { version in
+            if let version = version {
+                self.showImjangNoteVC(imjangId: item.limjangId, version: version)
+            } else {
+                self.showImjangNoteVC(imjangId: item.limjangId, version: version)
+            }
+        }
     }
 }
 

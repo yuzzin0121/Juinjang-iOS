@@ -13,15 +13,16 @@ import RealmSwift
 class CheckListViewController: BaseViewController {
     
     // 체크리스트 정보
-    var version: Int = 0
+    var version: Int
     var imjangId: Int
     var isEditMode: Bool = false // 수정 모드 여부
     var allCategory: [String] = [] // 카테고리
     var checkListCategories: [CheckListCategory] = [] // 카테고리별 질문
     var checkListItems: [CheckListAnswer] = [] // 저장된 체크리스트 항목
     
-    init(imjangId: Int) {
+    init(imjangId: Int, version: Int) {
         self.imjangId = imjangId
+        self.version = version
         super.init()
     }
     
@@ -118,10 +119,6 @@ class CheckListViewController: BaseViewController {
         do {
             let realm = try Realm()
             var result = realm.objects(CheckListItem.self)
-
-            // ImjangNoteViewController로 버전 전달
-//            let imjangNoteViewController = ImjangNoteViewController(imjangId: imjangId)
-//            imjangNoteViewController.receivedVersion = version
             
             print("조회한 체크리스트 버전: \(version)")
             result = result.filter("version == \(version)")

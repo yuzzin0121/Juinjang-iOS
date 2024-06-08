@@ -14,8 +14,8 @@ class EditBasicInfoDetailViewController: BaseViewController {
     var imjangId: Int? = nil
     var versionInfo: VersionInfo? = nil
     
-    var moveTypeButtons: [UIButton] = [] // "입주 유형"을 나타내는 선택지
-    var selectedMoveTypeButton: UIButton? // 입주 유형 카테고리의 버튼
+    var priceTypeButtons: [UIButton] = [] // "가격 유형"을 나타내는 선택지
+    var selectedPriceTypeButton: UIButton? // 가격 유형 카테고리의 버튼
     var isMoveTypeSelected: Bool = false
     
     var moveTypeStackView: UIStackView!
@@ -413,25 +413,25 @@ class EditBasicInfoDetailViewController: BaseViewController {
         addressTextField.text = detailDto.address
         addressDetailTextField.text = detailDto.addressDetail
         houseNicknameTextField.text = detailDto.nickname
-        setMoveTypeButton(priceType: detailDto.priceType)
+        setPriceTypeButton(priceType: detailDto.priceType)
         setPriceLabel(priceList: detailDto.priceList)
     }
     
-    func setMoveTypeButton(priceType: Int) {
+    func setPriceTypeButton(priceType: Int) {
         if priceType == 0 {
             saleButton.isSelected = true
             isMoveTypeSelected = saleButton.isSelected
-            selectedMoveTypeButton = saleButton.isSelected ? saleButton : nil
+            selectedPriceTypeButton = saleButton.isSelected ? saleButton : nil
             setSaleView()
         } else if priceType == 1 {
             jeonseButton.isSelected = true
             isMoveTypeSelected = jeonseButton.isSelected
-            selectedMoveTypeButton = jeonseButton.isSelected ? jeonseButton : nil
+            selectedPriceTypeButton = jeonseButton.isSelected ? jeonseButton : nil
             setJeonseView()
         } else if priceType == 2 {
             monthlyRentButton.isSelected = true
             isMoveTypeSelected = monthlyRentButton.isSelected
-            selectedMoveTypeButton = monthlyRentButton.isSelected ? monthlyRentButton : nil
+            selectedPriceTypeButton = monthlyRentButton.isSelected ? monthlyRentButton : nil
             setmonthlyRentView()
         }
     }
@@ -631,14 +631,14 @@ class EditBasicInfoDetailViewController: BaseViewController {
     // 각 카테고리에 따른 버튼을 나타내기 위한 처리
     func setButton() {
         // 입주 유형 카테고리에 속한 버튼
-        moveTypeButtons = [saleButton, jeonseButton, monthlyRentButton]
+        priceTypeButtons = [saleButton, jeonseButton, monthlyRentButton]
     }
     
     @objc func buttonPressed(_ sender: UIButton) {
         guard !sender.isSelected else { return } // 이미 선택된 버튼이면 아무 동작도 하지 않음
         
         // 매물 유형 카테고리의 버튼일 경우
-        if let selectedButton = selectedMoveTypeButton, selectedButton != sender {
+        if let selectedButton = selectedPriceTypeButton, selectedButton != sender {
             // 이전에 선택된 버튼이 있고 새로운 버튼과 다른 경우에는 이전 버튼의 선택을 해제
             selectedButton.isSelected = false
         }
@@ -664,7 +664,7 @@ class EditBasicInfoDetailViewController: BaseViewController {
             fourDisitMonthlyRentField.text = ""
             setmonthlyRentView()
         }
-        selectedMoveTypeButton = sender.isSelected ? sender : nil
+        selectedPriceTypeButton = sender.isSelected ? sender : nil
     }
     
     private func setSaleView() {
@@ -741,10 +741,10 @@ class EditBasicInfoDetailViewController: BaseViewController {
         modifyImjang { [weak self] error in
             guard let self else { return }
             if error == nil {
-                guard let imjangId else { return }
-                let imjangNoteVC = ImjangNoteViewController(imjangId: imjangId)
+                guard let imjangId, let version = versionInfo?.version else { return }
+                let imjangNoteVC = ImjangNoteViewController(imjangId: imjangId, version: version)
 //                imjangNoteVC.imjangId = self.imjangId
-                imjangNoteVC.version = self.versionInfo
+                imjangNoteVC.versionInfo = self.versionInfo
                 self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
                 self.navigationController?.pushViewController(imjangNoteVC, animated: true)
             } else {
