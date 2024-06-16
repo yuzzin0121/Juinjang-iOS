@@ -72,6 +72,43 @@ final class MainViewController: BaseViewController {
         }
     }
     
+    func callVersionRequest(imjangId: Int, completion: @escaping (Int?) -> Void) {
+        JuinjangAPIManager.shared.fetchData(type: BaseResponse<DetailDto>.self, api: .detailImjang(imjangId: imjangId)) { detailDto, error in
+            if error == nil {
+                guard let result = detailDto else {
+                    completion(nil)
+                    return
+                }
+                if let detailDto = result.result {
+                    let checkListVersion = detailDto.checkListVersion
+                    if checkListVersion == "LIMJANG" {
+                        completion(0)
+                    } else if checkListVersion == "NON_LIMJANG" {
+                        completion(1)
+                    } else {
+                        completion(nil)
+                    }
+                }
+            } else {
+                guard let error else {
+                    completion(nil)
+                    return
+                }
+                switch error {
+                case .failedRequest:
+                    print("failedRequest")
+                case .noData:
+                    print("noData")
+                case .invalidResponse:
+                    print("invalidResponse")
+                case .invalidData:
+                    print("invalidData")
+                }
+                completion(nil)
+            }
+        }
+    }
+    
     // 네비게이션 바 디자인
     func designNavigationBar() {
         self.navigationController?.navigationBar.tintColor = .black
@@ -94,9 +131,9 @@ final class MainViewController: BaseViewController {
         
     }
     
-    func showImjangNoteVC(imjangId: Int?) {
-        guard let imjangId = imjangId else { return }
-        let imjangNoteVC = ImjangNoteViewController(imjangId: imjangId)
+    func showImjangNoteVC(imjangId: Int?, version: Int?) {
+        guard let imjangId = imjangId, let version = version else { return }
+        let imjangNoteVC = ImjangNoteViewController(imjangId: imjangId, version: version)
         imjangNoteVC.imjangId = imjangId
         imjangNoteVC.previousVCType = .main
         imjangNoteVC.completionHandler = {
@@ -256,7 +293,13 @@ extension MainViewController : UICollectionViewDelegate, UICollectionViewDataSou
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let item = mainImjangList[indexPath.row]
-        showImjangNoteVC(imjangId: item.limjangId)
+        callVersionRequest(imjangId: item.limjangId) { version in
+            if let version = version {
+                self.showImjangNoteVC(imjangId: item.limjangId, version: version)
+            } else {
+                self.showImjangNoteVC(imjangId: item.limjangId, version: version)
+            }
+        }
     }
 }
 

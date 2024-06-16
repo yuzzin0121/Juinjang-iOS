@@ -553,14 +553,32 @@ class OpenNewPage2ViewController: BaseViewController, WarningMessageDelegate {
         navigationController?.popViewController(animated: true)
     }
     
+    func determineVersion(purposeType: Int, propertyType: Int) -> Int {
+        if purposeType == 0 {
+            // 부동산 투자 - version: 0
+            return 0
+        } else if purposeType == 1 {
+            // 직접 입주
+            if propertyType == 0 || propertyType == 3 {
+                // 아파트, 단독주택 - version: 0
+                return 0
+            } else if propertyType == 1 || propertyType == 2 {
+                // 빌라, 오피스텔 - version: 1
+                return 1
+            }
+        }
+        return -1 // 예외 처리
+    }
+    
     @objc func nextButtonTapped(_ sender: UIButton) {
         createImjang { imjangId, error in
             if error == nil {
-                guard let imjangId else { return }
-                let ImjangNoteVC = ImjangNoteViewController(imjangId: imjangId)
+                guard let imjangId, let newImjang = self.newImjang else { return }
+                let version = self.determineVersion(purposeType: newImjang.purposeType, propertyType: newImjang.propertyType)
+                let ImjangNoteVC = ImjangNoteViewController(imjangId: imjangId, version: version)
                 ImjangNoteVC.previousVCType = .createImjangVC
                 ImjangNoteVC.imjangId = imjangId
-                ImjangNoteVC.version = self.versionInfo
+                ImjangNoteVC.versionInfo = self.versionInfo
                 self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
                 self.navigationController?.pushViewController(ImjangNoteVC, animated: true)
             } else {

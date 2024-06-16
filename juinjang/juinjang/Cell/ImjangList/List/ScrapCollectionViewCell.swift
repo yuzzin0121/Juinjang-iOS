@@ -100,7 +100,7 @@ class ScrapCollectionViewCell: UICollectionViewCell {
         [firstImageView, secondImageView].forEach { totalStackView.addArrangedSubview($0)}
         
         firstImageView.snp.remakeConstraints {
-            $0.height.equalTo(firstImageView.snp.width).multipliedBy(117.0 / 190.0)
+            $0.height.equalTo(firstImageView.snp.width).multipliedBy(117.0 / 170.0)
         }
         
         secondImageView.snp.remakeConstraints {
@@ -147,7 +147,7 @@ class ScrapCollectionViewCell: UICollectionViewCell {
         }
                
         firstImageView.snp.makeConstraints {
-            $0.height.equalTo(firstImageView.snp.width).multipliedBy(117.0 / 190.0)
+            $0.height.equalTo(firstImageView.snp.width).multipliedBy(117.0 / 170.0)
         }
         
         secondImageView.snp.remakeConstraints {

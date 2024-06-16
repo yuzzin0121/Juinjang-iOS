@@ -13,15 +13,16 @@ import RealmSwift
 class CheckListViewController: BaseViewController {
     
     // 체크리스트 정보
-    var version: Int = 0
+    var version: Int
     var imjangId: Int
     var isEditMode: Bool = false // 수정 모드 여부
     var allCategory: [String] = [] // 카테고리
     var checkListCategories: [CheckListCategory] = [] // 카테고리별 질문
     var checkListItems: [CheckListAnswer] = [] // 저장된 체크리스트 항목
     
-    init(imjangId: Int) {
+    init(imjangId: Int, version: Int) {
         self.imjangId = imjangId
+        self.version = version
         super.init()
     }
     
@@ -33,6 +34,7 @@ class CheckListViewController: BaseViewController {
         $0.separatorStyle = .none
         $0.showsVerticalScrollIndicator = false
         $0.isScrollEnabled = false
+        $0.frame.size.height = $0.contentSize.height
     }
     
     override func viewDidLoad() {
@@ -117,10 +119,6 @@ class CheckListViewController: BaseViewController {
         do {
             let realm = try Realm()
             var result = realm.objects(CheckListItem.self)
-
-            // ImjangNoteViewController로 버전 전달
-            let imjangNoteViewController = ImjangNoteViewController(imjangId: imjangId)
-            imjangNoteViewController.receivedVersion = version
             
             print("조회한 체크리스트 버전: \(version)")
             result = result.filter("version == \(version)")
@@ -188,12 +186,6 @@ class CheckListViewController: BaseViewController {
                 print("실패: \(error?.localizedDescription ?? "error")")
                 return
             }
-            
-            if let categoryItem = response?.result {
-                for item in categoryItem {
-                    self.checkListItems.append(CheckListAnswer(imjangId: self.imjangId, questionId: item.questionId, answer: item.answer, isSelected: true))
-                }
-            }
 
             print("----- 체크리스트 저장할 항목 -----")
             let checkListItems = self.checkListItems
@@ -243,6 +235,7 @@ class CheckListViewController: BaseViewController {
                         case .success(let value):
                             print("체크리스트 저장 처리 성공")
                             print(value)
+                            self.showCheckList(completion: {})
                         case .failure(let error):
                             print("체크리스트 저장 처리 실패")
                             if let data = response.data,
@@ -309,7 +302,7 @@ class CheckListViewController: BaseViewController {
     }
 }
 
-extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
+extension CheckListViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard scrollView == self.tableView else { return }
         
@@ -327,7 +320,9 @@ extension CheckListViewController : UITableViewDelegate, UITableViewDataSource, 
             }
         }
     }
+}
 
+extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return isEditMode ? allCategory.count + 1 : allCategory.count
     }
