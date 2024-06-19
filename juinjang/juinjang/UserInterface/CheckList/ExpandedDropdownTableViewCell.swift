@@ -100,8 +100,6 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        etcTextField.removeFromSuperview()
-
         // 셀 내용 초기화
         itemPickerView.selectRow(0, inComponent: 0, animated: true)
         itemButton.backgroundColor = UIColor(named: "shadowGray")
@@ -120,6 +118,34 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
         // 배경색 초기화
         backgroundColor = .white
         questionImage.image = UIImage(named: "question-image")
+        
+        // 버튼 위치 제자리로
+        itemButton.snp.updateConstraints {
+            $0.trailing.equalToSuperview().offset(-24)
+        }
+        
+        // 기타 텍스트필드 초기화
+        etcTextField.text = ""
+        etcTextField.layer.backgroundColor = UIColor(named: "lightBackgroundOrange")?.cgColor
+        
+        // 기타 항목 선택 시 텍스트필드 위치 초기화
+        if selectedButton.title(for: .normal) == "기타" {
+            selectedButton.backgroundColor = UIColor(named: "shadowGray")
+            selectedButton.setTitleColor(UIColor(named: "darkGray"), for: .normal)
+            selectedButton.snp.updateConstraints {
+                $0.trailing.equalToSuperview().offset(-250)
+            }
+            contentView.addSubview(etcTextField)
+            
+            etcTextField.snp.makeConstraints {
+                $0.trailing.equalToSuperview().offset(-24)
+                $0.top.equalTo(contentLabel.snp.bottom).offset(20)
+                $0.height.equalTo(31)
+                $0.width.equalTo(218)
+            }
+        } else {
+            etcTextField.removeFromSuperview()
+        }
     }
     
     func setupLayout() {
@@ -371,18 +397,30 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
             setBasicInset()
             handleOptionSelection(selectedOption.option)
         } else {
-            backgroundColor = UIColor(named: "lightOrange")
-            questionImage.image = UIImage(named: "question-selected-image")
-            
             if selectedOption.option == "기타" {
                 // 기타 선택했을 때 선택지 중에 있는지 확인
                 if let existingOption = options.first(where: { $0.option == etcTextField.text }) {
+                    // UI 설정
+                    questionImage.image = UIImage(named: "question-selected-image")
+                    backgroundColor = UIColor(named: "lightOrange")
+                    
+                    // 값 전달
                     handleOptionSelection(existingOption.option)
                 } else {
-                    // 선택지 중에 없는 경우 사용자 입력값으로 전달
-                    handleOptionSelection(etcTextField.text ?? "")
+                    // 선택지 중에 없는 경우 사용자 입력값으로 처리
+                    if let etcText = etcTextField.text, !etcText.isEmpty {
+                        questionImage.image = UIImage(named: "question-selected-image")
+                        backgroundColor = UIColor(named: "lightOrange")
+                        handleOptionSelection(etcText)
+                    } else {
+                        questionImage.image = UIImage(named: "question-image")
+                        backgroundColor = .white
+                        handleOptionSelection("") // 빈 값 처리
+                    }
                 }
             } else {
+                questionImage.image = UIImage(named: "question-selected-image")
+                backgroundColor = UIColor(named: "lightOrange")
                 handleOptionSelection(selectedOption.option)
             }
         }

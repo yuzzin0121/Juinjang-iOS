@@ -18,7 +18,8 @@ class CheckListViewController: BaseViewController {
     var isEditMode: Bool = false // 수정 모드 여부
     var allCategory: [String] = [] // 카테고리
     var checkListCategories: [CheckListCategory] = [] // 카테고리별 질문
-    var checkListItems: [CheckListAnswer] = [] // 저장된 체크리스트 항목
+    var savedCheckListItems: [CheckListAnswer] = [] // 저장되어 있던 체크리스트 항목
+    var checkListItems: [CheckListAnswer] = [] // 저장될 체크리스트 항목
     
     init(imjangId: Int, version: Int) {
         self.imjangId = imjangId
@@ -154,7 +155,8 @@ class CheckListViewController: BaseViewController {
                 print("------저장된 체크리스트 조회------")
                 if let categoryItem = response.result {
                     for item in categoryItem {
-                        checkListItems.append(CheckListAnswer(imjangId: imjangId, questionId: item.questionId, answer: item.answer, isSelected: true))
+                        savedCheckListItems.append(CheckListAnswer(imjangId: imjangId, questionId: item.questionId, answer: item.answer, isSelected: true))
+//                        checkListItems.append(CheckListAnswer(imjangId: imjangId, questionId: item.questionId, answer: item.answer, isSelected: true))
                     }
                 }
                 print(self.checkListItems)
