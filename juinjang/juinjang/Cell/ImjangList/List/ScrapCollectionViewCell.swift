@@ -104,7 +104,7 @@ class ScrapCollectionViewCell: UICollectionViewCell {
         }
         
         secondImageView.snp.remakeConstraints {
-            $0.height.equalTo(secondImageView.snp.width).multipliedBy(117.0 / 95.0)
+            $0.height.equalTo(secondImageView.snp.width).multipliedBy(117.0 / 105.0)
         }
         
         if let url1 = URL(string: images[0]) {
@@ -131,7 +131,7 @@ class ScrapCollectionViewCell: UICollectionViewCell {
         let secondImageView = ImjangImageView(frame: .zero)
         let thirdImageView = ImjangImageView(frame: .zero)
         
-        var imageVStackView = UIStackView().then {
+        let imageVStackView = UIStackView().then {
             $0.axis = .vertical
             $0.alignment = .fill
             $0.distribution = .equalSpacing
@@ -151,11 +151,11 @@ class ScrapCollectionViewCell: UICollectionViewCell {
         }
         
         secondImageView.snp.remakeConstraints {
-            $0.height.equalTo(secondImageView.snp.width).multipliedBy(96.0 / 130.0)
+            $0.height.equalTo(secondImageView.snp.width).multipliedBy(94.0 / 155.0)
         }
         
         thirdImageView.snp.remakeConstraints {
-            $0.height.equalTo(thirdImageView.snp.width).multipliedBy(70.0 / 130.0)
+            $0.height.equalTo(thirdImageView.snp.width).multipliedBy(70.0 / 155.0)
         }
         
         if let url1 = URL(string: images[0]) {

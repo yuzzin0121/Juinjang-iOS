@@ -57,9 +57,7 @@ class RecordingFilesViewController: BaseViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        NotificationCenter.default.removeObserver(self)
-    }
+        super.viewWillDisappear(animated)    }
     
     private func setAddObserver() {
         NotificationCenter.default.addObserver(self, selector: #selector(editRecordName), name: .editRecordName, object: nil)
