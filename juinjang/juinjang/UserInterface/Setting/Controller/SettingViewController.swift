@@ -95,11 +95,17 @@ class SettingViewController : BaseViewController, UIImagePickerControllerDelegat
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.textColor = ColorStyle.textGray
     }
+//    var logImageView = UIImageView().then {
+//        $0.image = UIImage(named:"KAKAO")
+//    }
     var logImageView = UIImageView().then {
-        $0.image = UIImage(named:"KAKAO")
+        if UserDefaultManager.shared.isKakaoLogin {
+            $0.image = UIImage(named: "KAKAO")
+        } else {
+            $0.image = UIImage(named: "apple-logo")
+        }
     }
     var logInfoMailLabel = UILabel().then {
-        let vc = ToSViewController()
         $0.text = "\(UserDefaultManager.shared.email)"
         $0.font = UIFont(name: "Pretendard-Medium", size: 16)
         $0.translatesAutoresizingMaskIntoConstraints = false
@@ -404,7 +410,6 @@ class SettingViewController : BaseViewController, UIImagePickerControllerDelegat
                     print("Error: \(error)")
                 }
             }
-//        MainViewController().refreshToken()
     }
     
     func designNavigationBar() {
@@ -452,6 +457,7 @@ class SettingViewController : BaseViewController, UIImagePickerControllerDelegat
         logImageView.snp.makeConstraints{
             $0.top.equalTo(logInfoLabel.snp.bottom).offset(10)
             $0.left.equalToSuperview().offset(24)
+            $0.height.width.equalTo(20)
         }
         logInfoMailLabel.snp.makeConstraints{
             $0.top.equalTo(logInfoLabel.snp.bottom).offset(8)
@@ -519,6 +525,7 @@ class SettingViewController : BaseViewController, UIImagePickerControllerDelegat
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("email :\(UserDefaultManager.shared.email)")
         //getUserInfo()
         loadProfileImage()
         designNavigationBar()

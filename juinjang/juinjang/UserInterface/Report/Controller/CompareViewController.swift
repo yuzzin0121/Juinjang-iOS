@@ -199,13 +199,6 @@ class CompareViewController : BaseViewController {
         $0.translatesAutoresizingMaskIntoConstraints = false
     }
     var totalRateLabel2 = UILabel().then {
-        let text1 = NSTextAttachment()
-        text1.image = UIImage(named: "star")
-        let text2 = " " + "4.5"
-        let text3 = NSMutableAttributedString(string: "")
-        text3.append(NSAttributedString(attachment: text1))
-        text3.append(NSAttributedString(string: text2))
-        $0.attributedText = text3
         $0.textColor = UIColor(named: "juinjang")
         $0.font = UIFont(name: "Pretendard-SemiBold", size: 14)
         $0.translatesAutoresizingMaskIntoConstraints = false
@@ -253,7 +246,20 @@ class CompareViewController : BaseViewController {
         $0.fillColor = .clear
     }
     
-    func setData() {
+    func updateRate(rate: String, label: UILabel){
+        let text1 = NSTextAttachment()
+        text1.image = UIImage(named: "grayStar")
+        if label == totalRateLabel1 {
+            text1.image = UIImage(named: "star")
+        }
+        let text2 = " " + rate
+        let text3 = NSMutableAttributedString(string: "")
+        text3.append(NSAttributedString(attachment: text1))
+        text3.append(NSAttributedString(string: text2))
+        label.attributedText = text3
+    }
+    
+    func setData(indoor: Float, location: Float, publicSpace: Float) {
         let dataSet1 = RadarChartDataSet(
             entries: [
                 RadarChartDataEntry(value: 1.0),
@@ -292,9 +298,9 @@ class CompareViewController : BaseViewController {
         
         let compareDataSet1 = RadarChartDataSet(
             entries: [
-                RadarChartDataEntry(value: 3.5),
-                RadarChartDataEntry(value: 2.8),
-                RadarChartDataEntry(value: 4.0)
+                RadarChartDataEntry(value: Double(indoor)),
+                RadarChartDataEntry(value: Double(location)),
+                RadarChartDataEntry(value: Double(publicSpace))
             ]
         )
         
@@ -363,7 +369,7 @@ class CompareViewController : BaseViewController {
         chartCompareImageView2.isHidden = true
         
         self.compareDataSet2.fillColor = .clear
-        setData()
+        //setData()
     }
     
     func setConstraint() {
@@ -395,7 +401,7 @@ class CompareViewController : BaseViewController {
         }
         insideRateLabel1.snp.makeConstraints{
             $0.top.equalToSuperview().offset(12)
-            $0.right.equalToSuperview().inset(13)
+            $0.left.equalToSuperview().offset(110)
             $0.height.equalTo(20)
         }
         
@@ -406,7 +412,7 @@ class CompareViewController : BaseViewController {
         }
         publicSpaceRateLabel1.snp.makeConstraints{
             $0.top.equalToSuperview().offset(36)
-            $0.right.equalToSuperview().inset(13)
+            $0.left.equalToSuperview().offset(110)
             $0.height.equalTo(20)
         }
         locationConditionLabel1.snp.makeConstraints{
@@ -416,7 +422,7 @@ class CompareViewController : BaseViewController {
         }
         locationConditionRateLabel1.snp.makeConstraints{
             $0.top.equalToSuperview().offset(60)
-            $0.right.equalToSuperview().inset(13)
+            $0.left.equalToSuperview().offset(110)
             $0.height.equalTo(20)
         }
         totalLabel1.snp.makeConstraints{
@@ -426,7 +432,7 @@ class CompareViewController : BaseViewController {
         }
         totalRateLabel1.snp.makeConstraints{
             $0.bottom.equalToSuperview().inset(12)
-            $0.right.equalToSuperview().inset(12)
+            $0.left.equalToSuperview().offset(110)
             $0.height.equalTo(20)
         }
         
@@ -558,7 +564,7 @@ class CompareViewController : BaseViewController {
         view.addSubview(compareViewEmpty)
         isCompare()
         view.addSubview(radarChartView)
-        setData()
+        //setData()
         
         addTarget()
         setConstraint()

@@ -26,45 +26,31 @@ class GraphViewController : BaseViewController {
         $0.image = UIImage(named:"noteline")
     }
     
-    var houseimageView = UIImageView().then {
+    var indoorImageView = UIImageView().then {
         $0.image = UIImage(named: "house")
     }
-    var houseLabel = UILabel().then {
+    var indoorLabel = UILabel().then {
         $0.text = "상당히 쾌적한 실내"
         $0.font = UIFont(name: "Pretendard-Bold", size: 18)
         $0.textColor = UIColor(named: "500")
         $0.translatesAutoresizingMaskIntoConstraints = false
     }
-    var rateLabel1 = UILabel().then {
-        let text1 = NSTextAttachment()
-        text1.image = UIImage(named: "grayStar")
-        let text2 = " " + "4.5"
-        let text3 = NSMutableAttributedString(string: "")
-        text3.append(NSAttributedString(attachment: text1))
-        text3.append(NSAttributedString(string: text2))
-        $0.attributedText = text3
+    var indoorRateLabel = UILabel().then {
         $0.textColor = UIColor(named: "300")
         $0.font = UIFont(name: "Pretendard-SemiBold", size: 16)
         $0.translatesAutoresizingMaskIntoConstraints = false
     }
     
-    var buildingimageView = UIImageView().then {
+    var publicImageView = UIImageView().then {
         $0.image = UIImage(named: "building")
     }
-    var buildingLabel = UILabel().then {
+    var publicLabel = UILabel().then {
         $0.text = "훌륭한 공용공간"
         $0.font = UIFont(name: "Pretendard-Bold", size: 18)
         $0.textColor = UIColor(named: "500")
         $0.translatesAutoresizingMaskIntoConstraints = false
     }
-    var rateLabel2 = UILabel().then {
-        let text1 = NSTextAttachment()
-        text1.image = UIImage(named: "grayStar")
-        let text2 = " " + "4.5"
-        let text3 = NSMutableAttributedString(string: "")
-        text3.append(NSAttributedString(attachment: text1))
-        text3.append(NSAttributedString(string: text2))
-        $0.attributedText = text3
+    var publicRateLabel = UILabel().then {
         $0.textColor = UIColor(named: "300")
         $0.font = UIFont(name: "Pretendard-SemiBold", size: 16)
         $0.translatesAutoresizingMaskIntoConstraints = false
@@ -79,14 +65,7 @@ class GraphViewController : BaseViewController {
         $0.textColor = UIColor(named: "500")
         $0.translatesAutoresizingMaskIntoConstraints = false
     }
-    var rateLabel3 = UILabel().then {
-        let text1 = NSTextAttachment()
-        text1.image = UIImage(named: "grayStar")
-        let text2 = " " + "4.5"
-        let text3 = NSMutableAttributedString(string: "")
-        text3.append(NSAttributedString(attachment: text1))
-        text3.append(NSAttributedString(string: text2))
-        $0.attributedText = text3
+    var locationRateLabel = UILabel().then {
         $0.textColor = UIColor(named: "300")
         $0.font = UIFont(name: "Pretendard-SemiBold", size: 16)
         $0.translatesAutoresizingMaskIntoConstraints = false
@@ -122,7 +101,27 @@ class GraphViewController : BaseViewController {
         $0.legend.enabled = false
     }
     
-    func setData() {
+    func updateLabel(with status1: String, status2: String, status3: String) {
+        print("실행")
+        indoorLabel.text = "\(status1) 실내"
+        indoorLabel.asColor(targetString: status1, color: UIColor(named: "juinjang"))
+        locationLabel.text = "\(status2) 입지 여건"
+        locationLabel.asColor(targetString: status2, color: UIColor(named: "juinjang"))
+        publicLabel.text = "\(status3) 공용공간"
+        publicLabel.asColor(targetString: status3, color: UIColor(named: "juinjang"))
+    }
+    
+    func updateRate(rate: String, label: UILabel){
+        let text1 = NSTextAttachment()
+        text1.image = UIImage(named: "grayStar")
+        let text2 = " " + rate
+        let text3 = NSMutableAttributedString(string: "")
+        text3.append(NSAttributedString(attachment: text1))
+        text3.append(NSAttributedString(string: text2))
+        label.attributedText = text3
+    }
+    
+    func setData(indoor: Float, location: Float, publicSpace: Float) {
         let dataSet1 = RadarChartDataSet(
             entries: [
                 RadarChartDataEntry(value: 1.0),
@@ -162,9 +161,9 @@ class GraphViewController : BaseViewController {
         
         let compareDataSet1 = RadarChartDataSet(
             entries: [
-                RadarChartDataEntry(value: 3.0),
-                RadarChartDataEntry(value: 2.8),
-                RadarChartDataEntry(value: 4.0)
+                RadarChartDataEntry(value: Double(indoor)),
+                RadarChartDataEntry(value: Double(location)),
+                RadarChartDataEntry(value: Double(publicSpace))
             ]
         )
         
@@ -222,51 +221,51 @@ class GraphViewController : BaseViewController {
             $0.height.equalTo(128)
         }
         
-        houseimageView.snp.makeConstraints{
+        indoorImageView.snp.makeConstraints{
             $0.top.equalToSuperview().offset(12)
             $0.left.equalToSuperview()
             $0.height.equalTo(18)
         }
-        houseLabel.snp.makeConstraints{
+        indoorLabel.snp.makeConstraints{
             $0.top.equalToSuperview().offset(10)
-            $0.left.equalTo(houseimageView.snp.right).offset(8)
+            $0.left.equalTo(indoorImageView.snp.right).offset(8)
             $0.height.equalTo(24)
         }
-        rateLabel1.snp.makeConstraints{
+        indoorRateLabel.snp.makeConstraints{
             $0.top.equalToSuperview().offset(10)
-            $0.right.equalToSuperview()
+            $0.left.equalToSuperview().offset(295)
             $0.height.equalTo(23)
         }
         
-        buildingimageView.snp.makeConstraints{
-            $0.top.equalTo(houseimageView.snp.bottom).offset(25)
+        publicImageView.snp.makeConstraints{
+            $0.top.equalTo(indoorImageView.snp.bottom).offset(25)
             $0.left.equalToSuperview()
             $0.height.equalTo(18)
         }
-        buildingLabel.snp.makeConstraints{
-            $0.top.equalTo(houseLabel.snp.bottom).offset(18)
-            $0.left.equalTo(buildingimageView.snp.right).offset(8)
+        publicLabel.snp.makeConstraints{
+            $0.top.equalTo(indoorLabel.snp.bottom).offset(18)
+            $0.left.equalTo(publicImageView.snp.right).offset(8)
             $0.height.equalTo(24)
         }
-        rateLabel2.snp.makeConstraints{
-            $0.top.equalTo(rateLabel1.snp.bottom).offset(19)
-            $0.right.equalToSuperview()
+        publicRateLabel.snp.makeConstraints{
+            $0.top.equalTo(indoorRateLabel.snp.bottom).offset(19)
+            $0.left.equalToSuperview().offset(295)
             $0.height.equalTo(23)
         }
         
         locationimageView.snp.makeConstraints{
-            $0.top.equalTo(buildingimageView.snp.bottom).offset(24)
+            $0.top.equalTo(publicImageView.snp.bottom).offset(24)
             $0.left.equalToSuperview()
             $0.height.equalTo(18)
         }
         locationLabel.snp.makeConstraints{
-            $0.top.equalTo(buildingLabel.snp.bottom).offset(18)
+            $0.top.equalTo(publicLabel.snp.bottom).offset(18)
             $0.left.equalTo(locationimageView.snp.right).offset(8)
             $0.height.equalTo(24)
         }
-        rateLabel3.snp.makeConstraints{
-            $0.top.equalTo(rateLabel2.snp.bottom).offset(19)
-            $0.right.equalToSuperview()
+        locationRateLabel.snp.makeConstraints{
+            $0.top.equalTo(publicRateLabel.snp.bottom).offset(19)
+            $0.left.equalToSuperview().offset(295)
             $0.height.equalTo(23)
         }
         
@@ -287,24 +286,19 @@ class GraphViewController : BaseViewController {
         view.addSubview(label1)
         view.addSubview(noteImageView)
         
-        noteImageView.addSubview(houseimageView)
-        noteImageView.addSubview(houseLabel)
-        houseLabel.asColor(targetString: "상당히 쾌적한", color: UIColor(named: "juinjang"))
-        noteImageView.addSubview(rateLabel1)
+        noteImageView.addSubview(indoorImageView)
+        noteImageView.addSubview(indoorLabel)
+        noteImageView.addSubview(indoorRateLabel)
         
-        noteImageView.addSubview(buildingimageView)
-        noteImageView.addSubview(buildingLabel)
-        buildingLabel.asColor(targetString: "훌륭한", color: UIColor(named: "juinjang"))
-        noteImageView.addSubview(rateLabel2)
+        noteImageView.addSubview(publicImageView)
+        noteImageView.addSubview(publicLabel)
+        noteImageView.addSubview(publicRateLabel)
         
         noteImageView.addSubview(locationimageView)
         noteImageView.addSubview(locationLabel)
-        locationLabel.asColor(targetString: "좋은 편인", color: UIColor(named: "juinjang"))
-        noteImageView.addSubview(rateLabel3)
+        noteImageView.addSubview(locationRateLabel)
         
         view.addSubview(radarChartView)
-        setData()
-        
         setConstraint()
     }
 }

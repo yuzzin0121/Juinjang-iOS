@@ -278,7 +278,7 @@ class ImjangNoteViewController: BaseViewController{
 //                present(reportPopupVC, animated: false, completion: nil)
 //            } else {
                 // 아니라면 ReportViewController로 이동
-                let reportVC = ReportViewController()
+            let reportVC = ReportViewController(imjangId: imjangId)
                 navigationController?.pushViewController(reportVC, animated: true)
 //            }
         }
@@ -787,7 +787,7 @@ class ImjangNoteViewController: BaseViewController{
         } else {
             editButton.setImage(UIImage(named: "edit-button"), for: .normal)
             NotificationCenter.default.post(name: NSNotification.Name("EditButtonTapped"), object: nil)
-            let reportVC = ReportViewController()
+            let reportVC = ReportViewController(imjangId: imjangId)
             self.navigationController?.pushViewController(reportVC, animated: true)
         }
         NotificationCenter.default.post(name: Notification.Name("EditModeChanged"), object: true)

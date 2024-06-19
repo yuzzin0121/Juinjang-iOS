@@ -205,7 +205,11 @@ class WelcomeViewController: BaseViewController {
     
     @objc func buttonTapped(_ sender: UIButton) {
         //UserDefaultManager.shared.userStatus = true
-        signupRequest(email: UserDefaultManager.shared.email, kakaoNickname: UserDefaultManager.shared.nickname, nickname: UserDefaultManager.shared.nickname)
+        if UserDefaultManager.shared.isKakaoLogin {
+            signupRequest(email: UserDefaultManager.shared.email, kakaoNickname: UserDefaultManager.shared.nickname, nickname: UserDefaultManager.shared.nickname)
+        } else {
+            signupWithApple(identityToken: UserDefaultManager.shared.identityToken, nickname: UserDefaultManager.shared.nickname)
+        }
 //        let RecordingRightsVC = RecordingRightsViewController()
 //        RecordingRightsVC.modalPresentationStyle = .fullScreen
 //        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)

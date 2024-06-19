@@ -258,6 +258,7 @@ extension SignUpViewController{
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
+                    UserDefaultManager.shared.isKakaoLogin = true
                     print("API Success: \(value)")
                     if let json = value as? [String: Any],
                        let result = json["result"] as? [String: Any],
@@ -269,13 +270,20 @@ extension SignUpViewController{
                         UserDefaultManager.shared.refreshToken = refreshToken
                         self.getUserNickname()
                     } else {
-                        print(value)
-                        print("회원가입")
                         if let json = value as? [String: Any],
                            let code = json["code"] as? String, code == "MEMBER4001" {
+                            print("회원가입")
                             // MEMBER4001 에러 코드일 때 다른 화면으로 전환
                             let nextVC = ToSViewController()
                             self.navigationController?.pushViewController(nextVC, animated: true)
+                        }
+                        if let json = value as? [String: Any],
+                           let code = json["code"] as? String, code == "MEMBER4003" {
+                            print("이미 애플로그인 했다미")
+                            let alertController = UIAlertController(title: nil, message: "이미 Apple로 회원가입한 회원입니다", preferredStyle: .alert)
+                            let okAction = UIAlertAction(title: "확인", style: .default, handler: nil)
+                            alertController.addAction(okAction)
+                            self.present(alertController, animated: true, completion: nil)
                         }
                     }
                 case .failure(let error):
@@ -287,7 +295,7 @@ extension SignUpViewController{
 
 //애플 로그인
 extension SignUpViewController: ASAuthorizationControllerDelegate,ASAuthorizationControllerPresentationContextProviding {
-    // 카카오톡 앱으로 로그인
+
     struct ResponseBody: Codable {
         let isSuccess: Bool
         let code: String
@@ -310,65 +318,51 @@ extension SignUpViewController: ASAuthorizationControllerDelegate,ASAuthorizatio
         ]
         
         AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default)
-            .responseString { response in
+            .responseString(encoding: .utf8) { response in
                 switch response.result {
             case .success(let value):
+                UserDefaultManager.shared.isKakaoLogin = false
                 // 전체 응답 본문 출력
                 print("Response: \(value)")
                 // JSON 파싱
                 if let jsonData = value.data(using: .utf8) {
-                    do {
-                        let responseBody = try JSONDecoder().decode(ResponseBody.self, from: jsonData)
-                        let accessToken = responseBody.result.accessToken
-                        let refreshToken = responseBody.result.refreshToken
-                        print("Access Token: \(accessToken)")
-                        print("Refresh Token: \(refreshToken)")
-                        self.getUserNickname()
-                    } catch {
-                        print("JSON Decoding Error: \(error)")
-                    }
-                } else {
-                    print("Failed to convert response to JSON data")
-                    print(value)
-                    print("회원가입")
-                    if let jsonData = value.data(using: .utf8) {
+                    if value.contains("\"isSuccess\":true") {
                         do {
                             let responseBody = try JSONDecoder().decode(ResponseBody.self, from: jsonData)
-                            if responseBody.code == "MEMBER4001" {
-                                let nextVC = ToSViewController()
-                                self.navigationController?.pushViewController(nextVC, animated: true)
-                            }
+                            let accessToken = responseBody.result.accessToken
+                            let refreshToken = responseBody.result.refreshToken
+                            let email = responseBody.result.email
+                            print("Access Token: \(accessToken)")
+                            print("Refresh Token: \(refreshToken)")
+                            UserDefaultManager.shared.accessToken = accessToken
+                            UserDefaultManager.shared.refreshToken = refreshToken
+                            UserDefaultManager.shared.email = email
+                            self.getUserNickname()
                         } catch {
                             print("JSON Decoding Error: \(error)")
                         }
+                    } else {
+                        if value.contains("\"code\":\"MEMBER4001\"") {
+                            print("회원가입")
+                            let nextVC = ToSViewController()
+                            self.navigationController?.pushViewController(nextVC, animated: true)
+                        } else if value.contains("\"code\":\"MEMBER4006\""){
+                            print("이미 카카오로그인 했다미")
+                            let alertController = UIAlertController(title: nil, message: "이미 Kakao로 회원가입한 회원입니다", preferredStyle: .alert)
+                            let okAction = UIAlertAction(title: "확인", style: .default, handler: nil)
+                            alertController.addAction(okAction)
+                            self.present(alertController, animated: true, completion: nil)
+                        } else {
+                            print("회원가입 실패 또는 다른 에러")
+                        }
                     }
+                } else {
+                    print("Failed to convert response to JSON data")
                 }
             case .failure(let error):
                 print("Error: \(error)")
             }
         }
-        
-        // Make the request
-//        AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default)
-//            .responseJSON { response in
-//                switch response.result {
-//                case .success(let value):
-//                    if let json = value as? [String: Any],
-//                       let isSuccess = json["isSuccess"] as? Bool,
-//                       let result = json["result"] as? [String: Any],
-//                       let accessToken = result["accessToken"] as? String,
-//                       let refreshToken = result["refreshToken"] as? String {
-//                        print("Success: \(isSuccess)")
-//                        print("AccessToken: \(accessToken)")
-//                        print("RefreshToken: \(refreshToken)")
-//                        //print("Email: \(email)")
-//                    } else {
-//                        print("Failed to parse response")
-//                    }
-//                case .failure(let error):
-//                    print("Error: \(error)")
-//                }
-//            }
     }
     
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
@@ -391,6 +385,7 @@ extension SignUpViewController: ASAuthorizationControllerDelegate,ASAuthorizatio
                 let email2 = Utils.decode(jwtToken: tokenString)["email"] as? String ?? ""
                 print("이메일 - \(email2)")
                 print("identityToken : \(tokenString)")
+                UserDefaultManager.shared.identityToken = tokenString
                 performAppleSignInWithAlamofire(identityToken: tokenString)
             }
         }
@@ -402,47 +397,10 @@ extension SignUpViewController: ASAuthorizationControllerDelegate,ASAuthorizatio
         }
     }
     
-//    func authorizationController( controller: ASAuthorizationController,
-//                didCompleteWithAuthorization authorization: ASAuthorization) {
-////        guard let credential = authorization.credential as? ASAuthorizationAppleIDCredential else {
-////            return
-////        }
-//        switch authorization.credential {
-//        case let appleIDCredential as ASAuthorizationAppleIDCredential:
-//            // You can create an account in your system.
-//            let userIdentifier = appleIDCredential.user
-//            let fullName = appleIDCredential.fullName
-//            let email = appleIDCredential.email
-//            
-//            if  let authorizationCode = appleIDCredential.authorizationCode,
-//                let identityToken = appleIDCredential.identityToken,
-//                let authCodeString = String(data: authorizationCode, encoding: .utf8),
-//                let identifyTokenString = String(data: identityToken, encoding: .utf8) {
-//                print("authorizationCode: \(authorizationCode)")
-//                print("identityToken: \(identityToken)")
-//                print("authCodeString: \(authCodeString)")
-//                print("identifyTokenString: \(identifyTokenString)")
-//                performAppleSignInWithAlamofire(identityToken: identifyTokenString)
-//            }
-//            
-//            print("useridentifier: \(userIdentifier)")
-//            print("fullName: \(fullName)")
-//            print("email: \(email)")
-//            
-//            //print(credential.user)
-//            //print("애플 로그인 성공")
-//        default:
-//            break
-//        }
-//    }
-
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
         print("애플 로그인 실패 \(error.localizedDescription)")
     }
-    
-    
 }
-
 
 class Utils {
     // MARK: - JWT decode
@@ -467,10 +425,8 @@ class Utils {
                   let json = try? JSONSerialization.jsonObject(with: bodyData, options: []), let payload = json as? [String: Any] else {
                 return nil
             }
-
             return payload
         }
-        
         let segments = jwt.components(separatedBy: ".")
         return decodeJWTPart(segments[1]) ?? [:]
     }

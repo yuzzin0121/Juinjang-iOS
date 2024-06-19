@@ -20,6 +20,8 @@ class UserDefaultManager {
         case userStatus
         case email
         case profileImage
+        case isKakaoLogin
+        case identityToken
     }
     
     let ud = UserDefaults.standard
@@ -68,6 +70,16 @@ class UserDefaultManager {
                 ud.removeObject(forKey: UDKey.profileImage.rawValue)
             }
         }
+    }
+    
+    var isKakaoLogin: Bool {
+        get { ud.bool(forKey: UDKey.isKakaoLogin.rawValue) }
+        set { ud.set(newValue, forKey: UDKey.isKakaoLogin.rawValue) }
+    }
+    
+    var identityToken: String {
+        get { ud.string(forKey: UDKey.identityToken.rawValue) ?? "" }
+        set { ud.set(newValue, forKey: UDKey.identityToken.rawValue) }
     }
 }
 

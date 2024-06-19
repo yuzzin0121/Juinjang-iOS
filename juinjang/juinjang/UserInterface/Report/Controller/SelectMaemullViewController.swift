@@ -32,6 +32,7 @@ class SelectMaemullViewController : BaseViewController {
     var menuChildren: [UIMenuElement] = []
     lazy var filterList = Filter.allCases
     var imjangList: [ListDto] = []
+    var imjangId: Int = 0
     
     let tableView = UITableView().then {
         $0.estimatedRowHeight = UITableView.automaticDimension
@@ -166,7 +167,7 @@ class SelectMaemullViewController : BaseViewController {
         navigationController?.pushViewController(searchVC, animated: true)
     }
     @objc func applyBtnTap() {
-        let vc = ReportViewController()
+        let vc = ReportViewController(imjangId: imjangId)
         vc.tabViewController.index = 1
         vc.tabViewController.compareVC.isCompared = true
         vc.tabViewController.compareVC.compareDataSet2.fillAlpha = CGFloat(0.8)

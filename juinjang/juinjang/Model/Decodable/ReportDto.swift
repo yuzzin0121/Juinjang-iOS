@@ -28,7 +28,7 @@ struct reportDto: Codable {
 
 struct ReportDTO: Codable {
     let reportId: Int
-    let indoorKeyword: String
+    let indoorKeyWord: String
     let publicSpaceKeyWord: String
     let locationConditionsWord: String
     let indoorRate: Float

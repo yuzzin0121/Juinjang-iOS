@@ -44,6 +44,7 @@ class CompareSearchViewController: BaseViewController {
     var searchKeyword  = ""
     var searchedImjangList: [ListDto] = []
     var imjangList: [ListDto] = []
+    var imjangId: Int = 0
     
     // 네비게이션 바 디자인
     func designNavigationBar() {
@@ -65,7 +66,7 @@ class CompareSearchViewController: BaseViewController {
     }
     
     @objc func applyBtnTap() {
-        let vc = ReportViewController()
+        let vc = ReportViewController(imjangId: imjangId)
         vc.tabViewController.index = 1
         vc.tabViewController.compareVC.isCompared = true
         vc.tabViewController.compareVC.compareDataSet2.fillAlpha = CGFloat(0.8)

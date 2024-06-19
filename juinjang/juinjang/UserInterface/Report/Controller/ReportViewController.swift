@@ -17,31 +17,20 @@ import KakaoSDKCommon
 import KakaoSDKShare
 import SafariServices
 
+import Alamofire
+
 class ReportViewController : BaseViewController {
     let templateId = 103560
     var safariViewController : SFSafariViewController?
     var checkListViewController: CheckListViewController?
+    
     //MARK: - 총 평점 멘트, 가격, 주소
     var totalGradeLabel = UILabel().then {
+        $0.text = "판교푸르지오월드마크"
         $0.textColor = UIColor(named: "600")
         $0.numberOfLines = 0
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.font = UIFont(name: "Pretendard-Bold", size: 24)
-        
-        let star = NSTextAttachment()
-        star.image = UIImage(named: "bigStar")
-        let attrString = NSMutableAttributedString(string: "4.5점입니다")
-        let range = ("4.5점입니다" as NSString).range(of: "4.5점")
-        attrString.addAttribute(.foregroundColor, value: UIColor(named: "juinjang")!, range: range)
-        let text2 = attrString
-        let text3 = NSMutableAttributedString(string: "판교푸르지오월드마크의\n총점은 ")
-        text3.append(NSAttributedString(attachment: star))
-        text3.append(NSAttributedString(attributedString: text2))
-        
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineSpacing = 8.0
-        text3.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: text3.length))
-        $0.attributedText = text3
     }
     var imjangLabel = UILabel().then {
         $0.text = "판교푸르지오월드마크"
@@ -59,8 +48,61 @@ class ReportViewController : BaseViewController {
         $0.font = UIFont(name: "Pretendard-Medium", size: 16)
     }
     
+    var imjangId: Int
+    var indoorRate: Float = 0.0
+    var indoorKeyWord : String = ""
+    var locationConditionsRate : Float = 0.0
+    var locationConditionsWord : String = ""
+    var publicSpaceRate : Float = 0.0
+    var publicSpaceKeyWord : String = ""
+   // var reportId : Int = 0
+    var totalRate : Float = 0.0
+   
     //MARK: - 그래프
     let tabViewController = TabViewController()
+    
+    func getReportInfo(limjangId: Int, accessToken: String) {
+        // 기본 URL
+        let baseURL = "http://juinjang1227.com:8080/api/report/\(limjangId)"
+        
+        // 요청 헤더 구성
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(accessToken)"
+        ]
+        
+        // Alamofire를 사용하여 GET 요청
+        AF.request(baseURL, method: .get, headers: headers).responseJSON { response in
+            switch response.result {
+            case .success(let value):
+                if let json = value as? [String: Any],
+                   let result = json["result"] as? [String: Any],
+                   let limjangDto = result["limjangDto"] as? [String: Any],
+                   let reportDTO = result["reportDTO"] as? [String: Any] {
+                    print("Response JSON: \(json)")
+                    do {
+                        let decoder = JSONDecoder()
+                        let reportData = try JSONSerialization.data(withJSONObject: reportDTO, options: [])
+                        let reportDto = try decoder.decode(ReportDTO.self, from: reportData)
+                        self.setData(reportDto: reportDto)
+                        
+                    } catch {
+                        print("JSON2 디코딩 에러: \(error.localizedDescription)")
+                    }
+                    do {
+                        let decoder = JSONDecoder()
+                        let limjangData = try JSONSerialization.data(withJSONObject: limjangDto, options: [])
+                        let detailDto = try decoder.decode(DetailDto.self, from: limjangData)
+                        self.setData(detailDto: detailDto)
+                        
+                    } catch {
+                        print("JSON1 디코딩 에러: \(error.localizedDescription)")
+                    }
+                }
+            case .failure(let error):
+                print("Error: \(error.localizedDescription)")
+            }
+        }
+    }
     
     func setConstraint() {
         totalGradeLabel.snp.makeConstraints{
@@ -101,16 +143,69 @@ class ReportViewController : BaseViewController {
         self.navigationItem.rightBarButtonItem = .none
     }
     
-//    func setData(detailDto: DetailDto) {
-//        totalGradeLabel.imjangLabel.text = detailDto.nickname
-//        priceLabel.text = detailDto.priceList
-//        roomAddressLabel.text = "\(detailDto.address) \(detailDto.addressDetail)"
-//        modifiedDateStringLabel.text = "최근 수정 날짜 \(String.dateToString(target: detailDto.updatedAt))"
-//        images = detailDto.images
-//        version?.editCriteria = detailDto.purposeCode
-//        setUpImageUI()
-//        adjustLabelHeight()
-//    }
+    func setData(detailDto: DetailDto) {
+        imjangLabel.text = detailDto.nickname
+        let star = NSTextAttachment()
+        star.image = UIImage(named: "bigStar")
+        let attrString = NSMutableAttributedString(string: "\(String(format: "%.2f", totalRate))점입니다")
+        let range = ("\(String(format: "%.2f", totalRate))점입니다" as NSString).range(of: "\(String(format: "%.2f", totalRate))점")
+        attrString.addAttribute(.foregroundColor, value: UIColor(named: "juinjang")!, range: range)
+        let text3 = NSMutableAttributedString(string: "\(imjangLabel.text ?? "판교푸르지오월드마크")의\n총점은 ")
+        text3.append(NSAttributedString(attachment: star))
+        text3.append(NSAttributedString(attributedString: attrString))
+        
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 8.0
+        text3.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: text3.length))
+        totalGradeLabel.attributedText = text3
+        setPriceLabel(priceList: detailDto.priceList)
+        addressLabel.text = "\(detailDto.address) \(detailDto.addressDetail)"
+        
+        tabViewController.compareVC.compareLabel1.text = detailDto.nickname
+    }
+    
+    func setData(reportDto: ReportDTO) {
+        indoorKeyWord = reportDto.indoorKeyWord
+        indoorRate = reportDto.indoorRate
+        
+        locationConditionsWord = reportDto.locationConditionsWord
+        locationConditionsRate = reportDto.locationConditionsRate
+        
+        publicSpaceKeyWord = reportDto.publicSpaceKeyWord
+        publicSpaceRate = reportDto.publicSpaceRate
+        
+        totalRate = reportDto.totalRate
+        
+        let graphVC = tabViewController.graphVC
+        graphVC.updateLabel(with: indoorKeyWord, status2: locationConditionsWord, status3: publicSpaceKeyWord)
+        graphVC.updateRate(rate: String(format: "%.2f", indoorRate), label: graphVC.indoorRateLabel)
+        graphVC.updateRate(rate: String(format: "%.2f", locationConditionsRate), label: graphVC.locationRateLabel)
+        graphVC.updateRate(rate: String(format: "%.2f", publicSpaceRate), label: graphVC.publicRateLabel)
+        graphVC.setData(indoor: indoorRate, location: locationConditionsRate, publicSpace: publicSpaceRate)
+        
+        let compareVC = tabViewController.compareVC
+        compareVC.updateRate(rate: String(format: "%.2f", indoorRate), label: compareVC.insideRateLabel1)
+        compareVC.updateRate(rate: String(format: "%.2f", locationConditionsRate), label: compareVC.locationConditionRateLabel1)
+        compareVC.updateRate(rate: String(format: "%.2f", publicSpaceRate), label: compareVC.publicSpaceRateLabel1)
+        compareVC.updateRate(rate: String(format: "%.2f", totalRate), label: compareVC.totalRateLabel1)
+        compareVC.setData(indoor: indoorRate, location: locationConditionsRate, publicSpace: publicSpaceRate)
+
+    }
+    
+    func setPriceLabel(priceList: [String]) {
+        switch priceList.count {
+        case 1:
+            let priceString = priceList[0]
+            priceLabel.text = priceString.formatToKoreanCurrencyWithZero()
+        case 2:
+            let priceString1 = priceList[0].formatToKoreanCurrencyWithZero()
+            let priceString2 = priceList[1].formatToKoreanCurrencyWithZero()
+            priceLabel.text = "\(priceString1) • 월 \(priceString2)"
+            priceLabel.asColor(targetString: "• 월", color: ColorStyle.mainStrokeOrange)
+        default:
+            priceLabel.text = "편집을 통해 가격을 설정해주세요."
+        }
+    }
     
     @objc func backBtnTap() {
         NotificationCenter.default.post(name: NSNotification.Name("ReloadTableView"), object: nil)
@@ -148,10 +243,19 @@ class ReportViewController : BaseViewController {
         }
     }
     
+    init(imjangId: Int) {
+        self.imjangId = imjangId
+        super.init()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         designNavigationBar()
-        
+        getReportInfo(limjangId: imjangId, accessToken: UserDefaultManager.shared.accessToken)
         view.backgroundColor = .white
         
         view.addSubview(totalGradeLabel)
@@ -161,6 +265,7 @@ class ReportViewController : BaseViewController {
         addChild(tabViewController)
         view.addSubview(tabViewController.view)
         tabViewController.didMove(toParent: self)
+        
         
         setConstraint()
     }
