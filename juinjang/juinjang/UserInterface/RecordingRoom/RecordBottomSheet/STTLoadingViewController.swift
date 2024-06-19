@@ -79,19 +79,27 @@ class STTLoadingViewController: BaseViewController {
                 
                 let recordRequestDTO = getRecordRequestDTO(script: script)
                 
-                JuinjangAPIManager.shared.uploadRecordFile(api: .uploadRecordFile, fileURL: fileURL, dto: recordRequestDTO) { [weak self] result in
-                    guard let self else { return }
-                    switch result {
-                    case .success(let recordResponse):
-                        print(recordResponse)
-                        NotificationCenter.default.post(name: .addRecordResponse, object: recordResponse)
-                        showPlaybackVC(recordResponse: recordResponse)
-                    case .failure(let failure):
-                        print("실패...>!!!!!")
-                    }
-                }
+                uploadRecordFile(recordRequestDto: recordRequestDTO)
             case .failure(let failure):
-                bottomSheetViewController?.transitionToViewController(self)
+                print("STT 실패")
+                let recordRequestDTO = getRecordRequestDTO(script: "")
+                uploadRecordFile(recordRequestDto: recordRequestDTO)
+//                bottomSheetViewController?.transitionToViewController(self)
+            }
+        }
+    }
+    
+    private func uploadRecordFile(recordRequestDto: RecordRequestDTO) {
+        JuinjangAPIManager.shared.uploadRecordFile(api: .uploadRecordFile, fileURL: fileURL, dto: recordRequestDto) { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case .success(let recordResponse):
+                print(recordResponse)
+                NotificationCenter.default.post(name: .addRecordResponse, object: recordResponse)
+                showPlaybackVC(recordResponse: recordResponse)
+            case .failure(let failure):
+                print("실패...>!!!!!")
+                bottomSheetViewController?.hideBottomSheetAndGoBack()
             }
         }
     }
@@ -118,9 +126,9 @@ class STTLoadingViewController: BaseViewController {
             if result.isFinal {
                 print("Transcription: \(result.bestTranscription.formattedString)")
                 completionHandler(.success(result.bestTranscription.formattedString))
+                return
             }
         }
-        completionHandler(.failure(STTError.resultError))
     }
     
     private func getRecordRequestDTO(script: String) -> RecordRequestDTO {

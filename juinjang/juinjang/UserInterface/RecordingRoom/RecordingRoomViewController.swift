@@ -96,10 +96,10 @@ class RecordingRoomViewController: BaseViewController, RemoveRecordDelegate {
         setAddObserver()
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        NotificationCenter.default.removeObserver(self)
-    }
+//    override func viewWillDisappear(_ animated: Bool) {
+//        super.viewWillDisappear(animated)
+//        NotificationCenter.default.removeObserver(self)
+//    }
     
     @objc
     func didStoppedParentScroll() {
@@ -460,7 +460,7 @@ extension RecordingRoomViewController: UIScrollViewDelegate {
         //        print("Child 스크롤 좌표 - \(scrollView.contentOffset.y)")
         
         // Child 스크롤 0 이하일 때
-        if scrollView.contentOffset.y < -30 {
+        if scrollView.contentOffset.y < -1 {
             scrollView.contentOffset.y = 0
             scrollView.isScrollEnabled = false
             NotificationCenter.default.post(name: NSNotification.Name("didStoppedChildScroll"), object: nil)
