@@ -86,20 +86,15 @@ class RecordingRoomViewController: BaseViewController, RemoveRecordDelegate {
         designViews()
         setDelegate()
         hideKeyboardWhenTappedArround()
+        setAddObserver()
         showTotalRecordingButton.addTarget(self, action: #selector(showRecordingFilesVC), for: .touchUpInside)
         addRecordingButton.addTarget(self, action: #selector(addRecordingFilesVC), for: .touchUpInside)
         callFetchRequest()
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        setAddObserver()
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
-    
-//    override func viewWillDisappear(_ animated: Bool) {
-//        super.viewWillDisappear(animated)
-//        NotificationCenter.default.removeObserver(self)
-//    }
     
     @objc
     func didStoppedParentScroll() {
@@ -112,14 +107,26 @@ class RecordingRoomViewController: BaseViewController, RemoveRecordDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(didStoppedParentScroll), name: NSNotification.Name("didStoppedParentScroll"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(editRecordName), name: .editRecordName, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(editRecordScript), name: .editRecordScript, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(removeRecordFile), name: .removeRecordResponse, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(addRecordResponse), name: .addRecordResponse, object: nil)
     }
     
     @objc private func addRecordResponse(_ notification: Notification) {
         print(#function)
         guard let recordResponse = notification.object as? RecordResponse else { return }
-        fileItems.insert(recordResponse, at: 0)
-        fileItems.removeLast()
+        if fileItems.isEmpty {
+            fileItems.insert(recordResponse, at: 0)
+        } else {
+            fileItems.insert(recordResponse, at: 0)
+            fileItems.removeLast()
+        }
+    
+        loadRecordings()
+    }
+    
+    @objc private func removeRecordFile(_ notification: Notification) {
+        guard let recordId = notification.object as? Int else { return }
+        fileItems.removeAll { $0.recordId == recordId }
         loadRecordings()
     }
     

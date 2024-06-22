@@ -186,6 +186,7 @@ class RecordingFilesViewController: BaseViewController {
             guard let self else { return }
             let index = indexPath.row
             deleteRecordFile(recordId: fileItems[index].recordId)
+            NotificationCenter.default.post(name: .removeRecordResponse, object: fileItems[index].recordId, userInfo: nil)
             fileItems.remove(at: index)
             view.makeToast("\(fileName)이 삭제되었습니다.", duration: 1.0)
         }
