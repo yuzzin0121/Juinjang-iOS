@@ -82,7 +82,7 @@ enum JuinjangAPI {
         case .detailImjang(let imjangId):
             return URL(string: baseURL + "limjang/detail/\(imjangId)")!
         case .deleteImjangs:
-            return URL(string: baseURL + "limjang/delete")!
+            return URL(string: baseURL + "limjang")!
         case .memo(let imjangId):
             return URL(string: baseURL + "memo/\(imjangId)")!
         case .fetchRecordingRoom(let imjangId):
@@ -123,13 +123,13 @@ enum JuinjangAPI {
     
     var method: HTTPMethod {
         switch self {
-        case .saveChecklist, .scrap, .createImjang, .regenerateToken, .logout, .deleteImjangs, .memo, .addImage, .deleteImage, .uploadRecordFile:
+        case .saveChecklist, .scrap, .createImjang, .regenerateToken, .logout, .memo, .addImage, .deleteImage, .uploadRecordFile:
             return .post
         case .showChecklist, .totalImjang, .searchImjang, .mainImjang, .detailImjang, .kakaoLogin, .kakaoLoginCallback, .profile, .fetchRecordingRoom, .fetchImage, .fetchRecordFiles:
             return .get
         case .nickname, .modifyImjang, .modifyChecklist, .editRecordName, .editRecordContent:
             return .patch
-        case .deleteRecordFile, .cancelScrap:
+        case .deleteRecordFile, .cancelScrap, .deleteImjangs:
             return .delete
         }
     }

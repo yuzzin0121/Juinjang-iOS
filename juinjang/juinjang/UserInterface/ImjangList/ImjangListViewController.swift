@@ -18,7 +18,11 @@ protocol SendFilterItemDelegate: AnyObject {
     func sendFilterItem(filter: Filter)
 }
 
-final class ImjangListViewController: BaseViewController {
+protocol DeleteImjangListDelegate: AnyObject {
+    func deleteImjangList(_ deleteIdList: [Int])
+}
+
+final class ImjangListViewController: BaseViewController, DeleteImjangListDelegate {
     
     // 임장 노트가 존재하지 않을 때의 뷰
     let emptyBackgroundView = UIView()
@@ -218,10 +222,23 @@ final class ImjangListViewController: BaseViewController {
     
     @objc func showDeleteImjangVC() {
         let DeleteImjangVC = DeleteImjangViewController()
+        DeleteImjangVC.deleteImjangListDelegate = self
         self.navigationController?.pushViewController(DeleteImjangVC, animated: true)
     }
     
-    func setScrap(imjangNote: ListDto) {
+    func deleteImjangList(_ deleteIdList: [Int]) {
+        imjangList.removeAll { imjang in
+            deleteIdList.contains(imjang.limjangId)
+        }
+        
+        scrapImjangList.removeAll { scrapImjang in
+            deleteIdList.contains(scrapImjang.limjangId)
+        }
+        setEmptyUI(isEmpty: imjangList.isEmpty)
+        imjangTableView.reloadData()
+    }
+    
+    private func setScrap(imjangNote: ListDto) {
         if scrapImjangList.count < 10 {
             scrapImjangList.append(imjangNote)
         }

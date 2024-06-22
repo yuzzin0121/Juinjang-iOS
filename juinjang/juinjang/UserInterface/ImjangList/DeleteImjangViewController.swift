@@ -31,6 +31,7 @@ class DeleteImjangViewController: BaseViewController {
     }
     
     var imjangList: [ListDto] = []
+    weak var deleteImjangListDelegate: DeleteImjangListDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,7 +53,8 @@ class DeleteImjangViewController: BaseViewController {
         deleteImjangPopupVC.selectedCount = selectedIndexes.count
         deleteImjangPopupVC.modalPresentationStyle = .overFullScreen
         
-        deleteImjangPopupVC.completionHandler = {
+        deleteImjangPopupVC.completionHandler = { [weak self] in
+            guard let self else { return }
             let indexs = self.selectedIndexes.sorted(by: <)
             print(indexs)
             var ids: [Int] = []
@@ -61,6 +63,7 @@ class DeleteImjangViewController: BaseViewController {
             }
             print(ids)
             self.deleteRequest(imjangIds: ids)
+            deleteImjangListDelegate?.deleteImjangList(ids)
         }
         present(deleteImjangPopupVC, animated: false)
     }
@@ -70,6 +73,7 @@ class DeleteImjangViewController: BaseViewController {
         let parameter: [String: Any] = [
             "limjangIdList": imjangIds
         ]
+        print(JuinjangAPI.deleteImjangs(imjangIds: imjangIds).header)
         JuinjangAPIManager.shared.postData(type: BaseResponseString.self, api: .deleteImjangs(imjangIds: imjangIds), parameter: parameter) { response, error in
             if error == nil {
                 guard let response = response else { return }
