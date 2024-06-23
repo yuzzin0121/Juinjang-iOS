@@ -99,54 +99,60 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        
-        // 셀 내용 초기화
-        itemPickerView.selectRow(0, inComponent: 0, animated: true)
-        itemButton.backgroundColor = UIColor(named: "shadowGray")
-        itemButton.setTitle("선택안함", for: .normal)
-        itemButton.setTitleColor(UIColor(named: "darkGray"), for: .normal)
-        let buttonImage = UIImage(named: "item-arrow-down")
-        itemButton.setImage(buttonImage, for: .normal)
-        itemButton.semanticContentAttribute = .forceRightToLeft
-        // 여백 설정
-        let titleInset: CGFloat = 12.0
-        let imageInset: CGFloat = 8.0
-        itemButton.sizeToFit()
-        itemButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: titleInset, bottom: 0, right: -imageInset)
-        itemButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: itemButton.bounds.width - 35, bottom: 0, right: -imageInset)
-        
-        // 배경색 초기화
-        backgroundColor = .white
-        questionImage.image = UIImage(named: "question-image")
-        
-        // 버튼 위치 제자리로
-        itemButton.snp.updateConstraints {
-            $0.trailing.equalToSuperview().offset(-24)
-        }
-        
-        // 기타 텍스트필드 초기화
-        etcTextField.text = ""
-        etcTextField.layer.backgroundColor = UIColor(named: "lightBackgroundOrange")?.cgColor
-        
-        // 기타 항목 선택 시 텍스트필드 위치 초기화
-        if selectedButton.title(for: .normal) == "기타" {
-            selectedButton.backgroundColor = UIColor(named: "shadowGray")
-            selectedButton.setTitleColor(UIColor(named: "darkGray"), for: .normal)
-            selectedButton.snp.updateConstraints {
+
+        // "기타" 항목 선택 시 텍스트필드 초기화 및 위치 조정
+        if itemButton.title(for: .normal) == "기타" {
+            itemButton.backgroundColor = UIColor(named: "shadowGray")
+            itemButton.setTitleColor(UIColor(named: "darkGray"), for: .normal)
+            itemButton.snp.updateConstraints {
                 $0.trailing.equalToSuperview().offset(-250)
             }
             contentView.addSubview(etcTextField)
-            
+
             etcTextField.snp.makeConstraints {
                 $0.trailing.equalToSuperview().offset(-24)
                 $0.top.equalTo(contentLabel.snp.bottom).offset(20)
                 $0.height.equalTo(31)
                 $0.width.equalTo(218)
             }
+
+            // 기타 텍스트필드 초기화
+            etcTextField.text = ""
+            etcTextField.layer.backgroundColor = UIColor(named: "lightBackgroundOrange")?.cgColor
         } else {
+            // "기타" 항목이 아닌 경우 기타 텍스트필드 제거
             etcTextField.removeFromSuperview()
+            
+            // 기본 셀 내용 초기화
+            itemButton.backgroundColor = UIColor(named: "shadowGray")
+            itemButton.setTitle("선택안함", for: .normal)
+            itemButton.setTitleColor(UIColor(named: "darkGray"), for: .normal)
+            let buttonImage = UIImage(named: "item-arrow-down")
+            itemButton.setImage(buttonImage, for: .normal)
+            itemButton.semanticContentAttribute = .forceRightToLeft
+
+            // 여백 설정
+            let titleInset: CGFloat = 12.0
+            let imageInset: CGFloat = 8.0
+            itemButton.sizeToFit()
+            itemButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: titleInset, bottom: 0, right: -imageInset)
+            itemButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: itemButton.bounds.width - 35, bottom: 0, right: -imageInset)
+
+            // 배경색 초기화
+            backgroundColor = .white
+            questionImage.image = UIImage(named: "question-image")
+
+            // 버튼 위치 초기화
+            itemButton.snp.updateConstraints {
+                $0.trailing.equalToSuperview().offset(-24)
+            }
+
+            // 피커 뷰 초기화
+            itemPickerView.selectRow(0, inComponent: 0, animated: true)
+            itemPickerView.reloadAllComponents()
         }
     }
+
     
     func setupLayout() {
         // 질문 구분 imageView
@@ -332,7 +338,7 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
             } else {
                 itemButton.setImage(nil, for: .normal)
             }
-            itemButton.backgroundColor = .white
+            itemButton.backgroundColor = UIColor(named: "lightOrange")
             itemButton.setTitleColor(UIColor(named: "darkGray"), for: .normal)
             setSavedInset()
         }
@@ -389,7 +395,6 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
         etcTextField.removeFromSuperview()
         
         // 기본값 설정
-        // 기본값 설정
         if row == 0 {
             backgroundColor = .white
             questionImage.image = UIImage(named: "question-image")
@@ -440,12 +445,12 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
             label = UILabel()
         }
         
-        let option = options[row]
+        let option = options[row].option
         label.font = UIFont.pretendard(size: fontSize, weight: .regular)
         label.textColor = UIColor.black
         label.textAlignment = .left
         
-        if let originalImage = UIImage(data: option.image),
+        if let originalImage = UIImage(data: options[row].image),
            let resizedImage = originalImage.resized(toWidth: 16) { // 이미지 리사이징
             
             let imageAttachment = NSTextAttachment()
@@ -464,12 +469,12 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
                 .font: UIFont.pretendard(size: fontSize, weight: .regular),
                 .foregroundColor: UIColor.black
             ]
-            let textAttributedString = NSAttributedString(string: " \(option.option)", attributes: textAttributes)
+            let textAttributedString = NSAttributedString(string: " \(options[row].option)", attributes: textAttributes)
             attributedString.append(textAttributedString)
             
             label.attributedText = attributedString
         } else {
-            label.text = option.option
+            label.text = options[row].option
             label.frame.origin.x = leftPadding
         }
         return label
