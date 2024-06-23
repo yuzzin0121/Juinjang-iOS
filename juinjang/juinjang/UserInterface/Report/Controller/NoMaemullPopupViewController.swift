@@ -11,10 +11,9 @@ import Then
 
 class NoMaemullPopupViewController: BaseViewController {
     private let popupView: NoMaemullPopupView
-    @objc
-    func btnTap(_ sender: UIButton) {
-        let vc = SelectMaemullViewController()
-        self.navigationController?.pushViewController(vc, animated: true)
+    
+    @objc func btnTap(_ sender: UIButton) {
+        self.dismiss(animated: true)
     }
   
     init(ment: String) {

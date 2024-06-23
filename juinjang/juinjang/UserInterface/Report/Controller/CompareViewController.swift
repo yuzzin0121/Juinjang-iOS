@@ -8,9 +8,28 @@
 import UIKit
 import Then
 import DGCharts
+import Alamofire
 
-class CompareViewController : BaseViewController {
-    var isCompared :Bool = false
+class CompareViewController : BaseViewController, SendCompareImjangData {
+    func sendData(isSelected: Bool, compareImjangId: Int, compareImjangName: String) {
+        isCompared = isSelected
+        getReportInfo(limjangId: compareImjangId, accessToken: UserDefaultManager.shared.accessToken)
+        isCompare()
+        compareLabel2.text = compareImjangName
+        chartCompareLabel2.text = compareImjangName
+    }
+    
+    var isCompared : Bool = false
+    var imjangId : Int
+    var comparedImjangId : Int = 0
+    
+    var indoorRate1 : Float = 0.0
+    var locationRate1 : Float = 0.0
+    var publicRate1 : Float = 0.0
+    
+    var indoorRate2 : Float = 0.0
+    var locationRate2 : Float = 0.0
+    var publicRate2 : Float = 0.0
     
     var backgroundImageView = UIImageView().then {
         $0.image = UIImage(named:"PaperTexture")
@@ -76,25 +95,12 @@ class CompareViewController : BaseViewController {
     }
     
     var insideRateLabel1 = UILabel().then {
-        let text1 = NSTextAttachment()
-        text1.image = UIImage(named: "grayStar")
-        let text2 = " " + "4.5"
-        let text3 = NSMutableAttributedString(string: "")
-        text3.append(NSAttributedString(attachment: text1))
-        text3.append(NSAttributedString(string: text2))
-        $0.attributedText = text3
         $0.textColor = UIColor(named: "300")
         $0.font = UIFont(name: "Pretendard-Medium", size: 14)
         $0.translatesAutoresizingMaskIntoConstraints = false
     }
-    var insideRateLabel2 = UILabel().then {
-        let text1 = NSTextAttachment()
-        text1.image = UIImage(named: "grayStar")
-        let text2 = " " + "4.5"
-        let text3 = NSMutableAttributedString(string: "")
-        text3.append(NSAttributedString(attachment: text1))
-        text3.append(NSAttributedString(string: text2))
-        $0.attributedText = text3
+    lazy var insideRateLabel2 = UILabel().then {
+        $0.text = "4.5"
         $0.textColor = UIColor(named: "300")
         $0.font = UIFont(name: "Pretendard-Medium", size: 14)
         $0.translatesAutoresizingMaskIntoConstraints = false
@@ -124,14 +130,8 @@ class CompareViewController : BaseViewController {
         $0.font = UIFont(name: "Pretendard-Medium", size: 14)
         $0.translatesAutoresizingMaskIntoConstraints = false
     }
-    var publicSpaceRateLabel2 = UILabel().then {
-        let text1 = NSTextAttachment()
-        text1.image = UIImage(named: "grayStar")
-        let text2 = " " + "4.5"
-        let text3 = NSMutableAttributedString(string: "")
-        text3.append(NSAttributedString(attachment: text1))
-        text3.append(NSAttributedString(string: text2))
-        $0.attributedText = text3
+    lazy var publicSpaceRateLabel2 = UILabel().then {
+        $0.text = "4.5"
         $0.textColor = UIColor(named: "300")
         $0.font = UIFont(name: "Pretendard-Medium", size: 14)
         $0.translatesAutoresizingMaskIntoConstraints = false
@@ -162,13 +162,6 @@ class CompareViewController : BaseViewController {
         $0.translatesAutoresizingMaskIntoConstraints = false
     }
     var locationConditionRateLabel2 = UILabel().then {
-        let text1 = NSTextAttachment()
-        text1.image = UIImage(named: "grayStar")
-        let text2 = " " + "4.5"
-        let text3 = NSMutableAttributedString(string: "")
-        text3.append(NSAttributedString(attachment: text1))
-        text3.append(NSAttributedString(string: text2))
-        $0.attributedText = text3
         $0.textColor = UIColor(named: "300")
         $0.font = UIFont(name: "Pretendard-Medium", size: 14)
         $0.translatesAutoresizingMaskIntoConstraints = false
@@ -238,7 +231,7 @@ class CompareViewController : BaseViewController {
     
     var compareDataSet2 = RadarChartDataSet(
         entries: [
-            RadarChartDataEntry(value: 2.5),
+            RadarChartDataEntry(value: 2.8),
             RadarChartDataEntry(value: 4.0),
             RadarChartDataEntry(value: 3.2)
         ]
@@ -246,10 +239,161 @@ class CompareViewController : BaseViewController {
         $0.fillColor = .clear
     }
     
+    func isCompare() {
+        
+        if isCompared == true {
+            compareViewEmpty.isHidden = true
+            view.addSubview(compareView2)
+            compareView2.addSubview(insideLabel2)
+            compareView2.addSubview(insideRateLabel2)
+            compareView2.addSubview(publicSpaceLabel2)
+            compareView2.addSubview(publicSpaceRateLabel2)
+            compareView2.addSubview(locationConditionLabel2)
+            compareView2.addSubview(locationConditionRateLabel2)
+            compareView2.addSubview(totalLabel2)
+            compareView2.addSubview(totalRateLabel2)
+            view.addSubview(closeButton)
+            view.addSubview(compareLabel2)
+            view.addSubview(chartCompareLabel1)
+            view.addSubview(chartCompareImageView1)
+            view.addSubview(chartCompareLabel2)
+            view.addSubview(chartCompareImageView2)
+            compareView2.snp.makeConstraints{
+                $0.top.equalTo(compareLabel1.snp.bottom).offset(12)
+                $0.right.equalToSuperview().inset(24)
+            }
+            closeButton.snp.makeConstraints{
+                $0.right.equalToSuperview().inset(18)
+                $0.top.equalTo(compareView2.snp.top).offset(-10)
+                $0.height.equalTo(22)
+            }
+            compareLabel2.snp.makeConstraints{
+                $0.top.equalToSuperview().offset(77)
+                $0.centerX.equalTo(compareView2)
+            }
+            chartCompareImageView1.snp.makeConstraints{
+                $0.top.equalTo(compareView1.snp.bottom).offset(28)
+                $0.left.equalToSuperview().offset(21)
+                $0.height.equalTo(11)
+            }
+            chartCompareLabel1.snp.makeConstraints{
+                $0.top.equalTo(compareView1.snp.bottom).offset(25)
+                $0.left.equalTo(chartCompareImageView1.snp.right).offset(4)
+                $0.height.equalTo(17)
+            }
+            chartCompareImageView2.snp.makeConstraints{
+                $0.top.equalTo(chartCompareImageView1.snp.bottom).offset(8)
+                $0.left.equalToSuperview().offset(21)
+                $0.height.equalTo(11)
+            }
+            chartCompareLabel2.snp.makeConstraints{
+                $0.top.equalTo(chartCompareLabel1.snp.bottom).offset(2)
+                $0.left.equalTo(chartCompareImageView2.snp.right).offset(4)
+                $0.height.equalTo(17)
+            }
+            insideLabel2.snp.makeConstraints{
+                $0.top.equalToSuperview().offset(12)
+                $0.left.equalToSuperview().offset(12)
+                $0.height.equalTo(20)
+            }
+            insideRateLabel2.snp.makeConstraints{
+                $0.top.equalToSuperview().offset(12)
+                $0.left.equalToSuperview().offset(110)
+                $0.height.equalTo(20)
+            }
+            
+            publicSpaceLabel2.snp.makeConstraints{
+                $0.top.equalToSuperview().offset(36)
+                $0.left.equalToSuperview().offset(12)
+                $0.height.equalTo(20)
+            }
+            publicSpaceRateLabel2.snp.makeConstraints{
+                $0.top.equalToSuperview().offset(36)
+                $0.left.equalToSuperview().offset(110)
+                $0.height.equalTo(20)
+            }
+            locationConditionLabel2.snp.makeConstraints{
+                $0.top.equalToSuperview().offset(60)
+                $0.left.equalToSuperview().offset(12)
+                $0.height.equalTo(20)
+            }
+            locationConditionRateLabel2.snp.makeConstraints{
+                $0.top.equalToSuperview().offset(60)
+                $0.left.equalToSuperview().offset(110)
+                $0.height.equalTo(20)
+            }
+            totalLabel2.snp.makeConstraints{
+                $0.bottom.equalToSuperview().inset(12)
+                $0.left.equalToSuperview().offset(12)
+                $0.height.equalTo(20)
+            }
+            totalRateLabel2.snp.makeConstraints{
+                $0.bottom.equalToSuperview().inset(12)
+                $0.left.equalToSuperview().offset(110)
+                $0.height.equalTo(20)
+            }
+        }
+    }
+    
+    func getReportInfo(limjangId: Int, accessToken: String) {
+        print("비교매물")
+        print(limjangId)
+        // 기본 URL
+        let baseURL = "http://juinjang1227.com:8080/api/report/\(limjangId)"
+        
+        // 요청 헤더 구성
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(accessToken)"
+        ]
+        
+        // Alamofire를 사용하여 GET 요청
+        AF.request(baseURL, method: .get, headers: headers).responseJSON { response in
+            switch response.result {
+            case .success(let value):
+                if let json = value as? [String: Any],
+                   let result = json["result"] as? [String: Any],
+                   let limjangDto = result["limjangDto"] as? [String: Any],
+                   let reportDTO = result["reportDTO"] as? [String: Any] {
+                    print("Response2 JSON: \(json)")
+                    do {
+                        let decoder = JSONDecoder()
+                        let reportData = try JSONSerialization.data(withJSONObject: reportDTO, options: [])
+                        let reportDto = try decoder.decode(ReportDTO.self, from: reportData)
+                        self.setData(reportDto: reportDto)
+                        
+                    } catch {
+                        print("JSON2 디코딩 에러: \(error.localizedDescription)")
+                    }
+                }
+            case .failure(let error):
+                print("Error: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func setData(reportDto: ReportDTO) {
+        updateRate(rate: String(format: "%.2f", reportDto.indoorRate), label: insideRateLabel2)
+        updateRate(rate: String(format: "%.2f", reportDto.locationConditionsRate), label: locationConditionRateLabel2)
+        updateRate(rate: String(format: "%.2f", reportDto.publicSpaceRate), label: publicSpaceRateLabel2)
+        updateRate(rate: String(format: "%.2f", reportDto.totalRate), label: totalRateLabel2)
+        
+        
+        compareDataSet2 = RadarChartDataSet(
+            entries: [
+                RadarChartDataEntry(value: Double(reportDto.indoorRate)),
+                RadarChartDataEntry(value: Double(reportDto.locationConditionsRate)),
+                RadarChartDataEntry(value: Double(reportDto.publicSpaceRate))
+            ]
+        )
+        compareDataSet2.fillAlpha = CGFloat(0.8)
+        compareDataSet2.fillColor = .white
+        setCompareData()
+    }
+    
     func updateRate(rate: String, label: UILabel){
         let text1 = NSTextAttachment()
         text1.image = UIImage(named: "grayStar")
-        if label == totalRateLabel1 {
+        if label == totalRateLabel1 || label == totalRateLabel2 {
             text1.image = UIImage(named: "star")
         }
         let text2 = " " + rate
@@ -260,6 +404,12 @@ class CompareViewController : BaseViewController {
     }
     
     func setData(indoor: Float, location: Float, publicSpace: Float) {
+        indoorRate1 = indoor
+        locationRate1 = location
+        publicRate1 = publicSpace
+    }
+    
+    func setCompareData() {
         let dataSet1 = RadarChartDataSet(
             entries: [
                 RadarChartDataEntry(value: 1.0),
@@ -298,9 +448,9 @@ class CompareViewController : BaseViewController {
         
         let compareDataSet1 = RadarChartDataSet(
             entries: [
-                RadarChartDataEntry(value: Double(indoor)),
-                RadarChartDataEntry(value: Double(location)),
-                RadarChartDataEntry(value: Double(publicSpace))
+                RadarChartDataEntry(value: Double(indoorRate1)),
+                RadarChartDataEntry(value: Double(locationRate1)),
+                RadarChartDataEntry(value: Double(publicRate1))
             ]
         )
         
@@ -343,6 +493,7 @@ class CompareViewController : BaseViewController {
         compareDataSet2.valueFormatter = DataSetValueFormatter()
     }
     
+    
     func addTarget() {
         compareViewEmpty.addTarget(self, action: #selector(compareButtonTap), for: .touchUpInside)
         closeButton.addTarget(self, action: #selector(closeBtnTap), for: .touchUpInside)
@@ -354,7 +505,8 @@ class CompareViewController : BaseViewController {
         self.present(popupViewController, animated: false)*/
         
         //비교할 매물이 있을 때
-        let vc = SelectMaemullViewController()
+        let vc = SelectMaemullViewController(imjangId: imjangId)
+        vc.delegate = self
         self.navigationController?.pushViewController(vc, animated: true)
     }
     @objc private func closeBtnTap() {
@@ -368,8 +520,8 @@ class CompareViewController : BaseViewController {
         chartCompareLabel2.isHidden = true
         chartCompareImageView2.isHidden = true
         
-        self.compareDataSet2.fillColor = .clear
-        //setData()
+        compareDataSet2.fillColor = .clear
+        setCompareData()
     }
     
     func setConstraint() {
@@ -450,100 +602,13 @@ class CompareViewController : BaseViewController {
         
     }
     
-    func isCompare() {
-        
-        if isCompared == true {
-            compareViewEmpty.isHidden = true
-            view.addSubview(compareView2)
-            compareView2.addSubview(insideLabel2)
-            compareView2.addSubview(insideRateLabel2)
-            compareView2.addSubview(publicSpaceLabel2)
-            compareView2.addSubview(publicSpaceRateLabel2)
-            compareView2.addSubview(locationConditionLabel2)
-            compareView2.addSubview(locationConditionRateLabel2)
-            compareView2.addSubview(totalLabel2)
-            compareView2.addSubview(totalRateLabel2)
-            view.addSubview(closeButton)
-            view.addSubview(compareLabel2)
-            view.addSubview(chartCompareLabel1)
-            view.addSubview(chartCompareImageView1)
-            view.addSubview(chartCompareLabel2)
-            view.addSubview(chartCompareImageView2)
-            compareView2.snp.makeConstraints{
-                $0.top.equalTo(compareLabel1.snp.bottom).offset(12)
-                $0.right.equalToSuperview().inset(24)
-            }
-            closeButton.snp.makeConstraints{
-                $0.right.equalToSuperview().inset(18)
-                $0.top.equalTo(compareView2.snp.top).offset(-10)
-                $0.height.equalTo(22)
-            }
-            compareLabel2.snp.makeConstraints{
-                $0.top.equalToSuperview().offset(77)
-                $0.centerX.equalTo(compareView2)
-            }
-            chartCompareImageView1.snp.makeConstraints{
-                $0.top.equalTo(compareView1.snp.bottom).offset(28)
-                $0.left.equalToSuperview().offset(21)
-                $0.height.equalTo(11)
-            }
-            chartCompareLabel1.snp.makeConstraints{
-                $0.top.equalTo(compareView1.snp.bottom).offset(25)
-                $0.left.equalTo(chartCompareImageView1.snp.right).offset(4)
-                $0.height.equalTo(17)
-            }
-            chartCompareImageView2.snp.makeConstraints{
-                $0.top.equalTo(chartCompareImageView1.snp.bottom).offset(8)
-                $0.left.equalToSuperview().offset(21)
-                $0.height.equalTo(11)
-            }
-            chartCompareLabel2.snp.makeConstraints{
-                $0.top.equalTo(chartCompareLabel1.snp.bottom).offset(2)
-                $0.left.equalTo(chartCompareImageView2.snp.right).offset(4)
-                $0.height.equalTo(17)
-            }
-            insideLabel2.snp.makeConstraints{
-                $0.top.equalToSuperview().offset(12)
-                $0.left.equalToSuperview().offset(12)
-                $0.height.equalTo(20)
-            }
-            insideRateLabel2.snp.makeConstraints{
-                $0.top.equalToSuperview().offset(12)
-                $0.right.equalToSuperview().inset(13)
-                $0.height.equalTo(20)
-            }
-            
-            publicSpaceLabel2.snp.makeConstraints{
-                $0.top.equalToSuperview().offset(36)
-                $0.left.equalToSuperview().offset(12)
-                $0.height.equalTo(20)
-            }
-            publicSpaceRateLabel2.snp.makeConstraints{
-                $0.top.equalToSuperview().offset(36)
-                $0.right.equalToSuperview().inset(13)
-                $0.height.equalTo(20)
-            }
-            locationConditionLabel2.snp.makeConstraints{
-                $0.top.equalToSuperview().offset(60)
-                $0.left.equalToSuperview().offset(12)
-                $0.height.equalTo(20)
-            }
-            locationConditionRateLabel2.snp.makeConstraints{
-                $0.top.equalToSuperview().offset(60)
-                $0.right.equalToSuperview().inset(13)
-                $0.height.equalTo(20)
-            }
-            totalLabel2.snp.makeConstraints{
-                $0.bottom.equalToSuperview().inset(12)
-                $0.left.equalToSuperview().offset(12)
-                $0.height.equalTo(20)
-            }
-            totalRateLabel2.snp.makeConstraints{
-                $0.bottom.equalToSuperview().inset(12)
-                $0.right.equalToSuperview().inset(12)
-                $0.height.equalTo(20)
-            }
-        }
+    init(imjangId: Int) {
+        self.imjangId = imjangId
+        super.init()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func viewDidLoad() {
@@ -563,8 +628,9 @@ class CompareViewController : BaseViewController {
         compareView1.addSubview(totalRateLabel1)
         view.addSubview(compareViewEmpty)
         isCompare()
+        
         view.addSubview(radarChartView)
-        //setData()
+        setCompareData()
         
         addTarget()
         setConstraint()

@@ -78,7 +78,7 @@ class ReportViewController : BaseViewController {
                    let result = json["result"] as? [String: Any],
                    let limjangDto = result["limjangDto"] as? [String: Any],
                    let reportDTO = result["reportDTO"] as? [String: Any] {
-                    print("Response JSON: \(json)")
+                    //print("Response JSON: \(json)")
                     do {
                         let decoder = JSONDecoder()
                         let reportData = try JSONSerialization.data(withJSONObject: reportDTO, options: [])
@@ -162,6 +162,7 @@ class ReportViewController : BaseViewController {
         addressLabel.text = "\(detailDto.address) \(detailDto.addressDetail)"
         
         tabViewController.compareVC.compareLabel1.text = detailDto.nickname
+        tabViewController.compareVC.chartCompareLabel1.text = detailDto.nickname
     }
     
     func setData(reportDto: ReportDTO) {
@@ -263,8 +264,10 @@ class ReportViewController : BaseViewController {
         view.addSubview(addressLabel)
         
         addChild(tabViewController)
+        tabViewController.imjangId = imjangId
         view.addSubview(tabViewController.view)
         tabViewController.didMove(toParent: self)
+        
         
         
         setConstraint()

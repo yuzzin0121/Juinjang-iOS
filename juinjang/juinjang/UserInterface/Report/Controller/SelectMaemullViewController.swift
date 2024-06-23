@@ -7,8 +7,15 @@
 import UIKit
 import Then
 import SnapKit
+import Alamofire
+
+protocol SendCompareImjangData{
+    func sendData(isSelected: Bool, compareImjangId: Int,  compareImjangName: String)
+}
 
 class SelectMaemullViewController : BaseViewController {
+    
+    var delegate: SendCompareImjangData?
     
     var contentView = UIView().then {
         $0.backgroundColor = .white
@@ -32,7 +39,9 @@ class SelectMaemullViewController : BaseViewController {
     var menuChildren: [UIMenuElement] = []
     lazy var filterList = Filter.allCases
     var imjangList: [ListDto] = []
-    var imjangId: Int = 0
+    var imjangId: Int
+    var comparedImjangId : Int = 0
+    var comparedName : String = ""
     
     let tableView = UITableView().then {
         $0.estimatedRowHeight = UITableView.automaticDimension
@@ -145,20 +154,21 @@ class SelectMaemullViewController : BaseViewController {
     func designNavigationBar() {
         self.navigationController?.navigationBar.tintColor = .black
         navigationItem.title = "비교할 매물 고르기"
-
+        
         // UIBarButtonItem 생성 및 이미지 설정
         let backButtonItem = UIBarButtonItem(image: UIImage(named: "arrow-left"), style: .plain, target: self, action: #selector(backBtnTap))
         backButtonItem.tintColor = UIColor(named: "300")
         backButtonItem.imageInsets = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 0)
-
+        
         let searchButtonItem = UIBarButtonItem(image: UIImage(named:"search"), style: .plain, target: self, action: #selector(searchBtnTap))
         searchButtonItem.tintColor = UIColor(named: "300")
         searchButtonItem.imageInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 12)
-
+        
         // 네비게이션 아이템에 백 버튼 아이템 설정
         self.navigationItem.leftBarButtonItem = backButtonItem
         self.navigationItem.rightBarButtonItem = searchButtonItem
     }
+    
     @objc func backBtnTap() {
         self.navigationController?.popViewController(animated: true)
     }
@@ -167,18 +177,23 @@ class SelectMaemullViewController : BaseViewController {
         navigationController?.pushViewController(searchVC, animated: true)
     }
     @objc func applyBtnTap() {
-        let vc = ReportViewController(imjangId: imjangId)
-        vc.tabViewController.index = 1
-        vc.tabViewController.compareVC.isCompared = true
-        vc.tabViewController.compareVC.compareDataSet2.fillAlpha = CGFloat(0.8)
-        vc.tabViewController.compareVC.compareDataSet2.fillColor = .white
-        self.navigationController?.pushViewController(vc, animated: true)
+        delegate?.sendData(isSelected: true, compareImjangId: comparedImjangId, compareImjangName: comparedName)
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    init(imjangId: Int) {
+        self.imjangId = imjangId
+        super.init()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         designNavigationBar()
-        callRequest(setScrap: true, excludingId: 9)
+        callRequest(setScrap: true, excludingId: imjangId)
         tableView.delegate = self
         tableView.dataSource = self
         view.backgroundColor = .white
@@ -189,8 +204,6 @@ class SelectMaemullViewController : BaseViewController {
         
         view.addSubview(btnBackGroundView)
         btnBackGroundView.addSubview(applyBtn)
-        //applyBtn.addTarget(self, action: #selector(applyBtnTap), for: .touchUpInside)
-        
         setFilterData()
         setConstraint()
     }
@@ -210,7 +223,13 @@ extension SelectMaemullViewController: UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+       
+        let compareImjangId = imjangList[indexPath.row].limjangId
+        comparedImjangId = compareImjangId
+        print("Row deselected at indexPath: \(compareImjangId)")
+        
         let cell = tableView.cellForRow(at: indexPath) as! ReportImjangListTableViewCell
+        comparedName = cell.roomNameLabel.text ?? "error"
         if cell.isSelect == false {
             cell.isSelect = true
             cell.contentView.backgroundColor = UIColor(named: "main100")
@@ -232,6 +251,7 @@ extension SelectMaemullViewController: UITableViewDelegate, UITableViewDataSourc
         cell.isSelect = false
         cell.contentView.backgroundColor = .white
         cell.contentView.layer.borderColor = ColorStyle.strokeGray.cgColor
+        
         applyBtn.backgroundColor = UIColor(named: "null")
         applyBtn.removeTarget(self, action: #selector(applyBtnTap), for: .touchUpInside)
     }

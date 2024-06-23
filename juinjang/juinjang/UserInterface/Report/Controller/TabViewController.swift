@@ -15,6 +15,8 @@ class TabViewController: TabmanViewController {
     
     private var viewControllers: Array<UIViewController> = []
     var index = 0
+    var imjangId: Int = 0
+    
     let tabView = UIView().then {
         $0.backgroundColor = .white
     }
@@ -22,8 +24,10 @@ class TabViewController: TabmanViewController {
     let lineView = UIView().then {
         $0.backgroundColor = UIColor(named: "100")
     }
+    
     let graphVC = GraphViewController()
-    let compareVC = CompareViewController()
+    lazy var compareVC = CompareViewController(imjangId: imjangId)
+    
     
     func addViewControllers() {
         viewControllers.append(graphVC)
