@@ -12,6 +12,7 @@ import Alamofire
 
 class CompareViewController : BaseViewController, SendCompareImjangData {
     func sendData(isSelected: Bool, compareImjangId: Int, compareImjangName: String) {
+        print("sendData")
         isCompared = isSelected
         getReportInfo(limjangId: compareImjangId, accessToken: UserDefaultManager.shared.accessToken)
         isCompare()
@@ -240,9 +241,16 @@ class CompareViewController : BaseViewController, SendCompareImjangData {
     }
     
     func isCompare() {
-        
+        print("이즈컴페어 : \(isCompared)")
         if isCompared == true {
             compareViewEmpty.isHidden = true
+            compareView2.isHidden = false
+            closeButton.isHidden = false
+            compareLabel2.isHidden = false
+            chartCompareLabel1.isHidden = false
+            chartCompareImageView1.isHidden = false
+            chartCompareLabel2.isHidden = false
+            chartCompareImageView2.isHidden = false
             view.addSubview(compareView2)
             compareView2.addSubview(insideLabel2)
             compareView2.addSubview(insideRateLabel2)
