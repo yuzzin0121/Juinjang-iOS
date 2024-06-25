@@ -13,7 +13,6 @@ class EditBasicInfoDetailViewController: BaseViewController {
     var transactionModel = TransactionModel()
     var imjangId: Int? = nil
     var versionInfo: VersionInfo? = nil
-    var selectedPriceType: Int?
     
     var priceTypeButtons: [UIButton] = [] // "가격 유형"을 나타내는 선택지
     var selectedPriceTypeButton: UIButton? // 가격 유형 카테고리의 버튼
@@ -330,6 +329,7 @@ class EditBasicInfoDetailViewController: BaseViewController {
         let url = JuinjangAPI.modifyImjang.endpoint
         
         // -MARK: 매매-전세-월세 선택값 가져오기
+        var selectedPriceType: Int? = nil
         if saleButton.isSelected == true {
             selectedPriceType = 0
         } else if jeonseButton.isSelected == true {
@@ -353,20 +353,17 @@ class EditBasicInfoDetailViewController: BaseViewController {
         }
         
         let parameter: Parameters = [
-//            "limjangId": imjangId,
-            "priceType": selectedPriceType,
-            "priceList": priceList,
+            "limjangId": imjangId,
             "address": addressTextField.text ?? "",
             "addressDetail": addressDetailTextField.text ?? "",
             "nickname": houseNicknameTextField.text ?? "",
+            "priceType": selectedPriceType,
+            "priceList": priceList
         ]
         
         print(parameter)
         
-        let header : HTTPHeaders = [
-            "Content-Type": "application/json",
-            "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"
-        ]
+        let header : HTTPHeaders = ["Content-Type": "application/json", "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"]
         AF.request(url,
                  method: .patch,
                  parameters: parameter,
@@ -380,10 +377,7 @@ class EditBasicInfoDetailViewController: BaseViewController {
                 completionHandler(nil)
         
             case .failure(let failure):
-                if let data = response.data, let jsonString = String(data: data, encoding: .utf8) {
-                    print("Response Data: \(jsonString)")
-                }
-                print("Request failed with error: \(failure)")
+                print("Error: \(failure)")
                 completionHandler(NetworkError.failedRequest)
             }
         }

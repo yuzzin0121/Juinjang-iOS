@@ -380,12 +380,6 @@ class EditBasicInfoViewController: BaseViewController {
         fourDisitPriceField.text = remainder
     }
     
-    func textSize(for text: String, withFont font: UIFont) -> CGSize {
-        let attributes = [NSAttributedString.Key.font: font]
-        let size = (text as NSString).size(withAttributes: attributes)
-        return size
-    }
-    
     func setupWidgets() {
         // 위젯들을 서브뷰로 추가
         [addressLabel,

@@ -18,8 +18,7 @@ class CheckListViewController: BaseViewController {
     var isEditMode: Bool = false // 수정 모드 여부
     var allCategory: [String] = [] // 카테고리
     var checkListCategories: [CheckListCategory] = [] // 카테고리별 질문
-    var savedCheckListItems: [CheckListAnswer] = [] // 저장되어 있던 체크리스트 항목
-    var checkListItems: [CheckListAnswer] = [] // 저장될 체크리스트 항목
+    var checkListItems: [CheckListAnswer] = [] // 저장된 체크리스트 항목
     
     init(imjangId: Int, version: Int) {
         self.imjangId = imjangId
@@ -155,8 +154,7 @@ class CheckListViewController: BaseViewController {
                 print("------저장된 체크리스트 조회------")
                 if let categoryItem = response.result {
                     for item in categoryItem {
-                        savedCheckListItems.append(CheckListAnswer(imjangId: imjangId, questionId: item.questionId, answer: item.answer, isSelected: true))
-//                        checkListItems.append(CheckListAnswer(imjangId: imjangId, questionId: item.questionId, answer: item.answer, isSelected: true))
+                        checkListItems.append(CheckListAnswer(imjangId: imjangId, questionId: item.questionId, answer: item.answer, isSelected: true))
                     }
                 }
                 print(self.checkListItems)
@@ -194,25 +192,28 @@ class CheckListViewController: BaseViewController {
             print(checkListItems)
 
             // 유효한 값만 필터링
-            let parameters: [[String: Any?]] = checkListItems.compactMap { item in
-                // 1. 문자열이 아닌 경우 제외
-                guard let answer = item.answer as? String else {
-                    return nil
+            let validCheckListItems = checkListItems.filter { item in
+                if let answer = item.answer as? String {
+                    return !answer.isEmpty
+                } else {
+                    return true
                 }
-                
-                // 2. 공백만 있거나 "NaN"인 경우 제외
-                let trimmedAnswer = answer.trimmingCharacters(in: .whitespacesAndNewlines)
-                if trimmedAnswer.isEmpty || trimmedAnswer == "NaN" {
-                    return nil
-                }
-                
-                return [
-                    "questionId": item.questionId,
-                    "answer": trimmedAnswer
-                ]
             }
 
-            print("파라미터: \(parameters)")
+            print("유효한 체크리스트 항목: \(validCheckListItems)")
+
+            var parameters: [[String: Any?]] = []
+            for item in validCheckListItems {
+                var answerValue: Any? = item.answer
+                if let answer = item.answer as? String, answer == "NaN" || answer.isEmpty {
+                    answerValue = NSNull()
+                }
+                parameters.append([
+                    "questionId": item.questionId,
+                    "answer": answerValue
+                ])
+            }
+
             do {
                 let jsonData = try JSONSerialization.data(withJSONObject: parameters, options: [])
 
