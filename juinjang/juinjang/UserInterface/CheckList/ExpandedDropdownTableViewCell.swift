@@ -271,7 +271,7 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
                 itemButton.setImage(resizedImage, for: .normal)
             }
             
-            itemButton.backgroundColor = .white
+            itemButton.backgroundColor = UIColor(named: "lightOrange")
             itemButton.setTitleColor(UIColor(named: "darkGray"), for: .normal)
             itemButton.semanticContentAttribute = .forceLeftToRight
             setSavedInset()
@@ -363,7 +363,6 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
         etcTextField.removeFromSuperview()
         
         // 기본값 설정
-        // 기본값 설정
         if row == 0 {
             backgroundColor = .white
             questionImage.image = UIImage(named: "question-image")
@@ -371,18 +370,30 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
             setBasicInset()
             handleOptionSelection(selectedOption.option)
         } else {
-            backgroundColor = UIColor(named: "lightOrange")
-            questionImage.image = UIImage(named: "question-selected-image")
-            
             if selectedOption.option == "기타" {
                 // 기타 선택했을 때 선택지 중에 있는지 확인
                 if let existingOption = options.first(where: { $0.option == etcTextField.text }) {
+                    // UI 설정
+                    questionImage.image = UIImage(named: "question-selected-image")
+                    backgroundColor = UIColor(named: "lightOrange")
+
+                    // 값 전달
                     handleOptionSelection(existingOption.option)
                 } else {
-                    // 선택지 중에 없는 경우 사용자 입력값으로 전달
-                    handleOptionSelection(etcTextField.text ?? "")
+                    // 선택지 중에 없는 경우 사용자 입력값으로 처리
+                    if let etcText = etcTextField.text, !etcText.isEmpty {
+                        questionImage.image = UIImage(named: "question-selected-image")
+                        backgroundColor = UIColor(named: "lightOrange")
+                        handleOptionSelection(etcText)
+                    } else {
+                        questionImage.image = UIImage(named: "question-image")
+                        backgroundColor = .white
+                        handleOptionSelection("") // 빈 값 처리
+                    }
                 }
             } else {
+                questionImage.image = UIImage(named: "question-selected-image")
+                backgroundColor = UIColor(named: "lightOrange")
                 handleOptionSelection(selectedOption.option)
             }
         }
@@ -402,12 +413,12 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
             label = UILabel()
         }
         
-        let option = options[row]
+        let option = options[row].option
         label.font = UIFont.pretendard(size: fontSize, weight: .regular)
         label.textColor = UIColor.black
         label.textAlignment = .left
         
-        if let originalImage = UIImage(data: option.image),
+        if let originalImage = UIImage(data: options[row].image),
            let resizedImage = originalImage.resized(toWidth: 16) { // 이미지 리사이징
             
             let imageAttachment = NSTextAttachment()
@@ -426,12 +437,12 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
                 .font: UIFont.pretendard(size: fontSize, weight: .regular),
                 .foregroundColor: UIColor.black
             ]
-            let textAttributedString = NSAttributedString(string: " \(option.option)", attributes: textAttributes)
+            let textAttributedString = NSAttributedString(string: " \(options[row].option)", attributes: textAttributes)
             attributedString.append(textAttributedString)
             
             label.attributedText = attributedString
         } else {
-            label.text = option.option
+            label.text = options[row].option
             label.frame.origin.x = leftPadding
         }
         return label

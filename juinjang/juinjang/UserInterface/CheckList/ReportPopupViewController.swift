@@ -110,7 +110,9 @@ class ReportPopupViewController: BaseViewController {
     }
     
     @objc func inputAction(_ sender: UIButton) {
-        NotificationCenter.default.post(name: NSNotification.Name("EditCheckList"), object: nil)
+        // TODO: 수정모드 진입은 되나 버튼 이미지가 안 바뀌는 거 변경해야됨
+        NotificationCenter.default.post(name: NSNotification.Name("EditButtonTapped"), object: nil)
+        NotificationCenter.default.post(name: Notification.Name("EditModeChanged"), object: true)
         dismiss(animated: false, completion: nil)
     }
 }
