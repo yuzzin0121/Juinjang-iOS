@@ -225,36 +225,7 @@ class ImjangNoteViewController: BaseViewController{
             roomPriceLabel.text = "편집을 통해 가격을 설정해주세요."
         }
     }
-    
-    // -MARK: API 요청(버전 설정)
-//    func showCheckList(completion: @escaping () -> Void) {
-//        JuinjangAPIManager.shared.fetchData(type: BaseResponse<[CheckListResponse]>.self, api: .showChecklist(imjangId: imjangId)) { [weak self] response, error in
-//            guard let self else { return }
-//            if error == nil {
-//                if let firstCheckList = response?.result?.first,
-//                   let version = firstCheckList..first?.version {
-//                    // 임의로 editCriteria를 0(실거래가)로 추가
-//                    self.version = VersionInfo(version: version, editCriteria: 0)
-//                    print("체크리스트 버전 설정: \(version)")
-//                }
-//            } else {
-//                guard let error = error else { return }
-//                switch error {
-//                case .failedRequest:
-//                    print("failedRequest")
-//                case .noData:
-//                    print("noData")
-//                case .invalidResponse:
-//                    print("invalidResponse")
-//                case .invalidData:
-//                    print("invalidData")
-//                }
-//            }
-//            completion()
-//        }
-//    }
 
-    
     // 리포트 보기 클릭 했을 때 - showReportVC 호출
     func setReportStackViewClick() {
         reportStackView.isUserInteractionEnabled = true
@@ -265,22 +236,18 @@ class ImjangNoteViewController: BaseViewController{
     @objc func showReportVC() {
         // 현재 ViewController를 검사해서 미입력 상태라면
         if let currentVC = recordingSegmentedVC.currentViewController as? CheckListViewController {
-            // 모든 문항이 값이 null인지 확인
-//            let allItemsAreNull = currentVC.categories.allSatisfy { category in
-//                return category.questionDtos.allSatisfy { questionDto in
-//                    return questionDto.answer == nil
-//                }
-//            }
-//            if allItemsAreNull {
-//                // 팝업창이 뜸
-//                let reportPopupVC = ReportPopupViewController()
-//                reportPopupVC.modalPresentationStyle = .overCurrentContext
-//                present(reportPopupVC, animated: false, completion: nil)
-//            } else {
+            // savedCheckListItems 배열이 비어 있는지 확인
+            let savedCheckListItemsAreEmpty = currentVC.savedCheckListItems.isEmpty
+            if savedCheckListItemsAreEmpty {
+                // 팝업창이 뜸
+                let reportPopupVC = ReportPopupViewController()
+                reportPopupVC.modalPresentationStyle = .overCurrentContext
+                present(reportPopupVC, animated: false, completion: nil)
+            } else {
                 // 아니라면 ReportViewController로 이동
             let reportVC = ReportViewController(imjangId: imjangId)
                 navigationController?.pushViewController(reportVC, animated: true)
-//            }
+            }
         }
     }
     
