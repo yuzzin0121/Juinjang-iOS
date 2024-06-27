@@ -63,7 +63,7 @@ class RecordingRoomViewController: BaseViewController, RemoveRecordDelegate {
         $0.textColor = UIColor(named: "placeholderOrange")
     }
     
-    let memoTextViewPlaceholder = "눌러서 메모를 추가해보세요!"
+    let memoTextViewPlaceholder = "500자까지 메모를 남길 수 있어요"
     
     var fileItems: [RecordResponse] = []
     
@@ -201,9 +201,16 @@ class RecordingRoomViewController: BaseViewController, RemoveRecordDelegate {
     }
     
     func setMemo(memo: String?) {
-        guard let memo = memo else { return }
+        guard let memo = memo else { 
+            memoTextView.textColor = ColorStyle.placeholderOrange
+            return
+        }
         memoTextView.text = memo
+        print("memo======\(memo)")
         memoTextView.textColor = memo.isEmpty ? ColorStyle.placeholderOrange : ColorStyle.textBlack
+        if memo == memoTextViewPlaceholder {
+            memoTextView.textColor = ColorStyle.placeholderOrange
+        }
     }
     
     // 메모장 생성/수정 요청
@@ -490,6 +497,8 @@ extension RecordingRoomViewController: UITextViewDelegate {
             textView.text = memoTextViewPlaceholder
             textView.textColor = ColorStyle.placeholderOrange
             
+            callMemoRequest()
+        } else {
             callMemoRequest()
         }
     }
