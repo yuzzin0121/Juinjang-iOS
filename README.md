@@ -30,7 +30,7 @@
 
 
 ## 주요 기술
-**Platform** - UIKit <br>
+**Framework** - UIKit <br>
 **Pattern** - Router / MVC / Delegate / Singleton <br>
 **Network** - Alamofire <br>
 **Database** - Realm <br>
