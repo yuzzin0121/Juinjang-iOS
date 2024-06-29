@@ -56,7 +56,7 @@
 
 ## 트러블 슈팅
 
-### 1. accessToken 만료 시 수동으로 네트워크 재요청을 해줘야 하는 이슈
+### 1. accessToken 만료 시 수동으로 갱신 후 네트워크 재요청을 해줘야 하는 이슈
 **해결 방안** 
 - Alamofire의 RequestInterceptor를 사용하여 네트워크 요청 전처리와 에러 후처리 구현
 - 네트워크 요청 후 에러가 발생했을 때, response의 상태코드 값이 accessToken 만료에 해당하는 상태코드 값과 일치할 경우 refreshToken을 통해 accessToken 갱신하는 API를 요청 후 네트워크 재요청
