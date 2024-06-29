@@ -279,7 +279,7 @@ class ImjangNoteViewController: BaseViewController{
 //            } else {
                 // 아니라면 ReportViewController로 이동
             let reportVC = ReportViewController(imjangId: imjangId)
-                navigationController?.pushViewController(reportVC, animated: true)
+            navigationController?.pushViewController(reportVC, animated: true)
 //            }
         }
     }
