@@ -8,7 +8,7 @@
 import Foundation
 import Alamofire
 
-class AuthInterceptor: RequestInterceptor {
+final class AuthInterceptor: RequestInterceptor {
     // 네트워크 요청 직전 호출
     func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, any Error>) -> Void) {
         var urlRequest = urlRequest

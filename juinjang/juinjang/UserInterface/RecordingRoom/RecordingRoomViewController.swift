@@ -114,7 +114,7 @@ class RecordingRoomViewController: BaseViewController, RemoveRecordDelegate {
     @objc private func addRecordResponse(_ notification: Notification) {
         print(#function)
         guard let recordResponse = notification.object as? RecordResponse else { return }
-        if fileItems.isEmpty {
+        if fileItems.count < 3 {
             fileItems.insert(recordResponse, at: 0)
         } else {
             fileItems.insert(recordResponse, at: 0)
@@ -146,7 +146,7 @@ class RecordingRoomViewController: BaseViewController, RemoveRecordDelegate {
         
         for index in fileItems.indices {
             if fileItems[index].recordId == recordResponse.recordId {
-                fileItems[index].recordName = recordResponse.recordScript
+                fileItems[index].recordScript = recordResponse.recordScript
                 recordingFileTableView.reloadData()
             }
         }
