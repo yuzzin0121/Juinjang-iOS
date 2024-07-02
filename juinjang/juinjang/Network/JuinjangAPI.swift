@@ -25,7 +25,7 @@ enum JuinjangAPI {
     case cancelScrap(imjangId: Int)
     case totalImjang(sort: String)
     case createImjang
-    case modifyImjang
+    case modifyImjang(imjangId: Int)
     case searchImjang(keyword: String)
     case mainImjang
     case detailImjang(imjangId: Int)
@@ -71,8 +71,10 @@ enum JuinjangAPI {
             
         case .scrap(let imjangId), .cancelScrap(let imjangId):
             return URL(string: baseURL + "limjangs/scraps/\(imjangId)")!
-        case .totalImjang, .createImjang, .modifyImjang:
+        case .totalImjang, .createImjang:
             return URL(string: baseURL + "limjang")!
+        case .modifyImjang(let imjangId):
+            return URL(string: baseURL + "limjang\(imjangId)")!
             
         case .searchImjang(let keyword):
             return URL(string: baseURL + "limjang/\(keyword)")!

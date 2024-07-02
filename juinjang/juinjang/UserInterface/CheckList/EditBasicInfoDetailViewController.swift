@@ -327,7 +327,7 @@ class EditBasicInfoDetailViewController: BaseViewController {
     
     func modifyImjang(completionHandler: @escaping (NetworkError?) -> Void) {
         guard let imjangId = imjangId else { return }
-        let url = JuinjangAPI.modifyImjang.endpoint
+        let url = JuinjangAPI.modifyImjang(imjangId: imjangId).endpoint
         
         // -MARK: 매매-전세-월세 선택값 가져오기
         var selectedPriceType: Int? = nil
@@ -354,13 +354,12 @@ class EditBasicInfoDetailViewController: BaseViewController {
         }
         
         let parameter: Parameters = [
+            "limjangId": imjangId,
             "priceType": selectedPriceType,
             "priceList": priceList,
             "address": addressTextField.text ?? "",
             "addressDetail": addressDetailTextField.text ?? "",
-            "nickname": houseNicknameTextField.text ?? "",
-            "priceType": selectedPriceType,
-            "priceList": priceList
+            "nickname": houseNicknameTextField.text ?? ""
         ]
         
         print(parameter)
