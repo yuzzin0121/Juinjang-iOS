@@ -18,7 +18,8 @@ class CheckListViewController: BaseViewController {
     var isEditMode: Bool = false // 수정 모드 여부
     var allCategory: [String] = [] // 카테고리
     var checkListCategories: [CheckListCategory] = [] // 카테고리별 질문
-    var checkListItems: [CheckListAnswer] = [] // 저장된 체크리스트 항목
+    var savedCheckListItems: [CheckListAnswer] = [] // 저장되어 있던 체크리스트 항목
+    var checkListItems: [CheckListAnswer] = [] // 저장될 체크리스트 항목
     
     init(imjangId: Int, version: Int) {
         self.imjangId = imjangId
@@ -152,9 +153,27 @@ class CheckListViewController: BaseViewController {
             if error == nil {
                 guard let response = response else { return }
                 print("------저장된 체크리스트 조회------")
+                // 이미 추가된 questionId를 추적하기 위한 Set
+                var addedQuestionIds = Set<Int>()
+                
                 if let categoryItem = response.result {
                     for item in categoryItem {
-                        checkListItems.append(CheckListAnswer(imjangId: imjangId, questionId: item.questionId, answer: item.answer, isSelected: true))
+                        // 이미 추가된 questionId인 경우 skip
+                        if addedQuestionIds.contains(item.questionId) {
+                            continue
+                        }
+                        
+                        // CheckListAnswer 객체를 생성하여 배열에 추가
+                        let checkListAnswer = CheckListAnswer(imjangId: self.imjangId,
+                                                              questionId: item.questionId,
+                                                              answer: item.answer,
+                                                              isSelected: true)
+                        
+                        savedCheckListItems.append(checkListAnswer)
+                        checkListItems.append(checkListAnswer)
+                        
+                        // 추가된 questionId를 Set에 추가
+                        addedQuestionIds.insert(item.questionId)
                     }
                 }
                 print(self.checkListItems)
@@ -189,7 +208,31 @@ class CheckListViewController: BaseViewController {
 
             print("----- 체크리스트 저장할 항목 -----")
             let checkListItems = self.checkListItems
-            print(checkListItems)
+            print("----- 체크리스트 저장할 항목 -----")
+            var seenQuestionIds = Set<Int>()
+            var uniqueItems = [CheckListAnswer]()
+
+            // 최근에 추가된 항목만 유지하고 중복된 항목 제거
+            for item in checkListItems.reversed() {
+                if !seenQuestionIds.contains(item.questionId) {
+                    seenQuestionIds.insert(item.questionId)
+                    uniqueItems.insert(item, at: 0) // 최근 항목을 배열의 첫 부분에 추가
+                } else {
+                    // 중복된 항목은 제거
+                    if let index = uniqueItems.firstIndex(where: { $0.questionId == item.questionId }) {
+                        uniqueItems.remove(at: index)
+                    }
+                }
+            }
+
+            self.checkListItems = uniqueItems
+
+            for checkListItem in checkListItems {
+                // 여기서 필요한 추가 작업 수행
+                print(checkListItem)
+            }
+
+//            print(checkListItems)
 
             // 유효한 값만 필터링
             let validCheckListItems = checkListItems.filter { item in

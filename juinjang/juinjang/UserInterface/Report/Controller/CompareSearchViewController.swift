@@ -2,7 +2,14 @@
 import UIKit
 import Pageboy
 
+protocol SendSearchCompareImjangData{
+    func sendData(isSelected: Bool, compareImjangId: Int,  compareImjangName: String)
+}
+
 class CompareSearchViewController: BaseViewController {
+    
+    var delegate: SendSearchCompareImjangData?
+    
     var searchBar = UISearchBar().then{
         $0.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width * 0.82, height: 0)
         $0.placeholder = "집 별명이나 주소를 검색해보세요"
@@ -44,7 +51,9 @@ class CompareSearchViewController: BaseViewController {
     var searchKeyword  = ""
     var searchedImjangList: [ListDto] = []
     var imjangList: [ListDto] = []
-    var imjangId: Int = 0
+    var imjangId: Int
+    var comparedImjangId : Int = 0
+    var comparedName : String = ""
     
     // 네비게이션 바 디자인
     func designNavigationBar() {
@@ -66,12 +75,14 @@ class CompareSearchViewController: BaseViewController {
     }
     
     @objc func applyBtnTap() {
-        let vc = ReportViewController(imjangId: imjangId)
-        vc.tabViewController.index = 1
-        vc.tabViewController.compareVC.isCompared = true
-        vc.tabViewController.compareVC.compareDataSet2.fillAlpha = CGFloat(0.8)
-        vc.tabViewController.compareVC.compareDataSet2.fillColor = .white
-        self.navigationController?.pushViewController(vc, animated: true)
+        delegate?.sendData(isSelected: true, compareImjangId: comparedImjangId, compareImjangName: comparedName)
+        
+        if let navigationController = self.navigationController {
+            // comparesearchviewcontroller에서 실행
+            if let ReportViewController = navigationController.viewControllers.first(where: { $0 is ReportViewController }) {
+                navigationController.popToViewController(ReportViewController, animated: true)
+            }
+        }
     }
     
     @objc func textFieldDidChange(_ sender: Any?) {
@@ -95,12 +106,20 @@ class CompareSearchViewController: BaseViewController {
         }
     }
     
-    func callRequest(sort: Filter = .update, setScrap: Bool = false) {
+    func callRequest(sort: Filter = .update, setScrap: Bool = false, excludingId: Int? = nil) {
         JuinjangAPIManager.shared.fetchData(type: BaseResponse<TotalListDto>.self, api: .totalImjang(sort: sort.sortValue)) { response, error in
             if error == nil {
                 guard let response = response else { return }
                 guard let result = response.result else { return }
-                self.imjangList = result.limjangList
+                
+                let filteredList = result.limjangList.filter { item in
+                    if let excludingId = excludingId {
+                        return item.limjangId != excludingId
+                    }
+                    return true
+                }
+                
+                self.imjangList = filteredList
                 self.setEmptyUI(isEmpty: self.imjangList.isEmpty)
                 self.searchedTableView.reloadData()
             } else {
@@ -143,9 +162,18 @@ class CompareSearchViewController: BaseViewController {
         }
     }
     
+    init(imjangId: Int) {
+        self.imjangId = imjangId
+        super.init()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        callRequest(setScrap: true)
+        callRequest(setScrap: true, excludingId: imjangId)
         designNavigationBar()
         
         view.backgroundColor = .white
@@ -178,7 +206,13 @@ extension CompareSearchViewController: UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let compareImjangId = imjangList[indexPath.row].limjangId
+        comparedImjangId = compareImjangId
+        
         let cell = tableView.cellForRow(at: indexPath) as! ReportImjangListTableViewCell
+        comparedName = cell.roomNameLabel.text ?? "error"
+        
         if cell.isSelect == false {
             cell.isSelect = true
             cell.contentView.backgroundColor = UIColor(named: "main100")

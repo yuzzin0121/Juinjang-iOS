@@ -56,8 +56,8 @@ class DeleteImjangImagePopupView: UIViewController {
     }
     
     func designViews() {
-        designButton(cancelButton, title: "아니요", backgroundColor: UIColor(named: "buttonGray")!)
-        designButton(confirmButton, title: "삭제하기", backgroundColor: UIColor(named: "textBlack")!, textColor: .white)
+        designButton(cancelButton, title: "아니요", backgroundColor: ColorStyle.gray3)
+        designButton(confirmButton, title: "삭제하기", backgroundColor: ColorStyle.textBlack, textColor: .white)
         if let selectedCount {
             messageLabel.text = "총 \(selectedCount)개의 사진을 정말 삭제할까요?\n삭제한 사진은 다시 되돌릴 수 없습니다."
             messageLabel.font = .pretendard(size: 16, weight: .medium)

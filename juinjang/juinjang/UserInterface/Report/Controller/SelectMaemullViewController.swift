@@ -98,8 +98,6 @@ class SelectMaemullViewController : BaseViewController {
                     return true
                 }
                 self.imjangList = filteredList
-                print("나의 임장들 \(result)")
-                //self.imjangList = result.limjangList
                 self.setEmptyUI(isEmpty: self.imjangList.isEmpty)
                 self.tableView.reloadData()
             } else {
@@ -173,7 +171,8 @@ class SelectMaemullViewController : BaseViewController {
         self.navigationController?.popViewController(animated: true)
     }
     @objc func searchBtnTap() {
-        let searchVC = CompareSearchViewController()
+        let searchVC = CompareSearchViewController(imjangId: imjangId)
+        searchVC.delegate = self.delegate as? SendSearchCompareImjangData
         navigationController?.pushViewController(searchVC, animated: true)
     }
     @objc func applyBtnTap() {

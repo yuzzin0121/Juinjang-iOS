@@ -334,6 +334,11 @@ class EditBasicInfoViewController: BaseViewController {
         
             case .failure(let failure):
                 print("Error: \(failure)")
+                if let data = response.data, let jsonString = String(data: data, encoding: .utf8) {
+                       print("Response Data: \(jsonString)")
+                   }
+                   print("Request failed with error: \(failure)")
+                   print("Bearer \(UserDefaultManager.shared.accessToken)")
                 completionHandler(NetworkError.failedRequest)
             }
         }
