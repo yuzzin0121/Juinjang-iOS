@@ -448,13 +448,19 @@ class EditBasicInfoDetailViewController: BaseViewController {
     }
     
     func setPriceLabel(priceList: [String]) {
+        guard !priceList.isEmpty else { return }
+        
         switch priceList.count {
         case 1:
             let priceString = priceList[0]
             let (units, remainder) = priceString.twoSplitAmount()
             print("\(units)억 \(remainder)만원")
             threeDisitPriceField.text = units
-            fourDisitPriceField.text = remainder
+            if remainder != "0" {
+                fourDisitPriceField.text = remainder
+            } else {
+                fourDisitPriceField.text = ""
+            }
         case 2:
             let priceString = priceList[0]
             let (units, remainder) = priceString.twoSplitAmount()
@@ -469,6 +475,33 @@ class EditBasicInfoDetailViewController: BaseViewController {
             fourDisitPriceField.text = ""
             fourDisitMonthlyRentField.text = ""
         }
+        
+        // 텍스트 필드 너비 설정
+        let padding: CGFloat = 20
+        let minimumWidth: CGFloat = 30
+        let threeDisitPriceFieldMaximumWidth: CGFloat = 60
+        let fourDisitPriceFieldMaximumWidth: CGFloat = 74
+        
+        let threeDisitPriceFieldSize = sizeForText(text: threeDisitPriceField.text ?? "", font: threeDisitPriceField.font ?? UIFont.systemFont(ofSize: 17)).width + padding
+        let fourDisitPriceFieldSize = sizeForText(text: fourDisitPriceField.text ?? "", font: fourDisitPriceField.font ?? UIFont.systemFont(ofSize: 17)).width + padding
+        let fourDisitMonthlyRentFieldSize = sizeForText(text: fourDisitMonthlyRentField.text ?? "", font: fourDisitMonthlyRentField.font ?? UIFont.systemFont(ofSize: 17)).width + padding
+
+        // 최대 너비 제한
+        let threeDisitPriceFieldFinalWidth: CGFloat = min(max(threeDisitPriceFieldSize, minimumWidth), threeDisitPriceFieldMaximumWidth)
+        let fourDisitMonthlyRentFieldSizeFinalWidth: CGFloat = min(max(fourDisitMonthlyRentFieldSize, minimumWidth), fourDisitPriceFieldMaximumWidth)
+        let fourDisitPriceFieldFinalWidth: CGFloat
+        if fourDisitPriceField.text?.isEmpty ?? true {
+            fourDisitPriceFieldFinalWidth = fourDisitPriceFieldMaximumWidth
+        } else {
+            fourDisitPriceFieldFinalWidth = min(max(fourDisitPriceFieldSize, minimumWidth), fourDisitPriceFieldMaximumWidth)
+        }
+
+        // 너비 제약 업데이트
+        updateTextFieldWidthConstraint(for: threeDisitPriceField, constant: threeDisitPriceFieldFinalWidth)
+        updateTextFieldWidthConstraint(for: fourDisitPriceField, constant: fourDisitPriceFieldFinalWidth)
+        updateTextFieldWidthConstraint(for: fourDisitMonthlyRentField, constant: fourDisitMonthlyRentFieldSizeFinalWidth)
+        
+        view.layoutIfNeeded()
     }
     
     func setupWidgets() {
@@ -794,16 +827,19 @@ class EditBasicInfoDetailViewController: BaseViewController {
 
 
 extension EditBasicInfoDetailViewController: UITextFieldDelegate {
+    func removeAllWidthConstraints(for textField: UITextField) {
+        textField.constraints.forEach { constraint in
+            if constraint.firstAttribute == .width {
+                textField.removeConstraint(constraint)
+            }
+        }
+    }
     
     func updateTextFieldWidthConstraint(for textField: UITextField, constant: CGFloat) {
-        guard let text = textField.text else { return }
-        // 기존의 widthAnchor로 업데이트
-        if text.isEmpty {
-            for constraint in textField.constraints where constraint.firstAttribute == .width {
-                constraint.constant = constant
-            }
-        } else {
-        }
+        removeAllWidthConstraints(for: textField)
+        let widthConstraint = textField.widthAnchor.constraint(equalToConstant: constant)
+        widthConstraint.isActive = true
+        textField.superview?.layoutIfNeeded()
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -811,6 +847,7 @@ extension EditBasicInfoDetailViewController: UITextFieldDelegate {
 
         // 각 텍스트 필드에 대한 최소, 최대 너비 설정
         let minimumWidth: CGFloat = 30 // 최소 너비
+        let padding: CGFloat = 20
         var maximumWidth: CGFloat = 74 // 네 자릿수 텍스트 필드의 최대 너비
 
         if textField == threeDisitPriceField {
@@ -818,8 +855,9 @@ extension EditBasicInfoDetailViewController: UITextFieldDelegate {
         }
         
         // 텍스트 길이에 따라 적절한 너비 계산
-        let size = text.size(withAttributes: [.font: textField.font ?? UIFont.systemFont(ofSize: 17)])
-        let calculatedWidth = max(size.width + 20, minimumWidth) // 텍스트 길이와 최소 너비 중 큰 값을 선택
+        let newText = (text as NSString).replacingCharacters(in: range, with: string)
+        let size = sizeForText(text: newText, font: textField.font ?? UIFont.systemFont(ofSize: 17)).width + padding
+        let calculatedWidth = max(size, minimumWidth) // 텍스트 길이와 최소 너비 중 큰 값을 선택
         let finalWidth = min(calculatedWidth, maximumWidth) // 최대 너비 제한
 
         // 너비 제약 업데이트
@@ -828,29 +866,32 @@ extension EditBasicInfoDetailViewController: UITextFieldDelegate {
         // 레이아웃 업데이트
         view.layoutIfNeeded()
         
-        // 백 스페이스 실행 가능하도록
-        if let char = string.cString(using: String.Encoding.utf8) {
-            let isBackSpace = strcmp(char, "\\b")
-            if (isBackSpace == -92) {
-                return true
-            }
+        // 백스페이스 처리
+        if string.isEmpty {
+            return true
         }
+        
         // textField에 따라 글자 수 제한
         if textField == houseNicknameTextField {
-            guard textField.text!.count < 12 else { return false }
-        } else if textField == threeDisitPriceField || textField == fourDisitPriceField
-                    || textField == fourDisitMonthlyRentField  {
+            guard text.count + string.count - range.length <= 12 else { return false }
+        } else if textField == threeDisitPriceField || textField == fourDisitPriceField || textField == fourDisitPriceField {
             // 숫자만 허용
-            guard Int(string) != nil || string == "" else { return false }
+            let allowedCharacters = CharacterSet.decimalDigits
+            let characterSet = CharacterSet(charactersIn: string)
+            guard allowedCharacters.isSuperset(of: characterSet) else { return false }
             
             if textField == threeDisitPriceField {
-                guard textField.text!.count < 3 else { return false }
+                guard text.count + string.count - range.length <= 3 else { return false }
             } else if textField == fourDisitPriceField || textField == fourDisitMonthlyRentField {
-                guard textField.text!.count < 4 else { return false }
+                guard text.count + string.count - range.length <= 4 else { return false }
             }
         }
-    
         return true
+    }
+    
+    func sizeForText(text: String, font: UIFont) -> CGSize {
+        let fontAttributes = [NSAttributedString.Key.font: font]
+        return (text as NSString).size(withAttributes: fontAttributes)
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {

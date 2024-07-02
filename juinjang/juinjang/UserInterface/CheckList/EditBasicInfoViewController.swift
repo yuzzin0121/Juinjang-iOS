@@ -624,7 +624,7 @@ extension EditBasicInfoViewController: UITextFieldDelegate {
             maximumWidth = 62 // 세 자릿수 텍스트 필드의 최대 너비
         }
         
-        // 텍스트 길이에 따라 적절한 너비 계산
+        // 텍스트 길이에 따라 너비 계산
         let newText = (text as NSString).replacingCharacters(in: range, with: string)
         let size = sizeForText(text: newText, font: textField.font ?? UIFont.systemFont(ofSize: 17)).width + padding
         let calculatedWidth = max(size, minimumWidth) // 텍스트 길이와 최소 너비 중 큰 값을 선택
