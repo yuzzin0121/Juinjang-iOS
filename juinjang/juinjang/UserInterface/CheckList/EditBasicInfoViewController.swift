@@ -301,7 +301,7 @@ class EditBasicInfoViewController: BaseViewController {
     
     func modifyImjang(completionHandler: @escaping (NetworkError?) -> Void) {
         guard let imjangId = imjangId else { return }
-        let url = JuinjangAPI.modifyImjang.endpoint
+        let url = JuinjangAPI.modifyImjang(imjangId: imjangId).endpoint
         
         // threeDisitPriceField와 fourDisitPriceField의 값을 합쳐서 selectedPrice에 저장
         let threeDisitPrice = Int(threeDisitPriceField.text ?? "") ?? 0
@@ -319,7 +319,11 @@ class EditBasicInfoViewController: BaseViewController {
         
         print(parameter)
         
-        let header : HTTPHeaders = ["Content-Type": "application/json", "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"]
+        let header : HTTPHeaders = [
+            "Content-Type": "application/json",
+            "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"
+        ]
+        
         AF.request(url,
                  method: .patch,
                  parameters: parameter,

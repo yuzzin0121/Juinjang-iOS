@@ -158,7 +158,7 @@ class CheckListViewController: BaseViewController {
                 
                 if let categoryItem = response.result {
                     for item in categoryItem {
-                        // 이미 추가된 questionId인 경우 skip
+                        // 이미 추가된 questionId인 경우
                         if addedQuestionIds.contains(item.questionId) {
                             continue
                         }
@@ -194,13 +194,34 @@ class CheckListViewController: BaseViewController {
         }
     }
     
-    // -MARK: API 요청(체크리스트 저장)
+    private func refreshToken(completion: @escaping (Bool) -> Void) {
+        // 토큰 재발급 API 호출
+        let url = JuinjangAPI.regenerateToken.endpoint
+        AF.request(url, method: .post).responseJSON { response in
+            switch response.result {
+            case .success(let value):
+                if let responseDict = value as? [String: Any],
+                   let newToken = responseDict["newToken"] as? String {
+                    UserDefaultManager.shared.accessToken = newToken
+                    completion(true)
+                } else {
+                    completion(false)
+                }
+            case .failure:
+                completion(false)
+            }
+        }
+    }
+
+    
+    // -MARK: API 요청
     func saveAnswer() {
-        print("saveAnswer 함수 호출")
-        print("토큰값 \(UserDefaultManager.shared.accessToken)")
+        let token = UserDefaultManager.shared.accessToken
+        print("토큰값 \(token)")
 
         // 저장된 체크리스트 불러오기
-        JuinjangAPIManager.shared.fetchData(type: BaseResponse<[QuestionAnswerDto]>.self, api: .showChecklist(imjangId: imjangId)) { response, error in
+        JuinjangAPIManager.shared.fetchData(type: BaseResponse<[QuestionAnswerDto]>.self, api: .showChecklist(imjangId: imjangId)) { [weak self] response, error in
+            guard let self = self else { return }
             guard let checkListResponse = response else {
                 print("실패: \(error?.localizedDescription ?? "error")")
                 return
@@ -208,9 +229,18 @@ class CheckListViewController: BaseViewController {
 
             print("----- 체크리스트 저장할 항목 -----")
             let checkListItems = self.checkListItems
-            print("----- 체크리스트 저장할 항목 -----")
+            print(checkListItems)
+
             var seenQuestionIds = Set<Int>()
             var uniqueItems = [CheckListAnswer]()
+            
+            // 서버에서 불러온 questionId 목록
+            var existingQuestionIds = Set<Int>()
+            if let categoryItem = checkListResponse.result {
+                for item in categoryItem {
+                    existingQuestionIds.insert(item.questionId)
+                }
+            }
 
             // 최근에 추가된 항목만 유지하고 중복된 항목 제거
             for item in checkListItems.reversed() {
@@ -228,11 +258,8 @@ class CheckListViewController: BaseViewController {
             self.checkListItems = uniqueItems
 
             for checkListItem in checkListItems {
-                // 여기서 필요한 추가 작업 수행
                 print(checkListItem)
             }
-
-//            print(checkListItems)
 
             // 유효한 값만 필터링
             let validCheckListItems = checkListItems.filter { item in
@@ -245,53 +272,107 @@ class CheckListViewController: BaseViewController {
 
             print("유효한 체크리스트 항목: \(validCheckListItems)")
 
-            var parameters: [[String: Any?]] = []
+            // 저장할 항목과 수정할 항목 분리
+            var saveItems = [CheckListAnswer]()
+            var modifyItems = [CheckListAnswer]()
+
             for item in validCheckListItems {
-                var answerValue: Any? = item.answer
-                if let answer = item.answer as? String, answer == "NaN" || answer.isEmpty {
-                    answerValue = NSNull()
+                if !existingQuestionIds.contains(item.questionId) {
+                    saveItems.append(item)
+                } else {
+                    modifyItems.append(item)
                 }
-                parameters.append([
-                    "questionId": item.questionId,
-                    "answer": answerValue
-                ])
             }
 
-            do {
-                let jsonData = try JSONSerialization.data(withJSONObject: parameters, options: [])
+            // 저장 요청 처리
+            if !saveItems.isEmpty {
+                self.saveChecklist(items: saveItems, token: token)
+            }
 
-                if let jsonString = String(data: jsonData, encoding: .utf8) {
-                    print("JSON Data: \(jsonString)")
-                }
+            // 수정 요청 처리
+            if !modifyItems.isEmpty {
+                self.modifyChecklist(items: modifyItems, token: token)
+            }
+        }
+    }
 
-                let headers: HTTPHeaders = ["Content-Type": "application/json"]
-                let url = JuinjangAPI.saveChecklist(imjangId: self.imjangId).endpoint
+    // 체크리스트 저장
+    private func saveChecklist(items: [CheckListAnswer], token: String) {
+        self.requestChecklist(with: .post, items: items, token: token)
+    }
 
-                var request = URLRequest(url: url)
-                request.httpMethod = HTTPMethod.post.rawValue
-                request.headers = headers
-                request.httpBody = jsonData
+    // 체크리스트 수정
+    private func modifyChecklist(items: [CheckListAnswer], token: String) {
+        self.requestChecklist(with: .patch, items: items, token: token)
+    }
 
-                AF.request(request)
-                    .responseJSON { response in
-                        switch response.result {
-                        case .success(let value):
-                            print("체크리스트 저장 처리 성공")
-                            print(value)
-                            self.showCheckList(completion: {})
-                        case .failure(let error):
-                            print("체크리스트 저장 처리 실패")
-                            if let data = response.data,
-                               let errorMessage = String(data: data, encoding: .utf8) {
-                                print("서버 응답 에러 메시지: \(errorMessage)")
-                            } else {
-                                print("에러: \(error.localizedDescription)")
+    // 체크리스트 API
+    private func requestChecklist(with method: HTTPMethod, items: [CheckListAnswer], token: String) {
+        let parameters = items.map { item -> [String: Any?] in
+            var answerValue: Any? = item.answer
+            if let answer = item.answer as? String, answer == "NaN" || answer.isEmpty {
+                answerValue = NSNull()
+            }
+            return [
+                "questionId": item.questionId,
+                "answer": answerValue
+            ]
+        }
+
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: parameters, options: [])
+
+            if let jsonString = String(data: jsonData, encoding: .utf8) {
+                print("JSON Data: \(jsonString)")
+            }
+
+            let headers: HTTPHeaders = [
+                "Content-Type": "application/json",
+                "Authorization": "Bearer \(token)"
+            ]
+
+            var request: URLRequest
+            if method == .post {
+                request = URLRequest(url: JuinjangAPI.saveChecklist(imjangId: self.imjangId).endpoint)
+            } else if method == .patch {
+                request = URLRequest(url: JuinjangAPI.modifyChecklist(imjangId: self.imjangId).endpoint)
+            } else {
+                return
+            }
+
+            request.httpMethod = method.rawValue
+            request.headers = headers
+            request.httpBody = jsonData
+
+            AF.request(request)
+                .responseJSON { response in
+                    switch response.result {
+                    case .success(let value):
+                        print("체크리스트 \(method == .post ? "저장" : "수정") 처리 성공")
+                        print(value)
+                        self.showCheckList(completion: {})
+                    case .failure(let error):
+                        print("체크리스트 \(method == .post ? "저장" : "수정") 처리 실패")
+                        if let data = response.data,
+                           let errorMessage = String(data: data, encoding: .utf8) {
+                            print("서버 응답 에러 메시지: \(errorMessage)")
+                            // 토큰 관련 에러 처리
+                            if response.response?.statusCode == 401 {
+                                self.refreshToken { success in
+                                    if success {
+                                        self.requestChecklist(with: method, items: items, token: UserDefaultManager.shared.accessToken ?? "")
+                                    } else {
+                                        print("토큰 만료")
+                                    }
+                                }
                             }
+                        } else {
+                            print("에러: \(error.localizedDescription)")
                         }
                     }
-            } catch {
-                print("encoding 에러: \(error)")
-            }
+                }
+        } catch {
+            print("encoding 에러: \(error)")
         }
     }
     
@@ -473,7 +554,7 @@ extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
                             // 현재 questionId에 대한 기존 답변이 있는지 확인
                             if let index = self.checkListItems.firstIndex(where: { $0.questionId == questionId }) {
                                 let existingAnswer = self.checkListItems[index]
-                                if option == "0" {
+                                if option == "선택안함" {
                                     // 선택 취소하는 경우
                                     self.checkListItems.remove(at: index)
                                     print("\(questionId)번에 해당하는 답변 삭제")
