@@ -192,6 +192,7 @@ class EditBasicInfoViewController: BaseViewController {
     lazy var threeDisitPriceField = UITextField().then {
         $0.layer.backgroundColor = UIColor(named: "gray2")?.cgColor
         $0.layer.cornerRadius = 15
+        $0.textAlignment = .center
         
         $0.attributedPlaceholder = NSAttributedString(
             string: "000",
@@ -216,6 +217,8 @@ class EditBasicInfoViewController: BaseViewController {
     lazy var fourDisitPriceField = UITextField().then {
         $0.layer.backgroundColor = UIColor(named: "gray2")?.cgColor
         $0.layer.cornerRadius = 15
+        $0.textAlignment = .center
+        
         $0.attributedPlaceholder = NSAttributedString(
             string: "0000",
             attributes: [
@@ -369,8 +372,8 @@ class EditBasicInfoViewController: BaseViewController {
         // 텍스트 필드 너비 설정
         let padding: CGFloat = 20
         let minimumWidth: CGFloat = 30
-        let threeDisitPriceFieldMaximumWidth: CGFloat = 62
-        let fourDisitPriceFieldMaximumWidth: CGFloat = 78
+        let threeDisitPriceFieldMaximumWidth: CGFloat = 63
+        let fourDisitPriceFieldMaximumWidth: CGFloat = 79
         
         let threeDisitPriceFieldSize = sizeForText(text: threeDisitPriceField.text ?? "", font: threeDisitPriceField.font ?? UIFont.systemFont(ofSize: 17)).width + padding
         let fourDisitPriceFieldSize = sizeForText(text: fourDisitPriceField.text ?? "", font: fourDisitPriceField.font ?? UIFont.systemFont(ofSize: 17)).width + padding
@@ -618,10 +621,10 @@ extension EditBasicInfoViewController: UITextFieldDelegate {
         // 각 텍스트 필드에 대한 최소, 최대 너비 설정
         let minimumWidth: CGFloat = 30 // 최소 너비
         let padding: CGFloat = 20
-        var maximumWidth: CGFloat = 78 // 네 자릿수 텍스트 필드의 최대 너비
+        var maximumWidth: CGFloat = 79 // 네 자릿수 텍스트 필드의 최대 너비
 
         if textField == threeDisitPriceField {
-            maximumWidth = 62 // 세 자릿수 텍스트 필드의 최대 너비
+            maximumWidth = 63 // 세 자릿수 텍스트 필드의 최대 너비
         }
         
         // 텍스트 길이에 따라 너비 계산
@@ -674,14 +677,20 @@ extension EditBasicInfoViewController: UITextFieldDelegate {
 
         if textField == threeDisitPriceField {
             textField.placeholder = "000"
-            updateTextFieldWidthConstraint(for: textField, constant: 60) // 기존 너비로 복원
+            updateTextFieldWidthConstraint(for: textField, constant: 63) // 기존 너비로 복원
         } else if textField == fourDisitPriceField {
             textField.placeholder = "0000"
-            updateTextFieldWidthConstraint(for: textField, constant: 74)
+            updateTextFieldWidthConstraint(for: textField, constant: 79)
         }
     }
 }
 
 protocol SendEditData {
-    func sendData(imjangId: Int, priceList: [String], address: String, addressDetail: String, nickname: String, updatedAt: String)
+    func sendData(
+        imjangId: Int,
+        priceList: [String],
+        address: String,
+        addressDetail: String,
+        nickname: String,
+        updatedAt: String)
 }

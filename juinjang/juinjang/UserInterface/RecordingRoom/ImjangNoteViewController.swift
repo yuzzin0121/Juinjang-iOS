@@ -355,6 +355,7 @@ class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEdit
         } else if versionInfo?.editCriteria == 1 {
             editDetailVC.imjangId = imjangId
             editDetailVC.versionInfo = versionInfo
+            editDetailVC.delegate = self
             self.navigationController?.pushViewController(editDetailVC, animated: true)
         }
     }

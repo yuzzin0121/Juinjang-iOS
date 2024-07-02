@@ -219,6 +219,7 @@ class EditBasicInfoDetailViewController: BaseViewController {
     lazy var threeDisitPriceField = UITextField().then {
         $0.layer.backgroundColor = UIColor(named: "gray2")?.cgColor
         $0.layer.cornerRadius = 15
+        $0.textAlignment = .center
         
         $0.attributedPlaceholder = NSAttributedString(
             string: "000",
@@ -243,6 +244,8 @@ class EditBasicInfoDetailViewController: BaseViewController {
     lazy var fourDisitPriceField = UITextField().then {
         $0.layer.backgroundColor = UIColor(named: "gray2")?.cgColor
         $0.layer.cornerRadius = 15
+        $0.textAlignment = .center
+        
         $0.attributedPlaceholder = NSAttributedString(
             string: "0000",
             attributes: [
@@ -266,6 +269,8 @@ class EditBasicInfoDetailViewController: BaseViewController {
     lazy var fourDisitMonthlyRentField = UITextField().then {
         $0.layer.backgroundColor = UIColor(named: "gray2")?.cgColor
         $0.layer.cornerRadius = 15
+        $0.textAlignment = .center
+        
         $0.attributedPlaceholder = NSAttributedString(
             string: "0000",
             attributes: [
@@ -479,8 +484,8 @@ class EditBasicInfoDetailViewController: BaseViewController {
         // 텍스트 필드 너비 설정
         let padding: CGFloat = 20
         let minimumWidth: CGFloat = 30
-        let threeDisitPriceFieldMaximumWidth: CGFloat = 60
-        let fourDisitPriceFieldMaximumWidth: CGFloat = 74
+        let threeDisitPriceFieldMaximumWidth: CGFloat = 63
+        let fourDisitPriceFieldMaximumWidth: CGFloat = 79
         
         let threeDisitPriceFieldSize = sizeForText(text: threeDisitPriceField.text ?? "", font: threeDisitPriceField.font ?? UIFont.systemFont(ofSize: 17)).width + padding
         let fourDisitPriceFieldSize = sizeForText(text: fourDisitPriceField.text ?? "", font: fourDisitPriceField.font ?? UIFont.systemFont(ofSize: 17)).width + padding
@@ -709,6 +714,13 @@ class EditBasicInfoDetailViewController: BaseViewController {
             setmonthlyRentView()
         }
         selectedPriceTypeButton = sender.isSelected ? sender : nil
+        
+        // 텍스트 필드 관련
+        view.endEditing(true)
+        
+        updateTextFieldWidthConstraint(for: threeDisitPriceField, constant: 63)
+        updateTextFieldWidthConstraint(for: fourDisitPriceField, constant: 79)
+        updateTextFieldWidthConstraint(for: fourDisitMonthlyRentField, constant: 79)
     }
     
     private func setSaleView() {
@@ -790,7 +802,15 @@ class EditBasicInfoDetailViewController: BaseViewController {
 
                 let threeDisitPrice = Int(threeDisitPriceField.text ?? "") ?? 0
                 let fourDisitPrice = Int(fourDisitPriceField.text ?? "") ?? 0
+                let fourDisitMonthlyRent = Int(fourDisitMonthlyRentField.text ?? "") ?? 0
                 var priceList = [String(threeDisitPrice * 100000000 + fourDisitPrice * 10000)]
+                
+                let separatedPriceList: [String]
+                if fourDisitMonthlyRentField.text?.isEmpty == true {
+                    separatedPriceList = priceList
+                } else {
+                    separatedPriceList = [String(threeDisitPrice * 100000000 + fourDisitPrice * 10000), String(fourDisitMonthlyRent * 10000)]
+                }
                 
                 let now = Date()
                 let formatter = DateFormatter()
@@ -799,7 +819,7 @@ class EditBasicInfoDetailViewController: BaseViewController {
                 
                 delegate?.sendData(
                     imjangId: imjangId,
-                    priceList: priceList,
+                    priceList: separatedPriceList,
                     address: addressTextField.text ?? "",
                     addressDetail: addressDetailTextField.text ?? "",
                     nickname: houseNicknameTextField.text ?? "",
@@ -848,10 +868,10 @@ extension EditBasicInfoDetailViewController: UITextFieldDelegate {
         // 각 텍스트 필드에 대한 최소, 최대 너비 설정
         let minimumWidth: CGFloat = 30 // 최소 너비
         let padding: CGFloat = 20
-        var maximumWidth: CGFloat = 74 // 네 자릿수 텍스트 필드의 최대 너비
+        var maximumWidth: CGFloat = 79 // 네 자릿수 텍스트 필드의 최대 너비
 
         if textField == threeDisitPriceField {
-            maximumWidth = 60 // 세 자릿수 텍스트 필드의 최대 너비
+            maximumWidth = 63 // 세 자릿수 텍스트 필드의 최대 너비
         }
         
         // 텍스트 길이에 따라 적절한 너비 계산
@@ -894,22 +914,23 @@ extension EditBasicInfoDetailViewController: UITextFieldDelegate {
         return (text as NSString).size(withAttributes: fontAttributes)
     }
     
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        textField.placeholder = "" // 입력 시작 시 placeholder를 숨김
-    }
-    
     func textFieldDidEndEditing(_ textField: UITextField) {
         guard textField.text?.isEmpty ?? true else { return }
         if textField == threeDisitPriceField {
             textField.placeholder = "000"
-            updateTextFieldWidthConstraint(for: textField, constant: 60) // 기존 너비로 복원
+            updateTextFieldWidthConstraint(for: textField, constant: 63) // 기존 너비로 복원
         } else if textField == fourDisitPriceField || textField == fourDisitMonthlyRentField {
             textField.placeholder = "0000"
-            updateTextFieldWidthConstraint(for: textField, constant: 74)
+            updateTextFieldWidthConstraint(for: textField, constant: 79)
         }
     }
 }
 
 protocol SendDetailEditData {
-    func sendData(imjangId: Int, priceList: [String], address: String, addressDetail: String, nickname: String, updatedAt: String)
+    func sendData(imjangId: Int,
+                  priceList: [String],
+                  address: String,
+                  addressDetail: String,
+                  nickname: String,
+                  updatedAt: String)
 }
