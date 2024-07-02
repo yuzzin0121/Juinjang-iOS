@@ -52,7 +52,7 @@ class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEdit
     }
     
     let roomNameLabel = UILabel()
-
+    
     let houseImageView = UIImageView()
     let roomStackView = UIStackView()
     let roomPriceLabel = UILabel()
@@ -189,7 +189,7 @@ class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEdit
         if detailDto.purposeCode == 0 {
             self.versionInfo = VersionInfo(version: versionDetail, editCriteria: 0)
         } else if detailDto.purposeCode == 1 {
-                self.versionInfo = VersionInfo(version: versionDetail, editCriteria: 1)
+            self.versionInfo = VersionInfo(version: versionDetail, editCriteria: 1)
         }
         print("체크리스트 버전 설정: \(versionInfo)")
         versionInfo?.editCriteria = detailDto.purposeCode
@@ -208,7 +208,7 @@ class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEdit
     func adjustLabelHeight() {
         let maxSize = CGSize(width: addressBackgroundView.bounds.width - 30, height: CGFloat.greatestFiniteMagnitude) // 여백 고려
         let expectedSize = roomAddressLabel.sizeThatFits(maxSize)
-
+        
         // 텍스트 길이에 따라 조건적으로 높이 업데이트
         roomAddressLabel.snp.updateConstraints { make in
             if expectedSize.height > 30 { // someThreshold는 조건에 맞는 텍스트 높이입니다.
@@ -253,12 +253,12 @@ class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEdit
                 reportPopupVC.modalPresentationStyle = .overCurrentContext
                 present(reportPopupVC, animated: false, completion: nil)
             } else {
-            let reportVC = ReportViewController(imjangId: imjangId)
+                let reportVC = ReportViewController(imjangId: imjangId)
                 navigationController?.pushViewController(reportVC, animated: true)
             }
         }
     }
-    
+        
     // 방 사진 클릭했을 때 - showImjangImageListVC. 호출
     func setImageStackViewClick(isEmpty: Bool) {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(showImjangImageListVC))
@@ -277,10 +277,10 @@ class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEdit
         thirdImage.isUserInteractionEnabled = isEmpty ? false : true
         noImageBackgroundView.isUserInteractionEnabled = isEmpty ? true : false
     }
-    
+        
     // 이미지 리스트 화면으로 이동
     @objc func showImjangImageListVC() {
-//        guard let imjangId = imjangId else { return }
+        //        guard let imjangId = imjangId else { return }
         let imjangImageListVC = ImjangImageListViewController()
         imjangImageListVC.imjangId = imjangId
         imjangImageListVC.completionHandler = { imageStrings in
@@ -312,13 +312,13 @@ class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEdit
     func designNavigationBar() {
         self.navigationItem.title = "판교푸르지오월드마크"     // TODO: - 나중에 roomName 으로 연결
         self.navigationController?.navigationBar.tintColor = .black
-       
+        
         // UIBarButtonItem 생성 및 이미지 설정
         let backButtonItem = UIBarButtonItem(image: ImageStyle.arrowLeft, style: .plain, target: self, action: #selector(popView))
         let editButtonItem = UIBarButtonItem(title: "편집", style: .plain, target: self, action: #selector(editView))
         backButtonItem.tintColor = ColorStyle.textGray
         editButtonItem.tintColor = ColorStyle.textGray
-
+        
         // 네비게이션 아이템에 백 버튼 아이템 설정
         self.navigationItem.leftBarButtonItem = backButtonItem
         self.navigationItem.rightBarButtonItem = editButtonItem
@@ -360,7 +360,7 @@ class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEdit
         }
         
         upButton.isHidden = true
-
+        
         scrollView.addSubview(contentView)
         
         [roomStackView, roomPriceLabel, infoStackView, addressBackgroundView, containerView, noImageBackgroundView, stackView].forEach {
@@ -430,7 +430,7 @@ class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEdit
                         image: UIImage(named: "location"),
                         contentMode: .scaleAspectFit)
         
-        setStackView(addressStackView, 
+        setStackView(addressStackView,
                      label: roomAddressLabel,
                      image: roomLocationIcon,
                      axis: .horizontal,
@@ -469,7 +469,7 @@ class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEdit
                     font: UIFont.pretendard(size: 14, weight: .semiBold),
                     textColor: ColorStyle.textGray)
         
-    
+        
     }
     
     // 이미지 개수에 따라 stackView 설정
@@ -513,7 +513,7 @@ class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEdit
     }
     
     func setImage2() {
-//        let imagesWidth = view.frame.width - (24*2) - 8
+        //        let imagesWidth = view.frame.width - (24*2) - 8
         stackView.spacing = 8
         vStackView.spacing = 0
         
@@ -524,7 +524,7 @@ class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEdit
         secondImage.snp.remakeConstraints {
             $0.height.equalTo(secondImage.snp.width).multipliedBy(171.0 / 109.0)
         }
-     
+        
         if let image1 = images.first, let url1 = URL(string: image1) {
             firstImage.kf.setImage(with: url1, placeholder: UIImage(named: "1"))
         }
@@ -537,7 +537,7 @@ class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEdit
     func setImage3() {
         stackView.spacing = 8
         vStackView.spacing = 8
-
+        
         firstImage.snp.remakeConstraints {
             $0.height.equalTo(firstImage.snp.width).multipliedBy(171.0 / 225.0)
         }
@@ -598,7 +598,7 @@ class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEdit
         [secondImage, thirdImage].forEach {
             vStackView.addArrangedSubview($0)
         }
-   
+        
         stackView.addSubview(maximizeImageView)
         maximizeImageView.snp.makeConstraints {
             $0.bottom.trailing.equalTo(stackView).inset(12)
@@ -692,8 +692,8 @@ class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEdit
             $0.top.equalTo(infoStackView.snp.bottom).offset(12)
             $0.leading.trailing.equalTo(contentView)
             $0.bottom.equalTo(contentView).offset(-24)
-//            $0.height.equalTo(view).multipliedBy(1.5)
-//            $0.height.equalTo(view).multipliedBy(5) // 체크리스트 뷰 컨트롤러에서는 변경될 수 있게 적절한 값으로 설정 필요
+            //            $0.height.equalTo(view).multipliedBy(1.5)
+            //            $0.height.equalTo(view).multipliedBy(5) // 체크리스트 뷰 컨트롤러에서는 변경될 수 있게 적절한 값으로 설정 필요
         }
         
         recordingSegmentedVC.view.snp.makeConstraints {
@@ -774,12 +774,11 @@ class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEdit
         scrollView.setContentOffset(CGPoint.zero, animated: true)
     }
 }
-
-
+    
 extension ImjangNoteViewController: UIScrollViewDelegate {
-
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        print("스크롤 좌표 - \(scrollView.contentOffset.y), containerView 좌표 - \(containerView.frame.origin.y)")
+        //        print("스크롤 좌표 - \(scrollView.contentOffset.y), containerView 좌표 - \(containerView.frame.origin.y)")
         
         let containerY = containerView.frame.origin.y
         
@@ -808,7 +807,7 @@ extension ImjangNoteViewController: UIScrollViewDelegate {
             scrollView.contentOffset.y = containerY
             NotificationCenter.default.post(name: NSNotification.Name("didStoppedParentScroll"), object: nil)
         }
-
+        
         if scrollView.contentOffset.y > 20 {
             UIView.animate(withDuration: 0.5) {
                 self.upButton.alpha = 1
@@ -820,3 +819,4 @@ extension ImjangNoteViewController: UIScrollViewDelegate {
         }
     }
 }
+

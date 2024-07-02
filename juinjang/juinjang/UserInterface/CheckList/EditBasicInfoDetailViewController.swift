@@ -375,7 +375,7 @@ class EditBasicInfoDetailViewController: BaseViewController {
                  method: .patch,
                  parameters: parameter,
                  encoding: JSONEncoding.default,
-                 headers: header)
+                   headers: JuinjangAPI.modifyImjang(imjangId: imjangId).header)
         .validate(statusCode: 200..<300)
         .responseDecodable(of: BaseResponse<String>.self) { response in
             switch response.result {

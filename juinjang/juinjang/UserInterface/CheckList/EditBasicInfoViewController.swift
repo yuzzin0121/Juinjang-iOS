@@ -338,10 +338,6 @@ class EditBasicInfoViewController: BaseViewController {
                 completionHandler(nil)
         
             case .failure(let failure):
-                if let data = response.data, let jsonString = String(data: data, encoding: .utf8) {
-                    print("Response Data: \(jsonString)")
-                }
-                print("Request failed with error: \(failure)")
                 completionHandler(NetworkError.failedRequest)
             }
         }

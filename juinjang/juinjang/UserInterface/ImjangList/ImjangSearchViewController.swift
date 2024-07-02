@@ -161,16 +161,19 @@ class ImjangSearchViewController: BaseViewController {
 extension ImjangSearchViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         let keyword = searchBar.text!
-        if keyword.count < 2 {
+        let trimmedKeyword = keyword.trimmingCharacters(in: [" "])
+        if trimmedKeyword.count < 2 {
+            showAlert(title: "경고", message: "2글자 이상 입력해주세요", actionHandler: nil)
+            searchBar.text = ""
             return
         }
         if searchedKeywordList.count < 3 {
-            searchedKeywordList.append(keyword)
+            searchedKeywordList.append(trimmedKeyword)
         }
-        saveSearchKeyword(keyword: keyword)
+        saveSearchKeyword(keyword: trimmedKeyword)
         searchBar.text = ""
         view.endEditing(true)
-        showSearchResultVC(keyword: keyword)
+        showSearchResultVC(keyword: trimmedKeyword)
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {

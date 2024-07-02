@@ -10,7 +10,8 @@ import Then
 import DGCharts
 import Alamofire
 
-class CompareViewController : BaseViewController, SendCompareImjangData {
+class CompareViewController : BaseViewController, SendCompareImjangData, SendSearchCompareImjangData {
+    
     func sendData(isSelected: Bool, compareImjangId: Int, compareImjangName: String) {
         print("sendData")
         isCompared = isSelected

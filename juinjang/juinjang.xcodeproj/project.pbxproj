@@ -982,7 +982,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1430;
-				LastUpgradeCheck = 1520;
+				LastUpgradeCheck = 1540;
 				TargetAttributes = {
 					0A9E0A422B3DCAB90094595A = {
 						CreatedOnToolsVersion = 14.3.1;
@@ -1077,7 +1077,6 @@
 				619269F52B67747F00D4DD3E /* ScrapCollectionViewCell.swift in Sources */,
 				3458557E2B689D2A00432C06 /* ExpandableTableViewCell.swift in Sources */,
 				616D481A2BFBAF660073029A /* Int+Extension.swift in Sources */,
-				616408E12B405B7200EC3B5E /* ImjangNoteViewController.swift in Sources */,
 				0A24711D2B69147200A7382B /* ToSDetailViewController.swift in Sources */,
 				0A7AC0F12B6412760032C9DF /* KakaoZipCodeViewController.swift in Sources */,
 				0A4EBE382B5EDD6F00909B7A /* ExpandedTextFieldTableViewCell.swift in Sources */,
