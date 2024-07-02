@@ -74,7 +74,7 @@ enum JuinjangAPI {
         case .totalImjang, .createImjang:
             return URL(string: baseURL + "limjang")!
         case .modifyImjang(let imjangId):
-            return URL(string: baseURL + "limjang\(imjangId)")!
+            return URL(string: baseURL + "limjang/\(imjangId)")!
             
         case .searchImjang(let keyword):
             return URL(string: baseURL + "limjang/\(keyword)")!
