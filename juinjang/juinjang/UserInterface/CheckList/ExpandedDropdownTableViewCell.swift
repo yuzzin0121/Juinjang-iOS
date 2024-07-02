@@ -8,7 +8,6 @@
 import UIKit
 import SnapKit
 
-// -TODO: "선택안함"은 선택으로 인식되지 않게 하기
 class ExpandedDropdownTableViewCell: UITableViewCell {
     
     var optionSelectionHandler: ((String) -> Void)?
@@ -97,40 +96,17 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
+    // TODO: - 기타 항목을 구분해서 기타 항목에 대한 재사용 처리 필요
     override func prepareForReuse() {
         super.prepareForReuse()
-        
-        // 기본 셀 내용 초기화
-        itemButton.setTitle("선택안함", for: .normal)
-        itemButton.backgroundColor = UIColor(named: "shadowGray")
-        itemButton.setTitleColor(UIColor(named: "darkGray"), for: .normal)
-
-        let buttonImage = UIImage(named: "item-arrow-down")
-        itemButton.setImage(buttonImage, for: .normal)
-        itemButton.semanticContentAttribute = .forceRightToLeft
-
-        // 여백 설정
-        let titleInset: CGFloat = 12.0
-        let imageInset: CGFloat = 8.0
-        itemButton.sizeToFit()
-        itemButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: titleInset, bottom: 0, right: -imageInset)
-        itemButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: itemButton.bounds.width - 35, bottom: 0, right: -imageInset)
-
-        // 배경색 초기화
-        backgroundColor = .white
-        questionImage.image = UIImage(named: "question-image")
-
-        // 버튼 위치 초기화
-        itemButton.snp.updateConstraints {
-            $0.trailing.equalToSuperview().offset(-24)
-        }
         
         // 피커 뷰 초기화
 //        itemPickerView.selectRow(0, inComponent: 0, animated: true)
         itemPickerView.reloadAllComponents()
 
         // 기타 항목 선택 시 텍스트필드 초기화 및 위치 조정
-        if itemButton.title(for: .normal) == "기타" {
+        let numbersOfRow = pickerView(itemPickerView, numberOfRowsInComponent: 0)
+        if itemPickerView.selectedRow(inComponent: 0) == numbersOfRow - 1 {
             itemButton.snp.updateConstraints {
                 $0.trailing.equalToSuperview().offset(-250)
             }
@@ -149,6 +125,31 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
         } else {
             // "기타" 항목이 아닌 경우 기타 텍스트필드 제거
             etcTextField.removeFromSuperview()
+            
+            // 기본 셀 내용 초기화
+            itemButton.setTitle("선택안함", for: .normal)
+            itemButton.backgroundColor = UIColor(named: "shadowGray")
+            itemButton.setTitleColor(UIColor(named: "darkGray"), for: .normal)
+
+            let buttonImage = UIImage(named: "item-arrow-down")
+            itemButton.setImage(buttonImage, for: .normal)
+            itemButton.semanticContentAttribute = .forceRightToLeft
+
+            // 여백 설정
+            let titleInset: CGFloat = 12.0
+            let imageInset: CGFloat = 8.0
+            itemButton.sizeToFit()
+            itemButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: titleInset, bottom: 0, right: -imageInset)
+            itemButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: itemButton.bounds.width - 35, bottom: 0, right: -imageInset)
+
+            // 배경색 초기화
+            backgroundColor = .white
+            questionImage.image = UIImage(named: "question-image")
+
+            // 버튼 위치 초기화
+            itemButton.snp.updateConstraints {
+                $0.trailing.equalToSuperview().offset(-24)
+            }
         }
     }
     
@@ -419,7 +420,6 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
                     } else {
                         questionImage.image = UIImage(named: "question-image")
                         backgroundColor = .white
-                        handleOptionSelection("") // 빈 값 처리
                     }
                 }
             } else {
