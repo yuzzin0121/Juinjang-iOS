@@ -214,7 +214,8 @@ class CheckListViewController: BaseViewController {
     }
 
     
-    // -MARK: API 요청
+    // MARK: - API 요청
+    // TODO: - 체크리스트 빈값일 때 체크완료되는 거 처리 필요
     func saveAnswer() {
         let token = UserDefaultManager.shared.accessToken
         print("토큰값 \(token)")

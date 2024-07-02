@@ -21,9 +21,10 @@ class EditBasicInfoViewController: BaseViewController {
     var priceDetailLabel: UILabel?
     var priceDetailLabel2: UILabel?
     
+    var delegate: SendEditData?
+    
     let contentView = UIView().then {
         $0.translatesAutoresizingMaskIntoConstraints = false
-//        $0.backgroundColor = .blue
     }
     
     func configureLabel(_ label: UILabel, text: String) {
@@ -310,11 +311,11 @@ class EditBasicInfoViewController: BaseViewController {
         
         let parameter: Parameters = [
             "limjangId": imjangId,
+            "priceType": 3,
+            "priceList": priceList,
             "address": addressTextField.text ?? "",
             "addressDetail": addressDetailTextField.text ?? "",
-            "nickname": houseNicknameTextField.text ?? "",
-            "priceType": 3,
-            "priceList": priceList
+            "nickname": houseNicknameTextField.text ?? ""
         ]
         
         print(parameter)
@@ -337,12 +338,6 @@ class EditBasicInfoViewController: BaseViewController {
                 completionHandler(nil)
         
             case .failure(let failure):
-                print("Error: \(failure)")
-                if let data = response.data, let jsonString = String(data: data, encoding: .utf8) {
-                       print("Response Data: \(jsonString)")
-                   }
-                   print("Request failed with error: \(failure)")
-                   print("Bearer \(UserDefaultManager.shared.accessToken)")
                 completionHandler(NetworkError.failedRequest)
             }
         }
@@ -549,15 +544,33 @@ class EditBasicInfoViewController: BaseViewController {
     }
     
     @objc func nextButtonTapped(_ sender: UIButton) {
+
         modifyImjang { [weak self] error in
             guard let self else { return }
             if error == nil {
                 guard let imjangId, let version = versionInfo?.version else { return }
                 let imjangNoteVC = ImjangNoteViewController(imjangId: imjangId, version: version)
-//                imjangNoteVC.imjangId = self.imjangId
-                imjangNoteVC.versionInfo = self.versionInfo
+                
+                let threeDisitPrice = Int(threeDisitPriceField.text ?? "") ?? 0
+                let fourDisitPrice = Int(fourDisitPriceField.text ?? "") ?? 0
+                var priceList = [String(threeDisitPrice * 100000000 + fourDisitPrice * 10000)]
+                
+                let now = Date()
+                let formatter = DateFormatter()
+                formatter.dateFormat = "yy.MM.dd"
+                let updatedAt = formatter.string(from: now)
+                
+                delegate?.sendData(
+                    imjangId: imjangId,
+                    priceList: priceList,
+                    address: addressTextField.text ?? "",
+                    addressDetail: addressDetailTextField.text ?? "",
+                    nickname: houseNicknameTextField.text ?? "",
+                    updatedAt: updatedAt
+                )
+                
                 self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-                self.navigationController?.pushViewController(imjangNoteVC, animated: true)
+                self.navigationController?.popViewController(animated: true)
             } else {
                 guard let error else { return }
                 switch error {
@@ -650,4 +663,8 @@ extension EditBasicInfoViewController: UITextFieldDelegate {
             updateTextFieldWidthConstraint(for: textField, constant: 74)
         }
     }
+}
+
+protocol SendEditData {
+    func sendData(imjangId: Int, priceList: [String], address: String, addressDetail: String, nickname: String, updatedAt: String)
 }
