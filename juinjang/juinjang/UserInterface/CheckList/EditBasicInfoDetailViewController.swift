@@ -26,6 +26,8 @@ class EditBasicInfoDetailViewController: BaseViewController {
     var priceDetailLabel: UILabel?
     var priceDetailLabel2: UILabel?
     
+    var delegate: SendDetailEditData?
+    
     let contentView = UIView().then {
         $0.translatesAutoresizingMaskIntoConstraints = false
     }
@@ -386,6 +388,7 @@ class EditBasicInfoDetailViewController: BaseViewController {
                     print("Response Data: \(jsonString)")
                 }
                 print("Request failed with error: \(failure)")
+                print("Bearer \(UserDefaultManager.shared.accessToken)")
                 completionHandler(NetworkError.failedRequest)
             }
         }
@@ -751,10 +754,27 @@ class EditBasicInfoDetailViewController: BaseViewController {
             if error == nil {
                 guard let imjangId, let version = versionInfo?.version else { return }
                 let imjangNoteVC = ImjangNoteViewController(imjangId: imjangId, version: version)
-//                imjangNoteVC.imjangId = self.imjangId
-                imjangNoteVC.versionInfo = self.versionInfo
+
+                let threeDisitPrice = Int(threeDisitPriceField.text ?? "") ?? 0
+                let fourDisitPrice = Int(fourDisitPriceField.text ?? "") ?? 0
+                var priceList = [String(threeDisitPrice * 100000000 + fourDisitPrice * 10000)]
+                
+                let now = Date()
+                let formatter = DateFormatter()
+                formatter.dateFormat = "yy.MM.dd"
+                let updatedAt = formatter.string(from: now)
+                
+                delegate?.sendData(
+                    imjangId: imjangId,
+                    priceList: priceList,
+                    address: addressTextField.text ?? "",
+                    addressDetail: addressDetailTextField.text ?? "",
+                    nickname: houseNicknameTextField.text ?? "",
+                    updatedAt: updatedAt
+                )
+                
                 self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-                self.navigationController?.pushViewController(imjangNoteVC, animated: true)
+                self.navigationController?.popViewController(animated: true)
             } else {
                 guard let error else { return }
                 switch error {
@@ -847,4 +867,8 @@ extension EditBasicInfoDetailViewController: UITextFieldDelegate {
             updateTextFieldWidthConstraint(for: textField, constant: 74)
         }
     }
+}
+
+protocol SendDetailEditData {
+    func sendData(imjangId: Int, priceList: [String], address: String, addressDetail: String, nickname: String, updatedAt: String)
 }

@@ -10,8 +10,7 @@ import SnapKit
 import Then
 import Kingfisher
 
-class ImjangNoteViewController: BaseViewController{
-    
+class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEditData {
     // 스크롤뷰
     let scrollView = UIScrollView().then {
         $0.backgroundColor = .white
@@ -174,6 +173,8 @@ class ImjangNoteViewController: BaseViewController{
         roomNameLabel.text = detailDto.nickname
         setPriceLabel(priceList: detailDto.priceList)
         roomAddressLabel.text = "\(detailDto.address) \(detailDto.addressDetail)"
+        print("최근 수정 날짜")
+        print(detailDto.updatedAt)
         modifiedDateStringLabel.text = "최근 수정 날짜 \(String.dateToString(target: detailDto.updatedAt))"
         images = detailDto.images
         
@@ -194,6 +195,14 @@ class ImjangNoteViewController: BaseViewController{
         versionInfo?.editCriteria = detailDto.purposeCode
         setUpImageUI()
         adjustLabelHeight()
+    }
+    
+    func sendData(imjangId: Int, priceList: [String], address: String, addressDetail: String, nickname: String, updatedAt: String) {
+        self.navigationItem.title = nickname
+        roomNameLabel.text = nickname
+        setPriceLabel(priceList: priceList)
+        roomAddressLabel.text = "\(address) \(addressDetail)"
+        modifiedDateStringLabel.text = "최근 수정 날짜 \(updatedAt)"
     }
     
     func adjustLabelHeight() {
@@ -335,6 +344,7 @@ class ImjangNoteViewController: BaseViewController{
         if versionInfo?.editCriteria == 0 {
             editVC.imjangId = imjangId
             editVC.versionInfo = versionInfo
+            editVC.delegate = self
             self.navigationController?.pushViewController(editVC, animated: true)
         } else if versionInfo?.editCriteria == 1 {
             editDetailVC.imjangId = imjangId
@@ -785,7 +795,7 @@ extension ImjangNoteViewController: UIScrollViewDelegate {
 //        }
 //        
 //        if scrollView.contentOffset.y > 20 {
-//            UIView.animate(withDuration: 0.5, delay:0) {
+//            UIView.animate(w\ithDuration: 0.5, delay:0) {
 //                self.upButton.alpha = 1
 //            }
 //        } else {
