@@ -10,7 +10,7 @@ import SnapKit
 import Then
 import Kingfisher
 
-class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEditData {
+class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEditData, ButtonStateDelegate {
     // 스크롤뷰
     let scrollView = UIScrollView().then {
         $0.backgroundColor = .white
@@ -250,6 +250,7 @@ class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEdit
             if savedCheckListItemsAreEmpty {
                 // 팝업창이 뜸
                 let reportPopupVC = ReportPopupViewController()
+                reportPopupVC.delegate = self
                 reportPopupVC.modalPresentationStyle = .overCurrentContext
                 present(reportPopupVC, animated: false, completion: nil)
             } else {
@@ -257,6 +258,11 @@ class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEdit
                 navigationController?.pushViewController(reportVC, animated: true)
             }
         }
+    }
+    
+    func updateButtonState(isSelected: Bool) {
+        editButton.setImage(UIImage(named: "completed-button"), for: .normal)
+        editButton.isSelected = isSelected
     }
         
     // 방 사진 클릭했을 때 - showImjangImageListVC. 호출
@@ -349,6 +355,7 @@ class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEdit
         } else if versionInfo?.editCriteria == 1 {
             editDetailVC.imjangId = imjangId
             editDetailVC.versionInfo = versionInfo
+            editDetailVC.delegate = self
             self.navigationController?.pushViewController(editDetailVC, animated: true)
         }
     }
