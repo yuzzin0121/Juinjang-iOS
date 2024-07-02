@@ -186,7 +186,7 @@ class ImjangImageListViewController: UIViewController {
                 guard let response = response else { return }
                 print(response)
                 self.selectedIndexs.removeAll()
-                self.callFetchImageRequest()  // 삭제 완료시 전체 이미지 조회
+//                self.callFetchImageRequest()  // 삭제 완료시 전체 이미지 조회
             } else {
                 guard let error else { return }
                 switch error {
@@ -221,9 +221,14 @@ class ImjangImageListViewController: UIViewController {
         let deletePopupVC = DeleteImjangImagePopupView()
         deletePopupVC.selectedCount = selectedIndexs.count
         deletePopupVC.modalPresentationStyle = .overFullScreen
-        deletePopupVC.completionHandler = { // 선택된 이미지 삭제
+        deletePopupVC.completionHandler = {  [weak self] in// 선택된 이미지 삭제
+            guard let self else { return }
             let indexes = self.selectedIndexs.sorted(by: >)
             print("삭제할 id들: \(indexes)")
+            imageList.removeAll { image in
+                indexes.contains(image.imageId)
+            }
+            imageCollectionView.reloadData()
             self.callDeleteImageRequest(imageIds: indexes)
         }
         present(deletePopupVC, animated: false)

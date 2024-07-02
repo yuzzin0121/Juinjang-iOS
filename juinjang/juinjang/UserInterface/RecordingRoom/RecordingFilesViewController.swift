@@ -88,7 +88,7 @@ class RecordingFilesViewController: BaseViewController {
         
         for index in fileItems.indices {
             if fileItems[index].recordId == recordResponse.recordId {
-                fileItems[index].recordName = recordResponse.recordScript
+                fileItems[index].recordScript = recordResponse.recordScript
             }
         }
     }
