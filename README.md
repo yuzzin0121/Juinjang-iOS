@@ -33,7 +33,7 @@
 ## 주요 기술
 **Framework** - UIKit <br>
 **Pattern** - Router / MVC / Delegate / Singleton <br>
-**Network** - Alamofire <br>
+**Network** - Alamofire / Codable  <br>
 **Database** - Realm <br>
 **OpenSource** - SnapKit, Then, ToastSwift, TapMan, FSCalendar, Kingfisher, Lottie, IQKeyboardManagerSwift, DGCharts, KakaoOpenSDK <br>
 **Etc** - AVFoundation <br>
