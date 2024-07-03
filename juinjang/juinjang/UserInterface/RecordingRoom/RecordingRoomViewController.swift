@@ -74,6 +74,8 @@ class RecordingRoomViewController: BaseViewController, RemoveRecordDelegate {
         super.init()
     }
     
+    let lastPopupDateKey = "lastPopupDate" // 경고 메시지 날짜 저장 Key
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -248,12 +250,48 @@ class RecordingRoomViewController: BaseViewController, RemoveRecordDelegate {
     
     @objc
     func addRecordingFilesVC() {
-        let bottomSheetViewController = BottomSheetViewController(imjangId: imjangId)
+        let bottomSheetVC = BottomSheetViewController(imjangId: imjangId)
         let warningMessageVC = WarningMessageViewController(imjangId: imjangId)
-        warningMessageVC.bottomSheetViewController = bottomSheetViewController
-        bottomSheetViewController.addContentViewController(warningMessageVC)
-        bottomSheetViewController.modalPresentationStyle = .custom
-        self.present(bottomSheetViewController, animated: false, completion: nil)
+        let recordVC = RecordViewController(imjangId: imjangId)
+        if shouldShowPopup() {
+            warningMessageVC.bottomSheetViewController = bottomSheetVC
+            warningMessageVC.delegate = self
+            bottomSheetVC.addContentViewController(warningMessageVC)
+            bottomSheetVC.modalPresentationStyle = .custom
+            self.present(bottomSheetVC, animated: false, completion: nil)
+        } else {
+            print("오늘 하루 보지 않기 버튼을 선택했으므로 경고 메시지가 내일 나타납니다.")
+            recordVC.bottomSheetViewController = bottomSheetVC
+            bottomSheetVC.addContentViewController(recordVC)
+            bottomSheetVC.modalPresentationStyle = .custom
+            self.present(bottomSheetVC, animated: false, completion: nil)
+        }
+    }
+    
+    func shouldShowPopup() -> Bool {
+        let userDefaults = UserDefaults.standard
+        if let lastPopupDate = userDefaults.object(forKey: lastPopupDateKey) as? Date {
+            let calendar = Calendar.current
+            if calendar.isDateInToday(lastPopupDate) {
+                return false
+            } else {
+                return true
+            }
+        } else {
+            return true // 처음 실행
+        }
+    }
+    
+    func resetPopupDateIfNeeded() {
+        let userDefaults = UserDefaults.standard
+        if let lastPopupDate = userDefaults.object(forKey: lastPopupDateKey) as? Date {
+            let calendar = Calendar.current
+            if !calendar.isDateInToday(lastPopupDate) {
+                userDefaults.removeObject(forKey: lastPopupDateKey)
+            } else {
+                print("오늘 하루 보지 않기 버튼을 선택했으므로 경고 메시지가 내일 나타납니다.")
+            }
+        }
     }
     
     // 키보드 내리기
@@ -504,4 +542,9 @@ extension RecordingRoomViewController: UITextViewDelegate {
     }
 }
 
-
+extension RecordingRoomViewController: CheckWarningMessageDelegate {
+    func checkMessage() {
+        let startOfDay = Calendar.current.startOfDay(for: Date())
+        UserDefaults.standard.set(startOfDay, forKey: lastPopupDateKey)
+    }
+}
