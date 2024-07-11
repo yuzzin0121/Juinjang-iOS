@@ -8,7 +8,7 @@
 
 
 ## 프로젝트 개발 및 환경
-- iOS 3인 개발
+- 기획 1인, 디자인 1인, 서버 4인, iOS 3인 개발
 - 개발 기간: 6개월 (2024.01.02 ~ 2024.06.28)
 - 환경: 최소 버전 17.0 / 세로 모드 / 아이폰용
 <br>
@@ -25,7 +25,7 @@
 <br><br>
 ※ `표시` 는 제가 담당한 기능입니다.
 
-## 스크린샷
+
 
 <br>
 
@@ -43,9 +43,14 @@
 ### **Alamofire**
 - Alamofire에 Router 패턴과 Generic을 통해 네트워크 통신의 구조화 및 확장성 있는 네트워킹 구현
 - Alamofire RequestInterceptor를 활용한 JWT 인증 구현
-- multipart-form을 활용해 이미지 파일을 서버에 전송
+- multipart/form-data 타입을 통해 음성 파일 등록을 서버에 요청
 
 ### **Etc**
+- **SFSpeechRecognizer**를 통해 녹음된 파일에 대한 **음성을 텍스트로 변환** (**STT**)
+- **AudioRecorderManager**와 **AudioPlayerManager**를 구현하여 **음성 녹음과 재생을 효율적으로 관리**
+- **UIPanGestureRecognizer**를 통해 드래그로 이미지 선택 구현
+- SnapKit의 **updateConstraints**를 통해 데이터 개수에 따라 **테이블뷰의 높이 동적으로 변경**
+- **Lottie**를 활용해 **로딩 화면, 스플레시 화면 구현**
 - 공통적인 디자인의 뷰를 재사용하기 위해 커스텀 뷰로 구성
 - 이미지 및 컬러 등 반복적으로 사용되는 에셋을 enum을 통해 네임스페이스화하여 관리
 - NotificationCenter를 활용해 다른 계층에 있는 뷰에 데이터 갱신
@@ -58,7 +63,7 @@
 
 ### 1. accessToken 만료 시 수동으로 갱신 후 네트워크 재요청을 해줘야 하는 이슈
 **해결 방안** 
-- Alamofire의 RequestInterceptor를 사용하여 네트워크 요청 전처리와 에러 후처리 구현
+- Alamofire의 **RequestInterceptor**를 사용하여 **네트워크 요청 전처리와 에러 후처리 구현**
 - 네트워크 요청 후 에러가 발생했을 때, response의 상태코드 값이 accessToken 만료에 해당하는 상태코드 값과 일치할 경우 refreshToken을 통해 accessToken 갱신하는 API를 요청 후 네트워크 재요청
 - 네트워크 요청 전에 urlRequest 헤더의 Authorization Key에 대한 값으로 accessToken을 적용
 
