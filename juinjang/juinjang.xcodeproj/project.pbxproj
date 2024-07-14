@@ -55,7 +55,6 @@
 		0AC6ED672B7E917F00263487 /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = 0AC6ED662B7E917F00263487 /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json */; };
 		0AD529D62B729B6500FE7D9E /* CheckListPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD529D52B729B6500FE7D9E /* CheckListPopUpViewController.swift */; };
 		0AE388892B5986BC0041A979 /* CategoryItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE388882B5986BC0041A979 /* CategoryItemTableViewCell.swift */; };
-		0AE3888B2B5992870041A979 /* CheckListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE3888A2B5992870041A979 /* CheckListItem.swift */; };
 		0AEE17F42BB0632B00D86DEE /* CheckListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEE17F32BB0632B00D86DEE /* CheckListModel.swift */; };
 		0AF0ECBE2BEFE1AD00413778 /* AnswerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF0ECBD2BEFE1AD00413778 /* AnswerModel.swift */; };
 		0AF89DA32B74C5D500C9AD81 /* ContentWrappingTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF89DA22B74C5D500C9AD81 /* ContentWrappingTableView.swift */; };
@@ -238,7 +237,6 @@
 		0AC6ED662B7E917F00263487 /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json"; sourceTree = "<group>"; };
 		0AD529D52B729B6500FE7D9E /* CheckListPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckListPopUpViewController.swift; sourceTree = "<group>"; };
 		0AE388882B5986BC0041A979 /* CategoryItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryItemTableViewCell.swift; sourceTree = "<group>"; };
-		0AE3888A2B5992870041A979 /* CheckListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckListItem.swift; sourceTree = "<group>"; };
 		0AEE17F32BB0632B00D86DEE /* CheckListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckListModel.swift; sourceTree = "<group>"; };
 		0AF0ECBD2BEFE1AD00413778 /* AnswerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerModel.swift; sourceTree = "<group>"; };
 		0AF89DA22B74C5D500C9AD81 /* ContentWrappingTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentWrappingTableView.swift; sourceTree = "<group>"; };
@@ -902,7 +900,6 @@
 				61D925072B486706002A16B4 /* RecordingFileItem.swift */,
 				0A73E60C2B5855CD00EF1C89 /* UserInfo.swift */,
 				61864BEE2B600E920073C175 /* ImjangNote.swift */,
-				0AE3888A2B5992870041A979 /* CheckListItem.swift */,
 				6108CFE02B761B3A00EF302F /* BaseResponse.swift */,
 				0AA6E90E2B79292A000BDA1F /* VersionInfo.swift */,
 			);
@@ -1158,7 +1155,6 @@
 				345855972B692DFB00432C06 /* GraphViewController.swift in Sources */,
 				61D925112B4983A1002A16B4 /* UILabel+Extension.swift in Sources */,
 				619269F32B67747F00D4DD3E /* RecentSearchKeywordTableViewCell.swift in Sources */,
-				0AE3888B2B5992870041A979 /* CheckListItem.swift in Sources */,
 				345855922B689E5200432C06 /* AccountDeleteFinalViewController.swift in Sources */,
 				345855992B692E0400432C06 /* TabViewController.swift in Sources */,
 				0A3D5D4C2B4D333900574686 /* TransactionModel.swift in Sources */,

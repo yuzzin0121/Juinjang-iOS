@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 extension String {
     
@@ -82,5 +83,15 @@ extension String {
             // 변환 실패 시 기본값 반환
             return ("0")
         }
+    }
+    
+    // 텍스트 너비 계산
+    func size(forFont font: UIFont) -> CGSize {
+        let fontAttributes = [NSAttributedString.Key.font: font]
+        return (self as NSString).size(withAttributes: fontAttributes)
+    }
+    
+    func width(forFont font: UIFont) -> CGFloat {
+        return self.size(forFont: font).width
     }
 }
