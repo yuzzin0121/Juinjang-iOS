@@ -8,6 +8,10 @@
 import UIKit
 import SnapKit
 
+protocol CheckWarningMessageDelegate {
+    func checkMessage()
+}
+
 class WarningMessageViewController: BaseViewController {
     
     lazy var bottomSheetView = UIView().then {
@@ -19,6 +23,9 @@ class WarningMessageViewController: BaseViewController {
     
     let totalHeight: CGFloat = 844 // 전체 높이
     let ratio: CGFloat = 392 // Bottom Sheet가 차지하는 높이
+    let lastPopupDateKey = "lastPopupDate" // 경고 메시지 날짜 저장 Key
+    
+    var delegate: CheckWarningMessageDelegate?
     
     var bottomSheetHeight: CGFloat {
         return (ratio / totalHeight) * UIScreen.main.bounds.height // 디바이스가 달라져도 비율만큼 차지
@@ -45,7 +52,6 @@ class WarningMessageViewController: BaseViewController {
         $0.contentMode = .scaleAspectFill
     }
     
-    // -TODO: Session 처리 필요
     lazy var checkButton = UIButton().then {
         $0.setTitle("오늘 하루 보지 않기", for: .normal)
         $0.setTitleColor(UIColor(named: "normalText"), for: .normal)
@@ -58,7 +64,6 @@ class WarningMessageViewController: BaseViewController {
 
         $0.semanticContentAttribute = .forceLeftToRight
         $0.contentHorizontalAlignment = .left
-    
         $0.imageEdgeInsets = UIEdgeInsets(top: 0, left: -4, bottom: 0, right: 4)
     }
 
@@ -158,7 +163,6 @@ class WarningMessageViewController: BaseViewController {
             $0.bottom.equalTo(view.snp.bottom).offset(-33)
         }
     }
-
     
     @objc func checkButtonPressed(_ sender: UIButton) {
         checkButton.isSelected = !checkButton.isSelected
@@ -167,6 +171,7 @@ class WarningMessageViewController: BaseViewController {
             print("선택")
             checkButton.setImage(UIImage(named: "record-check-on"), for: .normal)
             recordStartButton.setTitle("확인했어요", for: .normal)
+            delegate?.checkMessage()
         } else {
             print("선택 해제")
             checkButton.setImage(UIImage(named: "record-check-off"), for: .normal)
