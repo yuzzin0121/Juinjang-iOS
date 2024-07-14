@@ -48,13 +48,16 @@ extension String {
     }
     
     static func dateToString(target: String) -> String {
-        // 서버에서 주는 형태 (ISO규약에 따른 문자열 형태)
-        guard let isoDate = ISO8601DateFormatter().date(from: target ?? "") else {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSS"
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        guard let isoDate = dateFormatter.date(from: target) else {
             return ""
         }
-        let myFormatter = DateFormatter()
-        myFormatter.dateFormat = "yyyy-MM-dd"
-        let dateString = myFormatter.string(from: isoDate)
+//        let myFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yy.MM.dd"
+        let dateString = dateFormatter.string(from: isoDate)
         return dateString
     }
     

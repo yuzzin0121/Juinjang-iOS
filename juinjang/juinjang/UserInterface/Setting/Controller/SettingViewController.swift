@@ -316,15 +316,14 @@ class SettingViewController : BaseViewController, UIImagePickerControllerDelegat
             nicknameTextField.removeFromSuperview()
             line1.removeFromSuperview()
         default:
-//            saveButton.setTitle("변경", for: .normal)
-//            saveButton.backgroundColor = UIColor(named: "300")
-//            nicknameTextField.removeFromSuperview()
-//            line1.removeFromSuperview()
-//            nicknameWarnLabel.removeFromSuperview()
-//            nicknameWarnImageView.removeFromSuperview()
-//            nickname.text = nicknameTextField.text
-            UserDefaultManager.shared.nickname = nicknameTextField.text!
-            sendNickName()
+            if nicknameTextField.text == UserDefaultManager.shared.nickname {
+                self.saveButton.setTitle("변경", for: .normal)
+                self.saveButton.backgroundColor = UIColor(named: "300")
+                self.nicknameTextField.removeFromSuperview()
+            } else {
+                sendNickName(nickname: nicknameTextField.text ?? UserDefaultManager.shared.nickname)
+            }
+            
         }
     }
     
@@ -351,8 +350,8 @@ class SettingViewController : BaseViewController, UIImagePickerControllerDelegat
         self.navigationController?.pushViewController(mainVC, animated: true)
     }
     
-    func sendNickName() {
-        print("sendNickName : \(UserDefaultManager.shared.nickname)")
+    func sendNickName(nickname: String) {
+        print("sendNickName : \(nickname)")
         
         // 요청 URL 설정
         let headers: HTTPHeaders = [
@@ -361,7 +360,7 @@ class SettingViewController : BaseViewController, UIImagePickerControllerDelegat
         ]
 
         let parameters: [String: Any] = [
-            "nickname": UserDefaultManager.shared.nickname
+            "nickname": nickname
         ]
 
         let urlString = "http://juinjang1227.com:8080/api/nickname"
@@ -395,7 +394,7 @@ class SettingViewController : BaseViewController, UIImagePickerControllerDelegat
                             self.nicknameWarnLabel.removeFromSuperview()
                             self.nicknameWarnImageView.removeFromSuperview()
                             self.nickname.text = self.nicknameTextField.text
-                            UserDefaultManager.shared.nickname = self.nickname.text!
+                            UserDefaultManager.shared.nickname = nickname
                             self.nicknameSameWarnLabel.removeFromSuperview()
                             self.nicknameWarnImageView.removeFromSuperview()
                         } else {

@@ -4,7 +4,7 @@ import Then
 import Lottie
 import Alamofire
 
-final class MainViewController: BaseViewController {
+final class MainViewController: BaseViewController, DeleteImjangListDelegate {
     
 // MARK: - 변수, 상수 설정
     //설정 버튼, 메인 로고, 스피커 버튼
@@ -148,6 +148,7 @@ final class MainViewController: BaseViewController {
     }
     @objc func myImjangBtnTap() {
         let vc = ImjangListViewController()
+        vc.deleteImjangListDelegate = self
         self.navigationController?.pushViewController(vc, animated: true)
     }
     @objc func setttingBtnTap() {
@@ -155,59 +156,6 @@ final class MainViewController: BaseViewController {
         self.navigationController?.pushViewController(vc, animated: false)
     }
     
-//MARK: - 함수 선언
-//    func refreshToken() {
-//        print("refreshToken")
-//        let url = "http://juinjang1227.com:8080/api/auth/regenerate-token"
-//        let headers : HTTPHeaders = [
-//            "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)", // 현재 Access Token
-//            "Refresh-Token": "Bearer \(UserDefaultManager.shared.refreshToken)" // Refresh Token
-//        ]
-//        
-//        AF.request(url, method: .post, headers: headers).responseData { response in
-//            switch response.result {
-//            case .success(let value):
-//                if let httpResponse = response.response {
-//                    print("Status code: \(httpResponse.statusCode)")
-//                }
-//                // 응답 데이터 출력
-//                if let jsonObject = try? JSONSerialization.jsonObject(with: value, options: []),
-//                   let json = jsonObject as? [String: Any],
-//                   let result = json["result"] as? [String: Any],
-//                   let accessToken = result["accessToken"] as? String,
-//                   let refreshToken = result["refreshToken"] as? String {
-//                    print("accessToken: \(accessToken)")
-//                    print("refreshToken: \(refreshToken)")
-//                    
-//                    // UserDefaults에 새로운 토큰 저장
-//                    UserDefaultManager.shared.accessToken = accessToken
-//                    UserDefaultManager.shared.refreshToken = refreshToken
-//                    //self.tableView.reloadData()
-//                    self.callMainImjangRequest()
-//                    // 기타 필요한 작업 수행
-//                } else {
-//                }
-//                do {
-//                    let decoder = JSONDecoder()
-//                    let refreshTokenResponse = try decoder.decode(RefreshTokenResponse.self, from: value)
-//                    if refreshTokenResponse.code == "TOKEN402" || refreshTokenResponse.code == "COMMON500" || refreshTokenResponse.code == "TOKEN401"{
-//                        // "code"가 "TOKEN402"인 경우 로그아웃 함수 호출
-//                        let settingViewController = SettingViewController()
-//                        settingViewController.logout()
-//                    }
-//                } catch {
-//                    print("Error decoding JSON: \(error)")
-//                }
-//                if let responseString = String(data: value, encoding: .utf8) {
-//                    print("Response data: \(responseString)")
-//                    self.callMainImjangRequest()
-//                }
-//                
-//            case .failure(let error):
-//                print("Error: \(error)")
-//            }
-//        }
-//    }
     func setConstraint() {
         //배경
         backgroundImageView.snp.makeConstraints{
@@ -300,6 +248,13 @@ extension MainViewController : UICollectionViewDelegate, UICollectionViewDataSou
                 self.showImjangNoteVC(imjangId: item.limjangId, version: version)
             }
         }
+    }
+    
+    func deleteImjangList(_ deleteIdList: [Int]) {
+        mainImjangList.removeAll { imjang in
+            deleteIdList.contains(imjang.limjangId)
+        }
+        tableView.reloadData()
     }
 }
 

@@ -142,6 +142,16 @@ class CompareSearchViewController: BaseViewController {
         searchedTableView.isHidden = isEmpty ? true : false
     }
     
+    func hideKeyboardWhenTappedAround() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+
+    @objc func dismissKeyboard() {
+        searchBar.resignFirstResponder()
+    }
+    
     func setupConstraints() {
         searchedTableView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(23)
@@ -189,6 +199,7 @@ class CompareSearchViewController: BaseViewController {
         searchBar.searchTextField.addTarget(self, action: #selector(CompareSearchViewController.textFieldDidChange(_:)), for: .editingChanged)
         
         setupConstraints()
+        hideKeyboardWhenTappedAround()
     }
 }
 

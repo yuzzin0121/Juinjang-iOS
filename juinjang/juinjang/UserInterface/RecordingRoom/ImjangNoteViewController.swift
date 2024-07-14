@@ -104,10 +104,10 @@ class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEdit
     
     lazy var recordingSegmentedVC = RecordingSegmentedViewController(imjangId: imjangId, version: versionDetail)
     
-    var roomName: String = "판교푸르지오월드마크"
-    var roomPriceString: String = "30억 1천만원"
-    var roomAddress: String = "경기도 성남시 분당구 삼평동 741"
-    var mDateString: String = "23.12.01"
+//    var roomName: String = "판교푸르지오월드마크"
+//    var roomPriceString: String = "30억 1천만원"
+//    var roomAddress: String = "경기도 성남시 분당구 삼평동 741"
+//    var mDateString: String = "23.12.01"
     var completionHandler: (() -> Void)?
     
     lazy var images: [String] = []
@@ -173,9 +173,7 @@ class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEdit
         roomNameLabel.text = detailDto.nickname
         setPriceLabel(priceList: detailDto.priceList)
         roomAddressLabel.text = "\(detailDto.address) \(detailDto.addressDetail)"
-        print("최근 수정 날짜")
-        print(detailDto.updatedAt)
-        modifiedDateStringLabel.text = "최근 수정 날짜 \(String.dateToString(target: detailDto.updatedAt))"
+        modifiedDate.text = "\(String.dateToString(target: detailDto.updatedAt))"
         images = detailDto.images
         
         // 버전 설정
@@ -191,7 +189,6 @@ class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEdit
         } else if detailDto.purposeCode == 1 {
             self.versionInfo = VersionInfo(version: versionDetail, editCriteria: 1)
         }
-        print("체크리스트 버전 설정: \(versionInfo)")
         versionInfo?.editCriteria = detailDto.purposeCode
         setUpImageUI()
         adjustLabelHeight()
@@ -202,7 +199,7 @@ class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEdit
         roomNameLabel.text = nickname
         setPriceLabel(priceList: priceList)
         roomAddressLabel.text = "\(address) \(addressDetail)"
-        modifiedDateStringLabel.text = "최근 수정 날짜 \(updatedAt)"
+        modifiedDate.text = "\(updatedAt)"
     }
     
     func adjustLabelHeight() {
@@ -409,7 +406,6 @@ class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEdit
         
         // 방 이름 레이블
         designLabel(roomNameLabel,
-                    text: roomName,
                     alignment: .left,
                     font: UIFont.pretendard(size: 20, weight: .extraBold),
                     textColor: ColorStyle.mainOrange)
@@ -424,13 +420,11 @@ class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEdit
         
         // 방 가격 레이블
         designLabel(roomPriceLabel,
-                    text: roomPriceString,
                     font: UIFont.pretendard(size: 20, weight: .bold),
                     textColor: ColorStyle.textBlack)
         
         // 방 주소 레이블
         designLabel(roomAddressLabel,
-                    text: roomAddress,
                     font: UIFont.pretendard(size: 16, weight: .medium),
                     textColor: ColorStyle.textGray, numberOfLines: 2)
         designImageView(roomLocationIcon,
@@ -472,7 +466,6 @@ class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEdit
         
         // 최근 수정날짜값 레이블
         designLabel(modifiedDate,
-                    text: mDateString,
                     font: UIFont.pretendard(size: 14, weight: .semiBold),
                     textColor: ColorStyle.textGray)
         
@@ -753,7 +746,7 @@ class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEdit
     }
     
     // 레이블 디자인
-    func designLabel(_ label: UILabel, text: String, alignment: NSTextAlignment = .left, font: UIFont, textColor: UIColor, numberOfLines: Int = 1) {
+    func designLabel(_ label: UILabel, text: String = "", alignment: NSTextAlignment = .left, font: UIFont, textColor: UIColor, numberOfLines: Int = 1) {
         label.text = text
         label.textAlignment = alignment
         label.font = font
