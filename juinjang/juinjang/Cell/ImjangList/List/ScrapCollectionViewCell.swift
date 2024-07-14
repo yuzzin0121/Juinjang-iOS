@@ -99,12 +99,12 @@ class ScrapCollectionViewCell: UICollectionViewCell {
         
         [firstImageView, secondImageView].forEach { totalStackView.addArrangedSubview($0)}
         
-        firstImageView.snp.remakeConstraints {
-            $0.height.equalTo(firstImageView.snp.width).multipliedBy(117.0 / 170.0)
+        firstImageView.snp.makeConstraints {
+            $0.height.equalTo(firstImageView.snp.width).multipliedBy(117.0 / 174.0)
         }
         
-        secondImageView.snp.remakeConstraints {
-            $0.height.equalTo(secondImageView.snp.width).multipliedBy(117.0 / 105.0)
+        secondImageView.snp.makeConstraints {
+            $0.height.equalTo(secondImageView.snp.width).multipliedBy(117.0 / 109.0)
         }
         
         if let url1 = URL(string: images[0]) {
@@ -135,7 +135,7 @@ class ScrapCollectionViewCell: UICollectionViewCell {
             $0.axis = .vertical
             $0.alignment = .fill
             $0.distribution = .equalSpacing
-            $0.spacing = 4
+            $0.spacing = 5
         }
         
         [firstImageView, imageVStackView].forEach {
@@ -146,16 +146,21 @@ class ScrapCollectionViewCell: UICollectionViewCell {
             imageVStackView.addArrangedSubview($0)
         }
                
+        var secondHeight: Double = UIScreen.main.isWiderThan375pt ? 67 : 80
+        var thirdHeight: Double = UIScreen.main.isWiderThan375pt ? 48 : 58
+        
+        var firstWidth: Double = UIScreen.main.isWiderThan428pt ? 186 : 174
+        var secondWidth: Double = UIScreen.main.isWiderThan428pt ? 130 : 105
         firstImageView.snp.makeConstraints {
-            $0.height.equalTo(firstImageView.snp.width).multipliedBy(117.0 / 170.0)
+            $0.height.equalTo(firstImageView.snp.width).multipliedBy(117.0 / firstWidth)
         }
         
-        secondImageView.snp.remakeConstraints {
-            $0.height.equalTo(secondImageView.snp.width).multipliedBy(94.0 / 155.0)
+        secondImageView.snp.makeConstraints {
+            $0.height.equalTo(secondImageView.snp.width).multipliedBy(secondHeight / secondWidth)
         }
         
-        thirdImageView.snp.remakeConstraints {
-            $0.height.equalTo(thirdImageView.snp.width).multipliedBy(70.0 / 155.0)
+        thirdImageView.snp.makeConstraints {
+            $0.height.equalTo(thirdImageView.snp.width).multipliedBy(thirdHeight / secondWidth)
         }
         
         if let url1 = URL(string: images[0]) {
