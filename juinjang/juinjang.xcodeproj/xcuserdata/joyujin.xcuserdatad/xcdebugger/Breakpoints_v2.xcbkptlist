@@ -14,9 +14,9 @@
             filePath = "juinjang/UserInterface/RecordingRoom/ImjangNoteViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "242"
-            endingLineNumber = "242"
-            landmarkName = "showReportVC()"
+            startingLineNumber = "239"
+            endingLineNumber = "239"
+            landmarkName = "setReportStackViewClick()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

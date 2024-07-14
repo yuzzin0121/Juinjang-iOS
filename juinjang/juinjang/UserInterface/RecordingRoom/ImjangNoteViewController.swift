@@ -10,8 +10,7 @@ import SnapKit
 import Then
 import Kingfisher
 
-class ImjangNoteViewController: BaseViewController{
-    
+class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEditData, ButtonStateDelegate {
     // 스크롤뷰
     let scrollView = UIScrollView().then {
         $0.backgroundColor = .white
@@ -105,10 +104,10 @@ class ImjangNoteViewController: BaseViewController{
     
     lazy var recordingSegmentedVC = RecordingSegmentedViewController(imjangId: imjangId, version: versionDetail)
     
-    var roomName: String = "판교푸르지오월드마크"
-    var roomPriceString: String = "30억 1천만원"
-    var roomAddress: String = "경기도 성남시 분당구 삼평동 741"
-    var mDateString: String = "23.12.01"
+//    var roomName: String = "판교푸르지오월드마크"
+//    var roomPriceString: String = "30억 1천만원"
+//    var roomAddress: String = "경기도 성남시 분당구 삼평동 741"
+//    var mDateString: String = "23.12.01"
     var completionHandler: (() -> Void)?
     
     lazy var images: [String] = []
@@ -174,7 +173,7 @@ class ImjangNoteViewController: BaseViewController{
         roomNameLabel.text = detailDto.nickname
         setPriceLabel(priceList: detailDto.priceList)
         roomAddressLabel.text = "\(detailDto.address) \(detailDto.addressDetail)"
-        modifiedDateStringLabel.text = "최근 수정 날짜 \(String.dateToString(target: detailDto.updatedAt))"
+        modifiedDate.text = "\(String.dateToString(target: detailDto.updatedAt))"
         images = detailDto.images
         
         // 버전 설정
@@ -190,10 +189,17 @@ class ImjangNoteViewController: BaseViewController{
         } else if detailDto.purposeCode == 1 {
             self.versionInfo = VersionInfo(version: versionDetail, editCriteria: 1)
         }
-        print("체크리스트 버전 설정: \(versionInfo)")
         versionInfo?.editCriteria = detailDto.purposeCode
         setUpImageUI()
         adjustLabelHeight()
+    }
+    
+    func sendData(imjangId: Int, priceList: [String], address: String, addressDetail: String, nickname: String, updatedAt: String) {
+        self.navigationItem.title = nickname
+        roomNameLabel.text = nickname
+        setPriceLabel(priceList: priceList)
+        roomAddressLabel.text = "\(address) \(addressDetail)"
+        modifiedDate.text = "\(updatedAt)"
     }
     
     func adjustLabelHeight() {
@@ -241,6 +247,7 @@ class ImjangNoteViewController: BaseViewController{
             if savedCheckListItemsAreEmpty {
                 // 팝업창이 뜸
                 let reportPopupVC = ReportPopupViewController()
+                reportPopupVC.delegate = self
                 reportPopupVC.modalPresentationStyle = .overCurrentContext
                 present(reportPopupVC, animated: false, completion: nil)
             } else {
@@ -248,6 +255,11 @@ class ImjangNoteViewController: BaseViewController{
                 navigationController?.pushViewController(reportVC, animated: true)
             }
         }
+    }
+    
+    func updateButtonState(isSelected: Bool) {
+        editButton.setImage(UIImage(named: "completed-button"), for: .normal)
+        editButton.isSelected = isSelected
     }
         
     // 방 사진 클릭했을 때 - showImjangImageListVC. 호출
@@ -335,10 +347,12 @@ class ImjangNoteViewController: BaseViewController{
         if versionInfo?.editCriteria == 0 {
             editVC.imjangId = imjangId
             editVC.versionInfo = versionInfo
+            editVC.delegate = self
             self.navigationController?.pushViewController(editVC, animated: true)
         } else if versionInfo?.editCriteria == 1 {
             editDetailVC.imjangId = imjangId
             editDetailVC.versionInfo = versionInfo
+            editDetailVC.delegate = self
             self.navigationController?.pushViewController(editDetailVC, animated: true)
         }
     }
@@ -392,7 +406,6 @@ class ImjangNoteViewController: BaseViewController{
         
         // 방 이름 레이블
         designLabel(roomNameLabel,
-                    text: roomName,
                     alignment: .left,
                     font: UIFont.pretendard(size: 20, weight: .extraBold),
                     textColor: ColorStyle.mainOrange)
@@ -407,13 +420,11 @@ class ImjangNoteViewController: BaseViewController{
         
         // 방 가격 레이블
         designLabel(roomPriceLabel,
-                    text: roomPriceString,
                     font: UIFont.pretendard(size: 20, weight: .bold),
                     textColor: ColorStyle.textBlack)
         
         // 방 주소 레이블
         designLabel(roomAddressLabel,
-                    text: roomAddress,
                     font: UIFont.pretendard(size: 16, weight: .medium),
                     textColor: ColorStyle.textGray, numberOfLines: 2)
         designImageView(roomLocationIcon,
@@ -455,7 +466,6 @@ class ImjangNoteViewController: BaseViewController{
         
         // 최근 수정날짜값 레이블
         designLabel(modifiedDate,
-                    text: mDateString,
                     font: UIFont.pretendard(size: 14, weight: .semiBold),
                     textColor: ColorStyle.textGray)
         
@@ -736,7 +746,7 @@ class ImjangNoteViewController: BaseViewController{
     }
     
     // 레이블 디자인
-    func designLabel(_ label: UILabel, text: String, alignment: NSTextAlignment = .left, font: UIFont, textColor: UIColor, numberOfLines: Int = 1) {
+    func designLabel(_ label: UILabel, text: String = "", alignment: NSTextAlignment = .left, font: UIFont, textColor: UIColor, numberOfLines: Int = 1) {
         label.text = text
         label.textAlignment = alignment
         label.font = font
@@ -773,25 +783,25 @@ extension ImjangNoteViewController: UIScrollViewDelegate {
         let containerY = containerView.frame.origin.y
         
         // 0이상, && scrollView.contentOffset.y <= containerY
-        //        if (scrollView.contentOffset.y > 0) && (scrollView.contentOffset.y > containerY - 10){
-        //            DispatchQueue.main.async {
-        //                scrollView.isScrollEnabled = false
-        //                UIView.animate(withDuration: 0.05) {
-        //                    scrollView.contentOffset.y = containerY
-        //                }
-        //            }
-        //            NotificationCenter.default.post(name: NSNotification.Name("didStoppedParentScroll"), object: nil)
-        //        }
-        //
-        //        if scrollView.contentOffset.y > 20 {
-        //            UIView.animate(withDuration: 0.5, delay:0) {
-        //                self.upButton.alpha = 1
-        //            }
-        //        } else {
-        //            UIView.animate(withDuration: 0.5, delay:0) {
-        //                self.upButton.alpha = 0
-        //            }
-        //        }
+//        if (scrollView.contentOffset.y > 0) && (scrollView.contentOffset.y > containerY - 10){
+//            DispatchQueue.main.async {
+//                scrollView.isScrollEnabled = false
+//                UIView.animate(withDuration: 0.05) {
+//                    scrollView.contentOffset.y = containerY
+//                }
+//            }
+//            NotificationCenter.default.post(name: NSNotification.Name("didStoppedParentScroll"), object: nil)
+//        }
+//        
+//        if scrollView.contentOffset.y > 20 {
+//            UIView.animate(w\ithDuration: 0.5, delay:0) {
+//                self.upButton.alpha = 1
+//            }
+//        } else {
+//            UIView.animate(withDuration: 0.5, delay:0) {
+//                self.upButton.alpha = 0
+//            }
+//        }
         if scrollView.contentOffset.y > 0 && scrollView.contentOffset.y > containerY - 10 {
             scrollView.isScrollEnabled = false
             scrollView.contentOffset.y = containerY

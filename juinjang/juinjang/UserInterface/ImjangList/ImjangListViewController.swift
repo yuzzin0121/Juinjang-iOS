@@ -85,6 +85,7 @@ final class ImjangListViewController: BaseViewController, DeleteImjangListDelega
 
     var menuChildren: [UIMenuElement] = []
     lazy var filterList = Filter.allCases
+    weak var deleteImjangListDelegate: DeleteImjangListDelegate?
     
     // MARK: - viewDidLoad()
     override func viewDidLoad() {
@@ -227,6 +228,7 @@ final class ImjangListViewController: BaseViewController, DeleteImjangListDelega
     }
     
     func deleteImjangList(_ deleteIdList: [Int]) {
+        deleteImjangListDelegate?.deleteImjangList(deleteIdList)
         imjangList.removeAll { imjang in
             deleteIdList.contains(imjang.limjangId)
         }

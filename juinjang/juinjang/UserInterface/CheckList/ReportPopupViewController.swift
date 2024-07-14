@@ -10,6 +10,8 @@ import Then
 
 class ReportPopupViewController: BaseViewController {
     
+    var delegate: ButtonStateDelegate?
+    
     // 팝업 View
     lazy var popupView = UIView().then {
         $0.backgroundColor = .white
@@ -113,6 +115,11 @@ class ReportPopupViewController: BaseViewController {
         // TODO: 수정모드 진입은 되나 버튼 이미지가 안 바뀌는 거 변경해야됨
         NotificationCenter.default.post(name: NSNotification.Name("EditButtonTapped"), object: nil)
         NotificationCenter.default.post(name: Notification.Name("EditModeChanged"), object: true)
+        delegate?.updateButtonState(isSelected: true)
         dismiss(animated: false, completion: nil)
     }
+}
+
+protocol ButtonStateDelegate {
+    func updateButtonState(isSelected: Bool)
 }
