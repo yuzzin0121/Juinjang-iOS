@@ -102,6 +102,7 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
         // 피커 뷰 초기화
         itemPickerView.reloadAllComponents()
         etcTextField.text = ""
+        etcTextField.removeConstraints(etcTextField.constraints)
         etcTextField.removeFromSuperview()
         itemPickerView.selectRow(0, inComponent: 0, animated: true)
         
@@ -204,6 +205,7 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
                 $0.width.equalTo(218)
             }
         } else {
+            etcTextField.removeConstraints(etcTextField.constraints)
             etcTextField.removeFromSuperview()
             
             // 기타 항목이 아닌 경우, selectedButton을 원래 위치로 복구
@@ -401,11 +403,12 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
             $0.width.equalTo(123)
         }
         
+        etcTextField.text = ""
+        etcTextField.removeConstraints(etcTextField.constraints)
         etcTextField.removeFromSuperview()
         
         // 기본값 설정
         if row == 0 {
-            etcTextField.text = ""
             backgroundColor = .white
             questionImage.image = UIImage(named: "question-image")
             itemButton.layer.backgroundColor = UIColor(named: "shadowGray")?.cgColor
@@ -435,12 +438,12 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
                     } else {
                         questionImage.image = UIImage(named: "question-image")
                         backgroundColor = .white
+                        etcTextField.removeConstraints(etcTextField.constraints)
                         etcTextField.removeFromSuperview()
                         handleOptionSelection(options[0].option)
                     }
                 }
             } else {
-                etcTextField.text = ""
                 questionImage.image = UIImage(named: "question-selected-image")
                 backgroundColor = UIColor(named: "lightOrange")
                 handleOptionSelection(options[row].option)
@@ -601,7 +604,10 @@ extension ExpandedDropdownTableViewCell: UITextFieldDelegate {
             backgroundColor = .white
             questionImage.image = UIImage(named: "question-image")
             textField.backgroundColor = UIColor(named: "lightBackgroundOrange")
-            updateTextFieldWidthConstraint(for: textField, constant: 218, shouldRemoveLeadingConstraint: false)
+            etcTextField.snp.updateConstraints {
+                $0.width.equalTo(218)
+            }
+            handleOptionSelection(options[0].option)
         }
         etcTextField.layoutIfNeeded()
     }
