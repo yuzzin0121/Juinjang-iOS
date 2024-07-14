@@ -75,7 +75,7 @@ class ReportViewController : BaseViewController {
         AF.request(baseURL, method: .get, headers: headers).responseJSON { response in
             switch response.result {
             case .success(let value):
-                print(value)
+                print("리포트 value : \(value)")
                 if let json = value as? [String: Any],
                    let result = json["result"] as? [String: Any],
                    let limjangDto = result["limjangDto"] as? [String: Any],
