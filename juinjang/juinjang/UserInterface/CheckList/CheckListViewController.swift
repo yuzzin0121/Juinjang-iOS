@@ -468,7 +468,6 @@ extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
             }
         }
     }
-
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if isEditMode {
@@ -566,10 +565,12 @@ extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
                                     print("\(questionId)번에 해당하는 답변 수정")
                                 }
                             } else {
-                                // 기존 답변이 없는 경우 답변을 생성하여 배열에 추가
-                                let answerItem = CheckListAnswer(imjangId: self.imjangId, questionId: questionId, answer: option, isSelected: true)
-                                self.checkListItems.append(answerItem)
-                                print("\(questionId)번에 해당하는 답변 생성")
+                                if option != "선택안함" {
+                                    // 기존 답변이 없는 경우 답변을 생성하여 배열에 추가
+                                    let answerItem = CheckListAnswer(imjangId: self.imjangId, questionId: questionId, answer: option, isSelected: true)
+                                    self.checkListItems.append(answerItem)
+                                    print("\(questionId)번에 해당하는 답변 생성")
+                                }
                             }
                             print(checkListItems)
                         }

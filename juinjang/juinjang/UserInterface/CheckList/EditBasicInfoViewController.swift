@@ -189,7 +189,7 @@ class EditBasicInfoViewController: BaseViewController {
     }()
     
     
-    lazy var threeDisitPriceField = UITextField().then {
+    lazy var threeDigitPriceField = UITextField().then {
         $0.layer.backgroundColor = UIColor(named: "gray2")?.cgColor
         $0.layer.cornerRadius = 15
         $0.textAlignment = .center
@@ -214,7 +214,7 @@ class EditBasicInfoViewController: BaseViewController {
         $0.translatesAutoresizingMaskIntoConstraints = false
     }
     
-    lazy var fourDisitPriceField = UITextField().then {
+    lazy var fourDigitPriceField = UITextField().then {
         $0.layer.backgroundColor = UIColor(named: "gray2")?.cgColor
         $0.layer.cornerRadius = 15
         $0.textAlignment = .center
@@ -284,9 +284,9 @@ class EditBasicInfoViewController: BaseViewController {
         guard let imjangId = imjangId else { return }
         let url = JuinjangAPI.modifyImjang(imjangId: imjangId).endpoint
         
-        // threeDisitPriceField와 fourDisitPriceField의 값을 합쳐서 selectedPrice에 저장
-        let threeDisitPrice = Int(threeDisitPriceField.text ?? "") ?? 0
-        let fourDisitPrice = Int(fourDisitPriceField.text ?? "") ?? 0
+        // threeDigitPriceField와 fourDigitPriceField의 값을 합쳐서 selectedPrice에 저장
+        let threeDisitPrice = Int(threeDigitPriceField.text ?? "") ?? 0
+        let fourDisitPrice = Int(fourDigitPriceField.text ?? "") ?? 0
         var priceList = [String(threeDisitPrice * 100000000 + fourDisitPrice * 10000)]
         
         let parameter: Parameters = [
@@ -344,8 +344,8 @@ class EditBasicInfoViewController: BaseViewController {
     func setDelegate() {
         addressTextField.delegate = self
         houseNicknameTextField.delegate = self
-        threeDisitPriceField.delegate = self
-        fourDisitPriceField.delegate = self
+        threeDigitPriceField.delegate = self
+        fourDigitPriceField.delegate = self
     }
     
     func setData(detailDto: DetailDto) {
@@ -361,35 +361,35 @@ class EditBasicInfoViewController: BaseViewController {
         let priceString = priceList[0]
         let (units, remainder) = priceString.twoSplitAmount()
         print("\(units)억 \(remainder)만원")
-        threeDisitPriceField.text = units
+        threeDigitPriceField.text = units
         
         if remainder != "0" {
-            fourDisitPriceField.text = remainder
+            fourDigitPriceField.text = remainder
         } else {
-            fourDisitPriceField.text = ""
+            fourDigitPriceField.text = ""
         }
         
         // 텍스트 필드 너비 설정
         let padding: CGFloat = 20
         let minimumWidth: CGFloat = 30
-        let threeDisitPriceFieldMaximumWidth: CGFloat = 63
-        let fourDisitPriceFieldMaximumWidth: CGFloat = 79
+        let threeDigitPriceFieldMaximumWidth: CGFloat = 63
+        let fourDigitPriceFieldMaximumWidth: CGFloat = 79
         
-        let threeDisitPriceFieldSize = sizeForText(text: threeDisitPriceField.text ?? "", font: threeDisitPriceField.font ?? UIFont.systemFont(ofSize: 17)).width + padding
-        let fourDisitPriceFieldSize = sizeForText(text: fourDisitPriceField.text ?? "", font: fourDisitPriceField.font ?? UIFont.systemFont(ofSize: 17)).width + padding
+        let threeDigitPriceFieldSize = (threeDigitPriceField.text ?? "").size(forFont: threeDigitPriceField.font ?? UIFont.systemFont(ofSize: 17)).width + padding
+        let fourDigitPriceFieldSize = (fourDigitPriceField.text ?? "").size(forFont: fourDigitPriceField.font ?? UIFont.systemFont(ofSize: 17)).width + padding
 
         // 최대 너비 제한
-        let threeDisitPriceFieldFinalWidth: CGFloat = min(max(threeDisitPriceFieldSize, minimumWidth), threeDisitPriceFieldMaximumWidth)
-        let fourDisitPriceFieldFinalWidth: CGFloat
-        if fourDisitPriceField.text?.isEmpty ?? true {
-            fourDisitPriceFieldFinalWidth = fourDisitPriceFieldMaximumWidth
+        let threeDigitPriceFieldFinalWidth: CGFloat = min(max(threeDigitPriceFieldSize, minimumWidth), threeDigitPriceFieldMaximumWidth)
+        let fourDigitPriceFieldFinalWidth: CGFloat
+        if fourDigitPriceField.text?.isEmpty ?? true {
+            fourDigitPriceFieldFinalWidth = fourDigitPriceFieldMaximumWidth
         } else {
-            fourDisitPriceFieldFinalWidth = min(max(fourDisitPriceFieldSize, minimumWidth), fourDisitPriceFieldMaximumWidth)
+            fourDigitPriceFieldFinalWidth = min(max(fourDigitPriceFieldSize, minimumWidth), fourDigitPriceFieldMaximumWidth)
         }
 
         // 너비 제약 업데이트
-        updateTextFieldWidthConstraint(for: threeDisitPriceField, constant: threeDisitPriceFieldFinalWidth)
-        updateTextFieldWidthConstraint(for: fourDisitPriceField, constant: fourDisitPriceFieldFinalWidth)
+        updateTextFieldWidthConstraint(for: threeDigitPriceField, constant: threeDigitPriceFieldFinalWidth)
+        updateTextFieldWidthConstraint(for: fourDigitPriceField, constant: fourDigitPriceFieldFinalWidth)
         
         view.layoutIfNeeded()
     }
@@ -492,9 +492,9 @@ class EditBasicInfoViewController: BaseViewController {
         // 가격 입력칸 Stack View
         inputPriceStackView = UIStackView(
             arrangedSubviews:
-                [threeDisitPriceField,
+                [threeDigitPriceField,
                  priceDetailLabels[4],
-                 fourDisitPriceField,
+                 fourDigitPriceField,
                  priceDetailLabels[6]])
 
         inputPriceStackView.translatesAutoresizingMaskIntoConstraints = false
@@ -523,12 +523,12 @@ class EditBasicInfoViewController: BaseViewController {
         inputMonthlyRentStackView.spacing = 5
     
         // 가격 입력 받는 TextField
-        threeDisitPriceField.snp.makeConstraints {
+        threeDigitPriceField.snp.makeConstraints {
             $0.top.equalTo(priceView.snp.top).offset(4)
             $0.centerY.equalTo(priceView.snp.centerY)
         }
 
-        fourDisitPriceField.snp.makeConstraints {
+        fourDigitPriceField.snp.makeConstraints {
             $0.top.equalTo(priceView.snp.top).offset(4)
             $0.centerY.equalTo(priceView.snp.centerY)
         }
@@ -561,8 +561,8 @@ class EditBasicInfoViewController: BaseViewController {
                 guard let imjangId, let version = versionInfo?.version else { return }
                 let imjangNoteVC = ImjangNoteViewController(imjangId: imjangId, version: version)
                 
-                let threeDisitPrice = Int(threeDisitPriceField.text ?? "") ?? 0
-                let fourDisitPrice = Int(fourDisitPriceField.text ?? "") ?? 0
+                let threeDisitPrice = Int(threeDigitPriceField.text ?? "") ?? 0
+                let fourDisitPrice = Int(fourDigitPriceField.text ?? "") ?? 0
                 var priceList = [String(threeDisitPrice * 100000000 + fourDisitPrice * 10000)]
                 
                 let now = Date()
@@ -623,13 +623,13 @@ extension EditBasicInfoViewController: UITextFieldDelegate {
         let padding: CGFloat = 20
         var maximumWidth: CGFloat = 79 // 네 자릿수 텍스트 필드의 최대 너비
 
-        if textField == threeDisitPriceField {
+        if textField == threeDigitPriceField {
             maximumWidth = 63 // 세 자릿수 텍스트 필드의 최대 너비
         }
         
         // 텍스트 길이에 따라 너비 계산
         let newText = (text as NSString).replacingCharacters(in: range, with: string)
-        let size = sizeForText(text: newText, font: textField.font ?? UIFont.systemFont(ofSize: 17)).width + padding
+        let size = newText.size(forFont: textField.font ?? UIFont.systemFont(ofSize: 17)).width + padding
         let calculatedWidth = max(size, minimumWidth) // 텍스트 길이와 최소 너비 중 큰 값을 선택
         let finalWidth = min(calculatedWidth, maximumWidth) // 최대 너비 제한
 
@@ -647,25 +647,19 @@ extension EditBasicInfoViewController: UITextFieldDelegate {
         // textField에 따라 글자 수 제한
         if textField == houseNicknameTextField {
             guard text.count + string.count - range.length <= 12 else { return false }
-        } else if textField == threeDisitPriceField || textField == fourDisitPriceField {
+        } else if textField == threeDigitPriceField || textField == fourDigitPriceField {
             // 숫자만 허용
             let allowedCharacters = CharacterSet.decimalDigits
             let characterSet = CharacterSet(charactersIn: string)
             guard allowedCharacters.isSuperset(of: characterSet) else { return false }
             
-            if textField == threeDisitPriceField {
+            if textField == threeDigitPriceField {
                 guard text.count + string.count - range.length <= 3 else { return false }
-            } else if textField == fourDisitPriceField {
+            } else if textField == fourDigitPriceField {
                 guard text.count + string.count - range.length <= 4 else { return false }
             }
         }
         return true
-    }
-
-    // 텍스트 너비 계산
-    func sizeForText(text: String, font: UIFont) -> CGSize {
-        let fontAttributes = [NSAttributedString.Key.font: font]
-        return (text as NSString).size(withAttributes: fontAttributes)
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
@@ -675,10 +669,10 @@ extension EditBasicInfoViewController: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         guard textField.text?.isEmpty ?? true else { return }
 
-        if textField == threeDisitPriceField {
+        if textField == threeDigitPriceField {
             textField.placeholder = "000"
             updateTextFieldWidthConstraint(for: textField, constant: 63) // 기존 너비로 복원
-        } else if textField == fourDisitPriceField {
+        } else if textField == fourDigitPriceField {
             textField.placeholder = "0000"
             updateTextFieldWidthConstraint(for: textField, constant: 79)
         }
