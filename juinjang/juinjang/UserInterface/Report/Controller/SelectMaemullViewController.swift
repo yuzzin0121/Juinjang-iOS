@@ -24,15 +24,15 @@ class SelectMaemullViewController : BaseViewController {
     lazy var filterselectBtn: UIButton = {
         var configuration = UIButton.Configuration.filled()
         var container = AttributeContainer()
-        container.font = .pretendard(size:14, weight: .semiBold)
+        container.font = .pretendard(size: 14, weight: .semiBold)
         configuration.attributedTitle = AttributedString(filterList[0].title, attributes: container)
-        configuration.imagePadding = 2
+        configuration.baseBackgroundColor = ColorStyle.textWhite
+        configuration.baseForegroundColor = ColorStyle.darkGray
+        configuration.image = ImageStyle.arrowDown
+        configuration.image?.withTintColor(ColorStyle.darkGray)
+        configuration.imagePlacement = .trailing
+        configuration.imagePadding = 6
         let button = UIButton(configuration: configuration, primaryAction: nil)
-        button.setTitleColor(ColorStyle.darkGray, for: .normal)
-        button.setImage(ImageStyle.arrowDown, for: .normal)
-        button.semanticContentAttribute = .forceRightToLeft
-        button.contentHorizontalAlignment = .leading
-        button.tintColor = .white
         return button
     }()
     
@@ -67,19 +67,25 @@ class SelectMaemullViewController : BaseViewController {
     
     func setFilterData() {
         for filter in filterList {
-            menuChildren.append(UIAction(title: filter.title, state: .off,handler: {  (action: UIAction) in
+            menuChildren.append(UIAction(title: filter.title, state: .off,handler: { [weak self] (action: UIAction) in
+                guard let self else { return }
                 self.changefilterTitle(filter.title)
-                self.callRequestFiltered(sort: filter.title)
+                NotificationCenter.default.post(name: .imjangListFilterTapped, object: nil, userInfo: ["title":filter.title])
+                callRequest(sort: filter)
             }))
         }
-        filterselectBtn.menu = UIMenu(options: .displayAsPalette, children: menuChildren)
+        filterselectBtn.menu = UIMenu(options: .displayAsPalette, preferredElementSize: .small ,children: menuChildren)
         
         filterselectBtn.showsMenuAsPrimaryAction = true
     }
+    
     func changefilterTitle(_ title: String) {
-        filterselectBtn.setTitle(title, for: .normal)
-        filterselectBtn.titleLabel?.font = UIFont(name: "Pretendard-SemiBold", size: 14)
+        var container = AttributeContainer()
+        container.font = .pretendard(size: 14, weight: .semiBold)
+        filterselectBtn.configuration?.title = title
+        filterselectBtn.configuration?.attributedTitle = AttributedString(title, attributes: container)
     }
+    
     func callRequestFiltered(sort: String) {
         
     }
@@ -89,15 +95,7 @@ class SelectMaemullViewController : BaseViewController {
             if error == nil {
                 guard let response = response else { return }
                 guard let result = response.result else { return }
-                
-                // 특정 limjangId를 제외한 리스트를 생성
-                let filteredList = result.limjangList.filter { item in
-                    if let excludingId = excludingId {
-                        return item.limjangId != excludingId
-                    }
-                    return true
-                }
-                self.imjangList = filteredList
+                self.imjangList = result.limjangList
                 self.setEmptyUI(isEmpty: self.imjangList.isEmpty)
                 self.tableView.reloadData()
             } else {
@@ -115,6 +113,7 @@ class SelectMaemullViewController : BaseViewController {
             }
         }
     }
+    
     func setEmptyUI(isEmpty: Bool) {
         //emptyBackgroundView.isHidden = isEmpty ? false : true
         tableView.isHidden = isEmpty ? true : false
