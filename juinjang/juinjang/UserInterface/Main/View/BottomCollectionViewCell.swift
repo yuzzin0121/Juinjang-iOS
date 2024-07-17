@@ -79,7 +79,7 @@ class BottomCollectionViewCell: UICollectionViewCell {
         nameLabel.design(font: .pretendard(size: 15, weight: .semiBold), numberOfLines: 2)
         priceLabel.design(textColor: ColorStyle.priceColor, font: .pretendard(size: 14, weight: .bold))
         starIcon.design(image: ImageStyle.starEmpty, contentMode: .scaleAspectFit)
-        rateLabel.design(text: "0.0", textColor: ColorStyle.null, font: .pretendard(size: 14, weight: .bold))
+        rateLabel.design(text: "0.0", textColor: ColorStyle.mainOrange, font: .pretendard(size: 14, weight: .bold))
         scoreStackView.design(distribution: .fill, spacing: 3)
     }
     

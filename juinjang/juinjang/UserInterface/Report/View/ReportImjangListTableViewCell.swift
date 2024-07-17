@@ -64,18 +64,20 @@ class ReportImjangListTableViewCell: UITableViewCell {
         
         roomNameLabel.text = imjangNote.nickname
         setPriceLabel(priceList: imjangNote.priceList)
-        if let score = imjangNote.totalAverage {
-            DispatchQueue.main.async {
-                self.starIcon.image = ImageStyle.star
-            }
-            scoreLabel.text = String(format: "%.1f", score)
-        } else {
-            DispatchQueue.main.async {
-                self.starIcon.image = ImageStyle.starEmpty
-            }
-            scoreLabel.text = "0.0"
-            scoreLabel.textColor = ColorStyle.null
-        }
+        setRate(totalAverage: imjangNote.totalAverage)
+        print("총점은 : \(imjangNote.totalAverage)")
+//        if let score = imjangNote.totalAverage {
+//            DispatchQueue.main.async {
+//                self.starIcon.image = ImageStyle.star
+//            }
+//            scoreLabel.text = String(format: "%.1f", score)
+//        } else {
+//            DispatchQueue.main.async {
+//                self.starIcon.image = ImageStyle.starEmpty
+//            }
+//            scoreLabel.text = "0.0"
+//            scoreLabel.textColor = ColorStyle.null
+//        }
         
         addressLabel.text = imjangNote.address
         
@@ -93,9 +95,17 @@ class ReportImjangListTableViewCell: UITableViewCell {
                     self.roomThumbnailImageView.kf.setImage(with: url, placeholder: UIImage(named: "1"))
                 }
             }
-            
         }
-        
+    }
+    
+    func setRate(totalAverage: String?) {
+        if let totalAverage {
+            starIcon.image = ImageStyle.star
+            scoreLabel.text = totalAverage
+        } else {
+            starIcon.image = ImageStyle.starEmpty
+            scoreLabel.text = "0.0"
+        }
     }
     
     func setConstraints() {
@@ -174,7 +184,7 @@ class ReportImjangListTableViewCell: UITableViewCell {
         priceLabel.design(text:"", font: .pretendard(size: 16, weight: .semiBold))
         
         starIcon.design(image: ImageStyle.star, contentMode: .scaleAspectFit)
-        scoreLabel.design(text:"", textColor: ColorStyle.mainOrange, font: .pretendard(size: 14, weight: .semiBold))
+        scoreLabel.design(text:"0.0", textColor: ColorStyle.mainOrange, font: .pretendard(size: 14, weight: .semiBold))
         addressLabel.design(text: "", textColor: ColorStyle.textGray, font: .pretendard(size: 14, weight: .medium))
     }
 }
