@@ -220,8 +220,7 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
         dateFormatter.timeZone = TimeZone(abbreviation: "UTC") // UTC TimeZone 설정
         
         // 날짜 문자열을 Date로 변환
-        if let date = dateFormatter.date(from: answer) {
-            print("Date from stored date string:", date)
+        if let date = dateFormatter.date(from: answer) {            
             selectedDate = date
             calendar.select(date)
             if let selectedCell = calendar.cell(for: date, at: .current) {
@@ -291,7 +290,7 @@ extension ExpandedCalendarTableViewCell: FSCalendarDelegate, FSCalendarDataSourc
 
         // 선택된 날짜의 시간 성분을 12:00 PM으로 설정 (UTC로 변환)
         if let selectedDateNoon = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: date)?.addingTimeInterval(TimeInterval(NSTimeZone.system.secondsFromGMT())) {
-            print("Selected Date (after adjustment): \(selectedDateNoon)")
+            print("Selected Date (UTC 변환): \(selectedDateNoon)")
             
             handleDateSelection(dateFormatter.string(from: date))
         }

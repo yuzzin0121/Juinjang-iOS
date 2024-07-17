@@ -290,10 +290,43 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
                 itemButton.setImage(nil, for: .normal)
             }
 
-            itemButton.layer.backgroundColor = UIColor(named: "lightBackgroundOrange")?.cgColor
+            itemButton.backgroundColor = UIColor(named: "lightBackgroundOrange")
             itemButton.setTitleColor(UIColor(named: "darkGray"), for: .normal)
             itemButton.semanticContentAttribute = .forceLeftToRight
             setSavedInset()
+        } else {
+            if let selectedIndex = options.firstIndex(where: { $0.option == "기타" }) {
+                if !answer.isEmpty && answer != nil {
+                    itemPickerView.selectRow(selectedIndex, inComponent: 0, animated: true)
+                    questionImage.image = UIImage(named: "question-selected-image")
+                    contentLabel.textColor = UIColor(named: "500")
+                    backgroundColor = .white
+                    
+                    let selectedOption = options[selectedIndex]
+                    itemButton.setTitle(selectedOption.option, for: .normal)
+                    itemButton.setImage(nil, for: .normal)
+                    
+                    itemButton.snp.updateConstraints {
+                        $0.trailing.equalToSuperview().offset(-250)
+                    }
+                    
+                    contentView.addSubview(etcTextField)
+                    
+                    etcTextField.snp.makeConstraints {
+                        $0.trailing.equalToSuperview().offset(-24)
+                        $0.top.equalTo(contentLabel.snp.bottom).offset(20)
+                        $0.height.equalTo(31)
+                        $0.width.equalTo(218)
+                    }
+                    etcTextField.text = answer
+                    etcTextField.backgroundColor = UIColor(named: "lightBackgroundOrange")
+                    let padding: CGFloat = 27
+                    let etcTextFieldSize = (etcTextField.text ?? "").width(forFont: etcTextField.font ?? UIFont.systemFont(ofSize: 16)) + padding
+                    updateTextFieldWidthConstraint(for: etcTextField, constant: etcTextFieldSize, shouldRemoveLeadingConstraint: false)
+                }
+            } else {
+                print("값을 찾을 수 없습니다.")
+            }
         }
         selectedOption = answer
         selectedButton.backgroundColor = .white
@@ -380,7 +413,6 @@ extension ExpandedDropdownTableViewCell: UIPickerViewDelegate, UIPickerViewDataS
 
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         let selectedOption = options[row].option
-        print("Selected option: (row, \(selectedOption))")
         
         // 선택한 옵션으로 selectedButton 설정
         selectedButton.setTitle(selectedOption, for: .normal)

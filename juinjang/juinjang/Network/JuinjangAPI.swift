@@ -62,11 +62,7 @@ enum JuinjangAPI {
         case .profile:
             return URL(string: baseURL + "profile")!
             
-        case .showChecklist(let imjangId):
-            return URL(string: baseURL + "checklist/\(imjangId)")!
-        case .saveChecklist(let imjangId):
-            return URL(string: baseURL + "checklist/\(imjangId)")!
-        case .modifyChecklist(let imjangId):
+        case .showChecklist(let imjangId), .saveChecklist(let imjangId), .modifyChecklist(let imjangId):
             return URL(string: baseURL + "checklist/\(imjangId)")!
             
         case .scrap(let imjangId), .cancelScrap(let imjangId):
