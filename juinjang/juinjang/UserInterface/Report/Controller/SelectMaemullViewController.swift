@@ -71,7 +71,7 @@ class SelectMaemullViewController : BaseViewController {
                 guard let self else { return }
                 self.changefilterTitle(filter.title)
                 NotificationCenter.default.post(name: .imjangListFilterTapped, object: nil, userInfo: ["title":filter.title])
-                callRequest(sort: filter)
+                callRequest(sort: filter, excludingId: imjangId)
             }))
         }
         filterselectBtn.menu = UIMenu(options: .displayAsPalette, preferredElementSize: .small ,children: menuChildren)
@@ -86,16 +86,20 @@ class SelectMaemullViewController : BaseViewController {
         filterselectBtn.configuration?.attributedTitle = AttributedString(title, attributes: container)
     }
     
-    func callRequestFiltered(sort: String) {
-        
-    }
-    
     func callRequest(sort: Filter = .update, setScrap: Bool = false, excludingId: Int? = nil) {
         JuinjangAPIManager.shared.fetchData(type: BaseResponse<TotalListDto>.self, api: .totalImjang(sort: sort.sortValue)) { response, error in
             if error == nil {
                 guard let response = response else { return }
                 guard let result = response.result else { return }
-                self.imjangList = result.limjangList
+                
+                let filteredList = result.limjangList.filter { item in
+                    if let excludingId = excludingId {
+                        return item.limjangId != excludingId
+                    }
+                    return true
+                }
+                
+                self.imjangList = filteredList
                 self.setEmptyUI(isEmpty: self.imjangList.isEmpty)
                 self.tableView.reloadData()
             } else {

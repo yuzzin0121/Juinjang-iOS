@@ -394,7 +394,7 @@ class CompareViewController : BaseViewController, SendCompareImjangData, SendSea
                 RadarChartDataEntry(value: Double(reportDto.publicSpaceRate))
             ]
         )
-        compareDataSet2.fillAlpha = CGFloat(0.8)
+        compareDataSet2.fillAlpha = CGFloat(0.7)
         compareDataSet2.fillColor = .white
         setCompareData()
     }
@@ -481,7 +481,7 @@ class CompareViewController : BaseViewController, SendCompareImjangData, SendSea
         dataSet3.fillColor = dataColor
         dataSet4.fillColor = dataColor
         dataSet5.fillColor = dataColor
-        compareDataSet1.fillAlpha = CGFloat(0.6)
+        compareDataSet1.fillAlpha = CGFloat(0.55)
         compareDataSet1.fillColor = UIColor(red: 1, green: 0.386, blue: 0.158, alpha: 1)
         
         
