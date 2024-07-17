@@ -152,7 +152,6 @@ class CheckListViewController: BaseViewController {
             guard let self else { return }
             if error == nil {
                 guard let response = response else { return }
-                print("------저장된 체크리스트 조회------")
                 // 이미 추가된 questionId를 추적하기 위한 Set
                 var addedQuestionIds = Set<Int>()
                 
@@ -176,7 +175,10 @@ class CheckListViewController: BaseViewController {
                         addedQuestionIds.insert(item.questionId)
                     }
                 }
-                print(self.checkListItems)
+                print("------저장된 체크리스트 조회------")
+                for checkListItem in checkListItems {
+                    print(checkListItem)
+                }
                 completion()
             } else {
                 guard let error = error else { return }
@@ -215,7 +217,6 @@ class CheckListViewController: BaseViewController {
 
     
     // MARK: - API 요청
-    // TODO: - 체크리스트 빈값일 때 체크완료되는 거 처리 필요
     func saveAnswer() {
         let token = UserDefaultManager.shared.accessToken
         print("토큰값 \(token)")
@@ -228,25 +229,22 @@ class CheckListViewController: BaseViewController {
                 return
             }
 
-            print("----- 체크리스트 저장할 항목 -----")
             let checkListItems = self.checkListItems
-            print(checkListItems)
-
-            var seenQuestionIds = Set<Int>()
+            var savedQuestionIds = Set<Int>()
             var uniqueItems = [CheckListAnswer]()
             
             // 서버에서 불러온 questionId 목록
-            var existingQuestionIds = Set<Int>()
+            var existingItems = [Int: CheckListAnswer]()
             if let categoryItem = checkListResponse.result {
                 for item in categoryItem {
-                    existingQuestionIds.insert(item.questionId)
+                    existingItems[item.questionId] = CheckListAnswer(imjangId: imjangId, questionId: item.questionId, answer: item.answer, isSelected: true)
                 }
             }
 
             // 최근에 추가된 항목만 유지하고 중복된 항목 제거
             for item in checkListItems.reversed() {
-                if !seenQuestionIds.contains(item.questionId) {
-                    seenQuestionIds.insert(item.questionId)
+                if !savedQuestionIds.contains(item.questionId) {
+                    savedQuestionIds.insert(item.questionId)
                     uniqueItems.insert(item, at: 0) // 최근 항목을 배열의 첫 부분에 추가
                 } else {
                     // 중복된 항목은 제거
@@ -258,10 +256,6 @@ class CheckListViewController: BaseViewController {
 
             self.checkListItems = uniqueItems
 
-            for checkListItem in checkListItems {
-                print(checkListItem)
-            }
-
             // 유효한 값만 필터링
             let validCheckListItems = checkListItems.filter { item in
                 if let answer = item.answer as? String {
@@ -271,17 +265,22 @@ class CheckListViewController: BaseViewController {
                 }
             }
 
-            print("유효한 체크리스트 항목: \(validCheckListItems)")
+            print("----- 체크리스트 저장할 항목 -----")
+            for checkListItem in validCheckListItems {
+                print(checkListItem)
+            }
 
             // 저장할 항목과 수정할 항목 분리
             var saveItems = [CheckListAnswer]()
             var modifyItems = [CheckListAnswer]()
 
             for item in validCheckListItems {
-                if !existingQuestionIds.contains(item.questionId) {
-                    saveItems.append(item)
+                if let existingItem = existingItems[item.questionId] {
+                    if existingItem.answer != item.answer {
+                        modifyItems.append(item)
+                    }
                 } else {
-                    modifyItems.append(item)
+                    saveItems.append(item)
                 }
             }
 
@@ -522,7 +521,7 @@ extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
                                 self.checkListItems.append(answerItem)
                                 print("\(questionId)번에 해당하는 답변 생성")
                             }
-                            print(checkListItems)
+//                            print(checkListItems)
                         }
                     }
 
@@ -572,7 +571,7 @@ extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
                                     print("\(questionId)번에 해당하는 답변 생성")
                                 }
                             }
-                            print(checkListItems)
+//                            print(checkListItems)
                         }
                     }
 
@@ -616,7 +615,7 @@ extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
                                 self.checkListItems.append(answerItem)
                                 print("\(questionId)번에 해당하는 답변 생성")
                             }
-                            print(checkListItems)
+//                            print(checkListItems)
                         }
                     }
 
@@ -660,7 +659,7 @@ extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
                                 self.checkListItems.append(answerItem)
                                 print("\(questionId)번에 해당하는 답변 생성")
                             }
-                            print(checkListItems)
+//                            print(checkListItems)
                         }
                     }
                     

@@ -132,7 +132,7 @@ class ExpandedTextFieldTableViewCell: UITableViewCell {
         answerTextField.text = answer
         answerTextField.backgroundColor = UIColor(named: "lightBackgroundOrange")
         
-        // -TODO: 너비 설정 필요
+        updateTextFieldWidth()
     }
     
     // 수정 모드일 때 저장된 값이 있는 경우
@@ -145,7 +145,13 @@ class ExpandedTextFieldTableViewCell: UITableViewCell {
         answerTextField.text = answer
         answerTextField.backgroundColor = .white
         
-        // -TODO: 너비 설정 필요
+        updateTextFieldWidth()
+    }
+    
+    private func updateTextFieldWidth() {
+        let padding: CGFloat = 27
+        let answerTextFieldSize = (answerTextField.text ?? "").width(forFont: answerTextField.font ?? UIFont.systemFont(ofSize: 16)) + padding
+        updateTextFieldWidthConstraint(for: answerTextField, constant: answerTextFieldSize, shouldRemoveLeadingConstraint: true)
     }
     
     func handleTextSelection(_ text: String) {
