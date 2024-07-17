@@ -326,10 +326,10 @@ class ExpandedDropdownTableViewCell: UITableViewCell {
                 }
             } else {
                 print("값을 찾을 수 없습니다.")
+                itemButton.backgroundColor = .white
             }
         }
         selectedOption = answer
-        selectedButton.backgroundColor = .white
     }
 
     // 수정 모드일 때 저장된 값이 있는 경우
