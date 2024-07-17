@@ -220,16 +220,21 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
         dateFormatter.timeZone = TimeZone(abbreviation: "UTC") // UTC TimeZone 설정
         
         // 날짜 문자열을 Date로 변환
-        if let date = dateFormatter.date(from: answer) {            
+        if let date = dateFormatter.date(from: answer) {
             selectedDate = date
+        
             calendar.select(date)
-            if let selectedCell = calendar.cell(for: date, at: .current) {
-                selectedCell.layer.cornerRadius = 9.97
-                selectedCell.layer.borderWidth = 1.5
-                selectedCell.layer.borderColor = UIColor(named: "mainOrange")?.cgColor
-            } else {
-                selectedDate = nil
+            DispatchQueue.main.async {
+                if let selectedCell = self.calendar.cell(for: date, at: .current) {
+                    selectedCell.layer.cornerRadius = 9.97
+                    selectedCell.layer.borderWidth = 1.5
+                    selectedCell.layer.borderColor = UIColor(named: "mainOrange")?.cgColor
+                } else {
+                    print("찾을 수 없는 셀 날짜: \(date)")
+                }
             }
+        } else {
+            print("날짜 Date 형 변환 실패: \(answer)")
         }
     }
     
@@ -244,6 +249,7 @@ extension ExpandedCalendarTableViewCell: FSCalendarDelegate, FSCalendarDataSourc
         self.monthPosition = monthPosition
         backgroundColor = UIColor(named: "lightOrange")
         questionImage.image = UIImage(named: "question-selected-image")
+        selectedDate = date
         
         // 이미 선택된 날짜를 클릭하면 선택을 해제
         if let currentSelectedDate = selectedDate, currentSelectedDate == date {
@@ -294,7 +300,6 @@ extension ExpandedCalendarTableViewCell: FSCalendarDelegate, FSCalendarDataSourc
             
             handleDateSelection(dateFormatter.string(from: date))
         }
-        selectedDate = date
     }
     
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
