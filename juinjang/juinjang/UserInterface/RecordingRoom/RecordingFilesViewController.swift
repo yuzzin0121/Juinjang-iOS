@@ -9,6 +9,8 @@ import UIKit
 import AVFoundation
 
 class RecordingFilesViewController: BaseViewController {
+
+    let lastPopupDateKey = "lastPopupDate" // 경고 메시지 날짜 저장 Key
     
     private let recordingFileTableView = UITableView().then {
         $0.showsVerticalScrollIndicator = false
@@ -88,7 +90,7 @@ class RecordingFilesViewController: BaseViewController {
         
         for index in fileItems.indices {
             if fileItems[index].recordId == recordResponse.recordId {
-                fileItems[index].recordName = recordResponse.recordScript
+                fileItems[index].recordScript = recordResponse.recordScript
             }
         }
     }
@@ -152,12 +154,48 @@ class RecordingFilesViewController: BaseViewController {
     }
     
     @objc func startRecording(_ sender: Any) {
-        let bottomSheetViewController = BottomSheetViewController(imjangId: imjangId)
+        let bottomSheetVC = BottomSheetViewController(imjangId: imjangId)
         let warningMessageVC = WarningMessageViewController(imjangId: imjangId)
-        warningMessageVC.bottomSheetViewController = bottomSheetViewController
-        bottomSheetViewController.addContentViewController(warningMessageVC)
-        bottomSheetViewController.modalPresentationStyle = .custom
-        self.present(bottomSheetViewController, animated: false, completion: nil)
+        let recordVC = RecordViewController(imjangId: imjangId)
+        if shouldShowPopup() {
+            warningMessageVC.bottomSheetViewController = bottomSheetVC
+            warningMessageVC.delegate = self
+            bottomSheetVC.addContentViewController(warningMessageVC)
+            bottomSheetVC.modalPresentationStyle = .custom
+            self.present(bottomSheetVC, animated: false, completion: nil)
+        } else {
+            print("오늘 하루 보지 않기 버튼을 선택했으므로 경고 메시지가 내일 나타납니다.")
+            recordVC.bottomSheetViewController = bottomSheetVC
+            bottomSheetVC.addContentViewController(recordVC)
+            bottomSheetVC.modalPresentationStyle = .custom
+            self.present(bottomSheetVC, animated: false, completion: nil)
+        }
+    }
+    
+    func shouldShowPopup() -> Bool {
+        let userDefaults = UserDefaults.standard
+        if let lastPopupDate = userDefaults.object(forKey: lastPopupDateKey) as? Date {
+            let calendar = Calendar.current
+            if calendar.isDateInToday(lastPopupDate) {
+                return false
+            } else {
+                return true
+            }
+        } else {
+            return true // 처음 실행
+        }
+    }
+    
+    func resetPopupDateIfNeeded() {
+        let userDefaults = UserDefaults.standard
+        if let lastPopupDate = userDefaults.object(forKey: lastPopupDateKey) as? Date {
+            let calendar = Calendar.current
+            if !calendar.isDateInToday(lastPopupDate) {
+                userDefaults.removeObject(forKey: lastPopupDateKey)
+            } else {
+                print("오늘 하루 보지 않기 버튼을 선택했으므로 경고 메시지가 내일 나타납니다.")
+            }
+        }
     }
  
     func addSubViews() {
@@ -266,5 +304,12 @@ extension RecordingFilesViewController: UITableViewDelegate, UITableViewDataSour
         deleteAction.backgroundColor = UIColor(named: "mainOrange")
         let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
         return configuration
+    }
+}
+
+extension RecordingFilesViewController: CheckWarningMessageDelegate {
+    func checkMessage() {
+        let startOfDay = Calendar.current.startOfDay(for: Date())
+        UserDefaults.standard.set(startOfDay, forKey: lastPopupDateKey)
     }
 }

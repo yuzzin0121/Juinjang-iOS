@@ -12,7 +12,6 @@ import Kingfisher
 
 class BottomCollectionViewCell: UICollectionViewCell {
     var recentImjangImageView = UIImageView()
-    var noImageImageView = UIImageView()
     
     var nameLabel = UILabel()
     var priceLabel = UILabel()
@@ -34,6 +33,7 @@ class BottomCollectionViewCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        recentImjangImageView.image = nil
         configureCell(listDto: nil)
     }
     
@@ -56,15 +56,14 @@ class BottomCollectionViewCell: UICollectionViewCell {
     }
     
     func setImageUI(image: String?) {
-        if let image = image {
-            noImageImageView.isHidden = true
-            if let url = URL(string: image) {
-                recentImjangImageView.kf.setImage(with: url, placeholder: UIImage(named: "1"))
-            } else {
-                recentImjangImageView.image = UIImage(named: "1")
-            }
+        guard let imageURL = image else {
+            recentImjangImageView.image = ImageStyle.emptyImage
+            return
+        }
+        if let url = URL(string: imageURL) {
+            recentImjangImageView.kf.setImage(with: url, placeholder: UIImage(named: "1"))
         } else {
-            noImageImageView.isHidden = false
+            recentImjangImageView.image = ImageStyle.gallery
         }
     }
     
@@ -77,11 +76,10 @@ class BottomCollectionViewCell: UICollectionViewCell {
 
         recentImjangImageView.design(cornerRadius: 10)
         recentImjangImageView.backgroundColor = ColorStyle.gray0
-        noImageImageView.design(image: ImageStyle.gallery)
         nameLabel.design(font: .pretendard(size: 15, weight: .semiBold), numberOfLines: 2)
         priceLabel.design(textColor: ColorStyle.priceColor, font: .pretendard(size: 14, weight: .bold))
         starIcon.design(image: ImageStyle.starEmpty, contentMode: .scaleAspectFit)
-        rateLabel.design(text: "0.0", textColor: ColorStyle.null, font: .pretendard(size: 14, weight: .bold))
+        rateLabel.design(text: "0.0", textColor: ColorStyle.mainOrange, font: .pretendard(size: 14, weight: .bold))
         scoreStackView.design(distribution: .fill, spacing: 3)
     }
     
@@ -89,7 +87,6 @@ class BottomCollectionViewCell: UICollectionViewCell {
         [recentImjangImageView, nameLabel, priceLabel, scoreStackView].forEach {
             contentView.addSubview($0)
         }
-        recentImjangImageView.addSubview(noImageImageView)
         [starIcon, rateLabel].forEach {
             scoreStackView.addArrangedSubview($0)
         }
@@ -100,10 +97,6 @@ class BottomCollectionViewCell: UICollectionViewCell {
             $0.top.equalToSuperview().offset(6)
             $0.horizontalEdges.equalToSuperview().inset(8)
             $0.height.equalTo(119)
-        }
-        noImageImageView.snp.makeConstraints{
-            $0.center.equalTo(recentImjangImageView)
-            $0.size.equalTo(48)
         }
         nameLabel.snp.makeConstraints{
             $0.top.equalTo(recentImjangImageView.snp.bottom).offset(6)

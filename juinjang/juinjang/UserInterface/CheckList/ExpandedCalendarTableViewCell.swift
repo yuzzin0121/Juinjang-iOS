@@ -221,16 +221,20 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
         
         // 날짜 문자열을 Date로 변환
         if let date = dateFormatter.date(from: answer) {
-            print("Date from stored date string:", date)
             selectedDate = date
+        
             calendar.select(date)
-            if let selectedCell = calendar.cell(for: date, at: .current) {
-                selectedCell.layer.cornerRadius = 9.97
-                selectedCell.layer.borderWidth = 1.5
-                selectedCell.layer.borderColor = UIColor(named: "mainOrange")?.cgColor
-            } else {
-                selectedDate = nil
+            DispatchQueue.main.async {
+                if let selectedCell = self.calendar.cell(for: date, at: .current) {
+                    selectedCell.layer.cornerRadius = 9.97
+                    selectedCell.layer.borderWidth = 1.5
+                    selectedCell.layer.borderColor = UIColor(named: "mainOrange")?.cgColor
+                } else {
+                    print("찾을 수 없는 셀 날짜: \(date)")
+                }
             }
+        } else {
+            print("날짜 Date 형 변환 실패: \(answer)")
         }
     }
     
@@ -245,6 +249,7 @@ extension ExpandedCalendarTableViewCell: FSCalendarDelegate, FSCalendarDataSourc
         self.monthPosition = monthPosition
         backgroundColor = UIColor(named: "lightOrange")
         questionImage.image = UIImage(named: "question-selected-image")
+        selectedDate = date
         
         // 이미 선택된 날짜를 클릭하면 선택을 해제
         if let currentSelectedDate = selectedDate, currentSelectedDate == date {
@@ -291,11 +296,10 @@ extension ExpandedCalendarTableViewCell: FSCalendarDelegate, FSCalendarDataSourc
 
         // 선택된 날짜의 시간 성분을 12:00 PM으로 설정 (UTC로 변환)
         if let selectedDateNoon = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: date)?.addingTimeInterval(TimeInterval(NSTimeZone.system.secondsFromGMT())) {
-            print("Selected Date (after adjustment): \(selectedDateNoon)")
+            print("Selected Date (UTC 변환): \(selectedDateNoon)")
             
             handleDateSelection(dateFormatter.string(from: date))
         }
-        selectedDate = date
     }
     
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {

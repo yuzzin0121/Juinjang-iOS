@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 extension String {
     
@@ -47,13 +48,16 @@ extension String {
     }
     
     static func dateToString(target: String) -> String {
-        // 서버에서 주는 형태 (ISO규약에 따른 문자열 형태)
-        guard let isoDate = ISO8601DateFormatter().date(from: target ?? "") else {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSS"
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        guard let isoDate = dateFormatter.date(from: target) else {
             return ""
         }
-        let myFormatter = DateFormatter()
-        myFormatter.dateFormat = "yyyy-MM-dd"
-        let dateString = myFormatter.string(from: isoDate)
+//        let myFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yy.MM.dd"
+        let dateString = dateFormatter.string(from: isoDate)
         return dateString
     }
     
@@ -82,5 +86,15 @@ extension String {
             // 변환 실패 시 기본값 반환
             return ("0")
         }
+    }
+    
+    // 텍스트 너비 계산
+    func size(forFont font: UIFont) -> CGSize {
+        let fontAttributes = [NSAttributedString.Key.font: font]
+        return (self as NSString).size(withAttributes: fontAttributes)
+    }
+    
+    func width(forFont font: UIFont) -> CGFloat {
+        return self.size(forFont: font).width
     }
 }

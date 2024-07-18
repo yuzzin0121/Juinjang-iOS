@@ -62,6 +62,7 @@ class ReportViewController : BaseViewController {
     let tabViewController = TabViewController()
     
     func getReportInfo(limjangId: Int, accessToken: String) {
+        print("hi")
         // 기본 URL
         let baseURL = "http://juinjang1227.com:8080/api/report/\(limjangId)"
         
@@ -74,11 +75,12 @@ class ReportViewController : BaseViewController {
         AF.request(baseURL, method: .get, headers: headers).responseJSON { response in
             switch response.result {
             case .success(let value):
+                print("리포트 value : \(value)")
                 if let json = value as? [String: Any],
                    let result = json["result"] as? [String: Any],
                    let limjangDto = result["limjangDto"] as? [String: Any],
                    let reportDTO = result["reportDTO"] as? [String: Any] {
-                    //print("Response JSON: \(json)")
+                    print("Response JSON: \(json)")
                     do {
                         let decoder = JSONDecoder()
                         let reportData = try JSONSerialization.data(withJSONObject: reportDTO, options: [])
@@ -257,6 +259,7 @@ class ReportViewController : BaseViewController {
         super.viewDidLoad()
         designNavigationBar()
         getReportInfo(limjangId: imjangId, accessToken: UserDefaultManager.shared.accessToken)
+        print(imjangId)
         view.backgroundColor = .white
         
         view.addSubview(totalGradeLabel)

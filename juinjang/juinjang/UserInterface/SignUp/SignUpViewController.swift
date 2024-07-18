@@ -135,10 +135,11 @@ class SignUpViewController: BaseViewController {
                 }
                 // 응답 데이터 출력
                 if let responseString = String(data: data, encoding: .utf8) {
-                    print("Response data: \(responseString)")
+                    print("Response image data: \(responseString)")
                 }
                 // JSON 데이터 파싱
                 do {
+                    print("여기유")
                     let userInfoResponse = try JSONDecoder().decode(UserInfoResponse.self, from: data)
                     let nickname = userInfoResponse.result.nickname
                     if let profileImage = userInfoResponse.result.image, let imageUrl = URL(string: profileImage) {
@@ -152,6 +153,8 @@ class SignUpViewController: BaseViewController {
                                 print("imageLoad Fail")
                             }
                         }
+                    } else {
+                        UserDefaultManager.shared.profileImage = UIImage(named:"profileImage")
                     }
                     //print("Nickname : \(nickname ?? "")")
                     UserDefaultManager.shared.nickname = nickname ?? ""

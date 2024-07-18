@@ -20,6 +20,19 @@ class BaseViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         NotificationCenter.default.addObserver(self, selector: #selector(showLoginVC), name: .refreshTokenExpired, object: nil)
+        setSwipe()
+    }
+    
+    private func setSwipe() {
+        let swipeRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(swipeAction))
+        swipeRecognizer.direction = .right
+        view.addGestureRecognizer(swipeRecognizer)
+    }
+    
+    @objc func swipeAction(_ sender: UISwipeGestureRecognizer) {
+        if sender.direction == .right {
+            self.navigationController?.popViewController(animated: true)
+        }
     }
     
     @objc func showLoginVC(notification: Notification) {
@@ -39,4 +52,5 @@ class BaseViewController: UIViewController {
         alert.addAction(action)
         present(alert, animated: true)
     }
+    
 }

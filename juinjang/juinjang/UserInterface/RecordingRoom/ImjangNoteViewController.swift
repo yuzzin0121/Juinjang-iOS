@@ -10,8 +10,7 @@ import SnapKit
 import Then
 import Kingfisher
 
-class ImjangNoteViewController: BaseViewController{
-    
+class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEditData, ButtonStateDelegate {
     // 스크롤뷰
     let scrollView = UIScrollView().then {
         $0.backgroundColor = .white
@@ -53,7 +52,7 @@ class ImjangNoteViewController: BaseViewController{
     }
     
     let roomNameLabel = UILabel()
-
+    
     let houseImageView = UIImageView()
     let roomStackView = UIStackView()
     let roomPriceLabel = UILabel()
@@ -105,10 +104,10 @@ class ImjangNoteViewController: BaseViewController{
     
     lazy var recordingSegmentedVC = RecordingSegmentedViewController(imjangId: imjangId, version: versionDetail)
     
-    var roomName: String = "판교푸르지오월드마크"
-    var roomPriceString: String = "30억 1천만원"
-    var roomAddress: String = "경기도 성남시 분당구 삼평동 741"
-    var mDateString: String = "23.12.01"
+//    var roomName: String = "판교푸르지오월드마크"
+//    var roomPriceString: String = "30억 1천만원"
+//    var roomAddress: String = "경기도 성남시 분당구 삼평동 741"
+//    var mDateString: String = "23.12.01"
     var completionHandler: (() -> Void)?
     
     lazy var images: [String] = []
@@ -174,7 +173,7 @@ class ImjangNoteViewController: BaseViewController{
         roomNameLabel.text = detailDto.nickname
         setPriceLabel(priceList: detailDto.priceList)
         roomAddressLabel.text = "\(detailDto.address) \(detailDto.addressDetail)"
-        modifiedDateStringLabel.text = "최근 수정 날짜 \(String.dateToString(target: detailDto.updatedAt))"
+        modifiedDate.text = "\(String.dateToString(target: detailDto.updatedAt))"
         images = detailDto.images
         
         // 버전 설정
@@ -188,18 +187,25 @@ class ImjangNoteViewController: BaseViewController{
         if detailDto.purposeCode == 0 {
             self.versionInfo = VersionInfo(version: versionDetail, editCriteria: 0)
         } else if detailDto.purposeCode == 1 {
-                self.versionInfo = VersionInfo(version: versionDetail, editCriteria: 1)
+            self.versionInfo = VersionInfo(version: versionDetail, editCriteria: 1)
         }
-        print("체크리스트 버전 설정: \(versionInfo)")
         versionInfo?.editCriteria = detailDto.purposeCode
         setUpImageUI()
         adjustLabelHeight()
     }
     
+    func sendData(imjangId: Int, priceList: [String], address: String, addressDetail: String, nickname: String, updatedAt: String) {
+        self.navigationItem.title = nickname
+        roomNameLabel.text = nickname
+        setPriceLabel(priceList: priceList)
+        roomAddressLabel.text = "\(address) \(addressDetail)"
+        modifiedDate.text = "\(updatedAt)"
+    }
+    
     func adjustLabelHeight() {
         let maxSize = CGSize(width: addressBackgroundView.bounds.width - 30, height: CGFloat.greatestFiniteMagnitude) // 여백 고려
         let expectedSize = roomAddressLabel.sizeThatFits(maxSize)
-
+        
         // 텍스트 길이에 따라 조건적으로 높이 업데이트
         roomAddressLabel.snp.updateConstraints { make in
             if expectedSize.height > 30 { // someThreshold는 조건에 맞는 텍스트 높이입니다.
@@ -241,15 +247,21 @@ class ImjangNoteViewController: BaseViewController{
             if savedCheckListItemsAreEmpty {
                 // 팝업창이 뜸
                 let reportPopupVC = ReportPopupViewController()
+                reportPopupVC.delegate = self
                 reportPopupVC.modalPresentationStyle = .overCurrentContext
                 present(reportPopupVC, animated: false, completion: nil)
             } else {
-            let reportVC = ReportViewController(imjangId: imjangId)
+                let reportVC = ReportViewController(imjangId: imjangId)
                 navigationController?.pushViewController(reportVC, animated: true)
             }
         }
     }
     
+    func updateButtonState(isSelected: Bool) {
+        editButton.setImage(UIImage(named: "completed-button"), for: .normal)
+        editButton.isSelected = isSelected
+    }
+        
     // 방 사진 클릭했을 때 - showImjangImageListVC. 호출
     func setImageStackViewClick(isEmpty: Bool) {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(showImjangImageListVC))
@@ -268,10 +280,10 @@ class ImjangNoteViewController: BaseViewController{
         thirdImage.isUserInteractionEnabled = isEmpty ? false : true
         noImageBackgroundView.isUserInteractionEnabled = isEmpty ? true : false
     }
-    
+        
     // 이미지 리스트 화면으로 이동
     @objc func showImjangImageListVC() {
-//        guard let imjangId = imjangId else { return }
+        //        guard let imjangId = imjangId else { return }
         let imjangImageListVC = ImjangImageListViewController()
         imjangImageListVC.imjangId = imjangId
         imjangImageListVC.completionHandler = { imageStrings in
@@ -303,13 +315,13 @@ class ImjangNoteViewController: BaseViewController{
     func designNavigationBar() {
         self.navigationItem.title = "판교푸르지오월드마크"     // TODO: - 나중에 roomName 으로 연결
         self.navigationController?.navigationBar.tintColor = .black
-       
+        
         // UIBarButtonItem 생성 및 이미지 설정
         let backButtonItem = UIBarButtonItem(image: ImageStyle.arrowLeft, style: .plain, target: self, action: #selector(popView))
         let editButtonItem = UIBarButtonItem(title: "편집", style: .plain, target: self, action: #selector(editView))
         backButtonItem.tintColor = ColorStyle.textGray
         editButtonItem.tintColor = ColorStyle.textGray
-
+        
         // 네비게이션 아이템에 백 버튼 아이템 설정
         self.navigationItem.leftBarButtonItem = backButtonItem
         self.navigationItem.rightBarButtonItem = editButtonItem
@@ -335,10 +347,12 @@ class ImjangNoteViewController: BaseViewController{
         if versionInfo?.editCriteria == 0 {
             editVC.imjangId = imjangId
             editVC.versionInfo = versionInfo
+            editVC.delegate = self
             self.navigationController?.pushViewController(editVC, animated: true)
         } else if versionInfo?.editCriteria == 1 {
             editDetailVC.imjangId = imjangId
             editDetailVC.versionInfo = versionInfo
+            editDetailVC.delegate = self
             self.navigationController?.pushViewController(editDetailVC, animated: true)
         }
     }
@@ -350,7 +364,7 @@ class ImjangNoteViewController: BaseViewController{
         }
         
         upButton.isHidden = true
-
+        
         scrollView.addSubview(contentView)
         
         [roomStackView, roomPriceLabel, infoStackView, addressBackgroundView, containerView, noImageBackgroundView, stackView].forEach {
@@ -392,7 +406,6 @@ class ImjangNoteViewController: BaseViewController{
         
         // 방 이름 레이블
         designLabel(roomNameLabel,
-                    text: roomName,
                     alignment: .left,
                     font: UIFont.pretendard(size: 20, weight: .extraBold),
                     textColor: ColorStyle.mainOrange)
@@ -407,20 +420,18 @@ class ImjangNoteViewController: BaseViewController{
         
         // 방 가격 레이블
         designLabel(roomPriceLabel,
-                    text: roomPriceString,
                     font: UIFont.pretendard(size: 20, weight: .bold),
                     textColor: ColorStyle.textBlack)
         
         // 방 주소 레이블
         designLabel(roomAddressLabel,
-                    text: roomAddress,
                     font: UIFont.pretendard(size: 16, weight: .medium),
                     textColor: ColorStyle.textGray, numberOfLines: 2)
         designImageView(roomLocationIcon,
                         image: UIImage(named: "location"),
                         contentMode: .scaleAspectFit)
         
-        setStackView(addressStackView, 
+        setStackView(addressStackView,
                      label: roomAddressLabel,
                      image: roomLocationIcon,
                      axis: .horizontal,
@@ -455,11 +466,10 @@ class ImjangNoteViewController: BaseViewController{
         
         // 최근 수정날짜값 레이블
         designLabel(modifiedDate,
-                    text: mDateString,
                     font: UIFont.pretendard(size: 14, weight: .semiBold),
                     textColor: ColorStyle.textGray)
         
-    
+        
     }
     
     // 이미지 개수에 따라 stackView 설정
@@ -503,7 +513,7 @@ class ImjangNoteViewController: BaseViewController{
     }
     
     func setImage2() {
-//        let imagesWidth = view.frame.width - (24*2) - 8
+        //        let imagesWidth = view.frame.width - (24*2) - 8
         stackView.spacing = 8
         vStackView.spacing = 0
         
@@ -514,7 +524,7 @@ class ImjangNoteViewController: BaseViewController{
         secondImage.snp.remakeConstraints {
             $0.height.equalTo(secondImage.snp.width).multipliedBy(171.0 / 109.0)
         }
-     
+        
         if let image1 = images.first, let url1 = URL(string: image1) {
             firstImage.kf.setImage(with: url1, placeholder: UIImage(named: "1"))
         }
@@ -527,7 +537,7 @@ class ImjangNoteViewController: BaseViewController{
     func setImage3() {
         stackView.spacing = 8
         vStackView.spacing = 8
-
+        
         firstImage.snp.remakeConstraints {
             $0.height.equalTo(firstImage.snp.width).multipliedBy(171.0 / 225.0)
         }
@@ -588,7 +598,7 @@ class ImjangNoteViewController: BaseViewController{
         [secondImage, thirdImage].forEach {
             vStackView.addArrangedSubview($0)
         }
-   
+        
         stackView.addSubview(maximizeImageView)
         maximizeImageView.snp.makeConstraints {
             $0.bottom.trailing.equalTo(stackView).inset(12)
@@ -682,8 +692,8 @@ class ImjangNoteViewController: BaseViewController{
             $0.top.equalTo(infoStackView.snp.bottom).offset(12)
             $0.leading.trailing.equalTo(contentView)
             $0.bottom.equalTo(contentView).offset(-24)
-//            $0.height.equalTo(view).multipliedBy(1.5)
-//            $0.height.equalTo(view).multipliedBy(5) // 체크리스트 뷰 컨트롤러에서는 변경될 수 있게 적절한 값으로 설정 필요
+            //            $0.height.equalTo(view).multipliedBy(1.5)
+            //            $0.height.equalTo(view).multipliedBy(5) // 체크리스트 뷰 컨트롤러에서는 변경될 수 있게 적절한 값으로 설정 필요
         }
         
         recordingSegmentedVC.view.snp.makeConstraints {
@@ -736,7 +746,7 @@ class ImjangNoteViewController: BaseViewController{
     }
     
     // 레이블 디자인
-    func designLabel(_ label: UILabel, text: String, alignment: NSTextAlignment = .left, font: UIFont, textColor: UIColor, numberOfLines: Int = 1) {
+    func designLabel(_ label: UILabel, text: String = "", alignment: NSTextAlignment = .left, font: UIFont, textColor: UIColor, numberOfLines: Int = 1) {
         label.text = text
         label.textAlignment = alignment
         label.font = font
@@ -764,12 +774,11 @@ class ImjangNoteViewController: BaseViewController{
         scrollView.setContentOffset(CGPoint.zero, animated: true)
     }
 }
-
-
+    
 extension ImjangNoteViewController: UIScrollViewDelegate {
-
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        print("스크롤 좌표 - \(scrollView.contentOffset.y), containerView 좌표 - \(containerView.frame.origin.y)")
+        //        print("스크롤 좌표 - \(scrollView.contentOffset.y), containerView 좌표 - \(containerView.frame.origin.y)")
         
         let containerY = containerView.frame.origin.y
         
@@ -785,7 +794,7 @@ extension ImjangNoteViewController: UIScrollViewDelegate {
 //        }
 //        
 //        if scrollView.contentOffset.y > 20 {
-//            UIView.animate(withDuration: 0.5, delay:0) {
+//            UIView.animate(w\ithDuration: 0.5, delay:0) {
 //                self.upButton.alpha = 1
 //            }
 //        } else {
@@ -798,7 +807,7 @@ extension ImjangNoteViewController: UIScrollViewDelegate {
             scrollView.contentOffset.y = containerY
             NotificationCenter.default.post(name: NSNotification.Name("didStoppedParentScroll"), object: nil)
         }
-
+        
         if scrollView.contentOffset.y > 20 {
             UIView.animate(withDuration: 0.5) {
                 self.upButton.alpha = 1
@@ -810,3 +819,4 @@ extension ImjangNoteViewController: UIScrollViewDelegate {
         }
     }
 }
+
