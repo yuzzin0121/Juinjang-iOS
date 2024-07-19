@@ -260,7 +260,7 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
     
     private func setborderStyle() {
         if let selectedDate = self.selectedDate {
-            guard let convertedDate = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: selectedDate)?.addingTimeInterval(TimeInterval(NSTimeZone.system.secondsFromGMT())) else { return }
+            let convertedDate = convertDate(date: selectedDate)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 self.updateCalendarCell(for: convertedDate)
             }
@@ -270,6 +270,12 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
     func handleDateSelection(_ date: String) {
         dateSelectionHandler?(date)
     }
+    
+    private func convertDate(date: Date) -> Date {
+        guard let convertedDate = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: date)?.addingTimeInterval(TimeInterval(NSTimeZone.system.secondsFromGMT()))
+        else { return date }
+        return convertedDate
+    }
 }
 
 extension ExpandedCalendarTableViewCell: FSCalendarDelegate, FSCalendarDataSource, FSCalendarDelegateAppearance {
@@ -278,6 +284,9 @@ extension ExpandedCalendarTableViewCell: FSCalendarDelegate, FSCalendarDataSourc
         self.monthPosition = monthPosition
         backgroundColor = UIColor(named: "lightOrange")
         questionImage.image = UIImage(named: "question-selected-image")
+        
+        // 날짜 변환
+        let date = convertDate(date: date)
         
         // 이미 선택된 날짜를 클릭하면 선택을 해제
         if let currentSelectedDate = selectedDate, currentSelectedDate == date {
@@ -335,10 +344,7 @@ extension ExpandedCalendarTableViewCell: FSCalendarDelegate, FSCalendarDataSourc
 //                selectedCell.layer.fs_height = 49
                 selectedCell.layer.borderColor = UIColor(named: "mainOrange")?.cgColor
             }
-            if let convertedDate = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: date)?.addingTimeInterval(TimeInterval(NSTimeZone.system.secondsFromGMT())) {
-                print("변환된 날짜: \(convertedDate)")
-                handleDateSelection(dateFormatter.string(from: convertedDate))
-            }
+            handleDateSelection(dateFormatter.string(from: date))
             selectedDate = date
         }
     }

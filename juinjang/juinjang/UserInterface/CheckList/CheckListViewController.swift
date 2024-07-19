@@ -21,6 +21,8 @@ class CheckListViewController: BaseViewController {
     var savedCheckListItems: [CheckListAnswer] = [] // 저장되어 있던 체크리스트 항목
     var checkListItems: [CheckListAnswer] = [] // 저장될 체크리스트 항목
     
+    private var isRequest = false // 체크리스트 저장 요청
+    
     init(imjangId: Int, version: Int) {
         self.imjangId = imjangId
         self.version = version
@@ -215,7 +217,6 @@ class CheckListViewController: BaseViewController {
         }
     }
 
-    
     // MARK: - API 요청
     func saveAnswer() {
         let token = UserDefaultManager.shared.accessToken
@@ -224,11 +225,8 @@ class CheckListViewController: BaseViewController {
         // 저장된 체크리스트 불러오기
         JuinjangAPIManager.shared.fetchData(type: BaseResponse<[QuestionAnswerDto]>.self, api: .showChecklist(imjangId: imjangId)) { [weak self] response, error in
             guard let self = self else { return }
-            guard let checkListResponse = response else {
-                print("실패: \(error?.localizedDescription ?? "error")")
-                return
-            }
-
+            guard let checkListResponse = response else { return }
+            
             let checkListItems = self.checkListItems
             var savedQuestionIds = Set<Int>()
             var uniqueItems = [CheckListAnswer]()
@@ -240,80 +238,63 @@ class CheckListViewController: BaseViewController {
                     existingItems[item.questionId] = CheckListAnswer(imjangId: imjangId, questionId: item.questionId, answer: item.answer, isSelected: true)
                 }
             }
-
+            
             // 최근에 추가된 항목만 유지하고 중복된 항목 제거
-            for item in checkListItems.reversed() {
+            for item in checkListItems {
                 if !savedQuestionIds.contains(item.questionId) {
                     savedQuestionIds.insert(item.questionId)
-                    uniqueItems.insert(item, at: 0) // 최근 항목을 배열의 첫 부분에 추가
-                } else {
-                    // 중복된 항목은 제거
-                    if let index = uniqueItems.firstIndex(where: { $0.questionId == item.questionId }) {
-                        uniqueItems.remove(at: index)
-                    }
+                    uniqueItems.append(item) // 중복 제거 후 새로운 값 추가
+                } else if let index = uniqueItems.firstIndex(where: { $0.questionId == item.questionId }) {
+                    uniqueItems[index] = item // 기존의 항목이 있다면 새로운 값으로 변경
                 }
             }
-
+            
             self.checkListItems = uniqueItems
-
+            
             // 유효한 값만 필터링
             let validCheckListItems = checkListItems.filter { item in
                 if let answer = item.answer as? String {
-                    return !answer.isEmpty
+                    return !answer.isEmpty && answer != "NaN"
                 } else {
-                    return true
+                    return item.answer != nil // 문자열이 아니라면 값이 존재하는지 확인
                 }
             }
-
+            
             print("----- 체크리스트 저장할 항목 -----")
             for checkListItem in validCheckListItems {
                 print(checkListItem)
             }
-
-            // 저장할 항목과 수정할 항목 분리
-            var saveItems = [CheckListAnswer]()
-            var modifyItems = [CheckListAnswer]()
-
-            for item in validCheckListItems {
-                if let existingItem = existingItems[item.questionId] {
-                    if existingItem.answer != item.answer {
-                        modifyItems.append(item)
-                    }
-                } else {
-                    saveItems.append(item)
-                }
-            }
-
-            // 저장 요청 처리
-            if !saveItems.isEmpty {
-                self.saveChecklist(items: saveItems, token: token)
-            }
-
-            // 수정 요청 처리
-            if !modifyItems.isEmpty {
-                self.modifyChecklist(items: modifyItems, token: token)
+            
+            if existingItems.isEmpty {
+                saveChecklist(items: validCheckListItems, token: token)
+            } else {
+                modifyChecklist(items: validCheckListItems, token: token)
             }
         }
     }
 
     // 체크리스트 저장
     private func saveChecklist(items: [CheckListAnswer], token: String) {
-        self.requestChecklist(with: .post, items: items, token: token)
+        self.requestChecklist(with: .post, items: items, action: "create", token: token)
     }
 
     // 체크리스트 수정
     private func modifyChecklist(items: [CheckListAnswer], token: String) {
-        self.requestChecklist(with: .patch, items: items, token: token)
+        self.requestChecklist(with: .post, items: items, action: "update", token: token)
     }
-
+    
     // 체크리스트 API
-    private func requestChecklist(with method: HTTPMethod, items: [CheckListAnswer], token: String) {
+    private func requestChecklist(with method: HTTPMethod,
+                                  items: [CheckListAnswer],
+                                  action: String,
+                                  token: String) {
         let parameters = items.map { item -> [String: Any?] in
             var answerValue: Any? = item.answer
             if let answer = item.answer as? String, answer == "NaN" || answer.isEmpty {
                 answerValue = NSNull()
             }
             return [
+                "action": action,
                 "questionId": item.questionId,
                 "answer": answerValue
             ]
@@ -332,40 +313,25 @@ class CheckListViewController: BaseViewController {
             ]
 
             var request: URLRequest
-            if method == .post {
-                request = URLRequest(url: JuinjangAPI.saveChecklist(imjangId: self.imjangId).endpoint)
-            } else if method == .patch {
-                request = URLRequest(url: JuinjangAPI.modifyChecklist(imjangId: self.imjangId).endpoint)
-            } else {
-                return
-            }
-
-            request.httpMethod = method.rawValue
+            request = URLRequest(url: JuinjangAPI.saveChecklist(imjangId: self.imjangId).endpoint)
+            request.httpMethod = JuinjangAPI.saveChecklist(imjangId: imjangId).method.rawValue
             request.headers = headers
             request.httpBody = jsonData
+            
+            guard !isRequest else { return }
+            isRequest = true
 
             AF.request(request)
                 .responseJSON { response in
                     switch response.result {
                     case .success(let value):
-                        print("체크리스트 \(method == .post ? "저장" : "수정") 처리 성공")
+                        print("체크리스트 \(action == "create" ? "저장" : "수정") 처리 성공")
                         print(value)
-                        self.showCheckList(completion: {})
                     case .failure(let error):
-                        print("체크리스트 \(method == .post ? "저장" : "수정") 처리 실패")
+                        print("체크리스트 \(action == "create" ? "저장" : "수정") 처리 실패")
                         if let data = response.data,
                            let errorMessage = String(data: data, encoding: .utf8) {
                             print("서버 응답 에러 메시지: \(errorMessage)")
-                            // 토큰 관련 에러 처리
-                            if response.response?.statusCode == 401 {
-                                self.refreshToken { success in
-                                    if success {
-                                        self.requestChecklist(with: method, items: items, token: UserDefaultManager.shared.accessToken ?? "")
-                                    } else {
-                                        print("토큰 만료")
-                                    }
-                                }
-                            }
                         } else {
                             print("에러: \(error.localizedDescription)")
                         }
