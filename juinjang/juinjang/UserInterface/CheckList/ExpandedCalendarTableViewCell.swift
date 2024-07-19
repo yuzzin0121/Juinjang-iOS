@@ -141,7 +141,6 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
         calendar.appearance.headerTitleColor = .black // 헤더 색
         calendar.calendarWeekdayView.weekdayLabels.first?.textColor = UIColor(named: "mainOrange")
         
-        
         // 날짜 부분
         calendar.backgroundColor = .white // 배경색
         calendar.appearance.weekdayTextColor = .black // 요일 글씨 색
@@ -200,7 +199,7 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
     
     private func moveCurrentPage(moveUp: Bool) {
         dateComponents.month = moveUp ? 1 : -1
-        currentPage = calendarCurrent.date(byAdding: dateComponents, to: (currentPage ?? selectedDate)!)
+        currentPage = calendarCurrent.date(byAdding: dateComponents, to: ((currentPage ?? selectedDate) ?? today))
         calendar.setCurrentPage(currentPage!, animated: true)
         setborderStyle()
     }
