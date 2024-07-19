@@ -137,10 +137,9 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
         calendar.headerHeight = 66 // YYYY년 M월 표시부 영역 높이
         calendar.weekdayHeight = 41 // 날짜 표시부 행의 높이
         calendar.appearance.headerMinimumDissolvedAlpha = 0.0 // 헤더 좌, 우측 흐릿한 글씨 삭제
-        calendar.appearance.headerDateFormat = "YYYY.MM" // 헤더 표시 형식
+        calendar.appearance.headerDateFormat = "yyyy.MM" // 헤더 표시 형식
         calendar.appearance.headerTitleColor = .black // 헤더 색
         calendar.calendarWeekdayView.weekdayLabels.first?.textColor = UIColor(named: "mainOrange")
-        
         
         // 날짜 부분
         calendar.backgroundColor = .white // 배경색
@@ -173,7 +172,9 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
         let nonSelectedCells = calendar.visibleCells().compactMap { $0 as? FSCalendarCell }
         
         for nonSelectedCell in nonSelectedCells {
-            nonSelectedCell.layer.borderWidth = 0.0
+            DispatchQueue.main.async {
+                nonSelectedCell.layer.borderWidth = 0.0
+            }
         }
         
         // 레이아웃 갱신
@@ -187,7 +188,9 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
         let nonSelectedCells = calendar.visibleCells().compactMap { $0 as? FSCalendarCell }
         
         for nonSelectedCell in nonSelectedCells {
-            nonSelectedCell.layer.borderWidth = 0.0
+            DispatchQueue.main.async {
+                nonSelectedCell.layer.borderWidth = 0.0
+            }
         }
         
         // 레이아웃 갱신
@@ -196,8 +199,9 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
     
     private func moveCurrentPage(moveUp: Bool) {
         dateComponents.month = moveUp ? 1 : -1
-        currentPage = calendarCurrent.date(byAdding: dateComponents, to: currentPage ?? today)
+        currentPage = calendarCurrent.date(byAdding: dateComponents, to: ((currentPage ?? selectedDate) ?? today))
         calendar.setCurrentPage(currentPage!, animated: true)
+        setborderStyle()
     }
       
     // 수정 모드
@@ -217,24 +221,49 @@ class ExpandedCalendarTableViewCell: UITableViewCell {
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyyMMdd" // 저장된 날짜 문자열의 포맷에 맞게 설정
-        dateFormatter.timeZone = TimeZone(abbreviation: "UTC") // UTC TimeZone 설정
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
         
         // 날짜 문자열을 Date로 변환
-        if let date = dateFormatter.date(from: answer) {
-            selectedDate = date
+        guard let date = dateFormatter.date(from: answer) else { return }
         
-            calendar.select(date)
-            DispatchQueue.main.async {
-                if let selectedCell = self.calendar.cell(for: date, at: .current) {
-                    selectedCell.layer.cornerRadius = 9.97
-                    selectedCell.layer.borderWidth = 1.5
-                    selectedCell.layer.borderColor = UIColor(named: "mainOrange")?.cgColor
-                } else {
-                    print("찾을 수 없는 셀 날짜: \(date)")
-                }
+        selectedDate = date
+        calendar.select(date)
+        
+        DispatchQueue.main.async {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                self.updateCalendarCell(for: date)
             }
+        }
+    }
+    
+    func updateCalendarCell(for date: Date) {
+        if let selectedCell = self.calendar.cell(for: date, at: .current) {
+            selectedCell.layer.cornerRadius = 9.97
+            selectedCell.layer.borderWidth = 1.5
+            selectedCell.layer.borderColor = UIColor(named: "mainOrange")?.cgColor
         } else {
-            print("날짜 Date 형 변환 실패: \(answer)")
+            // .current에서 찾지 못한 경우 .notFound로 시도
+            if let selectedCell = self.calendar.cell(for: date, at: .notFound) {
+                selectedCell.layer.cornerRadius = 9.97
+                selectedCell.layer.borderWidth = 1.5
+                selectedCell.layer.borderColor = UIColor(named: "mainOrange")?.cgColor
+            } else {
+                print("셀을 찾을 수 없습니다.")
+            }
+        }
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        setborderStyle()
+    }
+    
+    private func setborderStyle() {
+        if let selectedDate = self.selectedDate {
+            guard let convertedDate = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: selectedDate)?.addingTimeInterval(TimeInterval(NSTimeZone.system.secondsFromGMT())) else { return }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                self.updateCalendarCell(for: convertedDate)
+            }
         }
     }
     
@@ -249,56 +278,68 @@ extension ExpandedCalendarTableViewCell: FSCalendarDelegate, FSCalendarDataSourc
         self.monthPosition = monthPosition
         backgroundColor = UIColor(named: "lightOrange")
         questionImage.image = UIImage(named: "question-selected-image")
-        selectedDate = date
         
         // 이미 선택된 날짜를 클릭하면 선택을 해제
         if let currentSelectedDate = selectedDate, currentSelectedDate == date {
             calendar.deselect(date)
             selectedDate = nil
+            
             // 선택 해제할 경우 테두리 제거
-            if let selectedCell = calendar.cell(for: date, at: monthPosition) as? FSCalendarCell {
-                selectedCell.layer.borderWidth = 0.0
-                backgroundColor = .white
-                questionImage.image = UIImage(named: "question-image")
+            if let selectedCell = calendar.cell(for: date, at: monthPosition) {
+                DispatchQueue.main.async {
+                    selectedCell.layer.borderWidth = 0.0
+                    self.backgroundColor = .white
+                    self.questionImage.image = UIImage(named: "question-image")
+                }
             }
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyyMMdd"
+            handleDateSelection(dateFormatter.string(from: date))
+            
             return
         }
         
         // 현재 선택된 날짜의 테두리를 초기화
         if let currentSelectedDate = selectedDate, let currentSelectedCell = calendar.cell(for: currentSelectedDate, at: monthPosition) {
-            currentSelectedCell.layer.borderWidth = 0.0
+            DispatchQueue.main.async {
+                currentSelectedCell.layer.borderWidth = 0.0
+            }
         }
-
+        
         // 선택되지 않은 날짜의 테두리를 초기화
         let nonSelectedCells = calendar.visibleCells().compactMap { $0 as? FSCalendarCell }
-
         for nonSelectedCell in nonSelectedCells {
-            nonSelectedCell.layer.borderWidth = 0.0
+            DispatchQueue.main.async {
+                nonSelectedCell.layer.borderWidth = 0.0
+            }
         }
-
+        
         // 현재 달이 아닌 날짜의 테두리를 초기화
         if monthPosition != .current, let outOfMonthDateCell = calendar.cell(for: date, at: monthPosition) {
-            outOfMonthDateCell.layer.borderWidth = 0.0
-        }
-
-        // 선택된 날짜의 테두리를 설정
-        if let selectedCell = calendar.cell(for: date, at: monthPosition) {
-            selectedCell.layer.cornerRadius = 9.97
-            selectedCell.layer.borderWidth = 1.5
-//            selectedCell.layer.fs_width = 49
-//            selectedCell.layer.fs_height = 49
-            selectedCell.layer.borderColor = UIColor(named: "mainOrange")?.cgColor
+            DispatchQueue.main.async {
+                outOfMonthDateCell.layer.borderWidth = 0.0
+            }
         }
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyyMMdd"
         print("Selected Date: \(dateFormatter.string(from: date))")
-
-        // 선택된 날짜의 시간 성분을 12:00 PM으로 설정 (UTC로 변환)
-        if let selectedDateNoon = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: date)?.addingTimeInterval(TimeInterval(NSTimeZone.system.secondsFromGMT())) {
-            print("Selected Date (UTC 변환): \(selectedDateNoon)")
-            
-            handleDateSelection(dateFormatter.string(from: date))
+        
+        // 선택된 날짜의 테두리를 설정
+        if let selectedCell = calendar.cell(for: date, at: monthPosition) {
+            DispatchQueue.main.async {
+                selectedCell.layer.cornerRadius = 9.97
+                selectedCell.layer.borderWidth = 1.5
+//                selectedCell.layer.fs_width = 49
+//                selectedCell.layer.fs_height = 49
+                selectedCell.layer.borderColor = UIColor(named: "mainOrange")?.cgColor
+            }
+            if let convertedDate = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: date)?.addingTimeInterval(TimeInterval(NSTimeZone.system.secondsFromGMT())) {
+                print("변환된 날짜: \(convertedDate)")
+                handleDateSelection(dateFormatter.string(from: convertedDate))
+            }
+            selectedDate = date
         }
     }
     
