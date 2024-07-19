@@ -521,7 +521,6 @@ extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
                                 self.checkListItems.append(answerItem)
                                 print("\(questionId)번에 해당하는 답변 생성")
                             }
-//                            print(checkListItems)
                         }
                     }
 
@@ -571,7 +570,6 @@ extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
                                     print("\(questionId)번에 해당하는 답변 생성")
                                 }
                             }
-//                            print(checkListItems)
                         }
                     }
 
@@ -615,7 +613,6 @@ extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
                                 self.checkListItems.append(answerItem)
                                 print("\(questionId)번에 해당하는 답변 생성")
                             }
-//                            print(checkListItems)
                         }
                     }
 
@@ -626,7 +623,7 @@ extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
                     // CalendarItem
                     let cell: ExpandedCalendarTableViewCell = tableView.dequeueReusableCell(withIdentifier: ExpandedCalendarTableViewCell.identifier, for: indexPath) as! ExpandedCalendarTableViewCell
 
-                    cell.editModeConfigure(with: questionDto,  at: indexPath)
+                    cell.editModeConfigure(with: questionDto, at: indexPath)
                     
                     // 임시로 저장한 값
                     for item in checkListItems {
@@ -659,7 +656,6 @@ extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
                                 self.checkListItems.append(answerItem)
                                 print("\(questionId)번에 해당하는 답변 생성")
                             }
-//                            print(checkListItems)
                         }
                     }
                     
