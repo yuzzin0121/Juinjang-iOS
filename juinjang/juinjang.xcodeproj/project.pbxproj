@@ -55,6 +55,7 @@
 		0AC6ED672B7E917F00263487 /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json in Resources */ = {isa = PBXBuildFile; fileRef = 0AC6ED662B7E917F00263487 /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json */; };
 		0AD529D62B729B6500FE7D9E /* CheckListPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD529D52B729B6500FE7D9E /* CheckListPopUpViewController.swift */; };
 		0AE388892B5986BC0041A979 /* CategoryItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE388882B5986BC0041A979 /* CategoryItemTableViewCell.swift */; };
+		0AE9C19D2C4C285E00DE7739 /* GuideViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE9C19C2C4C285E00DE7739 /* GuideViewController.swift */; };
 		0AEE17F42BB0632B00D86DEE /* CheckListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEE17F32BB0632B00D86DEE /* CheckListModel.swift */; };
 		0AF0ECBE2BEFE1AD00413778 /* AnswerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF0ECBD2BEFE1AD00413778 /* AnswerModel.swift */; };
 		0AF89DA32B74C5D500C9AD81 /* ContentWrappingTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF89DA22B74C5D500C9AD81 /* ContentWrappingTableView.swift */; };
@@ -238,6 +239,7 @@
 		0AC6ED662B7E917F00263487 /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json"; sourceTree = "<group>"; };
 		0AD529D52B729B6500FE7D9E /* CheckListPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckListPopUpViewController.swift; sourceTree = "<group>"; };
 		0AE388882B5986BC0041A979 /* CategoryItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryItemTableViewCell.swift; sourceTree = "<group>"; };
+		0AE9C19C2C4C285E00DE7739 /* GuideViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuideViewController.swift; sourceTree = "<group>"; };
 		0AEE17F32BB0632B00D86DEE /* CheckListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckListModel.swift; sourceTree = "<group>"; };
 		0AF0ECBD2BEFE1AD00413778 /* AnswerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerModel.swift; sourceTree = "<group>"; };
 		0AF89DA22B74C5D500C9AD81 /* ContentWrappingTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentWrappingTableView.swift; sourceTree = "<group>"; };
@@ -485,6 +487,7 @@
 				0A0FE7562B6C0031001866C8 /* ReportPopupViewController.swift */,
 				0AD529D52B729B6500FE7D9E /* CheckListPopUpViewController.swift */,
 				0AF89DA22B74C5D500C9AD81 /* ContentWrappingTableView.swift */,
+				0AE9C19C2C4C285E00DE7739 /* GuideViewController.swift */,
 			);
 			path = CheckList;
 			sourceTree = "<group>";
@@ -1102,6 +1105,7 @@
 				616D48182BFBA52B0073029A /* DateFormatterManager.swift in Sources */,
 				0A2DED1A2B55198D00A96BAA /* STTLoadingViewController.swift in Sources */,
 				619269DA2B6773FE00D4DD3E /* DeleteImjangViewController.swift in Sources */,
+				0AE9C19D2C4C285E00DE7739 /* GuideViewController.swift in Sources */,
 				616F1E4B2C00EAD40049461F /* NotificationName+Extension.swift in Sources */,
 				619269E82B67745900D4DD3E /* ImageStyle.swift in Sources */,
 				0A0FE7572B6C0031001866C8 /* ReportPopupViewController.swift in Sources */,

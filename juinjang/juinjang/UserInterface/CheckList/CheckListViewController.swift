@@ -53,6 +53,18 @@ class CheckListViewController: BaseViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(handleEditModeChange(_:)), name: Notification.Name("EditModeChanged"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleEditButtonTappedNotification), name: NSNotification.Name("EditButtonTapped"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ReloadTableView), name: NSNotification.Name("ReloadTableView"), object: nil)
+//        UserDefaults.standard.clearKey(UserDefaultManager.UDKey.isShowGuide.rawValue)
+        if !UserDefaultManager.shared.isShowGuide {
+             showGuide()
+             UserDefaultManager.shared.isShowGuide = true
+        }
+    }
+    
+    private func showGuide() {
+        let guideVC = GuideViewController()
+        guideVC.modalPresentationStyle = .overFullScreen
+        guideVC.modalTransitionStyle = .crossDissolve
+        self.present(guideVC, animated: true, completion: nil)
     }
     
     private func setCheckInfo() {
