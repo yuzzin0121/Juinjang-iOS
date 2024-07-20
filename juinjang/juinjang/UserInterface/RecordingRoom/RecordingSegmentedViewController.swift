@@ -12,7 +12,7 @@ import Pageboy
 
 
 
-class RecordingSegmentedViewController: TabmanViewController, MoveWarningMessageDelegate {
+class RecordingSegmentedViewController: TabmanViewController, MoveWarningMessageDelegate, CheckListDelegate {
     
     let tabView = UIView().then {
         $0.backgroundColor = .white
@@ -23,6 +23,7 @@ class RecordingSegmentedViewController: TabmanViewController, MoveWarningMessage
 //    var viewControllers: Array<UIViewController> = [CheckListViewController(), RecordingRoomViewController()]
     var viewControllers: [UIViewController] = []
     let tabTitles = ["체크리스트", "기록룸"]
+    var recordingRoomVC: RecordingRoomViewController?
     
     var imjangNoteViewController: ImjangNoteViewController?
     var imjangId: Int
@@ -54,10 +55,18 @@ class RecordingSegmentedViewController: TabmanViewController, MoveWarningMessage
         tabView.addSubview(border)
     }
     
+    func didUpdateSavedCheckListItems(_ items: [CheckListAnswer]) {
+        recordingRoomVC?.updateUI(with: items)
+    }
+    
     func addViewControllers() {
         let checkListVC = CheckListViewController(imjangId: imjangId, version: version)
-        let recordingRoomVC = RecordingRoomViewController(imjangId: imjangId)
-        viewControllers.append(contentsOf: [checkListVC, recordingRoomVC])
+        checkListVC.delegate = self
+        print("뭐가 저장되어있느지 확인하게")
+        print(checkListVC.savedCheckListItems)
+        
+        recordingRoomVC = RecordingRoomViewController(imjangId: imjangId, savedCheckListItems: checkListVC.savedCheckListItems)
+        viewControllers.append(contentsOf: [checkListVC, recordingRoomVC!])
     }
 
     func setDelegate() {
