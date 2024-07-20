@@ -10,7 +10,11 @@ import SnapKit
 import Alamofire
 import RealmSwift
 
-class CheckListViewController: BaseViewController {
+protocol CheckListDelegate {
+    func didUpdateSavedCheckListItems(_ items: [CheckListAnswer])
+}
+
+class CheckListViewController: BaseViewController, CheckListContainable {
     
     // 체크리스트 정보
     var version: Int
@@ -22,6 +26,8 @@ class CheckListViewController: BaseViewController {
     var checkListItems: [CheckListAnswer] = [] // 저장될 체크리스트 항목
     
     private var isRequest = false // 체크리스트 저장 요청
+    
+    var delegate: CheckListDelegate?
     
     init(imjangId: Int, version: Int) {
         self.imjangId = imjangId
@@ -53,6 +59,18 @@ class CheckListViewController: BaseViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(handleEditModeChange(_:)), name: Notification.Name("EditModeChanged"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleEditButtonTappedNotification), name: NSNotification.Name("EditButtonTapped"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ReloadTableView), name: NSNotification.Name("ReloadTableView"), object: nil)
+//        UserDefaults.standard.clearKey(UserDefaultManager.UDKey.isShowGuide.rawValue)
+        if !UserDefaultManager.shared.isShowGuide {
+             showGuide()
+             UserDefaultManager.shared.isShowGuide = true
+        }
+    }
+    
+    private func showGuide() {
+        let guideVC = GuideViewController()
+        guideVC.modalPresentationStyle = .overFullScreen
+        guideVC.modalTransitionStyle = .crossDissolve
+        self.present(guideVC, animated: true, completion: nil)
     }
     
     private func setCheckInfo() {
@@ -181,6 +199,7 @@ class CheckListViewController: BaseViewController {
                 for checkListItem in checkListItems {
                     print(checkListItem)
                 }
+                delegate?.didUpdateSavedCheckListItems(savedCheckListItems)
                 completion()
             } else {
                 guard let error = error else { return }

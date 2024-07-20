@@ -13,7 +13,7 @@ protocol RemoveRecordDelegate: AnyObject {
     func removeRecordResponse(recordId: Int)
 }
 
-class RecordingRoomViewController: BaseViewController, RemoveRecordDelegate {
+class RecordingRoomViewController: BaseViewController, RemoveRecordDelegate, CheckListContainable {
     func removeRecordResponse(recordId: Int) {
         if let index = fileItems.firstIndex(where: { $0.recordId == recordId }) {
             fileItems.remove(at: index)
@@ -68,9 +68,11 @@ class RecordingRoomViewController: BaseViewController, RemoveRecordDelegate {
     var fileItems: [RecordResponse] = []
     
     var imjangId: Int
+    var savedCheckListItems: [CheckListAnswer] = []
     
-    init(imjangId: Int) {
+    init(imjangId: Int, savedCheckListItems: [CheckListAnswer]) {
         self.imjangId = imjangId
+        self.savedCheckListItems = savedCheckListItems
         super.init()
     }
     
@@ -96,6 +98,10 @@ class RecordingRoomViewController: BaseViewController, RemoveRecordDelegate {
 
     deinit {
         NotificationCenter.default.removeObserver(self)
+    }
+    
+    func updateUI(with items: [CheckListAnswer]) {
+        self.savedCheckListItems = items
     }
     
     @objc

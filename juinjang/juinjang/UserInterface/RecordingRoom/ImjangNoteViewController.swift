@@ -241,7 +241,7 @@ class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEdit
     
     @objc func showReportVC() {
         // 현재 ViewController를 검사해서 미입력 상태라면
-        if let currentVC = recordingSegmentedVC.currentViewController as? CheckListViewController {
+        if let currentVC = recordingSegmentedVC.currentViewController as? CheckListContainable {
             // savedCheckListItems 배열이 비어 있는지 확인
             let savedCheckListItemsAreEmpty = currentVC.savedCheckListItems.isEmpty
             if savedCheckListItemsAreEmpty {
