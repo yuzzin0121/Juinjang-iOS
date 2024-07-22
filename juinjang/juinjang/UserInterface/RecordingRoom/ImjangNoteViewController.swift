@@ -118,6 +118,7 @@ class ImjangNoteViewController: BaseViewController,
     
     
     var checkListItems: [CheckListAnswer] = []
+    var existingItems = [Int: CheckListAnswer]()
     
     // MARK: - CheckListDelegate
     func didSavedCheckListItems(_ items: [CheckListAnswer]) {
@@ -787,7 +788,6 @@ class ImjangNoteViewController: BaseViewController,
             var uniqueItems = [CheckListAnswer]()
             
             // 서버에서 불러온 questionId 목록
-            var existingItems = [Int: CheckListAnswer]()
             if let categoryItem = checkListResponse.result {
                 for item in categoryItem {
                     existingItems[item.questionId] = CheckListAnswer(imjangId: imjangId, questionId: item.questionId, answer: item.answer, isSelected: true)
@@ -958,11 +958,13 @@ class ImjangNoteViewController: BaseViewController,
                 guard let self = self else { return }
                 
                 if let detailDto = detailDto, let reportDto = reportDto {
-                    let reportVC = ReportViewController(imjangId: detailDto.limjangId, savedCheckListItems: checkListItems)
-                    reportVC.checkListDatadelegate = self
-                    reportVC.setData(detailDto: detailDto)
-                    reportVC.setData(reportDto: reportDto)
-                    self.navigationController?.pushViewController(reportVC, animated: true)
+                    if existingItems.isEmpty {
+                        let reportVC = ReportViewController(imjangId: detailDto.limjangId, savedCheckListItems: checkListItems)
+                        reportVC.checkListDatadelegate = self
+                        reportVC.setData(detailDto: detailDto)
+                        reportVC.setData(reportDto: reportDto)
+                        self.navigationController?.pushViewController(reportVC, animated: true)
+                    }
                 } else {
                     print("리포트 데이터가 준비되지 않았습니다.")
                 }
