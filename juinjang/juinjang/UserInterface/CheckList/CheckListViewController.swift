@@ -11,10 +11,10 @@ import Alamofire
 import RealmSwift
 
 protocol CheckListDelegate {
-    func didUpdateSavedCheckListItems(_ items: [CheckListAnswer])
+    func didSavedCheckListItems(_ items: [CheckListAnswer])
 }
 
-class CheckListViewController: BaseViewController, CheckListContainable {
+class CheckListViewController: BaseViewController {
     
     // 체크리스트 정보
     var version: Int
@@ -24,8 +24,6 @@ class CheckListViewController: BaseViewController, CheckListContainable {
     var checkListCategories: [CheckListCategory] = [] // 카테고리별 질문
     var savedCheckListItems: [CheckListAnswer] = [] // 저장되어 있던 체크리스트 항목
     var checkListItems: [CheckListAnswer] = [] // 저장될 체크리스트 항목
-    
-    private var isRequest = false // 체크리스트 저장 요청
     
     var delegate: CheckListDelegate?
     
@@ -57,7 +55,6 @@ class CheckListViewController: BaseViewController, CheckListContainable {
         setCheckInfo()
         NotificationCenter.default.addObserver(self, selector: #selector(didStoppedParentScroll), name: NSNotification.Name("didStoppedParentScroll"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleEditModeChange(_:)), name: Notification.Name("EditModeChanged"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(handleEditButtonTappedNotification), name: NSNotification.Name("EditButtonTapped"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ReloadTableView), name: NSNotification.Name("ReloadTableView"), object: nil)
 //        UserDefaults.standard.clearKey(UserDefaultManager.UDKey.isShowGuide.rawValue)
         if !UserDefaultManager.shared.isShowGuide {
@@ -199,7 +196,7 @@ class CheckListViewController: BaseViewController, CheckListContainable {
                 for checkListItem in checkListItems {
                     print(checkListItem)
                 }
-                delegate?.didUpdateSavedCheckListItems(savedCheckListItems)
+                delegate?.didSavedCheckListItems(savedCheckListItems)
                 completion()
             } else {
                 guard let error = error else { return }
@@ -235,131 +232,6 @@ class CheckListViewController: BaseViewController, CheckListContainable {
             }
         }
     }
-
-    // MARK: - API 요청
-    func saveAnswer() {
-        let token = UserDefaultManager.shared.accessToken
-        print("토큰값 \(token)")
-
-        // 저장된 체크리스트 불러오기
-        JuinjangAPIManager.shared.fetchData(type: BaseResponse<[QuestionAnswerDto]>.self, api: .showChecklist(imjangId: imjangId)) { [weak self] response, error in
-            guard let self = self else { return }
-            guard let checkListResponse = response else { return }
-            
-            let checkListItems = self.checkListItems
-            var savedQuestionIds = Set<Int>()
-            var uniqueItems = [CheckListAnswer]()
-            
-            // 서버에서 불러온 questionId 목록
-            var existingItems = [Int: CheckListAnswer]()
-            if let categoryItem = checkListResponse.result {
-                for item in categoryItem {
-                    existingItems[item.questionId] = CheckListAnswer(imjangId: imjangId, questionId: item.questionId, answer: item.answer, isSelected: true)
-                }
-            }
-            
-            // 최근에 추가된 항목만 유지하고 중복된 항목 제거
-            for item in checkListItems {
-                if !savedQuestionIds.contains(item.questionId) {
-                    savedQuestionIds.insert(item.questionId)
-                    uniqueItems.append(item) // 중복 제거 후 새로운 값 추가
-                } else if let index = uniqueItems.firstIndex(where: { $0.questionId == item.questionId }) {
-                    uniqueItems[index] = item // 기존의 항목이 있다면 새로운 값으로 변경
-                }
-            }
-            
-            self.checkListItems = uniqueItems
-            
-            // 유효한 값만 필터링
-            let validCheckListItems = checkListItems.filter { item in
-                if let answer = item.answer as? String {
-                    return !answer.isEmpty && answer != "NaN"
-                } else {
-                    return item.answer != nil // 문자열이 아니라면 값이 존재하는지 확인
-                }
-            }
-            
-            print("----- 체크리스트 저장할 항목 -----")
-            for checkListItem in validCheckListItems {
-                print(checkListItem)
-            }
-            
-            if existingItems.isEmpty {
-                saveChecklist(items: validCheckListItems, token: token)
-            } else {
-                modifyChecklist(items: validCheckListItems, token: token)
-            }
-        }
-    }
-
-    // 체크리스트 저장
-    private func saveChecklist(items: [CheckListAnswer], token: String) {
-        self.requestChecklist(with: .post, items: items, action: "create", token: token)
-    }
-
-    // 체크리스트 수정
-    private func modifyChecklist(items: [CheckListAnswer], token: String) {
-        self.requestChecklist(with: .post, items: items, action: "update", token: token)
-    }
-    
-    // 체크리스트 API
-    private func requestChecklist(with method: HTTPMethod,
-                                  items: [CheckListAnswer],
-                                  action: String,
-                                  token: String) {
-        let parameters = items.map { item -> [String: Any?] in
-            var answerValue: Any? = item.answer
-            if let answer = item.answer as? String, answer == "NaN" || answer.isEmpty {
-                answerValue = NSNull()
-            }
-            return [
-                "action": action,
-                "questionId": item.questionId,
-                "answer": answerValue
-            ]
-        }
-
-        do {
-            let jsonData = try JSONSerialization.data(withJSONObject: parameters, options: [])
-
-            if let jsonString = String(data: jsonData, encoding: .utf8) {
-                print("JSON Data: \(jsonString)")
-            }
-
-            let headers: HTTPHeaders = [
-                "Content-Type": "application/json",
-                "Authorization": "Bearer \(token)"
-            ]
-
-            var request: URLRequest
-            request = URLRequest(url: JuinjangAPI.saveChecklist(imjangId: self.imjangId).endpoint)
-            request.httpMethod = JuinjangAPI.saveChecklist(imjangId: imjangId).method.rawValue
-            request.headers = headers
-            request.httpBody = jsonData
-            
-            guard !isRequest else { return }
-            isRequest = true
-
-            AF.request(request)
-                .responseJSON { response in
-                    switch response.result {
-                    case .success(let value):
-                        print("체크리스트 \(action == "create" ? "저장" : "수정") 처리 성공")
-                        print(value)
-                    case .failure(let error):
-                        print("체크리스트 \(action == "create" ? "저장" : "수정") 처리 실패")
-                        if let data = response.data,
-                           let errorMessage = String(data: data, encoding: .utf8) {
-                            print("서버 응답 에러 메시지: \(errorMessage)")
-                        } else {
-                            print("에러: \(error.localizedDescription)")
-                        }
-                    }
-                }
-        } catch {
-            print("encoding 에러: \(error)")
-        }
-    }
     
     // 키보드 내리기
     func hideKeyboardWhenTappedArround() {
@@ -380,10 +252,6 @@ class CheckListViewController: BaseViewController, CheckListContainable {
                 self?.tableView.reloadData()
             }
         }
-    }
-    
-    @objc func handleEditButtonTappedNotification() {
-        saveAnswer()
     }
     
     @objc func didStoppedParentScroll() {
@@ -506,6 +374,7 @@ extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
                                 self.checkListItems.append(answerItem)
                                 print("\(questionId)번에 해당하는 답변 생성")
                             }
+                            NotificationCenter.default.post(name: NSNotification.Name("CheckListItemsUpdated"), object: checkListItems)
                         }
                     }
 
@@ -555,6 +424,7 @@ extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
                                     print("\(questionId)번에 해당하는 답변 생성")
                                 }
                             }
+                            NotificationCenter.default.post(name: NSNotification.Name("CheckListItemsUpdated"), object: checkListItems)
                         }
                     }
 
@@ -598,9 +468,9 @@ extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
                                 self.checkListItems.append(answerItem)
                                 print("\(questionId)번에 해당하는 답변 생성")
                             }
+                            NotificationCenter.default.post(name: NSNotification.Name("CheckListItemsUpdated"), object: checkListItems)
                         }
                     }
-
                     cell.answerTextField.isEnabled = true
                     
                     return cell
@@ -641,6 +511,7 @@ extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
                                 self.checkListItems.append(answerItem)
                                 print("\(questionId)번에 해당하는 답변 생성")
                             }
+                            NotificationCenter.default.post(name: NSNotification.Name("CheckListItemsUpdated"), object: checkListItems)
                         }
                     }
                     
@@ -753,6 +624,12 @@ extension CheckListViewController: UITableViewDelegate, UITableViewDataSource {
             }
         }
         return UITableViewCell()
+    }
+    
+    private func getUpdatedCheckListItems() -> [CheckListAnswer] {
+        // 업데이트된 체크리스트 항목을 반환
+        print(checkListItems)
+        return checkListItems
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

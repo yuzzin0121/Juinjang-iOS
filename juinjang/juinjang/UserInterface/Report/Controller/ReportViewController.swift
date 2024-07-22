@@ -20,6 +20,7 @@ import SafariServices
 import Alamofire
 
 class ReportViewController : BaseViewController {
+    
     let templateId = 103560
     var safariViewController : SFSafariViewController?
     var checkListViewController: CheckListViewController?
@@ -55,6 +56,8 @@ class ReportViewController : BaseViewController {
     var locationConditionsWord : String = ""
     var publicSpaceRate : Float = 0.0
     var publicSpaceKeyWord : String = ""
+    var savedCheckListItems: [CheckListAnswer]
+    var checkListDatadelegate: SendCheckListData?
    // var reportId : Int = 0
     var totalRate : Float = 0.0
    
@@ -212,6 +215,9 @@ class ReportViewController : BaseViewController {
     
     @objc func backBtnTap() {
         NotificationCenter.default.post(name: NSNotification.Name("ReloadTableView"), object: nil)
+        checkListDatadelegate?.sendData(
+            savedCheckListItems: savedCheckListItems
+        )
         self.navigationController?.popViewController(animated: true)
 //        let mainVC = ImjangNoteViewController()
 //        navigationController?.pushViewController(mainVC, animated: true)
@@ -246,8 +252,13 @@ class ReportViewController : BaseViewController {
         }
     }
     
-    init(imjangId: Int) {
+    func updateUI(with items: [CheckListAnswer]) {
+        self.savedCheckListItems = items
+    }
+    
+    init(imjangId: Int, savedCheckListItems: [CheckListAnswer]) {
         self.imjangId = imjangId
+        self.savedCheckListItems = savedCheckListItems
         super.init()
     }
     
@@ -271,8 +282,10 @@ class ReportViewController : BaseViewController {
         view.addSubview(tabViewController.view)
         tabViewController.didMove(toParent: self)
         
-        
-        
         setConstraint()
     }
+}
+
+protocol SendCheckListData {
+    func sendData(savedCheckListItems: [CheckListAnswer])
 }

@@ -13,7 +13,7 @@ protocol RemoveRecordDelegate: AnyObject {
     func removeRecordResponse(recordId: Int)
 }
 
-class RecordingRoomViewController: BaseViewController, RemoveRecordDelegate, CheckListContainable {
+class RecordingRoomViewController: BaseViewController, RemoveRecordDelegate {
     func removeRecordResponse(recordId: Int) {
         if let index = fileItems.firstIndex(where: { $0.recordId == recordId }) {
             fileItems.remove(at: index)
