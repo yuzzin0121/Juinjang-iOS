@@ -55,15 +55,13 @@ class RecordingSegmentedViewController: TabmanViewController, MoveWarningMessage
         tabView.addSubview(border)
     }
     
-    func didUpdateSavedCheckListItems(_ items: [CheckListAnswer]) {
+    func didSavedCheckListItems(_ items: [CheckListAnswer]) {
         recordingRoomVC?.updateUI(with: items)
     }
     
     func addViewControllers() {
         let checkListVC = CheckListViewController(imjangId: imjangId, version: version)
         checkListVC.delegate = self
-        print("뭐가 저장되어있느지 확인하게")
-        print(checkListVC.savedCheckListItems)
         
         recordingRoomVC = RecordingRoomViewController(imjangId: imjangId, savedCheckListItems: checkListVC.savedCheckListItems)
         viewControllers.append(contentsOf: [checkListVC, recordingRoomVC!])

@@ -9,8 +9,14 @@ import UIKit
 import SnapKit
 import Then
 import Kingfisher
+import Alamofire
 
-class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEditData, ButtonStateDelegate {
+class ImjangNoteViewController: BaseViewController,
+                                SendEditData,
+                                SendDetailEditData,
+                                ButtonStateDelegate,
+                                CheckListDelegate,
+                                SendCheckListData {
     // 스크롤뷰
     let scrollView = UIScrollView().then {
         $0.backgroundColor = .white
@@ -110,9 +116,19 @@ class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEdit
 //    var mDateString: String = "23.12.01"
     var completionHandler: (() -> Void)?
     
+    
+    var checkListItems: [CheckListAnswer] = []
+    var existingItems = [Int: CheckListAnswer]()
+    
+    // MARK: - CheckListDelegate
+    func didSavedCheckListItems(_ items: [CheckListAnswer]) {
+        self.checkListItems = items
+    }
+    
     lazy var images: [String] = []
     var imjangId: Int
     var detailDto: DetailDto? = nil
+    var reportDto: ReportDTO?
     var previousVCType: PreviousVCType = .createImjangVC
     var versionInfo: VersionInfo?
     var versionDetail: Int
@@ -143,6 +159,13 @@ class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEdit
         NotificationCenter.default.addObserver(self, selector: #selector(didStoppedChildScroll), name: NSNotification.Name("didStoppedChildScroll"), object: nil)
         recordingSegmentedVC.imjangNoteViewController = self
         NotificationCenter.default.addObserver(self, selector: #selector(scrollToTop), name: NSNotification.Name("ScrollToTop"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleCheckListItemsUpdated(_:)), name: NSNotification.Name("CheckListItemsUpdated"), object: nil)
+    }
+    
+    @objc func handleCheckListItemsUpdated(_ notification: Notification) {
+        if let items = notification.object as? [CheckListAnswer] {
+            self.checkListItems = items
+        }
     }
     
     func callRequest() {
@@ -240,20 +263,17 @@ class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEdit
     }
     
     @objc func showReportVC() {
-        // 현재 ViewController를 검사해서 미입력 상태라면
-        if let currentVC = recordingSegmentedVC.currentViewController as? CheckListContainable {
-            // savedCheckListItems 배열이 비어 있는지 확인
-            let savedCheckListItemsAreEmpty = currentVC.savedCheckListItems.isEmpty
-            if savedCheckListItemsAreEmpty {
-                // 팝업창이 뜸
-                let reportPopupVC = ReportPopupViewController()
-                reportPopupVC.delegate = self
-                reportPopupVC.modalPresentationStyle = .overCurrentContext
-                present(reportPopupVC, animated: false, completion: nil)
-            } else {
-                let reportVC = ReportViewController(imjangId: imjangId)
-                navigationController?.pushViewController(reportVC, animated: true)
-            }
+        // savedCheckListItems 배열이 비어 있는지 확인
+        let savedCheckListItemsAreEmpty = checkListItems.isEmpty
+        if savedCheckListItemsAreEmpty {
+            // 팝업창이 뜸
+            let reportPopupVC = ReportPopupViewController()
+            reportPopupVC.delegate = self
+            reportPopupVC.modalPresentationStyle = .overCurrentContext
+            present(reportPopupVC, animated: false, completion: nil)
+        } else {
+            let reportVC = ReportViewController(imjangId: imjangId, savedCheckListItems: checkListItems)
+            navigationController?.pushViewController(reportVC, animated: true)
         }
     }
     
@@ -754,19 +774,206 @@ class ImjangNoteViewController: BaseViewController, SendEditData, SendDetailEdit
         label.numberOfLines = numberOfLines
     }
     
+    // MARK: - API 요청
+    func saveAnswer(completion: @escaping (DetailDto?, ReportDTO?) -> Void) {
+        let token = UserDefaultManager.shared.accessToken
+        print("토큰값 \(token)")
+
+        // 저장된 체크리스트 불러오기
+        JuinjangAPIManager.shared.fetchData(type: BaseResponse<[QuestionAnswerDto]>.self, api: .showChecklist(imjangId: imjangId)) { [weak self] response, error in
+            guard let self = self else { return }
+            guard let checkListResponse = response else { return }
+            
+            var savedQuestionIds = Set<Int>()
+            var uniqueItems = [CheckListAnswer]()
+            
+            // 서버에서 불러온 questionId 목록
+            if let categoryItem = checkListResponse.result {
+                for item in categoryItem {
+                    existingItems[item.questionId] = CheckListAnswer(imjangId: imjangId, questionId: item.questionId, answer: item.answer, isSelected: true)
+                }
+            }
+            
+            // 최근에 추가된 항목만 유지하고 중복된 항목 제거
+            for item in checkListItems {
+                if !savedQuestionIds.contains(item.questionId) {
+                    savedQuestionIds.insert(item.questionId)
+                    uniqueItems.append(item) // 중복 제거 후 새로운 값 추가
+                } else if let index = uniqueItems.firstIndex(where: { $0.questionId == item.questionId }) {
+                    uniqueItems[index] = item // 기존의 항목이 있다면 새로운 값으로 변경
+                }
+            }
+            
+            self.checkListItems = uniqueItems
+            
+            // 유효한 값만 필터링
+            let validCheckListItems = checkListItems.filter { item in
+                if let answer = item.answer as? String {
+                    return !answer.isEmpty && answer != "NaN"
+                } else {
+                    return item.answer != nil // 문자열이 아니라면 값이 존재하는지 확인
+                }
+            }
+            
+            print("----- 체크리스트 저장할 항목 -----")
+            for checkListItem in validCheckListItems {
+                print(checkListItem)
+            }
+            
+            if existingItems.isEmpty {
+                saveChecklist(items: validCheckListItems, token: token, completion: completion)
+            } else {
+                modifyChecklist(items: validCheckListItems, token: token, completion: completion)
+            }
+        }
+    }
+    
+    
+    // 체크리스트 저장
+    private func saveChecklist(items: [CheckListAnswer], token: String, completion: @escaping (DetailDto?, ReportDTO?) -> Void) {
+        self.requestChecklist(with: .post, items: items, action: "create", token: token, completion: completion)
+    }
+
+    // 체크리스트 수정
+    private func modifyChecklist(items: [CheckListAnswer], token: String, completion: @escaping (DetailDto?, ReportDTO?) -> Void) {
+        self.requestChecklist(with: .post, items: items, action: "update", token: token, completion: completion)
+    }
+    
+    // 체크리스트 API
+    private func requestChecklist(with method: HTTPMethod,
+                                  items: [CheckListAnswer],
+                                  action: String,
+                                  token: String,
+                                  completion: @escaping (DetailDto?, ReportDTO?) -> Void) {
+        
+        let parameters = items.map { item -> [String: Any?] in
+            var answerValue: Any? = item.answer
+            if let answer = item.answer as? String, answer == "NaN" || answer.isEmpty {
+                answerValue = NSNull()
+            }
+            return [
+                "action": action,
+                "questionId": item.questionId,
+                "answer": answerValue
+            ]
+        }
+
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: parameters, options: [])
+
+            if let jsonString = String(data: jsonData, encoding: .utf8) {
+                print("JSON Data: \(jsonString)")
+            }
+
+            let headers: HTTPHeaders = [
+                "Content-Type": "application/json",
+                "Authorization": "Bearer \(token)"
+            ]
+
+            var request: URLRequest
+            request = URLRequest(url: JuinjangAPI.saveChecklist(imjangId: self.imjangId).endpoint)
+            request.httpMethod = JuinjangAPI.saveChecklist(imjangId: imjangId).method.rawValue
+            request.headers = headers
+            request.httpBody = jsonData
+            
+//            guard !isRequest else { return }
+//            isRequest = true
+
+            AF.request(request)
+                .responseJSON { response in
+                    switch response.result {
+                    case .success(let value):
+                        print("체크리스트 \(action == "create" ? "저장" : "수정") 처리 성공")
+                        print(value)
+                        
+                        if let json = value as? [String: Any],
+                           let result = json["result"] as? [String: Any],
+                           let reportData = result["reportDto"] as? [String: Any],
+                           let limjangData = reportData["limjangDto"] as? [String: Any],
+                           let reportDTOData = reportData["reportDTO"] as? [String: Any] {
+                            let reportDto = self.createReportDTO(from: reportData)
+                            let detailDto = self.createDetailDto(from: reportData)
+                            completion(detailDto, reportDto)
+                        }
+                    case .failure(let error):
+                        print("체크리스트 \(action == "create" ? "저장" : "수정") 처리 실패")
+                        if let data = response.data,
+                           let errorMessage = String(data: data, encoding: .utf8) {
+                            print("서버 응답 에러 메시지: \(errorMessage)")
+                        } else {
+                            print("에러: \(error.localizedDescription)")
+                        }
+                        completion(nil, nil)
+                    }
+                }
+        } catch {
+            print("encoding 에러: \(error)")
+            completion(nil, nil)
+        }
+    }
+    
+    private func createReportDTO(from data: [String: Any]) -> ReportDTO {
+        let reportDTOData = data["reportDTO"] as? [String: Any] ?? [:]
+        return ReportDTO(
+            reportId: reportDTOData["reportId"] as? Int ?? 0,
+            indoorKeyWord: reportDTOData["indoorKeyWord"] as? String ?? "",
+            publicSpaceKeyWord: reportDTOData["publicSpaceKeyWord"] as? String ?? "",
+            locationConditionsWord: reportDTOData["locationConditionsWord"] as? String ?? "",
+            indoorRate: reportDTOData["indoorRate"] as? Float ?? 0,
+            publicSpaceRate: reportDTOData["publicSpaceRate"] as? Float ?? 0,
+            locationConditionsRate: reportDTOData["locationConditionsRate"] as? Float ?? 0,
+            totalRate: reportDTOData["totalRate"] as? Float ?? 0
+        )
+    }
+
+    private func createDetailDto(from data: [String: Any]) -> DetailDto {
+        let limjangData = data["limjangDto"] as? [String: Any] ?? [:]
+        return DetailDto(
+            limjangId: limjangData["limjangId"] as? Int ?? 0,
+            checkListVersion: limjangData["checkListVersion"] as? String ?? "",
+            images: limjangData["images"] as? [String] ?? [],
+            purposeCode: limjangData["purposeCode"] as? Int ?? 0,
+            nickname: limjangData["nickname"] as? String ?? "",
+            priceType: limjangData["priceType"] as? Int ?? 0,
+            priceList: limjangData["priceList"] as? [String] ?? [],
+            address: limjangData["address"] as? String ?? "",
+            addressDetail: limjangData["addressDetail"] as? String ?? "",
+            createdAt: limjangData["createdAt"] as? String ?? "",
+            updatedAt: limjangData["updatedAt"] as? String ?? ""
+        )
+    }
+    
     // 수정 버튼 클릭
     @objc func editButtonTapped(_ sender: UIButton) {
         sender.isSelected.toggle()
         isEditMode.toggle()
         if sender.isSelected {
             editButton.setImage(UIImage(named: "completed-button"), for: .normal)
+            NotificationCenter.default.post(name: Notification.Name("EditModeChanged"), object: true)
         } else {
             editButton.setImage(UIImage(named: "edit-button"), for: .normal)
-            NotificationCenter.default.post(name: NSNotification.Name("EditButtonTapped"), object: nil)
-            let reportVC = ReportViewController(imjangId: imjangId)
-            self.navigationController?.pushViewController(reportVC, animated: true)
+            NotificationCenter.default.post(name: Notification.Name("EditModeChanged"), object: false)
+            
+            saveAnswer { [weak self] detailDto, reportDto in
+                guard let self = self else { return }
+                
+                if let detailDto = detailDto, let reportDto = reportDto {
+                    if existingItems.isEmpty {
+                        let reportVC = ReportViewController(imjangId: detailDto.limjangId, savedCheckListItems: checkListItems)
+                        reportVC.checkListDatadelegate = self
+                        reportVC.setData(detailDto: detailDto)
+                        reportVC.setData(reportDto: reportDto)
+                        self.navigationController?.pushViewController(reportVC, animated: true)
+                    }
+                } else {
+                    print("리포트 데이터가 준비되지 않았습니다.")
+                }
+            }
         }
-        NotificationCenter.default.post(name: Notification.Name("EditModeChanged"), object: true)
+    }
+    
+    func sendData(savedCheckListItems: [CheckListAnswer]) {
+        self.checkListItems = savedCheckListItems
     }
     
     // 스크롤 가장 위로 가게
