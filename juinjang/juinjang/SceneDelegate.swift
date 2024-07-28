@@ -12,23 +12,24 @@ import IQKeyboardManagerSwift
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    private var errorWindow: UIWindow?
+    private var scene: UIScene?
+    private var isShowingErrorView = false
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
-        // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
-        // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
 
         let mainViewController = SplashViewController()
-//        let navigationController = UINavigationController(rootViewController: mainViewController)
-//        navigationController.navigationBar.scrollEdgeAppearance?.backgroundColor = .white
         window?.rootViewController = mainViewController
         window?.makeKeyAndVisible()
         
         IQKeyboardManager.shared.enable = true
         
+        self.scene = scene
+        startMonitoring(scene: scene)
     }
+    
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
         if let url = URLContexts.first?.url {
             if (AuthApi.isKakaoTalkLoginUrl(url)) {
@@ -36,12 +37,44 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             }
         }
     }
+    
+    private func startMonitoring(scene: UIScene) {
+        NetworkMonitor.shared.startMonitoring { [weak self] connectionStatus in
+            guard let self else { return }
+            switch connectionStatus {
+            case .satisfied:
+                self.removeNetworkErrorWindow()
+            case .unsatisfied:
+                self.showNetworkErrorWindow(on: scene)
+            default:
+                break
+            }
+        }
+    }
+    
+    // errorWindow에 네트워크 단절 안내 화면 띄우기
+    private func showNetworkErrorWindow(on scene: UIScene) {
+        if let windowScene = scene as? UIWindowScene {
+            let window = UIWindow(windowScene: windowScene)
+            window.windowLevel = .statusBar
+            window.makeKeyAndVisible()
+            
+            let nowNetworkView = NetworkConnectionErrorView(frame: window.bounds)
+            window.addSubview(nowNetworkView)
+            errorWindow = window
+        }
+    }
+    
+    
+    // errorWindow 제거
+    private func removeNetworkErrorWindow() {
+        errorWindow?.resignKey()
+        errorWindow = nil
+        isShowingErrorView = false
+    }
 
     func sceneDidDisconnect(_ scene: UIScene) {
-        // Called as the scene is being released by the system.
-        // This occurs shortly after the scene enters the background, or when its session is discarded.
-        // Release any resources associated with this scene that can be re-created the next time the scene connects.
-        // The scene may re-connect later, as its session was not necessarily discarded (see `application:didDiscardSceneSessions` instead).
+        NetworkMonitor.shared.stopMonitoring()
     }
 
     func sceneDidBecomeActive(_ scene: UIScene) {

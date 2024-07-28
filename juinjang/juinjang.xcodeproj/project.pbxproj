@@ -128,6 +128,8 @@
 		611AA7B62B81E187005DAC3B /* ScrapTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611AA7B52B81E187005DAC3B /* ScrapTableViewCell.swift */; };
 		611AA7B92B8253BC005DAC3B /* ImjangNoteCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611AA7B82B8253BC005DAC3B /* ImjangNoteCollectionViewCell.swift */; };
 		611BB8A12C4418D600FFC28A /* UIScreen+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BB8A02C4418D600FFC28A /* UIScreen+Extension.swift */; };
+		611BB8AB2C4812F100FFC28A /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BB8AA2C4812F100FFC28A /* NetworkMonitor.swift */; };
+		611BB8AD2C4813DC00FFC28A /* NetworkConnectionErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611BB8AC2C4813DC00FFC28A /* NetworkConnectionErrorView.swift */; };
 		611F14552B47070B00B983F1 /* RecordingSegmentedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F14542B47070B00B983F1 /* RecordingSegmentedViewController.swift */; };
 		611F145A2B4707CC00B983F1 /* RecordingRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F14592B4707CC00B983F1 /* RecordingRoomViewController.swift */; };
 		611F145E2B471ECA00B983F1 /* CALayer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611F145D2B471ECA00B983F1 /* CALayer+Extension.swift */; };
@@ -293,6 +295,8 @@
 		611AA7B52B81E187005DAC3B /* ScrapTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrapTableViewCell.swift; sourceTree = "<group>"; };
 		611AA7B82B8253BC005DAC3B /* ImjangNoteCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImjangNoteCollectionViewCell.swift; sourceTree = "<group>"; };
 		611BB8A02C4418D600FFC28A /* UIScreen+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScreen+Extension.swift"; sourceTree = "<group>"; };
+		611BB8AA2C4812F100FFC28A /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
+		611BB8AC2C4813DC00FFC28A /* NetworkConnectionErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkConnectionErrorView.swift; sourceTree = "<group>"; };
 		611F14542B47070B00B983F1 /* RecordingSegmentedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingSegmentedViewController.swift; sourceTree = "<group>"; };
 		611F14592B4707CC00B983F1 /* RecordingRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingRoomViewController.swift; sourceTree = "<group>"; };
 		611F145D2B471ECA00B983F1 /* CALayer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+Extension.swift"; sourceTree = "<group>"; };
@@ -678,6 +682,7 @@
 				6108CFDE2B761AA300EF302F /* JuinjangAPI.swift */,
 				6108CFF92B76395B00EF302F /* JuinjangAPIManager.swift */,
 				616F1E4C2C071F240049461F /* AuthInterceptor.swift */,
+				611BB8AA2C4812F100FFC28A /* NetworkMonitor.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -883,6 +888,7 @@
 			children = (
 				61B0C9E42B6CDA0300BE86D2 /* PaddingLabel.swift */,
 				616F1E542C0DF2630049461F /* ImjangImageView.swift */,
+				611BB8AC2C4813DC00FFC28A /* NetworkConnectionErrorView.swift */,
 			);
 			path = CustomView;
 			sourceTree = "<group>";
@@ -1077,6 +1083,7 @@
 				345855742B689A7E00432C06 /* BottomCollectionViewCell.swift in Sources */,
 				611AA7B62B81E187005DAC3B /* ScrapTableViewCell.swift in Sources */,
 				619269E92B67745900D4DD3E /* UserDefaultManager.swift in Sources */,
+				611BB8AB2C4812F100FFC28A /* NetworkMonitor.swift in Sources */,
 				619269F52B67747F00D4DD3E /* ScrapCollectionViewCell.swift in Sources */,
 				3458557E2B689D2A00432C06 /* ExpandableTableViewCell.swift in Sources */,
 				616D481A2BFBAF660073029A /* Int+Extension.swift in Sources */,
@@ -1171,6 +1178,7 @@
 				61B0C9DF2B6C8D9400BE86D2 /* PhotoCollectionViewCell.swift in Sources */,
 				616408EC2B407A2D00EC3B5E /* UIView+Extension.swift in Sources */,
 				345855DB2B6B8D5100432C06 /* CompareSearchViewController.swift in Sources */,
+				611BB8AD2C4813DC00FFC28A /* NetworkConnectionErrorView.swift in Sources */,
 				619269F72B67747F00D4DD3E /* ImjangListHeaderView.swift in Sources */,
 				0A2471252B697E3D00A7382B /* EditBasicInfoViewController.swift in Sources */,
 				61864C4D2B653E140073C175 /* UIViewController+Extension.swift in Sources */,
