@@ -41,9 +41,9 @@
 
 ## 핵심 구현 및 담당역할
 ### **Alamofire**
-- Alamofire에 Router 패턴과 Generic을 통해 네트워크 통신의 구조화 및 확장성 있는 네트워킹 구현
-- Alamofire RequestInterceptor를 활용한 JWT 인증 구현
-- multipart/form-data 타입을 통해 음성 파일 등록을 서버에 요청
+- Alamofire에 **Router** 패턴과 **Generic**을 통해 네트워크 통신의 구조화 및 확장성 있는 네트워킹 구현
+- Alamofire **RequestInterceptor**를 활용한 JWT 인증 구현
+- **multipart/form-data** 타입을 통해 음성 파일 등록을 서버에 요청
 
 ### **Etc**
 - **SFSpeechRecognizer**를 통해 녹음된 파일에 대한 **음성을 텍스트로 변환** (**STT**)
@@ -51,11 +51,11 @@
 - **UIPanGestureRecognizer**를 통해 드래그로 이미지 선택 구현
 - SnapKit의 **updateConstraints**를 통해 데이터 개수에 따라 **테이블뷰의 높이 동적으로 변경**
 - **Lottie**를 활용해 **로딩 화면, 스플레시 화면 구현**
-- 공통적인 디자인의 뷰를 재사용하기 위해 커스텀 뷰로 구성
-- 이미지 및 컬러 등 반복적으로 사용되는 에셋을 enum을 통해 네임스페이스화하여 관리
-- NotificationCenter를 활용해 다른 계층에 있는 뷰에 데이터 갱신
-- NetworkMonitor를 통해 네트워크 단절 상황 대응
-- weak 키워드를 통해 객체를 약한 참조를 해줌으로써 메모리 누수 해결
+- 공통적인 디자인의 뷰를 재사용하기 위해 **커스텀 뷰**로 구성
+- 이미지 및 컬러 등 반복적으로 사용되는 에셋을 **enum을 통해 네임스페이스화**하여 관리
+- **NotificationCenter**를 활용해 다른 계층에 있는 뷰에 데이터 갱신
+- **NetworkMonitor**를 통해 네트워크 단절 상황 대응
+- **weak** 키워드를 통해 객체를 약한 참조를 해줌으로써 메모리 누수 해결
 
 <br><br>
 
