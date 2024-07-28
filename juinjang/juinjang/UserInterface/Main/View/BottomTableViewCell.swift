@@ -35,7 +35,7 @@ class BottomTableViewCell: UITableViewCell{
     
     //최근 본 임장이 없을 때
     var noImjangImageView = UIImageView().then {
-        $0.image = UIImage(named: "logo")
+        $0.image = UIImage(named: "nomaemull")
         $0.contentMode = .scaleAspectFill
     }
     var noImjangLabel = UILabel().then {
