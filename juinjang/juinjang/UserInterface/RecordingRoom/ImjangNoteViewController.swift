@@ -15,7 +15,6 @@ class ImjangNoteViewController: BaseViewController,
                                 SendEditData,
                                 SendDetailEditData,
                                 ButtonStateDelegate,
-                                CheckListDelegate,
                                 SendCheckListData {
     // 스크롤뷰
     let scrollView = UIScrollView().then {
@@ -119,11 +118,6 @@ class ImjangNoteViewController: BaseViewController,
     
     var checkListItems: [CheckListAnswer] = []
     var existingItems = [Int: CheckListAnswer]()
-    
-    // MARK: - CheckListDelegate
-    func didSavedCheckListItems(_ items: [CheckListAnswer]) {
-        self.checkListItems = items
-    }
     
     lazy var images: [String] = []
     var imjangId: Int
@@ -264,6 +258,8 @@ class ImjangNoteViewController: BaseViewController,
     
     @objc func showReportVC() {
         // savedCheckListItems 배열이 비어 있는지 확인
+        print("dpdpdpddp")
+        print(checkListItems)
         let savedCheckListItemsAreEmpty = checkListItems.isEmpty
         if savedCheckListItemsAreEmpty {
             // 팝업창이 뜸
