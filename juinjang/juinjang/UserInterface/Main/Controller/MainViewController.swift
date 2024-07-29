@@ -199,7 +199,6 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource{
             else{
                 return UITableViewCell()
             }
-            print("임장 개수: \(mainImjangList.count)")
             cell.selectionStyle = .none
             cell.backgroundColor = .clear
             cell.collectionView.delegate = self

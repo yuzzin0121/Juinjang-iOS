@@ -68,9 +68,11 @@ class RecordingRoomViewController: BaseViewController, RemoveRecordDelegate {
     var fileItems: [RecordResponse] = []
     
     var imjangId: Int
+    var savedCheckListItems: [CheckListAnswer] = []
     
-    init(imjangId: Int) {
+    init(imjangId: Int, savedCheckListItems: [CheckListAnswer]) {
         self.imjangId = imjangId
+        self.savedCheckListItems = savedCheckListItems
         super.init()
     }
     
@@ -96,6 +98,10 @@ class RecordingRoomViewController: BaseViewController, RemoveRecordDelegate {
 
     deinit {
         NotificationCenter.default.removeObserver(self)
+    }
+    
+    func updateUI(with items: [CheckListAnswer]) {
+        self.savedCheckListItems = items
     }
     
     @objc

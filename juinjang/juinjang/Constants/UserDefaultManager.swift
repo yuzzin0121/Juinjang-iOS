@@ -22,6 +22,7 @@ class UserDefaultManager {
         case profileImage
         case isKakaoLogin
         case identityToken
+        case isShowGuide
     }
     
     let ud = UserDefaults.standard
@@ -81,6 +82,18 @@ class UserDefaultManager {
         get { ud.string(forKey: UDKey.identityToken.rawValue) ?? "" }
         set { ud.set(newValue, forKey: UDKey.identityToken.rawValue) }
     }
+    
+    var isShowGuide: Bool {
+        get { ud.bool(forKey: UDKey.isShowGuide.rawValue) }
+        set { ud.set(newValue, forKey: UDKey.isShowGuide.rawValue) }
+    }
 }
 
 
+// TODO: - 테스트를 위해 임시로 추가한 코드, 제거 필요
+extension UserDefaults {
+    func clearKey(_ key: String) {
+        self.removeObject(forKey: key)
+        self.synchronize()
+    }
+}

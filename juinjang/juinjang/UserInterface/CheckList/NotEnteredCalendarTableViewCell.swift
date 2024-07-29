@@ -31,7 +31,7 @@ class NotEnteredCalendarTableViewCell: UITableViewCell {
     
     lazy var separationLine = UIImageView().then {
         $0.contentMode = .scaleAspectFit
-        $0.image = UIImage(named: "separation-line")
+        $0.image = UIImage(named: "enabled-separation-line")
     }
     
     lazy var balanceDueImage = UIImageView().then {
@@ -104,7 +104,7 @@ class NotEnteredCalendarTableViewCell: UITableViewCell {
 
         // 구분선 imageView
         separationLine.snp.makeConstraints {
-            $0.trailing.equalTo(balanceDueImage.snp.leading).offset(-12)
+            $0.trailing.equalTo(balanceDueImage.snp.leading).offset(-21)
             $0.centerY.equalToSuperview()
             $0.height.equalTo(8)
         }
@@ -154,6 +154,10 @@ class NotEnteredCalendarTableViewCell: UITableViewCell {
             moveInDateContentLabel.textColor = UIColor(named: "300")
             moveInDateImage.image = UIImage(named: "deadline-item")
             backgroundColor = UIColor(named: "lightBackgroundOrange")
+            separationLine.image = UIImage(named: "separation-line")
+            separationLine.snp.updateConstraints {
+                $0.trailing.equalTo(balanceDueImage.snp.leading).offset(-12)
+            }
         } else if answer[1].1 != "" {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyyMMdd"
@@ -168,6 +172,10 @@ class NotEnteredCalendarTableViewCell: UITableViewCell {
             // 잔금 기한 날짜 상세 Label
             balanceDueContentLabel.snp.updateConstraints {
                 $0.trailing.equalToSuperview().offset(-24)
+            }
+            separationLine.image = UIImage(named: "separation-line")
+            separationLine.snp.updateConstraints {
+                $0.trailing.equalTo(balanceDueImage.snp.leading).offset(-12)
             }
         }
     }

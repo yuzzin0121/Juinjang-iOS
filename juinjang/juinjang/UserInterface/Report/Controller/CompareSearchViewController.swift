@@ -30,7 +30,7 @@ class CompareSearchViewController: BaseViewController {
     }()
     
     let logoImageView = UIImageView().then {
-        $0.image = UIImage(named: "투명로고")
+        $0.image = UIImage(named: "nomaemull")
     }
     
     let mentLabel = UILabel().then {

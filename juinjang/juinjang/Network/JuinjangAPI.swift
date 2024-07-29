@@ -19,7 +19,6 @@ enum JuinjangAPI {
     
     case showChecklist(imjangId: Int)
     case saveChecklist(imjangId: Int)
-    case modifyChecklist(imjangId: Int)
     
     case scrap(imjangId: Int)
     case cancelScrap(imjangId: Int)
@@ -62,7 +61,7 @@ enum JuinjangAPI {
         case .profile:
             return URL(string: baseURL + "profile")!
             
-        case .showChecklist(let imjangId), .saveChecklist(let imjangId), .modifyChecklist(let imjangId):
+        case .showChecklist(let imjangId), .saveChecklist(let imjangId):
             return URL(string: baseURL + "checklist/\(imjangId)")!
             
         case .scrap(let imjangId), .cancelScrap(let imjangId):
@@ -125,7 +124,7 @@ enum JuinjangAPI {
             return .post
         case .showChecklist, .totalImjang, .searchImjang, .mainImjang, .detailImjang, .kakaoLogin, .kakaoLoginCallback, .profile, .fetchRecordingRoom, .fetchImage, .fetchRecordFiles:
             return .get
-        case .nickname, .modifyImjang, .modifyChecklist, .editRecordName, .editRecordContent:
+        case .nickname, .modifyImjang, .editRecordName, .editRecordContent:
             return .patch
         case .deleteRecordFile, .cancelScrap, .deleteImjangs:
             return .delete
