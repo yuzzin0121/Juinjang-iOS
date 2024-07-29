@@ -196,7 +196,7 @@ class CheckListViewController: BaseViewController {
                 for checkListItem in checkListItems {
                     print(checkListItem)
                 }
-                delegate?.didSavedCheckListItems(savedCheckListItems)
+                NotificationCenter.default.post(name: NSNotification.Name("CheckListItemsUpdated"), object: checkListItems)
                 completion()
             } else {
                 guard let error = error else { return }
