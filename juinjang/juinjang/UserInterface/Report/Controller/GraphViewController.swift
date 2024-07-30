@@ -165,6 +165,7 @@ class GraphViewController : BaseViewController {
                 RadarChartDataEntry(value: Double(location)),
                 RadarChartDataEntry(value: Double(publicSpace))
             ]
+            
         )
         
         let data = RadarChartData(dataSets: [dataSet5, dataSet4, dataSet3, dataSet2, dataSet1, compareDataSet1])
@@ -175,7 +176,20 @@ class GraphViewController : BaseViewController {
         dataSet3.lineWidth = 0
         dataSet4.lineWidth = 0
         dataSet5.lineWidth = 0
-        compareDataSet1.lineWidth = 0
+        
+        // entries의 값을 가져옴
+        let entries = compareDataSet1.entries.map { entry in
+            return (entry as? RadarChartDataEntry)?.value ?? 0.0
+        }
+
+        // 하나만 1이고 나머지가 0인지 확인
+        if (entries.filter { $0 == 0 }.count == 2) {
+            compareDataSet1.lineWidth = 1
+            compareDataSet1.setColor(UIColor(red: 1, green: 0.386, blue: 0.158, alpha: 1))
+        } else {
+            compareDataSet1.lineWidth = 0 // 기본 lineWidth 값을 설정
+        }
+        //compareDataSet1.lineWidth = 1
         
         let dataColor = UIColor(red: 1, green: 0.386, blue: 0.158, alpha: 0.3)
         let dataColor1 = UIColor.red
