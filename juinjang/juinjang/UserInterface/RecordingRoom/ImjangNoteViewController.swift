@@ -945,7 +945,6 @@ class ImjangNoteViewController: BaseViewController,
             editButton.setImage(UIImage(named: "completed-button"), for: .normal)
             NotificationCenter.default.post(name: Notification.Name("EditModeChanged"), object: true)
         } else {
-            if !checkListItems.isEmpty {
                 editButton.setImage(UIImage(named: "edit-button"), for: .normal)
                 NotificationCenter.default.post(name: Notification.Name("EditModeChanged"), object: false)
                 
@@ -961,13 +960,11 @@ class ImjangNoteViewController: BaseViewController,
                             self.navigationController?.pushViewController(reportVC, animated: true)
                         }
                     } else {
-                        print("리포트 데이터가 준비되지 않았습니다.")
+                        print("체크리스트 값이 입력되지 않았습니다.")
+                        editButton.setImage(UIImage(named: "edit-button"), for: .normal)
+                        NotificationCenter.default.post(name: Notification.Name("EditModeChanged"), object: false)
                     }
-                }
-            } else {
-                print("체크리스트 값이 입력되지 않았습니다.")
-                editButton.setImage(UIImage(named: "edit-button"), for: .normal)
-                NotificationCenter.default.post(name: Notification.Name("EditModeChanged"), object: false)
+                
             }
         }
     }
