@@ -258,8 +258,6 @@ class ImjangNoteViewController: BaseViewController,
     
     @objc func showReportVC() {
         // savedCheckListItems 배열이 비어 있는지 확인
-        print("dpdpdpddp")
-        print(checkListItems)
         let savedCheckListItemsAreEmpty = checkListItems.isEmpty
         if savedCheckListItemsAreEmpty {
             // 팝업창이 뜸
@@ -947,23 +945,26 @@ class ImjangNoteViewController: BaseViewController,
             editButton.setImage(UIImage(named: "completed-button"), for: .normal)
             NotificationCenter.default.post(name: Notification.Name("EditModeChanged"), object: true)
         } else {
-            editButton.setImage(UIImage(named: "edit-button"), for: .normal)
-            NotificationCenter.default.post(name: Notification.Name("EditModeChanged"), object: false)
-            
-            saveAnswer { [weak self] detailDto, reportDto in
-                guard let self = self else { return }
+                editButton.setImage(UIImage(named: "edit-button"), for: .normal)
+                NotificationCenter.default.post(name: Notification.Name("EditModeChanged"), object: false)
                 
-                if let detailDto = detailDto, let reportDto = reportDto {
-                    if existingItems.isEmpty {
-                        let reportVC = ReportViewController(imjangId: detailDto.limjangId, savedCheckListItems: checkListItems)
-                        reportVC.checkListDatadelegate = self
-                        reportVC.setData(detailDto: detailDto)
-                        reportVC.setData(reportDto: reportDto)
-                        self.navigationController?.pushViewController(reportVC, animated: true)
+                saveAnswer { [weak self] detailDto, reportDto in
+                    guard let self = self else { return }
+                    
+                    if let detailDto = detailDto, let reportDto = reportDto {
+                        if existingItems.isEmpty {
+                            let reportVC = ReportViewController(imjangId: detailDto.limjangId, savedCheckListItems: checkListItems)
+                            reportVC.checkListDatadelegate = self
+                            reportVC.setData(detailDto: detailDto)
+                            reportVC.setData(reportDto: reportDto)
+                            self.navigationController?.pushViewController(reportVC, animated: true)
+                        }
+                    } else {
+                        print("체크리스트 값이 입력되지 않았습니다.")
+                        editButton.setImage(UIImage(named: "edit-button"), for: .normal)
+                        NotificationCenter.default.post(name: Notification.Name("EditModeChanged"), object: false)
                     }
-                } else {
-                    print("리포트 데이터가 준비되지 않았습니다.")
-                }
+                
             }
         }
     }
