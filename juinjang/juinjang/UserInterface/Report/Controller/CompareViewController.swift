@@ -394,6 +394,7 @@ class CompareViewController : BaseViewController, SendCompareImjangData, SendSea
                 RadarChartDataEntry(value: Double(reportDto.publicSpaceRate))
             ]
         )
+        
         compareDataSet2.fillAlpha = CGFloat(0.7)
         compareDataSet2.fillColor = .white
         setCompareData()
@@ -473,6 +474,18 @@ class CompareViewController : BaseViewController, SendCompareImjangData, SendSea
         dataSet5.lineWidth = 0
         compareDataSet1.lineWidth = 0
         compareDataSet2.lineWidth = 0
+        
+        // entries의 값을 가져옴
+        let entries = compareDataSet2.entries.map { entry in
+            return (entry as? RadarChartDataEntry)?.value ?? 0.0
+        }
+        
+        if (entries.filter { $0 == 0 }.count == 2) {
+            compareDataSet2.lineWidth = 1
+            compareDataSet2.setColor(.white)
+        } else {
+            compareDataSet2.lineWidth = 0 // 기본 lineWidth 값을 설정
+        }
         
         let dataColor = UIColor(red: 1, green: 0.386, blue: 0.158, alpha: 0.3)
         
