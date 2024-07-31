@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import SnapKit
+import Then
 
 class ToSItemTableViewCell: UITableViewCell {
     
@@ -111,11 +113,17 @@ class ToSItemTableViewCell: UITableViewCell {
         let selectedDetail = termsOfServiceDetail[tag]
         
         let tosDetailVC = ToSDetailViewController()
+        let tos1VC = ToS1ViewController()
+        
         if let parentVC = parentViewController {
-            parentVC.navigationController?.pushViewController(tosDetailVC, animated: true)
-            tosDetailVC.tag = sender.tag
-            tosDetailVC.contentLabel.text = selectedDetail.contentLabel
-            tosDetailVC.contentDetailLabel.text = selectedDetail.contentDetailLabel
+            if tag == 0 {
+                parentVC.navigationController?.pushViewController(tos1VC, animated: true)
+            } else {
+                parentVC.navigationController?.pushViewController(tosDetailVC, animated: true)
+                tosDetailVC.tag = sender.tag
+                tosDetailVC.contentLabel.text = selectedDetail.contentLabel
+                tosDetailVC.contentDetailLabel.text = selectedDetail.contentDetailLabel
+            }
         }
     }
 
