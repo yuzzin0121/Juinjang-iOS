@@ -16,6 +16,7 @@ protocol SendCompareImjangData{
 class SelectMaemullViewController : BaseViewController {
     
     var delegate: SendCompareImjangData?
+    var scoreStates: [UIButton: Bool] = [:]
     
     var contentView = UIView().then {
         $0.backgroundColor = .white
@@ -178,9 +179,14 @@ class SelectMaemullViewController : BaseViewController {
         searchVC.delegate = self.delegate as? SendSearchCompareImjangData
         navigationController?.pushViewController(searchVC, animated: true)
     }
-    @objc func applyBtnTap() {
-        delegate?.sendData(isSelected: true, compareImjangId: comparedImjangId, compareImjangName: comparedName)
-        self.navigationController?.popViewController(animated: true)
+    @objc func applyBtnTap(_ sender: UIButton) {
+        let moveTo = scoreStates[sender] ?? false
+        if moveTo {
+            delegate?.sendData(isSelected: true, compareImjangId: comparedImjangId, compareImjangName: comparedName)
+            self.navigationController?.popViewController(animated: true)
+        } else {
+            self.view.makeToast("평점이 존재해야 비교하기가 가능합니다. 체크리스트 입력을 진행해주세요.", duration: 1.0)
+        }
     }
     
     init(imjangId: Int) {
@@ -237,6 +243,10 @@ extension SelectMaemullViewController: UITableViewDelegate, UITableViewDataSourc
             cell.contentView.backgroundColor = UIColor(named: "main100")
             cell.contentView.layer.borderColor = ColorStyle.mainOrange.cgColor
             applyBtn.backgroundColor = UIColor(named: "500")
+            if let score = cell.scoreLabel.text {
+                let moveTo = (score != "0.0")
+                scoreStates[applyBtn] = moveTo
+            }
             applyBtn.addTarget(self, action: #selector(applyBtnTap), for: .touchUpInside)
         }
         else {
