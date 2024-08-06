@@ -185,7 +185,7 @@ class SelectMaemullViewController : BaseViewController {
             delegate?.sendData(isSelected: true, compareImjangId: comparedImjangId, compareImjangName: comparedName)
             self.navigationController?.popViewController(animated: true)
         } else {
-            self.view.makeToast("평점이 존재해야 비교하기가 가능합니다. 체크리스트 입력을 진행해주세요.", duration: 1.0)
+            self.view.makeToast("미평가된 매물은 비교하기 어려워요 :(", duration: 1.0)
         }
     }
     
