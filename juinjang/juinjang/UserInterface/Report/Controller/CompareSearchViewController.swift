@@ -252,7 +252,10 @@ extension CompareSearchViewController: UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath) as! ReportImjangListTableViewCell
+        guard let cell = tableView.cellForRow(at: indexPath) as? ReportImjangListTableViewCell else {
+            print("Cell is not visible anymore")
+            return
+        }
         cell.isSelect = false
         cell.contentView.backgroundColor = .white
         cell.contentView.layer.borderColor = ColorStyle.strokeGray.cgColor

@@ -220,7 +220,13 @@ extension SignUpViewController{
                         //print("사용자 이메일 : \(email)")
                         UserDefaultManager.shared.email = email
                         UserDefaultManager.shared.nickname = nickname
-                        self.sendPostRequest(email: UserDefaultManager.shared.email, nickname: UserDefaultManager.shared.nickname)
+                        
+                        if let userId = kakaoUser.id {
+                            print("사용자 ID : \(userId)")
+                            self.sendPostRequest(email: UserDefaultManager.shared.email, nickname: UserDefaultManager.shared.nickname,targetID: userId)
+                        } else {
+                            print("사용자 ID를 가져올 수 없습니다.")
+                        }
                     } else {
                         print("사용자가 이메일 제공에 동의하지 않았습니다.")
                     }
@@ -232,6 +238,8 @@ extension SignUpViewController{
     struct RequestBody: Encodable {
         let email: String
         let nickname: String?
+        let target_id_type: String
+        let target_id: Int64
     }
     struct UserInfoResponse: Codable {
         let isSuccess: Bool
@@ -253,9 +261,9 @@ extension SignUpViewController{
             self.image = try container.decodeIfPresent(String.self, forKey: .image)
         }
     }
-    func sendPostRequest(email: String, nickname: String?) {
+    func sendPostRequest(email: String, nickname: String?, targetID: Int64) {
         let url = "http://juinjang1227.com:8080/api/auth/kakao/login"
-        let requestBody = RequestBody(email: email, nickname: nickname)
+        let requestBody = RequestBody(email: email, nickname: nickname, target_id_type: "user_id", target_id: targetID)
             
         AF.request(url, method: .post, parameters: requestBody, encoder: JSONParameterEncoder.default, interceptor: AuthInterceptor())
             .responseJSON { response in
@@ -379,7 +387,13 @@ extension SignUpViewController: ASAuthorizationControllerDelegate,ASAuthorizatio
         // MARK: - 이메일
         // 처음 애플 로그인 시 이메일은 credential.email 에 들어있다.
         if let email = credential.email {
-            print("이메일 : \(email)")
+            print("이메일 First : \(email)")
+            if let tokenString = String(data: credential.identityToken ?? Data(), encoding: .utf8) {
+                let email2 = Utils.decode(jwtToken: tokenString)["email"] as? String ?? ""
+                print("identityToken : \(tokenString)")
+                UserDefaultManager.shared.identityToken = tokenString
+                performAppleSignInWithAlamofire(identityToken: tokenString)
+            }
         }
         // 두번째부터는 credential.email은 nil이고, credential.identityToken에 들어있다.
         else {

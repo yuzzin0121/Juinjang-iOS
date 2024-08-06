@@ -178,6 +178,8 @@ class SelectMaemullViewController : BaseViewController {
         let searchVC = CompareSearchViewController(imjangId: imjangId)
         searchVC.delegate = self.delegate as? SendSearchCompareImjangData
         navigationController?.pushViewController(searchVC, animated: true)
+        tableView.reloadData()
+        applyBtn.backgroundColor = UIColor(named: "null")
     }
     @objc func applyBtnTap(_ sender: UIButton) {
         let moveTo = scoreStates[sender] ?? false
