@@ -136,9 +136,19 @@ class NotEnteredCalendarTableViewCell: UITableViewCell {
     func viewModeConfigure(at indexPath: IndexPath) {
         moveInDateLabel.textColor = UIColor(named: "gray5")
         moveInDateContentLabel.textColor = UIColor(named: "textGray")
+        moveInDateImage.image = UIImage(named: "calendar")
+        moveInDateContentLabel.text = "입력 안함"
+        
         balanceDueLabel.textColor = UIColor(named: "gray5")
         balanceDueContentLabel.textColor = UIColor(named: "textGray")
+        balanceDueImage.image = UIImage(named: "wallet")
+        balanceDueContentLabel.text = "입력 안함"
+        
         backgroundColor = UIColor(named: "gray0")
+        separationLine.image = UIImage(named: "enabled-separation-line")
+        separationLine.snp.updateConstraints {
+            $0.trailing.equalTo(balanceDueImage.snp.leading).offset(-21)
+        }
     }
     
     // 보기 모드일 때 저장된 값이 있는 경우
@@ -156,7 +166,7 @@ class NotEnteredCalendarTableViewCell: UITableViewCell {
             backgroundColor = UIColor(named: "lightBackgroundOrange")
             separationLine.image = UIImage(named: "separation-line")
             separationLine.snp.updateConstraints {
-                $0.trailing.equalTo(balanceDueImage.snp.leading).offset(-12)
+                $0.trailing.equalTo(balanceDueImage.snp.leading).offset(-10)
             }
         } else if answer[1].1 != "" {
             let dateFormatter = DateFormatter()
@@ -175,7 +185,7 @@ class NotEnteredCalendarTableViewCell: UITableViewCell {
             }
             separationLine.image = UIImage(named: "separation-line")
             separationLine.snp.updateConstraints {
-                $0.trailing.equalTo(balanceDueImage.snp.leading).offset(-12)
+                $0.trailing.equalTo(balanceDueImage.snp.leading).offset(-10)
             }
         }
     }

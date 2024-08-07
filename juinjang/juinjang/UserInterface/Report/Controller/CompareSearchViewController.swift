@@ -1,6 +1,7 @@
 
 import UIKit
 import Pageboy
+import Toast
 
 protocol SendSearchCompareImjangData{
     func sendData(isSelected: Bool, compareImjangId: Int,  compareImjangName: String)
@@ -54,6 +55,7 @@ class CompareSearchViewController: BaseViewController {
     var imjangId: Int
     var comparedImjangId : Int = 0
     var comparedName : String = ""
+    var scoreStates: [UIButton: Bool] = [:]
     
     // 네비게이션 바 디자인
     func designNavigationBar() {
@@ -74,14 +76,19 @@ class CompareSearchViewController: BaseViewController {
         navigationController?.popViewController(animated: true)
     }
     
-    @objc func applyBtnTap() {
-        delegate?.sendData(isSelected: true, compareImjangId: comparedImjangId, compareImjangName: comparedName)
-        
-        if let navigationController = self.navigationController {
-            // comparesearchviewcontroller에서 실행
-            if let ReportViewController = navigationController.viewControllers.first(where: { $0 is ReportViewController }) {
-                navigationController.popToViewController(ReportViewController, animated: true)
+    @objc func applyBtnTap(_ sender: UIButton) {
+        let moveTo = scoreStates[sender] ?? false
+        if moveTo {
+            delegate?.sendData(isSelected: true, compareImjangId: comparedImjangId, compareImjangName: comparedName)
+            
+            if let navigationController = self.navigationController {
+                // comparesearchviewcontroller에서 실행
+                if let ReportViewController = navigationController.viewControllers.first(where: { $0 is ReportViewController }) {
+                    navigationController.popToViewController(ReportViewController, animated: true)
+                }
             }
+        } else {
+            self.view.makeToast("미평가된 매물은 비교하기 어려워요 :(", duration: 1.0)
         }
     }
     
@@ -229,6 +236,10 @@ extension CompareSearchViewController: UITableViewDelegate, UITableViewDataSourc
             cell.contentView.backgroundColor = UIColor(named: "main100")
             cell.contentView.layer.borderColor = ColorStyle.mainOrange.cgColor
             applyBtn.backgroundColor = UIColor(named: "500")
+            if let score = cell.scoreLabel.text {
+                let moveTo = (score != "0.0")
+                scoreStates[applyBtn] = moveTo
+            }
             applyBtn.addTarget(self, action: #selector(applyBtnTap), for: .touchUpInside)
         }
         else {
@@ -241,7 +252,10 @@ extension CompareSearchViewController: UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath) as! ReportImjangListTableViewCell
+        guard let cell = tableView.cellForRow(at: indexPath) as? ReportImjangListTableViewCell else {
+            print("Cell is not visible anymore")
+            return
+        }
         cell.isSelect = false
         cell.contentView.backgroundColor = .white
         cell.contentView.layer.borderColor = ColorStyle.strokeGray.cgColor
