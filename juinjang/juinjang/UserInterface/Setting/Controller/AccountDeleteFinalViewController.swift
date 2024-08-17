@@ -135,20 +135,20 @@ class AccountDeleteFinalViewController: BaseViewController {
     // 카카오톡 탈퇴 API를 호출하는 함수
     func withdrawKakaoAccount(accessToken: String, kakaoTargetId: Int64) {
         // 탈퇴 API의 URL
-        let url = "http://juinjang1227.com:8080/api/auth/kakao/withdraw"
+        let url = "http://juinjang1227.com:8080/api/auth/withdraw/kakao"
         
         // Authorization과 target-id 헤더 설정
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(accessToken)",
             "target-id": String(kakaoTargetId)
         ]
-        
+        print("targetID: \(kakaoTargetId)")
         // Alamofire를 사용하여 DELETE 요청
         AF.request(url, method: .delete, headers: headers)
             .validate() // 응답의 상태 코드가 성공 범위 내에 있는지 확인
             .responseString { response in
                 switch response.result {
-                case .success(let responseBody):
+                    case .success(let responseBody):
                     print("Response Body: \(responseBody)")
                     let signupViewController = SignUpViewController()
                     // 현재 내비게이션 컨트롤러가 nil인지 확인
@@ -167,10 +167,14 @@ class AccountDeleteFinalViewController: BaseViewController {
                         print("SignUpViewController로 새로운 내비게이션 스택 시작됨") // 확인용 로그 추가
                     }
                     UserDefaultManager.shared.userStatus = false
-                case .failure(let error):
-                    print("Error: \(error)")
-                }
-            }
+                    case .failure(let error):
+                        print("Error: \(error)")
+                    // 상세 오류 정보 출력
+                        if let data = response.data, let errorDetails = String(data: data, encoding: .utf8) {
+                            print("Error Details: \(errorDetails)")
+                        }
+                    }
+            }       
     }
     
     // apple 탈퇴 API를 호출하는 함수
@@ -246,7 +250,7 @@ class AccountDeleteFinalViewController: BaseViewController {
         accountDeleteFinalView.addSubview(noButton)
         noButton.addTarget(self, action: #selector(no), for: .touchUpInside)
         accountDeleteFinalView.addSubview(yesButton)
-        yesButton.addTarget(self, action: #selector(no), for: .touchUpInside)
+        yesButton.addTarget(self, action: #selector(yes), for: .touchUpInside)
         setConstraint()
     }
 }

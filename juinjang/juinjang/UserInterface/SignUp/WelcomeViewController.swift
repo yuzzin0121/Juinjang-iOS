@@ -235,10 +235,10 @@ class WelcomeViewController: BaseViewController {
                        let refreshToken = result["refreshToken"] as? String,
                        isSuccess {
                         // 응답이 성공이라면 다음 ViewController로 이동합니다.
-                            print("Success: \(accessToken)")
-                            UserDefaultManager.shared.accessToken = accessToken
-                            print("Success: \(refreshToken)")
-                            UserDefaultManager.shared.refreshToken = refreshToken
+                        print("Success: \(accessToken)")
+                        UserDefaultManager.shared.accessToken = accessToken
+                        print("Success: \(refreshToken)")
+                        UserDefaultManager.shared.refreshToken = refreshToken
                         let RecordingRightsVC = RecordingRightsViewController()
                         RecordingRightsVC.modalPresentationStyle = .fullScreen
                         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
