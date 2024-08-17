@@ -8,6 +8,8 @@
 import UIKit
 import Then
 import SnapKit
+import Alamofire
+import AuthenticationServices
 
 class AccountDeleteFinalViewController: BaseViewController {
     
@@ -121,6 +123,96 @@ class AccountDeleteFinalViewController: BaseViewController {
     @objc func no(_ sender: Any) {
         dismiss(animated: false, completion: nil)
     }
+    @objc func yes(_ sender: Any) {
+        if UserDefaultManager.shared.isKakaoLogin {
+            withdrawKakaoAccount(accessToken: UserDefaultManager.shared.accessToken, kakaoTargetId: UserDefaultManager.shared.kakaoTargetId)
+        } else {
+            withdrawAppleAccount(accessToken: UserDefaultManager.shared.accessToken, xAppleCode: UserDefaultManager.shared.appleAuthCode)
+        }
+        
+    }
+    
+    // 카카오톡 탈퇴 API를 호출하는 함수
+    func withdrawKakaoAccount(accessToken: String, kakaoTargetId: Int64) {
+        // 탈퇴 API의 URL
+        let url = "http://juinjang1227.com:8080/api/auth/kakao/withdraw"
+        
+        // Authorization과 target-id 헤더 설정
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(accessToken)",
+            "target-id": String(kakaoTargetId)
+        ]
+        
+        // Alamofire를 사용하여 DELETE 요청
+        AF.request(url, method: .delete, headers: headers)
+            .validate() // 응답의 상태 코드가 성공 범위 내에 있는지 확인
+            .responseString { response in
+                switch response.result {
+                case .success(let responseBody):
+                    print("Response Body: \(responseBody)")
+                    let signupViewController = SignUpViewController()
+                    // 현재 내비게이션 컨트롤러가 nil인지 확인
+                    if let navigationController = self.navigationController {
+                        navigationController.pushViewController(signupViewController, animated: true)
+                        print("SignUpViewController로 push됨") // 확인용 로그 추가
+                    } else {
+                        // 현재 내비게이션 컨트롤러가 없는 경우, 새로운 내비게이션 컨트롤러를 시작하고 SignUpViewController를 rootViewController로 설정
+                        let navigationController = UINavigationController(rootViewController: signupViewController)
+                        if let windowScene = UIApplication.shared.connectedScenes
+                            .first(where: { $0 is UIWindowScene }) as? UIWindowScene {
+                            if let window = windowScene.windows.first {
+                                window.rootViewController = navigationController
+                            }
+                        }
+                        print("SignUpViewController로 새로운 내비게이션 스택 시작됨") // 확인용 로그 추가
+                    }
+                    UserDefaultManager.shared.userStatus = false
+                case .failure(let error):
+                    print("Error: \(error)")
+                }
+            }
+    }
+    
+    // apple 탈퇴 API를 호출하는 함수
+    func withdrawAppleAccount(accessToken: String, xAppleCode: String) {
+        // 탈퇴 API의 URL
+        let url = "http://juinjang1227.com:8080/api/auth/apple/withdraw"
+        
+        // Authorization과 target-id 헤더 설정
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(accessToken)",
+            "X-Apple-Code": xAppleCode
+        ]
+        
+        // Alamofire를 사용하여 DELETE 요청
+        AF.request(url, method: .delete, headers: headers)
+            .validate() // 응답의 상태 코드가 성공 범위 내에 있는지 확인
+            .responseString { response in
+                switch response.result {
+                case .success(let responseBody):
+                    print("Response Body: \(responseBody)")
+                    let signupViewController = SignUpViewController()
+                    // 현재 내비게이션 컨트롤러가 nil인지 확인
+                    if let navigationController = self.navigationController {
+                        navigationController.pushViewController(signupViewController, animated: true)
+                        print("SignUpViewController로 push됨") // 확인용 로그 추가
+                    } else {
+                        // 현재 내비게이션 컨트롤러가 없는 경우, 새로운 내비게이션 컨트롤러를 시작하고 SignUpViewController를 rootViewController로 설정
+                        let navigationController = UINavigationController(rootViewController: signupViewController)
+                        if let windowScene = UIApplication.shared.connectedScenes
+                            .first(where: { $0 is UIWindowScene }) as? UIWindowScene {
+                            if let window = windowScene.windows.first {
+                                window.rootViewController = navigationController
+                            }
+                        }
+                        print("SignUpViewController로 새로운 내비게이션 스택 시작됨") // 확인용 로그 추가
+                    }
+                    UserDefaultManager.shared.userStatus = false
+                case .failure(let error):
+                    print("Error: \(error)")
+                }
+            }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -154,6 +246,7 @@ class AccountDeleteFinalViewController: BaseViewController {
         accountDeleteFinalView.addSubview(noButton)
         noButton.addTarget(self, action: #selector(no), for: .touchUpInside)
         accountDeleteFinalView.addSubview(yesButton)
+        yesButton.addTarget(self, action: #selector(no), for: .touchUpInside)
         setConstraint()
     }
 }
