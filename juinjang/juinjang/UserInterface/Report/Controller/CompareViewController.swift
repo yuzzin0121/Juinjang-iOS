@@ -300,17 +300,16 @@ class CompareViewController : BaseViewController, SendCompareImjangData, SendSea
                 $0.left.equalTo(chartCompareImageView2.snp.right).offset(4)
                 $0.height.equalTo(17)
             }
-            insideLabel2.snp.makeConstraints{
+            locationConditionLabel2.snp.makeConstraints{
                 $0.top.equalToSuperview().offset(12)
                 $0.left.equalToSuperview().offset(12)
                 $0.height.equalTo(20)
             }
-            insideRateLabel2.snp.makeConstraints{
+            locationConditionRateLabel2.snp.makeConstraints{
                 $0.top.equalToSuperview().offset(12)
                 $0.left.equalToSuperview().offset(110)
                 $0.height.equalTo(20)
             }
-            
             publicSpaceLabel2.snp.makeConstraints{
                 $0.top.equalToSuperview().offset(36)
                 $0.left.equalToSuperview().offset(12)
@@ -321,12 +320,12 @@ class CompareViewController : BaseViewController, SendCompareImjangData, SendSea
                 $0.left.equalToSuperview().offset(110)
                 $0.height.equalTo(20)
             }
-            locationConditionLabel2.snp.makeConstraints{
+            insideLabel2.snp.makeConstraints{
                 $0.top.equalToSuperview().offset(60)
                 $0.left.equalToSuperview().offset(12)
                 $0.height.equalTo(20)
             }
-            locationConditionRateLabel2.snp.makeConstraints{
+            insideRateLabel2.snp.makeConstraints{
                 $0.top.equalToSuperview().offset(60)
                 $0.left.equalToSuperview().offset(110)
                 $0.height.equalTo(20)
@@ -521,6 +520,7 @@ class CompareViewController : BaseViewController, SendCompareImjangData, SendSea
         closeButton.addTarget(self, action: #selector(closeBtnTap), for: .touchUpInside)
     }
     @objc private func compareButtonTap() {
+        
         //비교할 매물이 없을 때
         /*let popupViewController = NoMaemullPopupViewController(ment: "비교할 매물이 아직 없어요.\n다른 매물이 생기면 다시 와주세요!")
         popupViewController.modalPresentationStyle = .overFullScreen
@@ -568,12 +568,12 @@ class CompareViewController : BaseViewController, SendCompareImjangData, SendSea
             $0.left.equalToSuperview().offset(24)
         }
         
-        insideLabel1.snp.makeConstraints{
+        locationConditionLabel1.snp.makeConstraints{
             $0.top.equalToSuperview().offset(12)
             $0.left.equalToSuperview().offset(12)
             $0.height.equalTo(20)
         }
-        insideRateLabel1.snp.makeConstraints{
+        locationConditionRateLabel1.snp.makeConstraints{
             $0.top.equalToSuperview().offset(12)
             $0.left.equalToSuperview().offset(110)
             $0.height.equalTo(20)
@@ -589,12 +589,12 @@ class CompareViewController : BaseViewController, SendCompareImjangData, SendSea
             $0.left.equalToSuperview().offset(110)
             $0.height.equalTo(20)
         }
-        locationConditionLabel1.snp.makeConstraints{
+        insideLabel1.snp.makeConstraints{
             $0.top.equalToSuperview().offset(60)
             $0.left.equalToSuperview().offset(12)
             $0.height.equalTo(20)
         }
-        locationConditionRateLabel1.snp.makeConstraints{
+        insideRateLabel1.snp.makeConstraints{
             $0.top.equalToSuperview().offset(60)
             $0.left.equalToSuperview().offset(110)
             $0.height.equalTo(20)
@@ -627,6 +627,7 @@ class CompareViewController : BaseViewController, SendCompareImjangData, SendSea
     init(imjangId: Int) {
         self.imjangId = imjangId
         super.init()
+        
     }
     
     required init?(coder: NSCoder) {

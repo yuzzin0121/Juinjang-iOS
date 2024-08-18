@@ -68,7 +68,7 @@ class TabViewController: TabmanViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print("imjangID : \(imjangId)")
         addViewControllers()
         self.dataSource = self
         

@@ -119,7 +119,7 @@ class SignUpViewController: BaseViewController {
         controller.delegate = self
         controller.presentationContextProvider = self
         controller.performRequests()
-            
+    
     }
     func getUserNickname() {
         let urlString = "http://juinjang1227.com:8080/api/profile"

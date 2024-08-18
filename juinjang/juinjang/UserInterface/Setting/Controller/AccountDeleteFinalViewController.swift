@@ -12,6 +12,10 @@ import Alamofire
 import AuthenticationServices
 
 class AccountDeleteFinalViewController: BaseViewController {
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        return self.view.window!
+    }
+    
     
     var accountDeleteFinalView = UIView().then {
         $0.backgroundColor = .white
@@ -127,7 +131,14 @@ class AccountDeleteFinalViewController: BaseViewController {
         if UserDefaultManager.shared.isKakaoLogin {
             withdrawKakaoAccount(accessToken: UserDefaultManager.shared.accessToken, kakaoTargetId: UserDefaultManager.shared.kakaoTargetId)
         } else {
-            withdrawAppleAccount(accessToken: UserDefaultManager.shared.accessToken, xAppleCode: UserDefaultManager.shared.appleAuthCode)
+            let appleProvider = ASAuthorizationAppleIDProvider()
+            let request = appleProvider.createRequest()
+            request.requestedScopes = [.fullName, .email]
+            
+            let controller = ASAuthorizationController(authorizationRequests: [request])
+            controller.delegate = self
+            controller.presentationContextProvider = self
+            controller.performRequests()
         }
         
     }
@@ -180,13 +191,15 @@ class AccountDeleteFinalViewController: BaseViewController {
     // apple 탈퇴 API를 호출하는 함수
     func withdrawAppleAccount(accessToken: String, xAppleCode: String) {
         // 탈퇴 API의 URL
-        let url = "http://juinjang1227.com:8080/api/auth/apple/withdraw"
+        let url = "http://juinjang1227.com:8080/api/auth/withdraw/apple"
         
         // Authorization과 target-id 헤더 설정
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(accessToken)",
             "X-Apple-Code": xAppleCode
         ]
+        print("access : \(accessToken)")
+        print("apple 토큰 : \(xAppleCode)")
         
         // Alamofire를 사용하여 DELETE 요청
         AF.request(url, method: .delete, headers: headers)
@@ -214,6 +227,9 @@ class AccountDeleteFinalViewController: BaseViewController {
                     UserDefaultManager.shared.userStatus = false
                 case .failure(let error):
                     print("Error: \(error)")
+                    if let data = response.data, let errorDetails = String(data: data, encoding: .utf8) {
+                        print("Error Details: \(errorDetails)")
+                    }
                 }
             }
     }
@@ -255,3 +271,19 @@ class AccountDeleteFinalViewController: BaseViewController {
     }
 }
 
+extension AccountDeleteFinalViewController : ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding{
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        guard let credential = authorization.credential as? ASAuthorizationAppleIDCredential else { return }
+        if let authorizationCodeData = credential.authorizationCode,
+           let authorizationCode = String(data: authorizationCodeData, encoding: .utf8) {
+            print("authorizationCode = \(authorizationCode)")
+            UserDefaultManager.shared.appleAuthCode = authorizationCode
+        } else {
+            print("Authorization code is missing or invalid")
+        }
+    }
+    
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        print("애플 로그인 실패 \(error.localizedDescription)")
+    }
+}
