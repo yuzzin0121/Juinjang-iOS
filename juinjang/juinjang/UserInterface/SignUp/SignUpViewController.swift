@@ -119,7 +119,7 @@ class SignUpViewController: BaseViewController {
         controller.delegate = self
         controller.presentationContextProvider = self
         controller.performRequests()
-            
+    
     }
     func getUserNickname() {
         let urlString = "http://juinjang1227.com:8080/api/profile"
@@ -223,7 +223,8 @@ extension SignUpViewController{
                         
                         if let userId = kakaoUser.id {
                             print("사용자 ID : \(userId)")
-                            self.sendPostRequest(email: UserDefaultManager.shared.email, nickname: UserDefaultManager.shared.nickname,targetID: userId)
+                            UserDefaultManager.shared.kakaoTargetId = userId
+                            self.sendPostRequest(email: UserDefaultManager.shared.email, nickname: UserDefaultManager.shared.nickname)
                         } else {
                             print("사용자 ID를 가져올 수 없습니다.")
                         }
@@ -238,8 +239,6 @@ extension SignUpViewController{
     struct RequestBody: Encodable {
         let email: String
         let nickname: String?
-        let target_id_type: String
-        let target_id: Int64
     }
     struct UserInfoResponse: Codable {
         let isSuccess: Bool
@@ -261,9 +260,9 @@ extension SignUpViewController{
             self.image = try container.decodeIfPresent(String.self, forKey: .image)
         }
     }
-    func sendPostRequest(email: String, nickname: String?, targetID: Int64) {
+    func sendPostRequest(email: String, nickname: String?) {
         let url = "http://juinjang1227.com:8080/api/auth/kakao/login"
-        let requestBody = RequestBody(email: email, nickname: nickname, target_id_type: "user_id", target_id: targetID)
+        let requestBody = RequestBody(email: email, nickname: nickname)
             
         AF.request(url, method: .post, parameters: requestBody, encoder: JSONParameterEncoder.default, interceptor: AuthInterceptor())
             .responseJSON { response in
@@ -382,8 +381,13 @@ extension SignUpViewController: ASAuthorizationControllerDelegate,ASAuthorizatio
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         guard let credential = authorization.credential as? ASAuthorizationAppleIDCredential else { return }
-        print(credential.authorizationCode)
-        
+        if let authorizationCodeData = credential.authorizationCode,
+           let authorizationCode = String(data: authorizationCodeData, encoding: .utf8) {
+            print("authorizationCode = \(authorizationCode)")
+            UserDefaultManager.shared.appleAuthCode = authorizationCode
+        } else {
+            print("Authorization code is missing or invalid")
+        }
         // MARK: - 이메일
         // 처음 애플 로그인 시 이메일은 credential.email 에 들어있다.
         if let email = credential.email {

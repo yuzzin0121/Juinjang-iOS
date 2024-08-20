@@ -206,7 +206,7 @@ class WelcomeViewController: BaseViewController {
     @objc func buttonTapped(_ sender: UIButton) {
         //UserDefaultManager.shared.userStatus = true
         if UserDefaultManager.shared.isKakaoLogin {
-            signupRequest(email: UserDefaultManager.shared.email, kakaoNickname: UserDefaultManager.shared.nickname, nickname: UserDefaultManager.shared.nickname)
+            signupRequest(email: UserDefaultManager.shared.email, kakaoNickname: UserDefaultManager.shared.nickname, nickname: UserDefaultManager.shared.nickname, kakaoTargetId: UserDefaultManager.shared.kakaoTargetId)
         } else {
             signupWithApple(identityToken: UserDefaultManager.shared.identityToken, nickname: UserDefaultManager.shared.nickname)
         }
@@ -215,11 +215,12 @@ class WelcomeViewController: BaseViewController {
 //        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
 //        self.navigationController?.pushViewController(RecordingRightsVC, animated: true)
     }
-    func signupRequest(email: String, kakaoNickname: String?, nickname: String) {
+    func signupRequest(email: String, kakaoNickname: String?, nickname: String, kakaoTargetId: Int64) {
         let parameters: [String: Any] = [
             "email": email,
             "kakaoNickname": kakaoNickname ?? NSNull(),
-            "nickname": nickname
+            "nickname": nickname,
+            "kakaoTargetId": kakaoTargetId
         ]
 
         AF.request("http://juinjang1227.com:8080/api/auth/kakao/signup", method: .post, parameters: parameters, encoding: JSONEncoding.default, interceptor: AuthInterceptor())
@@ -234,10 +235,10 @@ class WelcomeViewController: BaseViewController {
                        let refreshToken = result["refreshToken"] as? String,
                        isSuccess {
                         // 응답이 성공이라면 다음 ViewController로 이동합니다.
-                            print("Success: \(accessToken)")
-                            UserDefaultManager.shared.accessToken = accessToken
-                            print("Success: \(refreshToken)")
-                            UserDefaultManager.shared.refreshToken = refreshToken
+                        print("Success: \(accessToken)")
+                        UserDefaultManager.shared.accessToken = accessToken
+                        print("Success: \(refreshToken)")
+                        UserDefaultManager.shared.refreshToken = refreshToken
                         let RecordingRightsVC = RecordingRightsViewController()
                         RecordingRightsVC.modalPresentationStyle = .fullScreen
                         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)

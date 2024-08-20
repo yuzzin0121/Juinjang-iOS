@@ -42,17 +42,29 @@ class BottomCollectionViewCell: UICollectionViewCell {
         setImageUI(image: listDto.image)
         nameLabel.text = listDto.nickname
         priceLabel.text = listDto.price.formatToKoreanCurrencyWithZero()
-        setRate(totalAverage: listDto.totalAverage)
+        setScore(score: listDto.totalAverage)
     }
     
-    func setRate(totalAverage: String?) {
-        if let totalAverage {
-            starIcon.image = ImageStyle.star
-            rateLabel.text = totalAverage
-        } else {
-            starIcon.image = ImageStyle.starEmpty
+    func setScore(score: String?) {
+        guard let score, let doubleScore = Double(score) else {
             rateLabel.text = "0.0"
+            setScoreStyle()
+            return
         }
+        
+        let resultScore = doubleScore.truncateToSingleDecimal()
+        rateLabel.text = String(format: "%.1f", resultScore)
+        
+        if resultScore == 0.0 {
+            setScoreStyle()
+        } else {
+            setScoreStyle(empty: false)
+        }
+    }
+    
+    func setScoreStyle(empty: Bool = true) {
+        starIcon.image = empty ? ImageStyle.starEmpty : ImageStyle.star
+        rateLabel.textColor = empty ? ColorStyle.lightGray : ColorStyle.mainOrange
     }
     
     func setImageUI(image: String?) {
@@ -79,7 +91,7 @@ class BottomCollectionViewCell: UICollectionViewCell {
         nameLabel.design(font: .pretendard(size: 15, weight: .semiBold), numberOfLines: 2)
         priceLabel.design(textColor: ColorStyle.priceColor, font: .pretendard(size: 14, weight: .bold))
         starIcon.design(image: ImageStyle.starEmpty, contentMode: .scaleAspectFit)
-        rateLabel.design(text: "0.0", textColor: ColorStyle.mainOrange, font: .pretendard(size: 14, weight: .bold))
+        rateLabel.design(text: "0.0", textColor: ColorStyle.lightGray, font: .pretendard(size: 14, weight: .bold))
         scoreStackView.design(distribution: .fill, spacing: 3)
     }
     

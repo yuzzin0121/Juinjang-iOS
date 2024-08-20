@@ -62,7 +62,7 @@ class ReportViewController : BaseViewController {
     var totalRate : Float = 0.0
    
     //MARK: - 그래프
-    let tabViewController = TabViewController()
+    var tabViewController = TabViewController()
     
     func getReportInfo(limjangId: Int, accessToken: String) {
         print("hi")
@@ -258,6 +258,7 @@ class ReportViewController : BaseViewController {
     
     init(imjangId: Int, savedCheckListItems: [CheckListAnswer]) {
         self.imjangId = imjangId
+        tabViewController.imjangId = imjangId
         self.savedCheckListItems = savedCheckListItems
         super.init()
     }
@@ -278,7 +279,6 @@ class ReportViewController : BaseViewController {
         view.addSubview(addressLabel)
         
         addChild(tabViewController)
-        tabViewController.imjangId = imjangId
         view.addSubview(tabViewController.view)
         tabViewController.didMove(toParent: self)
         

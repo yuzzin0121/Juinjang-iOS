@@ -23,6 +23,8 @@ class UserDefaultManager {
         case isKakaoLogin
         case identityToken
         case isShowGuide
+        case kakaoTargetId
+        case appleAuthCode
     }
     
     let ud = UserDefaults.standard
@@ -86,6 +88,16 @@ class UserDefaultManager {
     var isShowGuide: Bool {
         get { ud.bool(forKey: UDKey.isShowGuide.rawValue) }
         set { ud.set(newValue, forKey: UDKey.isShowGuide.rawValue) }
+    }
+    
+    var kakaoTargetId: Int64 {
+        get { ud.object(forKey: UDKey.kakaoTargetId.rawValue) as? Int64 ?? 0 }
+        set { ud.set(newValue, forKey: UDKey.kakaoTargetId.rawValue) }
+    }
+    
+    var appleAuthCode: String {
+        get { ud.string(forKey: UDKey.appleAuthCode.rawValue) ?? "" }
+        set { ud.set(newValue, forKey: UDKey.appleAuthCode.rawValue) }
     }
 }
 

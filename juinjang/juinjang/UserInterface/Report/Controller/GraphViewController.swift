@@ -235,49 +235,49 @@ class GraphViewController : BaseViewController {
             $0.height.equalTo(128)
         }
         
-        indoorImageView.snp.makeConstraints{
+        locationimageView.snp.makeConstraints{
             $0.top.equalToSuperview().offset(12)
             $0.left.equalToSuperview()
             $0.height.equalTo(18)
         }
-        indoorLabel.snp.makeConstraints{
+        locationLabel.snp.makeConstraints{
             $0.top.equalToSuperview().offset(10)
-            $0.left.equalTo(indoorImageView.snp.right).offset(8)
+            $0.left.equalTo(locationimageView.snp.right).offset(8)
             $0.height.equalTo(24)
         }
-        indoorRateLabel.snp.makeConstraints{
+        locationRateLabel.snp.makeConstraints{
             $0.top.equalToSuperview().offset(10)
             $0.left.equalToSuperview().offset(295)
             $0.height.equalTo(23)
         }
         
         publicImageView.snp.makeConstraints{
-            $0.top.equalTo(indoorImageView.snp.bottom).offset(25)
+            $0.top.equalTo(locationimageView.snp.bottom).offset(25)
             $0.left.equalToSuperview()
             $0.height.equalTo(18)
         }
         publicLabel.snp.makeConstraints{
-            $0.top.equalTo(indoorLabel.snp.bottom).offset(18)
+            $0.top.equalTo(locationLabel.snp.bottom).offset(18)
             $0.left.equalTo(publicImageView.snp.right).offset(8)
             $0.height.equalTo(24)
         }
         publicRateLabel.snp.makeConstraints{
-            $0.top.equalTo(indoorRateLabel.snp.bottom).offset(19)
+            $0.top.equalTo(locationRateLabel.snp.bottom).offset(19)
             $0.left.equalToSuperview().offset(295)
             $0.height.equalTo(23)
         }
         
-        locationimageView.snp.makeConstraints{
+        indoorImageView.snp.makeConstraints{
             $0.top.equalTo(publicImageView.snp.bottom).offset(24)
             $0.left.equalToSuperview()
             $0.height.equalTo(18)
         }
-        locationLabel.snp.makeConstraints{
+        indoorLabel.snp.makeConstraints{
             $0.top.equalTo(publicLabel.snp.bottom).offset(18)
-            $0.left.equalTo(locationimageView.snp.right).offset(8)
+            $0.left.equalTo(indoorImageView.snp.right).offset(8)
             $0.height.equalTo(24)
         }
-        locationRateLabel.snp.makeConstraints{
+        indoorRateLabel.snp.makeConstraints{
             $0.top.equalTo(publicRateLabel.snp.bottom).offset(19)
             $0.left.equalToSuperview().offset(295)
             $0.height.equalTo(23)
@@ -300,17 +300,17 @@ class GraphViewController : BaseViewController {
         view.addSubview(label1)
         view.addSubview(noteImageView)
         
-        noteImageView.addSubview(indoorImageView)
-        noteImageView.addSubview(indoorLabel)
-        noteImageView.addSubview(indoorRateLabel)
+        noteImageView.addSubview(locationimageView)
+        noteImageView.addSubview(locationLabel)
+        noteImageView.addSubview(locationRateLabel)
         
         noteImageView.addSubview(publicImageView)
         noteImageView.addSubview(publicLabel)
         noteImageView.addSubview(publicRateLabel)
         
-        noteImageView.addSubview(locationimageView)
-        noteImageView.addSubview(locationLabel)
-        noteImageView.addSubview(locationRateLabel)
+        noteImageView.addSubview(indoorImageView)
+        noteImageView.addSubview(indoorLabel)
+        noteImageView.addSubview(indoorRateLabel)
         
         view.addSubview(radarChartView)
         setConstraint()

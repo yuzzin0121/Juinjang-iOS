@@ -93,12 +93,10 @@ final class ImjangListViewController: BaseViewController, DeleteImjangListDelega
         view.backgroundColor = .white
         designNavigationBar()
         addSubviews()
-        setEmptyConstraints()
         setupConstraints()
         configureTableView()
         designView()
         setFilterData()
-//        imjangTableView.reloadData()
         newPageButton.addTarget(self, action: #selector(showNewPageVC), for: .touchUpInside)
         callRequest(setScrap: true)   // 서버 요청 (total Imjang List)
     }
@@ -121,8 +119,8 @@ final class ImjangListViewController: BaseViewController, DeleteImjangListDelega
                 if setScrap {
                     self.setData(scrapedList: result.limjangList)   // 스크랩된것들 scrapList에 추가
                 }
-                self.setEmptyUI(isEmpty: self.imjangList.isEmpty)
                 self.imjangTableView.reloadData()
+                self.setEmptyUI(isEmpty: self.imjangList.isEmpty)
             } else {
                 guard let error else { return }
                 switch error {
@@ -521,7 +519,6 @@ extension ImjangListViewController {
     }
     
     func addSubviews() {
-//        view.addSubview(imjangTableView)
         view.addSubview(imjangTableView)
         view.addSubview(emptyBackgroundView)
         [emptyLogoImageView, emptyMessageLabel, newPageButton].forEach {
@@ -557,6 +554,7 @@ extension ImjangListViewController {
         deleteButton.design(image: ImageStyle.trash, backgroundColor: .clear)
         
 //        imjangTableView.backgroundColor = .white
+        setEmptyUI(isEmpty: false)
     }
     
     func setEmptyUI(isEmpty: Bool) {
@@ -585,6 +583,8 @@ extension ImjangListViewController {
             $0.trailing.equalToSuperview().inset(24)
             $0.size.equalTo(22)
         }
+        
+        setEmptyConstraints()
     }
     
     func setEmptyConstraints() {
