@@ -64,9 +64,11 @@ class ScrapTableViewCell: UITableViewCell {
         clipEmptyMessageLabel.design(text: "버튼을 누르면 상단에 고정할 수 있어요",
                                      textColor: ColorStyle.null,
                                      font: .pretendard(size: 16, weight: .medium))
+    
         DispatchQueue.main.async {
             self.clippingEmptyBackgroundView.applyGradientBackground()    // 스크랩 배경에 Gradient 추가
         }
+        setEmptyUI(isEmpty: false)
     }
     
     func setEmptyUI(isEmpty: Bool) {

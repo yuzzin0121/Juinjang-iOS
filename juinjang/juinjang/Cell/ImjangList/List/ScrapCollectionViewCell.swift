@@ -242,7 +242,7 @@ class ScrapCollectionViewCell: UICollectionViewCell {
     
     func setScoreStyle(empty: Bool = true) {
         starIcon.image = empty ? ImageStyle.starEmpty : ImageStyle.star
-        scoreLabel.textColor = empty ? ColorStyle.textGray : ColorStyle.mainOrange
+        scoreLabel.textColor = empty ? ColorStyle.lightGray : ColorStyle.mainOrange
     }
     
     func setStackViewBackground(isEmpty: Bool) {
@@ -285,8 +285,8 @@ class ScrapCollectionViewCell: UICollectionViewCell {
         roomNameLabel.design(text: "", font: .pretendard(size: 18, weight: .bold))
         roomIcon.design(image: ImageStyle.house, contentMode: .scaleAspectFit)
         
-        starIcon.design(image: ImageStyle.star, contentMode: .scaleAspectFit)
-        scoreLabel.design(textColor: ColorStyle.mainOrange, font: .pretendard(size: 16, weight: .semiBold))
+        starIcon.design(image: ImageStyle.starEmpty, contentMode: .scaleAspectFit)
+        scoreLabel.design(textColor: ColorStyle.lightGray, font: .pretendard(size: 16, weight: .semiBold))
         roomPriceLabel.design(text: "", font: .pretendard(size: 16, weight: .semiBold))
         roomAddressLabel.design(text: "", textColor: ColorStyle.textGray, font: .pretendard(size: 14, weight: .medium))
         bookMarkButton.design(image: ImageStyle.bookmark, backgroundColor: .white)

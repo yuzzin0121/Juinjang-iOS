@@ -108,7 +108,7 @@ class ImjangNoteTableViewCell: UITableViewCell {
     
     func setScoreStyle(empty: Bool = true) {
         starIcon.image = empty ? ImageStyle.starEmpty : ImageStyle.star
-        scoreLabel.textColor = empty ? ColorStyle.textGray : ColorStyle.mainOrange
+        scoreLabel.textColor = empty ? ColorStyle.lightGray : ColorStyle.mainOrange
     }
     
     func setConstraints() {
@@ -195,7 +195,7 @@ class ImjangNoteTableViewCell: UITableViewCell {
         priceLabel.design(text:"", font: .pretendard(size: 16, weight: .semiBold))
         
         starIcon.design(image: ImageStyle.starEmpty, contentMode: .scaleAspectFit)
-        scoreLabel.design(text:"", textColor: ColorStyle.mainOrange, font: .pretendard(size: 14, weight: .semiBold))
+        scoreLabel.design(text:"", textColor: ColorStyle.lightGray, font: .pretendard(size: 14, weight: .semiBold))
         addressLabel.design(text: "", textColor: ColorStyle.textGray, font: .pretendard(size: 14, weight: .medium))
         
         bookMarkButton.design(image: ImageStyle.bookmark, backgroundColor: .clear)
