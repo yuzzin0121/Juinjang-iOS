@@ -19,7 +19,7 @@ class ImjangNoteTableViewCell: UITableViewCell {
     let starStackView = UIStackView()
     let addressLabel = UILabel()
     let bookMarkButton = UIButton()
-
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -63,20 +63,8 @@ class ImjangNoteTableViewCell: UITableViewCell {
         
         roomNameLabel.text = imjangNote.nickname
         setPriceLabel(priceList: imjangNote.priceList)
-//        priceLabel.text = imjangNote.priceList[0].formatToKoreanCurrencyWithZero()
-        
-        if let score = imjangNote.totalAverage {
-            DispatchQueue.main.async {
-                self.starIcon.image = ImageStyle.star
-            }
-            scoreLabel.text = String(format: "%.1f", score)
-        } else {
-            DispatchQueue.main.async {
-                self.starIcon.image = ImageStyle.starEmpty
-            }
-            scoreLabel.text = "0.0"
-            scoreLabel.textColor = ColorStyle.null
-        }
+       
+        setScore(score: imjangNote.totalAverage)
         
         addressLabel.text = imjangNote.address
         
@@ -93,13 +81,34 @@ class ImjangNoteTableViewCell: UITableViewCell {
             let image = images[0]
             if let url = URL(string: image) {
                 DispatchQueue.main.async {
-    //                self.roomThumbnailImageView.image = UIImage(named: image)  // 임시
+                    //                self.roomThumbnailImageView.image = UIImage(named: image)  // 임시
                     self.roomThumbnailImageView.kf.setImage(with: url, placeholder: UIImage(named: "1"))
                 }
             }
             
         }
+    }
+    
+    func setScore(score: String?) {
+        guard let score, let doubleScore = Double(score) else {
+            scoreLabel.text = "0.0"
+            setScoreStyle()
+            return
+        }
         
+        let resultScore = doubleScore.truncateToSingleDecimal()
+        scoreLabel.text = String(format: "%.1f", resultScore)
+        
+        if resultScore == 0.0 {
+            setScoreStyle()
+        } else {
+            setScoreStyle(empty: false)
+        }
+    }
+    
+    func setScoreStyle(empty: Bool = true) {
+        starIcon.image = empty ? ImageStyle.starEmpty : ImageStyle.star
+        scoreLabel.textColor = empty ? ColorStyle.textGray : ColorStyle.mainOrange
     }
     
     func setConstraints() {
@@ -152,6 +161,7 @@ class ImjangNoteTableViewCell: UITableViewCell {
         super.prepareForReuse()
         configureCell(imjangNote: nil)
         self.roomThumbnailImageView.image = nil
+        starIcon.image = nil
     }
     
     override func draw(_ rect: CGRect) {
@@ -176,7 +186,7 @@ class ImjangNoteTableViewCell: UITableViewCell {
         
         starStackView.axis = .horizontal
         starStackView.spacing = 4
-        starStackView.alignment = .center
+        starStackView.alignment = .fill
         starStackView.distribution = .fill
 
         
@@ -184,7 +194,7 @@ class ImjangNoteTableViewCell: UITableViewCell {
         roomNameLabel.design(text:"", font: .pretendard(size: 16, weight: .bold))
         priceLabel.design(text:"", font: .pretendard(size: 16, weight: .semiBold))
         
-        starIcon.design(image: ImageStyle.star, contentMode: .scaleAspectFit)
+        starIcon.design(image: ImageStyle.starEmpty, contentMode: .scaleAspectFit)
         scoreLabel.design(text:"", textColor: ColorStyle.mainOrange, font: .pretendard(size: 14, weight: .semiBold))
         addressLabel.design(text: "", textColor: ColorStyle.textGray, font: .pretendard(size: 14, weight: .medium))
         

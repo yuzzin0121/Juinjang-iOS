@@ -42,17 +42,29 @@ class BottomCollectionViewCell: UICollectionViewCell {
         setImageUI(image: listDto.image)
         nameLabel.text = listDto.nickname
         priceLabel.text = listDto.price.formatToKoreanCurrencyWithZero()
-        setRate(totalAverage: listDto.totalAverage)
+        setScore(score: listDto.totalAverage)
     }
     
-    func setRate(totalAverage: String?) {
-        if let totalAverage {
-            starIcon.image = ImageStyle.star
-            rateLabel.text = totalAverage
-        } else {
-            starIcon.image = ImageStyle.starEmpty
+    func setScore(score: String?) {
+        guard let score, let doubleScore = Double(score) else {
             rateLabel.text = "0.0"
+            setScoreStyle()
+            return
         }
+        
+        let resultScore = doubleScore.truncateToSingleDecimal()
+        rateLabel.text = String(format: "%.1f", resultScore)
+        
+        if resultScore == 0.0 {
+            setScoreStyle()
+        } else {
+            setScoreStyle(empty: false)
+        }
+    }
+    
+    func setScoreStyle(empty: Bool = true) {
+        starIcon.image = empty ? ImageStyle.starEmpty : ImageStyle.star
+        rateLabel.textColor = empty ? ColorStyle.textGray : ColorStyle.mainOrange
     }
     
     func setImageUI(image: String?) {

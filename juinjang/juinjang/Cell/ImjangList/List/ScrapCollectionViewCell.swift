@@ -54,7 +54,7 @@ class ScrapCollectionViewCell: UICollectionViewCell {
     func setData(imjangNote: ListDto?) {
         guard let imjangNote else { return }
         roomNameLabel.text = imjangNote.nickname
-        setRate(totalAverage: imjangNote.totalAverage)
+        setScore(score: imjangNote.totalAverage)
         setPriceLabel(priceList: imjangNote.priceList)
         roomAddressLabel.text = imjangNote.address
         let bookmarkImage = imjangNote.isScraped ? ImageStyle.bookmarkSelected : ImageStyle.bookmark
@@ -223,21 +223,27 @@ class ScrapCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    func setRate(totalAverage: String?) {
-        if let score = totalAverage {
-            DispatchQueue.main.async {
-                self.starIcon.image = ImageStyle.star
-            }
-            scoreLabel.text = String(format: "%.1f", score)
-        } else {
-            DispatchQueue.main.async {
-                self.starIcon.image = ImageStyle.starEmpty
-            }
+    func setScore(score: String?) {
+        guard let score, let doubleScore = Double(score) else {
             scoreLabel.text = "0.0"
-            scoreLabel.textColor = ColorStyle.null
+            setScoreStyle()
+            return
+        }
+        
+        let resultScore = doubleScore.truncateToSingleDecimal()
+        scoreLabel.text = String(format: "%.1f", resultScore)
+        
+        if resultScore == 0.0 {
+            setScoreStyle()
+        } else {
+            setScoreStyle(empty: false)
         }
     }
-
+    
+    func setScoreStyle(empty: Bool = true) {
+        starIcon.image = empty ? ImageStyle.starEmpty : ImageStyle.star
+        scoreLabel.textColor = empty ? ColorStyle.textGray : ColorStyle.mainOrange
+    }
     
     func setStackViewBackground(isEmpty: Bool) {
         emptyImage.isHidden = isEmpty ? false : true

@@ -166,6 +166,7 @@
 		619269F52B67747F00D4DD3E /* ScrapCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 619269EF2B67747F00D4DD3E /* ScrapCollectionViewCell.swift */; };
 		619269F62B67747F00D4DD3E /* SearchKeywordHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 619269F02B67747F00D4DD3E /* SearchKeywordHeaderView.swift */; };
 		619269F72B67747F00D4DD3E /* ImjangListHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 619269F12B67747F00D4DD3E /* ImjangListHeaderView.swift */; };
+		6192AD782C745EB300FD9329 /* Double+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6192AD772C745EB300FD9329 /* Double+Extension.swift */; };
 		61A7B9262B4C4EC300795B49 /* Pretendard-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 61A7B91D2B4C4EC200795B49 /* Pretendard-Regular.otf */; };
 		61A7B9272B4C4EC300795B49 /* Pretendard-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = 61A7B91E2B4C4EC200795B49 /* Pretendard-ExtraLight.otf */; };
 		61A7B9282B4C4EC300795B49 /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 61A7B91F2B4C4EC200795B49 /* Pretendard-SemiBold.otf */; };
@@ -335,6 +336,7 @@
 		619269EF2B67747F00D4DD3E /* ScrapCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrapCollectionViewCell.swift; sourceTree = "<group>"; };
 		619269F02B67747F00D4DD3E /* SearchKeywordHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchKeywordHeaderView.swift; sourceTree = "<group>"; };
 		619269F12B67747F00D4DD3E /* ImjangListHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImjangListHeaderView.swift; sourceTree = "<group>"; };
+		6192AD772C745EB300FD9329 /* Double+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extension.swift"; sourceTree = "<group>"; };
 		61A7B91D2B4C4EC200795B49 /* Pretendard-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.otf"; sourceTree = "<group>"; };
 		61A7B91E2B4C4EC200795B49 /* Pretendard-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-ExtraLight.otf"; sourceTree = "<group>"; };
 		61A7B91F2B4C4EC200795B49 /* Pretendard-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-SemiBold.otf"; sourceTree = "<group>"; };
@@ -764,6 +766,7 @@
 				616D48192BFBAF660073029A /* Int+Extension.swift */,
 				616F1E4A2C00EAD40049461F /* NotificationName+Extension.swift */,
 				611BB8A02C4418D600FFC28A /* UIScreen+Extension.swift */,
+				6192AD772C745EB300FD9329 /* Double+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -1112,6 +1115,7 @@
 				345855822B689D7200432C06 /* QnATableViewCell.swift in Sources */,
 				345855A32B69504500432C06 /* SelectMaemullViewController.swift in Sources */,
 				0A603A682B7DD2640060B90D /* CheckListRequestDto.swift in Sources */,
+				6192AD782C745EB300FD9329 /* Double+Extension.swift in Sources */,
 				3458558E2B689E2D00432C06 /* AccountDeleteViewController.swift in Sources */,
 				34AA14F72B82E98C00CF10FC /* PlayViewController.swift in Sources */,
 				6108CFE82B761E5900EF302F /* TotalListDto.swift in Sources */,
@@ -1356,11 +1360,9 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = juinjang/juinjang.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = VJBC86TDTZ;
+				DEVELOPMENT_TEAM = VJBC86TDTZ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = juinjang/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "카메라 접근 권한이 필요합니다.";
@@ -1382,7 +1384,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.juinjangteam.juinjang;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = juinjang_profile;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -1399,11 +1400,9 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = juinjang/juinjang.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = VJBC86TDTZ;
+				DEVELOPMENT_TEAM = VJBC86TDTZ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = juinjang/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "카메라 접근 권한이 필요합니다.";
@@ -1425,7 +1424,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.juinjangteam.juinjang;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = juinjang_profile;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
