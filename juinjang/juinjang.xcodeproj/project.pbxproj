@@ -138,6 +138,7 @@
 		616408E12B405B7200EC3B5E /* ImjangNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616408E02B405B7200EC3B5E /* ImjangNoteViewController.swift */; };
 		616408EC2B407A2D00EC3B5E /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616408EB2B407A2D00EC3B5E /* UIView+Extension.swift */; };
 		616409022B407FB300EC3B5E /* UIFont+Pretendard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616409012B407FB300EC3B5E /* UIFont+Pretendard.swift */; };
+		616BCC1A2C75744700356BDA /* OnboardingContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616BCC192C75744700356BDA /* OnboardingContainerViewController.swift */; };
 		616D48182BFBA52B0073029A /* DateFormatterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D48172BFBA52B0073029A /* DateFormatterManager.swift */; };
 		616D481A2BFBAF660073029A /* Int+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D48192BFBAF660073029A /* Int+Extension.swift */; };
 		616D481F2BFC8CF40073029A /* RecordRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D481E2BFC8CF40073029A /* RecordRequestDTO.swift */; };
@@ -308,6 +309,7 @@
 		616408E02B405B7200EC3B5E /* ImjangNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImjangNoteViewController.swift; sourceTree = "<group>"; };
 		616408EB2B407A2D00EC3B5E /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		616409012B407FB300EC3B5E /* UIFont+Pretendard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Pretendard.swift"; sourceTree = "<group>"; };
+		616BCC192C75744700356BDA /* OnboardingContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingContainerViewController.swift; sourceTree = "<group>"; };
 		616D48172BFBA52B0073029A /* DateFormatterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatterManager.swift; sourceTree = "<group>"; };
 		616D48192BFBAF660073029A /* Int+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extension.swift"; sourceTree = "<group>"; };
 		616D481E2BFC8CF40073029A /* RecordRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordRequestDTO.swift; sourceTree = "<group>"; };
@@ -455,6 +457,7 @@
 			isa = PBXGroup;
 			children = (
 				616F1E512C0729140049461F /* Base */,
+				616BCC182C75742600356BDA /* Onboarding */,
 				346CF6AC2B70B41F00C70C7A /* Splash */,
 				3458556E2B6899D300432C06 /* Main */,
 				619269D22B6773FE00D4DD3E /* ImjangList */,
@@ -798,6 +801,22 @@
 			path = Fonts;
 			sourceTree = "<group>";
 		};
+		616BCC182C75742600356BDA /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				616BCC1B2C75809800356BDA /* View */,
+				616BCC192C75744700356BDA /* OnboardingContainerViewController.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		616BCC1B2C75809800356BDA /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		616D48162BFB423C0073029A /* Query */ = {
 			isa = PBXGroup;
 			children = (
@@ -1102,6 +1121,7 @@
 				0A7AC0F12B6412760032C9DF /* KakaoZipCodeViewController.swift in Sources */,
 				0A4EBE382B5EDD6F00909B7A /* ExpandedTextFieldTableViewCell.swift in Sources */,
 				616F1E502C0724CD0049461F /* APIError.swift in Sources */,
+				616BCC1A2C75744700356BDA /* OnboardingContainerViewController.swift in Sources */,
 				345855A42B69E44D00432C06 /* NoMaemullPopupView.swift in Sources */,
 				0A554CE42B5420F20023BB49 /* WarningMessageViewController.swift in Sources */,
 				0A14E3712B56B31A0008FD28 /* SetNickNameViewController.swift in Sources */,
