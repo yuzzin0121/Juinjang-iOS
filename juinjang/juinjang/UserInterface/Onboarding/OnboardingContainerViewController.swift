@@ -18,14 +18,24 @@ final class OnboardingContainerViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setViewControllers()
         configureDataSource()
         configureHierarchy()
         configureLayout()
         configureView()
     }
     
+    private func setViewControllers() {
+        let checkListOnboardingVC = OnboardingViewController(onboardingType: OnboardingType.checklist)
+        let recordImjangOnboardingVC = OnboardingViewController(onboardingType: OnboardingType.recordImjang)
+        let reportOnboardingVC = OnboardingViewController(onboardingType: OnboardingType.report)
+        
+        pageViewControllerList = [checkListOnboardingVC, recordImjangOnboardingVC, reportOnboardingVC]
+    }
+    
     private func configureDataSource() {
         pageViewController.dataSource = self
+        pageViewController.delegate = self
     }
     
     private func configureHierarchy() {
@@ -41,7 +51,7 @@ final class OnboardingContainerViewController: UIViewController {
         
         pageControl.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).offset(18)
-            make.leading.equalTo(view.safeAreaLayoutGuide).offset(24)
+            make.leading.equalTo(view.safeAreaLayoutGuide)
         }
     }
     
@@ -87,5 +97,14 @@ extension OnboardingContainerViewController: UIPageViewControllerDataSource {
         guard let viewController = pageViewController.viewControllers?.first,
               let currentIndex = pageViewControllerList.firstIndex(of: viewController) else { return 0 }
         return currentIndex
+    }
+}
+
+extension OnboardingContainerViewController: UIPageViewControllerDelegate {
+    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+        guard let viewController = pageViewController.viewControllers?.first,
+              let currentIndex = pageViewControllerList.firstIndex(of: viewController) else { return }
+        
+        pageControl.currentPage = currentIndex
     }
 }

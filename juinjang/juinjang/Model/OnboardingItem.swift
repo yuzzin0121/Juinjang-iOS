@@ -10,11 +10,11 @@ import Foundation
 struct OnboardingItem {
     let title: String
     let keyword: String
-    let videoURL: URL?
+    let jsonURLString: String
     
-    init(title: String, keyword: String, videoURL: URL?) {
+    init(title: String, keyword: String, jsonURLString: String) {
         self.title = title
         self.keyword = keyword
-        self.videoURL = videoURL
+        self.jsonURLString = jsonURLString
     }
 }

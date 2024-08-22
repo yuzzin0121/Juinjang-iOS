@@ -16,13 +16,13 @@ enum OnboardingType {
         switch self {
         case .checklist: OnboardingItem(title: "매물마다\n중요한 포인트는\n따로 있으니까",
                                         keyword: "중요한 포인트",
-                                        videoURL: VideoUrl.checklist.url1)
+                                        jsonURLString: JsonURLString.checklist.urlString1)
         case .recordImjang: OnboardingItem(title: "중요한 대화,\n신경쓰지 않으면\n놓쳐버리니까",
                                            keyword: "놓쳐버리니까",
-                                           videoURL: VideoUrl.recordImjang.url1)
+                                           jsonURLString: JsonURLString.recordImjang.urlString1)
         case .report: OnboardingItem(title: "모으는 것만큼\n분석하는 방법도\n중요하니까",
                                      keyword: "분석하는 방법",
-                                     videoURL: VideoUrl.report.url1)
+                                     jsonURLString: JsonURLString.report.urlString1)
         }
     }
     
@@ -30,39 +30,21 @@ enum OnboardingType {
         switch self {
         case .checklist: OnboardingItem(title: "주인장\n맞춤 체크리스트로\n현명하게",
                                         keyword: "맞춤 체크리스트",
-                                        videoURL: VideoUrl.checklist.url2)
+                                        jsonURLString: JsonURLString.checklist.urlString2)
         case .recordImjang: OnboardingItem(title: "주인장\n매물별 음성 녹음으로\n꼼꼼하게",
-                                           keyword: "매물별 음성녹음",
-                                           videoURL: VideoUrl.recordImjang.url2)
+                                           keyword: "매물별 음성 녹음",
+                                           jsonURLString: JsonURLString.recordImjang.urlString2)
         case .report: OnboardingItem(title: "리포트로\n분석과 비교까지\n주인장이 도와드릴게요!",
                                      keyword: "분석과 비교",
-                                     videoURL: VideoUrl.report.url2)
+                                     jsonURLString: JsonURLString.report.urlString2)
         }
     }
 }
 
-enum VideoUrl {
+enum JsonURLString {
     case checklist
     case recordImjang
     case report
-    
-    var url1: URL? {
-        let extensionType = "mp4"
-        switch self {
-        case .checklist: return Bundle.main.url(forResource: urlString1, withExtension: extensionType)
-        case .recordImjang: return Bundle.main.url(forResource: urlString1, withExtension: extensionType)
-        case .report: return Bundle.main.url(forResource: urlString1, withExtension: extensionType)
-        }
-    }
-    
-    var url2: URL? {
-        let extensionType = "mp4"
-        switch self {
-        case .checklist: return Bundle.main.url(forResource: urlString2, withExtension: extensionType)
-        case .recordImjang: return Bundle.main.url(forResource: urlString2, withExtension: extensionType)
-        case .report: return Bundle.main.url(forResource: urlString2, withExtension: extensionType)
-        }
-    }
     
     var urlString1: String {
         switch self {
