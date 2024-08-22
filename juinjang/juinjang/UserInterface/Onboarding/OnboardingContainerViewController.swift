@@ -13,7 +13,7 @@ final class OnboardingContainerViewController: UIViewController {
     private var pageViewControllerList = [UIViewController]()
     private var initialPage = 0
     
-    private var pageControl: UIPageControl!
+    private var pageControl = UIPageControl()
     
 
     override func viewDidLoad() {
@@ -30,9 +30,8 @@ final class OnboardingContainerViewController: UIViewController {
     
     private func configureHierarchy() {
         view.addSubview(pageViewController.view)
-        addChild(pageViewController)
-        
         view.addSubview(pageControl)
+        addChild(pageViewController)
     }
     
     private func configureLayout() {
@@ -47,7 +46,7 @@ final class OnboardingContainerViewController: UIViewController {
     }
     
     private func configureView() {
-        pageControl = UIPageControl.appearance()
+        view.backgroundColor = ColorStyle.textWhite
         pageControl.currentPageIndicatorTintColor = ColorStyle.mainOrange
         pageControl.pageIndicatorTintColor = ColorStyle.lightBackgroundOrange
         pageControl.backgroundColor = .clear
