@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum OnboardingType {
+enum OnboardingType: Int {
     case checklist
     case recordImjang
     case report

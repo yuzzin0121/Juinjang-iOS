@@ -15,8 +15,11 @@ final class OnboardingViewController: UIViewController {
     private lazy var animationView = LottieAnimationView(name: onboardingType.item1.jsonURLString)
     private var onboardingType: OnboardingType
     
+    weak var showLoginButtonDelegate: ShowLoginButtonDelegate?
+    
     init(onboardingType: OnboardingType) {
         self.onboardingType = onboardingType
+        print("OnboardingViewController Init")
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -32,8 +35,8 @@ final class OnboardingViewController: UIViewController {
     }
     
     // MARK: viewDidAppear
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         
         setTitle(onboardingType.item1.title, keyword: onboardingType.item1.keyword)
         animationView = LottieAnimationView(name: onboardingType.item1.jsonURLString)
@@ -54,8 +57,17 @@ final class OnboardingViewController: UIViewController {
                     guard let self else { return }
                     // 어플 예시 화면, 텍스트로 변경
                     startItem2Animation()
+                    
+                    // 마지막 온보딩 화면인지 체크 후 로그인 버튼 보이기
+                    checkLastOnboarding()
                 }
             }
+        }
+    }
+    
+    private func checkLastOnboarding() {
+        if onboardingType == .report {
+            showLoginButtonDelegate?.showLoginButton()
         }
     }
     
@@ -79,10 +91,9 @@ final class OnboardingViewController: UIViewController {
     }
     
     // MARK: viewDidDisappear
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
         setUIHidden(true)
-        animationView.removeFromSuperview()
     }
     
     private func configureHierarchy() {
@@ -149,6 +160,6 @@ final class OnboardingViewController: UIViewController {
     
     private func setUIHidden(_ isHidden: Bool, hiddenAlpha: Double = 0.2) {
         titleLabel.alpha = isHidden ? hiddenAlpha : 1
-        animationView.alpha = isHidden ? hiddenAlpha : 1
+        animationView.alpha = isHidden ? 0 : 1
     }
 }

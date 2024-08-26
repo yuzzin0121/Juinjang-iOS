@@ -7,15 +7,33 @@
 
 import UIKit
 
+protocol ShowLoginButtonDelegate: AnyObject {
+    func showLoginButton()
+}
+
 final class OnboardingContainerViewController: UIViewController {
     private let goLoginButton = UIButton()
     private let pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
-    private var pageViewControllerList = [UIViewController]()
+    private var pageViewControllerList: [UIViewController] = []
     private var initialPage = 0
     
     private var pageControl = UIPageControl()
+    private var isShowingLoginButton = false
     
-
+    
+    init() {
+        print("OnboardingContainerViewController Init")
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        print("OnboardingContainerViewController Init")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setViewControllers()
@@ -29,6 +47,7 @@ final class OnboardingContainerViewController: UIViewController {
         let checkListOnboardingVC = OnboardingViewController(onboardingType: OnboardingType.checklist)
         let recordImjangOnboardingVC = OnboardingViewController(onboardingType: OnboardingType.recordImjang)
         let reportOnboardingVC = OnboardingViewController(onboardingType: OnboardingType.report)
+        reportOnboardingVC.showLoginButtonDelegate = self
         
         pageViewControllerList = [checkListOnboardingVC, recordImjangOnboardingVC, reportOnboardingVC]
     }
@@ -65,6 +84,34 @@ final class OnboardingContainerViewController: UIViewController {
         
         guard let first = pageViewControllerList.first else { return }
         pageViewController.setViewControllers([first], direction: .forward, animated: true)
+        
+        var config = UIButton.Configuration.filled()
+        config.title = "로그인 페이지로"
+        config.titleAlignment = .center
+        config.baseForegroundColor = ColorStyle.textWhite
+        config.baseBackgroundColor = ColorStyle.textBlack
+        config.background.cornerRadius = 10
+ 
+        var container = AttributeContainer()
+        container.font = .pretendard(size: 14, weight: .semiBold)
+        config.attributedTitle = AttributedString("로그인 페이지로", attributes: container)
+        
+        goLoginButton.configuration = config
+        goLoginButton.alpha = 0
+        goLoginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc private func loginButtonTapped() {
+        changeLoginVC()
+    }
+    
+    private func setLoginButtonLayout() {
+        view.addSubview(goLoginButton)
+        goLoginButton.snp.makeConstraints { make in
+            make.horizontalEdges.equalToSuperview().inset(24)
+            make.bottom.equalTo(view.safeAreaLayoutGuide).inset(12)
+            make.height.equalTo(52)
+        }
     }
 }
 
@@ -106,5 +153,19 @@ extension OnboardingContainerViewController: UIPageViewControllerDelegate {
               let currentIndex = pageViewControllerList.firstIndex(of: viewController) else { return }
         
         pageControl.currentPage = currentIndex
+    }
+}
+
+extension OnboardingContainerViewController: ShowLoginButtonDelegate {
+    func showLoginButton() {
+        if isShowingLoginButton == false {
+            isShowingLoginButton = true
+            // 로그인 버튼 보여주기
+            setLoginButtonLayout()
+            UIView.animate(withDuration: 0.5, delay: 0.0, options: .allowUserInteraction, animations: { [weak self] in
+                guard let self else { return }
+                goLoginButton.alpha = 1
+            })
+        }
     }
 }
