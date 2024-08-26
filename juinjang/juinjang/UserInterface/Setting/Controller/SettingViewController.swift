@@ -231,6 +231,7 @@ class SettingViewController : BaseViewController, UIImagePickerControllerDelegat
             switch response.result {
             case .success(let data):
                 // 응답 확인
+                print("refresh토큰 : \(UserDefaultManager.shared.refreshToken)")
                 if let httpResponse = response.response {
                     print("Status code: \(httpResponse.statusCode)")
                 }
@@ -239,23 +240,33 @@ class SettingViewController : BaseViewController, UIImagePickerControllerDelegat
                     print("Response data: \(responseString)")
                 }
                 
-                let signupViewController = SignUpViewController()
-                // 현재 내비게이션 컨트롤러가 nil인지 확인
-                if let navigationController = self.navigationController {
-                    navigationController.pushViewController(signupViewController, animated: true)
-                    print("SignUpViewController로 push됨") // 확인용 로그 추가
-                } else {
-                    // 현재 내비게이션 컨트롤러가 없는 경우, 새로운 내비게이션 컨트롤러를 시작하고 SignUpViewController를 rootViewController로 설정
-                    let navigationController = UINavigationController(rootViewController: signupViewController)
-                    if let windowScene = UIApplication.shared.connectedScenes
-                        .first(where: { $0 is UIWindowScene }) as? UIWindowScene {
-                        if let window = windowScene.windows.first {
-                            window.rootViewController = navigationController
+                // JSON 데이터 파싱
+                if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                   let isSuccess = json["isSuccess"] as? Bool {
+                    
+                    // isSuccess가 true일 때만 SignUpViewController로 이동
+                    if isSuccess {
+                        let signupViewController = SignUpViewController()
+                        if let navigationController = self.navigationController {
+                            navigationController.pushViewController(signupViewController, animated: true)
+                            print("SignUpViewController로 push됨") // 확인용 로그 추가
+                        } else {
+                            let navigationController = UINavigationController(rootViewController: signupViewController)
+                            if let windowScene = UIApplication.shared.connectedScenes
+                                .first(where: { $0 is UIWindowScene }) as? UIWindowScene {
+                                if let window = windowScene.windows.first {
+                                    window.rootViewController = navigationController
+                                }
+                            }
+                            print("SignUpViewController로 새로운 내비게이션 스택 시작됨") // 확인용 로그 추가
                         }
+                        UserDefaultManager.shared.userStatus = false
+                    } else {
+                        print("로그아웃 실패: \(json["message"] as? String ?? "알 수 없는 오류")")
                     }
-                    print("SignUpViewController로 새로운 내비게이션 스택 시작됨") // 확인용 로그 추가
+                } else {
+                    print("응답 데이터를 파싱할 수 없습니다.")
                 }
-                UserDefaultManager.shared.userStatus = false
             case .failure(let error):
                 print("Error: \(error)")
             }
