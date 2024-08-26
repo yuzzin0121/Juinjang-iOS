@@ -10,8 +10,8 @@ import AVFoundation
 import Lottie
 
 final class OnboardingViewController: UIViewController {
-    private let stackView = UIStackView()
-    private let titleLabel = UILabel()      // 온보딩 텍스트]
+//    private let stackView = UIStackView()
+    private let titleLabel = UILabel()      // 온보딩 텍스트
     private lazy var animationView = LottieAnimationView(name: onboardingType.item1.jsonURLString)
     private var onboardingType: OnboardingType
     
@@ -60,7 +60,7 @@ final class OnboardingViewController: UIViewController {
     }
     
     private func startItem2Animation() {
-        UIView.animate(withDuration: 1, delay: 0.0, options: .allowUserInteraction, animations: { [weak self] in
+        UIView.animate(withDuration: 0.5, delay: 0.0, options: .allowUserInteraction, animations: { [weak self] in
             guard let self else { return }
             setUIHidden(true, hiddenAlpha: 0)
         })
@@ -82,17 +82,17 @@ final class OnboardingViewController: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         setUIHidden(true)
+        animationView.removeFromSuperview()
     }
     
     private func configureHierarchy() {
-        view.addSubview(stackView)
         [titleLabel, animationView].forEach {
-            stackView.addArrangedSubview($0)
+            view.addSubview($0)
         }
     }
     
     private func configureLayout() {
-        stackView.snp.makeConstraints { make in
+        titleLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.horizontalEdges.equalToSuperview().inset(64)
             make.top.equalToSuperview().offset(view.frame.height * 0.15)
@@ -101,42 +101,34 @@ final class OnboardingViewController: UIViewController {
         animationView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalTo(titleLabel.snp.bottom).offset(54)
-            make.horizontalEdges.equalToSuperview()
+            make.horizontalEdges.equalToSuperview().inset(64)
             make.height.equalTo(animationView.snp.width)
         }
     }
     
     private func setAnimationViewLayout(isItem2: Bool) {
-        stackView.subviews.forEach { subView in
-            if subView is LottieAnimationView {
-                subView.removeFromSuperview()
-            }
-        }
-        stackView.addArrangedSubview(animationView)
+        animationView.removeFromSuperview()
+        view.addSubview(animationView)
         
         if isItem2 {
-            stackView.spacing = 0
-            stackView.snp.updateConstraints { make in
+            animationView.snp.makeConstraints { make in
+                make.centerX.equalToSuperview()
+                make.top.equalTo(titleLabel.snp.bottom).offset(22)
                 make.horizontalEdges.equalToSuperview()
+                make.height.equalTo(animationView.snp.width)
             }
-            stackView.layoutIfNeeded()
         } else {
-            stackView.spacing = 54
-            stackView.snp.updateConstraints { make in
+            animationView.snp.makeConstraints { make in
+                make.centerX.equalToSuperview()
+                make.top.equalTo(titleLabel.snp.bottom).offset(54)
                 make.horizontalEdges.equalToSuperview().inset(64)
+                make.height.equalTo(animationView.snp.width)
             }
-            stackView.layoutIfNeeded()
         }
-        animationView.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.top.equalTo(titleLabel.snp.bottom).offset(54)
-            make.horizontalEdges.equalToSuperview()
-            make.height.equalTo(animationView.snp.width)
-        }
+        
     }
     
     private func configureView() {
-        stackView.design(axis: .vertical, spacing: 54)
         
         titleLabel.design(text: onboardingType.item1.title, font: .pretendard(size: 24, weight: .bold), numberOfLines: 0)
         titleLabel.setLineSpacing(spacing: 10)
