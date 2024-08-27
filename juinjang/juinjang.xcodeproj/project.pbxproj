@@ -138,6 +138,10 @@
 		616408E12B405B7200EC3B5E /* ImjangNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616408E02B405B7200EC3B5E /* ImjangNoteViewController.swift */; };
 		616408EC2B407A2D00EC3B5E /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616408EB2B407A2D00EC3B5E /* UIView+Extension.swift */; };
 		616409022B407FB300EC3B5E /* UIFont+Pretendard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616409012B407FB300EC3B5E /* UIFont+Pretendard.swift */; };
+		616BCC1A2C75744700356BDA /* OnboardingContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616BCC192C75744700356BDA /* OnboardingContainerViewController.swift */; };
+		616BCC1D2C75872900356BDA /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616BCC1C2C75872900356BDA /* OnboardingViewController.swift */; };
+		616BCC1F2C758C4E00356BDA /* OnboardingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616BCC1E2C758C4E00356BDA /* OnboardingItem.swift */; };
+		616BCC212C758C9400356BDA /* OnboardingType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616BCC202C758C9400356BDA /* OnboardingType.swift */; };
 		616D48182BFBA52B0073029A /* DateFormatterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D48172BFBA52B0073029A /* DateFormatterManager.swift */; };
 		616D481A2BFBAF660073029A /* Int+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D48192BFBAF660073029A /* Int+Extension.swift */; };
 		616D481F2BFC8CF40073029A /* RecordRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D481E2BFC8CF40073029A /* RecordRequestDTO.swift */; };
@@ -186,6 +190,12 @@
 		61B0C9DF2B6C8D9400BE86D2 /* PhotoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0C9DE2B6C8D9400BE86D2 /* PhotoCollectionViewCell.swift */; };
 		61B0C9E52B6CDA0300BE86D2 /* PaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0C9E42B6CDA0300BE86D2 /* PaddingLabel.swift */; };
 		61B0C9E72B6F5AD300BE86D2 /* DeleteImjangImagePopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B0C9E62B6F5AD300BE86D2 /* DeleteImjangImagePopupView.swift */; };
+		61B6E7282C7D50EA00929673 /* checklist2.json in Resources */ = {isa = PBXBuildFile; fileRef = 61B6E7252C7D50E900929673 /* checklist2.json */; };
+		61B6E7292C7D50EA00929673 /* recordImjang2.json in Resources */ = {isa = PBXBuildFile; fileRef = 61B6E7262C7D50E900929673 /* recordImjang2.json */; };
+		61B6E72A2C7D50EA00929673 /* report2.json in Resources */ = {isa = PBXBuildFile; fileRef = 61B6E7272C7D50EA00929673 /* report2.json */; };
+		61B9229A2C7C70410049B76F /* checklist1.json in Resources */ = {isa = PBXBuildFile; fileRef = 61B922952C7C70410049B76F /* checklist1.json */; };
+		61B9229B2C7C70410049B76F /* recordImjang1.json in Resources */ = {isa = PBXBuildFile; fileRef = 61B922962C7C70410049B76F /* recordImjang1.json */; };
+		61B9229C2C7C70410049B76F /* report1.json in Resources */ = {isa = PBXBuildFile; fileRef = 61B922972C7C70410049B76F /* report1.json */; };
 		61C667BE2BB9A079007F65E9 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 61C667BD2BB9A079007F65E9 /* Colors.xcassets */; };
 		61D925052B486508002A16B4 /* RecordingFileViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D925042B486508002A16B4 /* RecordingFileViewCell.swift */; };
 		61D925082B486706002A16B4 /* RecordingFileItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D925072B486706002A16B4 /* RecordingFileItem.swift */; };
@@ -308,6 +318,10 @@
 		616408E02B405B7200EC3B5E /* ImjangNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImjangNoteViewController.swift; sourceTree = "<group>"; };
 		616408EB2B407A2D00EC3B5E /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		616409012B407FB300EC3B5E /* UIFont+Pretendard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Pretendard.swift"; sourceTree = "<group>"; };
+		616BCC192C75744700356BDA /* OnboardingContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingContainerViewController.swift; sourceTree = "<group>"; };
+		616BCC1C2C75872900356BDA /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
+		616BCC1E2C758C4E00356BDA /* OnboardingItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingItem.swift; sourceTree = "<group>"; };
+		616BCC202C758C9400356BDA /* OnboardingType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingType.swift; sourceTree = "<group>"; };
 		616D48172BFBA52B0073029A /* DateFormatterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatterManager.swift; sourceTree = "<group>"; };
 		616D48192BFBAF660073029A /* Int+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extension.swift"; sourceTree = "<group>"; };
 		616D481E2BFC8CF40073029A /* RecordRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordRequestDTO.swift; sourceTree = "<group>"; };
@@ -356,6 +370,12 @@
 		61B0C9DE2B6C8D9400BE86D2 /* PhotoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewCell.swift; sourceTree = "<group>"; };
 		61B0C9E42B6CDA0300BE86D2 /* PaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingLabel.swift; sourceTree = "<group>"; };
 		61B0C9E62B6F5AD300BE86D2 /* DeleteImjangImagePopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteImjangImagePopupView.swift; sourceTree = "<group>"; };
+		61B6E7252C7D50E900929673 /* checklist2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = checklist2.json; sourceTree = "<group>"; };
+		61B6E7262C7D50E900929673 /* recordImjang2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = recordImjang2.json; sourceTree = "<group>"; };
+		61B6E7272C7D50EA00929673 /* report2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = report2.json; sourceTree = "<group>"; };
+		61B922952C7C70410049B76F /* checklist1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = checklist1.json; sourceTree = "<group>"; };
+		61B922962C7C70410049B76F /* recordImjang1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = recordImjang1.json; sourceTree = "<group>"; };
+		61B922972C7C70410049B76F /* report1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = report1.json; sourceTree = "<group>"; };
 		61C667BB2BB9A06A007F65E9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		61C667BD2BB9A079007F65E9 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		61D925042B486508002A16B4 /* RecordingFileViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingFileViewCell.swift; sourceTree = "<group>"; };
@@ -455,6 +475,7 @@
 			isa = PBXGroup;
 			children = (
 				616F1E512C0729140049461F /* Base */,
+				616BCC182C75742600356BDA /* Onboarding */,
 				346CF6AC2B70B41F00C70C7A /* Splash */,
 				3458556E2B6899D300432C06 /* Main */,
 				619269D22B6773FE00D4DD3E /* ImjangList */,
@@ -549,6 +570,7 @@
 				616408EA2B407A2100EC3B5E /* Extension */,
 				6108CFDD2B761A8A00EF302F /* Network */,
 				61D925062B4866D9002A16B4 /* Model */,
+				61F5A94A2C76C06E002381A6 /* Data */,
 				61D925032B4864E8002A16B4 /* Cell */,
 				0A9E0A462B3DCAB90094595A /* AppDelegate.swift */,
 				0A9E0A482B3DCAB90094595A /* SceneDelegate.swift */,
@@ -798,6 +820,23 @@
 			path = Fonts;
 			sourceTree = "<group>";
 		};
+		616BCC182C75742600356BDA /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				616BCC1B2C75809800356BDA /* View */,
+				616BCC192C75744700356BDA /* OnboardingContainerViewController.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		616BCC1B2C75809800356BDA /* View */ = {
+			isa = PBXGroup;
+			children = (
+				616BCC1C2C75872900356BDA /* OnboardingViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		616D48162BFB423C0073029A /* Query */ = {
 			isa = PBXGroup;
 			children = (
@@ -840,6 +879,7 @@
 				61DEFEDE2BFB39980069A820 /* Error */,
 				619269DF2B67742B00D4DD3E /* Filter.swift */,
 				6108D0112B78CFFA00EF302F /* PreviousVCType.swift */,
+				616BCC202C758C9400356BDA /* OnboardingType.swift */,
 			);
 			path = Enum;
 			sourceTree = "<group>";
@@ -923,6 +963,7 @@
 				61864BEE2B600E920073C175 /* ImjangNote.swift */,
 				6108CFE02B761B3A00EF302F /* BaseResponse.swift */,
 				0AA6E90E2B79292A000BDA1F /* VersionInfo.swift */,
+				616BCC1E2C758C4E00356BDA /* OnboardingItem.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -943,6 +984,27 @@
 				61DEFEDF2BFB39A90069A820 /* STTError.swift */,
 			);
 			path = Error;
+			sourceTree = "<group>";
+		};
+		61F5A94A2C76C06E002381A6 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				61F5A94B2C76C075002381A6 /* onboarding */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		61F5A94B2C76C075002381A6 /* onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				61B6E7252C7D50E900929673 /* checklist2.json */,
+				61B6E7262C7D50E900929673 /* recordImjang2.json */,
+				61B6E7272C7D50EA00929673 /* report2.json */,
+				61B922952C7C70410049B76F /* checklist1.json */,
+				61B922962C7C70410049B76F /* recordImjang1.json */,
+				61B922972C7C70410049B76F /* report1.json */,
+			);
+			path = onboarding;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1054,12 +1116,18 @@
 				61A7B92A2B4C4EC300795B49 /* Pretendard-Medium.otf in Resources */,
 				0A72515E2C5FCD350096BD2F /* PrivacyInfo.xcprivacy in Resources */,
 				61A7B92C2B4C4EC300795B49 /* Pretendard-Black.otf in Resources */,
+				61B9229C2C7C70410049B76F /* report1.json in Resources */,
 				61A7B9272B4C4EC300795B49 /* Pretendard-ExtraLight.otf in Resources */,
 				0AC6ED672B7E917F00263487 /* splash-ezgif.com-gif-to-mp4-converter.mp4.lottie.json in Resources */,
+				61B9229B2C7C70410049B76F /* recordImjang1.json in Resources */,
+				61B6E7282C7D50EA00929673 /* checklist2.json in Resources */,
 				61A7B9282B4C4EC300795B49 /* Pretendard-SemiBold.otf in Resources */,
+				61B6E72A2C7D50EA00929673 /* report2.json in Resources */,
 				61C667BE2BB9A079007F65E9 /* Colors.xcassets in Resources */,
+				61B6E7292C7D50EA00929673 /* recordImjang2.json in Resources */,
 				0A9E0A532B3DCAB90094595A /* LaunchScreen.storyboard in Resources */,
 				0AF9C28C2BB9D779009926E4 /* Assets.xcassets in Resources */,
+				61B9229A2C7C70410049B76F /* checklist1.json in Resources */,
 				61A7B92B2B4C4EC300795B49 /* Pretendard-Light.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1102,6 +1170,7 @@
 				0A7AC0F12B6412760032C9DF /* KakaoZipCodeViewController.swift in Sources */,
 				0A4EBE382B5EDD6F00909B7A /* ExpandedTextFieldTableViewCell.swift in Sources */,
 				616F1E502C0724CD0049461F /* APIError.swift in Sources */,
+				616BCC1A2C75744700356BDA /* OnboardingContainerViewController.swift in Sources */,
 				345855A42B69E44D00432C06 /* NoMaemullPopupView.swift in Sources */,
 				0A554CE42B5420F20023BB49 /* WarningMessageViewController.swift in Sources */,
 				0A14E3712B56B31A0008FD28 /* SetNickNameViewController.swift in Sources */,
@@ -1150,6 +1219,7 @@
 				0A73E60D2B5855CD00EF1C89 /* UserInfo.swift in Sources */,
 				0AF0ECBE2BEFE1AD00413778 /* AnswerModel.swift in Sources */,
 				345855802B689D4C00432C06 /* LogoutPopupView.swift in Sources */,
+				616BCC1D2C75872900356BDA /* OnboardingViewController.swift in Sources */,
 				349E301A2BAEBCD900B59D35 /* Use3ViewController.swift in Sources */,
 				349E30182BAD5E3F00B59D35 /* UseSelectViewController.swift in Sources */,
 				619269D82B6773FE00D4DD3E /* ImjangSearchViewController.swift in Sources */,
@@ -1176,6 +1246,7 @@
 				619269F62B67747F00D4DD3E /* SearchKeywordHeaderView.swift in Sources */,
 				616409022B407FB300EC3B5E /* UIFont+Pretendard.swift in Sources */,
 				61E8EC0C2B726C9100BEAFE5 /* DeleteImjangPopupViewController.swift in Sources */,
+				616BCC1F2C758C4E00356BDA /* OnboardingItem.swift in Sources */,
 				61B0C9E72B6F5AD300BE86D2 /* DeleteImjangImagePopupView.swift in Sources */,
 				345855A72B6A039600432C06 /* ReportImjangListTableViewCell.swift in Sources */,
 				345855972B692DFB00432C06 /* GraphViewController.swift in Sources */,
@@ -1187,6 +1258,7 @@
 				0A2471272B69803000A7382B /* EditBasicInfoDetailViewController.swift in Sources */,
 				345855952B692DF100432C06 /* ReportViewController.swift in Sources */,
 				0A4EBE342B5EA25300909B7A /* ExpandedCalendarTableViewCell.swift in Sources */,
+				616BCC212C758C9400356BDA /* OnboardingType.swift in Sources */,
 				61B0C9DF2B6C8D9400BE86D2 /* PhotoCollectionViewCell.swift in Sources */,
 				616408EC2B407A2D00EC3B5E /* UIView+Extension.swift in Sources */,
 				345855DB2B6B8D5100432C06 /* CompareSearchViewController.swift in Sources */,
@@ -1362,7 +1434,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = T2Q8P9627P;
+				DEVELOPMENT_TEAM = VJBC86TDTZ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = juinjang/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "카메라 접근 권한이 필요합니다.";
@@ -1402,7 +1474,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = T2Q8P9627P;
+				DEVELOPMENT_TEAM = VJBC86TDTZ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = juinjang/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "카메라 접근 권한이 필요합니다.";
