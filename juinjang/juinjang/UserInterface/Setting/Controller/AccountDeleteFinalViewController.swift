@@ -55,7 +55,10 @@ class AccountDeleteFinalViewController: BaseViewController {
     
     let buttonList = ["더 이상 쓸 일이 없어요", "앱 사용법을 모르겠어요", "임장에 도움이 되지 않아요", "앱이 정상적으로 작동하기 않아요", "보안이 걱정돼요", "다른 서비스가 더 좋아요"]
     
+    let textMapping : [String: String] = ["더 이상 쓸 일이 없어요": "NOT_USE", "앱 사용법을 모르겠어요": "CANNOT_USE", "임장에 도움이 되지 않아요": "NOT_HELP", "앱이 정상적으로 작동하기 않아요": "CANNOT_FUNCTION", "보안이 걱정돼요": "CONCERN_SECURITY", "다른 서비스가 더 좋아요": "OTHER_SERVICE"]
+    
     var btnArry : [UIButton] = []
+    var selectedTexts: [String] = []
     
     var noButton = UIButton().then {
         $0.translatesAutoresizingMaskIntoConstraints = false
@@ -117,11 +120,22 @@ class AccountDeleteFinalViewController: BaseViewController {
             sender.layer.borderColor = UIColor(red: 1, green: 0.664, blue: 0.475, alpha: 1).cgColor
             sender.setTitleColor(UIColor(named: "juinjang"), for: .normal)
             
+            // 버튼의 텍스트를 selectedTexts 배열에 추가
+            if let title = sender.title(for: .normal) {
+                selectedTexts.append(title)
+            }
+            
+            print(selectedTexts)
         } else {
             sender.backgroundColor = UIColor(named: "100")
             sender.layer.borderWidth = 0
             sender.layer.borderColor = .none
             sender.setTitleColor(UIColor(named: "300"), for: .normal)
+            
+            // 버튼의 텍스트를 selectedTexts 배열에서 제거
+            if let title = sender.title(for: .normal), let index = selectedTexts.firstIndex(of: title) {
+                selectedTexts.remove(at: index)
+            }
         }
     }
     @objc func no(_ sender: Any) {
@@ -145,6 +159,10 @@ class AccountDeleteFinalViewController: BaseViewController {
     
     // 카카오톡 탈퇴 API를 호출하는 함수
     func withdrawKakaoAccount(accessToken: String, kakaoTargetId: Int64) {
+        
+        let mappedTexts = selectedTexts.compactMap { textMapping[$0] }
+        print("탈퇴 사유 : \(mappedTexts)")
+        
         // 탈퇴 API의 URL
         let url = "http://juinjang1227.com:8080/api/auth/withdraw/kakao"
         
@@ -154,8 +172,11 @@ class AccountDeleteFinalViewController: BaseViewController {
             "target-id": String(kakaoTargetId)
         ]
         print("targetID: \(kakaoTargetId)")
+        
+        let requestBody: [String: Any] = ["withdrawReason": mappedTexts]
+
         // Alamofire를 사용하여 DELETE 요청
-        AF.request(url, method: .delete, headers: headers)
+        AF.request(url, method: .delete, parameters: requestBody, encoding: JSONEncoding.default, headers: headers)
             .validate() // 응답의 상태 코드가 성공 범위 내에 있는지 확인
             .responseString { response in
                 switch response.result {
@@ -190,6 +211,9 @@ class AccountDeleteFinalViewController: BaseViewController {
     
     // apple 탈퇴 API를 호출하는 함수
     func withdrawAppleAccount(accessToken: String, xAppleCode: String) {
+        
+        let mappedTexts = selectedTexts.compactMap { textMapping[$0] }
+        
         // 탈퇴 API의 URL
         let url = "http://juinjang1227.com:8080/api/auth/withdraw/apple"
         
@@ -198,11 +222,14 @@ class AccountDeleteFinalViewController: BaseViewController {
             "Authorization": "Bearer \(accessToken)",
             "X-Apple-Code": xAppleCode
         ]
+        
+        let requestBody: [String: Any] = ["withdrawReason": mappedTexts]
+
         print("access : \(accessToken)")
         print("apple 토큰 : \(xAppleCode)")
         
         // Alamofire를 사용하여 DELETE 요청
-        AF.request(url, method: .delete, headers: headers)
+        AF.request(url, method: .delete, parameters: requestBody, encoding: JSONEncoding.default, headers: headers)
             .validate() // 응답의 상태 코드가 성공 범위 내에 있는지 확인
             .responseString { response in
                 switch response.result {
@@ -278,6 +305,7 @@ extension AccountDeleteFinalViewController : ASAuthorizationControllerDelegate, 
            let authorizationCode = String(data: authorizationCodeData, encoding: .utf8) {
             print("authorizationCode = \(authorizationCode)")
             UserDefaultManager.shared.appleAuthCode = authorizationCode
+            withdrawAppleAccount(accessToken: UserDefaultManager.shared.accessToken, xAppleCode: UserDefaultManager.shared.appleAuthCode)
         } else {
             print("Authorization code is missing or invalid")
         }

@@ -18,12 +18,42 @@ extension UIViewController {
     }
 
     func changeHome() {
-        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return }
-        let sceneDelegate = windowScene.delegate as? SceneDelegate
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+        let sceneDelegate = windowScene.delegate as? SceneDelegate,
+        let window = sceneDelegate.window else { return }
+        
         let mainViewController = MainViewController()
         let nav = UINavigationController(rootViewController: mainViewController)
-        sceneDelegate?.window?.rootViewController = nav
-        sceneDelegate?.window?.makeKey()
+        window.rootViewController = nav
+        UIView.transition(with: window, duration: 0.3, options: [.transitionCrossDissolve], animations: nil, completion: nil)
+        
+        window.makeKey()
+    }
+    
+    func changeLoginVC() {
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+        let sceneDelegate = windowScene.delegate as? SceneDelegate,
+        let window = sceneDelegate.window else { return }
+        
+        let mainViewController = SignUpViewController()
+        let nav = UINavigationController(rootViewController: mainViewController)
+        window.rootViewController = nav
+        UIView.transition(with: window, duration: 0.2, options: [.transitionCrossDissolve], animations: nil, completion: nil)
+        
+        window.makeKey()
+    }
+    
+    func changeOnboardingContainerVC() {
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+        let sceneDelegate = windowScene.delegate as? SceneDelegate,
+        let window = sceneDelegate.window else { return }
+        
+        let mainViewController = OnboardingContainerViewController()
+        let nav = UINavigationController(rootViewController: mainViewController)
+        window.rootViewController = nav
+        UIView.transition(with: window, duration: 0.2, options: [.transitionCrossDissolve], animations: nil, completion: nil)
+        
+        window.makeKey()
     }
 //    func hideKeyboardWhenTappedAround() {
 //        let tap = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
