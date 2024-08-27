@@ -11,7 +11,7 @@ import Lottie
 
 final class OnboardingViewController: UIViewController {
 //    private let stackView = UIStackView()
-    private let titleLabel = UILabel()      // 온보딩 텍스트
+    private var titleLabel = UILabel()      // 온보딩 텍스트
     private lazy var animationView = LottieAnimationView(name: onboardingType.item1.jsonURLString)
     private var onboardingType: OnboardingType
     
@@ -45,11 +45,11 @@ final class OnboardingViewController: UIViewController {
         
         UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveEaseInOut, animations: { [weak self] in
             guard let self else { return }
-            self.titleLabel.alpha = 1.0
+            titleLabel.alpha = 1.0
         }) { _ in   // 타이틀 애니메이션 끝났을 때
             UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveEaseInOut, animations: { [weak self] in
                 guard let self else { return }
-                self.animationView.alpha = 1.0
+                animationView.alpha = 1.0
             }) { [weak self] _ in   // 영상뷰 애니메이션 끝났을 때
                 guard let self else { return }
                 // 3D 영상 재생 시작
@@ -120,6 +120,8 @@ final class OnboardingViewController: UIViewController {
     private func setAnimationViewLayout(isItem2: Bool) {
         animationView.removeFromSuperview()
         view.addSubview(animationView)
+        animationView.layer.shouldRasterize = true
+        animationView.layer.rasterizationScale = UIScreen.main.scale
         
         if isItem2 {
             animationView.snp.makeConstraints { make in
@@ -136,7 +138,7 @@ final class OnboardingViewController: UIViewController {
                 make.height.equalTo(animationView.snp.width)
             }
         }
-        
+        animationView.layoutIfNeeded()
     }
     
     private func configureView() {
@@ -145,10 +147,11 @@ final class OnboardingViewController: UIViewController {
         titleLabel.setLineSpacing(spacing: 10)
         titleLabel.textAlignment = .center
         titleLabel.asColor(targetString: onboardingType.item1.keyword, color: ColorStyle.mainOrange)
+        titleLabel.layer.shouldRasterize = true
+        titleLabel.layer.rasterizationScale = UIScreen.main.scale
         
         animationView.backgroundColor = .systemGray6
         animationView.loopMode = .playOnce
-        
         
         setUIHidden(true)
     }

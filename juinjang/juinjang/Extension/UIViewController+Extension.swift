@@ -38,7 +38,7 @@ extension UIViewController {
         let mainViewController = SignUpViewController()
         let nav = UINavigationController(rootViewController: mainViewController)
         window.rootViewController = nav
-        UIView.transition(with: window, duration: 0.3, options: [.transitionCrossDissolve], animations: nil, completion: nil)
+        UIView.transition(with: window, duration: 0.2, options: [.transitionCrossDissolve], animations: nil, completion: nil)
         
         window.makeKey()
     }
