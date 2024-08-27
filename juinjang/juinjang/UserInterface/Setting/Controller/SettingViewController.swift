@@ -358,8 +358,7 @@ class SettingViewController : BaseViewController, UIImagePickerControllerDelegat
     }
     
     @objc func backBtnTap() {
-        let mainVC = MainViewController()
-        self.navigationController?.pushViewController(mainVC, animated: true)
+        navigationController?.popViewController(animated: true)
     }
     
     func sendNickName(nickname: String) {

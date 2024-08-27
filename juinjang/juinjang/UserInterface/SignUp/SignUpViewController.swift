@@ -163,8 +163,9 @@ class SignUpViewController: BaseViewController {
                                                                   
                 }
                 print("present to Main")
-                let nextVC = MainViewController()
-                self.navigationController?.pushViewController(nextVC, animated: true)
+//                let nextVC = MainViewController()
+//                self.navigationController?.pushViewController(nextVC, animated: true)
+                changeHome()
             case .failure(let error):
                 print("Error: \(error)")
             }

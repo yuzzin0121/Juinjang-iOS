@@ -19,10 +19,7 @@ class SplashViewController: UIViewController {
     
     func hasLogin() {
         if UserDefaultManager.shared.userStatus {
-            let mainVC = MainViewController()
-            let nav = UINavigationController(rootViewController: mainVC)
-            nav.modalPresentationStyle = .fullScreen
-            present(nav, animated: false)
+            changeHome()
         } else {
             let signupVC = SignUpViewController()
             let nav = UINavigationController(rootViewController: signupVC)
