@@ -42,6 +42,19 @@ extension UIViewController {
         
         window.makeKey()
     }
+    
+    func changeOnboardingContainerVC() {
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+        let sceneDelegate = windowScene.delegate as? SceneDelegate,
+        let window = sceneDelegate.window else { return }
+        
+        let mainViewController = OnboardingContainerViewController()
+        let nav = UINavigationController(rootViewController: mainViewController)
+        window.rootViewController = nav
+        UIView.transition(with: window, duration: 0.2, options: [.transitionCrossDissolve], animations: nil, completion: nil)
+        
+        window.makeKey()
+    }
 //    func hideKeyboardWhenTappedAround() {
 //        let tap = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
 //        tap.cancelsTouchesInView = false

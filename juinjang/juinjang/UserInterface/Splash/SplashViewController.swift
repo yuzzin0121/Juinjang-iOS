@@ -18,13 +18,16 @@ class SplashViewController: UIViewController {
     }
     
     func hasLogin() {
+        
         if UserDefaultManager.shared.userStatus {
-            changeHome()
+            if UserDefaultManager.shared.email.isEmpty {
+                changeLoginVC()
+            } else {
+                changeHome()
+            }
         } else {
-            let signupVC = SignUpViewController()
-            let nav = UINavigationController(rootViewController: signupVC)
-            nav.modalPresentationStyle = .fullScreen
-            present(nav, animated: false)
+            UserDefaultManager.shared.userStatus = true
+            changeOnboardingContainerVC()
         }
     }
     
