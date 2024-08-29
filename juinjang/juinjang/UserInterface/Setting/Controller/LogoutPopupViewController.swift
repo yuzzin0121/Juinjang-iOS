@@ -13,12 +13,15 @@ import Alamofire
 class LogoutPopupViewController: BaseViewController {
     
     private let popupView: LogoutPopupView
+    weak var logoutDelegate: LogoutDelegate?
+    
+    
     @objc func no(_ sender: UIButton) {
         self.dismiss(animated: false, completion: nil)
     }
     
     @objc func yes(_ sender: UIButton) {
-        SettingViewController().logout()
+        logoutDelegate?.logout()
     }
   
     

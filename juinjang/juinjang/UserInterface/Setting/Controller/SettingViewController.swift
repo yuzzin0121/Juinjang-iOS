@@ -24,7 +24,11 @@ struct ResultModel: Codable {
     let image: String
 }
 
-class SettingViewController : BaseViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+protocol LogoutDelegate: AnyObject {
+    func logout()
+}
+
+class SettingViewController : BaseViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, LogoutDelegate {
     
     static let id = "SettingViewController"
     
@@ -223,12 +227,11 @@ class SettingViewController : BaseViewController, UIImagePickerControllerDelegat
     }
     
     func logout() {
+        print(#function)
         JuinjangAPIManager.shared.postData(type: BaseResponseStringOptionalResult.self, api: .logout, parameter: [:]) { [weak self] response, error in
             guard let self else { return }
-            print(response, error)
             if error == nil {
                 guard let response = response else { return }
-                guard let result = response.result else { return }
                 if response.isSuccess {   // 로그아웃 성공
                     print("로그아웃 성공")
                     UserDefaultManager.shared.removeUserInfo()
@@ -239,6 +242,7 @@ class SettingViewController : BaseViewController, UIImagePickerControllerDelegat
             
             } else {
                 guard let error else { return }
+                showAlert(title: "로그아웃 에러", message: "로그아웃에 실패하였습니다.\n 다시 시도해주세요.", actionHandler: nil)
                 switch error {
                 case .failedRequest:
                     print("failedRequest")
@@ -272,6 +276,7 @@ class SettingViewController : BaseViewController, UIImagePickerControllerDelegat
     
     @objc func logoutButtonTap() {
         let popupViewController = LogoutPopupViewController(name: UserDefaultManager.shared.nickname, email: logInfoMailLabel.text!, ment: "계정에서 로그아웃할까요?")
+        popupViewController.logoutDelegate = self
         popupViewController.modalPresentationStyle = .overFullScreen
         self.present(popupViewController, animated: false)
     }
