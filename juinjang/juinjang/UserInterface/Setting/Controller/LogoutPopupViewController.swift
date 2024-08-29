@@ -18,7 +18,6 @@ class LogoutPopupViewController: BaseViewController {
     }
     
     @objc func yes(_ sender: UIButton) {
-        print("logout() success.")
         SettingViewController().logout()
     }
   

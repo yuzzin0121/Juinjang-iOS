@@ -218,10 +218,10 @@ extension SignUpViewController{
             } else {
                 if let kakaoUser = user {
                     if let email = kakaoUser.kakaoAccount?.email, let nickname = kakaoUser.kakaoAccount?.profile?.nickname {
-                        //print("사용자 이메일 : \(email)")
+                        print("사용자 이메일 : \(email)")
                         UserDefaultManager.shared.email = email
                         UserDefaultManager.shared.nickname = nickname
-                        
+                        print("targetId: \(kakaoUser.id)")
                         if let userId = kakaoUser.id {
                             print("사용자 ID : \(userId)")
                             UserDefaultManager.shared.kakaoTargetId = userId
@@ -275,9 +275,7 @@ extension SignUpViewController{
                        let result = json["result"] as? [String: Any],
                        let accessToken = result["accessToken"] as? String,
                        let refreshToken = result["refreshToken"] as? String {
-                        //print("Success: \(accessToken)")
                         UserDefaultManager.shared.accessToken = accessToken
-                        //print("Success: \(refreshToken)")
                         UserDefaultManager.shared.refreshToken = refreshToken
                         self.getUserNickname()
                     } else {
