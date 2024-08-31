@@ -268,6 +268,7 @@ class WelcomeViewController: BaseViewController {
                         print("Refresh Token: \(result.refreshToken)")
                         UserDefaultManager.shared.refreshToken = result.refreshToken
                         print("Email: \(result.email)")
+                        UserDefaultManager.shared.email = result.email
                     }
                     let RecordingRightsVC = RecordingRightsViewController()
                     RecordingRightsVC.modalPresentationStyle = .fullScreen

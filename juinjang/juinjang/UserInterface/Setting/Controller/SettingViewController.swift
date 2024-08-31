@@ -227,49 +227,6 @@ class SettingViewController : BaseViewController, UIImagePickerControllerDelegat
     }
     
     func logout() {
-<<<<<<< HEAD
-        // 로그아웃 API의 URL
-        let urlString = "http://juinjang1227.com:8080/api/auth/logout"
-        // Authorization 헤더에 포함할 토큰
-        // HTTP 요청 보내기
-        AF.request(urlString, method: .post, headers: HTTPHeaders(["Refresh-Token": "Bearer \(UserDefaultManager.shared.refreshToken)"]), interceptor: AuthInterceptor()).responseData { response in
-            switch response.result {
-            case .success(let data):
-                // 응답 확인
-                print("refresh토큰 : \(UserDefaultManager.shared.refreshToken)")
-                if let httpResponse = response.response {
-                    print("Status code: \(httpResponse.statusCode)")
-                }
-                // 응답 데이터 출력
-                if let responseString = String(data: data, encoding: .utf8) {
-                    print("Response data: \(responseString)")
-                }
-                
-                // JSON 데이터 파싱
-                if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-                   let isSuccess = json["isSuccess"] as? Bool {
-                    
-                    // isSuccess가 true일 때만 SignUpViewController로 이동
-                    if isSuccess {
-                        let signupViewController = SignUpViewController()
-                        if let navigationController = self.navigationController {
-                            navigationController.pushViewController(signupViewController, animated: true)
-                            print("SignUpViewController로 push됨") // 확인용 로그 추가
-                        } else {
-                            let navigationController = UINavigationController(rootViewController: signupViewController)
-                            if let windowScene = UIApplication.shared.connectedScenes
-                                .first(where: { $0 is UIWindowScene }) as? UIWindowScene {
-                                if let window = windowScene.windows.first {
-                                    window.rootViewController = navigationController
-                                }
-                            }
-                            print("SignUpViewController로 새로운 내비게이션 스택 시작됨") // 확인용 로그 추가
-                        }
-                        UserDefaultManager.shared.userStatus = false
-                    } else {
-                        print("로그아웃 실패: \(json["message"] as? String ?? "알 수 없는 오류")")
-                    }
-=======
         print(#function)
         JuinjangAPIManager.shared.postData(type: BaseResponseStringOptionalResult.self, api: .logout, parameter: [:]) { [weak self] response, error in
             guard let self else { return }
@@ -279,11 +236,9 @@ class SettingViewController : BaseViewController, UIImagePickerControllerDelegat
                     print("로그아웃 성공")
                     UserDefaultManager.shared.removeUserInfo()
                     changeLoginVC()
->>>>>>> 4c3b014915e03fe4e71327cd5d894e8399a9f1f2
                 } else {
                     showAlert(title: "로그아웃 에러", message: "로그아웃에 실패하였습니다.\n 다시 시도해주세요.", actionHandler: nil)
                 }
-            
             } else {
                 guard let error else { return }
                 showAlert(title: "로그아웃 에러", message: "로그아웃에 실패하였습니다.\n 다시 시도해주세요.", actionHandler: nil)
