@@ -53,8 +53,13 @@ enum JuinjangAPI {
             return URL(string: baseURL + "auth/kakao/callback")!
         case .regenerateToken:
             return URL(string: baseURL + "auth/regenerate-token")!
+<<<<<<< HEAD
         //case .logout:
            // return URL(string: baseURL + "logout")!
+=======
+        case .logout:
+            return URL(string: baseURL + "auth/logout")!
+>>>>>>> 4c3b014915e03fe4e71327cd5d894e8399a9f1f2
             
         case .nickname:
             return URL(string: baseURL + "nickname")!
@@ -112,6 +117,9 @@ enum JuinjangAPI {
                 "Content-Type": "multipart/form-data",
                 "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"
             ]
+        case .logout:
+            return ["Content-Type": "application/json",
+                    "Refresh-Token": "Bearer \(UserDefaultManager.shared.refreshToken)"]
         default:
             return ["Content-Type": "application/json",
                     "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"]

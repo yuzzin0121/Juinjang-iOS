@@ -24,7 +24,11 @@ struct ResultModel: Codable {
     let image: String
 }
 
-class SettingViewController : BaseViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+protocol LogoutDelegate: AnyObject {
+    func logout()
+}
+
+class SettingViewController : BaseViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, LogoutDelegate {
     
     static let id = "SettingViewController"
     
@@ -223,6 +227,7 @@ class SettingViewController : BaseViewController, UIImagePickerControllerDelegat
     }
     
     func logout() {
+<<<<<<< HEAD
         // 로그아웃 API의 URL
         let urlString = "http://juinjang1227.com:8080/api/auth/logout"
         // Authorization 헤더에 포함할 토큰
@@ -264,11 +269,34 @@ class SettingViewController : BaseViewController, UIImagePickerControllerDelegat
                     } else {
                         print("로그아웃 실패: \(json["message"] as? String ?? "알 수 없는 오류")")
                     }
+=======
+        print(#function)
+        JuinjangAPIManager.shared.postData(type: BaseResponseStringOptionalResult.self, api: .logout, parameter: [:]) { [weak self] response, error in
+            guard let self else { return }
+            if error == nil {
+                guard let response = response else { return }
+                if response.isSuccess {   // 로그아웃 성공
+                    print("로그아웃 성공")
+                    UserDefaultManager.shared.removeUserInfo()
+                    changeLoginVC()
+>>>>>>> 4c3b014915e03fe4e71327cd5d894e8399a9f1f2
                 } else {
-                    print("응답 데이터를 파싱할 수 없습니다.")
+                    showAlert(title: "로그아웃 에러", message: "로그아웃에 실패하였습니다.\n 다시 시도해주세요.", actionHandler: nil)
                 }
-            case .failure(let error):
-                print("Error: \(error)")
+            
+            } else {
+                guard let error else { return }
+                showAlert(title: "로그아웃 에러", message: "로그아웃에 실패하였습니다.\n 다시 시도해주세요.", actionHandler: nil)
+                switch error {
+                case .failedRequest:
+                    print("failedRequest")
+                case .noData:
+                    print("noData")
+                case .invalidResponse:
+                    print("invalidResponse")
+                case .invalidData:
+                    print("invalidData")
+                }
             }
         }
     }
@@ -292,6 +320,7 @@ class SettingViewController : BaseViewController, UIImagePickerControllerDelegat
     
     @objc func logoutButtonTap() {
         let popupViewController = LogoutPopupViewController(name: UserDefaultManager.shared.nickname, email: logInfoMailLabel.text!, ment: "계정에서 로그아웃할까요?")
+        popupViewController.logoutDelegate = self
         popupViewController.modalPresentationStyle = .overFullScreen
         self.present(popupViewController, animated: false)
     }
@@ -358,8 +387,7 @@ class SettingViewController : BaseViewController, UIImagePickerControllerDelegat
     }
     
     @objc func backBtnTap() {
-        let mainVC = MainViewController()
-        self.navigationController?.pushViewController(mainVC, animated: true)
+        navigationController?.popViewController(animated: true)
     }
     
     func sendNickName(nickname: String) {

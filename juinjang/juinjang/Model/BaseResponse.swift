@@ -26,3 +26,10 @@ struct BaseResponseString: Decodable {
     let message: String
     let result: String
 }
+
+struct BaseResponseStringOptionalResult: Decodable {
+    let isSuccess: Bool
+    let code: String
+    let message: String
+    let result: String?
+}

@@ -345,10 +345,11 @@ class ImjangNoteViewController: BaseViewController,
     @objc func popView() {
         switch previousVCType {
         case .createImjangVC:
-            let mainVC = MainViewController()
-            let nav = UINavigationController(rootViewController: mainVC)
-            nav.modalPresentationStyle = .fullScreen
-            present(nav, animated: true)
+//            let mainVC = MainViewController()
+//            let nav = UINavigationController(rootViewController: mainVC)
+//            nav.modalPresentationStyle = .fullScreen
+//            present(nav, animated: true)
+            changeHome()
         case .imjangList, .main:
             completionHandler?()
             navigationController?.popViewController(animated: true)

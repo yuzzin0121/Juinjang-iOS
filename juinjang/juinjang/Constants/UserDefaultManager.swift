@@ -99,13 +99,20 @@ class UserDefaultManager {
         get { ud.string(forKey: UDKey.appleAuthCode.rawValue) ?? "" }
         set { ud.set(newValue, forKey: UDKey.appleAuthCode.rawValue) }
     }
-}
-
-
-// TODO: - 테스트를 위해 임시로 추가한 코드, 제거 필요
-extension UserDefaults {
+    
+    func removeUserInfo() {
+        let udKeys = UDKey.allCases
+        
+        for key in udKeys {
+            if key != UDKey.userStatus && key != UDKey.isShowGuide {
+                UserDefaultManager.shared.clearKey(key.rawValue)
+            }
+        }
+    }
+    
     func clearKey(_ key: String) {
-        self.removeObject(forKey: key)
-        self.synchronize()
+        UserDefaults.standard.removeObject(forKey: key)
+        UserDefaults.standard.synchronize()
     }
 }
+
