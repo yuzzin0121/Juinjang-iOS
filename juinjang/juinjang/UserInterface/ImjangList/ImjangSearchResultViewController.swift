@@ -68,13 +68,8 @@ class ImjangSearchResultViewController: BaseViewController {
                     guard let response = response else { return }
                     guard let result = response.result else { return }
                     self.searchedImjangList = result.limjangList
-                    if !self.searchedImjangList.isEmpty {
-                        self.emptyImage.isHidden = true
-                        self.emptyLabel.isHidden = true
-                    } else {
-                        self.emptyImage.isHidden = false
-                        self.emptyLabel.isHidden = false
-                    }
+                    self.emptyImage.isHidden = !self.searchedImjangList.isEmpty
+                    self.emptyLabel.isHidden = !self.searchedImjangList.isEmpty
                     print("요청성공")
                     self.searchedTableView.reloadData()
                 } else {
