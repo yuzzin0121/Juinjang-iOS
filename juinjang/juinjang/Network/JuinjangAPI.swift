@@ -12,7 +12,7 @@ enum JuinjangAPI {
     case kakaoLogin
     case kakaoLoginCallback
     case regenerateToken
-    case logout
+    //case logout
     
     case nickname
     case profile
@@ -53,8 +53,8 @@ enum JuinjangAPI {
             return URL(string: baseURL + "auth/kakao/callback")!
         case .regenerateToken:
             return URL(string: baseURL + "auth/regenerate-token")!
-        case .logout:
-            return URL(string: baseURL + "logout")!
+        //case .logout:
+           // return URL(string: baseURL + "logout")!
             
         case .nickname:
             return URL(string: baseURL + "nickname")!
@@ -120,7 +120,7 @@ enum JuinjangAPI {
     
     var method: HTTPMethod {
         switch self {
-        case .saveChecklist, .scrap, .createImjang, .regenerateToken, .logout, .memo, .addImage, .deleteImage, .uploadRecordFile:
+        case .saveChecklist, .scrap, .createImjang, .regenerateToken, .memo, .addImage, .deleteImage, .uploadRecordFile:
             return .post
         case .showChecklist, .totalImjang, .searchImjang, .mainImjang, .detailImjang, .kakaoLogin, .kakaoLoginCallback, .profile, .fetchRecordingRoom, .fetchImage, .fetchRecordFiles:
             return .get

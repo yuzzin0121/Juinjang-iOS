@@ -227,7 +227,7 @@ class SettingViewController : BaseViewController, UIImagePickerControllerDelegat
         let urlString = "http://juinjang1227.com:8080/api/auth/logout"
         // Authorization 헤더에 포함할 토큰
         // HTTP 요청 보내기
-        AF.request(urlString, method: .post, headers: HTTPHeaders(["Authorization": "Bearer \(UserDefaultManager.shared.refreshToken)"]), interceptor: AuthInterceptor()).responseData { response in
+        AF.request(urlString, method: .post, headers: HTTPHeaders(["Refresh-Token": "Bearer \(UserDefaultManager.shared.refreshToken)"]), interceptor: AuthInterceptor()).responseData { response in
             switch response.result {
             case .success(let data):
                 // 응답 확인
