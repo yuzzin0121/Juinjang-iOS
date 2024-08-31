@@ -89,7 +89,7 @@ class BottomCollectionViewCell: UICollectionViewCell {
         recentImjangImageView.design(cornerRadius: 10)
         recentImjangImageView.backgroundColor = ColorStyle.gray0
         nameLabel.design(font: .pretendard(size: 15, weight: .semiBold), numberOfLines: 2)
-        priceLabel.design(textColor: ColorStyle.priceColor, font: .pretendard(size: 14, weight: .bold))
+        priceLabel.design(textColor: ColorStyle.mainOrange, font: .pretendard(size: 14, weight: .bold))
         starIcon.design(image: ImageStyle.starEmpty, contentMode: .scaleAspectFit)
         rateLabel.design(text: "0.0", textColor: ColorStyle.lightGray, font: .pretendard(size: 14, weight: .bold))
         scoreStackView.design(distribution: .fill, spacing: 3)

@@ -1435,9 +1435,8 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = VJBC86TDTZ;
 				DEVELOPMENT_TEAM = VJBC86TDTZ;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = VJBC86TDTZ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = juinjang/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "카메라 접근 권한이 필요합니다.";
@@ -1479,8 +1478,8 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = VJBC86TDTZ;
 				DEVELOPMENT_TEAM = VJBC86TDTZ;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = VJBC86TDTZ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = juinjang/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "카메라 접근 권한이 필요합니다.";
