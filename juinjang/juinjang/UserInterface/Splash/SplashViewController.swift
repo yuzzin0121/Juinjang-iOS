@@ -20,7 +20,7 @@ class SplashViewController: UIViewController {
     func hasLogin() {
         
         if UserDefaultManager.shared.userStatus {
-            if UserDefaultManager.shared.email.isEmpty {
+            if UserDefaultManager.shared.accessToken.isEmpty {
                 changeLoginVC()
             } else {
                 changeHome()
