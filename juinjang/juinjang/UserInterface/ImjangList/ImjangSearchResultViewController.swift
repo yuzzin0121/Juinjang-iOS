@@ -27,6 +27,20 @@ class ImjangSearchResultViewController: BaseViewController {
         return tableView
     }()
     
+    let emptyImage: UIImageView = {
+        let emptyImage = UIImageView()
+        emptyImage.image = UIImage(named: "nomaemull")
+        return emptyImage
+    }()
+    
+    let emptyLabel: UILabel = {
+        let emptyLabel = UILabel()
+        emptyLabel.text = "일치하는 매물이 없어요"
+        emptyLabel.font = .pretendard(size: 16, weight: .semiBold)
+        emptyLabel.textColor = UIColor(named: "400")
+        return emptyLabel
+    }()
+    
     var searchKeyword  = ""
     var searchedImjangList: [ListDto] = []
     var totalImjangList: [ListDto] = []
@@ -38,6 +52,8 @@ class ImjangSearchResultViewController: BaseViewController {
         configureHierarchy()
         setupConstraints()
         designView()
+        addSubView()
+        setConstraints()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -52,6 +68,8 @@ class ImjangSearchResultViewController: BaseViewController {
                     guard let response = response else { return }
                     guard let result = response.result else { return }
                     self.searchedImjangList = result.limjangList
+                    self.emptyImage.isHidden = !self.searchedImjangList.isEmpty
+                    self.emptyLabel.isHidden = !self.searchedImjangList.isEmpty
                     print("요청성공")
                     self.searchedTableView.reloadData()
                 } else {
@@ -68,6 +86,29 @@ class ImjangSearchResultViewController: BaseViewController {
                     }
                 }
             }
+        }
+    }
+    
+    // MARK: - addSubView()
+    func addSubView() {
+        [emptyImage, emptyLabel].forEach {
+            view.addSubview($0)
+        }
+    }
+    
+    // 결과가 없을 때 배경
+    func setConstraints() {
+        emptyImage.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.centerY.equalToSuperview()
+            $0.height.equalTo(108.83)
+            $0.width.equalTo(105.56)
+        }
+        
+        emptyLabel.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.top.equalTo(emptyImage.snp.bottom).offset(34.17)
+            $0.height.equalTo(22)
         }
     }
     
