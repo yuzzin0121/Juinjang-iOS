@@ -378,7 +378,7 @@ class CompareViewController : BaseViewController, SendCompareImjangData, SendSea
         print("비교매물")
         print(limjangId)
         // 기본 URL
-        let baseURL = "http://juinjang1227.com:8080/api/report/\(limjangId)"
+        let baseURL = "http://prod.juinjang1227.com/\(limjangId)"
         
         // 요청 헤더 구성
         let headers: HTTPHeaders = [

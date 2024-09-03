@@ -228,7 +228,7 @@ class WelcomeViewController: BaseViewController {
         ]
 
         print(kakaoTargetId)
-        AF.request("http://juinjang1227.com:8080/api/auth/kakao/signup", method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers, interceptor: AuthInterceptor())
+        AF.request("http://prod.juinjang1227.com/api/auth/kakao/signup", method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers, interceptor: AuthInterceptor())
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
@@ -260,7 +260,7 @@ class WelcomeViewController: BaseViewController {
             }
         }
     func signupWithApple(identityToken: String, nickname: String) {
-        let url = "http://juinjang1227.com:8080/api/auth/apple/signup"
+        let url = "http://prod.juinjang1227.com/api/auth/apple/signup"
         let parameters = SignupRequest(identityToken: identityToken, nickname: nickname)
 
         AF.request(url, method: .post, parameters: parameters, encoder: JSONParameterEncoder.default)

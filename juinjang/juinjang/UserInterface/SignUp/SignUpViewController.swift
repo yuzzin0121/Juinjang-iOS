@@ -122,7 +122,7 @@ class SignUpViewController: BaseViewController {
     
     }
     func getUserNickname() {
-        let urlString = "http://juinjang1227.com:8080/api/profile"
+        let urlString = "http://prod.juinjang1227.com/api/profile"
         
         // HTTP 요청 보내기
         AF.request(urlString, method: .get, headers: HTTPHeaders(["Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"]), interceptor: AuthInterceptor()).responseData { [self] response in
@@ -262,7 +262,7 @@ extension SignUpViewController{
         }
     }
     func sendPostRequest(email: String, nickname: String?, kakaoTargetId: Int64) {
-        let url = "http://juinjang1227.com:8080/api/auth/kakao/login"
+        let url = "http://prod.juinjang1227.com/api/auth/kakao/login"
         let requestBody = RequestBody(email: email, nickname: nickname)
         let headers: HTTPHeaders = [
             "target-id": "\(kakaoTargetId)" // Int64를 문자열로 변환하여 헤더에 포함
@@ -329,7 +329,7 @@ extension SignUpViewController: ASAuthorizationControllerDelegate,ASAuthorizatio
     }
     func performAppleSignInWithAlamofire(identityToken: String) {
         // Set the URL for the API endpoint
-        let url = "http://juinjang1227.com:8080/api/auth/apple/login"
+        let url = "http://prod.juinjang1227.com/api/auth/apple/login"
         
         // Create the parameters
         let parameters: [String: Any] = [

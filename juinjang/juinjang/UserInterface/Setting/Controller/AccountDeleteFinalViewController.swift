@@ -164,12 +164,12 @@ class AccountDeleteFinalViewController: BaseViewController {
         print("탈퇴 사유 : \(mappedTexts)")
         
         // 탈퇴 API의 URL
-        let url = "http://juinjang1227.com:8080/api/auth/withdraw/kakao"
+        let url = "http://prod.juinjang1227.com/api/auth/withdraw/kakao"
         
         // Authorization과 target-id 헤더 설정
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(accessToken)",
-            "target-id": String(kakaoTargetId)
+            "target-id": "\(kakaoTargetId)"
         ]
         print("targetID: \(kakaoTargetId)")
         
@@ -201,7 +201,7 @@ class AccountDeleteFinalViewController: BaseViewController {
         let mappedTexts = selectedTexts.compactMap { textMapping[$0] }
         
         // 탈퇴 API의 URL
-        let url = "http://juinjang1227.com:8080/api/auth/withdraw/apple"
+        let url = "http://prod.juinjang1227.com/api/auth/withdraw/apple"
         
         // Authorization과 target-id 헤더 설정
         let headers: HTTPHeaders = [

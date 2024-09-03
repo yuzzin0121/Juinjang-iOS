@@ -156,7 +156,7 @@ class SetNickNameViewController: BaseViewController {
             "nickname": UserDefaultManager.shared.nickname
         ]
 
-        let urlString = "http://juinjang1227.com:8080/api/nickname"
+        let urlString = "http://prod.juinjang1227.com/api/nickname"
 
         AF.request(urlString, method: .patch, parameters: parameters, encoding: JSONEncoding.default, headers: headers, interceptor: AuthInterceptor())
             .responseString(encoding: .utf8) { response in

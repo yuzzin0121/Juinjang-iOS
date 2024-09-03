@@ -42,7 +42,8 @@ enum JuinjangAPI {
     case editRecordContent(recordId: Int, content: String)
     
     var baseURL: String {
-        return "http://juinjang1227.com:8080/api/"
+        //return "http://juinjang1227.com:8080/api/"
+        return "http://prod.juinjang1227.com/"
     }
     
     var endpoint: URL {

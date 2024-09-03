@@ -120,9 +120,13 @@ class SignupPopupViewController: BaseViewController {
     }
     
     @objc func cancelAction(_ sender: UIButton) {
-        let SignUpVC = SignUpViewController()
-        SignUpVC.modalPresentationStyle = .overCurrentContext
-        present(SignUpVC, animated: false, completion: nil)
+//        let SignUpVC = SignUpViewController()
+//        SignUpVC.modalPresentationStyle = .overCurrentContext
+//        present(SignUpVC, animated: false, completion: nil)
+        self.dismiss(animated: false) {
+            // completion handler에서 ToSViewController도 dismiss
+            self.presentingViewController?.dismiss(animated: false, completion: nil)
+        }
     }
     
     @objc func confirmAction(_ sender: UIButton) {

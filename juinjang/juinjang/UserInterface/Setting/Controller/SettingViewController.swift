@@ -207,7 +207,7 @@ class SettingViewController : BaseViewController, UIImagePickerControllerDelegat
             
             AF.upload(multipartFormData: { multipartFormData in
                 multipartFormData.append(imageData, withName: "multipartFile", fileName: "image.jpg", mimeType: "image/jpeg")
-            }, to: "http://juinjang1227.com:8080/api/profile/image", method: .patch, headers: headers, interceptor: AuthInterceptor())
+            }, to: "http://prod.juinjang1227.com/api/profile/image", method: .patch, headers: headers, interceptor: AuthInterceptor())
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
@@ -359,7 +359,7 @@ class SettingViewController : BaseViewController, UIImagePickerControllerDelegat
             "nickname": nickname
         ]
 
-        let urlString = "http://juinjang1227.com:8080/api/nickname"
+        let urlString = "http://prod.juinjang1227.com/api/nickname"
 
         AF.request(urlString, method: .patch, parameters: parameters, encoding: JSONEncoding.default, headers: headers, interceptor: AuthInterceptor())
             .responseString(encoding: .utf8) { response in
