@@ -196,27 +196,31 @@ class SettingViewController : BaseViewController, UIImagePickerControllerDelegat
     }
     
     func uploadImage(_ image: UIImage) {
-            guard let imageData = image.jpegData(compressionQuality: 1.0) else {
-                print("Could not get JPEG representation of image")
-                return
-            }
-            
-            let headers: HTTPHeaders = [
-                "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"
-            ]
-            
-            AF.upload(multipartFormData: { multipartFormData in
-                multipartFormData.append(imageData, withName: "multipartFile", fileName: "image.jpg", mimeType: "image/jpeg")
-            }, to: "http://prod.juinjang1227.com/api/profile/image", method: .patch, headers: headers, interceptor: AuthInterceptor())
-            .responseJSON { response in
-                switch response.result {
-                case .success(let value):
-                    print("Response: \(value)")
-                case .failure(let error):
-                    print("Error: \(error)")
+        guard let imageData = image.jpegData(compressionQuality: 0.2) else {
+            print("Could not get JPEG representation of image")
+            return
+        }
+        
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"
+        ]
+        
+        AF.upload(multipartFormData: { multipartFormData in
+            multipartFormData.append(imageData, withName: "multipartFile", fileName: "image.jpg", mimeType: "image/jpeg")
+        }, to: "http://prod.juinjang1227.com/api/profile/image", method: .patch, headers: headers, interceptor: AuthInterceptor())
+        .responseData { response in
+            switch response.result {
+            case .success(let data):
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("Response String: \(responseString)")
+                } else {
+                    print("Failed to convert data to string")
                 }
+            case .failure(let error):
+                print("Image Error: \(error)")
             }
         }
+    }
     func loadProfileImage() {
         if let savedImage = UserDefaultManager.shared.profileImage {
             profileImageView.image = savedImage

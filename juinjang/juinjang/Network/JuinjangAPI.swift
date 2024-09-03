@@ -43,7 +43,7 @@ enum JuinjangAPI {
     
     var baseURL: String {
         //return "http://juinjang1227.com:8080/api/"
-        return "http://prod.juinjang1227.com/"
+        return "http://prod.juinjang1227.com/api/"
     }
     
     var endpoint: URL {
