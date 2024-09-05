@@ -9,6 +9,7 @@ import UIKit
 import Then
 
 class SignupPopupViewController: BaseViewController {
+    weak var delegate: PopUpDelegate?
     
     // 팝업 View
     lazy var popupView = UIView().then {
@@ -123,10 +124,8 @@ class SignupPopupViewController: BaseViewController {
 //        let SignUpVC = SignUpViewController()
 //        SignUpVC.modalPresentationStyle = .overCurrentContext
 //        present(SignUpVC, animated: false, completion: nil)
-        self.dismiss(animated: false) {
-            // completion handler에서 ToSViewController도 dismiss
-            self.presentingViewController?.dismiss(animated: false, completion: nil)
-        }
+        delegate?.didTapCancelButton()
+        self.dismiss(animated: true, completion: nil)
     }
     
     @objc func confirmAction(_ sender: UIButton) {
