@@ -109,10 +109,7 @@ class ImjangNoteViewController: BaseViewController,
     
     lazy var recordingSegmentedVC = RecordingSegmentedViewController(imjangId: imjangId, version: versionDetail)
     
-//    var roomName: String = "판교푸르지오월드마크"
-//    var roomPriceString: String = "30억 1천만원"
-//    var roomAddress: String = "경기도 성남시 분당구 삼평동 741"
-//    var mDateString: String = "23.12.01"
+
     var completionHandler: (() -> Void)?
     
     
@@ -327,7 +324,7 @@ class ImjangNoteViewController: BaseViewController,
     
     // 네비게이션 바 디자인
     func designNavigationBar() {
-        self.navigationItem.title = "판교푸르지오월드마크"     // TODO: - 나중에 roomName 으로 연결
+        self.navigationItem.title = ""     // TODO: - 나중에 roomName 으로 연결
         self.navigationController?.navigationBar.tintColor = .black
         
         // UIBarButtonItem 생성 및 이미지 설정
