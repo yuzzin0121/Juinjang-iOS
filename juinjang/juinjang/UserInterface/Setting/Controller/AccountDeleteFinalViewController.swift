@@ -164,12 +164,12 @@ class AccountDeleteFinalViewController: BaseViewController {
         print("탈퇴 사유 : \(mappedTexts)")
         
         // 탈퇴 API의 URL
-        let url = "http://juinjang1227.com:8080/api/auth/withdraw/kakao"
+        let url = "http://prod.juinjang1227.com/api/auth/withdraw/kakao"
         
         // Authorization과 target-id 헤더 설정
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(accessToken)",
-            "target-id": String(kakaoTargetId)
+            "target-id": "\(kakaoTargetId)"
         ]
         print("targetID: \(kakaoTargetId)")
         
@@ -178,34 +178,20 @@ class AccountDeleteFinalViewController: BaseViewController {
         // Alamofire를 사용하여 DELETE 요청
         AF.request(url, method: .delete, parameters: requestBody, encoding: JSONEncoding.default, headers: headers)
             .validate() // 응답의 상태 코드가 성공 범위 내에 있는지 확인
-            .responseString { response in
+            .responseString { [weak self] response in
+                guard let self else { return }
                 switch response.result {
-                    case .success(let responseBody):
-                    print("Response Body: \(responseBody)")
-                    let signupViewController = SignUpViewController()
-                    // 현재 내비게이션 컨트롤러가 nil인지 확인
-                    if let navigationController = self.navigationController {
-                        navigationController.pushViewController(signupViewController, animated: true)
-                        print("SignUpViewController로 push됨") // 확인용 로그 추가
-                    } else {
-                        // 현재 내비게이션 컨트롤러가 없는 경우, 새로운 내비게이션 컨트롤러를 시작하고 SignUpViewController를 rootViewController로 설정
-                        let navigationController = UINavigationController(rootViewController: signupViewController)
-                        if let windowScene = UIApplication.shared.connectedScenes
-                            .first(where: { $0 is UIWindowScene }) as? UIWindowScene {
-                            if let window = windowScene.windows.first {
-                                window.rootViewController = navigationController
-                            }
-                        }
-                        print("SignUpViewController로 새로운 내비게이션 스택 시작됨") // 확인용 로그 추가
-                    }
-                    UserDefaultManager.shared.userStatus = false
-                    case .failure(let error):
-                        print("Error: \(error)")
+                case .success(let responseBody):
+                print("Response Body: \(responseBody)")
+                UserDefaultManager.shared.removeUserInfo()
+                changeLoginVC()
+                case .failure(let error):
+                    print("Error: \(error)")
                     // 상세 오류 정보 출력
-                        if let data = response.data, let errorDetails = String(data: data, encoding: .utf8) {
-                            print("Error Details: \(errorDetails)")
-                        }
+                    if let data = response.data, let errorDetails = String(data: data, encoding: .utf8) {
+                        print("Error Details: \(errorDetails)")
                     }
+                }
             }       
     }
     
@@ -215,7 +201,7 @@ class AccountDeleteFinalViewController: BaseViewController {
         let mappedTexts = selectedTexts.compactMap { textMapping[$0] }
         
         // 탈퇴 API의 URL
-        let url = "http://juinjang1227.com:8080/api/auth/withdraw/apple"
+        let url = "http://prod.juinjang1227.com/api/auth/withdraw/apple"
         
         // Authorization과 target-id 헤더 설정
         let headers: HTTPHeaders = [
@@ -231,27 +217,13 @@ class AccountDeleteFinalViewController: BaseViewController {
         // Alamofire를 사용하여 DELETE 요청
         AF.request(url, method: .delete, parameters: requestBody, encoding: JSONEncoding.default, headers: headers)
             .validate() // 응답의 상태 코드가 성공 범위 내에 있는지 확인
-            .responseString { response in
+            .responseString { [weak self] response in
+                guard let self else { return }
                 switch response.result {
                 case .success(let responseBody):
                     print("Response Body: \(responseBody)")
-                    let signupViewController = SignUpViewController()
-                    // 현재 내비게이션 컨트롤러가 nil인지 확인
-                    if let navigationController = self.navigationController {
-                        navigationController.pushViewController(signupViewController, animated: true)
-                        print("SignUpViewController로 push됨") // 확인용 로그 추가
-                    } else {
-                        // 현재 내비게이션 컨트롤러가 없는 경우, 새로운 내비게이션 컨트롤러를 시작하고 SignUpViewController를 rootViewController로 설정
-                        let navigationController = UINavigationController(rootViewController: signupViewController)
-                        if let windowScene = UIApplication.shared.connectedScenes
-                            .first(where: { $0 is UIWindowScene }) as? UIWindowScene {
-                            if let window = windowScene.windows.first {
-                                window.rootViewController = navigationController
-                            }
-                        }
-                        print("SignUpViewController로 새로운 내비게이션 스택 시작됨") // 확인용 로그 추가
-                    }
-                    UserDefaultManager.shared.userStatus = false
+                    UserDefaultManager.shared.removeUserInfo()
+                    changeLoginVC()
                 case .failure(let error):
                     print("Error: \(error)")
                     if let data = response.data, let errorDetails = String(data: data, encoding: .utf8) {

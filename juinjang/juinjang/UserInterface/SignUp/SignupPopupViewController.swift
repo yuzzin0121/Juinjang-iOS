@@ -9,6 +9,7 @@ import UIKit
 import Then
 
 class SignupPopupViewController: BaseViewController {
+    weak var delegate: PopUpDelegate?
     
     // 팝업 View
     lazy var popupView = UIView().then {
@@ -120,9 +121,11 @@ class SignupPopupViewController: BaseViewController {
     }
     
     @objc func cancelAction(_ sender: UIButton) {
-        let SignUpVC = SignUpViewController()
-        SignUpVC.modalPresentationStyle = .overCurrentContext
-        present(SignUpVC, animated: false, completion: nil)
+//        let SignUpVC = SignUpViewController()
+//        SignUpVC.modalPresentationStyle = .overCurrentContext
+//        present(SignUpVC, animated: false, completion: nil)
+        delegate?.didTapCancelButton()
+        self.dismiss(animated: true, completion: nil)
     }
     
     @objc func confirmAction(_ sender: UIButton) {

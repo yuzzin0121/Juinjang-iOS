@@ -122,7 +122,7 @@ class SignUpViewController: BaseViewController {
     
     }
     func getUserNickname() {
-        let urlString = "http://juinjang1227.com:8080/api/profile"
+        let urlString = "http://prod.juinjang1227.com/api/profile"
         
         // HTTP 요청 보내기
         AF.request(urlString, method: .get, headers: HTTPHeaders(["Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"]), interceptor: AuthInterceptor()).responseData { [self] response in
@@ -218,14 +218,14 @@ extension SignUpViewController{
             } else {
                 if let kakaoUser = user {
                     if let email = kakaoUser.kakaoAccount?.email, let nickname = kakaoUser.kakaoAccount?.profile?.nickname {
-                        //print("사용자 이메일 : \(email)")
+                        print("사용자 이메일 : \(email)")
                         UserDefaultManager.shared.email = email
                         UserDefaultManager.shared.nickname = nickname
-                        
+                        print("targetId: \(kakaoUser.id)")
                         if let userId = kakaoUser.id {
                             print("사용자 ID : \(userId)")
                             UserDefaultManager.shared.kakaoTargetId = userId
-                            self.sendPostRequest(email: UserDefaultManager.shared.email, nickname: UserDefaultManager.shared.nickname)
+                            self.sendPostRequest(email: UserDefaultManager.shared.email, nickname: UserDefaultManager.shared.nickname, kakaoTargetId: userId)
                         } else {
                             print("사용자 ID를 가져올 수 없습니다.")
                         }
@@ -261,11 +261,14 @@ extension SignUpViewController{
             self.image = try container.decodeIfPresent(String.self, forKey: .image)
         }
     }
-    func sendPostRequest(email: String, nickname: String?) {
-        let url = "http://juinjang1227.com:8080/api/auth/kakao/login"
+    func sendPostRequest(email: String, nickname: String?, kakaoTargetId: Int64) {
+        let url = "http://prod.juinjang1227.com/api/auth/kakao/login"
         let requestBody = RequestBody(email: email, nickname: nickname)
+        let headers: HTTPHeaders = [
+            "target-id": "\(kakaoTargetId)" // Int64를 문자열로 변환하여 헤더에 포함
+        ]
             
-        AF.request(url, method: .post, parameters: requestBody, encoder: JSONParameterEncoder.default, interceptor: AuthInterceptor())
+        AF.request(url, method: .post, parameters: requestBody, encoder: JSONParameterEncoder.default, headers: headers, interceptor: AuthInterceptor())
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
@@ -275,9 +278,7 @@ extension SignUpViewController{
                        let result = json["result"] as? [String: Any],
                        let accessToken = result["accessToken"] as? String,
                        let refreshToken = result["refreshToken"] as? String {
-                        //print("Success: \(accessToken)")
                         UserDefaultManager.shared.accessToken = accessToken
-                        //print("Success: \(refreshToken)")
                         UserDefaultManager.shared.refreshToken = refreshToken
                         self.getUserNickname()
                     } else {
@@ -292,6 +293,13 @@ extension SignUpViewController{
                            let code = json["code"] as? String, code == "MEMBER4003" {
                             print("이미 애플로그인 했다미")
                             let alertController = UIAlertController(title: nil, message: "이미 Apple로 회원가입한 회원입니다", preferredStyle: .alert)
+                            let okAction = UIAlertAction(title: "확인", style: .default, handler: nil)
+                            alertController.addAction(okAction)
+                            self.present(alertController, animated: true, completion: nil)
+                        }
+                        if let json = value as? [String: Any],
+                           let code = json["code"] as? String, code == "MEMBER4011" {
+                            let alertController = UIAlertController(title: nil, message: "이미 KAKAO로 가입한 회원입니다", preferredStyle: .alert)
                             let okAction = UIAlertAction(title: "확인", style: .default, handler: nil)
                             alertController.addAction(okAction)
                             self.present(alertController, animated: true, completion: nil)
@@ -321,7 +329,7 @@ extension SignUpViewController: ASAuthorizationControllerDelegate,ASAuthorizatio
     }
     func performAppleSignInWithAlamofire(identityToken: String) {
         // Set the URL for the API endpoint
-        let url = "http://juinjang1227.com:8080/api/auth/apple/login"
+        let url = "http://prod.juinjang1227.com/api/auth/apple/login"
         
         // Create the parameters
         let parameters: [String: Any] = [
@@ -355,11 +363,20 @@ extension SignUpViewController: ASAuthorizationControllerDelegate,ASAuthorizatio
                     } else {
                         if value.contains("\"code\":\"MEMBER4001\"") {
                             print("회원가입")
+//                            let signupVC = SignUpViewController()
+//                            let navigationController = UINavigationController(rootViewController: signupVC)
+//                            UIApplication.shared.keyWindow?.rootViewController = navigationController
+
                             let nextVC = ToSViewController()
                             self.navigationController?.pushViewController(nextVC, animated: true)
                         } else if value.contains("\"code\":\"MEMBER4006\""){
                             print("이미 카카오로그인 했다미")
-                            let alertController = UIAlertController(title: nil, message: "이미 Kakao로 회원가입한 회원입니다", preferredStyle: .alert)
+                            let alertController = UIAlertController(title: nil, message: "이미 Kakao로 회원가입한 회원입니다.", preferredStyle: .alert)
+                            let okAction = UIAlertAction(title: "확인", style: .default, handler: nil)
+                            alertController.addAction(okAction)
+                            self.present(alertController, animated: true, completion: nil)
+                        } else if value.contains("\"code\":\"MEMBER4011\""){
+                            let alertController = UIAlertController(title: nil, message: "이미 가입된 이메일입니다.", preferredStyle: .alert)
                             let okAction = UIAlertAction(title: "확인", style: .default, handler: nil)
                             alertController.addAction(okAction)
                             self.present(alertController, animated: true, completion: nil)

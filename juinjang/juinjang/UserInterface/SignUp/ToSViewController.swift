@@ -7,7 +7,16 @@
 
 import UIKit
 
-class ToSViewController: BaseViewController {
+protocol PopUpDelegate: AnyObject {
+    func didTapCancelButton()
+}
+
+
+class ToSViewController: BaseViewController, PopUpDelegate {
+    func didTapCancelButton() {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
     
     lazy var guideLabel = UILabel().then {
         $0.text = "주인장 서비스의\n이용 약관에 동의해 주세요"
@@ -166,6 +175,7 @@ class ToSViewController: BaseViewController {
     
     @objc func backButtonTapped() {
         let SignupPopupVC = SignupPopupViewController()
+        SignupPopupVC.delegate = self
         SignupPopupVC.modalPresentationStyle = .overCurrentContext
         present(SignupPopupVC, animated: false, completion: nil)
     }

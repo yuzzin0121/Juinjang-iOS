@@ -115,20 +115,19 @@ final class MainViewController: BaseViewController, DeleteImjangListDelegate {
         navigationItem.titleView = mainLogoImageView
         
         // 이미지 로드
-        let speaker = UIImage(named:"speaker")
-
-        // UIBarButtonItem 생성 및 이미지 설정
-        let speakerButtonItem = UIBarButtonItem(image: speaker, style: .plain, target: self, action: nil)
-        speakerButtonItem.tintColor = ColorStyle.darkGray
-        speakerButtonItem.imageInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 12)
+//        let speaker = UIImage(named:"speaker")
+//
+//        // UIBarButtonItem 생성 및 이미지 설정
+//        let speakerButtonItem = UIBarButtonItem(image: speaker, style: .plain, target: self, action: nil)
+//        speakerButtonItem.tintColor = ColorStyle.darkGray
+//        speakerButtonItem.imageInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 12)
         
         let settingButtonItem = UIBarButtonItem(image: UIImage(named:"setting"), style: .plain, target: self, action: #selector(setttingBtnTap))
         settingButtonItem.tintColor = ColorStyle.darkGray
         settingButtonItem.imageInsets = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 0)
         // 네비게이션 아이템에 백 버튼 아이템 설정
         self.navigationItem.leftBarButtonItem = settingButtonItem
-        self.navigationItem.rightBarButtonItem = speakerButtonItem
-        
+//        self.navigationItem.rightBarButtonItem = speakerButtonItem
     }
     
     func showImjangNoteVC(imjangId: Int?, version: Int?) {

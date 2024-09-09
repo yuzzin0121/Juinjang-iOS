@@ -59,14 +59,14 @@ final class JuinjangAPIManager {
                    headers: api.header,
                    interceptor: AuthInterceptor())
         .responseDecodable(of: type) { response in
-            print("StatusCode: \(response.response?.statusCode)")
+            print(response)
             switch response.result {
             case .success(let success):
+                print(success)
                 completionHandler(success, nil)
             case .failure(let failure):
                 print(failure)
                 completionHandler(nil, .failedRequest)
-                //               fatalError("네트워킹 오류")
             }
         }
     }

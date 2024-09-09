@@ -42,7 +42,8 @@ enum JuinjangAPI {
     case editRecordContent(recordId: Int, content: String)
     
     var baseURL: String {
-        return "http://juinjang1227.com:8080/api/"
+        //return "http://juinjang1227.com:8080/api/"
+        return "http://prod.juinjang1227.com/api/"
     }
     
     var endpoint: URL {
@@ -54,8 +55,7 @@ enum JuinjangAPI {
         case .regenerateToken:
             return URL(string: baseURL + "auth/regenerate-token")!
         case .logout:
-            return URL(string: baseURL + "logout")!
-            
+            return URL(string: baseURL + "auth/logout")!
         case .nickname:
             return URL(string: baseURL + "nickname")!
         case .profile:
@@ -112,6 +112,9 @@ enum JuinjangAPI {
                 "Content-Type": "multipart/form-data",
                 "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"
             ]
+        case .logout:
+            return ["Content-Type": "application/json",
+                    "Refresh-Token": "Bearer \(UserDefaultManager.shared.refreshToken)"]
         default:
             return ["Content-Type": "application/json",
                     "Authorization": "Bearer \(UserDefaultManager.shared.accessToken)"]

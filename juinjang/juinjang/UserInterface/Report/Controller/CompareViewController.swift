@@ -24,6 +24,7 @@ class CompareViewController : BaseViewController, SendCompareImjangData, SendSea
     var isCompared : Bool = false
     var imjangId : Int
     var comparedImjangId : Int = 0
+    var imjangList: [ListDto] = []
     
     var indoorRate1 : Float = 0.0
     var locationRate1 : Float = 0.0
@@ -343,11 +344,41 @@ class CompareViewController : BaseViewController, SendCompareImjangData, SendSea
         }
     }
     
+    func callRequest(sort: Filter = .update, setScrap: Bool = false, excludingId: Int? = nil) {
+        JuinjangAPIManager.shared.fetchData(type: BaseResponse<TotalListDto>.self, api: .totalImjang(sort: sort.sortValue)) { response, error in
+            if error == nil {
+                guard let response = response else { return }
+                guard let result = response.result else { return }
+                
+                let filteredList = result.limjangList.filter { item in
+                    if let excludingId = excludingId {
+                        return item.limjangId != excludingId
+                    }
+                    return true
+                }
+                
+                self.imjangList = filteredList
+            } else {
+                guard let error else { return }
+                switch error {
+                case .failedRequest:
+                    print("failedRequest")
+                case .noData:
+                    print("noData")
+                case .invalidResponse:
+                    print("invalidResponse")
+                case .invalidData:
+                    print("invalidData")
+                }
+            }
+        }
+    }
+    
     func getReportInfo(limjangId: Int, accessToken: String) {
         print("비교매물")
         print(limjangId)
         // 기본 URL
-        let baseURL = "http://juinjang1227.com:8080/api/report/\(limjangId)"
+        let baseURL = "http://prod.juinjang1227.com/\(limjangId)"
         
         // 요청 헤더 구성
         let headers: HTTPHeaders = [
@@ -521,15 +552,17 @@ class CompareViewController : BaseViewController, SendCompareImjangData, SendSea
     }
     @objc private func compareButtonTap() {
         
-        //비교할 매물이 없을 때
-        /*let popupViewController = NoMaemullPopupViewController(ment: "비교할 매물이 아직 없어요.\n다른 매물이 생기면 다시 와주세요!")
-        popupViewController.modalPresentationStyle = .overFullScreen
-        self.present(popupViewController, animated: false)*/
-        
-        //비교할 매물이 있을 때
-        let vc = SelectMaemullViewController(imjangId: imjangId)
-        vc.delegate = self
-        self.navigationController?.pushViewController(vc, animated: true)
+        if imjangList.isEmpty {
+            // 매물이 하나도 없을 때 팝업을 띄움
+            let popupViewController = NoMaemullPopupViewController(ment: "비교할 매물이 아직 없어요.\n다른 매물이 생기면 다시 와주세요!")
+            popupViewController.modalPresentationStyle = .overFullScreen
+            self.present(popupViewController, animated: false)
+        } else {
+            // 매물이 있을 때 `SelectMaemullViewController`로 이동
+            let vc = SelectMaemullViewController(imjangId: self.imjangId)
+            vc.delegate = self
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
     }
     @objc private func closeBtnTap() {
         isCompared = false
@@ -651,6 +684,7 @@ class CompareViewController : BaseViewController, SendCompareImjangData, SendSea
         compareView1.addSubview(totalRateLabel1)
         view.addSubview(compareViewEmpty)
         isCompare()
+        callRequest(setScrap: true, excludingId: imjangId)
         
         view.addSubview(radarChartView)
         setCompareData()

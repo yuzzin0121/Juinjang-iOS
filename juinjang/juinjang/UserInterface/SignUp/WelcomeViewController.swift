@@ -222,11 +222,17 @@ class WelcomeViewController: BaseViewController {
             "nickname": nickname,
             "kakaoTargetId": kakaoTargetId
         ]
+        
+        let headers: HTTPHeaders = [
+            "target-id": "\(kakaoTargetId)" // Int64를 문자열로 변환하여 헤더에 포함
+        ]
 
-        AF.request("http://juinjang1227.com:8080/api/auth/kakao/signup", method: .post, parameters: parameters, encoding: JSONEncoding.default, interceptor: AuthInterceptor())
+        print(kakaoTargetId)
+        AF.request("http://prod.juinjang1227.com/api/auth/kakao/signup", method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers, interceptor: AuthInterceptor())
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
+                    print("여기 : \(email)")
                     print(value) // 서버에서 받은 응답을 출력하거나 필요한 처리를 진행합니다.
                     if let json = value as? [String: Any],
                        let isSuccess = json["isSuccess"] as? Bool,
@@ -247,13 +253,14 @@ class WelcomeViewController: BaseViewController {
                         // 실패 처리 로직을 추가할 수 있습니다.
                     }
                 case .failure(let error):
+                    print("실패")
                     print(error.localizedDescription)
                     // 실패 처리 로직을 추가할 수 있습니다.
                 }
             }
         }
     func signupWithApple(identityToken: String, nickname: String) {
-        let url = "http://juinjang1227.com:8080/api/auth/apple/signup"
+        let url = "http://prod.juinjang1227.com/api/auth/apple/signup"
         let parameters = SignupRequest(identityToken: identityToken, nickname: nickname)
 
         AF.request(url, method: .post, parameters: parameters, encoder: JSONParameterEncoder.default)
@@ -268,6 +275,7 @@ class WelcomeViewController: BaseViewController {
                         print("Refresh Token: \(result.refreshToken)")
                         UserDefaultManager.shared.refreshToken = result.refreshToken
                         print("Email: \(result.email)")
+                        UserDefaultManager.shared.email = result.email
                     }
                     let RecordingRightsVC = RecordingRightsViewController()
                     RecordingRightsVC.modalPresentationStyle = .fullScreen

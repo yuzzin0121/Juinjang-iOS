@@ -207,7 +207,13 @@ final class ImjangListViewController: BaseViewController, DeleteImjangListDelega
                 callRequest(sort: filter)
             }))
         }
-        filterselectBtn.menu = UIMenu(options: .displayAsPalette, preferredElementSize: .small ,children: menuChildren)
+        if #available(iOS 17.0, *) {
+            filterselectBtn.menu = UIMenu(options: .displayAsPalette, preferredElementSize: .small ,children: menuChildren)
+        } else if #available(iOS 16.0, *){
+            filterselectBtn.menu = UIMenu(options: .displayInline, preferredElementSize: .small ,children: menuChildren)
+        } else {
+            filterselectBtn.menu = UIMenu(options: .destructive, children: menuChildren)
+        }
         
         filterselectBtn.showsMenuAsPrimaryAction = true
     }
@@ -534,7 +540,7 @@ extension ImjangListViewController {
         view.backgroundColor = UIColor(named: "textWhite")
         
         // 비었을 때 로고 이미지뷰
-        emptyLogoImageView.design(image: ImageStyle.logo,
+        emptyLogoImageView.design(image: UIImage(named: "nomaemull")!,
                          contentMode: .scaleAspectFit)
         // 비었을 때 추가 권유 메시지 레이블
         emptyMessageLabel.design(text: "아직 등록된 집이 없어요\n지금 바로 부동산을 추가해 볼까요?",
@@ -549,6 +555,7 @@ extension ImjangListViewController {
         // 새 페이지 펼치기 버튼
         newPageButton.design(title: "새 페이지 펼치기",
                              font: .pretendard(size: 16, weight: .semiBold),
+                             backgroundColor: ColorStyle.textBlack,
                              cornerRadius: 10)
         
         deleteButton.design(image: ImageStyle.trash, backgroundColor: .clear)
@@ -596,7 +603,7 @@ extension ImjangListViewController {
         emptyLogoImageView.snp.makeConstraints {
             $0.centerX.equalTo(emptyBackgroundView)
             $0.size.equalTo(UIScreen.main.bounds.width * 0.4)
-            $0.top.equalTo(emptyBackgroundView).offset(UIScreen.main.bounds.height * 0.25)
+            $0.top.equalTo(emptyBackgroundView).offset(UIScreen.main.bounds.height * 0.30)
         }
         
         emptyMessageLabel.snp.makeConstraints {
@@ -610,7 +617,7 @@ extension ImjangListViewController {
             $0.width.equalTo(164)
             $0.height.equalTo(52)
             $0.centerX.equalTo(emptyBackgroundView)
-            $0.top.equalTo(emptyMessageLabel.snp.bottom).offset(118)
+            $0.top.equalTo(emptyMessageLabel.snp.bottom).offset(36)
         }
     }
 
