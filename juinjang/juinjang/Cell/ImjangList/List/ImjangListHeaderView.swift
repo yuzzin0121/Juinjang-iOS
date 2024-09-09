@@ -67,8 +67,13 @@ class ImjangListHeaderView: UITableViewHeaderFooterView {
                 self.callRequestFiltered(filterItem: filter)
             }))
         }
-        let menu = UIMenu(options: .displayAsPalette, children: menuChildren)
-        filterselectBtn.menu = menu
+        if #available(iOS 17.0, *) {
+            filterselectBtn.menu = UIMenu(options: .displayAsPalette, preferredElementSize: .small ,children: menuChildren)
+        } else if #available(iOS 16.0, *){
+            filterselectBtn.menu = UIMenu(options: .displayInline, preferredElementSize: .small ,children: menuChildren)
+        } else {
+            filterselectBtn.menu = UIMenu(options: .destructive, children: menuChildren)
+        }
         
         filterselectBtn.showsMenuAsPrimaryAction = true
     }

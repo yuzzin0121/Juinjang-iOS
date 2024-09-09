@@ -214,7 +214,3 @@ extension ImjangSearchViewController: UITableViewDelegate, UITableViewDataSource
         showSearchResultVC(keyword: keyword)
     }
 }
-
-#Preview {
-    ImjangSearchViewController()
-}
